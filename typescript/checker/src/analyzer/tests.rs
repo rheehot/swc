@@ -51,7 +51,7 @@ fn assignment_1() {
 let a: undefined | number;
 a = 2;",
     );
-;}
+}
 
 #[test]
 fn assignment_2() {

@@ -469,7 +469,7 @@ impl Analyzer<'_, '_> {
             fn visit(&mut self, stmt: &ReturnStmt) {
                 let ty = match stmt.arg {
                     Some(ref arg) => self.a.type_of(arg),
-                    None => Ok(Cow::Owned(undefined(self.span))),
+                    None => Ok(undefined(self.span).into()),
                 };
                 self.types.push(ty.map(|ty| ty.into_owned()));
             }
@@ -499,17 +499,18 @@ impl Analyzer<'_, '_> {
                     span: body.span(),
                     types: tys,
                 }),
-            ))),
+            ))
+            .map(Type::from)),
         }
     }
 
-    pub(super) fn type_of_arrow_fn(&self, f: &ArrowExpr) -> Result<TsType, Error> {
+    pub(super) fn type_of_arrow_fn(&self, f: &ArrowExpr) -> Result<Type<'static>, Error> {
         let ret_ty = match f.return_type {
-            Some(ref ret_ty) => self.expand(f.span, Cow::Borrowed(&*ret_ty.type_ann))?,
+            Some(ref ret_ty) => self.expand(f.span, Type::from(&*ret_ty.type_ann))?,
             None => match f.body {
                 BlockStmtOrExpr::BlockStmt(ref body) => match self.infer_return_type(body) {
-                    Ok(Some(ty)) => Cow::Owned(ty),
-                    Ok(None) => Cow::Owned(undefined(body.span())),
+                    Ok(Some(ty)) => ty,
+                    Ok(None) => undefined(body.span()),
                     Err(err) => return Err(err),
                 },
                 BlockStmtOrExpr::Expr(ref expr) => self.type_of(&expr)?,
@@ -527,15 +528,16 @@ impl Analyzer<'_, '_> {
                 },
             }),
         ))
+        .map(Type::from)
     }
 
     pub(super) fn type_of_fn(&self, f: &Function) -> Result<Type<'static>, Error> {
         let ret_ty = match f.return_type {
-            Some(ref ret_ty) => self.expand(f.span, Cow::Borrowed(&*ret_ty.type_ann))?,
+            Some(ref ret_ty) => self.expand(f.span, Type::from(&*ret_ty.type_ann))?,
             None => match f.body {
                 Some(ref body) => match self.infer_return_type(body) {
-                    Ok(Some(ty)) => Cow::Owned(ty),
-                    Ok(None) => Cow::Owned(undefined(body.span())),
+                    Ok(Some(ty)) => ty,
+                    Ok(None) => undefined(body.span()),
                     Err(err) => return Err(err),
                 },
                 None => unreachable!("function without body should have type annotation"),
@@ -556,13 +558,13 @@ impl Analyzer<'_, '_> {
         .map(Type::from)
     }
 
-    fn extract_call_new_expr(
-        &self,
-        callee: &Expr,
+    fn extract_call_new_expr<'e>(
+        &'e self,
+        callee: &'e Expr,
         kind: ExtractKind,
         args: &[ExprOrSpread],
         type_args: Option<&TsTypeParamInstantiation>,
-    ) -> Result<Type, Error> {
+    ) -> Result<Type<'e>, Error> {
         let span = callee.span();
 
         match *callee {
@@ -843,7 +845,8 @@ impl Analyzer<'_, '_> {
 
             // // TODO: Handle multiple definitions
             // let min = ty_params_decl
-            //     .map(|decl| decl.params.iter().filter(|p| p.default.is_none()).count())
+            //     .map(|decl| decl.params.iter().filter(|p|
+            // p.default.is_none()).count())
             //     .unwrap_or(type_params_len);
 
             // let expected = min..=type_params_len;
@@ -958,40 +961,47 @@ impl Analyzer<'_, '_> {
                     //             ExportExtra::Module(TsModuleDecl {
                     //                 body: Some(body), ..
                     //             })
-                    //             | ExportExtra::Namespace(TsNamespaceDecl { box body, .. }) => {
-                    //                 let mut name = type_name;
-                    //                 let mut body = body;
-                    //                 let mut ty = None;
+                    //             | ExportExtra::Namespace(TsNamespaceDecl {
+                    // box body, .. }) => {                 
+                    // let mut name = type_name;            
+                    // let mut body = body;                 
+                    // let mut ty = None;
 
-                    //                 while let TsEntityName::TsQualifiedName(q) = name {
+                    //                 while let
+                    // TsEntityName::TsQualifiedName(q) = name {
                     //                     body = match body {
-                    //                         TsNamespaceBody::TsModuleBlock(ref module) => {
+                    //                         
+                    // TsNamespaceBody::TsModuleBlock(ref module) => {
                     //                             match q.left {
-                    //                                 TsEntityName::Ident(ref left) => {
-                    //                                     for item in module.body.iter() {}
-                    //                                     return Err(Error::UndefinedSymbol {
+                    //                                 TsEntityName::Ident(ref
+                    // left) => {                           
+                    // for item in module.body.iter() {}
+                    //                                     return
+                    // Err(Error::UndefinedSymbol {
                     //                                         span: left.span,
                     //                                     });
                     //                                 }
                     //                                 _ => {
                     //                                     //
-                    //                                     unimplemented!("qname")
-                    //                                 }
-                    //                             }
+                    //                                     
+                    // unimplemented!("qname")              
+                    // }                             }
                     //                         }
-                    //                         TsNamespaceBody::TsNamespaceDecl(TsNamespaceDecl {
+                    //                         
+                    // TsNamespaceBody::TsNamespaceDecl(TsNamespaceDecl {
                     //                             ref id,
                     //                             ref body,
                     //                             ..
                     //                         }) => {
                     //                             match q.left {
-                    //                                 TsEntityName::Ident(ref left) => {
-                    //                                     if id.sym != left.sym {
-                    //                                         return Err(Error::UndefinedSymbol {
-                    //                                             span: left.span,
-                    //                                         });
-                    //                                     }
-                    //                                 }
+                    //                                 TsEntityName::Ident(ref
+                    // left) => {                           
+                    // if id.sym != left.sym {              
+                    // return Err(Error::UndefinedSymbol {
+                    //                                             span:
+                    // left.span,                           
+                    // });                                  
+                    // }                                 }
                     //                                 _ => {}
                     //                             }
                     //                             //
@@ -1003,21 +1013,22 @@ impl Analyzer<'_, '_> {
 
                     //                 return match ty {
                     //                     Some(ty) => Ok(ty),
-                    //                     None => Err(Error::UndefinedSymbol { span }),
-                    //                 };
+                    //                     None => Err(Error::UndefinedSymbol {
+                    // span }),                 };
                     //             }
                     //             ExportExtra::Module(..) => {
                     //                 assert_eq!(*type_params, None);
 
                     //                 unimplemented!(
-                    //                     "ExportExtra::Module without body cannot be instantiated"
-                    //                 )
-                    //             }
+                    //                     "ExportExtra::Module without body
+                    // cannot be instantiated"              
+                    // )             }
                     //             ExportExtra::Interface(ref i) => {
                     //                 // TODO: Check length of type parmaters
                     //                 // TODO: Instantiate type parameters
 
-                    //                 let members = i.body.body.iter().cloned().collect();
+                    //                 let members =
+                    // i.body.body.iter().cloned().collect();
 
                     //                 return Ok(TsType::TsTypeLit(TsTypeLit {
                     //                     span: i.span,
@@ -1031,8 +1042,8 @@ impl Analyzer<'_, '_> {
                     //             }
                     //         }
                     //     }
-                    //     None => unimplemented!("`ty` and `extra` are both null"),
-                    // }
+                    //     None => unimplemented!("`ty` and `extra` are both
+                    // null"), }
                 }
 
                 TsType::TsTypeQuery(TsTypeQuery { ref expr_name, .. }) => match *expr_name {
@@ -1080,32 +1091,37 @@ fn negate(ty: Type) -> Type {
         .into()
     }
 
-    Cow::Owned(match *ty {
-        TsType::TsLitType(TsLitType { ref lit, span }) => match *lit {
-            TsLit::Bool(v) => TsType::TsLitType(TsLitType {
-                lit: TsLit::Bool(Bool {
-                    value: !v.value,
-                    ..v
-                }),
-                span,
-            }),
-            TsLit::Number(v) => TsType::TsLitType(TsLitType {
-                lit: TsLit::Bool(Bool {
-                    value: v.value != 0.0,
-                    span: v.span,
-                }),
-                span,
-            }),
-            TsLit::Str(ref v) => TsType::TsLitType(TsLitType {
-                lit: TsLit::Bool(Bool {
-                    value: v.value != js_word!(""),
-                    span: v.span,
-                }),
-                span,
-            }),
+    match ty {
+        Type::Simple(ref ty) => match **ty {
+            TsType::TsLitType(TsLitType { ref lit, span }) => match *lit {
+                TsLit::Bool(v) => TsType::TsLitType(TsLitType {
+                    lit: TsLit::Bool(Bool {
+                        value: !v.value,
+                        ..v
+                    }),
+                    span,
+                })
+                .into(),
+                TsLit::Number(v) => TsType::TsLitType(TsLitType {
+                    lit: TsLit::Bool(Bool {
+                        value: v.value != 0.0,
+                        span: v.span,
+                    }),
+                    span,
+                })
+                .into(),
+                TsLit::Str(ref v) => TsType::TsLitType(TsLitType {
+                    lit: TsLit::Bool(Bool {
+                        value: v.value != js_word!(""),
+                        span: v.span,
+                    }),
+                    span,
+                })
+                .into(),
+            },
+            _ => boolean(ty.span()),
         },
-        _ => boolean(ty.span()),
-    })
+    }
 }
 
 pub const fn undefined(span: Span) -> Type<'static> {
