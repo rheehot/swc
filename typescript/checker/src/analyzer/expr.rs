@@ -867,7 +867,7 @@ impl Analyzer<'_, '_> {
     ///
     ///   - Type alias
     pub(super) fn expand<'t>(&'t self, span: Span, ty: TypeRef<'t>) -> Result<TypeRef<'t>, Error> {
-        println!("({}) expand({:?})", self.scope.depth(), ty);
+        // println!("({}) expand({:?})", self.scope.depth(), ty);
 
         match *ty {
             // TOOD:
@@ -1068,7 +1068,9 @@ impl Analyzer<'_, '_> {
                     _ => unimplemented!("expand(TsTypeQuery): typeof member.expr"),
                 },
 
-                _ => return Ok(s_ty.clone().into_cow()),
+                _ => {
+                    return Ok(s_ty.clone().into_cow());
+                }
             },
 
             _ => {}
