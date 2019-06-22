@@ -29,9 +29,9 @@ pub enum Error {
 
     AssignFailed {
         #[span(lo)]
-        left: Type,
+        left: Type<'static>,
         #[span(hi)]
-        right: Type,
+        right: Type<'static>,
         cause: Vec<Error>,
     },
 
@@ -72,12 +72,12 @@ pub enum Error {
 
     NoNewSignature {
         span: Span,
-        callee: Type,
+        callee: Type<'static>,
     },
 
     NoCallSignature {
         span: Span,
-        callee: Type,
+        callee: Type<'static>,
     },
 
     WrongTypeParams {
