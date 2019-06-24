@@ -1013,6 +1013,11 @@ impl Analyzer<'_, '_> {
                                     Type::Interface(..) | Type::Class(..) => {
                                         return Ok(ty.static_cast())
                                     }
+
+                                    Type::Alias(ref a) => {
+                                        // Expand type alias
+                                        return Ok(a.ty.static_cast());
+                                    }
                                     _ => {}
                                 }
                             }
