@@ -972,6 +972,7 @@ impl Analyzer<'_, '_> {
         // println!("({}) expand({:?})", self.scope.depth(), ty);
 
         match *ty {
+            Type::Static(s) => return self.expand_type(span, s.static_cast()),
             Type::Simple(ref s_ty) => match **s_ty {
                 TsType::TsTypeRef(TsTypeRef {
                     ref type_name,
@@ -986,8 +987,8 @@ impl Analyzer<'_, '_> {
                             }
 
                             // Handle enum
-                            if let Some(ty) = self.find_type(&i.sym) {
-                                match *ty {
+                            if let Some(ref ty) = self.find_type(&i.sym) {
+                                match ty.normalize() {
                                     Type::Enum(..) => {
                                         assert_eq!(
                                             *type_params, None,
@@ -998,7 +999,7 @@ impl Analyzer<'_, '_> {
                                     }
 
                                     Type::Interface(..) | Type::Class(..) => {
-                                        return Ok(ty.static_cast())
+                                        return Ok(ty.static_cast());
                                     }
 
                                     Type::Alias(ref a) => {
@@ -1139,7 +1140,7 @@ impl Analyzer<'_, '_> {
                 },
 
                 _ => {
-                    return Ok(s_ty.clone().into_cow());
+                    return Ok(Cow::Owned((*s_ty).clone().into()));
                 }
             },
 
