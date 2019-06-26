@@ -62,9 +62,12 @@ pub fn builtin(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
             })
             .collect::<Vec<_>>();
 
+        let mut names = vec![];
+
         for (path, file_name) in files {
             println!("Processing file: {}", file_name);
             let name = syn::Ident::new(&file_name.to_camel_case(), Span::call_site());
+            names.push(name.clone());
 
             let comments = Comments::default();
 
@@ -95,6 +98,12 @@ pub fn builtin(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
                 }
             }));
         }
+        let names = names.iter().cloned().collect::<Punctuated<_, Token![,]>>();
+        tokens = tokens.quote_with(smart_quote!(Vars { names: &names }, {
+            pub enum Lib {
+                names,
+            }
+        }));
 
         print("builtin", tokens)
     })
@@ -173,13 +182,24 @@ fn quote_decl(decl: &Decl) -> syn::Stmt {
             ));
         }
 
-        Decl::Class(..) => {
-            tokens = tokens.quote_with(smart_quote!(Vars {}, {
-                body.push(ModuleItem::Stmt(Stmt::Decl(Decl::Class(ClassDecl {
-                    span: DUMMY_SP,
-                    declare: true,
-                }))));
-            }));
+        Decl::Class(ClassDecl {
+            ref ident,
+            ref class,
+            ..
+        }) => {
+            tokens = tokens.quote_with(smart_quote!(
+                Vars {
+                    sym: id_to_str(ident),
+                    class_v: quote_class(class),
+                },
+                {
+                    body.push(ModuleItem::Stmt(Stmt::Decl(Decl::Class(ClassDecl {
+                        ident: Ident::new(sym.into(), DUMMY_SP),
+                        class: class_v,
+                        declare: true,
+                    }))));
+                }
+            ));
         }
 
         Decl::TsInterface(i) => {
@@ -264,6 +284,72 @@ fn quote_decl(decl: &Decl) -> syn::Stmt {
     tokens.parse()
 }
 
+fn quote_class(c: &Class) -> syn::Expr {
+    q().quote_with(smart_quote!(
+        Vars {
+            body_v: quote_class_members(&c.body),
+            super_class_v: quote_option(c.super_class.as_ref(), |expr| quote_expr(expr)),
+            is_abstract_v: c.is_abstract,
+            type_params_v: quote_type_params(c.type_params.as_ref()),
+            super_type_params: quote_type_params_instantiation(c.super_type_params.as_ref()),
+            implements_v: quote_exprs_with_type_args(&c.implements),
+        },
+        {
+            Class {
+                span: DUMMY_SP,
+                decorators: vec![],
+                body: vec![body_v],
+                super_class: super_class_v.map(Box::new),
+                is_abstract: is_abstract_v,
+                type_params: type_params_v,
+                super_type_params: super_type_params_v,
+                implements: vec![implements_v],
+            }
+        }
+    ))
+    .parse()
+}
+
+fn quote_class_members(ms: &[ClassMember]) -> Punctuated<syn::Expr, Token![,]> {
+    ms.iter().map(quote_class_member).collect()
+}
+
+fn quote_class_member(ms: &ClassMember) -> syn::Expr {
+    match ms {
+        ClassMember::Constructor(Constructor {
+            key,
+            params,
+            body,
+            accessibility,
+            is_optional,
+            ..
+        }) => {
+            assert!(body.is_none());
+            q().quote_with(smart_quote!(
+                Vars {
+                    key_v: quote_prop_name(&key),
+                    params_v: quote_pat_or_ts_fn_params(&params),
+                    accessibility_v: quote_accessibility(accessibility.clone()),
+                    is_optional_v: is_optional,
+                },
+                {
+                    ClassMember::Constructor(Constructor {
+                        span: DUMMY_SP,
+                        key: key_v,
+                        params: vec![params_v],
+                        body: None,
+                        accessibility: accessibility_v,
+                        is_optional: is_optional_v,
+                    })
+                }
+            ))
+            .parse()
+        }
+
+        _ => unimplemented!("quote_class_member({:#?})", ms),
+    }
+}
+
 fn id_to_str(ident: &Ident) -> syn::Lit {
     syn::Lit::Str(LitStr::new(&*ident.sym, Span::call_site()))
 }
@@ -292,7 +378,7 @@ fn quote_param(param: &Pat) -> syn::Expr {
                 {
                     Pat::Rest(RestPat {
                         dot3_token: DUMMY_SP,
-                        arg: arg_v,
+                        arg: box arg_v,
                         type_ann: type_ann_v,
                     })
                 }
@@ -343,7 +429,6 @@ fn quote_type_param(param: &TsTypeParam) -> syn::Expr {
             TsTypeParam {
                 span: DUMMY_SP,
                 name: Ident::new(name_v.into(), DUMMY_SP),
-
                 constraint: constraint_v,
                 default: default_v,
             }
@@ -507,7 +592,7 @@ fn quote_ty(ty: &TsType) -> syn::Expr {
                         }
                         TsLit::Str(Str { value, .. }) => {
                             let value = &**value;
-                            quote!(TsLit::Str(Str { span: DUMMY_SP, value: #value }))
+                            quote!(TsLit::Str(Str { span: DUMMY_SP, has_escape: false ,value: #value }))
                         }
                     },
                 },
@@ -850,16 +935,19 @@ fn quote_ty(ty: &TsType) -> syn::Expr {
         TsType::TsIndexedAccessType(TsIndexedAccessType {
             ref obj_type,
             ref index_type,
+            readonly,
             ..
         }) => {
             q = q.quote_with(smart_quote!(
                 Vars {
+                    readonly_v: readonly,
                     obj_type_v: quote_box_ty(&obj_type),
                     index_type_v: quote_box_ty(&index_type),
                 },
                 {
                     TsType::TsIndexedAccessType(TsIndexedAccessType {
                         span: DUMMY_SP,
+                        readonly: readonly_v,
                         obj_type: obj_type_v,
                         index_type: index_type_v,
                     })
@@ -884,7 +972,7 @@ fn quote_ty(ty: &TsType) -> syn::Expr {
 }
 
 fn quote_types(tys: &[Box<TsType>]) -> Punctuated<syn::Expr, Token![,]> {
-    tys.iter().map(|e| quote_ty(e)).collect()
+    tys.iter().map(|e| quote_box_ty(e)).collect()
 }
 
 fn quote_type_elements(els: &[TsTypeElement]) -> Punctuated<syn::Expr, Token![,]> {
@@ -1225,7 +1313,7 @@ fn quote_expr(e: &Expr) -> syn::Expr {
                         span: DUMMY_SP,
                         computed: computed_v,
                         obj: ExprOrSuper::Expr(box obj_v),
-                        prop: prop_v,
+                        prop: box prop_v,
                     })
                 }
             ))
@@ -1265,7 +1353,7 @@ fn quote_object_pat_prop(p: &ObjectPatProp) -> syn::Expr {
                 {
                     ObjectPatProp::KeyValue(KeyValuePatProp {
                         key: key_v,
-                        value: value_v,
+                        value: box value_v,
                     })
                 }
             ))
@@ -1299,6 +1387,66 @@ fn quote_prop_name(n: &PropName) -> Quote {
             PropName::Ident(Ident::new(sym.into(), DUMMY_SP))
         })),
         _ => unimplemented!("quote_prop_name({:#?})", n),
+    }
+}
+
+fn quote_pat_or_ts_fn_params(p: &[PatOrTsParamProp]) -> Punctuated<syn::Expr, Token![,]> {
+    p.iter().map(quote_pat_or_ts_fn_param).collect()
+}
+
+fn quote_pat_or_ts_fn_param(p: &PatOrTsParamProp) -> syn::Expr {
+    match *p {
+        PatOrTsParamProp::Pat(ref p) => q()
+            .quote_with(smart_quote!(Vars { q: quote_param(p) }, {
+                PatOrTsParamProp::Pat(q)
+            }))
+            .parse(),
+        PatOrTsParamProp::TsParamProp(ref p) => q()
+            .quote_with(smart_quote!(
+                Vars {
+                    q: quote_ts_param_prop(p)
+                },
+                { PatOrTsParamProp::TsParamProp(q) }
+            ))
+            .parse(),
+    }
+}
+
+fn quote_ts_param_prop(p: &TsParamProp) -> syn::Expr {
+    q().quote_with(smart_quote!(
+        Vars {
+            accessibility_v: quote_accessibility(p.accessibility),
+            readonly_v: p.readonly,
+            param_v: quote_ts_param_prop_param(&p.param),
+        },
+        {
+            TsParamProp {
+                span: DUMMY_SP,
+                decorators: vec![],
+                accessibility: accessibility_v,
+                readonly: readonly_v,
+                param: param_v,
+            }
+        }
+    ))
+    .parse()
+}
+
+fn quote_accessibility(opt: Option<Accessibility>) -> syn::Expr {
+    match opt {
+        // TODO
+        Some(v) => q().quote_with(smart_quote!(Vars {}, { Some() })).parse(),
+        None => q().quote_with(smart_quote!(Vars {}, { None })).parse(),
+    }
+}
+
+fn quote_ts_param_prop_param(p: &TsParamPropParam) -> syn::Expr {
+    match p {
+        TsParamPropParam::Ident(i) => q()
+            .quote_with(smart_quote!(Vars {}, { TsParamPropParam::Ident() }))
+            .parse(),
+
+        _ => unimplemented!("quote_ts_param_prop_param({:?})", p),
     }
 }
 
