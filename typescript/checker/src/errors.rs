@@ -10,6 +10,16 @@ pub enum Error {
         span: Span,
     },
 
+    TooManyTupleElements {
+        span: Span,
+    },
+
+    NotVariable {
+        // Span of rhs
+        span: Span,
+        left: Span,
+    },
+
     Unimplemented {
         span: Span,
         msg: String,
