@@ -1,4 +1,6 @@
-use super::{Array, Function, Interface, Intersection, Param, Type, TypeLit, TypeRefExt, Union};
+use super::{
+    Array, Function, Interface, Intersection, Param, Tuple, Type, TypeLit, TypeRefExt, Union,
+};
 use crate::{
     errors::Error,
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
@@ -155,6 +157,13 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                         cause: vec![cause],
                     }
                 });
+            }
+
+            Type::Tuple(Tuple { ref types, .. }) => {
+                for ty in types {
+                    try_assign(elem_type, ty, span)?;
+                }
+                return Ok(());
             }
             _ => fail!(),
         },
