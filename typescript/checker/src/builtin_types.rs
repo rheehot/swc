@@ -92,7 +92,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                     TsModuleName::Ident(ref i) => i.sym.clone(),
                                     _ => unreachable!(),
                                 };
-                                debug_assert_eq!(merged.types.get(&id), None);
+                                debug_assert_eq!(merged.types.get(&id), None, "libs: {:?}", libs);
 
                                 merged.types.insert(id, m.clone().into());
                             }
