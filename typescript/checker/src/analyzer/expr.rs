@@ -93,16 +93,6 @@ impl Analyzer<'_, '_> {
                 }
 
                 return Ok(Type::Tuple(Tuple { span, types }).into_cow());
-
-                // return Ok(Type::Array(Array {
-                //     span,
-                //     elem_type: match types.len() {
-                //         0 => box Type::any(span).into_cow(),
-                //         1 => box types.into_iter().next().unwrap(),
-                //         _ => box Union { span, types }.into_cow(),
-                //     },
-                // })
-                // .into_cow());
             }
 
             Expr::Lit(Lit::Bool(v)) => {
