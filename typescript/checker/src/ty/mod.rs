@@ -489,13 +489,13 @@ impl<'a> Type<'a> {
         's: 'c,
     {
         match *self {
-            Type::Static(Static { ref ty, .. }) => unsafe {
+            Type::Static(Static { ty, .. }) => unsafe {
                 // 'static lives longer than anything
-                transmute::<_, &'c Type<'d>>(ty)
+                transmute::<&'static Type<'static>, &'c Type<'d>>(ty)
             },
             _ => unsafe {
                 // Shorten lifetimes
-                transmute::<_, &'c Type<'d>>(self)
+                transmute::<&'s Self, &'c Type<'d>>(self)
             },
         }
     }
