@@ -92,9 +92,23 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                     TsModuleName::Ident(ref i) => i.sym.clone(),
                                     _ => unreachable!(),
                                 };
-                                debug_assert_eq!(merged.types.get(&id), None, "libs: {:?}", libs);
 
-                                merged.types.insert(id, m.clone().into());
+                                match merged.types.entry(id) {
+                                    Entry::Occupied(mut e) => match e.get_mut() {
+                                        ty::Type::Module(TsModuleDecl {
+                                            body: Some(TsNamespaceBody::TsModuleBlock(ref mut b)),
+                                            ..
+                                        }) => b.body.extend(match m.body.as_ref().unwrap() {
+                                            TsNamespaceBody::TsModuleBlock(ref b) => b.body.clone(),
+                                            _ => unimplemented!(),
+                                        }),
+
+                                        ref e => unimplemented!("Merging module with {:?}", e),
+                                    },
+                                    Entry::Vacant(e) => {
+                                        e.insert(m.clone().into());
+                                    }
+                                }
                             }
 
                             Stmt::Decl(Decl::TsTypeAlias(ref a)) => {
