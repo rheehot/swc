@@ -4,8 +4,8 @@ use crate::{
     errors::Error,
     ty::{
         self, Array, CallSignature, ConstructorSignature, EnumVariant, Intersection,
-        MethodSignature, PropertySignature, Type, TypeElement, TypeLit, TypeParamDecl, TypeRef,
-        TypeRefExt, Union,
+        MethodSignature, PropertySignature, Tuple, Type, TypeElement, TypeLit, TypeParamDecl,
+        TypeRef, TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
@@ -80,31 +80,29 @@ impl Analyzer<'_, '_> {
                             ref expr,
                         }) => {
                             let ty = self.type_of(expr)?.generalize_lit();
-                            if types.iter().all(|l| !l.eq_ignore_span(&ty)) {
-                                types.push(ty)
-                            }
+                            types.push(ty)
                         }
                         Some(ExprOrSpread {
                             spread: Some(..), ..
                         }) => unimplemented!("type of array spread"),
                         None => {
                             let ty = Type::undefined(span);
-                            if types.iter().all(|l| !l.eq_ignore_span(&ty)) {
-                                types.push(ty.into_cow())
-                            }
+                            types.push(ty.into_cow())
                         }
                     }
                 }
 
-                return Ok(Type::Array(Array {
-                    span,
-                    elem_type: match types.len() {
-                        0 => box Type::any(span).into_cow(),
-                        1 => box types.into_iter().next().unwrap(),
-                        _ => box Union { span, types }.into_cow(),
-                    },
-                })
-                .into_cow());
+                return Ok(Type::Tuple(Tuple { span, types }).into_cow());
+
+                // return Ok(Type::Array(Array {
+                //     span,
+                //     elem_type: match types.len() {
+                //         0 => box Type::any(span).into_cow(),
+                //         1 => box types.into_iter().next().unwrap(),
+                //         _ => box Union { span, types }.into_cow(),
+                //     },
+                // })
+                // .into_cow());
             }
 
             Expr::Lit(Lit::Bool(v)) => {
