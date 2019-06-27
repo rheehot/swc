@@ -103,9 +103,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             buf
         };
 
-        let ignore = file_name.contains("circular")
-            || (mode == Mode::Conformance
-                && (file_name.contains("typeRelationships") || !file_name.contains("types/union")));
+        let ignore = file_name.contains("circular");
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);
@@ -200,7 +198,6 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
                                     if s.starts_with("@target: ") {
                                         libs = Lib::load(&s[8..].trim());
-                                        println!("Libs: {:?}", libs);
                                     } else if s.starts_with("@strict: ") {
                                         let strict = s[8..].trim().parse().unwrap(); // TODO
                                         rule.no_implicit_any = strict;
