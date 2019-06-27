@@ -81,6 +81,7 @@ pub enum Type<'a> {
     TypeLit(TypeLit<'a>),
     Keyword(TsKeywordType),
     Simple(Cow<'a, TsType>),
+    Tuple(Tuple<'a>),
     Array(Array<'a>),
     Union(Union<'a>),
     Intersection(Intersection<'a>),
@@ -109,6 +110,12 @@ pub struct Static {
     pub span: Span,
     #[fold(ignore)]
     pub ty: &'static Type<'static>,
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct Tuple<'a> {
+    pub span: Span,
+    pub types: Vec<TypeRef<'a>>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
@@ -158,7 +165,7 @@ pub struct TsExpr<'a> {
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct TypeParamInstantiation<'a> {
     pub span: Span,
-    pub params: Vec<Box<TypeRef<'a>>>,
+    pub params: Vec<TypeRef<'a>>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned, FromVariant)]
@@ -404,6 +411,8 @@ impl Type<'_> {
             Type::Param(p) => Type::Param(Param { span, ..p }),
 
             Type::Static(s) => Type::Static(Static { span, ..s }),
+
+            Type::Tuple(ty) => Type::Tuple(Tuple { span, ..ty }),
         }
     }
 }
@@ -477,6 +486,8 @@ impl Type<'_> {
             Type::Module(m) => Type::Module(m),
 
             Type::Static(s) => Type::Static(s),
+
+            Type::Tuple(t) => Type::Tuple(t.into_static()),
         }
     }
 }
@@ -552,11 +563,7 @@ impl TypeParamInstantiation<'_> {
     pub fn into_static(self) -> TypeParamInstantiation<'static> {
         TypeParamInstantiation {
             span: self.span,
-            params: self
-                .params
-                .into_iter()
-                .map(|v| box static_type(*v))
-                .collect(),
+            params: self.params.into_iter().map(static_type).collect(),
         }
     }
 }
@@ -669,6 +676,15 @@ impl Param<'_> {
             span: self.span,
             constraint: self.constraint.map(|v| box static_type(*v)),
             default: self.default.map(|v| box static_type(*v)),
+        }
+    }
+}
+
+impl Tuple<'_> {
+    pub fn into_static(self) -> Tuple<'static> {
+        Tuple {
+            span: self.span,
+            types: self.types.into_iter().map(static_type).collect(),
         }
     }
 }

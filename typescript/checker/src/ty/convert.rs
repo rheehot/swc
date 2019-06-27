@@ -1,6 +1,6 @@
 use super::{
     Alias, Array, CallSignature, Constructor, ConstructorSignature, Function, IndexSignature,
-    Interface, Intersection, MethodSignature, PropertySignature, TsExpr, Type, TypeElement,
+    Interface, Intersection, MethodSignature, PropertySignature, TsExpr, Tuple, Type, TypeElement,
     TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
 };
 use crate::util::IntoCow;
@@ -76,6 +76,7 @@ impl From<TsType> for Type<'_> {
             TsType::TsThisType(this) => this.into(),
             TsType::TsLitType(ty) => ty.into(),
             TsType::TsKeywordType(ty) => ty.into(),
+            TsType::TsTupleType(ty) => Type::Tuple(ty.into()),
             TsType::TsUnionOrIntersectionType(TsUnionOrIntersectionType::TsUnionType(
                 TsUnionType { span, types },
             )) => Union {
@@ -231,7 +232,16 @@ impl From<TsTypeParamInstantiation> for TypeParamInstantiation<'_> {
     fn from(i: TsTypeParamInstantiation) -> Self {
         TypeParamInstantiation {
             span: i.span,
-            params: i.params.into_iter().map(|v| box v.into_cow()).collect(),
+            params: i.params.into_iter().map(|v| v.into_cow()).collect(),
+        }
+    }
+}
+
+impl From<TsTupleType> for Tuple<'_> {
+    fn from(t: TsTupleType) -> Self {
+        Tuple {
+            span: t.span,
+            types: t.elem_types.into_iter().map(|v| (*v).into_cow()).collect(),
         }
     }
 }
