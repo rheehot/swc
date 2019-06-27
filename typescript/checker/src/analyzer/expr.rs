@@ -811,6 +811,17 @@ impl Analyzer<'_, '_> {
                         );
                     }
 
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsSymbolKeyword,
+                        ..
+                    }) => {
+                        if let Ok(ty) =
+                            builtin_types::get_type(self.libs, span, &js_word!("Symbol"))
+                        {
+                            return Ok(ty.owned());
+                        }
+                    }
+
                     Type::Interface(ref i) => {
                         search_members_for_prop!(&i.body, prop);
                     }
