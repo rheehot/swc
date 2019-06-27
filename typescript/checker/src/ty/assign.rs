@@ -88,9 +88,7 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                     });
                 }
 
-                Type::Array(..) => fail!(),
-
-                Type::Lit(..) => fail!(),
+                Type::Array(..) | Type::Lit(..) => fail!(),
 
                 _ => {}
             }
