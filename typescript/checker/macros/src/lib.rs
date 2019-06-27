@@ -1,3 +1,4 @@
+#![feature(box_patterns)]
 #![deny(unused_variables)]
 #![recursion_limit = "4096"]
 
@@ -738,16 +739,25 @@ fn quote_type_params_instantiation(i: Option<&TsTypeParamInstantiation>) -> Quot
 
 fn quote_ts_entity_name(n: &TsEntityName) -> Quote {
     match *n {
-        TsEntityName::Ident(Ident { ref sym, .. }) => q().quote_with(smart_quote!(
+        TsEntityName::Ident(ref i) => q().quote_with(smart_quote!(Vars { i: quote_ident(i) }, {
+            TsEntityName::Ident(i)
+        })),
+        TsEntityName::TsQualifiedName(box TsQualifiedName {
+            ref left,
+            ref right,
+            ..
+        }) => q().quote_with(smart_quote!(
             Vars {
-                i: {
-                    let s = &**sym;
-                    quote!(#s)
-                }
+                left_v: quote_ts_entity_name(left),
+                right_v: quote_ident(right)
             },
-            { TsEntityName::Ident(Ident::new(i.into(), DUMMY_SP)) }
+            {
+                TsEntityName::TsQualifiedName(box TsQualifiedName {
+                    left: left_v,
+                    right: right_v,
+                })
+            }
         )),
-        _ => unimplemented!(),
     }
 }
 
@@ -1368,8 +1378,8 @@ fn quote_ts_fn_params(param: &[TsFnParam]) -> Punctuated<syn::Expr, Token![,]> {
         .iter()
         .map(|param| match *param {
             TsFnParam::Ident(ref i) => q()
-                .quote_with(smart_quote!(Vars { s: id_to_str(&i) }, {
-                    TsFnParam::Ident(Ident::new(s.into(), DUMMY_SP))
+                .quote_with(smart_quote!(Vars { i: quote_ident(i) }, {
+                    TsFnParam::Ident(i)
                 }))
                 .parse::<syn::Expr>(),
 
@@ -1537,8 +1547,8 @@ fn quote_this_or_ident(t: &TsThisTypeOrIdent) -> syn::Expr {
             }))
             .parse(),
         TsThisTypeOrIdent::Ident(ref i) => q()
-            .quote_with(smart_quote!(Vars { v: id_to_str(i) }, {
-                TsThisTypeOrIdent::Ident(Ident::new(v.into(), DUMMY_SP))
+            .quote_with(smart_quote!(Vars { i: quote_ident(i) }, {
+                TsThisTypeOrIdent::Ident(i)
             }))
             .parse(),
     }
@@ -1570,13 +1580,13 @@ fn quote_object_pat_prop(p: &ObjectPatProp) -> syn::Expr {
         }) => q()
             .quote_with(smart_quote!(
                 Vars {
-                    key_v: id_to_str(key),
+                    key_v: quote_ident(key),
                     value_v: quote_option(value.as_ref(), |expr| quote_expr(&expr))
                 },
                 {
                     ObjectPatProp::Assign(AssignPatProp {
                         span: DUMMY_SP,
-                        key: Ident::new(key_v.into(), DUMMY_SP),
+                        key: key_v,
                         value: value_v.map(Box::new),
                     })
                 }
@@ -1667,6 +1677,25 @@ fn quote_ts_param_prop_param(p: &TsParamPropParam) -> syn::Expr {
 
         _ => unimplemented!("quote_ts_param_prop_param({:?})", p),
     }
+}
+
+fn quote_ident(i: &Ident) -> syn::Expr {
+    q().quote_with(smart_quote!(
+        Vars {
+            s: id_to_str(&i),
+            type_ann_v: quote_opt_type_ann(i.type_ann.as_ref()),
+            optional_v: i.optional,
+        },
+        {
+            Ident {
+                span: DUMMY_SP,
+                sym: s.into(),
+                type_ann: type_ann_v,
+                optional: optional_v,
+            }
+        }
+    ))
+    .parse()
 }
 
 fn q() -> Quote {

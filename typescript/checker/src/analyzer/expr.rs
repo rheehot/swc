@@ -948,7 +948,9 @@ impl Analyzer<'_, '_> {
             }};
         }
 
-        match *ty {
+        match *ty.normalize() {
+            Type::Static(..) => unreachable!("normalize should handle Type::Static"),
+
             Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsAnyKeyword,
                 ..
