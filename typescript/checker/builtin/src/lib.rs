@@ -1,4 +1,5 @@
 #![feature(box_syntax)]
+#![feature(specialization)]
 
 extern crate lazy_static;
 extern crate swc_atoms;
@@ -12,7 +13,7 @@ use std::sync::Arc;
 use swc_atoms::js_word;
 use swc_common::{
     errors::{ColorConfig, Handler},
-    FileName, FilePathMapping, SourceMap, DUMMY_SP,
+    FileName, FilePathMapping, Fold, FoldWith, SourceMap, Span, DUMMY_SP,
 };
 use swc_ecma_ast::*;
 use swc_ecma_parser::{Parser, Session, SourceFileInput, Syntax};
@@ -84,5 +85,13 @@ fn parse_namespace(s: &str) -> TsNamespaceDecl {
             span: DUMMY_SP,
             body: script.body.into_iter().map(ModuleItem::Stmt).collect(),
         }),
+    }
+    .fold_with(&mut SpanRemover)
+}
+
+struct SpanRemover;
+impl Fold<Span> for SpanRemover {
+    fn fold(&mut self, _: Span) -> Span {
+        DUMMY_SP
     }
 }
