@@ -840,6 +840,7 @@ impl Analyzer<'_, '_> {
             }
             _ => {
                 let ty = self.type_of(callee)?;
+                let ty = self.expand_type(span, ty)?;
 
                 Ok(self.extract(span, &ty, kind, args, type_args)?.into_cow())
             }
@@ -854,6 +855,16 @@ impl Analyzer<'_, '_> {
         args: &[ExprOrSpread],
         type_args: Option<&TsTypeParamInstantiation>,
     ) -> Result<Type, Error> {
+        if cfg!(debug_assertions) {
+            match *ty.normalize() {
+                Type::Simple(ref s) => match **s {
+                    TsType::TsTypeRef(ref s) => unreachable!("TypeRef: {:#?}", s),
+                    _ => {}
+                },
+                _ => {}
+            }
+        }
+
         macro_rules! ret_err {
             () => {{
                 match kind {
@@ -965,7 +976,7 @@ impl Analyzer<'_, '_> {
             Type::Union(ref u) => {
                 let mut errors = vec![];
                 for ty in &u.types {
-                    match self.extract(span, ty, kind, args, type_args) {
+                    match self.extract(span, &ty, kind, args, type_args) {
                         Ok(ty) => return Ok(ty),
                         Err(err) => errors.push(err),
                     }
