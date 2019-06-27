@@ -354,6 +354,39 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
             }
         }
 
+        Type::Tuple(Tuple { ref types, .. }) => {
+            //
+            match *rhs.normalize() {
+                Type::Tuple(Tuple {
+                    types: ref r_types, ..
+                }) => {
+                    for (l, r) in types.into_iter().zip(r_types) {
+                        match try_assign(l, r, span) {
+                            // Great
+                            Ok(()) => {}
+                            Err(err) => {
+                                // I don't know why, but
+                                //
+                                //      var [a, b]: [number, any] = [undefined, undefined];
+                                //
+                                // is valid typescript.
+                                match *r.normalize() {
+                                    Type::Keyword(TsKeywordType {
+                                        kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                                        ..
+                                    }) => {}
+                                    _ => return Err(err),
+                                }
+                            }
+                        }
+                    }
+
+                    return Ok(());
+                }
+                _ => {}
+            }
+        }
+
         _ => {}
     }
 
