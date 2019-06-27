@@ -200,6 +200,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
                                     if s.starts_with("@target: ") {
                                         libs = Lib::load(&s[8..].trim());
+                                        println!("Libs: {:?}", libs);
                                     } else if s.starts_with("@strict: ") {
                                         let strict = s[8..].trim().parse().unwrap(); // TODO
                                         rule.no_implicit_any = strict;
