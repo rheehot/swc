@@ -567,7 +567,10 @@ impl Analyzer<'_, '_> {
         let ty = match arg {
             Some(ref expr) => {
                 let span = expr.span();
-                match self.type_of(&expr) {
+                match self
+                    .type_of(&expr)
+                    .and_then(|ty| self.expand_type(span, ty))
+                {
                     Ok(ty) => ty.to_static().respan(span),
                     Err(err) => {
                         self.info.errors.push(err);
