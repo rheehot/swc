@@ -1,9 +1,12 @@
 use super::{control_flow::CondFacts, Analyzer, Name};
-use crate::{errors::Error, ty::Type};
+use crate::{
+    errors::Error,
+    ty::{Array, Tuple, Type},
+};
 use fxhash::FxHashMap;
 use std::collections::hash_map::Entry;
 use swc_atoms::JsWord;
-use swc_common::DUMMY_SP;
+use swc_common::{Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone)]
@@ -120,6 +123,76 @@ impl<'a> Scope<'a> {
         Ok(())
     }
 
+    pub fn declare_complex_vars(
+        &mut self,
+        kind: VarDeclKind,
+        pat: &Pat,
+        ty: Type<'static>,
+    ) -> Result<(), Error> {
+        let span = pat.span();
+
+        match *pat {
+            Pat::Ident(ref i) => {
+                assert_eq!(
+                    i.type_ann, None,
+                    "declare_complex_vars: Pattern should not have type annotation"
+                );
+
+                self.declare_var(
+                    kind,
+                    i.sym.clone(),
+                    Some(ty),
+                    // initialized
+                    true,
+                    // let/const declarations does not allow multiple declarations with
+                    // same name
+                    kind == VarDeclKind::Var,
+                );
+                Ok(())
+            }
+
+            Pat::Array(ArrayPat {
+                ref elems,
+                ref type_ann,
+                ..
+            }) => {
+                assert_eq!(
+                    *type_ann, None,
+                    "declare_complex_vars: Pattern should not have type annotation"
+                );
+
+                // Handle tuple
+                //
+                // const [a , setA] = useState();
+                //
+
+                match ty {
+                    Type::Tuple(Tuple { types, .. }) => {
+                        if types.len() < elems.len() {
+                            return Err(Error::TooManyTupleElements { span });
+                        }
+
+                        for (elem, ty) in elems.into_iter().zip(types) {
+                            match *elem {
+                                Some(ref elem) => {
+                                    self.declare_complex_vars(kind, elem, ty.into_owned())?;
+                                }
+                                None => {
+                                    // Skip
+                                }
+                            }
+                        }
+
+                        return Ok(());
+                    }
+
+                    _ => unimplemented!(),
+                }
+            }
+            _ => unimplemented!(),
+        }
+    }
+
     pub fn declare_var(
         &mut self,
         kind: VarDeclKind,
@@ -144,7 +217,10 @@ impl<'a> Scope<'a> {
         self.vars.insert(name, info);
     }
 
-    /// Updates variable list
+    /// Updates variable list.
+    ///
+    /// This method should be called for function parameters including error
+    /// variable from a catch clause, and variable declarations.
     pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) {
         match *pat {
             Pat::Ident(ref i) => {
@@ -160,15 +236,30 @@ impl<'a> Scope<'a> {
                     // initialized
                     true,
                     // allow_multiple
-                    false,
+                    kind == VarDeclKind::Var,
                 );
-            }
-            Pat::Rest(ref p) => {
-                self.declare_vars(kind, &p.arg);
             }
             Pat::Assign(ref p) => {
                 self.declare_vars(kind, &p.left);
             }
+
+            Pat::Array(ArrayPat {
+                ref elems,
+                ..
+            }) => {
+                // TODO: Handle type annotation
+
+                for elem in elems {
+                    match *elem {
+                        Some(ref elem) => {
+                            self.declare_vars(kind, elem);
+                        }
+                        // Skip
+                        None => {}
+                    }
+                }
+            }
+
             _ => unimplemented!("declare_vars for patterns other than ident: {:#?}", pat),
         }
     }

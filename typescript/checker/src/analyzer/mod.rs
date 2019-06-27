@@ -526,19 +526,12 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
 
                         let ty = value_ty.generalize_lit().to_static();
 
-                        self.scope.declare_var(
-                            kind,
-                            match v.name {
-                                Pat::Ident(ref i) => i.sym.clone(),
-                                _ => unimplemented!("declare_var with complex type inference"),
-                            },
-                            Some(ty),
-                            // initialized
-                            true,
-                            // let/const declarations does not allow multiple declarations with
-                            // same name
-                            var.kind == VarDeclKind::Var,
-                        );
+                        match self.scope.declare_complex_vars(kind, &v.name, ty) {
+                            Ok(()) => {}
+                            Err(err) => {
+                                self.info.errors.push(err);
+                            }
+                        }
                         return;
                     }
                 }
