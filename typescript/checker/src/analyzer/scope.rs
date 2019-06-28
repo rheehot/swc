@@ -253,50 +253,6 @@ impl<'a> Scope<'a> {
         self.vars.insert(name, info);
     }
 
-    /// Updates variable list.
-    ///
-    /// This method should be called for function parameters including error
-    /// variable from a catch clause.
-    pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) {
-        match *pat {
-            Pat::Ident(ref i) => {
-                let name = i.sym.clone();
-                self.declare_var(
-                    kind,
-                    name,
-                    i.type_ann
-                        .as_ref()
-                        .map(|t| &*t.type_ann)
-                        .cloned()
-                        .map(Type::from),
-                    // initialized
-                    true,
-                    // allow_multiple
-                    kind == VarDeclKind::Var,
-                );
-            }
-            Pat::Assign(ref p) => {
-                self.declare_vars(kind, &p.left);
-            }
-
-            Pat::Array(ArrayPat { ref elems, .. }) => {
-                // TODO: Handle type annotation
-
-                for elem in elems {
-                    match *elem {
-                        Some(ref elem) => {
-                            self.declare_vars(kind, elem);
-                        }
-                        // Skip
-                        None => {}
-                    }
-                }
-            }
-
-            _ => unimplemented!("declare_vars for patterns other than ident: {:#?}", pat),
-        }
-    }
-
     /// This method does cannot handle imported types.
     pub(super) fn find_type(&self, name: &JsWord) -> Option<&Type<'static>> {
         if let Some(ty) = self.types.get(name) {
@@ -346,6 +302,64 @@ impl<'a> Scope<'a> {
 }
 
 impl Analyzer<'_, '_> {
+    /// Updates variable list.
+    ///
+    /// This method should be called for function parameters including error
+    /// variable from a catch clause.
+    pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) {
+        match *pat {
+            Pat::Ident(ref i) => {
+                let ty = i
+                    .type_ann
+                    .as_ref()
+                    .map(|t| &*t.type_ann)
+                    .cloned()
+                    .map(Type::from);
+                let ty = if let Some(ty) = ty {
+                    match self.expand_type(i.span, ty.owned()) {
+                        Ok(ty) => Some(ty.to_static()),
+                        Err(err) => {
+                            self.info.errors.push(err);
+                            return;
+                        }
+                    }
+                } else {
+                    None
+                };
+
+                let name = i.sym.clone();
+                self.scope.declare_var(
+                    kind,
+                    name,
+                    ty,
+                    // initialized
+                    true,
+                    // allow_multiple
+                    kind == VarDeclKind::Var,
+                );
+            }
+            Pat::Assign(ref p) => {
+                self.declare_vars(kind, &p.left);
+            }
+
+            Pat::Array(ArrayPat { ref elems, .. }) => {
+                // TODO: Handle type annotation
+
+                for elem in elems {
+                    match *elem {
+                        Some(ref elem) => {
+                            self.declare_vars(kind, elem);
+                        }
+                        // Skip
+                        None => {}
+                    }
+                }
+            }
+
+            _ => unimplemented!("declare_vars for patterns other than ident: {:#?}", pat),
+        }
+    }
+
     #[inline(never)]
     pub(super) fn find_var(&self, name: &JsWord) -> Option<&VarInfo> {
         static ERR_VAR: VarInfo = VarInfo {

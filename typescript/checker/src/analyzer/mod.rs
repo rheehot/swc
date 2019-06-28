@@ -364,7 +364,7 @@ impl Analyzer<'_, '_> {
 
             f.params
                 .iter()
-                .for_each(|pat| child.scope.declare_vars(VarDeclKind::Let, pat));
+                .for_each(|pat| child.declare_vars(VarDeclKind::Let, pat));
 
             f.visit_children(child);
 
@@ -438,7 +438,7 @@ impl Visit<ArrowExpr> for Analyzer<'_, '_> {
 
             f.params
                 .iter()
-                .for_each(|pat| child.scope.declare_vars(VarDeclKind::Let, pat));
+                .for_each(|pat| child.declare_vars(VarDeclKind::Let, pat));
 
             f.visit_children(child);
 
@@ -582,7 +582,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                 }
             }
 
-            self.scope.declare_vars(kind, &v.name);
+            self.declare_vars(kind, &v.name);
         });
     }
 }
