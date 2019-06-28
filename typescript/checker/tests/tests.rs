@@ -226,6 +226,8 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                                         rule.always_strict = strict;
                                         rule.strict_null_checks = strict;
                                         rule.strict_function_types = strict;
+                                    } else if s.starts_with("@declaration") {
+                                        // TODO: Create d.ts
                                     } else {
                                         panic!("Comment is not handled: {}", s);
                                     }
