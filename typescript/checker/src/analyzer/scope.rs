@@ -372,6 +372,27 @@ impl<'a> Scope<'a> {
     pub fn register_type(&mut self, name: JsWord, ty: Type<'static>) {
         let depth = self.depth();
 
+        if cfg!(debug_assertions) {
+            match ty.normalize() {
+                Type::Alias(ref alias) => {
+                    //
+                    if alias.type_params.is_none() {
+                        match **alias.ty {
+                            Type::Simple(ref s_ty) => match **s_ty {
+                                TsType::TsTypeRef(..) => panic!(
+                                    "Type alias without type parameters should be expanded before \
+                                     .register_type()"
+                                ),
+                                _ => {}
+                            },
+                            _ => {}
+                        }
+                    }
+                }
+                _ => {}
+            }
+        }
+
         match self.types.entry(name) {
             Entry::Occupied(mut e) => {
                 println!("({}) register_type({}): duplicate", depth, e.key());
