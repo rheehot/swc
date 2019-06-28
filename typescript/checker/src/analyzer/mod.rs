@@ -539,12 +539,22 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                 if !var.declare {
                     let (sym, ty) = match v.name {
                         Pat::Ident(Ident {
+                            span,
                             ref sym,
                             ref type_ann,
                             ..
                         }) => (
                             sym.clone(),
-                            type_ann.as_ref().map(|t| Type::from(t.type_ann.clone())),
+                            match type_ann.as_ref().map(|t| Type::from(t.type_ann.clone())) {
+                                Some(ty) => match self.expand_type(span, ty.into_cow()) {
+                                    Ok(ty) => Some(ty.to_static()),
+                                    Err(err) => {
+                                        self.info.errors.push(err);
+                                        return;
+                                    }
+                                },
+                                None => None,
+                            },
                         ),
                         _ => unreachable!(
                             "complex pattern without initializer is invalid syntax and parser \

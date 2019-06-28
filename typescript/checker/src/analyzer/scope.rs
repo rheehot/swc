@@ -112,14 +112,7 @@ impl<'a> Scope<'a> {
         name: JsWord,
         ty: Type<'static>,
     ) -> Result<(), Error> {
-        let info = VarInfo {
-            kind,
-            ty: Some(ty),
-            initialized: true,
-            copied: false,
-        };
-
-        self.vars.insert(name, info);
+        self.declare_var(kind, name, Some(ty), true, true);
 
         Ok(())
     }
@@ -244,6 +237,16 @@ impl<'a> Scope<'a> {
         initialized: bool,
         allow_multiple: bool,
     ) {
+        if cfg!(debug_assertions) {
+            match ty {
+                Some(Type::Simple(ref t)) => match **t {
+                    TsType::TsTypeRef(..) => panic!("Var's kind should not be TypeRef"),
+                    _ => {}
+                },
+                _ => {}
+            }
+        }
+
         let info = VarInfo {
             kind,
             ty,
