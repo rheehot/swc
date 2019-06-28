@@ -107,7 +107,8 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
 
         let ignore = file_name.contains("circular")
             || input.contains("@filename")
-            || (mode == Mode::Conformance && !file_name.contains(""));
+            || (mode == Mode::Conformance
+                && !file_name.contains("types/tuple/unionsOfTupleTypes1"));
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);
@@ -361,12 +362,27 @@ struct TestMaker<'a> {
     stmts: Vec<Stmt>,
 }
 
+impl Fold<Vec<ModuleItem>> for TestMaker<'_> {
+    fn fold(&mut self, stmts: Vec<ModuleItem>) -> Vec<ModuleItem> {
+        let mut ss = vec![];
+        for stmt in stmts {
+            let stmt = stmt.fold_with(self);
+            ss.push(stmt);
+            println!("DRAIN! {:?}", self.stmts);
+            ss.extend(self.stmts.drain(..).map(ModuleItem::Stmt));
+        }
+
+        ss
+    }
+}
+
 impl Fold<Vec<Stmt>> for TestMaker<'_> {
     fn fold(&mut self, stmts: Vec<Stmt>) -> Vec<Stmt> {
         let mut ss = vec![];
         for stmt in stmts {
             let stmt = stmt.fold_with(self);
             ss.push(stmt);
+            println!("DRAIN! {:?}", self.stmts);
             ss.extend(self.stmts.drain(..));
         }
 
