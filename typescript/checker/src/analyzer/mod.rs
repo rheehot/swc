@@ -8,7 +8,7 @@ use crate::{
     builtin_types::Lib,
     errors::Error,
     loader::Load,
-    ty::{Param, Type, TypeRefExt},
+    ty::{Alias, Param, Type, TypeRefExt},
     util::IntoCow,
     Rule,
 };
@@ -126,8 +126,28 @@ impl Visit<TsInterfaceDecl> for Analyzer<'_, '_> {
 
 impl Visit<TsTypeAliasDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, decl: &TsTypeAliasDecl) {
-        self.scope
-            .register_type(decl.id.sym.clone(), decl.clone().into());
+        let ty: Type<'_> = decl.type_ann.clone().into();
+
+        let ty = if decl.type_params.is_none() {
+            match self.expand_type(decl.span(), ty.owned()) {
+                Ok(ty) => ty.to_static(),
+                Err(err) => {
+                    self.info.errors.push(err);
+                    Type::any(decl.span())
+                }
+            }
+        } else {
+            ty
+        };
+
+        self.scope.register_type(
+            decl.id.sym.clone(),
+            Type::Alias(Alias {
+                span: decl.span(),
+                ty: box ty.owned(),
+                type_params: decl.type_params.clone().map(From::from),
+            }),
+        );
 
         // TODO(kdy1): Validate type
     }
