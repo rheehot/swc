@@ -380,7 +380,6 @@ impl Fold<Vec<Stmt>> for TestMaker<'_> {
         for stmt in stmts {
             let stmt = stmt.fold_with(self);
             ss.push(stmt);
-            println!("DRAIN! {:?}", self.stmts);
             ss.extend(self.stmts.drain(..));
         }
 
