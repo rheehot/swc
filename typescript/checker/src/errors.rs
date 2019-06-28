@@ -14,6 +14,10 @@ pub enum Error {
         span: Span,
     },
 
+    NotTuple {
+        span: Span,
+    },
+
     NotVariable {
         // Span of rhs
         span: Span,
