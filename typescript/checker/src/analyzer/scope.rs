@@ -127,11 +127,6 @@ impl<'a> Scope<'a> {
 
         match *pat {
             Pat::Ident(ref i) => {
-                assert_eq!(
-                    i.type_ann, None,
-                    "declare_complex_vars: Pattern should not have type annotation"
-                );
-
                 self.declare_var(
                     kind,
                     i.sym.clone(),
@@ -150,11 +145,6 @@ impl<'a> Scope<'a> {
                 ref type_ann,
                 ..
             }) => {
-                assert_eq!(
-                    *type_ann, None,
-                    "declare_complex_vars: Pattern should not have type annotation"
-                );
-
                 // Handle tuple
                 //
                 // const [a , setA] = useState();
