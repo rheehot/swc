@@ -190,13 +190,10 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                             Some(&comments),
                         );
 
-                        let module = parser
-                            .parse_module()
-                            .map_err(|mut e| {
-                                e.emit();
-                                ()
-                            })
-                            .expect("failed to parser module");
+                        let module = parser.parse_module().map_err(|mut e| {
+                            e.emit();
+                            ()
+                        })?;
                         let module = if mode == Mode::Conformance {
                             make_test(&comments, module)
                         } else {
