@@ -118,7 +118,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
 
         let ignore = file_name.contains("circular")
             || input.contains("@filename")
-            || (mode == Mode::Conformance && !file_name.contains(""));
+            || (mode == Mode::Conformance && !file_name.contains("stringLiteral"));
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);
@@ -147,7 +147,6 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
     let fname = file_name.display().to_string();
     let lines = match mode {
         Mode::Conformance => {
-            let mut buf = String::new();
             let fname = file_name.file_name().unwrap();
             let errors_file =
                 file_name.with_file_name(format!("{}.errors.txt", fname.to_string_lossy()));
