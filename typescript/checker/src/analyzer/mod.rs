@@ -213,6 +213,8 @@ impl<'a, 'b> Analyzer<'a, 'b> {
         path: Arc<PathBuf>,
         loader: &'b dyn Load,
     ) -> Self {
+        debug_assert_ne!(libs, &[]);
+
         Analyzer {
             libs,
             rule,
