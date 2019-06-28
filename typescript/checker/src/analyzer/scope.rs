@@ -215,7 +215,8 @@ impl<'a> Scope<'a> {
                     _ => unimplemented!("declare_complex_vars({:#?}, {:#?})", pat, ty),
                 }
             }
-            _ => unimplemented!(),
+
+            _ => unimplemented!("declare_complex_vars({:#?}, {:#?})", pat, ty),
         }
     }
 
