@@ -3,7 +3,7 @@ use crate::{
     builtin_types,
     errors::Error,
     ty::{
-        self, Array, CallSignature, ConstructorSignature, EnumVariant, Intersection,
+        self, Alias, Array, CallSignature, ConstructorSignature, EnumVariant, Intersection,
         MethodSignature, PropertySignature, Tuple, Type, TypeElement, TypeLit, TypeParamDecl,
         TypeRef, TypeRefExt, Union,
     },
@@ -1103,176 +1103,115 @@ impl Analyzer<'_, '_> {
 
         match *ty {
             Type::Static(s) => return self.expand_type(span, s.ty.static_cast()),
-            Type::Simple(ref s_ty) => match **s_ty {
-                TsType::TsTypeRef(TsTypeRef {
-                    ref type_name,
-                    ref type_params,
-                    ..
-                }) => {
-                    match *type_name {
-                        TsEntityName::Ident(ref i) => {
-                            // Check for builtin types
-                            if let Ok(ty) = builtin_types::get_type(self.libs, span, &i.sym) {
-                                return Ok(ty.owned());
-                            }
-
-                            // Handle enum
-                            if let Some(ref ty) = self.find_type(&i.sym) {
-                                match ty.normalize() {
-                                    Type::Enum(..) => {
-                                        assert_eq!(
-                                            *type_params, None,
-                                            "unimplemented: error rerporting: Enum reference \
-                                             cannot have type parameters."
-                                        );
-                                        return Ok(ty.static_cast());
-                                    }
-
-                                    Type::Interface(..) | Type::Class(..) | Type::Param(..) => {
-                                        return Ok(ty.static_cast());
-                                    }
-
-                                    Type::Alias(ref a) => {
-                                        // Expand type alias
-                                        return Ok(a.ty.static_cast());
-                                    }
-                                    _ => {}
+            Type::Simple(ref s_ty) => {
+                match **s_ty {
+                    TsType::TsTypeRef(TsTypeRef {
+                        ref type_name,
+                        ref type_params,
+                        ..
+                    }) => {
+                        match *type_name {
+                            TsEntityName::Ident(ref i) => {
+                                // Check for builtin types
+                                if let Ok(ty) = builtin_types::get_type(self.libs, span, &i.sym) {
+                                    return Ok(ty.owned());
                                 }
-                            }
-                        }
 
-                        // Handle enum variant type.
-                        //
-                        //  let a: StringEnum.Foo = x;
-                        TsEntityName::TsQualifiedName(box TsQualifiedName {
-                            left: TsEntityName::Ident(ref left),
-                            ref right,
-                        }) => {
-                            if let Some(ref ty) = self.scope.find_type(&left.sym) {
-                                match *ty {
-                                    Type::Enum(..) => {
-                                        return Ok(EnumVariant {
-                                            span,
-                                            enum_name: left.sym.clone(),
-                                            name: right.sym.clone(),
+                                // Handle enum
+                                if let Some(ref ty) = self.find_type(&i.sym) {
+                                    match ty.normalize() {
+                                        Type::Enum(..) => {
+                                            assert_eq!(
+                                                *type_params, None,
+                                                "unimplemented: error rerporting: Enum reference \
+                                                 cannot have type parameters."
+                                            );
+                                            return Ok(ty.static_cast());
                                         }
-                                        .into_cow())
+
+                                        Type::Interface(..) | Type::Class(..) | Type::Param(..) => {
+                                            return Ok(ty.static_cast());
+                                        }
+
+                                        Type::Alias(Alias {
+                                            type_params: None,
+                                            ref ty,
+                                            ..
+                                        }) => {
+                                            if cfg!(debug_assertions) {
+                                                match ty.normalize() {
+                                                    Type::Simple(ref s) => match **s {
+                                                        TsType::TsTypeRef(..) => unreachable!(),
+                                                        _ => {}
+                                                    },
+                                                    _ => {}
+                                                }
+                                            }
+                                            return Ok(ty.static_cast());
+                                        }
+
+                                        Type::Alias(Alias {
+                                            type_params: Some(ref tps),
+                                            ref ty,
+                                            ..
+                                        }) => unimplemented!(
+                                            "expanding type alias with type params.\nType parmas: \
+                                             {:#?}",
+                                            tps
+                                        ),
+
+                                        _ => unimplemented!(
+                                            "Handling result of find_type() -> {:#?}",
+                                            ty
+                                        ),
                                     }
-                                    _ => {}
                                 }
                             }
+
+                            // Handle enum variant type.
+                            //
+                            //  let a: StringEnum.Foo = x;
+                            TsEntityName::TsQualifiedName(box TsQualifiedName {
+                                left: TsEntityName::Ident(ref left),
+                                ref right,
+                            }) => {
+                                if let Some(ref ty) = self.scope.find_type(&left.sym) {
+                                    match *ty {
+                                        Type::Enum(..) => {
+                                            return Ok(EnumVariant {
+                                                span,
+                                                enum_name: left.sym.clone(),
+                                                name: right.sym.clone(),
+                                            }
+                                            .into_cow())
+                                        }
+                                        _ => {}
+                                    }
+                                }
+                            }
+                            _ => {}
                         }
-                        _ => {}
+
+                        unimplemented!(
+                            "expand_type(): error reporting for type not found: {:#?}",
+                            ty
+                        );
                     }
 
-                    return Ok(ty);
+                    TsType::TsTypeQuery(TsTypeQuery { ref expr_name, .. }) => match *expr_name {
+                        TsEntityName::Ident(ref i) => {
+                            let ty = self.type_of(&Expr::Ident(i.clone()))?;
 
-                    // match e.extra {
-                    //     Some(ref extra) => {
-                    //         // Expand
-                    //         match extra {
+                            return Ok(ty);
+                        }
+                        _ => unimplemented!("expand(TsTypeQuery): typeof member.expr"),
+                    },
 
-                    //             ExportExtra::Module(TsModuleDecl {
-                    //                 body: Some(body), ..
-                    //             })
-                    //             | ExportExtra::Namespace(TsNamespaceDecl {
-                    // box body, .. }) => {                 
-                    // let mut name = type_name;            
-                    // let mut body = body;                 
-                    // let mut ty = None;
-
-                    //                 while let
-                    // TsEntityName::TsQualifiedName(q) = name {
-                    //                     body = match body {
-                    //                         
-                    // TsNamespaceBody::TsModuleBlock(ref module) => {
-                    //                             match q.left {
-                    //                                 TsEntityName::Ident(ref
-                    // left) => {                           
-                    // for item in module.body.iter() {}
-                    //                                     return
-                    // Err(Error::UndefinedSymbol {
-                    //                                         span: left.span,
-                    //                                     });
-                    //                                 }
-                    //                                 _ => {
-                    //                                     //
-                    //                                     
-                    // unimplemented!("qname")              
-                    // }                             }
-                    //                         }
-                    //                         
-                    // TsNamespaceBody::TsNamespaceDecl(TsNamespaceDecl {
-                    //                             ref id,
-                    //                             ref body,
-                    //                             ..
-                    //                         }) => {
-                    //                             match q.left {
-                    //                                 TsEntityName::Ident(ref
-                    // left) => {                           
-                    // if id.sym != left.sym {              
-                    // return Err(Error::UndefinedSymbol {
-                    //                                             span:
-                    // left.span,                           
-                    // });                                  
-                    // }                                 }
-                    //                                 _ => {}
-                    //                             }
-                    //                             //
-                    //                             body
-                    //                         }
-                    //                     };
-                    //                     name = &q.left;
-                    //                 }
-
-                    //                 return match ty {
-                    //                     Some(ty) => Ok(ty),
-                    //                     None => Err(Error::UndefinedSymbol {
-                    // span }),                 };
-                    //             }
-                    //             ExportExtra::Module(..) => {
-                    //                 assert_eq!(*type_params, None);
-
-                    //                 unimplemented!(
-                    //                     "ExportExtra::Module without body
-                    // cannot be instantiated"              
-                    // )             }
-                    //             ExportExtra::Interface(ref i) => {
-                    //                 // TODO: Check length of type parmaters
-                    //                 // TODO: Instantiate type parameters
-
-                    //                 let members =
-                    // i.body.body.iter().cloned().collect();
-
-                    //                 return Ok(TsType::TsTypeLit(TsTypeLit {
-                    //                     span: i.span,
-                    //                     members,
-                    //                 })
-                    //                 .into());
-                    //             }
-                    //             ExportExtra::Alias(ref decl) => {
-                    //                 // TODO(kdy1): Handle type parameters.
-                    //                 return Ok(decl.type_ann.into());
-                    //             }
-                    //         }
-                    //     }
-                    //     None => unimplemented!("`ty` and `extra` are both
-                    // null"), }
-                }
-
-                TsType::TsTypeQuery(TsTypeQuery { ref expr_name, .. }) => match *expr_name {
-                    TsEntityName::Ident(ref i) => {
-                        let ty = self.type_of(&Expr::Ident(i.clone()))?;
-
-                        return Ok(ty);
+                    _ => {
+                        return Ok(Cow::Owned((*s_ty).clone().into()));
                     }
-                    _ => unimplemented!("expand(TsTypeQuery): typeof member.expr"),
-                },
-
-                _ => {
-                    return Ok(Cow::Owned((*s_ty).clone().into()));
                 }
-            },
+            }
 
             _ => {}
         }
