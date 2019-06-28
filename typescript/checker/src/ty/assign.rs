@@ -411,6 +411,22 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
             }
         }
 
+        Type::Simple(ref s) => match **s {
+            TsType::TsTypePredicate(..) => match *rhs.normalize() {
+                Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsBooleanKeyword,
+                    ..
+                })
+                | Type::Lit(TsLitType {
+                    lit: TsLit::Bool(..),
+                    ..
+                }) => return Ok(()),
+                _ => {}
+            },
+
+            _ => {}
+        },
+
         _ => {}
     }
 
