@@ -218,11 +218,11 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                                         panic!("Comment is not handled: {}", s);
                                     }
                                 }
-
-                                (libs, rule, ts_config)
                             }
-                            None => Default::default(),
+                            None => {}
                         }
+
+                        (libs, rule, ts_config)
                     }
                 }
             };
