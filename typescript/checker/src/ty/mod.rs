@@ -249,6 +249,7 @@ pub struct Intersection<'a> {
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct Param<'a> {
     pub span: Span,
+    pub name: JsWord,
     pub constraint: Option<Box<TypeRef<'a>>>,
     pub default: Option<Box<TypeRef<'a>>>,
 }
@@ -674,6 +675,7 @@ impl Param<'_> {
     pub fn into_static(self) -> Param<'static> {
         Param {
             span: self.span,
+            name: self.name,
             constraint: self.constraint.map(|v| box static_type(*v)),
             default: self.default.map(|v| box static_type(*v)),
         }

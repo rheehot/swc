@@ -65,7 +65,7 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
     macro_rules! handle_type_lit {
         ($members:expr) => {{
             let members = $members;
-            match rhs {
+            match *rhs.normalize() {
                 Type::TypeLit(TypeLit {
                     members: ref rhs_members,
                     ..
@@ -135,9 +135,33 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
         }
 
         Type::Param(Param {
-            constraint: Some(ref constraint),
+            ref name,
+            ref constraint,
             ..
-        }) => return try_assign(to, constraint, span),
+        }) => {
+            //
+            match to.normalize() {
+                Type::Param(Param {
+                    name: ref l_name, ..
+                }) => {
+                    if name == l_name {
+                        return Ok(());
+                    }
+
+                    {}
+                }
+                _ => {}
+            }
+
+            match *constraint {
+                Some(ref c) => {
+                    return try_assign(to, c, span);
+                }
+                None => {}
+            }
+
+            fail!()
+        }
 
         _ => {}
     }
