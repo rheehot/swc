@@ -456,6 +456,11 @@ impl Fold<TsTypeAliasDecl> for TestMaker<'_> {
 
 fn parse_type(span: Span, s: &str) -> Option<TsType> {
     let s = s.trim();
+
+    if s.starts_with("error") || s.starts_with("Error") {
+        return None;
+    }
+
     let ty = ::testing::run_test(true, |cm, handler| {
         let session = Session { handler: &handler };
 
