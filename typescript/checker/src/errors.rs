@@ -10,6 +10,10 @@ pub enum Error {
         span: Span,
     },
 
+    NoSuchProperty {
+        span: Span,
+    },
+
     TooManyTupleElements {
         span: Span,
     },

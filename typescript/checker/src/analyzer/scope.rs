@@ -1,7 +1,10 @@
 use super::{control_flow::CondFacts, Analyzer, Name};
 use crate::{
     errors::Error,
-    ty::{Array, Tuple, Type, TypeRefExt, Union},
+    ty::{
+        IndexSignature, Interface, PropertySignature, Tuple, Type, TypeElement, TypeLit, TypeRef,
+        TypeRefExt, Union,
+    },
     util::IntoCow,
 };
 use fxhash::FxHashMap;
@@ -140,16 +143,13 @@ impl<'a> Scope<'a> {
                 Ok(())
             }
 
-            Pat::Array(ArrayPat {
-                ref elems,
-                ref type_ann,
-                ..
-            }) => {
+            Pat::Array(ArrayPat { ref elems, .. }) => {
                 // Handle tuple
                 //
                 // const [a , setA] = useState();
                 //
 
+                // TODO: Normalize static
                 match ty {
                     Type::Tuple(Tuple { types, .. }) => {
                         if types.len() < elems.len() {
@@ -210,6 +210,73 @@ impl<'a> Scope<'a> {
                         }
 
                         return Ok(());
+                    }
+
+                    _ => unimplemented!("declare_complex_vars({:#?}, {:#?})", pat, ty),
+                }
+            }
+
+            Pat::Object(ObjectPat { ref props, .. }) => {
+                fn find<'a>(members: &[TypeElement<'a>], key: &PropName) -> Option<TypeRef<'a>> {
+                    let mut index_el = None;
+                    // First, we search for Property
+                    for m in members {
+                        match *m {
+                            TypeElement::Property(PropertySignature { ref type_ann, .. }) => {
+                                return match *type_ann {
+                                    Some(ref ty) => Some(ty.clone()),
+                                    None => Some(Type::any(key.span()).owned()),
+                                }
+                            }
+
+                            TypeElement::Index(IndexSignature { ref type_ann, .. }) => {
+                                index_el = Some(match *type_ann {
+                                    Some(ref ty) => ty.clone(),
+                                    None => Type::any(key.span()).owned(),
+                                });
+                            }
+                            _ => {}
+                        }
+                    }
+
+                    return index_el;
+                }
+
+                /// Handle TypeElements.
+                ///
+                /// Used for interfaces and type literals.
+                macro_rules! handle_elems {
+                    ($members:expr) => {{
+                        for p in props.iter() {
+                            match *p {
+                                ObjectPatProp::KeyValue(KeyValuePatProp {
+                                    ref key,
+                                    ref value,
+                                    ..
+                                }) => {
+                                    if let Some(ty) = find(&$members, key) {
+                                        self.declare_complex_vars(kind, value, ty.to_static())?;
+                                        return Ok(());
+                                    }
+                                }
+
+                                _ => unimplemented!("handle_elems({:#?})", p),
+                            }
+                        }
+
+                        return Err(Error::NoSuchProperty { span });
+                    }};
+                }
+
+                // TODO: Normalize static
+                match ty {
+                    Type::TypeLit(TypeLit { members, .. }) => {
+                        handle_elems!(members);
+                    }
+
+                    // TODO: Handle extends
+                    Type::Interface(Interface { body, .. }) => {
+                        handle_elems!(body);
                     }
 
                     _ => unimplemented!("declare_complex_vars({:#?}, {:#?})", pat, ty),
