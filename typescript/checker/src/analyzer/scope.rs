@@ -279,6 +279,32 @@ impl<'a> Scope<'a> {
                         handle_elems!(body);
                     }
 
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsAnyKeyword,
+                        ..
+                    }) => {
+                        for p in props.iter() {
+                            match *p {
+                                ObjectPatProp::KeyValue(ref kv) => {
+                                    self.declare_complex_vars(
+                                        kind,
+                                        &kv.value,
+                                        Type::any(kv.span()),
+                                    )?;
+                                }
+
+                                _ => unimplemented!("handle_elems({:#?})", p),
+                            }
+                        }
+
+                        return Ok(());
+                    }
+
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsUnknownKeyword,
+                        ..
+                    }) => return Err(Error::Unknown { span }),
+
                     _ => unimplemented!("declare_complex_vars({:#?}, {:#?})", pat, ty),
                 }
             }

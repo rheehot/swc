@@ -10,6 +10,10 @@ pub enum Error {
         span: Span,
     },
 
+    Unknown {
+        span: Span,
+    },
+
     NoSuchProperty {
         span: Span,
     },
