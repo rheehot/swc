@@ -534,7 +534,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     None => {
                         // infer type from value.
 
-                        let ty = value_ty.generalize_lit().to_static();
+                        let ty = value_ty.to_static();
 
                         match self.scope.declare_complex_vars(kind, &v.name, ty) {
                             Ok(()) => {}

@@ -79,7 +79,7 @@ impl Analyzer<'_, '_> {
                             spread: None,
                             ref expr,
                         }) => {
-                            let ty = self.type_of(expr)?.generalize_lit();
+                            let ty = self.type_of(expr)?;
                             types.push(ty)
                         }
                         Some(ExprOrSpread {
