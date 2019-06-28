@@ -1,0 +1,12 @@
+[
+    {
+        "line": 2,
+        "column": 15,
+        "msg": "Cannot find name 'arguments'."
+    },
+    {
+        "line": 19,
+        "column": 15,
+        "msg": "Cannot find name 'arguments'."
+    }
+]

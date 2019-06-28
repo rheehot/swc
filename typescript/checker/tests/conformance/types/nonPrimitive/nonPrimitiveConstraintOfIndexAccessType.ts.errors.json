@@ -1,0 +1,52 @@
+[
+    {
+        "line": 3,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type 'T[P]'."
+    },
+    {
+        "line": 6,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type 'T[P]'."
+    },
+    {
+        "line": 9,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type 'T[P]'."
+    },
+    {
+        "line": 12,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type 'T[P]'."
+    },
+    {
+        "line": 15,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type 'T[P]'."
+    },
+    {
+        "line": 18,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type 'T[P]'."
+    },
+    {
+        "line": 21,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type 'T[P]'."
+    },
+    {
+        "line": 24,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type 'T[P]'."
+    },
+    {
+        "line": 27,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type 'T[P]'."
+    },
+    {
+        "line": 30,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type 'T[P]'."
+    }
+]

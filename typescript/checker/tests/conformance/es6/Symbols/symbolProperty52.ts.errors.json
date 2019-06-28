@@ -1,0 +1,17 @@
+[
+    {
+        "line": 2,
+        "column": 13,
+        "msg": "Property 'nonsense' does not exist on type 'SymbolConstructor'."
+    },
+    {
+        "line": 5,
+        "column": 1,
+        "msg": "Property '[Symbol.nonsense]' is missing in type '{}' but required in type '{ [Symbol.nonsense]"
+    },
+    {
+        "line": 7,
+        "column": 12,
+        "msg": "Property 'nonsense' does not exist on type 'SymbolConstructor'."
+    }
+]

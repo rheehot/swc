@@ -1,0 +1,7 @@
+[
+    {
+        "line": 1,
+        "column": 7,
+        "msg": "Type '{}' is missing the following properties from type 'typeof A'"
+    }
+]

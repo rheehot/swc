@@ -1,0 +1,12 @@
+[
+    {
+        "line": 2,
+        "column": 17,
+        "msg": "Type 'IterableIterator<string>' is not assignable to type 'BadGenerator'."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "any) => IteratorResult<number>'."
+    }
+]

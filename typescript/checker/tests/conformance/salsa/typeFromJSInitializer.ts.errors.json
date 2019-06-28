@@ -1,0 +1,32 @@
+[
+    {
+        "line": 3,
+        "column": 5,
+        "msg": "Member 'unknown' implicitly has an 'any' type."
+    },
+    {
+        "line": 4,
+        "column": 5,
+        "msg": "Member 'unknowable' implicitly has an 'any' type."
+    },
+    {
+        "line": 5,
+        "column": 5,
+        "msg": "Member 'empty' implicitly has an 'any[]' type."
+    },
+    {
+        "line": 25,
+        "column": 12,
+        "msg": "Parameter 'a' implicitly has an 'any' type."
+    },
+    {
+        "line": 25,
+        "column": 29,
+        "msg": "Parameter 'l' implicitly has an 'any[]' type."
+    },
+    {
+        "line": 37,
+        "column": 5,
+        "msg": "Type '\"error\"' is not assignable to type 'number | undefined'."
+    }
+]

@@ -1,0 +1,12 @@
+[
+    {
+        "line": 26,
+        "column": 5,
+        "msg": "Decorators cannot be applied to multiple get/set accessors of the same name."
+    },
+    {
+        "line": 31,
+        "column": 5,
+        "msg": "Decorators cannot be applied to multiple get/set accessors of the same name."
+    }
+]

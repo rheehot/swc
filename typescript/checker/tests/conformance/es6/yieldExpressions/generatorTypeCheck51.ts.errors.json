@@ -1,0 +1,7 @@
+[
+    {
+        "line": 1,
+        "column": 9,
+        "msg": "Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type."
+    }
+]

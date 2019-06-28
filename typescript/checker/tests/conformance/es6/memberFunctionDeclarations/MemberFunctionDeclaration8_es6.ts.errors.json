@@ -1,0 +1,27 @@
+[
+    {
+        "line": 4,
+        "column": 9,
+        "msg": "Cannot find name 'a'."
+    },
+    {
+        "line": 4,
+        "column": 12,
+        "msg": "Invalid character."
+    },
+    {
+        "line": 4,
+        "column": 14,
+        "msg": "Expression expected."
+    },
+    {
+        "line": 4,
+        "column": 16,
+        "msg": "Cannot find name 'bar'."
+    },
+    {
+        "line": 5,
+        "column": 12,
+        "msg": "Cannot find name 'bar'."
+    }
+]

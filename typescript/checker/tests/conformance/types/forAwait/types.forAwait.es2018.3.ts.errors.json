@@ -1,0 +1,22 @@
+[
+    {
+        "line": 3,
+        "column": 27,
+        "msg": "Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator."
+    },
+    {
+        "line": 5,
+        "column": 21,
+        "msg": "Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator."
+    },
+    {
+        "line": 10,
+        "column": 27,
+        "msg": "Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator."
+    },
+    {
+        "line": 12,
+        "column": 21,
+        "msg": "Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator."
+    }
+]

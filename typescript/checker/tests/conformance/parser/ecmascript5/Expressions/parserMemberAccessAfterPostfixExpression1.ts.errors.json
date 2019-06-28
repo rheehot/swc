@@ -1,0 +1,17 @@
+[
+    {
+        "line": 1,
+        "column": 1,
+        "msg": "Cannot find name 'a'."
+    },
+    {
+        "line": 1,
+        "column": 4,
+        "msg": "';' expected."
+    },
+    {
+        "line": 1,
+        "column": 5,
+        "msg": "Cannot find name 'toString'. Did you mean 'String'?"
+    }
+]

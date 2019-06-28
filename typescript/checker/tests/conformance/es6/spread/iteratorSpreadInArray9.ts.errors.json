@@ -1,0 +1,12 @@
+[
+    {
+        "line": 13,
+        "column": 17,
+        "msg": "Type 'SymbolIterator' is not assignable to type 'Iterable<symbol>'."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "any) => IteratorResult<symbol>'."
+    }
+]

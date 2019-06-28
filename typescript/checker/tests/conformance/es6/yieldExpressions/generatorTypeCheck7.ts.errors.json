@@ -1,0 +1,7 @@
+[
+    {
+        "line": 4,
+        "column": 17,
+        "msg": "Property 'hello' is missing in type 'IterableIterator<number>' but required in type 'WeirdIter'."
+    }
+]

@@ -1,0 +1,72 @@
+[
+    {
+        "line": 3,
+        "column": 22,
+        "msg": "A required element cannot follow an optional element."
+    },
+    {
+        "line": 8,
+        "column": 13,
+        "msg": "A rest element must be last in a tuple type."
+    },
+    {
+        "line": 9,
+        "column": 13,
+        "msg": "A rest element type must be an array type."
+    },
+    {
+        "line": 10,
+        "column": 13,
+        "msg": "A rest element type must be an array type."
+    },
+    {
+        "line": 10,
+        "column": 16,
+        "msg": "JSDoc types can only be used inside documentation comments."
+    },
+    {
+        "line": 23,
+        "column": 31,
+        "msg": "Type 'number[]' does not satisfy the constraint '[number, ...number[]]'."
+    },
+    {
+        "line": 24,
+        "column": 31,
+        "msg": "Type '[]' does not satisfy the constraint '[number, ...number[]]'."
+    },
+    {
+        "line": 29,
+        "column": 18,
+        "msg": "Type 'number[]' does not satisfy the constraint '[number]'."
+    },
+    {
+        "line": 30,
+        "column": 18,
+        "msg": "Type '[number, ...number[]]' does not satisfy the constraint '[number]'."
+    },
+    {
+        "line": 32,
+        "column": 31,
+        "msg": "Type '[number, ...string[]]' does not satisfy the constraint '[number, ...number[]]'."
+    },
+    {
+        "line": 33,
+        "column": 31,
+        "msg": "Type '[string, ...number[]]' does not satisfy the constraint '[number, ...number[]]'."
+    },
+    {
+        "line": 34,
+        "column": 31,
+        "msg": "Type '[number, number, string]' does not satisfy the constraint '[number, ...number[]]'."
+    },
+    {
+        "line": 35,
+        "column": 31,
+        "msg": "Type '[number, number, number, string]' does not satisfy the constraint '[number, ...number[]]'."
+    },
+    {
+        "line": 59,
+        "column": 4,
+        "msg": "Argument of type '[]' is not assignable to parameter of type '[unknown, ...unknown[]]'."
+    }
+]

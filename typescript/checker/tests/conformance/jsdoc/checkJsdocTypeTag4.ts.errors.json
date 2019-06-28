@@ -1,0 +1,12 @@
+[
+    {
+        "line": 5,
+        "column": 14,
+        "msg": "Type 'number' does not satisfy the constraint 'string'."
+    },
+    {
+        "line": 7,
+        "column": 14,
+        "msg": "Type 'number' does not satisfy the constraint 'string'."
+    }
+]

@@ -1,0 +1,12 @@
+[
+    {
+        "line": 1,
+        "column": 14,
+        "msg": "Identifier expected."
+    },
+    {
+        "line": 1,
+        "column": 20,
+        "msg": "'"
+    }
+]

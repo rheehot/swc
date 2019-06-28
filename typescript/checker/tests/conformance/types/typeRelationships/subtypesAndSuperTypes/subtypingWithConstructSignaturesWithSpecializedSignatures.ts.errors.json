@@ -1,0 +1,22 @@
+[
+    {
+        "line": 70,
+        "column": 15,
+        "msg": "Interface 'I2' incorrectly extends interface 'Base2'."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "\"a\")"
+    },
+    {
+        "line": 76,
+        "column": 15,
+        "msg": "Interface 'I3' incorrectly extends interface 'Base2'."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "T) => T'."
+    }
+]

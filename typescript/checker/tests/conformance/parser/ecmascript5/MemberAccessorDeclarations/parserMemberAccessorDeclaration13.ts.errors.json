@@ -1,0 +1,7 @@
+[
+    {
+        "line": 2,
+        "column": 8,
+        "msg": "A 'set' accessor must have exactly one parameter."
+    }
+]

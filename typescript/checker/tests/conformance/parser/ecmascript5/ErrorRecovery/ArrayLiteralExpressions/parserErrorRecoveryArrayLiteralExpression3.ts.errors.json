@@ -1,0 +1,22 @@
+[
+    {
+        "line": 1,
+        "column": 54,
+        "msg": "',' expected."
+    },
+    {
+        "line": 1,
+        "column": 56,
+        "msg": "Left side of comma operator is unused and has no side effects."
+    },
+    {
+        "line": 1,
+        "column": 56,
+        "msg": "Left side of comma operator is unused and has no side effects."
+    },
+    {
+        "line": 1,
+        "column": 105,
+        "msg": "';' expected."
+    }
+]

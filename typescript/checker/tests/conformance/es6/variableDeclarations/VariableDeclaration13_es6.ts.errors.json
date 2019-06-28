@@ -1,0 +1,17 @@
+[
+    {
+        "line": 4,
+        "column": 5,
+        "msg": "Array element destructuring pattern expected."
+    },
+    {
+        "line": 4,
+        "column": 6,
+        "msg": "';' expected."
+    },
+    {
+        "line": 4,
+        "column": 8,
+        "msg": "Declaration or statement expected."
+    }
+]

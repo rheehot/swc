@@ -1,0 +1,12 @@
+[
+    {
+        "line": 2,
+        "column": 17,
+        "msg": "Property 'removeChildren' does not exist on type 'Event'."
+    },
+    {
+        "line": 3,
+        "column": 10,
+        "msg": "Property 'textContent' does not exist on type 'Event'."
+    }
+]

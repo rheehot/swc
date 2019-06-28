@@ -1,0 +1,42 @@
+[
+    {
+        "line": 2,
+        "column": 9,
+        "msg": "Type 'T' is not assignable to type 'object'."
+    },
+    {
+        "line": 9,
+        "column": 17,
+        "msg": "Argument of type '123' is not assignable to parameter of type 'object'."
+    },
+    {
+        "line": 10,
+        "column": 17,
+        "msg": "Argument of type 'string' is not assignable to parameter of type 'object'."
+    },
+    {
+        "line": 18,
+        "column": 7,
+        "msg": "Argument of type '123' is not assignable to parameter of type 'object'."
+    },
+    {
+        "line": 19,
+        "column": 7,
+        "msg": "Argument of type 'string' is not assignable to parameter of type 'object'."
+    },
+    {
+        "line": 25,
+        "column": 8,
+        "msg": "Type 'number' does not satisfy the constraint 'object'."
+    },
+    {
+        "line": 26,
+        "column": 8,
+        "msg": "Type 'string' does not satisfy the constraint 'object'."
+    },
+    {
+        "line": 34,
+        "column": 14,
+        "msg": "Type 'number' does not satisfy the constraint 'object'."
+    }
+]

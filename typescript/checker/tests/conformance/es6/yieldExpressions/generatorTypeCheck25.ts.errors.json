@@ -1,0 +1,12 @@
+[
+    {
+        "line": 4,
+        "column": 5,
+        "msg": "Type '() => IterableIterator<Bar | Baz>' is not assignable to type '() => Iterable<Foo>'."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "any) => IteratorResult<Foo>'."
+    }
+]

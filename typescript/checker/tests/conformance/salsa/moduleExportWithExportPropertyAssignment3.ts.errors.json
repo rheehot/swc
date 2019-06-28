@@ -1,0 +1,12 @@
+[
+    {
+        "line": 4,
+        "column": 17,
+        "msg": "Property 'toFixed' does not exist on type 'string | number'."
+    },
+    {
+        "line": 5,
+        "column": 16,
+        "msg": "Property 'toFixed' does not exist on type 'string | number'."
+    }
+]

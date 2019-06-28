@@ -1,0 +1,57 @@
+[
+    {
+        "line": 5,
+        "column": 5,
+        "msg": "Property 'b' has no initializer and is not definitely assigned in the constructor."
+    },
+    {
+        "line": 20,
+        "column": 6,
+        "msg": "A definite assignment assertion '!' is not permitted in this context."
+    },
+    {
+        "line": 21,
+        "column": 6,
+        "msg": "A definite assignment assertion '!' is not permitted in this context."
+    },
+    {
+        "line": 22,
+        "column": 13,
+        "msg": "A definite assignment assertion '!' is not permitted in this context."
+    },
+    {
+        "line": 28,
+        "column": 6,
+        "msg": "A definite assignment assertion '!' is not permitted in this context."
+    },
+    {
+        "line": 34,
+        "column": 15,
+        "msg": "A definite assignment assertion '!' is not permitted in this context."
+    },
+    {
+        "line": 68,
+        "column": 10,
+        "msg": "Definite assignment assertions can only be used along with a type annotation."
+    },
+    {
+        "line": 69,
+        "column": 10,
+        "msg": "Definite assignment assertions can only be used along with a type annotation."
+    },
+    {
+        "line": 70,
+        "column": 10,
+        "msg": "Definite assignment assertions can only be used along with a type annotation."
+    },
+    {
+        "line": 75,
+        "column": 15,
+        "msg": "Definite assignment assertions can only be used along with a type annotation."
+    },
+    {
+        "line": 76,
+        "column": 15,
+        "msg": "Definite assignment assertions can only be used along with a type annotation."
+    }
+]

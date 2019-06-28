@@ -1,0 +1,62 @@
+[
+    {
+        "line": 8,
+        "column": 6,
+        "msg": "Property 'a' does not exist on type 'Window'."
+    },
+    {
+        "line": 9,
+        "column": 6,
+        "msg": "Property 'b' does not exist on type 'Window'."
+    },
+    {
+        "line": 10,
+        "column": 8,
+        "msg": "Property 'a' does not exist on type 'Window'."
+    },
+    {
+        "line": 11,
+        "column": 8,
+        "msg": "Property 'b' does not exist on type 'Window'."
+    },
+    {
+        "line": 12,
+        "column": 5,
+        "msg": "Property 'a' does not exist on type 'Window'."
+    },
+    {
+        "line": 13,
+        "column": 5,
+        "msg": "Property 'b' does not exist on type 'Window'."
+    },
+    {
+        "line": 8,
+        "column": 6,
+        "msg": "Property 'a' does not exist on type 'Window'."
+    },
+    {
+        "line": 9,
+        "column": 6,
+        "msg": "Property 'b' does not exist on type 'Window'."
+    },
+    {
+        "line": 10,
+        "column": 8,
+        "msg": "Property 'a' does not exist on type 'Window'."
+    },
+    {
+        "line": 11,
+        "column": 8,
+        "msg": "Property 'b' does not exist on type 'Window'."
+    },
+    {
+        "line": 12,
+        "column": 5,
+        "msg": "Property 'a' does not exist on type 'Window'."
+    },
+    {
+        "line": 13,
+        "column": 5,
+        "msg": "Property 'b' does not exist on type 'Window'."
+    }
+]

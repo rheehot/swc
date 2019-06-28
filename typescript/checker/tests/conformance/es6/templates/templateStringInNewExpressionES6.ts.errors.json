@@ -1,0 +1,7 @@
+[
+    {
+        "line": 1,
+        "column": 1,
+        "msg": "Cannot use 'new' with an expression whose type lacks a call or construct signature."
+    }
+]

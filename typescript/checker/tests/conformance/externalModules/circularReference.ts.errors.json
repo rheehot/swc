@@ -1,0 +1,17 @@
+[
+    {
+        "line": 9,
+        "column": 12,
+        "msg": "Property 'x' does not exist on type 'C1'."
+    },
+    {
+        "line": 8,
+        "column": 12,
+        "msg": "Property 'y' does not exist on type 'C1'."
+    },
+    {
+        "line": 13,
+        "column": 8,
+        "msg": "Property 'x' does not exist on type 'C1'."
+    }
+]

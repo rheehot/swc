@@ -1,0 +1,7 @@
+[
+    {
+        "line": 2,
+        "column": 52,
+        "msg": "Type 'true' is not assignable to type 'number'."
+    }
+]

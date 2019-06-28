@@ -1,0 +1,7 @@
+[
+    {
+        "line": 4,
+        "column": 6,
+        "msg": "Parameter 'a' implicitly has an 'any' type."
+    }
+]

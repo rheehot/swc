@@ -1,0 +1,127 @@
+[
+    {
+        "line": 50,
+        "column": 5,
+        "msg": "Object is of type 'unknown'."
+    },
+    {
+        "line": 51,
+        "column": 5,
+        "msg": "Object is of type 'unknown'."
+    },
+    {
+        "line": 52,
+        "column": 5,
+        "msg": "Object is of type 'unknown'."
+    },
+    {
+        "line": 53,
+        "column": 5,
+        "msg": "Object is of type 'unknown'."
+    },
+    {
+        "line": 54,
+        "column": 5,
+        "msg": "Object is of type 'unknown'."
+    },
+    {
+        "line": 55,
+        "column": 5,
+        "msg": "Object is of type 'unknown'."
+    },
+    {
+        "line": 56,
+        "column": 6,
+        "msg": "Object is of type 'unknown'."
+    },
+    {
+        "line": 57,
+        "column": 6,
+        "msg": "Object is of type 'unknown'."
+    },
+    {
+        "line": 63,
+        "column": 5,
+        "msg": "Object is of type 'unknown'."
+    },
+    {
+        "line": 64,
+        "column": 5,
+        "msg": "Object is of type 'unknown'."
+    },
+    {
+        "line": 65,
+        "column": 5,
+        "msg": "Object is of type 'unknown'."
+    },
+    {
+        "line": 66,
+        "column": 9,
+        "msg": "Object is of type 'unknown'."
+    },
+    {
+        "line": 110,
+        "column": 9,
+        "msg": "Type 'unknown' is not assignable to type 'object'."
+    },
+    {
+        "line": 111,
+        "column": 9,
+        "msg": "Type 'unknown' is not assignable to type 'string'."
+    },
+    {
+        "line": 112,
+        "column": 9,
+        "msg": "Type 'unknown' is not assignable to type 'string[]'."
+    },
+    {
+        "line": 113,
+        "column": 9,
+        "msg": "Type 'unknown' is not assignable to type '{}'."
+    },
+    {
+        "line": 114,
+        "column": 9,
+        "msg": "Type 'unknown' is not assignable to type '{} | null | undefined'."
+    },
+    {
+        "line": 120,
+        "column": 9,
+        "msg": "Type 'T' is not assignable to type 'object'."
+    },
+    {
+        "line": 128,
+        "column": 5,
+        "msg": "Type 'number[]' is not assignable to type '{ [x"
+    },
+    {
+        "line": 129,
+        "column": 5,
+        "msg": "Type '123' is not assignable to type '{ [x"
+    },
+    {
+        "line": 149,
+        "column": 17,
+        "msg": "A function whose declared type is neither 'void' nor 'any' must return a value."
+    },
+    {
+        "line": 155,
+        "column": 14,
+        "msg": "Rest types may only be created from object types."
+    },
+    {
+        "line": 161,
+        "column": 5,
+        "msg": "Property 'a' has no initializer and is not definitely assigned in the constructor."
+    },
+    {
+        "line": 170,
+        "column": 9,
+        "msg": "Type 'U' is not assignable to type '{}'."
+    },
+    {
+        "line": 180,
+        "column": 5,
+        "msg": "Type 'T' is not assignable to type '{}'."
+    }
+]

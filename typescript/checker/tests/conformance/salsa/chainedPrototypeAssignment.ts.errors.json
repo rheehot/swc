@@ -1,0 +1,12 @@
+[
+    {
+        "line": 5,
+        "column": 5,
+        "msg": "Argument of type '\"nope\"' is not assignable to parameter of type 'number'."
+    },
+    {
+        "line": 6,
+        "column": 5,
+        "msg": "Argument of type '\"not really\"' is not assignable to parameter of type 'number'."
+    }
+]

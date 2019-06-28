@@ -1,0 +1,27 @@
+[
+    {
+        "line": 5,
+        "column": 8,
+        "msg": "Specifier of dynamic import cannot be spread element."
+    },
+    {
+        "line": 7,
+        "column": 17,
+        "msg": "Specifier of dynamic import cannot be spread element."
+    },
+    {
+        "line": 8,
+        "column": 12,
+        "msg": "Dynamic import must have one specifier as an argument."
+    },
+    {
+        "line": 9,
+        "column": 12,
+        "msg": "Dynamic import must have one specifier as an argument."
+    },
+    {
+        "line": 9,
+        "column": 19,
+        "msg": "Cannot find module 'pathToModule'."
+    }
+]

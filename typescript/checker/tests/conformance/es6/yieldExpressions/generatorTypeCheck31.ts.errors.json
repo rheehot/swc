@@ -1,0 +1,12 @@
+[
+    {
+        "line": 2,
+        "column": 11,
+        "msg": "Type 'IterableIterator<(x"
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "Iterable<(x"
+    }
+]

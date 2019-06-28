@@ -1,0 +1,42 @@
+[
+    {
+        "line": 5,
+        "column": 5,
+        "msg": "Duplicate number index signature."
+    },
+    {
+        "line": 9,
+        "column": 5,
+        "msg": "Duplicate number index signature."
+    },
+    {
+        "line": 10,
+        "column": 5,
+        "msg": "Duplicate number index signature."
+    },
+    {
+        "line": 14,
+        "column": 5,
+        "msg": "Duplicate number index signature."
+    },
+    {
+        "line": 15,
+        "column": 5,
+        "msg": "Duplicate number index signature."
+    },
+    {
+        "line": 20,
+        "column": 5,
+        "msg": "Duplicate number index signature."
+    },
+    {
+        "line": 25,
+        "column": 5,
+        "msg": "Duplicate number index signature."
+    },
+    {
+        "line": 30,
+        "column": 5,
+        "msg": "Duplicate number index signature."
+    }
+]

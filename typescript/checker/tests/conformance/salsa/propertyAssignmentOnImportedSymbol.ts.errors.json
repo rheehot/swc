@@ -1,0 +1,7 @@
+[
+    {
+        "line": 1,
+        "column": 10,
+        "msg": "Import declaration conflicts with local declaration of 'hurk'."
+    }
+]

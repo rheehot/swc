@@ -1,0 +1,122 @@
+[
+    {
+        "line": 11,
+        "column": 35,
+        "msg": "Argument of type '20' is not assignable to parameter of type 'string'."
+    },
+    {
+        "line": 17,
+        "column": 15,
+        "msg": "Expected 3 arguments, but got 2."
+    },
+    {
+        "line": 18,
+        "column": 35,
+        "msg": "Argument of type '20' is not assignable to parameter of type 'string'."
+    },
+    {
+        "line": 19,
+        "column": 44,
+        "msg": "Expected 3 arguments, but got 4."
+    },
+    {
+        "line": 22,
+        "column": 32,
+        "msg": "Argument of type '[number]' is not assignable to parameter of type '[number, string]'."
+    },
+    {
+        "line": 23,
+        "column": 37,
+        "msg": "Type 'number' is not assignable to type 'string'."
+    },
+    {
+        "line": 24,
+        "column": 32,
+        "msg": "Argument of type '[number, string, number]' is not assignable to parameter of type '[number, string]'."
+    },
+    {
+        "line": 41,
+        "column": 29,
+        "msg": "Argument of type '20' is not assignable to parameter of type 'string'."
+    },
+    {
+        "line": 42,
+        "column": 22,
+        "msg": "Argument of type 'undefined' is not assignable to parameter of type 'C'."
+    },
+    {
+        "line": 48,
+        "column": 17,
+        "msg": "Expected 3 arguments, but got 2."
+    },
+    {
+        "line": 49,
+        "column": 29,
+        "msg": "Argument of type '20' is not assignable to parameter of type 'string'."
+    },
+    {
+        "line": 50,
+        "column": 38,
+        "msg": "Expected 3 arguments, but got 4."
+    },
+    {
+        "line": 51,
+        "column": 22,
+        "msg": "Argument of type 'undefined' is not assignable to parameter of type 'C'."
+    },
+    {
+        "line": 54,
+        "column": 26,
+        "msg": "Argument of type '[number]' is not assignable to parameter of type '[number, string]'."
+    },
+    {
+        "line": 55,
+        "column": 31,
+        "msg": "Type 'number' is not assignable to type 'string'."
+    },
+    {
+        "line": 56,
+        "column": 26,
+        "msg": "Argument of type '[number, string, number]' is not assignable to parameter of type '[number, string]'."
+    },
+    {
+        "line": 57,
+        "column": 23,
+        "msg": "Argument of type 'undefined' is not assignable to parameter of type 'C'."
+    },
+    {
+        "line": 62,
+        "column": 33,
+        "msg": "Argument of type '20' is not assignable to parameter of type 'string'."
+    },
+    {
+        "line": 65,
+        "column": 3,
+        "msg": "Expected 3 arguments, but got 2."
+    },
+    {
+        "line": 66,
+        "column": 15,
+        "msg": "Argument of type '20' is not assignable to parameter of type 'string'."
+    },
+    {
+        "line": 67,
+        "column": 24,
+        "msg": "Expected 3 arguments, but got 4."
+    },
+    {
+        "line": 70,
+        "column": 12,
+        "msg": "Argument of type '[number]' is not assignable to parameter of type '[number, string]'."
+    },
+    {
+        "line": 71,
+        "column": 17,
+        "msg": "Type 'number' is not assignable to type 'string'."
+    },
+    {
+        "line": 72,
+        "column": 12,
+        "msg": "Argument of type '[number, string, number]' is not assignable to parameter of type '[number, string]'."
+    }
+]

@@ -1,0 +1,12 @@
+[
+    {
+        "line": 11,
+        "column": 14,
+        "msg": "Property 'doesNotExist' does not exist on type 'C'."
+    },
+    {
+        "line": 12,
+        "column": 26,
+        "msg": "Property 'doesntExistEither' does not exist on type 'number'."
+    }
+]

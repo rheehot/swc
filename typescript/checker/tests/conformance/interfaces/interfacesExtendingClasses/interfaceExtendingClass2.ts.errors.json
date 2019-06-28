@@ -1,0 +1,22 @@
+[
+    {
+        "line": 11,
+        "column": 5,
+        "msg": "Property 'a' of type '{ toString"
+    },
+    {
+        "line": 13,
+        "column": 13,
+        "msg": "Property or signature expected."
+    },
+    {
+        "line": 14,
+        "column": 9,
+        "msg": "Declaration or statement expected."
+    },
+    {
+        "line": 15,
+        "column": 5,
+        "msg": "Declaration or statement expected."
+    }
+]

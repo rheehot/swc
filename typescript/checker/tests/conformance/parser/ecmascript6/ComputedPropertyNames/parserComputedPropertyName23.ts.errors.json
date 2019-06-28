@@ -1,0 +1,12 @@
+[
+    {
+        "line": 2,
+        "column": 9,
+        "msg": "An accessor cannot be declared in an ambient context."
+    },
+    {
+        "line": 2,
+        "column": 10,
+        "msg": "Cannot find name 'e'."
+    }
+]

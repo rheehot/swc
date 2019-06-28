@@ -1,0 +1,67 @@
+[
+    {
+        "line": 3,
+        "column": 1,
+        "msg": "Operator '+' cannot be applied to types 'symbol' and 'symbol'."
+    },
+    {
+        "line": 4,
+        "column": 1,
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+    },
+    {
+        "line": 4,
+        "column": 5,
+        "msg": "The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+    },
+    {
+        "line": 5,
+        "column": 1,
+        "msg": "The '+' operator cannot be applied to type 'symbol'."
+    },
+    {
+        "line": 6,
+        "column": 1,
+        "msg": "The '+' operator cannot be applied to type 'symbol'."
+    },
+    {
+        "line": 7,
+        "column": 1,
+        "msg": "Operator '+' cannot be applied to types 'symbol' and '0'."
+    },
+    {
+        "line": 8,
+        "column": 6,
+        "msg": "The '+' operator cannot be applied to type 'symbol'."
+    },
+    {
+        "line": 9,
+        "column": 5,
+        "msg": "The '+' operator cannot be applied to type 'symbol'."
+    },
+    {
+        "line": 10,
+        "column": 1,
+        "msg": "Operator '+' cannot be applied to types '0' and 'symbol'."
+    },
+    {
+        "line": 11,
+        "column": 1,
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+    },
+    {
+        "line": 12,
+        "column": 5,
+        "msg": "The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+    },
+    {
+        "line": 14,
+        "column": 1,
+        "msg": "The '+' operator cannot be applied to type 'symbol'."
+    },
+    {
+        "line": 15,
+        "column": 6,
+        "msg": "The '+' operator cannot be applied to type 'symbol'."
+    }
+]

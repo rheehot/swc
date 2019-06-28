@@ -1,0 +1,7 @@
+[
+    {
+        "line": 1,
+        "column": 1,
+        "msg": "Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures."
+    }
+]

@@ -1,0 +1,32 @@
+[
+    {
+        "line": 8,
+        "column": 10,
+        "msg": "Object is possibly 'null'."
+    },
+    {
+        "line": 8,
+        "column": 17,
+        "msg": "Object is possibly 'null'."
+    },
+    {
+        "line": 9,
+        "column": 9,
+        "msg": "Object is possibly 'undefined'."
+    },
+    {
+        "line": 9,
+        "column": 21,
+        "msg": "Object is possibly 'undefined'."
+    },
+    {
+        "line": 19,
+        "column": 9,
+        "msg": "Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '0o1'."
+    },
+    {
+        "line": 24,
+        "column": 9,
+        "msg": "Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '-0o3'."
+    }
+]

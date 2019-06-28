@@ -1,0 +1,122 @@
+[
+    {
+        "line": 36,
+        "column": 25,
+        "msg": "Argument of type 'string' is not assignable to parameter of type '\"Hello\"'."
+    },
+    {
+        "line": 37,
+        "column": 25,
+        "msg": "Argument of type 'string' is not assignable to parameter of type '\"Hello\"'."
+    },
+    {
+        "line": 38,
+        "column": 25,
+        "msg": "Argument of type 'string' is not assignable to parameter of type '\"Hello\"'."
+    },
+    {
+        "line": 39,
+        "column": 25,
+        "msg": "Argument of type 'string' is not assignable to parameter of type '\"Hello\"'."
+    },
+    {
+        "line": 40,
+        "column": 25,
+        "msg": "Argument of type 'string' is not assignable to parameter of type '\"Hello\"'."
+    },
+    {
+        "line": 43,
+        "column": 30,
+        "msg": "Argument of type 'string' is not assignable to parameter of type '\"Hello\" | \"World\"'."
+    },
+    {
+        "line": 44,
+        "column": 30,
+        "msg": "Argument of type 'string' is not assignable to parameter of type '\"Hello\" | \"World\"'."
+    },
+    {
+        "line": 45,
+        "column": 30,
+        "msg": "Argument of type 'string' is not assignable to parameter of type '\"Hello\" | \"World\"'."
+    },
+    {
+        "line": 46,
+        "column": 30,
+        "msg": "Argument of type 'string' is not assignable to parameter of type '\"Hello\" | \"World\"'."
+    },
+    {
+        "line": 47,
+        "column": 30,
+        "msg": "Argument of type 'string' is not assignable to parameter of type '\"Hello\" | \"World\"'."
+    },
+    {
+        "line": 54,
+        "column": 43,
+        "msg": "Argument of type '\"World\"' is not assignable to parameter of type '\"Hello\"'."
+    },
+    {
+        "line": 56,
+        "column": 52,
+        "msg": "Argument of type '\"World\"' is not assignable to parameter of type '\"Hello\"'."
+    },
+    {
+        "line": 57,
+        "column": 43,
+        "msg": "Argument of type '\"World\"' is not assignable to parameter of type '\"Hello\"'."
+    },
+    {
+        "line": 60,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type '\"Hello\"'."
+    },
+    {
+        "line": 62,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type '\"Hello\"'."
+    },
+    {
+        "line": 74,
+        "column": 5,
+        "msg": "Type '\"Hello\" | \"World\"' is not assignable to type '\"Hello\"'."
+    },
+    {
+        "line": 76,
+        "column": 5,
+        "msg": "Type '\"Hello\" | \"World\"' is not assignable to type '\"Hello\"'."
+    },
+    {
+        "line": 86,
+        "column": 43,
+        "msg": "Argument of type '\"World\"' is not assignable to parameter of type '\"Hello\"'."
+    },
+    {
+        "line": 87,
+        "column": 43,
+        "msg": "Argument of type '\"Hello\"' is not assignable to parameter of type '\"World\"'."
+    },
+    {
+        "line": 88,
+        "column": 52,
+        "msg": "Argument of type '\"World\"' is not assignable to parameter of type '\"Hello\"'."
+    },
+    {
+        "line": 92,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type '\"Hello\" | \"World\"'."
+    },
+    {
+        "line": 96,
+        "column": 5,
+        "msg": "Type 'string' is not assignable to type '\"Hello\" | \"World\"'."
+    },
+    {
+        "line": 99,
+        "column": 25,
+        "msg": "Argument of type '\"Hello\" | \"World\"' is not assignable to parameter of type '\"Hello\"'."
+    },
+    {
+        "line": 103,
+        "column": 25,
+        "msg": "Argument of type '\"Hello\" | \"World\"' is not assignable to parameter of type '\"Hello\"'."
+    }
+]

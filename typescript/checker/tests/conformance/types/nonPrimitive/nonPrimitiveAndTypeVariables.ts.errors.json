@@ -1,0 +1,12 @@
+[
+    {
+        "line": 10,
+        "column": 9,
+        "msg": "Type 'T' is not assignable to type 'object'."
+    },
+    {
+        "line": 11,
+        "column": 9,
+        "msg": "Type 'T' is not assignable to type 'object | U'."
+    }
+]

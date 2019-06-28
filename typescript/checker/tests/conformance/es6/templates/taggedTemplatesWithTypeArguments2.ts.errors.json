@@ -1,0 +1,37 @@
+[
+    {
+        "line": 13,
+        "column": 30,
+        "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'number'."
+    },
+    {
+        "line": 15,
+        "column": 11,
+        "msg": "Untyped function calls may not accept type arguments."
+    },
+    {
+        "line": 17,
+        "column": 30,
+        "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'number'."
+    },
+    {
+        "line": 35,
+        "column": 5,
+        "msg": "Constructors for derived classes must contain a 'super' call."
+    },
+    {
+        "line": 36,
+        "column": 9,
+        "msg": "'super' must be called before accessing a property of 'super' in the constructor of a derived class."
+    },
+    {
+        "line": 36,
+        "column": 14,
+        "msg": "'super' may not use type arguments."
+    },
+    {
+        "line": 36,
+        "column": 34,
+        "msg": "'super' must be followed by an argument list or member access."
+    }
+]

@@ -1,0 +1,97 @@
+[
+    {
+        "line": 23,
+        "column": 5,
+        "msg": "Type 'T' is not assignable to type 'Required<T>'."
+    },
+    {
+        "line": 24,
+        "column": 5,
+        "msg": "Type 'Partial<T>' is not assignable to type 'Required<T>'."
+    },
+    {
+        "line": 27,
+        "column": 5,
+        "msg": "Type 'Partial<T>' is not assignable to type 'T'."
+    },
+    {
+        "line": 37,
+        "column": 5,
+        "msg": "Type 'Required<T>' is not assignable to type 'Denullified<T>'."
+    },
+    {
+        "line": 38,
+        "column": 5,
+        "msg": "Type 'T' is not assignable to type 'Denullified<T>'."
+    },
+    {
+        "line": 39,
+        "column": 5,
+        "msg": "Type 'Partial<T>' is not assignable to type 'Denullified<T>'."
+    },
+    {
+        "line": 42,
+        "column": 5,
+        "msg": "Type 'T' is not assignable to type 'Required<T>'."
+    },
+    {
+        "line": 43,
+        "column": 5,
+        "msg": "Type 'Partial<T>' is not assignable to type 'Required<T>'."
+    },
+    {
+        "line": 47,
+        "column": 5,
+        "msg": "Type 'Partial<T>' is not assignable to type 'T'."
+    },
+    {
+        "line": 56,
+        "column": 5,
+        "msg": "Type '{}' is not assignable to type 'Denullified<T>'."
+    },
+    {
+        "line": 57,
+        "column": 5,
+        "msg": "Type '{}' is not assignable to type 'Required<T>'."
+    },
+    {
+        "line": 58,
+        "column": 5,
+        "msg": "Type '{}' is not assignable to type 'T'."
+    },
+    {
+        "line": 92,
+        "column": 1,
+        "msg": "Property 'b' is missing in type '{ a"
+    },
+    {
+        "line": 104,
+        "column": 1,
+        "msg": "Type '{ a"
+    },
+    {
+        "line": 105,
+        "column": 1,
+        "msg": "Type '{ a"
+    },
+    {
+        "line": 106,
+        "column": 1,
+        "msg": "Property 'd' is missing in type '{ a"
+    },
+    {
+        "line": 116,
+        "column": 4,
+        "msg": "Cannot assign to 'b' because it is a read-only property."
+    },
+    {
+        "line": 119,
+        "column": 4,
+        "msg": "Cannot assign to 'a' because it is a read-only property."
+    },
+    {
+        "line": 120,
+        "column": 4,
+        "msg": "Cannot assign to 'b' because it is a read-only property."
+    }
+]

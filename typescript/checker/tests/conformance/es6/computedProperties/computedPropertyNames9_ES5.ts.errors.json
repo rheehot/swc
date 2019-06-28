@@ -1,0 +1,7 @@
+[
+    {
+        "line": 9,
+        "column": 5,
+        "msg": "A computed property name must be of type 'string', 'number', 'symbol', or 'any'."
+    }
+]

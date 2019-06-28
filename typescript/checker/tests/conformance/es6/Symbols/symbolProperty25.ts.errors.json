@@ -1,0 +1,7 @@
+[
+    {
+        "line": 5,
+        "column": 7,
+        "msg": "Class 'C' incorrectly implements interface 'I'."
+    }
+]

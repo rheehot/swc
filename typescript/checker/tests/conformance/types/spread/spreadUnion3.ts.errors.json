@@ -1,0 +1,22 @@
+[
+    {
+        "line": 2,
+        "column": 14,
+        "msg": "Type 'number' is not assignable to type 'string'."
+    },
+    {
+        "line": 9,
+        "column": 23,
+        "msg": "Property 'a' does not exist on type '{}'."
+    },
+    {
+        "line": 17,
+        "column": 11,
+        "msg": "Spread types may only be created from object types."
+    },
+    {
+        "line": 18,
+        "column": 11,
+        "msg": "Spread types may only be created from object types."
+    }
+]

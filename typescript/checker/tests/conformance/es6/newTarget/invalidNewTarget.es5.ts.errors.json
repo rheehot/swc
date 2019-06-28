@@ -1,0 +1,87 @@
+[
+    {
+        "line": 1,
+        "column": 11,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 2,
+        "column": 17,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 5,
+        "column": 6,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 6,
+        "column": 18,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 7,
+        "column": 22,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 8,
+        "column": 20,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 9,
+        "column": 15,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 11,
+        "column": 13,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 12,
+        "column": 25,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 13,
+        "column": 29,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 14,
+        "column": 27,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 15,
+        "column": 22,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 19,
+        "column": 6,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 20,
+        "column": 18,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 21,
+        "column": 22,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 22,
+        "column": 20,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    },
+    {
+        "line": 23,
+        "column": 8,
+        "msg": "Meta-property 'new.target' is only allowed in the body of a function declaration, function expression, or constructor."
+    }
+]

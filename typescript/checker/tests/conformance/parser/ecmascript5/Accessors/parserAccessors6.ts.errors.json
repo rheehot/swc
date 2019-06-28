@@ -1,0 +1,7 @@
+[
+    {
+        "line": 2,
+        "column": 7,
+        "msg": "An accessor cannot be declared in an ambient context."
+    }
+]

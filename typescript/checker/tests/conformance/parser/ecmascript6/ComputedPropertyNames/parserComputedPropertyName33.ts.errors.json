@@ -1,0 +1,22 @@
+[
+    {
+        "line": 3,
+        "column": 6,
+        "msg": "Cannot find name 'e'."
+    },
+    {
+        "line": 4,
+        "column": 6,
+        "msg": "Cannot find name 'e2'."
+    },
+    {
+        "line": 4,
+        "column": 12,
+        "msg": "';' expected."
+    },
+    {
+        "line": 5,
+        "column": 1,
+        "msg": "Declaration or statement expected."
+    }
+]

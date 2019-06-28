@@ -1,0 +1,42 @@
+[
+    {
+        "line": 2,
+        "column": 9,
+        "msg": "Getter and setter accessors do not agree in visibility."
+    },
+    {
+        "line": 5,
+        "column": 17,
+        "msg": "Getter and setter accessors do not agree in visibility."
+    },
+    {
+        "line": 10,
+        "column": 19,
+        "msg": "Getter and setter accessors do not agree in visibility."
+    },
+    {
+        "line": 13,
+        "column": 17,
+        "msg": "Getter and setter accessors do not agree in visibility."
+    },
+    {
+        "line": 18,
+        "column": 19,
+        "msg": "Getter and setter accessors do not agree in visibility."
+    },
+    {
+        "line": 20,
+        "column": 9,
+        "msg": "Getter and setter accessors do not agree in visibility."
+    },
+    {
+        "line": 26,
+        "column": 26,
+        "msg": "Getter and setter accessors do not agree in visibility."
+    },
+    {
+        "line": 28,
+        "column": 16,
+        "msg": "Getter and setter accessors do not agree in visibility."
+    }
+]

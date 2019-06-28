@@ -1,0 +1,47 @@
+[
+    {
+        "line": 3,
+        "column": 6,
+        "msg": "Type 'undefined' is not an array type."
+    },
+    {
+        "line": 3,
+        "column": 6,
+        "msg": "Initializer provides no value for this binding element and the binding element has no default value."
+    },
+    {
+        "line": 3,
+        "column": 12,
+        "msg": "Type 'undefined' is not an array type."
+    },
+    {
+        "line": 3,
+        "column": 12,
+        "msg": "Initializer provides no value for this binding element and the binding element has no default value."
+    },
+    {
+        "line": 4,
+        "column": 5,
+        "msg": "Type 'undefined' is not an array type."
+    },
+    {
+        "line": 9,
+        "column": 51,
+        "msg": "Type 'number' is not assignable to type 'boolean'."
+    },
+    {
+        "line": 22,
+        "column": 5,
+        "msg": "Type 'number[]' is missing the following properties from type '[number, number]'"
+    },
+    {
+        "line": 23,
+        "column": 5,
+        "msg": "Type 'number[]' is missing the following properties from type '[string, string]'"
+    },
+    {
+        "line": 34,
+        "column": 5,
+        "msg": "Type 'F' is not an array type."
+    }
+]

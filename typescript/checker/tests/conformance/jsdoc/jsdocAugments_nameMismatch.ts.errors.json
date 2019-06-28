@@ -1,0 +1,7 @@
+[
+    {
+        "line": 4,
+        "column": 15,
+        "msg": "JSDoc '@augments A' does not match the 'extends B' clause."
+    }
+]

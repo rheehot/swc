@@ -1,0 +1,12 @@
+[
+    {
+        "line": 2,
+        "column": 12,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 6,
+        "column": 12,
+        "msg": "The operand of a delete operator must be a property reference."
+    }
+]

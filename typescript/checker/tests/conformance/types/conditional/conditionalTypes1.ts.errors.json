@@ -1,0 +1,112 @@
+[
+    {
+        "line": 12,
+        "column": 5,
+        "msg": "Type 'T' is not assignable to type 'NonNullable<T>'."
+    },
+    {
+        "line": 17,
+        "column": 5,
+        "msg": "Type 'T' is not assignable to type 'NonNullable<T>'."
+    },
+    {
+        "line": 18,
+        "column": 9,
+        "msg": "Type 'T' is not assignable to type 'string'."
+    },
+    {
+        "line": 24,
+        "column": 5,
+        "msg": "Type 'T[keyof T] | undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'."
+    },
+    {
+        "line": 29,
+        "column": 5,
+        "msg": "Type 'T[\"x\"]' is not assignable to type 'NonNullable<T[\"x\"]>'."
+    },
+    {
+        "line": 30,
+        "column": 9,
+        "msg": "Type 'T[\"x\"]' is not assignable to type 'string'."
+    },
+    {
+        "line": 103,
+        "column": 5,
+        "msg": "Type 'Pick<T, { [K in keyof T]"
+    },
+    {
+        "line": 104,
+        "column": 5,
+        "msg": "Type 'Pick<T, { [K in keyof T]"
+    },
+    {
+        "line": 106,
+        "column": 5,
+        "msg": "Type 'Pick<T, { [K in keyof T]"
+    },
+    {
+        "line": 108,
+        "column": 5,
+        "msg": "Type 'Pick<T, { [K in keyof T]"
+    },
+    {
+        "line": 114,
+        "column": 5,
+        "msg": "Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T"
+    },
+    {
+        "line": 115,
+        "column": 5,
+        "msg": "Type 'T[keyof T] extends Function ? never"
+    },
+    {
+        "line": 116,
+        "column": 5,
+        "msg": "Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never"
+    },
+    {
+        "line": 117,
+        "column": 5,
+        "msg": "Type 'T[keyof T] extends Function ? keyof T"
+    },
+    {
+        "line": 134,
+        "column": 10,
+        "msg": "Cannot assign to 'id' because it is a read-only property."
+    },
+    {
+        "line": 135,
+        "column": 5,
+        "msg": "Index signature in type 'DeepReadonlyArray<Part>' only permits reading."
+    },
+    {
+        "line": 136,
+        "column": 22,
+        "msg": "Cannot assign to 'id' because it is a read-only property."
+    },
+    {
+        "line": 137,
+        "column": 10,
+        "msg": "Property 'updatePart' does not exist on type 'DeepReadonlyObject<Part>'."
+    },
+    {
+        "line": 159,
+        "column": 5,
+        "msg": "Type 'ZeroOf<T>' is not assignable to type 'T'."
+    },
+    {
+        "line": 160,
+        "column": 5,
+        "msg": "Type 'T' is not assignable to type 'ZeroOf<T>'."
+    },
+    {
+        "line": 263,
+        "column": 9,
+        "msg": "Subsequent variable declarations must have the same type.  Variable 'z' must be of type 'T1', but here has type 'Foo<T & U>'."
+    },
+    {
+        "line": 288,
+        "column": 43,
+        "msg": "Type 'T95<U>' is not assignable to type 'T94<U>'."
+    }
+]
