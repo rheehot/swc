@@ -266,7 +266,7 @@ impl<'a> Scope<'a> {
     /// Updates variable list.
     ///
     /// This method should be called for function parameters including error
-    /// variable from a catch clause, and variable declarations.
+    /// variable from a catch clause.
     pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) {
         match *pat {
             Pat::Ident(ref i) => {

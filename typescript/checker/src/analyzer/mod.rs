@@ -513,9 +513,15 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                             }
                         };
                         let error = value_ty.assign_to(&ty, v.span());
+                        let ty = ty.to_static();
                         match error {
                             Ok(()) => {
-                                self.scope.declare_vars(kind, &v.name);
+                                match self.scope.declare_complex_vars(kind, &v.name, ty) {
+                                    Ok(()) => {}
+                                    Err(err) => {
+                                        self.info.errors.push(err);
+                                    }
+                                }
                                 return;
                             }
                             Err(err) => {
