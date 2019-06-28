@@ -4,6 +4,8 @@
 #![feature(specialization)]
 #![feature(test)]
 
+extern crate serde;
+extern crate serde_json;
 extern crate swc_common;
 extern crate swc_ecma_ast;
 extern crate swc_ecma_parser;
@@ -12,6 +14,7 @@ extern crate test;
 extern crate testing;
 extern crate walkdir;
 
+use serde::Deserialize;
 use std::{
     env,
     fs::File,
@@ -25,6 +28,13 @@ use swc_ts_checker::{Lib, Rule};
 use test::{test_main, DynTestFn, Options, ShouldPanic::No, TestDesc, TestDescAndFn, TestName};
 use testing::StdErr;
 use walkdir::WalkDir;
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+struct Error {
+    pub line: usize,
+    pub column: usize,
+    pub msg: String,
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Mode {
@@ -108,7 +118,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
 
         let ignore = file_name.contains("circular")
             || input.contains("@filename")
-            || (mode == Mode::Conformance && !file_name.contains("types/unknown"));
+            || (mode == Mode::Conformance && !file_name.contains(""));
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);
@@ -138,19 +148,21 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
     let lines = match mode {
         Mode::Conformance => {
             let mut buf = String::new();
-            File::open(file_name)
-                .expect("failed to open file for testing")
-                .read_to_string(&mut buf)
-                .expect("failed to read file's content");
+            let fname = file_name.file_name().unwrap();
+            let errors_file =
+                file_name.with_file_name(format!("{}.errors.txt", fname.to_string_lossy()));
+            if !errors_file.exists() {
+                Some(vec![])
+            } else {
+                let errors: Vec<Error> = serde_json::from_reader(
+                    File::open(errors_file).expect("failed to open error sfile"),
+                )
+                .expect("failed to parse errors.txt.json");
 
-            Some(
-                buf.lines()
-                    .enumerate()
-                    .filter(|(_, s)| s.contains("// error") || s.contains("// Error"))
-                    .map(|(i, s)| (i, String::from(s)))
-                    .map(|(i, _)| i + 1)
-                    .collect::<Vec<_>>(),
-            )
+                // TODO: Match column and message
+
+                Some(errors.into_iter().map(|e| e.line).collect::<Vec<_>>())
+            }
         }
         _ => None,
     };
