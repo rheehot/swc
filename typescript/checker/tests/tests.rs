@@ -4,6 +4,7 @@
 #![feature(test)]
 
 extern crate swc_common;
+extern crate swc_ecma_ast;
 extern crate swc_ecma_parser;
 extern crate swc_ts_checker;
 extern crate test;
@@ -16,7 +17,8 @@ use std::{
     io::{self, Read},
     path::Path,
 };
-use swc_common::{comments::Comments, CM};
+use swc_common::{comments::Comments, Fold, FoldWith, Span, Spanned, CM};
+use swc_ecma_ast::{Module, *};
 use swc_ecma_parser::{Parser, Session, SourceFileInput, Syntax, TsConfig};
 use swc_ts_checker::{Lib, Rule};
 use test::{test_main, DynTestFn, Options, ShouldPanic::No, TestDesc, TestDescAndFn, TestName};
@@ -105,7 +107,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
 
         let ignore = file_name.contains("circular")
             || input.contains("@filename")
-            || (mode == Mode::Conformance && !file_name.contains("types/tuple"));
+            || (mode == Mode::Conformance && !file_name.contains(""));
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);
@@ -183,10 +185,15 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                                 ()
                             })
                             .expect("failed to parser module");
+                        let module = if mode == Mode::Conformance {
+                            make_test(&comments, module)
+                        } else {
+                            module
+                        };
 
-                        let mut libs = vec![];
+                        let mut libs = vec![Lib::Es5];
                         let mut rule = Rule::default();
-                        let mut ts_config = TsConfig::default();
+                        let ts_config = TsConfig::default();
 
                         let span = module.span;
                         let cmts = comments.leading_comments(span.lo());
@@ -338,4 +345,120 @@ fn add_test<F: FnOnce() + Send + 'static>(
         },
         testfn: DynTestFn(box f),
     });
+}
+
+fn make_test(c: &Comments, module: Module) -> Module {
+    let mut m = TestMaker {
+        c,
+        stmts: Default::default(),
+    };
+
+    module.fold_with(&mut m)
+}
+
+struct TestMaker<'a> {
+    c: &'a Comments,
+    stmts: Vec<Stmt>,
+}
+
+impl Fold<Vec<Stmt>> for TestMaker<'_> {
+    fn fold(&mut self, stmts: Vec<Stmt>) -> Vec<Stmt> {
+        let mut ss = vec![];
+        for stmt in stmts {
+            let stmt = stmt.fold_with(self);
+            ss.push(stmt);
+            ss.extend(self.stmts.drain(..));
+        }
+
+        ss
+    }
+}
+
+impl Fold<TsTypeAliasDecl> for TestMaker<'_> {
+    fn fold(&mut self, decl: TsTypeAliasDecl) -> TsTypeAliasDecl {
+        let cmts = self.c.trailing_comments(decl.span.hi());
+
+        match cmts {
+            Some(cmts) => {
+                assert!(cmts.len() == 1);
+                let cmt = cmts.iter().next().unwrap();
+                let t = cmt.text.trim().replace("\n", "").replace("\r", "");
+
+                //  {
+                //      let _value: ty = (Object as any as Alias)
+                //  }
+                //
+                //
+                let span = decl.span();
+                self.stmts.push(Stmt::Block(BlockStmt {
+                    span,
+                    stmts: vec![Stmt::Decl(Decl::Var(VarDecl {
+                        span,
+                        decls: vec![VarDeclarator {
+                            span,
+                            name: Pat::Ident(Ident {
+                                span,
+                                sym: "_value".into(),
+                                type_ann: Some(TsTypeAnn {
+                                    span,
+                                    type_ann: box parse_type(cmt.span, &t),
+                                }),
+                                optional: false,
+                            }),
+                            init: Some(box Expr::TsAs(TsAsExpr {
+                                span,
+                                expr: box Expr::TsAs(TsAsExpr {
+                                    span,
+                                    expr: box Expr::Ident(Ident::new("Object".into(), span)),
+                                    type_ann: box TsType::TsKeywordType(TsKeywordType {
+                                        span,
+                                        kind: TsKeywordTypeKind::TsAnyKeyword,
+                                    }),
+                                }),
+                                type_ann: box TsType::TsTypeRef(TsTypeRef {
+                                    span,
+                                    type_name: TsEntityName::Ident(decl.id.clone()),
+                                    type_params: None,
+                                }),
+                            })),
+                            definite: false,
+                        }],
+                        kind: VarDeclKind::Const,
+                        declare: false,
+                    }))],
+                }));
+            }
+            None => {}
+        }
+
+        decl
+    }
+}
+
+fn parse_type(span: Span, s: &str) -> TsType {
+    let s = s.trim();
+
+    macro_rules! kwd {
+        ($kind:expr) => {{
+            return TsType::TsKeywordType(TsKeywordType { span, kind: $kind });
+        }};
+    }
+    match s {
+        "string" => kwd!(TsKeywordTypeKind::TsStringKeyword),
+        "number" => kwd!(TsKeywordTypeKind::TsNumberKeyword),
+        "undefined" => kwd!(TsKeywordTypeKind::TsUndefinedKeyword),
+        "boolean" => kwd!(TsKeywordTypeKind::TsBooleanKeyword),
+        _ => {}
+    }
+
+    if s.contains("|") {
+        return TsType::TsUnionOrIntersectionType(TsUnionOrIntersectionType::TsUnionType(
+            TsUnionType {
+                span,
+                types: s.split("|").map(|v| box parse_type(span, v)).collect(),
+            },
+        ));
+    }
+
+    unimplemented!("conformance test: parse_type({})", s)
 }
