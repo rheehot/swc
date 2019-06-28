@@ -16,6 +16,7 @@ extern crate walkdir;
 
 use serde::Deserialize;
 use std::{
+    collections::HashSet,
     env,
     fs::File,
     io::{self, Read},
@@ -118,7 +119,9 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
 
         let ignore = file_name.contains("circular")
             || input.contains("@filename")
-            || (mode == Mode::Conformance && !file_name.contains("stringLiteral"));
+            || input.contains("@Filename")
+            || input.contains("@module")
+            || (mode == Mode::Conformance && !file_name.contains(""));
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);
@@ -213,18 +216,54 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                                     if !s.starts_with("@") {
                                         continue;
                                     }
+                                    let s = &s[1..]; // '@'
 
-                                    if s.starts_with("@target: ") {
-                                        libs = Lib::load(&s[8..].trim());
-                                    } else if s.starts_with("@strict: ") {
-                                        let strict = s[8..].trim().parse().unwrap(); // TODO
+                                    if s.starts_with("target:") || s.starts_with("Target:") {
+                                        libs = Lib::load(&s["target:".len()..].trim());
+                                    } else if s.starts_with("strict:") {
+                                        let strict = s["strict:".len()..].trim().parse().unwrap();
                                         rule.no_implicit_any = strict;
                                         rule.no_implicit_this = strict;
                                         rule.always_strict = strict;
                                         rule.strict_null_checks = strict;
                                         rule.strict_function_types = strict;
-                                    } else if s.starts_with("@declaration") {
+                                    } else if s.starts_with("noImplicitAny:") {
+                                        let v = s["noImplicitAny:".len()..].trim().parse().unwrap();
+                                        rule.no_implicit_any = v;
+                                    } else if s.starts_with("noImplicitReturns:") {
+                                        let v =
+                                            s["noImplicitReturns:".len()..].trim().parse().unwrap();
+                                        rule.no_implicit_returns = v;
+                                    } else if s.starts_with("declaration") {
                                         // TODO: Create d.ts
+                                    } else if s.starts_with("noEmitHelpers") {
+                                        // TODO
+                                    } else if s.starts_with("downlevelIteration: ") {
+                                        // TODO
+                                    } else if s.starts_with("sourceMap:") {
+                                        // TODO
+                                    } else if s.starts_with("isolatedModules:") {
+                                        // TODO
+                                    } else if s.starts_with("lib:") {
+                                        let mut ls = HashSet::<_>::default();
+                                        for v in s["lib:".len()..].trim().split(",") {
+                                            ls.extend(Lib::load(v))
+                                        }
+                                        libs = ls.into_iter().collect()
+                                    } else if s.starts_with("allowUnreachableCode:") {
+                                        let v = s["allowUnreachableCode:".len()..]
+                                            .trim()
+                                            .parse()
+                                            .unwrap();
+                                        rule.allow_unreachable_code = v;
+                                    } else if s.starts_with("strictNullChecks:") {
+                                        let v =
+                                            s["strictNullChecks:".len()..].trim().parse().unwrap();
+                                        rule.strict_null_checks = v;
+                                    } else if s.starts_with("noImplicitThis:") {
+                                        let v =
+                                            s["noImplicitThis:".len()..].trim().parse().unwrap();
+                                        rule.no_implicit_this = v;
                                     } else {
                                         panic!("Comment is not handled: {}", s);
                                     }
