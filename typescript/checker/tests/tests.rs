@@ -1,3 +1,4 @@
+#![recursion_limit = "256"]
 #![feature(box_syntax)]
 #![feature(box_patterns)]
 #![feature(specialization)]
@@ -17,7 +18,7 @@ use std::{
     io::{self, Read},
     path::Path,
 };
-use swc_common::{comments::Comments, Fold, FoldWith, Span, Spanned, CM};
+use swc_common::{comments::Comments, FileName, Fold, FoldWith, Span, Spanned, CM};
 use swc_ecma_ast::{Module, *};
 use swc_ecma_parser::{Parser, Session, SourceFileInput, Syntax, TsConfig};
 use swc_ts_checker::{Lib, Rule};
@@ -175,7 +176,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                                 ..Default::default()
                             }),
                             SourceFileInput::from(&*fm),
-                            Some(&comments), // Disable comments
+                            Some(&comments),
                         );
 
                         let module = parser
@@ -397,6 +398,11 @@ impl Fold<TsTypeAliasDecl> for TestMaker<'_> {
                 let cmt = cmts.iter().next().unwrap();
                 let t = cmt.text.trim().replace("\n", "").replace("\r", "");
 
+                let cmt_type = match parse_type(cmt.span, &t) {
+                    Some(ty) => ty,
+                    None => return decl,
+                };
+
                 //  {
                 //      let _value: ty = (Object as any as Alias)
                 //  }
@@ -414,7 +420,7 @@ impl Fold<TsTypeAliasDecl> for TestMaker<'_> {
                                 sym: "_value".into(),
                                 type_ann: Some(TsTypeAnn {
                                     span,
-                                    type_ann: box parse_type(cmt.span, &t),
+                                    type_ann: box cmt_type,
                                 }),
                                 optional: false,
                             }),
@@ -448,30 +454,37 @@ impl Fold<TsTypeAliasDecl> for TestMaker<'_> {
     }
 }
 
-fn parse_type(span: Span, s: &str) -> TsType {
+fn parse_type(span: Span, s: &str) -> Option<TsType> {
     let s = s.trim();
+    let ty = ::testing::run_test(true, |cm, handler| {
+        let session = Session { handler: &handler };
 
-    macro_rules! kwd {
-        ($kind:expr) => {{
-            return TsType::TsKeywordType(TsKeywordType { span, kind: $kind });
-        }};
-    }
-    match s {
-        "string" => kwd!(TsKeywordTypeKind::TsStringKeyword),
-        "number" => kwd!(TsKeywordTypeKind::TsNumberKeyword),
-        "undefined" => kwd!(TsKeywordTypeKind::TsUndefinedKeyword),
-        "boolean" => kwd!(TsKeywordTypeKind::TsBooleanKeyword),
-        _ => {}
-    }
+        let fm = cm.new_source_file(FileName::Anon, s.into());
 
-    if s.contains("|") {
-        return TsType::TsUnionOrIntersectionType(TsUnionOrIntersectionType::TsUnionType(
-            TsUnionType {
-                span,
-                types: s.split("|").map(|v| box parse_type(span, v)).collect(),
-            },
-        ));
-    }
+        let mut parser = Parser::new(
+            session,
+            Syntax::Typescript(Default::default()),
+            SourceFileInput::from(&*fm),
+            None,
+        );
+        let ty = match parser.parse_type() {
+            Ok(v) => v,
+            Err(..) => return Err(()),
+        };
+        Ok(ty)
+    });
 
-    unimplemented!("conformance test: parse_type({})", s)
+    let mut spanner = Spanner { span };
+
+    Some(*ty.ok()?.fold_with(&mut spanner))
+}
+
+struct Spanner {
+    span: Span,
+}
+
+impl Fold<Span> for Spanner {
+    fn fold(&mut self, _: Span) -> Span {
+        self.span
+    }
 }
