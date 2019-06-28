@@ -1,10 +1,11 @@
 use super::{control_flow::CondFacts, Analyzer, Name};
 use crate::{
     errors::Error,
-    ty::{Array, Tuple, Type},
+    ty::{Array, Tuple, Type, TypeRefExt, Union},
+    util::IntoCow,
 };
 use fxhash::FxHashMap;
-use std::collections::hash_map::Entry;
+use std::{collections::hash_map::Entry, iter::repeat_with};
 use swc_atoms::JsWord;
 use swc_common::{Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -186,7 +187,49 @@ impl<'a> Scope<'a> {
                         return Ok(());
                     }
 
-                    _ => unimplemented!(),
+                    // [a, b] | [c, d] => [a | c, b | d]
+                    Type::Union(Union { types, .. }) => {
+                        let mut errors = vec![];
+                        let mut buf: Vec<Vec<_>> = vec![];
+                        for ty in types.iter() {
+                            match *ty.normalize() {
+                                Type::Tuple(Tuple {
+                                    types: ref elem_types,
+                                    ..
+                                }) => {
+                                    buf.push(
+                                        elem_types
+                                            .iter()
+                                            .map(|v| v.to_static().into_cow())
+                                            .collect(),
+                                    );
+                                }
+                                _ => {
+                                    errors.push(Error::NotTuple { span: ty.span() });
+                                }
+                            }
+                        }
+                        if !errors.is_empty() {
+                            return Err(Error::UnionError { span, errors });
+                        }
+
+                        for (elem, types) in elems.into_iter().zip(
+                            buf.into_iter()
+                                .chain(repeat_with(|| vec![Type::undefined(span).owned()])),
+                        ) {
+                            match *elem {
+                                Some(ref elem) => {
+                                    let ty = Union { span, types }.into();
+                                    self.declare_complex_vars(kind, elem, ty)?;
+                                }
+                                None => {}
+                            }
+                        }
+
+                        return Ok(());
+                    }
+
+                    _ => unimplemented!("declare_complex_vars({:#?}, {:#?})", pat, ty),
                 }
             }
             _ => unimplemented!(),
@@ -243,10 +286,7 @@ impl<'a> Scope<'a> {
                 self.declare_vars(kind, &p.left);
             }
 
-            Pat::Array(ArrayPat {
-                ref elems,
-                ..
-            }) => {
+            Pat::Array(ArrayPat { ref elems, .. }) => {
                 // TODO: Handle type annotation
 
                 for elem in elems {
