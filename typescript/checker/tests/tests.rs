@@ -227,6 +227,11 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                                         rule.always_strict = strict;
                                         rule.strict_null_checks = strict;
                                         rule.strict_function_types = strict;
+                                    } else if s.starts_with("noLib:") {
+                                        let v = s["noLib:".len()..].trim().parse().unwrap();
+                                        if v {
+                                            libs = vec![];
+                                        }
                                     } else if s.starts_with("noImplicitAny:") {
                                         let v = s["noImplicitAny:".len()..].trim().parse().unwrap();
                                         rule.no_implicit_any = v;
@@ -236,11 +241,21 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                                         rule.no_implicit_returns = v;
                                     } else if s.starts_with("declaration") {
                                         // TODO: Create d.ts
+                                    } else if s.starts_with("stripInternal:") {
+                                        // TODO: Create d.ts
+                                    } else if s.starts_with("traceResolution") {
+                                        // no-op
+                                    } else if s.starts_with("allowUnusedLabels:") {
+                                        let v =
+                                            s["allowUnusedLabels:".len()..].trim().parse().unwrap();
+                                        rule.allow_unused_labels = v;
                                     } else if s.starts_with("noEmitHelpers") {
                                         // TODO
                                     } else if s.starts_with("downlevelIteration: ") {
                                         // TODO
-                                    } else if s.starts_with("sourceMap:") {
+                                    } else if s.starts_with("sourceMap:")
+                                        || s.starts_with("sourcemap:")
+                                    {
                                         // TODO
                                     } else if s.starts_with("isolatedModules:") {
                                         // TODO
