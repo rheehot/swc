@@ -22,6 +22,7 @@ use swc_ecma_ast::*;
 mod control_flow;
 pub mod export;
 mod expr;
+mod generic;
 mod name;
 mod scope;
 mod type_facts;

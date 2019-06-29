@@ -49,7 +49,8 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                         | TsType::TsUnionOrIntersectionType(..)
                         | TsType::TsTypeLit(..)
                         | TsType::TsThisType(..)
-                        | TsType::TsTupleType(..) => {
+                        | TsType::TsTupleType(..)
+                        | TsType::TsConditionalType(..) => {
                             unreachable!("this type should be converted to `Type`")
                         }
                         _ => {}

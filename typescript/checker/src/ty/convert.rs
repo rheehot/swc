@@ -1,7 +1,7 @@
 use super::{
-    Alias, Array, CallSignature, Constructor, ConstructorSignature, Function, IndexSignature,
-    Interface, Intersection, MethodSignature, PropertySignature, TsExpr, Tuple, Type, TypeElement,
-    TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
+    Alias, Array, CallSignature, Conditional, Constructor, ConstructorSignature, Function,
+    IndexSignature, Interface, Intersection, MethodSignature, PropertySignature, TsExpr, Tuple,
+    Type, TypeElement, TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
 };
 use crate::util::IntoCow;
 use swc_ecma_ast::*;
@@ -123,6 +123,7 @@ impl From<TsType> for Type<'_> {
                 ret_ty: box type_ann.type_ann.into_cow(),
             }),
             TsType::TsTypeLit(lit) => Type::TypeLit(lit.into()),
+            TsType::TsConditionalType(cond) => Type::Conditional(cond.into()),
             _ => Type::Simple(ty.into_cow()),
         }
     }
@@ -242,6 +243,18 @@ impl From<TsTupleType> for Tuple<'_> {
         Tuple {
             span: t.span,
             types: t.elem_types.into_iter().map(|v| (*v).into_cow()).collect(),
+        }
+    }
+}
+
+impl From<TsConditionalType> for Conditional<'_> {
+    fn from(t: TsConditionalType) -> Self {
+        Conditional {
+            span: t.span,
+            check_type: box t.check_type.into_cow(),
+            extends_type: box t.extends_type.into_cow(),
+            true_type: box t.true_type.into_cow(),
+            false_type: box t.false_type.into_cow(),
         }
     }
 }

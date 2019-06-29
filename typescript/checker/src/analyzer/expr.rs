@@ -1,9 +1,11 @@
-use super::{control_flow::RemoveTypes, export::pat_to_ts_fn_param, Analyzer};
+use super::{
+    control_flow::RemoveTypes, export::pat_to_ts_fn_param, generic::expand_type_params, Analyzer,
+};
 use crate::{
     builtin_types,
     errors::Error,
     ty::{
-        self, Alias, Array, CallSignature, ConstructorSignature, EnumVariant, Intersection,
+        self, Alias, CallSignature, ConstructorSignature, EnumVariant, Intersection,
         MethodSignature, PropertySignature, Tuple, Type, TypeElement, TypeLit, TypeParamDecl,
         TypeRef, TypeRefExt, Union,
     },
@@ -1162,11 +1164,22 @@ impl Analyzer<'_, '_> {
                                             type_params: Some(ref tps),
                                             ref ty,
                                             ..
-                                        }) => unimplemented!(
-                                            "expanding type alias with type params.\nType parmas: \
-                                             {:#?}",
-                                            tps
-                                        ),
+                                        }) => {
+                                            // Expand type parameters.
+
+                                            let ty = expand_type_params(
+                                                type_params.as_ref(),
+                                                tps,
+                                                &**ty,
+                                            )?;
+
+                                            unimplemented!(
+                                                "expanding type alias with type params.\nType: \
+                                                 {:#?}\nParams: {:#?}",
+                                                ty,
+                                                tps
+                                            )
+                                        }
 
                                         _ => unimplemented!(
                                             "Handling result of find_type() -> {:#?}",

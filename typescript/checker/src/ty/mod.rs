@@ -80,6 +80,7 @@ pub enum Type<'a> {
     Lit(TsLitType),
     TypeLit(TypeLit<'a>),
     Keyword(TsKeywordType),
+    Conditional(Conditional<'a>),
     Simple(Cow<'a, TsType>),
     Tuple(Tuple<'a>),
     Array(Array<'a>),
@@ -101,8 +102,17 @@ pub enum Type<'a> {
 
     /// Used for storing core types.
     ///
-    /// Don't match on this directly. Instead, use `.as_eef()`.
+    /// Don't match on this directly. Instead, use `.normalize()`.
     Static(Static),
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct Conditional<'a> {
+    pub span: Span,
+    pub check_type: Box<TypeRef<'a>>,
+    pub extends_type: Box<TypeRef<'a>>,
+    pub true_type: Box<TypeRef<'a>>,
+    pub false_type: Box<TypeRef<'a>>,
 }
 
 #[derive(Debug, Fold, Clone, Copy, PartialEq, Spanned)]
@@ -372,6 +382,8 @@ impl Type<'_> {
         }
 
         match self {
+            Type::Conditional(cond) => Type::Conditional(Conditional { span, ..cond }),
+
             Type::This(this) => Type::This(TsThisType { span, ..this }),
 
             Type::Lit(lit) => Type::Lit(TsLitType { span, ..lit }),
@@ -432,6 +444,7 @@ where
 impl Type<'_> {
     pub fn into_static(self) -> Type<'static> {
         match self {
+            Type::Conditional(cond) => Type::Conditional(cond.into_static()),
             Type::This(this) => Type::This(this),
             Type::TypeLit(lit) => Type::TypeLit(lit.into_static()),
             Type::Lit(lit) => Type::Lit(lit),
@@ -687,6 +700,18 @@ impl Tuple<'_> {
         Tuple {
             span: self.span,
             types: self.types.into_iter().map(static_type).collect(),
+        }
+    }
+}
+
+impl Conditional<'_> {
+    pub fn into_static(self) -> Conditional<'static> {
+        Conditional {
+            span: self.span,
+            check_type: box static_type(*self.check_type),
+            extends_type: box static_type(*self.extends_type),
+            true_type: box static_type(*self.true_type),
+            false_type: box static_type(*self.false_type),
         }
     }
 }
