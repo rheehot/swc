@@ -10,6 +10,10 @@ pub enum Error {
         span: Span,
     },
 
+    NotGeneric {
+        span: Span,
+    },
+
     Unknown {
         span: Span,
     },

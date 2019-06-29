@@ -1121,15 +1121,23 @@ impl Analyzer<'_, '_> {
                                 if let Some(ref ty) = self.find_type(&i.sym) {
                                     match ty.normalize() {
                                         Type::Enum(..) => {
-                                            assert_eq!(
-                                                *type_params, None,
-                                                "unimplemented: error rerporting: Enum reference \
-                                                 cannot have type parameters."
-                                            );
+                                            if let Some(..) = *type_params {
+                                                return Err(Error::NotGeneric { span });
+                                            }
                                             return Ok(ty.static_cast());
                                         }
 
-                                        Type::Interface(..) | Type::Class(..) | Type::Param(..) => {
+                                        Type::Param(..) => {
+                                            if let Some(..) = *type_params {
+                                                return Err(Error::NotGeneric { span });
+                                            }
+
+                                            return Ok(ty.static_cast());
+                                        }
+
+                                        Type::Interface(..) | Type::Class(..) => {
+                                            // TODO: Handle type parameters
+
                                             return Ok(ty.static_cast());
                                         }
 
