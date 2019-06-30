@@ -1,6 +1,6 @@
 [
     {
-        "line": 25,
+        "line": 30,
         "column": 19,
         "msg": "Cannot use namespace 'a' as a value."
     }

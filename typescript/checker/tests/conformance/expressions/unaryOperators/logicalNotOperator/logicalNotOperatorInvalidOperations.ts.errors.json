@@ -1,11 +1,11 @@
 [
     {
-        "line": 10,
+        "line": 12,
         "column": 16,
         "msg": "Operator '+' cannot be applied to types 'boolean' and 'number'."
     },
     {
-        "line": 13,
+        "line": 15,
         "column": 16,
         "msg": "Expression expected."
     }

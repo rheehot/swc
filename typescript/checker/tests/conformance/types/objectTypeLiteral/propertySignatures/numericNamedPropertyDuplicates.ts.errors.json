@@ -1,36 +1,36 @@
 [
     {
-        "line": 5,
+        "line": 7,
         "column": 5,
         "msg": "Duplicate identifier '1.0'."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 12,
         "msg": "Duplicate identifier '2'."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 5,
         "msg": "Duplicate identifier '2'."
     },
     {
-        "line": 12,
+        "line": 14,
         "column": 5,
         "msg": "Duplicate identifier '2'."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 5,
         "msg": "Duplicate identifier '1'."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 5,
         "msg": "Duplicate identifier '1'."
     },
     {
-        "line": 22,
+        "line": 24,
         "column": 5,
         "msg": "',' expected."
     }

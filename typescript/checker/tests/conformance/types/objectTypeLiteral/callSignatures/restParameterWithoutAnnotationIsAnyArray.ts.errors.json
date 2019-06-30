@@ -1,16 +1,16 @@
 [
     {
-        "line": 7,
+        "line": 12,
         "column": 11,
         "msg": "A rest parameter must be last in a parameter list."
     },
     {
-        "line": 15,
+        "line": 20,
         "column": 9,
         "msg": "A rest parameter must be last in a parameter list."
     },
     {
-        "line": 25,
+        "line": 30,
         "column": 21,
         "msg": "A rest parameter must be last in a parameter list."
     }

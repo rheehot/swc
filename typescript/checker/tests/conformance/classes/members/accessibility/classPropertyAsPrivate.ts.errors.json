@@ -1,61 +1,61 @@
 [
     {
-        "line": 5,
+        "line": 7,
         "column": 17,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 6,
+        "line": 8,
         "column": 17,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 10,
+        "line": 12,
         "column": 24,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 24,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
-    },
-    {
-        "line": 17,
-        "column": 3,
-        "msg": "Property 'x' is private and only accessible within class 'C'."
-    },
-    {
-        "line": 18,
-        "column": 3,
-        "msg": "Property 'y' is private and only accessible within class 'C'."
     },
     {
         "line": 19,
         "column": 3,
-        "msg": "Property 'y' is private and only accessible within class 'C'."
+        "msg": "Property 'x' is private and only accessible within class 'C'."
     },
     {
         "line": 20,
         "column": 3,
-        "msg": "Property 'foo' is private and only accessible within class 'C'."
+        "msg": "Property 'y' is private and only accessible within class 'C'."
+    },
+    {
+        "line": 21,
+        "column": 3,
+        "msg": "Property 'y' is private and only accessible within class 'C'."
     },
     {
         "line": 22,
         "column": 3,
-        "msg": "Property 'a' is private and only accessible within class 'C'."
-    },
-    {
-        "line": 23,
-        "column": 3,
-        "msg": "Property 'b' is private and only accessible within class 'C'."
+        "msg": "Property 'foo' is private and only accessible within class 'C'."
     },
     {
         "line": 24,
         "column": 3,
-        "msg": "Property 'b' is private and only accessible within class 'C'."
+        "msg": "Property 'a' is private and only accessible within class 'C'."
     },
     {
         "line": 25,
+        "column": 3,
+        "msg": "Property 'b' is private and only accessible within class 'C'."
+    },
+    {
+        "line": 26,
+        "column": 3,
+        "msg": "Property 'b' is private and only accessible within class 'C'."
+    },
+    {
+        "line": 27,
         "column": 3,
         "msg": "Property 'foo' is private and only accessible within class 'C'."
     }

@@ -1,11 +1,11 @@
 [
     {
-        "line": 13,
+        "line": 16,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'unionOfFunctionType' must be of type '(() => string) | (() => number)', but here has type '() => string | number'."
     },
     {
-        "line": 17,
+        "line": 20,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'unionOfConstructorType' must be of type '(new () => string) | (new () => number)', but here has type 'new () => string | number'."
     }

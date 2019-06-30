@@ -1,96 +1,96 @@
 [
     {
-        "line": 9,
+        "line": 25,
         "column": 8,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 9,
+        "line": 25,
         "column": 29,
         "msg": "',' expected."
     },
     {
-        "line": 10,
+        "line": 26,
         "column": 4,
         "msg": "Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'."
     },
     {
-        "line": 18,
+        "line": 34,
         "column": 8,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     },
     {
-        "line": 18,
+        "line": 34,
         "column": 16,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     },
     {
-        "line": 25,
-        "column": 16,
-        "msg": "Type 'string' is not assignable to type 'number'."
-    },
-    {
-        "line": 32,
-        "column": 14,
-        "msg": "Duplicate identifier 'z'."
-    },
-    {
-        "line": 32,
-        "column": 18,
-        "msg": "Duplicate identifier 'z'."
-    },
-    {
-        "line": 36,
-        "column": 6,
-        "msg": "Type 'number' is not assignable to type '{ x"
-    },
-    {
-        "line": 37,
-        "column": 4,
-        "msg": "Argument of type '{}' is not assignable to parameter of type '{ z"
-    },
-    {
-        "line": 38,
-        "column": 6,
-        "msg": "Type 'true' is not assignable to type 'number'."
-    },
-    {
-        "line": 39,
-        "column": 6,
-        "msg": "Type 'false' is not assignable to type 'number'."
-    },
-    {
-        "line": 40,
-        "column": 6,
-        "msg": "Type 'true' is not assignable to type 'string | number'."
-    },
-    {
         "line": 41,
-        "column": 11,
-        "msg": "Type 'false' is not assignable to type '[[any]]'."
-    },
-    {
-        "line": 42,
-        "column": 13,
+        "column": 16,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
         "line": 48,
-        "column": 13,
-        "msg": "A binding pattern parameter cannot be optional in an implementation signature."
+        "column": 14,
+        "msg": "Duplicate identifier 'z'."
     },
     {
-        "line": 49,
-        "column": 13,
-        "msg": "A binding pattern parameter cannot be optional in an implementation signature."
+        "line": 48,
+        "column": 18,
+        "msg": "Duplicate identifier 'z'."
+    },
+    {
+        "line": 52,
+        "column": 6,
+        "msg": "Type 'number' is not assignable to type '{ x"
+    },
+    {
+        "line": 53,
+        "column": 4,
+        "msg": "Argument of type '{}' is not assignable to parameter of type '{ z"
+    },
+    {
+        "line": 54,
+        "column": 6,
+        "msg": "Type 'true' is not assignable to type 'number'."
+    },
+    {
+        "line": 55,
+        "column": 6,
+        "msg": "Type 'false' is not assignable to type 'number'."
+    },
+    {
+        "line": 56,
+        "column": 6,
+        "msg": "Type 'true' is not assignable to type 'string | number'."
+    },
+    {
+        "line": 57,
+        "column": 11,
+        "msg": "Type 'false' is not assignable to type '[[any]]'."
     },
     {
         "line": 58,
+        "column": 13,
+        "msg": "Type 'string' is not assignable to type 'number'."
+    },
+    {
+        "line": 64,
+        "column": 13,
+        "msg": "A binding pattern parameter cannot be optional in an implementation signature."
+    },
+    {
+        "line": 65,
+        "column": 13,
+        "msg": "A binding pattern parameter cannot be optional in an implementation signature."
+    },
+    {
+        "line": 74,
         "column": 8,
         "msg": "A binding pattern parameter cannot be optional in an implementation signature."
     },
     {
-        "line": 59,
+        "line": 75,
         "column": 5,
         "msg": "Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'."
     },
@@ -100,17 +100,17 @@
         "msg": "any; y"
     },
     {
-        "line": 67,
+        "line": 83,
         "column": 18,
         "msg": "Duplicate identifier 'number'."
     },
     {
-        "line": 67,
+        "line": 83,
         "column": 26,
         "msg": "Duplicate identifier 'number'."
     },
     {
-        "line": 67,
+        "line": 83,
         "column": 34,
         "msg": "Duplicate identifier 'number'."
     }

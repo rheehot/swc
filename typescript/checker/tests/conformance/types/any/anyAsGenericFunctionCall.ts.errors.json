@@ -1,21 +1,21 @@
 [
     {
-        "line": 7,
-        "column": 9,
-        "msg": "Untyped function calls may not accept type arguments."
-    },
-    {
         "line": 8,
         "column": 9,
         "msg": "Untyped function calls may not accept type arguments."
     },
     {
-        "line": 11,
+        "line": 9,
         "column": 9,
         "msg": "Untyped function calls may not accept type arguments."
     },
     {
         "line": 12,
+        "column": 9,
+        "msg": "Untyped function calls may not accept type arguments."
+    },
+    {
+        "line": 13,
         "column": 9,
         "msg": "Untyped function calls may not accept type arguments."
     }

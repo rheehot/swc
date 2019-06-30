@@ -1,16 +1,16 @@
 [
     {
-        "line": 3,
+        "line": 8,
         "column": 12,
         "msg": "A namespace declaration cannot be located prior to a class or function with which it is merged."
     },
     {
-        "line": 19,
+        "line": 24,
         "column": 18,
         "msg": "Duplicate identifier 'Point'."
     },
     {
-        "line": 26,
+        "line": 31,
         "column": 20,
         "msg": "Duplicate identifier 'Point'."
     }

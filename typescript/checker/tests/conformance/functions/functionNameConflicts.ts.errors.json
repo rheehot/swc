@@ -1,56 +1,56 @@
 [
     {
-        "line": 7,
-        "column": 14,
-        "msg": "Duplicate identifier 'fn1'."
-    },
-    {
-        "line": 8,
-        "column": 9,
-        "msg": "Duplicate identifier 'fn1'."
-    },
-    {
-        "line": 10,
-        "column": 9,
-        "msg": "Duplicate identifier 'fn2'."
-    },
-    {
-        "line": 11,
-        "column": 14,
-        "msg": "Duplicate identifier 'fn2'."
-    },
-    {
         "line": 14,
+        "column": 14,
+        "msg": "Duplicate identifier 'fn1'."
+    },
+    {
+        "line": 15,
+        "column": 9,
+        "msg": "Duplicate identifier 'fn1'."
+    },
+    {
+        "line": 17,
+        "column": 9,
+        "msg": "Duplicate identifier 'fn2'."
+    },
+    {
+        "line": 18,
+        "column": 14,
+        "msg": "Duplicate identifier 'fn2'."
+    },
+    {
+        "line": 21,
         "column": 10,
         "msg": "Duplicate identifier 'fn3'."
     },
     {
-        "line": 15,
+        "line": 22,
         "column": 5,
         "msg": "Duplicate identifier 'fn3'."
     },
     {
-        "line": 18,
+        "line": 25,
         "column": 9,
         "msg": "Duplicate identifier 'fn4'."
-    },
-    {
-        "line": 19,
-        "column": 14,
-        "msg": "Duplicate identifier 'fn4'."
-    },
-    {
-        "line": 21,
-        "column": 14,
-        "msg": "Duplicate identifier 'fn5'."
-    },
-    {
-        "line": 22,
-        "column": 9,
-        "msg": "Duplicate identifier 'fn5'."
     },
     {
         "line": 26,
+        "column": 14,
+        "msg": "Duplicate identifier 'fn4'."
+    },
+    {
+        "line": 28,
+        "column": 14,
+        "msg": "Duplicate identifier 'fn5'."
+    },
+    {
+        "line": 29,
+        "column": 9,
+        "msg": "Duplicate identifier 'fn5'."
+    },
+    {
+        "line": 33,
         "column": 10,
         "msg": "Function implementation name must be 'over'."
     }

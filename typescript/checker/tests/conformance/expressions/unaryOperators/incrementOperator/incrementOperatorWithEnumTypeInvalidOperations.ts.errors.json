@@ -1,51 +1,51 @@
 [
     {
-        "line": 9,
+        "line": 14,
         "column": 25,
         "msg": "Cannot assign to 'ENUM' because it is not a variable."
     },
     {
-        "line": 10,
+        "line": 15,
         "column": 25,
         "msg": "Cannot assign to 'ENUM1' because it is not a variable."
-    },
-    {
-        "line": 12,
-        "column": 23,
-        "msg": "Cannot assign to 'ENUM' because it is not a variable."
-    },
-    {
-        "line": 13,
-        "column": 23,
-        "msg": "Cannot assign to 'ENUM1' because it is not a variable."
-    },
-    {
-        "line": 16,
-        "column": 25,
-        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 17,
         "column": 23,
+        "msg": "Cannot assign to 'ENUM' because it is not a variable."
+    },
+    {
+        "line": 18,
+        "column": 23,
+        "msg": "Cannot assign to 'ENUM1' because it is not a variable."
+    },
+    {
+        "line": 21,
+        "column": 25,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 20,
+        "line": 22,
+        "column": 23,
+        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
+    },
+    {
+        "line": 25,
         "column": 3,
         "msg": "Cannot assign to 'ENUM' because it is not a variable."
     },
     {
-        "line": 21,
+        "line": 26,
         "column": 3,
         "msg": "Cannot assign to 'ENUM1' because it is not a variable."
     },
     {
-        "line": 23,
+        "line": 28,
         "column": 1,
         "msg": "Cannot assign to 'ENUM' because it is not a variable."
     },
     {
-        "line": 24,
+        "line": 29,
         "column": 1,
         "msg": "Cannot assign to 'ENUM1' because it is not a variable."
     }

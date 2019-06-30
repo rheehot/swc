@@ -1,26 +1,26 @@
 [
     {
-        "line": 17,
+        "line": 23,
         "column": 32,
         "msg": "Property 'notHere' does not exist on type 'U'."
     },
     {
-        "line": 27,
+        "line": 33,
         "column": 16,
         "msg": "Property 'notHere' does not exist on type 'B'."
     },
     {
-        "line": 34,
+        "line": 40,
         "column": 22,
         "msg": "Property 'notHere' does not exist on type 'A'."
     },
     {
-        "line": 40,
+        "line": 46,
         "column": 9,
         "msg": "Type 'string' is not assignable to type 'U'."
     },
     {
-        "line": 40,
+        "line": 46,
         "column": 22,
         "msg": "Property 'notHere' does not exist on type 'U'."
     }

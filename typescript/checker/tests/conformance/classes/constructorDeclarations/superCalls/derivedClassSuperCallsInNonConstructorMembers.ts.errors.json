@@ -1,186 +1,186 @@
 [
     {
-        "line": 10,
+        "line": 12,
         "column": 8,
         "msg": "Cannot find name 'super'."
     },
     {
-        "line": 10,
+        "line": 12,
         "column": 13,
-        "msg": "';' expected."
-    },
-    {
-        "line": 10,
-        "column": 14,
-        "msg": "Expression expected."
-    },
-    {
-        "line": 11,
-        "column": 5,
-        "msg": "Cannot find name 'b'."
-    },
-    {
-        "line": 11,
-        "column": 9,
         "msg": "';' expected."
     },
     {
         "line": 12,
-        "column": 9,
-        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
+        "column": 14,
+        "msg": "Expression expected."
     },
     {
-        "line": 14,
+        "line": 13,
         "column": 5,
-        "msg": "Cannot find name 'get'."
+        "msg": "Cannot find name 'b'."
     },
     {
-        "line": 14,
+        "line": 13,
         "column": 9,
         "msg": "';' expected."
     },
     {
         "line": 14,
         "column": 9,
+        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
+    },
+    {
+        "line": 16,
+        "column": 5,
+        "msg": "Cannot find name 'get'."
+    },
+    {
+        "line": 16,
+        "column": 9,
+        "msg": "';' expected."
+    },
+    {
+        "line": 16,
+        "column": 9,
         "msg": "Cannot find name 'C'."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 13,
         "msg": "';' expected."
     },
     {
-        "line": 15,
+        "line": 17,
         "column": 9,
         "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 5,
         "msg": "Cannot find name 'set'."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 9,
         "msg": "';' expected."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 9,
         "msg": "Cannot find name 'C'."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 11,
         "msg": "Cannot find name 'v'."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 14,
         "msg": "';' expected."
     },
     {
-        "line": 19,
+        "line": 21,
         "column": 9,
         "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     },
     {
-        "line": 22,
+        "line": 24,
         "column": 5,
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 22,
+        "line": 24,
         "column": 15,
         "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     },
     {
-        "line": 23,
+        "line": 25,
         "column": 5,
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 23,
+        "line": 25,
         "column": 12,
         "msg": "Cannot find name 'b'."
     },
     {
-        "line": 23,
+        "line": 25,
         "column": 16,
         "msg": "';' expected."
     },
     {
-        "line": 24,
+        "line": 26,
         "column": 9,
         "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     },
     {
-        "line": 26,
+        "line": 28,
         "column": 5,
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 26,
+        "line": 28,
         "column": 12,
         "msg": "Cannot find name 'get'."
     },
     {
-        "line": 26,
+        "line": 28,
         "column": 16,
         "msg": "';' expected."
     },
     {
-        "line": 26,
+        "line": 28,
         "column": 16,
         "msg": "Cannot find name 'C'."
     },
     {
-        "line": 26,
+        "line": 28,
         "column": 20,
         "msg": "';' expected."
     },
     {
-        "line": 27,
+        "line": 29,
         "column": 9,
         "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 5,
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 12,
         "msg": "Cannot find name 'set'."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 16,
         "msg": "';' expected."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 16,
         "msg": "Cannot find name 'C'."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 18,
         "msg": "Cannot find name 'v'."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 21,
         "msg": "';' expected."
     },
     {
-        "line": 31,
+        "line": 33,
         "column": 9,
         "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     },
     {
-        "line": 33,
+        "line": 35,
         "column": 1,
         "msg": "Declaration or statement expected."
     }

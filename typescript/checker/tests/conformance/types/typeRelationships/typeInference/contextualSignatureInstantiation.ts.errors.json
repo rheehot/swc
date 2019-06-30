@@ -1,16 +1,16 @@
 [
     {
-        "line": 21,
+        "line": 26,
         "column": 13,
         "msg": "Argument of type '<T>(x"
     },
     {
-        "line": 22,
+        "line": 27,
         "column": 23,
         "msg": "Argument of type '<T>(x"
     },
     {
-        "line": 23,
+        "line": 28,
         "column": 23,
         "msg": "Argument of type '<T>(x"
     }

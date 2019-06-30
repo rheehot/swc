@@ -1,71 +1,71 @@
 [
     {
-        "line": 29,
+        "line": 50,
         "column": 9,
         "msg": "Argument of type '{}' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 62,
+        "line": 83,
         "column": 9,
         "msg": "Expected 3 type arguments, but got 1."
     },
     {
-        "line": 63,
+        "line": 84,
         "column": 9,
         "msg": "Expected 3 type arguments, but got 2."
     },
     {
-        "line": 67,
+        "line": 88,
         "column": 9,
         "msg": "Expected 3 type arguments, but got 4."
     },
     {
-        "line": 75,
+        "line": 96,
         "column": 25,
         "msg": "Argument of type '3' is not assignable to parameter of type 'string'."
     },
     {
-        "line": 76,
+        "line": 97,
         "column": 9,
         "msg": "Type 'number' does not satisfy the constraint 'string'."
     },
     {
-        "line": 77,
+        "line": 98,
         "column": 9,
         "msg": "Type 'number' does not satisfy the constraint 'string'."
     },
     {
-        "line": 81,
+        "line": 102,
         "column": 9,
         "msg": "Argument of type '3' is not assignable to parameter of type 'string'."
     },
     {
-        "line": 82,
+        "line": 103,
         "column": 9,
         "msg": "Argument of type '3' is not assignable to parameter of type 'string'."
     },
     {
-        "line": 86,
+        "line": 107,
         "column": 9,
         "msg": "Type 'boolean' does not satisfy the constraint 'string'."
     },
     {
-        "line": 89,
+        "line": 110,
         "column": 9,
         "msg": "Argument of type 'true' is not assignable to parameter of type 'string'."
     },
     {
-        "line": 90,
+        "line": 111,
         "column": 15,
         "msg": "Argument of type 'true' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 98,
+        "line": 119,
         "column": 18,
         "msg": "Property 'toFixed' does not exist on type 'string'."
     },
     {
-        "line": 100,
+        "line": 121,
         "column": 18,
         "msg": "Property 'blah' does not exist on type 'string'."
     }

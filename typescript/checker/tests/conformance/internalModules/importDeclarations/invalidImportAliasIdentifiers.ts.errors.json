@@ -1,16 +1,16 @@
 [
     {
-        "line": 7,
+        "line": 15,
         "column": 12,
         "msg": "Cannot find namespace 'V'."
     },
     {
-        "line": 13,
+        "line": 21,
         "column": 12,
         "msg": "'C' only refers to a type, but is being used as a namespace here."
     },
     {
-        "line": 25,
+        "line": 33,
         "column": 12,
         "msg": "'I' only refers to a type, but is being used as a namespace here."
     }

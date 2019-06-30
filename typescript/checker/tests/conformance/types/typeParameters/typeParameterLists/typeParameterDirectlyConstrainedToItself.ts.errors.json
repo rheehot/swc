@@ -1,51 +1,51 @@
 [
     {
-        "line": 5,
+        "line": 9,
         "column": 19,
         "msg": "Type parameter 'T' has a circular constraint."
     },
     {
-        "line": 6,
+        "line": 10,
         "column": 23,
         "msg": "Type parameter 'U' has a circular constraint."
     },
     {
-        "line": 8,
+        "line": 12,
         "column": 23,
         "msg": "Type parameter 'T' has a circular constraint."
     },
     {
-        "line": 9,
+        "line": 13,
         "column": 27,
         "msg": "Type parameter 'U' has a circular constraint."
     },
     {
-        "line": 11,
+        "line": 15,
         "column": 22,
         "msg": "Type parameter 'T' has a circular constraint."
     },
     {
-        "line": 12,
+        "line": 16,
         "column": 26,
         "msg": "Type parameter 'U' has a circular constraint."
     },
     {
-        "line": 15,
+        "line": 19,
         "column": 16,
         "msg": "Type parameter 'T' has a circular constraint."
     },
     {
-        "line": 16,
+        "line": 20,
         "column": 19,
         "msg": "Type parameter 'U' has a circular constraint."
     },
     {
-        "line": 19,
+        "line": 23,
         "column": 20,
         "msg": "Type parameter 'T' has a circular constraint."
     },
     {
-        "line": 20,
+        "line": 24,
         "column": 24,
         "msg": "Type parameter 'U' has a circular constraint."
     }

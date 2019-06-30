@@ -1,51 +1,51 @@
 [
     {
-        "line": 29,
+        "line": 48,
         "column": 9,
         "msg": "Argument of type '{}' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 45,
+        "line": 64,
         "column": 15,
         "msg": "Argument of type '\"\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 69,
+        "line": 88,
         "column": 9,
         "msg": "Expected 3 type arguments, but got 4."
     },
     {
-        "line": 79,
+        "line": 98,
         "column": 25,
         "msg": "Argument of type '3' is not assignable to parameter of type 'string'."
     },
     {
-        "line": 80,
+        "line": 99,
         "column": 25,
         "msg": "Argument of type '\"\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 90,
+        "line": 109,
         "column": 9,
         "msg": "Type 'boolean' does not satisfy the constraint 'number'."
     },
     {
-        "line": 93,
+        "line": 112,
         "column": 9,
         "msg": "Argument of type 'true' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 94,
+        "line": 113,
         "column": 15,
         "msg": "Argument of type 'true' is not assignable to parameter of type 'string'."
     },
     {
-        "line": 102,
+        "line": 121,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'n' must be of type 'number', but here has type 'string'."
     },
     {
-        "line": 102,
+        "line": 121,
         "column": 26,
         "msg": "Property 'toFixed' does not exist on type 'string'."
     }

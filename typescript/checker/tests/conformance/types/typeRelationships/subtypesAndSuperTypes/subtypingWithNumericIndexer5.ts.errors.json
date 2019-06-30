@@ -1,21 +1,21 @@
 [
     {
-        "line": 13,
+        "line": 22,
         "column": 7,
         "msg": "Class 'B' incorrectly implements interface 'A'."
     },
     {
-        "line": 34,
+        "line": 43,
         "column": 11,
         "msg": "Class 'B3<T>' incorrectly implements interface 'A<T>'."
     },
     {
-        "line": 38,
+        "line": 47,
         "column": 11,
         "msg": "Class 'B4<T>' incorrectly implements interface 'A<T>'."
     },
     {
-        "line": 42,
+        "line": 51,
         "column": 11,
         "msg": "Class 'B5<T>' incorrectly implements interface 'A<T>'."
     }

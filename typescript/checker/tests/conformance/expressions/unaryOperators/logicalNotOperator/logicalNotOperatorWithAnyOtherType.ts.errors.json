@@ -1,21 +1,21 @@
 [
     {
-        "line": 47,
+        "line": 52,
         "column": 27,
         "msg": "Operator '+' cannot be applied to types 'null' and 'undefined'."
     },
     {
-        "line": 48,
+        "line": 53,
         "column": 27,
         "msg": "Operator '+' cannot be applied to types 'null' and 'null'."
     },
     {
-        "line": 49,
+        "line": 54,
         "column": 27,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'undefined'."
     },
     {
-        "line": 59,
+        "line": 64,
         "column": 1,
         "msg": "Left side of comma operator is unused and has no side effects."
     }

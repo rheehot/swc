@@ -1,11 +1,11 @@
 [
     {
-        "line": 7,
+        "line": 9,
         "column": 11,
         "msg": "Interface 'I' incorrectly extends interface 'Foo'."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 12,
         "msg": "Property 'x' is protected and only accessible within class 'Foo' and its subclasses."
     }

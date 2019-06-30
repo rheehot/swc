@@ -1,81 +1,81 @@
 [
     {
-        "line": 5,
+        "line": 15,
         "column": 14,
         "msg": "Parameter cannot have question mark and initializer."
     },
     {
-        "line": 6,
-        "column": 22,
-        "msg": "Parameter cannot have question mark and initializer."
-    },
-    {
-        "line": 7,
+        "line": 16,
         "column": 22,
         "msg": "Parameter cannot have question mark and initializer."
     },
     {
         "line": 17,
+        "column": 22,
+        "msg": "Parameter cannot have question mark and initializer."
+    },
+    {
+        "line": 27,
         "column": 9,
         "msg": "Parameter cannot have question mark and initializer."
     },
     {
-        "line": 25,
+        "line": 35,
         "column": 6,
         "msg": "Parameter cannot have question mark and initializer."
     },
     {
-        "line": 25,
+        "line": 35,
         "column": 6,
-        "msg": "A parameter initializer is only allowed in a function or constructor implementation."
-    },
-    {
-        "line": 26,
-        "column": 20,
-        "msg": "Parameter cannot have question mark and initializer."
-    },
-    {
-        "line": 26,
-        "column": 20,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     },
     {
         "line": 36,
-        "column": 6,
+        "column": 20,
         "msg": "Parameter cannot have question mark and initializer."
     },
     {
         "line": 36,
-        "column": 6,
-        "msg": "A parameter initializer is only allowed in a function or constructor implementation."
-    },
-    {
-        "line": 37,
-        "column": 9,
-        "msg": "Parameter cannot have question mark and initializer."
-    },
-    {
-        "line": 37,
-        "column": 9,
+        "column": 20,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     },
     {
         "line": 46,
+        "column": 6,
+        "msg": "Parameter cannot have question mark and initializer."
+    },
+    {
+        "line": 46,
+        "column": 6,
+        "msg": "A parameter initializer is only allowed in a function or constructor implementation."
+    },
+    {
+        "line": 47,
         "column": 9,
         "msg": "Parameter cannot have question mark and initializer."
     },
     {
         "line": 47,
+        "column": 9,
+        "msg": "A parameter initializer is only allowed in a function or constructor implementation."
+    },
+    {
+        "line": 56,
+        "column": 9,
+        "msg": "Parameter cannot have question mark and initializer."
+    },
+    {
+        "line": 57,
         "column": 32,
         "msg": "Parameter cannot have question mark and initializer."
     },
     {
-        "line": 47,
+        "line": 57,
         "column": 32,
         "msg": "Type '\"\"' is not assignable to type 'number'."
     },
     {
-        "line": 48,
+        "line": 58,
         "column": 9,
         "msg": "Parameter cannot have question mark and initializer."
     }

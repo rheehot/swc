@@ -1,11 +1,11 @@
 [
     {
-        "line": 30,
+        "line": 36,
         "column": 13,
         "msg": "Property 'fn2' does not exist on type 'typeof A'."
     },
     {
-        "line": 31,
+        "line": 37,
         "column": 14,
         "msg": "Property 'fng2' does not exist on type 'typeof A'. Did you mean 'fng'?"
     }

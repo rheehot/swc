@@ -1,10 +1,5 @@
 [
     {
-        "line": 23,
-        "column": 11,
-        "msg": "An expression of type 'void' cannot be tested for truthiness"
-    },
-    {
         "line": 34,
         "column": 11,
         "msg": "An expression of type 'void' cannot be tested for truthiness"
@@ -46,6 +41,11 @@
     },
     {
         "line": 122,
+        "column": 11,
+        "msg": "An expression of type 'void' cannot be tested for truthiness"
+    },
+    {
+        "line": 133,
         "column": 11,
         "msg": "An expression of type 'void' cannot be tested for truthiness"
     }

@@ -1,41 +1,41 @@
 [
     {
-        "line": 19,
+        "line": 22,
         "column": 5,
         "msg": "This condition will always return 'false' since the types 'I1 & I3' and 'I2' have no overlap."
     },
     {
-        "line": 19,
+        "line": 22,
         "column": 16,
         "msg": "This condition will always return 'false' since the types 'I2' and 'I1 & I3' have no overlap."
     },
     {
-        "line": 21,
+        "line": 24,
         "column": 10,
         "msg": "This condition will always return 'true' since the types 'I1 & I3' and 'I2' have no overlap."
     },
     {
-        "line": 21,
+        "line": 24,
         "column": 21,
         "msg": "This condition will always return 'true' since the types 'I2' and 'I1 & I3' have no overlap."
     },
     {
-        "line": 23,
+        "line": 26,
         "column": 10,
         "msg": "This condition will always return 'false' since the types 'I1 & I3' and 'I2' have no overlap."
     },
     {
-        "line": 23,
+        "line": 26,
         "column": 20,
         "msg": "This condition will always return 'false' since the types 'I2' and 'I1 & I3' have no overlap."
     },
     {
-        "line": 25,
+        "line": 28,
         "column": 10,
         "msg": "This condition will always return 'true' since the types 'I1 & I3' and 'I2' have no overlap."
     },
     {
-        "line": 25,
+        "line": 28,
         "column": 20,
         "msg": "This condition will always return 'true' since the types 'I2' and 'I1 & I3' have no overlap."
     }

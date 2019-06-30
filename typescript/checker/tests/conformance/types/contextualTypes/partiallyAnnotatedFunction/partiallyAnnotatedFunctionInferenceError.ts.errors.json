@@ -1,16 +1,16 @@
 [
     {
-        "line": 14,
+        "line": 17,
         "column": 11,
         "msg": "Argument of type '(t1"
     },
     {
-        "line": 15,
+        "line": 18,
         "column": 11,
         "msg": "Argument of type '(t1"
     },
     {
-        "line": 16,
+        "line": 19,
         "column": 11,
         "msg": "Argument of type '(t1"
     }

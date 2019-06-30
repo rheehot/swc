@@ -1,11 +1,11 @@
 [
     {
-        "line": 28,
+        "line": 33,
         "column": 22,
         "msg": "In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element."
     },
     {
-        "line": 40,
+        "line": 45,
         "column": 22,
         "msg": "In an enum with multiple declarations, only one declaration can omit an initializer for its first enum element."
     }

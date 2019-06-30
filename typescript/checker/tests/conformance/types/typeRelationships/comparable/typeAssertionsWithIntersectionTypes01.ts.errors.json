@@ -1,11 +1,11 @@
 [
     {
-        "line": 19,
+        "line": 23,
         "column": 9,
         "msg": "Conversion of type 'I2' to type 'I1 & I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first."
     },
     {
-        "line": 20,
+        "line": 24,
         "column": 9,
         "msg": "Conversion of type 'I2' to type 'I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first."
     }

@@ -1,76 +1,76 @@
 [
     {
-        "line": 36,
+        "line": 49,
         "column": 5,
         "msg": "Type '\"this is a string\"' is not assignable to type 'number'."
     },
     {
-        "line": 37,
+        "line": 50,
         "column": 5,
         "msg": "Type '9.9' is not assignable to type 'string'."
     },
     {
-        "line": 38,
+        "line": 51,
         "column": 5,
         "msg": "Type '9.9' is not assignable to type 'Date'."
     },
     {
-        "line": 40,
+        "line": 53,
         "column": 5,
         "msg": "Type '9.9' is not assignable to type 'void'."
     },
     {
-        "line": 42,
+        "line": 55,
         "column": 5,
         "msg": "Property 'id' is missing in type 'D<unknown>' but required in type 'I'."
     },
     {
-        "line": 43,
+        "line": 56,
         "column": 5,
         "msg": "Property 'id' is missing in type 'D<unknown>' but required in type 'C'."
     },
     {
-        "line": 44,
+        "line": 57,
         "column": 5,
         "msg": "Type 'C' is missing the following properties from type 'D<string>'"
     },
     {
-        "line": 45,
+        "line": 58,
         "column": 28,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 46,
+        "line": 59,
         "column": 5,
         "msg": "Type 'C' is not assignable to type '{ id"
     },
     {
-        "line": 48,
+        "line": 61,
         "column": 5,
         "msg": "Type '(x"
     },
     {
-        "line": 49,
+        "line": 62,
         "column": 5,
         "msg": "Type '(x"
     },
     {
-        "line": 50,
+        "line": 63,
         "column": 32,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 52,
+        "line": 65,
         "column": 5,
         "msg": "Type 'typeof N' is not assignable to type 'typeof M'."
     },
     {
-        "line": 53,
+        "line": 66,
         "column": 5,
         "msg": "Type 'N.A' is not assignable to type 'M.A'."
     },
     {
-        "line": 54,
+        "line": 67,
         "column": 5,
         "msg": "Type '(x"
     }

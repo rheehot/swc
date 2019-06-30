@@ -1,18 +1,13 @@
 [
     {
-        "line": 5,
+        "line": 6,
         "column": 20,
         "msg": "'"
     },
     {
-        "line": 6,
+        "line": 7,
         "column": 7,
         "msg": "'"
-    },
-    {
-        "line": 7,
-        "column": 10,
-        "msg": "'(' expected."
     },
     {
         "line": 8,
@@ -21,40 +16,35 @@
     },
     {
         "line": 9,
-        "column": 9,
-        "msg": "'"
+        "column": 10,
+        "msg": "'(' expected."
     },
     {
         "line": 10,
-        "column": 10,
+        "column": 9,
         "msg": "'"
     },
     {
         "line": 11,
-        "column": 8,
-        "msg": "'"
-    },
-    {
-        "line": 12,
         "column": 10,
         "msg": "'"
     },
     {
-        "line": 14,
+        "line": 12,
+        "column": 8,
+        "msg": "'"
+    },
+    {
+        "line": 13,
+        "column": 10,
+        "msg": "'"
+    },
+    {
+        "line": 15,
         "column": 1,
         "msg": "'"
     },
     {
-        "line": 17,
-        "column": 5,
-        "msg": "No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer."
-    },
-    {
-        "line": 17,
-        "column": 6,
-        "msg": "',' expected."
-    },
-    {
         "line": 18,
         "column": 5,
         "msg": "No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer."
@@ -65,27 +55,37 @@
         "msg": "',' expected."
     },
     {
-        "line": 18,
+        "line": 19,
+        "column": 5,
+        "msg": "No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer."
+    },
+    {
+        "line": 19,
+        "column": 6,
+        "msg": "',' expected."
+    },
+    {
+        "line": 19,
         "column": 12,
         "msg": "'"
     },
     {
-        "line": 19,
+        "line": 20,
         "column": 5,
         "msg": "No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer."
     },
     {
-        "line": 19,
+        "line": 20,
         "column": 6,
         "msg": "',' expected."
     },
     {
-        "line": 19,
+        "line": 20,
         "column": 9,
         "msg": "'"
     },
     {
-        "line": 22,
+        "line": 23,
         "column": 17,
         "msg": "'"
     }

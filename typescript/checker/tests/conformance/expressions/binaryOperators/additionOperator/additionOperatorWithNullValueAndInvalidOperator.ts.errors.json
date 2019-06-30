@@ -1,28 +1,13 @@
 [
     {
-        "line": 13,
+        "line": 16,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'null' and 'boolean'."
     },
     {
-        "line": 14,
-        "column": 10,
-        "msg": "Operator '+' cannot be applied to types 'null' and 'Object'."
-    },
-    {
-        "line": 15,
-        "column": 10,
-        "msg": "Operator '+' cannot be applied to types 'null' and 'void'."
-    },
-    {
-        "line": 16,
-        "column": 10,
-        "msg": "Operator '+' cannot be applied to types 'boolean' and 'null'."
-    },
-    {
         "line": 17,
         "column": 10,
-        "msg": "Operator '+' cannot be applied to types 'Object' and 'null'."
+        "msg": "Operator '+' cannot be applied to types 'null' and 'Object'."
     },
     {
         "line": 18,
@@ -30,27 +15,42 @@
         "msg": "Operator '+' cannot be applied to types 'null' and 'void'."
     },
     {
+        "line": 19,
+        "column": 10,
+        "msg": "Operator '+' cannot be applied to types 'boolean' and 'null'."
+    },
+    {
+        "line": 20,
+        "column": 10,
+        "msg": "Operator '+' cannot be applied to types 'Object' and 'null'."
+    },
+    {
         "line": 21,
+        "column": 10,
+        "msg": "Operator '+' cannot be applied to types 'null' and 'void'."
+    },
+    {
+        "line": 24,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'null' and 'Number'."
     },
     {
-        "line": 22,
+        "line": 25,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'null' and 'true'."
     },
     {
-        "line": 23,
+        "line": 26,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'null' and '{ a"
     },
     {
-        "line": 24,
+        "line": 27,
         "column": 11,
         "msg": "Operator '+' cannot be applied to types 'null' and 'void'."
     },
     {
-        "line": 25,
+        "line": 28,
         "column": 11,
         "msg": "Operator '+' cannot be applied to types 'null' and '() => void'."
     }

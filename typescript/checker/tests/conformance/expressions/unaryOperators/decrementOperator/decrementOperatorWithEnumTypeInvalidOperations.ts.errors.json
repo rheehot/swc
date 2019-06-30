@@ -1,61 +1,61 @@
 [
     {
-        "line": 9,
+        "line": 14,
         "column": 25,
         "msg": "Cannot assign to 'ENUM' because it is not a variable."
     },
     {
-        "line": 10,
+        "line": 15,
         "column": 25,
         "msg": "Cannot assign to 'ENUM1' because it is not a variable."
     },
     {
-        "line": 12,
+        "line": 17,
         "column": 23,
         "msg": "Cannot assign to 'ENUM' because it is not a variable."
     },
     {
-        "line": 13,
+        "line": 18,
         "column": 23,
         "msg": "Cannot assign to 'ENUM1' because it is not a variable."
     },
     {
-        "line": 16,
+        "line": 21,
         "column": 25,
         "msg": "The operand of an increment or decrement operator must be a variable or a property access."
     },
     {
-        "line": 16,
+        "line": 21,
         "column": 43,
         "msg": "Property 'B' does not exist on type 'typeof ENUM'."
     },
     {
-        "line": 17,
+        "line": 22,
         "column": 23,
         "msg": "The operand of an increment or decrement operator must be a variable or a property access."
     },
     {
-        "line": 17,
+        "line": 22,
         "column": 29,
         "msg": "Property 'A' does not exist on type 'typeof ENUM'."
     },
     {
-        "line": 20,
+        "line": 25,
         "column": 3,
         "msg": "Cannot assign to 'ENUM' because it is not a variable."
     },
     {
-        "line": 21,
+        "line": 26,
         "column": 3,
         "msg": "Cannot assign to 'ENUM1' because it is not a variable."
     },
     {
-        "line": 23,
+        "line": 28,
         "column": 1,
         "msg": "Cannot assign to 'ENUM' because it is not a variable."
     },
     {
-        "line": 24,
+        "line": 29,
         "column": 1,
         "msg": "Cannot assign to 'ENUM1' because it is not a variable."
     }

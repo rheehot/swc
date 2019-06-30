@@ -1,28 +1,13 @@
 [
     {
-        "line": 17,
+        "line": 28,
         "column": 5,
         "msg": "A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties."
     },
     {
-        "line": 32,
+        "line": 43,
         "column": 5,
         "msg": "A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties."
-    },
-    {
-        "line": 49,
-        "column": 9,
-        "msg": "'super' must be called before accessing 'this' in the constructor of a derived class."
-    },
-    {
-        "line": 58,
-        "column": 5,
-        "msg": "A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties."
-    },
-    {
-        "line": 59,
-        "column": 9,
-        "msg": "'super' must be called before accessing 'this' in the constructor of a derived class."
     },
     {
         "line": 60,
@@ -30,17 +15,32 @@
         "msg": "'super' must be called before accessing 'this' in the constructor of a derived class."
     },
     {
-        "line": 81,
+        "line": 69,
         "column": 5,
         "msg": "A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties."
     },
     {
-        "line": 82,
+        "line": 70,
         "column": 9,
         "msg": "'super' must be called before accessing 'this' in the constructor of a derived class."
     },
     {
-        "line": 83,
+        "line": 71,
+        "column": 9,
+        "msg": "'super' must be called before accessing 'this' in the constructor of a derived class."
+    },
+    {
+        "line": 92,
+        "column": 5,
+        "msg": "A 'super' call must be the first statement in the constructor when a class contains initialized properties or has parameter properties."
+    },
+    {
+        "line": 93,
+        "column": 9,
+        "msg": "'super' must be called before accessing 'this' in the constructor of a derived class."
+    },
+    {
+        "line": 94,
         "column": 9,
         "msg": "'super' must be called before accessing 'this' in the constructor of a derived class."
     }

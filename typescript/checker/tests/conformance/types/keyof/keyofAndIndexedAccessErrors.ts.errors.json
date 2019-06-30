@@ -1,201 +1,201 @@
 [
     {
-        "line": 12,
+        "line": 44,
         "column": 18,
         "msg": "Cannot find name 'K0'."
     },
     {
-        "line": 22,
+        "line": 54,
         "column": 18,
         "msg": "Property 'foo' does not exist on type 'Shape'."
     },
     {
-        "line": 23,
+        "line": 55,
         "column": 18,
         "msg": "Property 'foo' does not exist on type 'Shape'."
     },
     {
-        "line": 24,
+        "line": 56,
         "column": 18,
         "msg": "Type 'any' cannot be used as an index type."
     },
     {
-        "line": 25,
+        "line": 57,
         "column": 18,
         "msg": "Type 'Shape' has no matching index signature for type 'string'."
     },
     {
-        "line": 26,
+        "line": 58,
         "column": 18,
         "msg": "Type 'Shape' has no matching index signature for type 'number'."
     },
     {
-        "line": 27,
+        "line": 59,
         "column": 18,
         "msg": "Type 'boolean' cannot be used as an index type."
     },
     {
-        "line": 28,
+        "line": 60,
         "column": 18,
         "msg": "Type 'void' cannot be used as an index type."
     },
     {
-        "line": 29,
+        "line": 61,
         "column": 18,
         "msg": "Type 'undefined' cannot be used as an index type."
     },
     {
-        "line": 30,
+        "line": 62,
         "column": 18,
         "msg": "Type '{ x"
     },
     {
-        "line": 31,
+        "line": 63,
         "column": 18,
         "msg": "Type 'Shape' has no matching index signature for type 'number'."
     },
     {
-        "line": 31,
+        "line": 63,
         "column": 18,
         "msg": "Type 'Shape' has no matching index signature for type 'string'."
     },
     {
-        "line": 33,
+        "line": 65,
         "column": 18,
         "msg": "Type 'Shape' has no matching index signature for type 'string'."
     },
     {
-        "line": 33,
+        "line": 65,
         "column": 18,
         "msg": "Type 'false' cannot be used as an index type."
     },
     {
-        "line": 33,
+        "line": 65,
         "column": 18,
         "msg": "Type 'true' cannot be used as an index type."
     },
     {
-        "line": 37,
+        "line": 69,
         "column": 21,
         "msg": "Type 'string[]' has no matching index signature for type 'string'."
     },
     {
-        "line": 38,
+        "line": 70,
         "column": 21,
         "msg": "Type 'boolean' cannot be used as an index type."
     },
     {
-        "line": 43,
+        "line": 75,
         "column": 31,
         "msg": "Type 'boolean' cannot be used as an index type."
     },
     {
-        "line": 48,
+        "line": 80,
         "column": 16,
         "msg": "Type 'boolean' cannot be used as an index type."
     },
     {
-        "line": 65,
+        "line": 97,
         "column": 33,
         "msg": "Argument of type '\"size\"' is not assignable to parameter of type '\"name\" | \"width\" | \"height\" | \"visible\"'."
     },
     {
-        "line": 66,
+        "line": 98,
         "column": 33,
         "msg": "Argument of type '\"name\" | \"size\"' is not assignable to parameter of type '\"name\" | \"width\" | \"height\" | \"visible\"'."
     },
     {
-        "line": 68,
+        "line": 100,
         "column": 24,
         "msg": "Argument of type '\"size\"' is not assignable to parameter of type '\"name\" | \"width\" | \"height\" | \"visible\"'."
     },
     {
-        "line": 69,
+        "line": 101,
         "column": 24,
         "msg": "Argument of type '\"name\" | \"size\"' is not assignable to parameter of type '\"name\" | \"width\" | \"height\" | \"visible\"'."
-    },
-    {
-        "line": 75,
-        "column": 5,
-        "msg": "Type 'keyof T | keyof U' cannot be used to index type 'T | U'."
-    },
-    {
-        "line": 76,
-        "column": 5,
-        "msg": "Type 'keyof T | keyof U' cannot be used to index type 'T | U'."
-    },
-    {
-        "line": 84,
-        "column": 5,
-        "msg": "Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'."
-    },
-    {
-        "line": 85,
-        "column": 5,
-        "msg": "Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'."
-    },
-    {
-        "line": 88,
-        "column": 5,
-        "msg": "Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'."
-    },
-    {
-        "line": 89,
-        "column": 5,
-        "msg": "Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'."
-    },
-    {
-        "line": 105,
-        "column": 9,
-        "msg": "Type 'Extract<keyof T, string>' is not assignable to type 'K'."
     },
     {
         "line": 107,
-        "column": 9,
-        "msg": "Type 'T[Extract<keyof T, string>]' is not assignable to type 'T[K]'."
+        "column": 5,
+        "msg": "Type 'keyof T | keyof U' cannot be used to index type 'T | U'."
     },
     {
-        "line": 110,
+        "line": 108,
         "column": 5,
-        "msg": "Type 'T[K]' is not assignable to type 'U[K]'."
-    },
-    {
-        "line": 113,
-        "column": 5,
-        "msg": "Type 'T[J]' is not assignable to type 'U[J]'."
+        "msg": "Type 'keyof T | keyof U' cannot be used to index type 'T | U'."
     },
     {
         "line": 116,
         "column": 5,
-        "msg": "Type 'T[K]' is not assignable to type 'T[J]'."
+        "msg": "Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'."
     },
     {
-        "line": 119,
+        "line": 117,
         "column": 5,
-        "msg": "Type 'T[K]' is not assignable to type 'U[J]'."
+        "msg": "Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'."
     },
     {
-        "line": 124,
+        "line": 120,
         "column": 5,
-        "msg": "Type '42' is not assignable to type 'keyof T'."
+        "msg": "Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'."
     },
     {
-        "line": 125,
+        "line": 121,
         "column": 5,
-        "msg": "Type '\"hello\"' is not assignable to type 'keyof T'."
+        "msg": "Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'."
+    },
+    {
+        "line": 137,
+        "column": 9,
+        "msg": "Type 'Extract<keyof T, string>' is not assignable to type 'K'."
+    },
+    {
+        "line": 139,
+        "column": 9,
+        "msg": "Type 'T[Extract<keyof T, string>]' is not assignable to type 'T[K]'."
     },
     {
         "line": 142,
         "column": 5,
+        "msg": "Type 'T[K]' is not assignable to type 'U[K]'."
+    },
+    {
+        "line": 145,
+        "column": 5,
+        "msg": "Type 'T[J]' is not assignable to type 'U[J]'."
+    },
+    {
+        "line": 148,
+        "column": 5,
+        "msg": "Type 'T[K]' is not assignable to type 'T[J]'."
+    },
+    {
+        "line": 151,
+        "column": 5,
+        "msg": "Type 'T[K]' is not assignable to type 'U[J]'."
+    },
+    {
+        "line": 156,
+        "column": 5,
+        "msg": "Type '42' is not assignable to type 'keyof T'."
+    },
+    {
+        "line": 157,
+        "column": 5,
+        "msg": "Type '\"hello\"' is not assignable to type 'keyof T'."
+    },
+    {
+        "line": 174,
+        "column": 5,
         "msg": "Type '42' is not assignable to type 'T[K]'."
     },
     {
-        "line": 143,
+        "line": 175,
         "column": 5,
         "msg": "Type '\"hello\"' is not assignable to type 'T[K]'."
     },
     {
-        "line": 144,
+        "line": 176,
         "column": 5,
         "msg": "Type 'number[]' is not assignable to type 'T[K]'."
     }

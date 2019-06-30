@@ -1,11 +1,11 @@
 [
     {
-        "line": 13,
+        "line": 14,
         "column": 15,
         "msg": "Only public and protected methods of the base class are accessible via the 'super' keyword."
     },
     {
-        "line": 21,
+        "line": 22,
         "column": 15,
         "msg": "Only public and protected methods of the base class are accessible via the 'super' keyword."
     }

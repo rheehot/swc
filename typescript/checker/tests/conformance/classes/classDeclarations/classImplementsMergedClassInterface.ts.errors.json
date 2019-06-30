@@ -1,16 +1,16 @@
 [
     {
-        "line": 11,
+        "line": 15,
         "column": 7,
         "msg": "Class 'C2' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?"
     },
     {
-        "line": 14,
+        "line": 18,
         "column": 7,
         "msg": "Class 'C3' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?"
     },
     {
-        "line": 18,
+        "line": 22,
         "column": 7,
         "msg": "Class 'C4' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?"
     }

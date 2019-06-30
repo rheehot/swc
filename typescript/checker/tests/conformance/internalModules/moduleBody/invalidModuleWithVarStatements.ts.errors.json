@@ -1,31 +1,31 @@
 [
     {
-        "line": 6,
+        "line": 13,
         "column": 5,
         "msg": "'public' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 10,
+        "line": 17,
         "column": 5,
         "msg": "'public' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 14,
+        "line": 21,
         "column": 5,
         "msg": "'static' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 18,
+        "line": 25,
         "column": 5,
         "msg": "'static' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 22,
+        "line": 29,
         "column": 5,
         "msg": "'private' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 27,
+        "line": 34,
         "column": 5,
         "msg": "'private' modifier cannot appear on a module or namespace element."
     }

@@ -1,71 +1,71 @@
 [
     {
-        "line": 10,
+        "line": 17,
         "column": 16,
         "msg": "Generic type 'C<T>' requires 1 type argument(s)."
     },
     {
-        "line": 12,
+        "line": 19,
         "column": 21,
         "msg": "Generic type 'C<T>' requires 1 type argument(s)."
     },
     {
-        "line": 13,
+        "line": 20,
         "column": 22,
         "msg": "Generic type 'C<T>' requires 1 type argument(s)."
     },
     {
-        "line": 13,
+        "line": 20,
         "column": 26,
         "msg": "Generic type 'C<T>' requires 1 type argument(s)."
     },
     {
-        "line": 14,
+        "line": 21,
         "column": 19,
         "msg": "An index signature parameter type must be 'string' or 'number'."
     },
     {
-        "line": 14,
+        "line": 21,
         "column": 22,
         "msg": "Generic type 'C<T>' requires 1 type argument(s)."
     },
     {
-        "line": 14,
+        "line": 21,
         "column": 26,
         "msg": "Generic type 'C<T>' requires 1 type argument(s)."
     },
     {
-        "line": 16,
+        "line": 23,
         "column": 23,
         "msg": "Generic type 'C<T>' requires 1 type argument(s)."
     },
     {
-        "line": 16,
+        "line": 23,
         "column": 27,
         "msg": "Generic type 'C<T>' requires 1 type argument(s)."
     },
     {
-        "line": 18,
+        "line": 25,
         "column": 25,
         "msg": "Generic type 'C<T>' requires 1 type argument(s)."
     },
     {
-        "line": 24,
+        "line": 31,
         "column": 28,
         "msg": "Property 'C' does not exist on type 'typeof M'."
     },
     {
-        "line": 25,
+        "line": 32,
         "column": 28,
         "msg": "Generic type 'E<T>' requires 1 type argument(s)."
     },
     {
-        "line": 27,
+        "line": 34,
         "column": 30,
         "msg": "Generic type 'C<T>' requires 1 type argument(s)."
     },
     {
-        "line": 28,
+        "line": 35,
         "column": 30,
         "msg": "Generic type 'E<T>' requires 1 type argument(s)."
     }

@@ -1,6 +1,6 @@
 [
     {
-        "line": 29,
+        "line": 34,
         "column": 5,
         "msg": "Duplicate identifier 'foo'."
     }

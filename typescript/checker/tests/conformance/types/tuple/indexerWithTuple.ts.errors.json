@@ -1,21 +1,21 @@
 [
     {
-        "line": 13,
+        "line": 14,
         "column": 25,
         "msg": "Tuple type '[string, number]' of length '2' has no element at index '2'."
     },
     {
-        "line": 19,
+        "line": 20,
         "column": 27,
         "msg": "Tuple type '[number, [string, number]]' of length '2' has no element at index '2'."
     },
     {
-        "line": 22,
+        "line": 23,
         "column": 30,
         "msg": "Tuple type '[number, string | number]' of length '2' has no element at index '2'."
     },
     {
-        "line": 30,
+        "line": 31,
         "column": 30,
         "msg": "Tuple type '[boolean, string | number]' of length '2' has no element at index '2'."
     }

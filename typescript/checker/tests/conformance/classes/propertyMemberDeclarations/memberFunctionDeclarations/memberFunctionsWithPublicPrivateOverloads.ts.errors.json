@@ -1,76 +1,76 @@
 [
     {
-        "line": 5,
-        "column": 12,
-        "msg": "Overload signatures must all be public, private or protected."
-    },
-    {
-        "line": 9,
-        "column": 12,
-        "msg": "Overload signatures must all be public, private or protected."
-    },
-    {
-        "line": 14,
-        "column": 19,
-        "msg": "Overload signatures must all be public, private or protected."
-    },
-    {
         "line": 17,
-        "column": 15,
+        "column": 12,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 18,
-        "column": 15,
+        "line": 21,
+        "column": 12,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 22,
+        "line": 26,
         "column": 19,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 27,
-        "column": 19,
+        "line": 29,
+        "column": 15,
+        "msg": "Overload signatures must all be public, private or protected."
+    },
+    {
+        "line": 30,
+        "column": 15,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
         "line": 34,
-        "column": 12,
-        "msg": "Overload signatures must all be public, private or protected."
-    },
-    {
-        "line": 38,
-        "column": 12,
-        "msg": "Overload signatures must all be public, private or protected."
-    },
-    {
-        "line": 43,
-        "column": 15,
-        "msg": "Overload signatures must all be public, private or protected."
-    },
-    {
-        "line": 47,
         "column": 19,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 51,
+        "line": 39,
         "column": 19,
+        "msg": "Overload signatures must all be public, private or protected."
+    },
+    {
+        "line": 46,
+        "column": 12,
+        "msg": "Overload signatures must all be public, private or protected."
+    },
+    {
+        "line": 50,
+        "column": 12,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
         "line": 55,
+        "column": 15,
+        "msg": "Overload signatures must all be public, private or protected."
+    },
+    {
+        "line": 59,
         "column": 19,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 61,
+        "line": 63,
+        "column": 19,
+        "msg": "Overload signatures must all be public, private or protected."
+    },
+    {
+        "line": 67,
+        "column": 19,
+        "msg": "Overload signatures must all be public, private or protected."
+    },
+    {
+        "line": 73,
         "column": 11,
         "msg": "Property 'foo' is private and only accessible within class 'C'."
     },
     {
-        "line": 64,
+        "line": 76,
         "column": 12,
         "msg": "Property 'foo' is private and only accessible within class 'D<T>'."
     }

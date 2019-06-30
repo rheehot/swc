@@ -1,16 +1,16 @@
 [
     {
-        "line": 120,
+        "line": 136,
         "column": 29,
         "msg": "Property 'n' does not exist on type 'typeof globalThis'."
     },
     {
-        "line": 121,
+        "line": 137,
         "column": 32,
         "msg": "Property 'n' does not exist on type 'typeof globalThis'."
     },
     {
-        "line": 122,
+        "line": 138,
         "column": 36,
         "msg": "Property 'n' does not exist on type 'typeof globalThis'."
     }

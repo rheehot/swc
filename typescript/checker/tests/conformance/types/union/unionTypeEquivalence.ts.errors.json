@@ -1,6 +1,6 @@
 [
     {
-        "line": 7,
+        "line": 9,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'C', but here has type 'C | D'."
     }

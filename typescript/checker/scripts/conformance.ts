@@ -50,7 +50,15 @@ async function handle(f: string) {
     // }
   } catch (e) {}
 
-  const len = (content.match(/\/\/ \@/g) || []).length;
+  let len = (content.match(/\/\/ \@|\/\/\@/g) || []).length;
+  if (len === 0) {
+    const data = content.split(/\r\n|\r|\n/);
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].length === 0) {
+        len++;
+      }
+    }
+  }
 
   const errors = extract(errorsText, len);
   const ref = `${dirname}/${basename}.errors.json`;

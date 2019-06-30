@@ -1,11 +1,11 @@
 [
     {
-        "line": 10,
+        "line": 11,
         "column": 1,
         "msg": "Type 'Object' is not assignable to type 'I'."
     },
     {
-        "line": 16,
+        "line": 17,
         "column": 1,
         "msg": "Type 'Object' is not assignable to type 'new () => any'."
     }

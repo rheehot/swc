@@ -1,30 +1,5 @@
 [
     {
-        "line": 16,
-        "column": 11,
-        "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
-    },
-    {
-        "line": 17,
-        "column": 11,
-        "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
-    },
-    {
-        "line": 18,
-        "column": 11,
-        "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
-    },
-    {
-        "line": 19,
-        "column": 11,
-        "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
-    },
-    {
-        "line": 20,
-        "column": 11,
-        "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
-    },
-    {
         "line": 21,
         "column": 11,
         "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
@@ -45,29 +20,29 @@
         "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
     },
     {
-        "line": 36,
-        "column": 24,
-        "msg": "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type."
+        "line": 25,
+        "column": 11,
+        "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
     },
     {
-        "line": 37,
-        "column": 24,
-        "msg": "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type."
+        "line": 26,
+        "column": 11,
+        "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
     },
     {
-        "line": 38,
-        "column": 24,
-        "msg": "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type."
+        "line": 27,
+        "column": 11,
+        "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
     },
     {
-        "line": 39,
-        "column": 24,
-        "msg": "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type."
+        "line": 28,
+        "column": 11,
+        "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
     },
     {
-        "line": 40,
-        "column": 24,
-        "msg": "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type."
+        "line": 29,
+        "column": 11,
+        "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
     },
     {
         "line": 41,
@@ -91,16 +66,41 @@
     },
     {
         "line": 45,
-        "column": 25,
+        "column": 24,
+        "msg": "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type."
+    },
+    {
+        "line": 46,
+        "column": 24,
+        "msg": "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type."
+    },
+    {
+        "line": 47,
+        "column": 24,
         "msg": "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type."
     },
     {
         "line": 48,
+        "column": 24,
+        "msg": "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type."
+    },
+    {
+        "line": 49,
+        "column": 24,
+        "msg": "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type."
+    },
+    {
+        "line": 50,
+        "column": 25,
+        "msg": "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type."
+    },
+    {
+        "line": 53,
         "column": 11,
         "msg": "The left-hand side of an 'instanceof' expression must be of type 'any', an object type or a type parameter."
     },
     {
-        "line": 48,
+        "line": 53,
         "column": 25,
         "msg": "The right-hand side of an 'instanceof' expression must be of type 'any' or of a type assignable to the 'Function' interface type."
     }

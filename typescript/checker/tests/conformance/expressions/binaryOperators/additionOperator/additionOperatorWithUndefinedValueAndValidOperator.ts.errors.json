@@ -1,51 +1,51 @@
 [
     {
-        "line": 17,
+        "line": 21,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'number'."
     },
     {
-        "line": 18,
+        "line": 22,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'undefined' and '1'."
     },
     {
-        "line": 19,
+        "line": 23,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'E'."
     },
     {
-        "line": 20,
+        "line": 24,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'E.a'."
     },
     {
-        "line": 21,
+        "line": 25,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'E.a'."
     },
     {
-        "line": 22,
+        "line": 26,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'number' and 'undefined'."
     },
     {
-        "line": 23,
+        "line": 27,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types '1' and 'undefined'."
     },
     {
-        "line": 24,
+        "line": 28,
         "column": 11,
         "msg": "Operator '+' cannot be applied to types 'E' and 'undefined'."
     },
     {
-        "line": 25,
+        "line": 29,
         "column": 11,
         "msg": "Operator '+' cannot be applied to types 'E.a' and 'undefined'."
     },
     {
-        "line": 26,
+        "line": 30,
         "column": 11,
         "msg": "Operator '+' cannot be applied to types 'E.a' and 'undefined'."
     }

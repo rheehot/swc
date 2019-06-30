@@ -1,1716 +1,1716 @@
 [
     {
-        "line": 6,
+        "line": 44,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found."
     },
     {
-        "line": 129,
+        "line": 167,
         "column": 33,
         "msg": "Class 'TokenInfo' used before its declaration."
     },
     {
-        "line": 129,
+        "line": 167,
         "column": 43,
         "msg": "An element access expression should take an argument."
     },
     {
-        "line": 130,
+        "line": 168,
         "column": 36,
         "msg": "'string' only refers to a type, but is being used as a value here."
     },
     {
-        "line": 130,
+        "line": 168,
         "column": 43,
         "msg": "An element access expression should take an argument."
     },
     {
-        "line": 131,
+        "line": 169,
         "column": 41,
         "msg": "'number' only refers to a type, but is being used as a value here."
     },
     {
-        "line": 131,
+        "line": 169,
         "column": 48,
         "msg": "An element access expression should take an argument."
     },
     {
-        "line": 132,
+        "line": 170,
         "column": 35,
         "msg": "'boolean' only refers to a type, but is being used as a value here."
     },
     {
-        "line": 132,
+        "line": 170,
         "column": 43,
         "msg": "An element access expression should take an argument."
     },
     {
-        "line": 181,
+        "line": 219,
         "column": 54,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 186,
+        "line": 224,
         "column": 28,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 190,
+        "line": 228,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 194,
+        "line": 232,
         "column": 33,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 200,
+        "line": 238,
         "column": 80,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 200,
+        "line": 238,
         "column": 120,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 200,
+        "line": 238,
         "column": 142,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 201,
+        "line": 239,
         "column": 81,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 201,
+        "line": 239,
         "column": 121,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 201,
+        "line": 239,
         "column": 147,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 202,
+        "line": 240,
         "column": 87,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 202,
+        "line": 240,
         "column": 127,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 202,
+        "line": 240,
         "column": 151,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 203,
+        "line": 241,
         "column": 86,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 203,
+        "line": 241,
         "column": 126,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 203,
+        "line": 241,
         "column": 149,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 204,
+        "line": 242,
         "column": 87,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 204,
+        "line": 242,
         "column": 127,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 204,
+        "line": 242,
         "column": 151,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 205,
+        "line": 243,
         "column": 93,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 205,
+        "line": 243,
         "column": 133,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 205,
+        "line": 243,
         "column": 157,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 206,
+        "line": 244,
         "column": 93,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 206,
+        "line": 244,
         "column": 133,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 206,
+        "line": 244,
         "column": 157,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 207,
+        "line": 245,
         "column": 90,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 207,
+        "line": 245,
         "column": 130,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 207,
+        "line": 245,
         "column": 157,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 208,
+        "line": 246,
         "column": 90,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 208,
+        "line": 246,
         "column": 130,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 208,
+        "line": 246,
         "column": 161,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 209,
+        "line": 247,
         "column": 89,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 209,
+        "line": 247,
         "column": 129,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 209,
+        "line": 247,
         "column": 155,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 210,
+        "line": 248,
         "column": 88,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 210,
+        "line": 248,
         "column": 129,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 210,
+        "line": 248,
         "column": 156,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 211,
+        "line": 249,
         "column": 84,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 211,
+        "line": 249,
         "column": 124,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 211,
+        "line": 249,
         "column": 145,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 212,
+        "line": 250,
         "column": 86,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 212,
+        "line": 250,
         "column": 126,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 212,
+        "line": 250,
         "column": 149,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 213,
+        "line": 251,
         "column": 92,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 213,
+        "line": 251,
         "column": 132,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 213,
+        "line": 251,
         "column": 155,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 214,
+        "line": 252,
         "column": 94,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 214,
+        "line": 252,
         "column": 134,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 214,
+        "line": 252,
         "column": 159,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 215,
+        "line": 253,
         "column": 95,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 215,
+        "line": 253,
         "column": 135,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 215,
+        "line": 253,
         "column": 161,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 216,
+        "line": 254,
         "column": 84,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 216,
+        "line": 254,
         "column": 124,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 216,
+        "line": 254,
         "column": 150,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 217,
+        "line": 255,
         "column": 87,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 217,
+        "line": 255,
         "column": 127,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 217,
+        "line": 255,
         "column": 151,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 218,
+        "line": 256,
         "column": 89,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 218,
+        "line": 256,
         "column": 129,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 218,
+        "line": 256,
         "column": 155,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 219,
+        "line": 257,
         "column": 85,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 219,
+        "line": 257,
         "column": 125,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 219,
+        "line": 257,
         "column": 147,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 220,
+        "line": 258,
         "column": 90,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 220,
+        "line": 258,
         "column": 130,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 220,
+        "line": 258,
         "column": 157,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 221,
+        "line": 259,
         "column": 105,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 221,
+        "line": 259,
         "column": 145,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 221,
+        "line": 259,
         "column": 175,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 222,
+        "line": 260,
         "column": 80,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 222,
+        "line": 260,
         "column": 120,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 222,
+        "line": 260,
         "column": 142,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 223,
+        "line": 261,
         "column": 80,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 223,
+        "line": 261,
         "column": 120,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 223,
+        "line": 261,
         "column": 142,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 224,
+        "line": 262,
         "column": 84,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 224,
+        "line": 262,
         "column": 124,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 224,
+        "line": 262,
         "column": 145,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 225,
+        "line": 263,
         "column": 104,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 225,
+        "line": 263,
         "column": 144,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 225,
+        "line": 263,
         "column": 173,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 226,
+        "line": 264,
         "column": 94,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 226,
+        "line": 264,
         "column": 134,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 226,
+        "line": 264,
         "column": 159,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 227,
+        "line": 265,
         "column": 90,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 227,
+        "line": 265,
         "column": 128,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 227,
+        "line": 265,
         "column": 149,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 228,
+        "line": 266,
         "column": 98,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 228,
+        "line": 266,
         "column": 140,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 228,
+        "line": 266,
         "column": 169,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 229,
+        "line": 267,
         "column": 103,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 229,
+        "line": 267,
         "column": 143,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 229,
+        "line": 267,
         "column": 171,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 230,
+        "line": 268,
         "column": 92,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 230,
+        "line": 268,
         "column": 132,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 230,
+        "line": 268,
         "column": 154,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 231,
+        "line": 269,
         "column": 83,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 231,
+        "line": 269,
         "column": 123,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 231,
+        "line": 269,
         "column": 148,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 232,
+        "line": 270,
         "column": 85,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 232,
+        "line": 270,
         "column": 125,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 232,
+        "line": 270,
         "column": 147,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 233,
+        "line": 271,
         "column": 83,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 233,
+        "line": 271,
         "column": 123,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 233,
+        "line": 271,
         "column": 148,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 234,
+        "line": 272,
         "column": 86,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 234,
+        "line": 272,
         "column": 126,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 234,
+        "line": 272,
         "column": 149,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 235,
+        "line": 273,
         "column": 96,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 235,
+        "line": 273,
         "column": 136,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 235,
+        "line": 273,
         "column": 162,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 236,
+        "line": 274,
         "column": 101,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 236,
+        "line": 274,
         "column": 141,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 236,
+        "line": 274,
         "column": 167,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 237,
+        "line": 275,
         "column": 98,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 237,
+        "line": 275,
         "column": 138,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 237,
+        "line": 275,
         "column": 166,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 238,
+        "line": 276,
         "column": 100,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 238,
+        "line": 276,
         "column": 140,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 238,
+        "line": 276,
         "column": 165,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 239,
+        "line": 277,
         "column": 88,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 239,
+        "line": 277,
         "column": 128,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 239,
+        "line": 277,
         "column": 153,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 240,
+        "line": 278,
         "column": 100,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 240,
+        "line": 278,
         "column": 140,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 240,
+        "line": 278,
         "column": 165,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 241,
+        "line": 279,
         "column": 83,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 241,
+        "line": 279,
         "column": 123,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 241,
+        "line": 279,
         "column": 148,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 242,
+        "line": 280,
         "column": 93,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 242,
+        "line": 280,
         "column": 133,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 242,
+        "line": 280,
         "column": 157,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 243,
+        "line": 281,
         "column": 88,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 243,
+        "line": 281,
         "column": 128,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 243,
+        "line": 281,
         "column": 153,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 244,
+        "line": 282,
         "column": 86,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 244,
+        "line": 282,
         "column": 126,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 244,
+        "line": 282,
         "column": 149,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 245,
+        "line": 283,
         "column": 87,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 245,
+        "line": 283,
         "column": 127,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 245,
+        "line": 283,
         "column": 151,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 246,
+        "line": 284,
         "column": 86,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 246,
+        "line": 284,
         "column": 126,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 246,
+        "line": 284,
         "column": 149,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 247,
+        "line": 285,
         "column": 85,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 247,
+        "line": 285,
         "column": 125,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 247,
+        "line": 285,
         "column": 147,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 248,
+        "line": 286,
         "column": 88,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 248,
+        "line": 286,
         "column": 129,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 248,
+        "line": 286,
         "column": 156,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 249,
+        "line": 287,
         "column": 85,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 249,
+        "line": 287,
         "column": 125,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 249,
+        "line": 287,
         "column": 147,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 250,
+        "line": 288,
         "column": 86,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 250,
+        "line": 288,
         "column": 127,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 250,
+        "line": 288,
         "column": 150,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 251,
+        "line": 289,
         "column": 86,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 251,
+        "line": 289,
         "column": 126,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 251,
+        "line": 289,
         "column": 149,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 252,
+        "line": 290,
         "column": 87,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 252,
+        "line": 290,
         "column": 127,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 252,
+        "line": 290,
         "column": 151,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 253,
+        "line": 291,
         "column": 94,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 253,
+        "line": 291,
         "column": 134,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 253,
+        "line": 291,
         "column": 158,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 255,
+        "line": 293,
         "column": 81,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 255,
+        "line": 293,
         "column": 121,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 255,
+        "line": 293,
         "column": 150,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 256,
+        "line": 294,
         "column": 84,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 256,
+        "line": 294,
         "column": 124,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 256,
+        "line": 294,
         "column": 156,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 257,
+        "line": 295,
         "column": 95,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 257,
+        "line": 295,
         "column": 135,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 257,
+        "line": 295,
         "column": 159,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 258,
+        "line": 296,
         "column": 84,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 258,
+        "line": 296,
         "column": 124,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 258,
+        "line": 296,
         "column": 150,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 261,
+        "line": 299,
         "column": 80,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 261,
+        "line": 299,
         "column": 120,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 261,
+        "line": 299,
         "column": 140,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 262,
+        "line": 300,
         "column": 81,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 262,
+        "line": 300,
         "column": 121,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 262,
+        "line": 300,
         "column": 141,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 263,
+        "line": 301,
         "column": 83,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 263,
+        "line": 301,
         "column": 123,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 263,
+        "line": 301,
         "column": 143,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 264,
+        "line": 302,
         "column": 80,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 264,
+        "line": 302,
         "column": 120,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 264,
+        "line": 302,
         "column": 140,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 265,
+        "line": 303,
         "column": 81,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 265,
+        "line": 303,
         "column": 121,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 265,
+        "line": 303,
         "column": 141,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 266,
+        "line": 304,
         "column": 80,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 266,
+        "line": 304,
         "column": 120,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 266,
+        "line": 304,
         "column": 142,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 269,
+        "line": 307,
         "column": 77,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 269,
+        "line": 307,
         "column": 118,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 269,
+        "line": 307,
         "column": 138,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 270,
+        "line": 308,
         "column": 83,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 270,
+        "line": 308,
         "column": 122,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 270,
+        "line": 308,
         "column": 142,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 271,
+        "line": 309,
         "column": 87,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 271,
+        "line": 309,
         "column": 129,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 271,
+        "line": 309,
         "column": 150,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 272,
+        "line": 310,
         "column": 88,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 272,
+        "line": 310,
         "column": 130,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 272,
+        "line": 310,
         "column": 151,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 273,
+        "line": 311,
         "column": 91,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 273,
+        "line": 311,
         "column": 133,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 273,
+        "line": 311,
         "column": 154,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 275,
+        "line": 313,
         "column": 88,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 275,
+        "line": 313,
         "column": 130,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 275,
+        "line": 313,
         "column": 151,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 276,
+        "line": 314,
         "column": 90,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 276,
+        "line": 314,
         "column": 132,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 276,
+        "line": 314,
         "column": 153,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 277,
+        "line": 315,
         "column": 92,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 277,
+        "line": 315,
         "column": 134,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 277,
+        "line": 315,
         "column": 155,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 278,
+        "line": 316,
         "column": 88,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 278,
+        "line": 316,
         "column": 130,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 278,
+        "line": 316,
         "column": 151,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 279,
+        "line": 317,
         "column": 86,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 279,
+        "line": 317,
         "column": 127,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 279,
+        "line": 317,
         "column": 148,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 280,
+        "line": 318,
         "column": 99,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 280,
+        "line": 318,
         "column": 141,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 280,
+        "line": 318,
         "column": 163,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 281,
+        "line": 319,
         "column": 105,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 281,
+        "line": 319,
         "column": 147,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 281,
+        "line": 319,
         "column": 169,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 282,
+        "line": 320,
         "column": 116,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 282,
+        "line": 320,
         "column": 158,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 282,
+        "line": 320,
         "column": 181,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 283,
+        "line": 321,
         "column": 86,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 283,
+        "line": 321,
         "column": 143,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 283,
+        "line": 321,
         "column": 163,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 284,
+        "line": 322,
         "column": 76,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 284,
+        "line": 322,
         "column": 116,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 284,
+        "line": 322,
         "column": 136,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 285,
+        "line": 323,
         "column": 82,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 285,
+        "line": 323,
         "column": 123,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 285,
+        "line": 323,
         "column": 144,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 286,
+        "line": 324,
         "column": 95,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 286,
+        "line": 324,
         "column": 137,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 286,
+        "line": 324,
         "column": 158,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 287,
+        "line": 325,
         "column": 79,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 287,
+        "line": 325,
         "column": 117,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 287,
+        "line": 325,
         "column": 137,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 288,
+        "line": 326,
         "column": 90,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 288,
+        "line": 326,
         "column": 129,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 288,
+        "line": 326,
         "column": 149,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 289,
+        "line": 327,
         "column": 80,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 289,
+        "line": 327,
         "column": 119,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 289,
+        "line": 327,
         "column": 139,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 290,
+        "line": 328,
         "column": 87,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 290,
+        "line": 328,
         "column": 125,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 290,
+        "line": 328,
         "column": 146,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 291,
+        "line": 329,
         "column": 92,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 291,
+        "line": 329,
         "column": 130,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 291,
+        "line": 329,
         "column": 151,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 292,
+        "line": 330,
         "column": 93,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 292,
+        "line": 330,
         "column": 132,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 292,
+        "line": 330,
         "column": 154,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 293,
+        "line": 331,
         "column": 98,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 293,
+        "line": 331,
         "column": 138,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 293,
+        "line": 331,
         "column": 160,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 294,
+        "line": 332,
         "column": 85,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 294,
+        "line": 332,
         "column": 123,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 294,
+        "line": 332,
         "column": 143,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 295,
+        "line": 333,
         "column": 91,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 295,
+        "line": 333,
         "column": 129,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 295,
+        "line": 333,
         "column": 150,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 296,
+        "line": 334,
         "column": 88,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 296,
+        "line": 334,
         "column": 126,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 296,
+        "line": 334,
         "column": 146,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 297,
+        "line": 335,
         "column": 94,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 297,
+        "line": 335,
         "column": 132,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 297,
+        "line": 335,
         "column": 153,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 298,
+        "line": 336,
         "column": 88,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 298,
+        "line": 336,
         "column": 127,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 298,
+        "line": 336,
         "column": 148,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 299,
+        "line": 337,
         "column": 94,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 299,
+        "line": 337,
         "column": 133,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 299,
+        "line": 337,
         "column": 154,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 300,
+        "line": 338,
         "column": 105,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 300,
+        "line": 338,
         "column": 144,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 300,
+        "line": 338,
         "column": 166,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 301,
+        "line": 339,
         "column": 79,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 301,
+        "line": 339,
         "column": 119,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 301,
+        "line": 339,
         "column": 138,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 302,
+        "line": 340,
         "column": 80,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 302,
+        "line": 340,
         "column": 120,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 302,
+        "line": 340,
         "column": 139,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 303,
+        "line": 341,
         "column": 89,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 303,
+        "line": 341,
         "column": 128,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 303,
+        "line": 341,
         "column": 148,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 304,
+        "line": 342,
         "column": 86,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 304,
+        "line": 342,
         "column": 125,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 304,
+        "line": 342,
         "column": 145,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 305,
+        "line": 343,
         "column": 88,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 305,
+        "line": 343,
         "column": 127,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 305,
+        "line": 343,
         "column": 147,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 306,
+        "line": 344,
         "column": 76,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 306,
+        "line": 344,
         "column": 117,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 306,
+        "line": 344,
         "column": 136,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 307,
+        "line": 345,
         "column": 82,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 307,
+        "line": 345,
         "column": 123,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 307,
+        "line": 345,
         "column": 145,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 308,
+        "line": 346,
         "column": 79,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 308,
+        "line": 346,
         "column": 120,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 308,
+        "line": 346,
         "column": 143,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 309,
+        "line": 347,
         "column": 81,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 309,
+        "line": 347,
         "column": 122,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 309,
+        "line": 347,
         "column": 145,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 310,
+        "line": 348,
         "column": 80,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 310,
+        "line": 348,
         "column": 120,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 310,
+        "line": 348,
         "column": 140,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 311,
+        "line": 349,
         "column": 82,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 311,
+        "line": 349,
         "column": 122,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 311,
+        "line": 349,
         "column": 142,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 312,
+        "line": 350,
         "column": 75,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 312,
+        "line": 350,
         "column": 115,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 312,
+        "line": 350,
         "column": 135,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 313,
+        "line": 351,
         "column": 80,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 313,
+        "line": 351,
         "column": 120,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 313,
+        "line": 351,
         "column": 144,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 314,
+        "line": 352,
         "column": 88,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 314,
+        "line": 352,
         "column": 128,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 314,
+        "line": 352,
         "column": 149,
         "msg": "Cannot find name 'ErrorRecoverySet'."
     },
     {
-        "line": 357,
+        "line": 395,
         "column": 52,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 358,
+        "line": 396,
         "column": 53,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 451,
+        "line": 489,
         "column": 41,
         "msg": "An element access expression should take an argument."
     }

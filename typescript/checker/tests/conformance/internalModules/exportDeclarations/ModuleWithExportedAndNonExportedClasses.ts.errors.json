@@ -1,11 +1,11 @@
 [
     {
-        "line": 32,
+        "line": 39,
         "column": 16,
         "msg": "Property 'A2' does not exist on type 'typeof A'."
     },
     {
-        "line": 33,
+        "line": 40,
         "column": 17,
         "msg": "Property 'A2' does not exist on type 'typeof A'."
     }

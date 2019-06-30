@@ -1,83 +1,58 @@
 [
     {
-        "line": 11,
+        "line": 23,
         "column": 43,
         "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 12,
+        "line": 24,
         "column": 29,
         "msg": "Argument of type 'true' is not assignable to parameter of type 'string'."
     },
     {
-        "line": 17,
+        "line": 29,
         "column": 29,
         "msg": "Argument of type 'true' is not assignable to parameter of type 'string'."
     },
     {
-        "line": 18,
+        "line": 30,
         "column": 1,
         "msg": "Expected 1 arguments, but got 0."
     },
     {
-        "line": 21,
+        "line": 33,
         "column": 32,
         "msg": "Argument of type '10' is not assignable to parameter of type 'never'."
     },
     {
-        "line": 22,
+        "line": 34,
         "column": 32,
         "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'never'."
     },
     {
-        "line": 23,
+        "line": 35,
         "column": 1,
         "msg": "Expected 1 arguments, but got 0."
     },
     {
-        "line": 26,
+        "line": 38,
         "column": 1,
         "msg": "Expected 1 arguments, but got 0."
     },
     {
-        "line": 28,
+        "line": 40,
         "column": 36,
         "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 31,
+        "line": 43,
         "column": 1,
         "msg": "Expected 2 arguments, but got 0."
-    },
-    {
-        "line": 32,
-        "column": 1,
-        "msg": "Expected 2 arguments, but got 1."
-    },
-    {
-        "line": 38,
-        "column": 49,
-        "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'number'."
-    },
-    {
-        "line": 39,
-        "column": 12,
-        "msg": "Expected 1-2 arguments, but got 0."
-    },
-    {
-        "line": 42,
-        "column": 12,
-        "msg": "Expected 2 arguments, but got 1."
     },
     {
         "line": 44,
-        "column": 49,
-        "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'number'."
-    },
-    {
-        "line": 45,
-        "column": 12,
-        "msg": "Expected 2 arguments, but got 0."
+        "column": 1,
+        "msg": "Expected 2 arguments, but got 1."
     },
     {
         "line": 50,
@@ -90,47 +65,72 @@
         "msg": "Expected 1-2 arguments, but got 0."
     },
     {
-        "line": 57,
-        "column": 45,
-        "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'number'."
-    },
-    {
-        "line": 58,
-        "column": 12,
-        "msg": "Expected at least 1 arguments, but got 0."
-    },
-    {
-        "line": 61,
+        "line": 54,
         "column": 12,
         "msg": "Expected 2 arguments, but got 1."
     },
     {
-        "line": 63,
+        "line": 56,
         "column": 49,
-        "msg": "Expected 2 arguments, but got 3."
-    },
-    {
-        "line": 64,
-        "column": 45,
         "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 65,
+        "line": 57,
         "column": 12,
         "msg": "Expected 2 arguments, but got 0."
     },
     {
-        "line": 71,
+        "line": 62,
+        "column": 49,
+        "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'number'."
+    },
+    {
+        "line": 63,
+        "column": 12,
+        "msg": "Expected 1-2 arguments, but got 0."
+    },
+    {
+        "line": 69,
         "column": 45,
         "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 72,
+        "line": 70,
         "column": 12,
         "msg": "Expected at least 1 arguments, but got 0."
     },
     {
+        "line": 73,
+        "column": 12,
+        "msg": "Expected 2 arguments, but got 1."
+    },
+    {
         "line": 75,
+        "column": 49,
+        "msg": "Expected 2 arguments, but got 3."
+    },
+    {
+        "line": 76,
+        "column": 45,
+        "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'number'."
+    },
+    {
+        "line": 77,
+        "column": 12,
+        "msg": "Expected 2 arguments, but got 0."
+    },
+    {
+        "line": 83,
+        "column": 45,
+        "msg": "Argument of type '\"hello\"' is not assignable to parameter of type 'number'."
+    },
+    {
+        "line": 84,
+        "column": 12,
+        "msg": "Expected at least 1 arguments, but got 0."
+    },
+    {
+        "line": 87,
         "column": 12,
         "msg": "Expected 2 arguments, but got 1."
     }

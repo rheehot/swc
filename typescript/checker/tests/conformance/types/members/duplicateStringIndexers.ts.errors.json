@@ -1,31 +1,31 @@
 [
     {
-        "line": 8,
+        "line": 14,
         "column": 9,
         "msg": "Duplicate string index signature."
     },
     {
-        "line": 13,
+        "line": 19,
         "column": 9,
         "msg": "Duplicate string index signature."
     },
     {
-        "line": 18,
+        "line": 24,
         "column": 9,
         "msg": "Duplicate string index signature."
     },
     {
-        "line": 23,
+        "line": 29,
         "column": 9,
         "msg": "Duplicate string index signature."
     },
     {
-        "line": 28,
+        "line": 34,
         "column": 9,
         "msg": "Duplicate string index signature."
     },
     {
-        "line": 33,
+        "line": 39,
         "column": 9,
         "msg": "Duplicate string index signature."
     }

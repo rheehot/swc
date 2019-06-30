@@ -1,43 +1,8 @@
 [
     {
-        "line": 6,
+        "line": 13,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found."
-    },
-    {
-        "line": 10,
-        "column": 35,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 11,
-        "column": 39,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 12,
-        "column": 34,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 13,
-        "column": 35,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 14,
-        "column": 34,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 15,
-        "column": 35,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 16,
-        "column": 37,
-        "msg": "Cannot find name 'AST'."
     },
     {
         "line": 17,
@@ -46,17 +11,17 @@
     },
     {
         "line": 18,
-        "column": 34,
+        "column": 39,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 19,
-        "column": 38,
+        "column": 34,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 20,
-        "column": 39,
+        "column": 35,
         "msg": "Cannot find name 'AST'."
     },
     {
@@ -71,47 +36,47 @@
     },
     {
         "line": 23,
-        "column": 33,
+        "column": 37,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 24,
-        "column": 33,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 25,
-        "column": 36,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 26,
         "column": 35,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 27,
-        "column": 32,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 28,
-        "column": 33,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 29,
+        "line": 25,
         "column": 34,
         "msg": "Cannot find name 'AST'."
     },
     {
+        "line": 26,
+        "column": 38,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 27,
+        "column": 39,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 28,
+        "column": 34,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 29,
+        "column": 35,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
         "line": 30,
-        "column": 32,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 31,
-        "column": 36,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
@@ -121,77 +86,77 @@
     },
     {
         "line": 33,
-        "column": 39,
+        "column": 35,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 34,
-        "column": 44,
-        "msg": "Cannot find name 'Identifier'."
+        "column": 32,
+        "msg": "Cannot find name 'AST'."
     },
     {
         "line": 35,
-        "column": 37,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 36,
-        "column": 35,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 37,
         "column": 34,
         "msg": "Cannot find name 'AST'."
     },
     {
+        "line": 37,
+        "column": 32,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
         "line": 38,
-        "column": 33,
+        "column": 36,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 39,
-        "column": 33,
+        "column": 36,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 40,
-        "column": 36,
+        "column": 39,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 41,
-        "column": 36,
-        "msg": "Cannot find name 'AST'."
+        "column": 44,
+        "msg": "Cannot find name 'Identifier'."
     },
     {
         "line": 42,
-        "column": 36,
+        "column": 37,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 43,
-        "column": 36,
+        "column": 35,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 44,
-        "column": 36,
+        "column": 34,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 45,
-        "column": 36,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 46,
-        "column": 36,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 47,
-        "column": 35,
+        "column": 36,
         "msg": "Cannot find name 'AST'."
     },
     {
@@ -211,12 +176,12 @@
     },
     {
         "line": 51,
-        "column": 35,
+        "column": 36,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 52,
-        "column": 35,
+        "column": 36,
         "msg": "Cannot find name 'AST'."
     },
     {
@@ -226,37 +191,37 @@
     },
     {
         "line": 54,
-        "column": 32,
+        "column": 35,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 55,
-        "column": 33,
+        "column": 36,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 56,
-        "column": 33,
+        "column": 36,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 57,
-        "column": 32,
+        "column": 36,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 58,
-        "column": 32,
+        "column": 35,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 59,
-        "column": 33,
+        "column": 35,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 60,
-        "column": 34,
+        "column": 36,
         "msg": "Cannot find name 'AST'."
     },
     {
@@ -266,12 +231,12 @@
     },
     {
         "line": 62,
-        "column": 32,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 63,
-        "column": 32,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
@@ -281,7 +246,7 @@
     },
     {
         "line": 65,
-        "column": 33,
+        "column": 32,
         "msg": "Cannot find name 'AST'."
     },
     {
@@ -291,27 +256,27 @@
     },
     {
         "line": 67,
-        "column": 33,
+        "column": 34,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 68,
-        "column": 33,
+        "column": 32,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 69,
-        "column": 33,
+        "column": 32,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 70,
-        "column": 33,
+        "column": 32,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 71,
-        "column": 33,
+        "column": 32,
         "msg": "Cannot find name 'AST'."
     },
     {
@@ -326,38 +291,38 @@
     },
     {
         "line": 74,
-        "column": 36,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 75,
-        "column": 36,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 76,
-        "column": 36,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 77,
-        "column": 37,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 78,
-        "column": 37,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 79,
-        "column": 43,
+        "column": 33,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 80,
-        "column": 43,
-        "msg": "Cannot find name 'FuncDecl'."
+        "column": 33,
+        "msg": "Cannot find name 'AST'."
     },
     {
         "line": 81,
@@ -366,87 +331,87 @@
     },
     {
         "line": 82,
-        "column": 41,
-        "msg": "Cannot find name 'VarDecl'."
+        "column": 36,
+        "msg": "Cannot find name 'AST'."
     },
     {
         "line": 83,
-        "column": 37,
+        "column": 36,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 84,
-        "column": 36,
+        "column": 37,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 85,
-        "column": 35,
+        "column": 37,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 86,
-        "column": 38,
+        "column": 43,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 87,
-        "column": 35,
-        "msg": "Cannot find name 'AST'."
+        "column": 43,
+        "msg": "Cannot find name 'FuncDecl'."
     },
     {
         "line": 88,
-        "column": 33,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 89,
-        "column": 35,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 90,
-        "column": 32,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 91,
-        "column": 35,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 92,
-        "column": 37,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 93,
-        "column": 37,
-        "msg": "Cannot find name 'Block'."
-    },
-    {
-        "line": 94,
-        "column": 34,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 95,
         "column": 36,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 96,
-        "column": 33,
+        "line": 89,
+        "column": 41,
+        "msg": "Cannot find name 'VarDecl'."
+    },
+    {
+        "line": 90,
+        "column": 37,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 97,
+        "line": 91,
+        "column": 36,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 92,
+        "column": 35,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 93,
         "column": 38,
         "msg": "Cannot find name 'AST'."
     },
     {
+        "line": 94,
+        "column": 35,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 95,
+        "column": 33,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 96,
+        "column": 35,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 97,
+        "column": 32,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
         "line": 98,
-        "column": 40,
+        "column": 35,
         "msg": "Cannot find name 'AST'."
     },
     {
@@ -456,126 +421,161 @@
     },
     {
         "line": 100,
-        "column": 35,
-        "msg": "Cannot find name 'AST'."
+        "column": 37,
+        "msg": "Cannot find name 'Block'."
     },
     {
         "line": 101,
-        "column": 38,
-        "msg": "Cannot find name 'ASTList'."
-    },
-    {
-        "line": 102,
-        "column": 39,
-        "msg": "Cannot find name 'Script'."
-    },
-    {
-        "line": 103,
-        "column": 46,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 104,
-        "column": 60,
-        "msg": "Cannot find name 'InterfaceDeclaration'."
-    },
-    {
-        "line": 105,
-        "column": 54,
-        "msg": "Cannot find name 'ModuleDeclaration'."
-    },
-    {
-        "line": 106,
-        "column": 47,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 107,
         "column": 34,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 108,
-        "column": 40,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 109,
-        "column": 46,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 110,
-        "column": 37,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 111,
+        "line": 102,
         "column": 36,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 112,
+        "line": 103,
+        "column": 33,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 104,
+        "column": 38,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 105,
+        "column": 40,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 106,
         "column": 37,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 113,
+        "line": 107,
         "column": 35,
         "msg": "Cannot find name 'AST'."
     },
     {
+        "line": 108,
+        "column": 38,
+        "msg": "Cannot find name 'ASTList'."
+    },
+    {
+        "line": 109,
+        "column": 39,
+        "msg": "Cannot find name 'Script'."
+    },
+    {
+        "line": 110,
+        "column": 46,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 111,
+        "column": 60,
+        "msg": "Cannot find name 'InterfaceDeclaration'."
+    },
+    {
+        "line": 112,
+        "column": 54,
+        "msg": "Cannot find name 'ModuleDeclaration'."
+    },
+    {
+        "line": 113,
+        "column": 47,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
         "line": 114,
-        "column": 37,
+        "column": 34,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 115,
-        "column": 38,
+        "column": 40,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 116,
+        "column": 46,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 117,
         "column": 37,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 119,
-        "column": 34,
-        "msg": "Cannot find name 'Script'."
+        "line": 118,
+        "column": 36,
+        "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 120,
-        "column": 25,
+        "line": 119,
+        "column": 37,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 120,
+        "column": 35,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 121,
+        "column": 37,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 122,
         "column": 38,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 125,
+        "line": 123,
+        "column": 37,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 126,
+        "column": 34,
+        "msg": "Cannot find name 'Script'."
+    },
+    {
+        "line": 127,
+        "column": 25,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 127,
+        "column": 38,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 132,
         "column": 26,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 125,
+        "line": 132,
         "column": 39,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 130,
+        "line": 137,
         "column": 33,
         "msg": "Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 134,
+        "line": 141,
         "column": 51,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 137,
+        "line": 144,
         "column": 36,
         "msg": "Cannot find name 'NodeType'."
     }

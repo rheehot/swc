@@ -1,6 +1,6 @@
 [
     {
-        "line": 9,
+        "line": 10,
         "column": 10,
         "msg": "Type '\"bar\"' is not comparable to type '\"foo\"'."
     }

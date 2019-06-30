@@ -1,31 +1,31 @@
 [
     {
-        "line": 75,
+        "line": 87,
         "column": 5,
         "msg": "Type 'D' is not assignable to type 'C'."
     },
     {
-        "line": 76,
+        "line": 88,
         "column": 5,
         "msg": "Type 'E' is not assignable to type 'C'."
     },
     {
-        "line": 80,
+        "line": 92,
         "column": 5,
         "msg": "Type 'D' is not assignable to type '{ opt"
     },
     {
-        "line": 81,
+        "line": 93,
         "column": 5,
         "msg": "Type 'E' is not assignable to type '{ opt"
     },
     {
-        "line": 85,
+        "line": 97,
         "column": 5,
         "msg": "Type 'D' is not assignable to type '{ opt"
     },
     {
-        "line": 86,
+        "line": 98,
         "column": 5,
         "msg": "Type 'E' is not assignable to type '{ opt"
     }

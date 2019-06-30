@@ -1,31 +1,31 @@
 [
     {
-        "line": 19,
+        "line": 31,
         "column": 15,
         "msg": "Interface 'B' incorrectly extends interface 'A'."
     },
     {
-        "line": 29,
+        "line": 41,
         "column": 15,
         "msg": "Interface 'B2' incorrectly extends interface 'A2'."
     },
     {
-        "line": 39,
+        "line": 51,
         "column": 15,
         "msg": "Interface 'B3' incorrectly extends interface 'A3'."
     },
     {
-        "line": 52,
+        "line": 64,
         "column": 15,
         "msg": "Interface 'B' incorrectly extends interface 'A'."
     },
     {
-        "line": 62,
+        "line": 74,
         "column": 15,
         "msg": "Interface 'B2' incorrectly extends interface 'A2'."
     },
     {
-        "line": 72,
+        "line": 84,
         "column": 15,
         "msg": "Interface 'B3' incorrectly extends interface 'A3'."
     }

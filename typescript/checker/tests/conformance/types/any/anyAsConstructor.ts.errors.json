@@ -1,6 +1,6 @@
 [
     {
-        "line": 12,
+        "line": 13,
         "column": 9,
         "msg": "Untyped function calls may not accept type arguments."
     }

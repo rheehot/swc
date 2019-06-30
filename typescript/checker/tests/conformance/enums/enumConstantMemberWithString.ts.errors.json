@@ -1,16 +1,16 @@
 [
     {
-        "line": 7,
+        "line": 12,
         "column": 9,
         "msg": "Computed values are not permitted in an enum with string valued members."
     },
     {
-        "line": 8,
+        "line": 13,
         "column": 9,
         "msg": "Computed values are not permitted in an enum with string valued members."
     },
     {
-        "line": 20,
+        "line": 25,
         "column": 9,
         "msg": "Computed values are not permitted in an enum with string valued members."
     }

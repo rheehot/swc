@@ -1,21 +1,21 @@
 [
     {
-        "line": 14,
+        "line": 18,
         "column": 9,
         "msg": "Type '1' is not assignable to type 'D'."
     },
     {
-        "line": 14,
+        "line": 18,
         "column": 9,
         "msg": "Return type of constructor signature must be assignable to the instance type of the class."
     },
     {
-        "line": 28,
+        "line": 32,
         "column": 9,
         "msg": "Return type of constructor signature must be assignable to the instance type of the class."
     },
     {
-        "line": 28,
+        "line": 32,
         "column": 18,
         "msg": "Type 'number' is not assignable to type 'T'."
     }

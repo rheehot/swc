@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 5,
         "column": 9,
         "msg": "Enum member expected."
     }

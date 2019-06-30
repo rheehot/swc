@@ -1,16 +1,16 @@
 [
     {
-        "line": 17,
+        "line": 21,
         "column": 5,
         "msg": "Type 'A | B' is not assignable to type 'A'."
     },
     {
-        "line": 18,
+        "line": 22,
         "column": 5,
         "msg": "Type 'A | B' is not assignable to type 'B'."
     },
     {
-        "line": 21,
+        "line": 25,
         "column": 5,
         "msg": "Type '((m"
     },
@@ -20,7 +20,7 @@
         "msg": "X) => number'."
     },
     {
-        "line": 22,
+        "line": 26,
         "column": 5,
         "msg": "Type '((m"
     },
@@ -30,7 +30,7 @@
         "msg": "X) => string'."
     },
     {
-        "line": 23,
+        "line": 27,
         "column": 5,
         "msg": "Type '((m"
     },

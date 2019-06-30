@@ -1,21 +1,21 @@
 [
     {
-        "line": 4,
+        "line": 7,
         "column": 18,
         "msg": "Duplicate identifier 'Point'."
     },
     {
-        "line": 12,
+        "line": 15,
         "column": 18,
         "msg": "Duplicate identifier 'Point'."
     },
     {
-        "line": 19,
+        "line": 22,
         "column": 18,
         "msg": "Duplicate identifier 'Line'."
     },
     {
-        "line": 28,
+        "line": 31,
         "column": 26,
         "msg": "Duplicate identifier 'Line'."
     }

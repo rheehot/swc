@@ -1,81 +1,81 @@
 [
     {
-        "line": 17,
+        "line": 20,
         "column": 14,
         "msg": "Operator '+' cannot be applied to types 'T' and 'boolean'."
     },
     {
-        "line": 18,
+        "line": 21,
         "column": 14,
         "msg": "Operator '+' cannot be applied to types 'T' and 'number'."
     },
     {
-        "line": 20,
+        "line": 23,
         "column": 14,
         "msg": "Operator '+' cannot be applied to types 'T' and 'Object'."
     },
     {
-        "line": 21,
+        "line": 24,
         "column": 14,
         "msg": "Operator '+' cannot be applied to types 'T' and 'E'."
     },
     {
-        "line": 22,
+        "line": 25,
         "column": 14,
         "msg": "Operator '+' cannot be applied to types 'T' and 'void'."
     },
     {
-        "line": 26,
+        "line": 29,
         "column": 14,
         "msg": "Operator '+' cannot be applied to types 'boolean' and 'T'."
     },
     {
-        "line": 27,
+        "line": 30,
         "column": 15,
         "msg": "Operator '+' cannot be applied to types 'number' and 'T'."
     },
     {
-        "line": 29,
+        "line": 32,
         "column": 15,
         "msg": "Operator '+' cannot be applied to types 'Object' and 'T'."
     },
     {
-        "line": 30,
+        "line": 33,
         "column": 15,
         "msg": "Operator '+' cannot be applied to types 'E' and 'T'."
     },
     {
-        "line": 31,
+        "line": 34,
         "column": 15,
         "msg": "Operator '+' cannot be applied to types 'void' and 'T'."
     },
     {
-        "line": 34,
+        "line": 37,
         "column": 15,
         "msg": "Operator '+' cannot be applied to types 'T' and 'null'."
     },
     {
-        "line": 35,
+        "line": 38,
         "column": 15,
         "msg": "Operator '+' cannot be applied to types 'T' and 'undefined'."
     },
     {
-        "line": 36,
+        "line": 39,
         "column": 15,
         "msg": "Operator '+' cannot be applied to types 'T' and 'T'."
     },
     {
-        "line": 37,
+        "line": 40,
         "column": 15,
         "msg": "Operator '+' cannot be applied to types 'T' and 'U'."
     },
     {
-        "line": 38,
+        "line": 41,
         "column": 15,
         "msg": "Operator '+' cannot be applied to types 'T' and '() => void'."
     },
     {
-        "line": 39,
+        "line": 42,
         "column": 15,
         "msg": "Operator '+' cannot be applied to types 'T' and 'undefined[]'."
     }

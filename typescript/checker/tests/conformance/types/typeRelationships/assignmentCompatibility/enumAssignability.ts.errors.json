@@ -1,101 +1,101 @@
 [
     {
-        "line": 11,
+        "line": 17,
         "column": 1,
         "msg": "Type 'F' is not assignable to type 'E'."
     },
     {
-        "line": 12,
+        "line": 18,
         "column": 1,
         "msg": "Type 'E' is not assignable to type 'F'."
     },
     {
-        "line": 31,
+        "line": 37,
         "column": 9,
         "msg": "Type 'E' is not assignable to type 'string'."
     },
     {
-        "line": 32,
+        "line": 38,
         "column": 9,
         "msg": "Type 'E' is not assignable to type 'boolean'."
     },
     {
-        "line": 33,
+        "line": 39,
         "column": 9,
         "msg": "Type 'E' is not assignable to type 'Date'."
     },
     {
-        "line": 35,
+        "line": 41,
         "column": 9,
         "msg": "Type 'E' is not assignable to type 'void'."
     },
     {
-        "line": 38,
+        "line": 44,
         "column": 9,
         "msg": "Type 'E' is not assignable to type '() => {}'."
     },
     {
-        "line": 39,
+        "line": 45,
         "column": 9,
         "msg": "Type 'E' is not assignable to type 'Function'."
     },
     {
-        "line": 40,
+        "line": 46,
         "column": 9,
         "msg": "Type 'E' is not assignable to type '(x"
     },
     {
-        "line": 41,
+        "line": 47,
         "column": 5,
         "msg": "Type 'E' is not assignable to type 'C'."
     },
     {
-        "line": 42,
+        "line": 48,
         "column": 5,
         "msg": "Type 'E' is not assignable to type 'I'."
     },
     {
-        "line": 43,
+        "line": 49,
         "column": 9,
         "msg": "Type 'E' is not assignable to type 'number[]'."
     },
     {
-        "line": 44,
+        "line": 50,
         "column": 9,
         "msg": "Type 'E' is not assignable to type '{ foo"
     },
     {
-        "line": 45,
+        "line": 51,
         "column": 9,
         "msg": "Type 'E' is not assignable to type '<T>(x"
     },
     {
-        "line": 47,
+        "line": 53,
         "column": 9,
         "msg": "Type 'E' is not assignable to type 'String'."
     },
     {
-        "line": 50,
+        "line": 56,
         "column": 9,
         "msg": "Type 'E' is not assignable to type 'T'."
     },
     {
-        "line": 51,
+        "line": 57,
         "column": 9,
         "msg": "Type 'E' is not assignable to type 'U'."
     },
     {
-        "line": 52,
+        "line": 58,
         "column": 9,
         "msg": "Type 'E' is not assignable to type 'V'."
     },
     {
-        "line": 53,
+        "line": 59,
         "column": 13,
         "msg": "Type 'E' is not assignable to type 'A'."
     },
     {
-        "line": 54,
+        "line": 60,
         "column": 13,
         "msg": "Type 'E' is not assignable to type 'B'."
     }

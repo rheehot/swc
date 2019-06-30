@@ -1,71 +1,71 @@
 [
     {
-        "line": 4,
+        "line": 15,
         "column": 17,
         "msg": "Initializers are not allowed in ambient contexts."
     },
     {
-        "line": 19,
+        "line": 30,
         "column": 22,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     },
     {
-        "line": 22,
+        "line": 33,
         "column": 24,
         "msg": "An implementation cannot be declared in ambient contexts."
     },
     {
-        "line": 31,
+        "line": 42,
         "column": 9,
         "msg": "In ambient enum declarations member initializer must be constant expression."
     },
     {
-        "line": 36,
+        "line": 47,
         "column": 13,
         "msg": "Initializers are not allowed in ambient contexts."
     },
     {
-        "line": 37,
+        "line": 48,
         "column": 19,
         "msg": "An implementation cannot be declared in ambient contexts."
     },
     {
-        "line": 39,
+        "line": 50,
         "column": 20,
         "msg": "Initializers are not allowed in ambient contexts."
     },
     {
-        "line": 40,
+        "line": 51,
         "column": 13,
         "msg": "Initializers are not allowed in ambient contexts."
     },
     {
-        "line": 41,
+        "line": 52,
         "column": 23,
         "msg": "An implementation cannot be declared in ambient contexts."
     },
     {
-        "line": 42,
+        "line": 53,
         "column": 14,
         "msg": "An implementation cannot be declared in ambient contexts."
     },
     {
-        "line": 43,
+        "line": 54,
         "column": 22,
         "msg": "An implementation cannot be declared in ambient contexts."
     },
     {
-        "line": 49,
+        "line": 60,
         "column": 20,
         "msg": "Ambient modules cannot be nested in other modules or namespaces."
     },
     {
-        "line": 53,
+        "line": 64,
         "column": 16,
         "msg": "Ambient module declaration cannot specify relative module name."
     },
     {
-        "line": 59,
+        "line": 70,
         "column": 5,
         "msg": "An export assignment cannot be used in a module with other exported elements."
     }

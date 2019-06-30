@@ -1,641 +1,641 @@
 [
     {
-        "line": 18,
+        "line": 151,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/RealWorld/formatting.ts' not found."
     },
     {
-        "line": 22,
+        "line": 155,
         "column": 38,
         "msg": "Cannot find name 'ILineIndenationResolver'."
     },
     {
-        "line": 24,
+        "line": 157,
         "column": 33,
         "msg": "Cannot find name 'IndentationBag'."
     },
     {
-        "line": 26,
+        "line": 159,
         "column": 42,
         "msg": "Cannot find name 'Dictionary_int_int'."
     },
     {
-        "line": 29,
+        "line": 162,
         "column": 28,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 30,
+        "line": 163,
         "column": 26,
         "msg": "Cannot find name 'ParseTree'."
     },
     {
-        "line": 31,
+        "line": 164,
         "column": 30,
         "msg": "Cannot find name 'ITextSnapshot'."
     },
     {
-        "line": 33,
+        "line": 166,
         "column": 35,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 34,
+        "line": 167,
         "column": 32,
         "msg": "Cannot find name 'TokenSpan'."
     },
     {
-        "line": 37,
+        "line": 170,
         "column": 39,
         "msg": "Cannot find name 'IndentationBag'."
     },
     {
-        "line": 39,
+        "line": 172,
         "column": 48,
         "msg": "Cannot find name 'Dictionary_int_int'."
     },
     {
-        "line": 49,
+        "line": 182,
         "column": 43,
         "msg": "Cannot find name 'TokenSpan'."
     },
     {
-        "line": 49,
+        "line": 182,
         "column": 65,
         "msg": "Cannot find name 'TokenSpan'."
     },
     {
-        "line": 49,
+        "line": 182,
         "column": 82,
         "msg": "Cannot find name 'ParseNode'."
     },
     {
-        "line": 49,
+        "line": 182,
         "column": 119,
         "msg": "Cannot find name 'List_TextEditInfo'."
     },
     {
-        "line": 62,
+        "line": 195,
         "column": 133,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 69,
+        "line": 202,
         "column": 49,
         "msg": "Cannot find name 'TokenSpan'."
     },
     {
-        "line": 69,
+        "line": 202,
         "column": 71,
         "msg": "Cannot find name 'TokenSpan'."
     },
     {
-        "line": 69,
+        "line": 202,
         "column": 88,
         "msg": "Cannot find name 'ParseNode'."
     },
     {
-        "line": 69,
+        "line": 202,
         "column": 125,
         "msg": "Cannot find name 'List_TextEditInfo'."
     },
     {
-        "line": 70,
+        "line": 203,
         "column": 30,
         "msg": "Cannot find name 'List_TextEditInfo'."
     },
     {
-        "line": 71,
+        "line": 204,
         "column": 34,
         "msg": "Cannot find name 'IndentationInfo'."
     },
     {
-        "line": 112,
+        "line": 245,
         "column": 40,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 112,
+        "line": 245,
         "column": 113,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 142,
+        "line": 275,
         "column": 40,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 154,
+        "line": 287,
         "column": 51,
         "msg": "Cannot find name 'TokenSpan'."
     },
     {
-        "line": 154,
+        "line": 287,
         "column": 63,
         "msg": "Cannot find name 'List_TextEditInfo'."
     },
     {
-        "line": 155,
+        "line": 288,
         "column": 30,
         "msg": "Cannot find name 'List_TextEditInfo'."
     },
     {
-        "line": 157,
+        "line": 290,
         "column": 32,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 184,
+        "line": 317,
         "column": 79,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 185,
+        "line": 318,
         "column": 20,
         "msg": "Cannot find name 'GetIndentSizeFromText'. Did you mean the static member 'Indenter.GetIndentSizeFromText'?"
     },
     {
-        "line": 188,
+        "line": 321,
         "column": 67,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 209,
+        "line": 342,
         "column": 50,
         "msg": "Cannot find name 'TokenSpan'."
     },
     {
-        "line": 209,
+        "line": 342,
         "column": 67,
         "msg": "Cannot find name 'ParseNode'."
     },
     {
-        "line": 209,
+        "line": 342,
         "column": 79,
         "msg": "Cannot find name 'IndentationInfo'."
     },
     {
-        "line": 210,
+        "line": 343,
         "column": 34,
         "msg": "Cannot find name 'IndentationInfo'."
     },
     {
-        "line": 213,
+        "line": 346,
         "column": 22,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 217,
+        "line": 350,
         "column": 22,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 218,
+        "line": 351,
         "column": 22,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 222,
+        "line": 355,
         "column": 22,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 224,
+        "line": 357,
         "column": 57,
         "msg": "Cannot find name 'AuthorParseNodeKind'."
     },
     {
-        "line": 224,
+        "line": 357,
         "column": 119,
         "msg": "Cannot find name 'AuthorParseNodeEdge'."
     },
     {
-        "line": 229,
+        "line": 362,
         "column": 22,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 230,
+        "line": 363,
         "column": 57,
         "msg": "Cannot find name 'AuthorParseNodeKind'."
     },
     {
-        "line": 237,
+        "line": 370,
         "column": 22,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 240,
+        "line": 373,
         "column": 22,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 248,
+        "line": 381,
         "column": 58,
         "msg": "Cannot find name 'ParseNode'."
     },
     {
-        "line": 248,
+        "line": 381,
         "column": 70,
         "msg": "Cannot find name 'IndentationInfo'."
     },
     {
-        "line": 249,
+        "line": 382,
         "column": 34,
         "msg": "Cannot find name 'IndentationInfo'."
     },
     {
-        "line": 251,
+        "line": 384,
         "column": 49,
         "msg": "Cannot find name 'AuthorParseNodeKind'."
     },
     {
-        "line": 252,
+        "line": 385,
         "column": 46,
         "msg": "Cannot find name 'AuthorParseNodeEdge'."
     },
     {
-        "line": 252,
+        "line": 385,
         "column": 107,
         "msg": "Cannot find name 'AuthorParseNodeEdge'."
     },
     {
-        "line": 257,
+        "line": 390,
         "column": 54,
         "msg": "Cannot find name 'AuthorParseNodeKind'."
     },
     {
-        "line": 267,
+        "line": 400,
         "column": 62,
         "msg": "Cannot find name 'TokenSpan'."
     },
     {
-        "line": 267,
+        "line": 400,
         "column": 79,
         "msg": "Cannot find name 'ParseNode'."
     },
     {
-        "line": 267,
+        "line": 400,
         "column": 91,
         "msg": "Cannot find name 'IndentationInfo'."
     },
     {
-        "line": 268,
+        "line": 401,
         "column": 34,
         "msg": "Cannot find name 'IndentationInfo'."
     },
     {
-        "line": 276,
+        "line": 409,
         "column": 53,
         "msg": "Cannot find name 'AuthorParseNodeKind'."
     },
     {
-        "line": 280,
+        "line": 413,
         "column": 50,
-        "msg": "Cannot find name 'Span'."
-    },
-    {
-        "line": 281,
-        "column": 28,
-        "msg": "Cannot find name 'ParseTree'."
-    },
-    {
-        "line": 290,
-        "column": 60,
-        "msg": "Cannot find name 'TokenSpan'."
-    },
-    {
-        "line": 290,
-        "column": 77,
-        "msg": "Cannot find name 'ParseNode'."
-    },
-    {
-        "line": 290,
-        "column": 89,
-        "msg": "Cannot find name 'IndentationInfo'."
-    },
-    {
-        "line": 291,
-        "column": 34,
-        "msg": "Cannot find name 'IndentationInfo'."
-    },
-    {
-        "line": 294,
-        "column": 59,
-        "msg": "Cannot find name 'Span'."
-    },
-    {
-        "line": 310,
-        "column": 41,
-        "msg": "Cannot find name 'TokenSpan'."
-    },
-    {
-        "line": 310,
-        "column": 58,
-        "msg": "Cannot find name 'ParseNode'."
-    },
-    {
-        "line": 312,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 313,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 314,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 315,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 316,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 317,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 318,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 319,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 320,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 321,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 322,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 323,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 326,
-        "column": 22,
-        "msg": "Cannot find name 'AuthorParseNodeKind'."
-    },
-    {
-        "line": 333,
-        "column": 36,
-        "msg": "Cannot find name 'ParseNodeExtensions'."
-    },
-    {
-        "line": 333,
-        "column": 83,
-        "msg": "Cannot find name 'AuthorParseNodeEdge'."
-    },
-    {
-        "line": 345,
-        "column": 84,
-        "msg": "Cannot find name 'ParseTree'."
-    },
-    {
-        "line": 398,
-        "column": 43,
-        "msg": "Cannot find name 'IndentationInfo'."
-    },
-    {
-        "line": 398,
-        "column": 114,
-        "msg": "Cannot find name 'TextEditInfo'."
-    },
-    {
-        "line": 402,
-        "column": 28,
-        "msg": "Cannot find name 'TextEditInfo'."
-    },
-    {
-        "line": 406,
-        "column": 45,
         "msg": "Cannot find name 'Span'."
     },
     {
         "line": 414,
+        "column": 28,
+        "msg": "Cannot find name 'ParseTree'."
+    },
+    {
+        "line": 423,
+        "column": 60,
+        "msg": "Cannot find name 'TokenSpan'."
+    },
+    {
+        "line": 423,
+        "column": 77,
+        "msg": "Cannot find name 'ParseNode'."
+    },
+    {
+        "line": 423,
+        "column": 89,
+        "msg": "Cannot find name 'IndentationInfo'."
+    },
+    {
+        "line": 424,
+        "column": 34,
+        "msg": "Cannot find name 'IndentationInfo'."
+    },
+    {
+        "line": 427,
+        "column": 59,
+        "msg": "Cannot find name 'Span'."
+    },
+    {
+        "line": 443,
+        "column": 41,
+        "msg": "Cannot find name 'TokenSpan'."
+    },
+    {
+        "line": 443,
+        "column": 58,
+        "msg": "Cannot find name 'ParseNode'."
+    },
+    {
+        "line": 445,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 446,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 447,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 448,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 449,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 450,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 451,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 452,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 453,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 454,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 455,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 456,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 459,
+        "column": 22,
+        "msg": "Cannot find name 'AuthorParseNodeKind'."
+    },
+    {
+        "line": 466,
+        "column": 36,
+        "msg": "Cannot find name 'ParseNodeExtensions'."
+    },
+    {
+        "line": 466,
+        "column": 83,
+        "msg": "Cannot find name 'AuthorParseNodeEdge'."
+    },
+    {
+        "line": 478,
+        "column": 84,
+        "msg": "Cannot find name 'ParseTree'."
+    },
+    {
+        "line": 531,
+        "column": 43,
+        "msg": "Cannot find name 'IndentationInfo'."
+    },
+    {
+        "line": 531,
+        "column": 114,
+        "msg": "Cannot find name 'TextEditInfo'."
+    },
+    {
+        "line": 535,
+        "column": 28,
+        "msg": "Cannot find name 'TextEditInfo'."
+    },
+    {
+        "line": 539,
+        "column": 45,
+        "msg": "Cannot find name 'Span'."
+    },
+    {
+        "line": 547,
         "column": 34,
         "msg": "Cannot find name 'StringUtils'."
     },
     {
-        "line": 415,
+        "line": 548,
         "column": 33,
         "msg": "Cannot find name 'Debug'."
     },
     {
-        "line": 420,
+        "line": 553,
         "column": 32,
         "msg": "Cannot find name 'TextEditInfo'."
     },
     {
-        "line": 433,
+        "line": 566,
         "column": 21,
         "msg": "Cannot find name 'StringUtils'."
     },
     {
-        "line": 437,
+        "line": 570,
         "column": 17,
         "msg": "Cannot find name 'StringUtils'."
     },
     {
-        "line": 456,
+        "line": 589,
         "column": 51,
         "msg": "Cannot find name 'StringUtils'."
     },
     {
-        "line": 459,
+        "line": 592,
         "column": 18,
         "msg": "Cannot find name 'StringUtils'."
     },
     {
-        "line": 479,
+        "line": 612,
         "column": 57,
         "msg": "Cannot find name 'TokenSpan'."
     },
     {
-        "line": 479,
+        "line": 612,
         "column": 74,
         "msg": "Cannot find name 'ParseNode'."
     },
     {
-        "line": 479,
+        "line": 612,
         "column": 86,
         "msg": "Cannot find name 'IndentationInfo'."
     },
     {
-        "line": 480,
+        "line": 613,
         "column": 34,
         "msg": "Cannot find name 'IndentationInfo'."
     },
     {
-        "line": 486,
+        "line": 619,
         "column": 89,
         "msg": "Cannot find name 'AuthorParseNodeKind'."
     },
     {
-        "line": 496,
+        "line": 629,
         "column": 84,
         "msg": "Cannot find name 'IndentationInfo'."
     },
     {
-        "line": 499,
+        "line": 632,
         "column": 41,
         "msg": "Cannot find name 'Span'."
     },
     {
-        "line": 506,
+        "line": 639,
         "column": 79,
         "msg": "Cannot find name 'IndentationInfo'."
     },
     {
-        "line": 519,
+        "line": 652,
         "column": 28,
         "msg": "Cannot find name 'IndentationInfo'."
     },
     {
-        "line": 526,
+        "line": 659,
         "column": 13,
         "msg": "Cannot find name 'Debug'."
     },
     {
-        "line": 536,
+        "line": 669,
         "column": 64,
         "msg": "Cannot find name 'Span'."
     },
     {
-        "line": 558,
+        "line": 691,
         "column": 69,
         "msg": "Cannot find name 'Span'."
     },
     {
-        "line": 573,
+        "line": 706,
         "column": 48,
         "msg": "Cannot find name 'ParseTree'."
     },
     {
-        "line": 576,
+        "line": 709,
         "column": 29,
         "msg": "Cannot find name 'ParseNode'."
     },
     {
-        "line": 598,
+        "line": 731,
         "column": 33,
         "msg": "Cannot find name 'ParseNode'."
     },
     {
-        "line": 624,
+        "line": 757,
         "column": 77,
         "msg": "Cannot find name 'AuthorParseNodeKind'."
     },
     {
-        "line": 636,
+        "line": 769,
         "column": 21,
         "msg": "Cannot find name 'ParseNodeExtensions'."
     },
     {
-        "line": 667,
+        "line": 800,
         "column": 34,
         "msg": "Cannot find name 'IndentationEditInfo'."
     },
     {
-        "line": 688,
+        "line": 821,
         "column": 45,
         "msg": "Cannot find name 'TextEditInfo'."
     },
     {
-        "line": 690,
+        "line": 823,
         "column": 34,
         "msg": "Cannot find name 'IndentationEditInfo'."
     },
     {
-        "line": 697,
+        "line": 830,
         "column": 35,
         "msg": "Cannot find name 'IndentationEditInfo'."
     },
     {
-        "line": 700,
+        "line": 833,
         "column": 39,
         "msg": "Cannot find name 'IndentationEditInfo'."
     },
     {
-        "line": 708,
+        "line": 841,
         "column": 42,
         "msg": "Cannot find name 'TextEditInfo'."
     },
     {
-        "line": 711,
+        "line": 844,
         "column": 50,
         "msg": "Cannot find name 'TokenSpan'."
     },
     {
-        "line": 711,
+        "line": 844,
         "column": 67,
         "msg": "Cannot find name 'ParseNode'."
     },
     {
-        "line": 719,
+        "line": 852,
         "column": 22,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 720,
+        "line": 853,
         "column": 73,
         "msg": "Cannot find name 'AuthorParseNodeKind'."
     },
     {
-        "line": 723,
+        "line": 856,
         "column": 22,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 724,
+        "line": 857,
         "column": 73,
         "msg": "Cannot find name 'AuthorParseNodeKind'."
     },
     {
-        "line": 727,
+        "line": 860,
         "column": 22,
         "msg": "Cannot find name 'AuthorTokenKind'."
     },
     {
-        "line": 728,
+        "line": 861,
         "column": 73,
         "msg": "Cannot find name 'AuthorParseNodeKind'."
     },
     {
-        "line": 733,
+        "line": 866,
         "column": 17,
         "msg": "Cannot find name 'ParseNodeExtensions'."
     },
     {
-        "line": 737,
+        "line": 870,
         "column": 42,
         "msg": "Cannot find name 'TokenSpan'."
     },
     {
-        "line": 738,
+        "line": 871,
         "column": 38,
         "msg": "Cannot find name 'TypeScript'."
     }

@@ -1,21 +1,21 @@
 [
     {
-        "line": 11,
+        "line": 15,
         "column": 7,
         "msg": "Class 'Bar' incorrectly implements interface 'I'."
     },
     {
-        "line": 14,
+        "line": 18,
         "column": 7,
         "msg": "Class 'Bar2' incorrectly implements interface 'I'."
     },
     {
-        "line": 18,
+        "line": 22,
         "column": 7,
         "msg": "Class 'Bar3' incorrectly implements interface 'I'."
     },
     {
-        "line": 23,
+        "line": 27,
         "column": 7,
         "msg": "Class 'Bar4' incorrectly implements interface 'I'."
     }

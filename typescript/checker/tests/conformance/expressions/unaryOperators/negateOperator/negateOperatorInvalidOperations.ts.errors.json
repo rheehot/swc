@@ -1,56 +1,56 @@
 [
     {
-        "line": 6,
+        "line": 8,
         "column": 15,
         "msg": "Expression expected."
     },
     {
-        "line": 6,
+        "line": 8,
         "column": 25,
         "msg": "',' expected."
     },
     {
-        "line": 6,
+        "line": 8,
         "column": 26,
         "msg": "Expression expected."
     },
     {
-        "line": 9,
+        "line": 11,
         "column": 17,
-        "msg": "Object is possibly 'null'."
-    },
-    {
-        "line": 9,
-        "column": 24,
-        "msg": "Object is possibly 'undefined'."
-    },
-    {
-        "line": 10,
-        "column": 17,
-        "msg": "Object is possibly 'null'."
-    },
-    {
-        "line": 10,
-        "column": 24,
         "msg": "Object is possibly 'null'."
     },
     {
         "line": 11,
+        "column": 24,
+        "msg": "Object is possibly 'undefined'."
+    },
+    {
+        "line": 12,
+        "column": 17,
+        "msg": "Object is possibly 'null'."
+    },
+    {
+        "line": 12,
+        "column": 24,
+        "msg": "Object is possibly 'null'."
+    },
+    {
+        "line": 13,
         "column": 17,
         "msg": "Object is possibly 'undefined'."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 29,
         "msg": "Object is possibly 'undefined'."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'NUMBER' must be of type 'any', but here has type 'number'."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 14,
         "msg": "Expression expected."
     }

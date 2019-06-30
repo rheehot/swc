@@ -1,31 +1,31 @@
 [
     {
-        "line": 4,
+        "line": 26,
         "column": 1,
         "msg": "The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'."
     },
     {
-        "line": 32,
+        "line": 54,
         "column": 9,
         "msg": "Type '() => number' is not assignable to type 'E'."
     },
     {
-        "line": 33,
+        "line": 55,
         "column": 16,
         "msg": "'this' cannot be referenced in current location."
     },
     {
-        "line": 45,
+        "line": 67,
         "column": 5,
         "msg": "The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'."
     },
     {
-        "line": 73,
+        "line": 95,
         "column": 13,
         "msg": "Type '() => number' is not assignable to type 'E'."
     },
     {
-        "line": 74,
+        "line": 96,
         "column": 20,
         "msg": "'this' cannot be referenced in current location."
     }

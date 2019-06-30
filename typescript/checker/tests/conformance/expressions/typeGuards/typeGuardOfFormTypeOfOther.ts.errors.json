@@ -1,10 +1,5 @@
 [
     {
-        "line": 23,
-        "column": 5,
-        "msg": "This condition will always return 'false' since the types '\"string\" | \"number\" | \"bigint\" | \"boolean\" | \"symbol\" | \"undefined\" | \"object\" | \"function\"' and '\"Object\"' have no overlap."
-    },
-    {
         "line": 29,
         "column": 5,
         "msg": "This condition will always return 'false' since the types '\"string\" | \"number\" | \"bigint\" | \"boolean\" | \"symbol\" | \"undefined\" | \"object\" | \"function\"' and '\"Object\"' have no overlap."
@@ -15,24 +10,24 @@
         "msg": "This condition will always return 'false' since the types '\"string\" | \"number\" | \"bigint\" | \"boolean\" | \"symbol\" | \"undefined\" | \"object\" | \"function\"' and '\"Object\"' have no overlap."
     },
     {
-        "line": 42,
-        "column": 5,
-        "msg": "Type 'string | C' is not assignable to type 'C'."
-    },
-    {
-        "line": 45,
-        "column": 9,
-        "msg": "Type 'string | C' is not assignable to type 'string'."
-    },
-    {
-        "line": 48,
+        "line": 41,
         "column": 5,
         "msg": "This condition will always return 'false' since the types '\"string\" | \"number\" | \"bigint\" | \"boolean\" | \"symbol\" | \"undefined\" | \"object\" | \"function\"' and '\"Object\"' have no overlap."
     },
     {
-        "line": 58,
+        "line": 48,
         "column": 5,
-        "msg": "This condition will always return 'true' since the types '\"string\" | \"number\" | \"bigint\" | \"boolean\" | \"symbol\" | \"undefined\" | \"object\" | \"function\"' and '\"Object\"' have no overlap."
+        "msg": "Type 'string | C' is not assignable to type 'C'."
+    },
+    {
+        "line": 51,
+        "column": 9,
+        "msg": "Type 'string | C' is not assignable to type 'string'."
+    },
+    {
+        "line": 54,
+        "column": 5,
+        "msg": "This condition will always return 'false' since the types '\"string\" | \"number\" | \"bigint\" | \"boolean\" | \"symbol\" | \"undefined\" | \"object\" | \"function\"' and '\"Object\"' have no overlap."
     },
     {
         "line": 64,
@@ -45,7 +40,12 @@
         "msg": "This condition will always return 'true' since the types '\"string\" | \"number\" | \"bigint\" | \"boolean\" | \"symbol\" | \"undefined\" | \"object\" | \"function\"' and '\"Object\"' have no overlap."
     },
     {
-        "line": 77,
+        "line": 76,
+        "column": 5,
+        "msg": "This condition will always return 'true' since the types '\"string\" | \"number\" | \"bigint\" | \"boolean\" | \"symbol\" | \"undefined\" | \"object\" | \"function\"' and '\"Object\"' have no overlap."
+    },
+    {
+        "line": 83,
         "column": 5,
         "msg": "This condition will always return 'true' since the types '\"string\" | \"number\" | \"bigint\" | \"boolean\" | \"symbol\" | \"undefined\" | \"object\" | \"function\"' and '\"Object\"' have no overlap."
     }

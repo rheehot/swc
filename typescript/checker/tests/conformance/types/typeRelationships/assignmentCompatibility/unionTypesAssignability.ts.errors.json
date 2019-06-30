@@ -1,96 +1,96 @@
 [
     {
-        "line": 20,
+        "line": 27,
         "column": 1,
         "msg": "Property 'foo1' is missing in type 'E' but required in type 'D'."
     },
     {
-        "line": 21,
+        "line": 28,
         "column": 1,
         "msg": "Type 'D | E' is not assignable to type 'D'."
     },
     {
-        "line": 22,
+        "line": 29,
         "column": 1,
         "msg": "Property 'foo2' is missing in type 'D' but required in type 'E'."
     },
     {
-        "line": 24,
+        "line": 31,
         "column": 1,
         "msg": "Type 'D | E' is not assignable to type 'E'."
     },
     {
-        "line": 26,
-        "column": 1,
-        "msg": "Type 'string' is not assignable to type 'number'."
-    },
-    {
-        "line": 27,
-        "column": 1,
-        "msg": "Type 'string | number' is not assignable to type 'number'."
-    },
-    {
-        "line": 28,
-        "column": 1,
-        "msg": "Type 'number' is not assignable to type 'string'."
-    },
-    {
-        "line": 30,
-        "column": 1,
-        "msg": "Type 'string | number' is not assignable to type 'string'."
-    },
-    {
         "line": 33,
         "column": 1,
-        "msg": "Property 'foo1' is missing in type 'C' but required in type 'D'."
+        "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
         "line": 34,
         "column": 1,
-        "msg": "Property 'foo2' is missing in type 'C' but required in type 'E'."
+        "msg": "Type 'string | number' is not assignable to type 'number'."
     },
     {
         "line": 35,
         "column": 1,
-        "msg": "Type 'C' is not assignable to type 'D | E'."
+        "msg": "Type 'number' is not assignable to type 'string'."
     },
     {
         "line": 37,
         "column": 1,
+        "msg": "Type 'string | number' is not assignable to type 'string'."
+    },
+    {
+        "line": 40,
+        "column": 1,
+        "msg": "Property 'foo1' is missing in type 'C' but required in type 'D'."
+    },
+    {
+        "line": 41,
+        "column": 1,
+        "msg": "Property 'foo2' is missing in type 'C' but required in type 'E'."
+    },
+    {
+        "line": 42,
+        "column": 1,
+        "msg": "Type 'C' is not assignable to type 'D | E'."
+    },
+    {
+        "line": 44,
+        "column": 1,
         "msg": "Type 'D' is not assignable to type 'E'."
     },
     {
-        "line": 39,
+        "line": 46,
         "column": 1,
         "msg": "Type 'E' is not assignable to type 'D'."
     },
     {
-        "line": 43,
+        "line": 50,
         "column": 1,
         "msg": "Type 'number' is not assignable to type 'string'."
     },
     {
-        "line": 45,
+        "line": 52,
         "column": 1,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 66,
+        "line": 73,
         "column": 5,
         "msg": "Type 'U' is not assignable to type 'T'."
     },
     {
-        "line": 67,
+        "line": 74,
         "column": 5,
         "msg": "Type 'T' is not assignable to type 'U'."
     },
     {
-        "line": 72,
+        "line": 79,
         "column": 5,
         "msg": "Type 'T | U' is not assignable to type 'T'."
     },
     {
-        "line": 73,
+        "line": 80,
         "column": 5,
         "msg": "Type 'T | U' is not assignable to type 'U'."
     }

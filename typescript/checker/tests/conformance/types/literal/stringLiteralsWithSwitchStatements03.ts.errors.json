@@ -1,33 +1,28 @@
 [
     {
-        "line": 12,
+        "line": 14,
         "column": 10,
         "msg": "Type '\"bar\" | \"baz\"' is not comparable to type '\"foo\"'."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 10,
         "msg": "Type '\"bar\"' is not comparable to type '\"foo\"'."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 10,
         "msg": "Type '\"baz\"' is not comparable to type '\"foo\"'."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 11,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 11,
         "msg": "Left side of comma operator is unused and has no side effects."
-    },
-    {
-        "line": 22,
-        "column": 10,
-        "msg": "Type '\"bar\" | \"baz\"' is not comparable to type '\"foo\"'."
     },
     {
         "line": 24,
@@ -35,7 +30,12 @@
         "msg": "Type '\"bar\" | \"baz\"' is not comparable to type '\"foo\"'."
     },
     {
-        "line": 25,
+        "line": 26,
+        "column": 10,
+        "msg": "Type '\"bar\" | \"baz\"' is not comparable to type '\"foo\"'."
+    },
+    {
+        "line": 27,
         "column": 10,
         "msg": "Type '\"bar\" | \"baz\"' is not comparable to type '\"foo\"'."
     }

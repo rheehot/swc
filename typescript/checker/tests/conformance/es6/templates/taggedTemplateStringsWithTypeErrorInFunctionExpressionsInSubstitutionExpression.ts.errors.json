@@ -1,6 +1,6 @@
 [
     {
-        "line": 6,
+        "line": 7,
         "column": 31,
         "msg": "Type '\"bad\"' is not assignable to type 'number'."
     }

@@ -1,46 +1,46 @@
 [
     {
-        "line": 9,
-        "column": 9,
-        "msg": "Type 'C' is not generic."
-    },
-    {
-        "line": 10,
-        "column": 9,
-        "msg": "Type 'I' is not generic."
-    },
-    {
         "line": 11,
         "column": 9,
-        "msg": "Type 'E' is not generic."
+        "msg": "Type 'C' is not generic."
     },
     {
         "line": 12,
         "column": 9,
-        "msg": "Type 'T' is not generic."
-    },
-    {
-        "line": 19,
-        "column": 13,
-        "msg": "Type 'C' is not generic."
-    },
-    {
-        "line": 20,
-        "column": 13,
         "msg": "Type 'I' is not generic."
+    },
+    {
+        "line": 13,
+        "column": 9,
+        "msg": "Type 'E' is not generic."
+    },
+    {
+        "line": 14,
+        "column": 9,
+        "msg": "Type 'T' is not generic."
     },
     {
         "line": 21,
         "column": 13,
-        "msg": "Type 'E' is not generic."
+        "msg": "Type 'C' is not generic."
     },
     {
         "line": 22,
         "column": 13,
-        "msg": "Type 'T' is not generic."
+        "msg": "Type 'I' is not generic."
     },
     {
         "line": 23,
+        "column": 13,
+        "msg": "Type 'E' is not generic."
+    },
+    {
+        "line": 24,
+        "column": 13,
+        "msg": "Type 'T' is not generic."
+    },
+    {
+        "line": 25,
         "column": 13,
         "msg": "Type 'U' is not generic."
     }

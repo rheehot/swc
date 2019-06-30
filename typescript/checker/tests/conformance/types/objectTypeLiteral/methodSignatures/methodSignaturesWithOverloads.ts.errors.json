@@ -1,11 +1,11 @@
 [
     {
-        "line": 7,
+        "line": 8,
         "column": 5,
         "msg": "Overload signatures must all be optional or required."
     },
     {
-        "line": 16,
+        "line": 17,
         "column": 5,
         "msg": "Overload signatures must all be optional or required."
     }

@@ -1,6 +1,6 @@
 [
     {
-        "line": 13,
+        "line": 17,
         "column": 14,
         "msg": "Argument of type '{ cb"
     },
@@ -10,7 +10,7 @@
         "msg": "T) => string' is not assignable to type 'new (t"
     },
     {
-        "line": 15,
+        "line": 19,
         "column": 14,
         "msg": "Argument of type '{ cb"
     },

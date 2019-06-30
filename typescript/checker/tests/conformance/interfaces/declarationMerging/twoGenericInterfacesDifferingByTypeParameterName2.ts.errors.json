@@ -1,36 +1,36 @@
 [
     {
-        "line": 5,
-        "column": 11,
-        "msg": "All declarations of 'B' must have identical type parameters."
-    },
-    {
-        "line": 9,
-        "column": 11,
-        "msg": "All declarations of 'B' must have identical type parameters."
-    },
-    {
-        "line": 10,
-        "column": 8,
-        "msg": "Cannot find name 'V'."
-    },
-    {
         "line": 14,
-        "column": 15,
+        "column": 11,
         "msg": "All declarations of 'B' must have identical type parameters."
     },
     {
         "line": 18,
+        "column": 11,
+        "msg": "All declarations of 'B' must have identical type parameters."
+    },
+    {
+        "line": 19,
+        "column": 8,
+        "msg": "Cannot find name 'V'."
+    },
+    {
+        "line": 23,
         "column": 15,
         "msg": "All declarations of 'B' must have identical type parameters."
     },
     {
-        "line": 36,
+        "line": 27,
+        "column": 15,
+        "msg": "All declarations of 'B' must have identical type parameters."
+    },
+    {
+        "line": 45,
         "column": 22,
         "msg": "All declarations of 'B' must have identical type parameters."
     },
     {
-        "line": 42,
+        "line": 51,
         "column": 22,
         "msg": "All declarations of 'B' must have identical type parameters."
     }

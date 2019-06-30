@@ -1,16 +1,16 @@
 [
     {
-        "line": 4,
+        "line": 5,
         "column": 21,
         "msg": "'this' cannot be referenced in constructor arguments."
     },
     {
-        "line": 8,
+        "line": 9,
         "column": 21,
         "msg": "'this' cannot be referenced in constructor arguments."
     },
     {
-        "line": 12,
+        "line": 13,
         "column": 28,
         "msg": "'this' cannot be referenced in constructor arguments."
     }

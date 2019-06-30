@@ -1,91 +1,91 @@
 [
     {
-        "line": 35,
+        "line": 47,
         "column": 5,
         "msg": "Type 'D' has no properties in common with type 'C'."
     },
     {
-        "line": 36,
+        "line": 48,
         "column": 5,
         "msg": "Type 'E' has no properties in common with type 'C'."
     },
     {
-        "line": 37,
+        "line": 49,
         "column": 5,
         "msg": "Type 'F' has no properties in common with type 'C'."
     },
     {
-        "line": 38,
+        "line": 50,
         "column": 5,
         "msg": "Type 'D' has no properties in common with type '{ opt?"
     },
     {
-        "line": 39,
+        "line": 51,
         "column": 5,
         "msg": "Type 'E' has no properties in common with type '{ opt?"
     },
     {
-        "line": 40,
+        "line": 52,
         "column": 5,
         "msg": "Type 'F' has no properties in common with type '{ opt?"
     },
     {
-        "line": 41,
+        "line": 53,
         "column": 5,
         "msg": "Type 'D' has no properties in common with type '{ opt?"
     },
     {
-        "line": 42,
+        "line": 54,
         "column": 5,
         "msg": "Type 'E' has no properties in common with type '{ opt?"
     },
     {
-        "line": 43,
+        "line": 55,
         "column": 5,
         "msg": "Type 'F' has no properties in common with type '{ opt?"
     },
     {
-        "line": 76,
+        "line": 88,
         "column": 5,
         "msg": "Property 'opt' is missing in type 'D' but required in type 'C'."
     },
     {
-        "line": 77,
+        "line": 89,
         "column": 5,
         "msg": "Property 'opt' is missing in type 'E' but required in type 'C'."
     },
     {
-        "line": 78,
+        "line": 90,
         "column": 5,
         "msg": "Property 'opt' is missing in type 'F' but required in type 'C'."
     },
     {
-        "line": 81,
+        "line": 93,
         "column": 5,
         "msg": "Property 'opt' is missing in type 'D' but required in type '{ opt"
     },
     {
-        "line": 82,
+        "line": 94,
         "column": 5,
         "msg": "Property 'opt' is missing in type 'E' but required in type '{ opt"
     },
     {
-        "line": 83,
+        "line": 95,
         "column": 5,
         "msg": "Property 'opt' is missing in type 'F' but required in type '{ opt"
     },
     {
-        "line": 86,
+        "line": 98,
         "column": 5,
         "msg": "Property 'opt' is missing in type 'D' but required in type '{ opt"
     },
     {
-        "line": 87,
+        "line": 99,
         "column": 5,
         "msg": "Property 'opt' is missing in type 'E' but required in type '{ opt"
     },
     {
-        "line": 88,
+        "line": 100,
         "column": 5,
         "msg": "Property 'opt' is missing in type 'F' but required in type '{ opt"
     }

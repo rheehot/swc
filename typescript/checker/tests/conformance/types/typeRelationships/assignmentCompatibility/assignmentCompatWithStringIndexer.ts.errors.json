@@ -1,41 +1,41 @@
 [
     {
-        "line": 17,
+        "line": 28,
         "column": 1,
         "msg": "Type 'A' is not assignable to type '{ [x"
     },
     {
-        "line": 21,
+        "line": 32,
         "column": 1,
         "msg": "Type 'A' is not assignable to type '{ [x"
     },
     {
-        "line": 35,
+        "line": 46,
         "column": 5,
         "msg": "Type 'A<Base>' is not assignable to type '{ [x"
     },
     {
-        "line": 43,
+        "line": 54,
         "column": 5,
         "msg": "Type 'A<Base>' is not assignable to type '{ [x"
     },
     {
-        "line": 48,
+        "line": 59,
         "column": 9,
         "msg": "Type '{ [x"
     },
     {
-        "line": 49,
+        "line": 60,
         "column": 9,
         "msg": "Type 'A<T>' is not assignable to type '{ [x"
     },
     {
-        "line": 52,
+        "line": 63,
         "column": 9,
         "msg": "Type '{ [x"
     },
     {
-        "line": 53,
+        "line": 64,
         "column": 9,
         "msg": "Type 'A<T>' is not assignable to type '{ [x"
     }

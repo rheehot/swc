@@ -1,21 +1,21 @@
 [
     {
-        "line": 7,
+        "line": 9,
         "column": 10,
         "msg": "',' expected."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 11,
         "msg": "Expression expected."
     },
     {
-        "line": 10,
+        "line": 12,
         "column": 27,
         "msg": "Variable declaration expected."
     },
     {
-        "line": 13,
+        "line": 15,
         "column": 9,
         "msg": "Expression expected."
     }

@@ -1,11 +1,11 @@
 [
     {
-        "line": 106,
+        "line": 142,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'."
     },
     {
-        "line": 111,
+        "line": 147,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'r4' must be of type 'E', but here has type 'Object'."
     }

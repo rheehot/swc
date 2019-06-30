@@ -1,81 +1,81 @@
 [
     {
-        "line": 15,
+        "line": 24,
         "column": 11,
         "msg": "Operator '<' cannot be applied to types 'A1' and 'B1'."
     },
     {
-        "line": 16,
+        "line": 25,
         "column": 11,
         "msg": "Operator '<' cannot be applied to types 'B1' and 'A1'."
     },
     {
-        "line": 19,
+        "line": 28,
         "column": 11,
         "msg": "Operator '>' cannot be applied to types 'A1' and 'B1'."
     },
     {
-        "line": 20,
+        "line": 29,
         "column": 11,
         "msg": "Operator '>' cannot be applied to types 'B1' and 'A1'."
     },
     {
-        "line": 23,
+        "line": 32,
         "column": 11,
         "msg": "Operator '<=' cannot be applied to types 'A1' and 'B1'."
     },
     {
-        "line": 24,
+        "line": 33,
         "column": 11,
         "msg": "Operator '<=' cannot be applied to types 'B1' and 'A1'."
     },
     {
-        "line": 27,
+        "line": 36,
         "column": 11,
         "msg": "Operator '>=' cannot be applied to types 'A1' and 'B1'."
     },
     {
-        "line": 28,
+        "line": 37,
         "column": 11,
         "msg": "Operator '>=' cannot be applied to types 'B1' and 'A1'."
     },
     {
-        "line": 31,
+        "line": 40,
         "column": 11,
         "msg": "This condition will always return 'false' since the types 'A1' and 'B1' have no overlap."
     },
     {
-        "line": 32,
+        "line": 41,
         "column": 11,
         "msg": "This condition will always return 'false' since the types 'B1' and 'A1' have no overlap."
     },
     {
-        "line": 35,
+        "line": 44,
         "column": 11,
         "msg": "This condition will always return 'true' since the types 'A1' and 'B1' have no overlap."
     },
     {
-        "line": 36,
+        "line": 45,
         "column": 11,
         "msg": "This condition will always return 'true' since the types 'B1' and 'A1' have no overlap."
     },
     {
-        "line": 39,
+        "line": 48,
         "column": 11,
         "msg": "This condition will always return 'false' since the types 'A1' and 'B1' have no overlap."
     },
     {
-        "line": 40,
+        "line": 49,
         "column": 11,
         "msg": "This condition will always return 'false' since the types 'B1' and 'A1' have no overlap."
     },
     {
-        "line": 43,
+        "line": 52,
         "column": 11,
         "msg": "This condition will always return 'true' since the types 'A1' and 'B1' have no overlap."
     },
     {
-        "line": 44,
+        "line": 53,
         "column": 11,
         "msg": "This condition will always return 'true' since the types 'B1' and 'A1' have no overlap."
     }

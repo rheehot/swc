@@ -1,26 +1,26 @@
 [
     {
-        "line": 5,
+        "line": 14,
         "column": 20,
         "msg": "Initializer of parameter 'bar' cannot reference identifier 'foo' declared after it."
     },
     {
-        "line": 15,
+        "line": 24,
         "column": 20,
         "msg": "Initializer of parameter 'bar' cannot reference identifier 'foo' declared after it."
     },
     {
-        "line": 23,
+        "line": 32,
         "column": 18,
         "msg": "Parameter 'a' cannot be referenced in its initializer."
     },
     {
-        "line": 27,
+        "line": 36,
         "column": 22,
         "msg": "Parameter 'async' cannot be referenced in its initializer."
     },
     {
-        "line": 31,
+        "line": 40,
         "column": 15,
         "msg": "Block-scoped variable 'foo' used before its declaration."
     }

@@ -1,21 +1,21 @@
 [
     {
-        "line": 37,
+        "line": 43,
         "column": 32,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 37,
+        "line": 43,
         "column": 56,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 38,
+        "line": 44,
         "column": 33,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 38,
+        "line": 44,
         "column": 57,
         "msg": "Left side of comma operator is unused and has no side effects."
     }

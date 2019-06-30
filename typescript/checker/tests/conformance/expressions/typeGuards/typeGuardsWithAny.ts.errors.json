@@ -1,16 +1,16 @@
 [
     {
-        "line": 13,
+        "line": 18,
         "column": 7,
         "msg": "Property 'p' does not exist on type 'string'."
     },
     {
-        "line": 20,
+        "line": 25,
         "column": 7,
         "msg": "Property 'p' does not exist on type 'number'."
     },
     {
-        "line": 27,
+        "line": 32,
         "column": 7,
         "msg": "Property 'p' does not exist on type 'boolean'."
     }

@@ -1,15 +1,5 @@
 [
     {
-        "line": 6,
-        "column": 5,
-        "msg": "Duplicate identifier 'foo'."
-    },
-    {
-        "line": 7,
-        "column": 5,
-        "msg": "Duplicate identifier 'foo'."
-    },
-    {
         "line": 16,
         "column": 5,
         "msg": "Duplicate identifier 'foo'."
@@ -20,24 +10,14 @@
         "msg": "Duplicate identifier 'foo'."
     },
     {
-        "line": 22,
+        "line": 26,
         "column": 5,
         "msg": "Duplicate identifier 'foo'."
     },
     {
-        "line": 24,
+        "line": 27,
         "column": 5,
-        "msg": "Duplicate function implementation."
-    },
-    {
-        "line": 25,
-        "column": 5,
-        "msg": "Duplicate function implementation."
-    },
-    {
-        "line": 28,
-        "column": 5,
-        "msg": "Duplicate identifier 'baz'."
+        "msg": "Duplicate identifier 'foo'."
     },
     {
         "line": 32,
@@ -45,37 +25,57 @@
         "msg": "Duplicate identifier 'foo'."
     },
     {
-        "line": 33,
+        "line": 34,
         "column": 5,
-        "msg": "Duplicate identifier 'foo'."
+        "msg": "Duplicate function implementation."
     },
     {
-        "line": 37,
+        "line": 35,
         "column": 5,
-        "msg": "Duplicate identifier 'foo'."
+        "msg": "Duplicate function implementation."
     },
     {
         "line": 38,
         "column": 5,
+        "msg": "Duplicate identifier 'baz'."
+    },
+    {
+        "line": 42,
+        "column": 5,
         "msg": "Duplicate identifier 'foo'."
     },
     {
-        "line": 40,
+        "line": 43,
         "column": 5,
-        "msg": "Duplicate identifier 'bar'."
+        "msg": "Duplicate identifier 'foo'."
     },
     {
-        "line": 41,
-        "column": 5,
-        "msg": "Duplicate identifier 'bar'."
-    },
-    {
-        "line": 46,
+        "line": 47,
         "column": 5,
         "msg": "Duplicate identifier 'foo'."
     },
     {
         "line": 48,
+        "column": 5,
+        "msg": "Duplicate identifier 'foo'."
+    },
+    {
+        "line": 50,
+        "column": 5,
+        "msg": "Duplicate identifier 'bar'."
+    },
+    {
+        "line": 51,
+        "column": 5,
+        "msg": "Duplicate identifier 'bar'."
+    },
+    {
+        "line": 56,
+        "column": 5,
+        "msg": "Duplicate identifier 'foo'."
+    },
+    {
+        "line": 58,
         "column": 5,
         "msg": "Duplicate identifier 'bar'."
     }

@@ -1,6 +1,6 @@
 [
     {
-        "line": 7,
+        "line": 8,
         "column": 9,
         "msg": "'super' can only be referenced in a derived class."
     }

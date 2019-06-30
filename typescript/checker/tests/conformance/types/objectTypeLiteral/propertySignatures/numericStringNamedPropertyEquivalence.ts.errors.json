@@ -1,13 +1,8 @@
 [
     {
-        "line": 8,
+        "line": 10,
         "column": 5,
         "msg": "Duplicate identifier '1.0'."
-    },
-    {
-        "line": 12,
-        "column": 5,
-        "msg": "Duplicate identifier '1'."
     },
     {
         "line": 14,
@@ -15,22 +10,27 @@
         "msg": "Duplicate identifier '1'."
     },
     {
-        "line": 18,
+        "line": 16,
         "column": 5,
         "msg": "Duplicate identifier '1'."
     },
     {
-        "line": 19,
+        "line": 20,
         "column": 5,
         "msg": "Duplicate identifier '1'."
     },
     {
-        "line": 19,
+        "line": 21,
+        "column": 5,
+        "msg": "Duplicate identifier '1'."
+    },
+    {
+        "line": 21,
         "column": 5,
         "msg": "Subsequent property declarations must have the same type.  Property '1.0' must be of type 'number', but here has type 'string'."
     },
     {
-        "line": 24,
+        "line": 26,
         "column": 5,
         "msg": "Duplicate identifier '0'."
     }
