@@ -325,11 +325,21 @@ impl Analyzer<'_, '_> {
                                         left: lhs.span(),
                                     });
                                 }
-                                // undefined symbol
-                                self.info
-                                    .errors
-                                    .push(Error::UndefinedSymbol { span: i.span });
-                                return;
+
+                                if self.allow_ref_declaring && self.declaring.contains(&i.sym) {
+                                    VarInfo {
+                                        ty: Some(Type::any(i.span)),
+                                        kind: VarDeclKind::Var,
+                                        copied: true,
+                                        initialized: true,
+                                    }
+                                } else {
+                                    // undefined symbol
+                                    self.info
+                                        .errors
+                                        .push(Error::UndefinedSymbol { span: i.span });
+                                    return;
+                                }
                             };
                             // Variable is defined on parent scope.
                             //
