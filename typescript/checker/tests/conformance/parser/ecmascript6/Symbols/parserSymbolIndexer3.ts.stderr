@@ -1,0 +1,6 @@
+error: Expected RBracket, got Some(Colon)
+ --> $DIR/tests/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer3.ts:3:14
+  |
+3 |     static [s: symbol]: string;
+  |              ^
+

@@ -1,0 +1,48 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            198,
+        ),
+        hi: BytePos(
+            204,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/es6/Symbols/symbolType6.ts:2:9
+  |
+2 | var s = Symbol.for("add");
+  |         ^^^^^^
+
+error: ReferencedInInit {
+    span: Span {
+        lo: BytePos(
+            231,
+        ),
+        hi: BytePos(
+            232,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/es6/Symbols/symbolType6.ts:4:1
+  |
+4 | s + s;
+  | ^
+
+error: ReferencedInInit {
+    span: Span {
+        lo: BytePos(
+            316,
+        ),
+        hi: BytePos(
+            317,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/es6/Symbols/symbolType6.ts:15:2
+   |
+15 | (s || "") + "";
+   |  ^
+
