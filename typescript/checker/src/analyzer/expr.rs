@@ -11,7 +11,7 @@ use crate::{
 };
 use std::borrow::Cow;
 use swc_atoms::js_word;
-use swc_common::{Span, Spanned};
+use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
@@ -301,16 +301,8 @@ impl Analyzer<'_, '_> {
                 return Ok(self.type_of_fn(&function)?.owned())
             }
 
-            Expr::Member(MemberExpr {
-                obj: ExprOrSuper::Expr(ref obj),
-                computed,
-                ref prop,
-                ..
-            }) => {
-                // member expression
-                let obj_ty = self.type_of(obj)?;
-
-                return self.access_property(span, obj_ty, prop, computed);
+            Expr::Member(ref expr) => {
+                return self.type_of_member_expr(expr);
             }
 
             Expr::MetaProp(..) => unimplemented!("typeof(MetaProp)"),
@@ -357,6 +349,25 @@ impl Analyzer<'_, '_> {
                 op: op!("void"), ..
             }) => return Ok(Type::undefined(span).into_cow()),
             _ => unimplemented!("typeof ({:#?})", expr),
+        }
+    }
+
+    fn type_of_member_expr(&self, expr: &MemberExpr) -> Result<TypeRef, Error> {
+        let MemberExpr {
+            ref obj,
+            computed,
+            ref prop,
+            span,
+            ..
+        } = *expr;
+
+        match *obj {
+            ExprOrSuper::Expr(ref obj) => {
+                let obj_ty = self.type_of(obj)?;
+
+                return self.access_property(span, obj_ty, prop, computed);
+            }
+            _ => unimplemented!("type_of_member_expr(super.foo)"),
         }
     }
 
@@ -490,10 +501,30 @@ impl Analyzer<'_, '_> {
                 }
             }
 
+            Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsAnyKeyword,
+                ..
+            }) => {
+                return Ok(Type::Keyword(TsKeywordType {
+                    span,
+                    kind: TsKeywordTypeKind::TsAnyKeyword,
+                })
+                .owned())
+            }
+
+            Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsUnknownKeyword,
+                ..
+            }) => return Err(Error::Unknown { span }),
+
             _ => {}
         }
 
-        unimplemented!("type_of(MemberExpr):\nObject: {:?}\nProp: {:?}", obj, prop);
+        unimplemented!(
+            "access_property(MemberExpr):\nObject: {:?}\nProp: {:?}",
+            obj,
+            prop
+        );
     }
 
     pub(super) fn type_of_class(&self, c: &Class) -> Result<Type<'static>, Error> {
@@ -1335,4 +1366,18 @@ fn negate(ty: Type) -> Type {
 enum ExtractKind {
     Call,
     New,
+}
+
+impl Visit<MemberExpr> for Analyzer<'_, '_> {
+    fn visit(&mut self, expr: &MemberExpr) {
+        expr.visit_children(self);
+
+        match self.type_of_member_expr(expr) {
+            Ok(..) => {}
+            Err(err) => {
+                self.info.errors.push(err);
+                return;
+            }
+        }
+    }
 }
