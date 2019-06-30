@@ -98,7 +98,7 @@ impl<'a> Scope<'a> {
         let mut parent = self.parent;
 
         while let Some(p) = parent {
-            if let Some(var_info) = self.vars.get(sym) {
+            if let Some(var_info) = p.vars.get(sym) {
                 return Some(var_info);
             }
 
