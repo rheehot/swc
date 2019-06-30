@@ -1,4 +1,5 @@
 #![recursion_limit = "256"]
+#![feature(vec_remove_item)]
 #![feature(box_syntax)]
 #![feature(box_patterns)]
 #![feature(specialization)]
@@ -121,7 +122,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             || input.contains("@filename")
             || input.contains("@Filename")
             || input.contains("@module")
-            || (mode == Mode::Conformance && !file_name.contains(""));
+            || (mode == Mode::Conformance && !file_name.contains("unknown/unknownType1"));
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);
@@ -148,7 +149,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
 
 fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(), StdErr> {
     let fname = file_name.display().to_string();
-    let lines = match mode {
+    let mut ref_error_lines = match mode {
         Mode::Conformance => {
             let fname = file_name.file_name().unwrap();
             let errors_file =
@@ -169,6 +170,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
         }
         _ => None,
     };
+    let ref_err_cnt = ref_error_lines.as_ref().map(Vec::len).unwrap_or(0);
 
     let res = ::testing::run_test(treat_error_as_bug, |cm, handler| {
         CM.set(&cm.clone(), || {
@@ -305,11 +307,26 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
             );
 
             let errors = checker.check(file_name.into());
-            if let Some(count) = lines.as_ref().map(|v| v.len()) {
-                if count != errors.len() {
+            if let Some(ref mut ref_error_lines) = ref_error_lines {
+                assert_eq!(mode, Mode::Conformance);
+
+                // We only emit errors which has wrong line.
+                if ref_error_lines.len() != errors.len() {
                     checker.run(|| {
                         for e in errors {
-                            e.emit(&handler);
+                            let span = e.span();
+                            let fl = cm
+                                .span_to_lines(span)
+                                .expect("failed to get span of the error");
+                            assert!(fl.lines.len() == 1);
+
+                            let li = fl.lines[0].line_index;
+                            println!("{}", li);
+                            if !ref_error_lines.contains(&(li + 1)) {
+                                e.emit(&handler);
+                            } else {
+                                ref_error_lines.remove_item(&(li + 1));
+                            }
                         }
                     });
                     return Err(());
@@ -348,25 +365,22 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
             };
 
             // TODO: filter line correctly
-            let mut err_lines = err
-                .lines()
-                .enumerate()
-                .filter(|(_, l)| l.contains("$DIR"))
-                .inspect(|(i, v)| println!("Line:({}) {}", i, v));
+            let mut err_lines = err.lines().enumerate().filter(|(_, l)| l.contains("$DIR"));
 
             let err_count = err_lines.clone().count();
-
-            if err_count != lines.as_ref().unwrap().len() {
-                panic!(
-                    "{:?}\nExpected {} errors, got {}",
-                    err,
-                    lines.unwrap().len(),
-                    err_count,
-                );
-            }
+            let error_lines = err_lines
+                .clone()
+                .map(|(_, s)| {
+                    s.split(":")
+                        .nth(1)
+                        .unwrap()
+                        .parse::<usize>()
+                        .expect("failed to parse line")
+                })
+                .collect::<Vec<_>>();
 
             let all = err_lines.all(|(_, v)| {
-                for l in lines.as_ref().unwrap() {
+                for l in ref_error_lines.as_ref().unwrap() {
                     if v.contains(&l.to_string()) {
                         return true;
                     }
@@ -374,13 +388,16 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 false
             });
 
-            if !all {
+            if err_count != ref_error_lines.as_ref().unwrap().len() || !all {
                 panic!(
-                    "{:?}\nExpected {} errors, got {}\nLines: {:?}\n",
+                    "{:?}\n{} unmatched errors out of {} errors. Got {}\nRef lines: {:?}\nReal \
+                     Lines: {:?}",
                     err,
-                    lines.as_ref().unwrap().len(),
+                    ref_error_lines.as_ref().unwrap().len(),
+                    ref_err_cnt,
                     err_count,
-                    lines.as_ref().unwrap(),
+                    ref_error_lines.as_ref().unwrap(),
+                    error_lines,
                 );
             }
 
