@@ -1,7 +1,7 @@
 use crate::util::IntoCow;
 use std::{borrow::Cow, mem::transmute};
-use swc_atoms::JsWord;
-use swc_common::{Fold, FromVariant, Span, Spanned};
+use swc_atoms::{js_word, JsWord};
+use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 mod assign;
@@ -761,6 +761,21 @@ impl Operator<'_> {
             span: self.span,
             op: self.op,
             ty: box static_type(*self.ty),
+        }
+    }
+}
+
+impl TypeElement<'_> {
+    pub fn key(&self) -> Option<&Expr> {
+        static CONSTRUCTOR_EXPR: Expr =
+            { Expr::Ident(Ident::new(js_word!("constructor"), DUMMY_SP)) };
+
+        match *self {
+            TypeElement::Call(..) => None,
+            TypeElement::Constructor(ref el) => Some(&CONSTRUCTOR_EXPR),
+            TypeElement::Index(..) => None,
+            TypeElement::Method(ref el) => Some(&el.key),
+            TypeElement::Property(ref el) => Some(&el.key),
         }
     }
 }

@@ -1,5 +1,6 @@
 use super::{
-    Array, Function, Interface, Intersection, Param, Tuple, Type, TypeLit, TypeRefExt, Union,
+    Array, Function, Interface, Intersection, Param, Tuple, Type, TypeElement, TypeLit, TypeRefExt,
+    Union,
 };
 use crate::{
     errors::Error,
@@ -74,20 +75,52 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                     ..
                 }) => {
                     // TODO: Assign property to proerty, instead of checking equality
+                    let mut missing_fields = vec![];
 
-                    if members
-                        .iter()
-                        .all(|m| rhs_members.iter().any(|rm| rm.eq_ignore_name_and_span(m)))
-                    {
-                        return Ok(());
+                    'outer: for m in members.iter() {
+                        if let Some(l_key) = m.key() {
+                            for rm in rhs_members {
+                                if rm.key() == Some(l_key) {
+                                    match m {
+                                        TypeElement::Property(ref el) => match rm {
+                                            TypeElement::Property(ref r_el) => {
+                                                try_assign(
+                                                    el.type_ann
+                                                        .as_ref()
+                                                        .unwrap_or(&Type::any(span).owned()),
+                                                    r_el.type_ann
+                                                        .as_ref()
+                                                        .unwrap_or(&Type::any(span).owned()),
+                                                    span,
+                                                )?;
+                                                continue 'outer;
+                                            }
+                                            _ => {}
+                                        },
+
+                                        TypeElement::Method(ref el) => match rm {
+                                            TypeElement::Method(ref r_el) => unimplemented!(
+                                                "assignment: method property in type literal"
+                                            ),
+                                            _ => {}
+                                        },
+                                        _ => {}
+                                    }
+                                }
+                            }
+
+                            // No property with `key` found.
+                            missing_fields.push(m.clone().into_static());
+                        } else {
+                            if !rhs_members.iter().any(|rm| rm.eq_ignore_name_and_span(m)) {
+                                missing_fields.push(m.clone().into_static());
+                            }
+                        }
                     }
 
-                    let missing_fields = members
-                        .iter()
-                        .filter(|m| rhs_members.iter().all(|rm| !rm.eq_ignore_name_and_span(m)))
-                        .cloned()
-                        .map(|v| v.into_static())
-                        .collect();
+                    if missing_fields.is_empty() {
+                        return Ok(());
+                    }
                     return Err(Error::MissingFields {
                         span,
                         fields: missing_fields,
