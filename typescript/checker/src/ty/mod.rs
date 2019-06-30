@@ -394,6 +394,13 @@ impl Type<'_> {
             kind: TsKeywordTypeKind::TsAnyKeyword,
         })
     }
+
+    pub const fn unknown<'any>(span: Span) -> Type<'any> {
+        Type::Keyword(TsKeywordType {
+            span,
+            kind: TsKeywordTypeKind::TsUnknownKeyword,
+        })
+    }
 }
 
 impl Type<'_> {

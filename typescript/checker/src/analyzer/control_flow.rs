@@ -300,14 +300,19 @@ impl Analyzer<'_, '_> {
                         } else {
                             let var_info = if let Some(var_info) = self.scope.search_parent(&i.sym)
                             {
+                                let ty = if var_info.ty.is_some()
+                                    && var_info.ty.as_ref().unwrap().is_any()
+                                {
+                                    Some(Type::any(var_info.ty.as_ref().unwrap().span()))
+                                } else if var_info.ty.is_some()
+                                    && var_info.ty.as_ref().unwrap().is_unknown()
+                                {
+                                    Some(Type::unknown(var_info.ty.as_ref().unwrap().span()))
+                                } else {
+                                    Some(ty.to_static())
+                                };
                                 VarInfo {
-                                    ty: if var_info.ty.is_some()
-                                        && var_info.ty.as_ref().unwrap().is_any()
-                                    {
-                                        Some(Type::any(var_info.ty.as_ref().unwrap().span()))
-                                    } else {
-                                        Some(ty.to_static())
-                                    },
+                                    ty,
                                     copied: true,
                                     ..var_info.clone()
                                 }

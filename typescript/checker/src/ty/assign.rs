@@ -127,7 +127,7 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                     });
                 }
 
-                Type::Array(..) | Type::Lit(..) => fail!(),
+                Type::Tuple(..) | Type::Array(..) | Type::Lit(..) => fail!(),
 
                 _ => {}
             }
