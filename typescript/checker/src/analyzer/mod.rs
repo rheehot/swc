@@ -388,26 +388,29 @@ impl Analyzer<'_, '_> {
                 None => {}
             }
 
+            let old = child.allow_ref_declaring;
+            child.allow_ref_declaring = false;
+
             f.params.iter().for_each(|pat| {
-                let old = child.allow_ref_declaring;
-                {
-                    child.allow_ref_declaring = false;
-                    child.declaring = vec![];
+                debug_assert_eq!(child.allow_ref_declaring, false);
+                child.declaring = vec![];
 
-                    let mut visitor = VarVisitor {
-                        names: &mut child.declaring,
-                    };
+                let mut visitor = VarVisitor {
+                    names: &mut child.declaring,
+                };
 
-                    pat.visit_with(&mut visitor);
-                }
+                pat.visit_with(&mut visitor);
 
+                debug_assert_eq!(child.allow_ref_declaring, false);
                 child.declare_vars(VarDeclKind::Let, pat);
-                child.allow_ref_declaring = old;
             });
 
             f.visit_children(child);
 
             let fn_ty = child.type_of_fn(f)?;
+
+            debug_assert_eq!(child.allow_ref_declaring, false);
+            child.allow_ref_declaring = old;
 
             Ok(fn_ty)
         });
@@ -542,6 +545,8 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
 
                     v.visit_with(self);
                 }
+                debug_assert_eq!(self.allow_ref_declaring, true);
+
                 //  Check if v_ty is assignable to ty
                 let value_ty = match self
                     .type_of(&init)
@@ -634,6 +639,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                 }
             }
 
+            debug_assert_eq!(self.allow_ref_declaring, true);
             self.allow_ref_declaring = old;
             self.declare_vars(kind, &v.name);
         });
