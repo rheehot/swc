@@ -170,6 +170,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
         }
         _ => None,
     };
+    let full_ref_err_lines = ref_error_lines.clone();
     let ref_err_cnt = ref_error_lines.as_ref().map(Vec::len).unwrap_or(0);
 
     let res = ::testing::run_test(treat_error_as_bug, |cm, handler| {
@@ -391,13 +392,14 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
             if err_count != ref_error_lines.as_ref().unwrap().len() || !all {
                 panic!(
                     "{:?}\n{} unmatched errors out of {} errors. Got {}\nRef lines: {:?}\nReal \
-                     Lines: {:?}",
+                     Lines: {:?}\nFull: {:?}",
                     err,
                     ref_error_lines.as_ref().unwrap().len(),
                     ref_err_cnt,
                     err_count,
                     ref_error_lines.as_ref().unwrap(),
                     error_lines,
+                    full_ref_err_lines.as_ref().unwrap()
                 );
             }
 
