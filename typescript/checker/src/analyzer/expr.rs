@@ -663,7 +663,35 @@ impl Analyzer<'_, '_> {
         );
     }
 
-    pub(super) fn type_of_class(&self, c: &Class) -> Result<Type<'static>, Error> {
+    /// In almost case, this method returns `Ok`.
+    pub(super) fn validate_type_of_class(&mut self, c: &Class) -> Result<Type<'static>, Error> {
+        for m in c.body.iter() {
+            let span = m.span();
+
+            match *m {
+                ClassMember::ClassProp(ref prop) => match prop.type_ann {
+                    Some(ref ty) => {
+                        let ty = Type::from(ty.clone());
+                        if ty.is_any() || ty.is_unknown() {
+
+                        } else {
+                            if prop.value.is_none() {
+                                self.info
+                                    .errors
+                                    .push(Error::ClassPropertyInitRequired { span })
+                            }
+                        }
+                    }
+                    None => {}
+                },
+                _ => {}
+            }
+        }
+
+        self.type_of_class(c)
+    }
+
+    fn type_of_class(&self, c: &Class) -> Result<Type<'static>, Error> {
         // let mut type_props = vec![];
         // for member in &c.body {
         //     let span = member.span();

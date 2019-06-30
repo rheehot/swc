@@ -10,6 +10,10 @@ pub enum Error {
         span: Span,
     },
 
+    ClassPropertyInitRequired {
+        span: Span,
+    },
+
     NotGeneric {
         span: Span,
     },
