@@ -1,6 +1,6 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 8,
         "msg": "'export' modifier already seen."
     }

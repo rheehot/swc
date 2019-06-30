@@ -1,6 +1,11 @@
 [
     {
-        "line": 16,
+        "line": 15,
+        "column": 5,
+        "msg": "Type '{ prop"
+    },
+    {
+        "line": 21,
         "column": 5,
         "msg": "Type '{ prop"
     },
@@ -10,22 +15,17 @@
         "msg": "Type '{ prop"
     },
     {
-        "line": 23,
+        "line": 26,
         "column": 5,
         "msg": "Type '{ prop"
     },
     {
-        "line": 27,
+        "line": 30,
         "column": 5,
         "msg": "Type '{ prop"
     },
     {
-        "line": 31,
-        "column": 5,
-        "msg": "Type '{ prop"
-    },
-    {
-        "line": 60,
+        "line": 59,
         "column": 5,
         "msg": "Type '(a"
     },

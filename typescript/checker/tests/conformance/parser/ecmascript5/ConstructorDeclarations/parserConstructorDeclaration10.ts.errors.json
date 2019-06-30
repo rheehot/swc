@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 18,
         "msg": "Type annotation cannot appear on a constructor declaration."
     }

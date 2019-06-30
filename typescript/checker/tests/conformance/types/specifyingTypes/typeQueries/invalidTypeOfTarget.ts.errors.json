@@ -1,18 +1,23 @@
 [
     {
+        "line": 2,
+        "column": 16,
+        "msg": "Identifier expected."
+    },
+    {
         "line": 3,
         "column": 16,
         "msg": "Identifier expected."
     },
     {
-        "line": 4,
-        "column": 16,
-        "msg": "Identifier expected."
+        "line": 3,
+        "column": 24,
+        "msg": "'=>' expected."
     },
     {
         "line": 4,
-        "column": 24,
-        "msg": "'=>' expected."
+        "column": 16,
+        "msg": "Identifier expected."
     },
     {
         "line": 5,
@@ -27,35 +32,30 @@
     {
         "line": 7,
         "column": 16,
-        "msg": "Identifier expected."
+        "msg": "Cannot find name 'null'."
     },
     {
         "line": 8,
         "column": 16,
-        "msg": "Cannot find name 'null'."
-    },
-    {
-        "line": 9,
-        "column": 16,
         "msg": "Cannot find name 'function'. Did you mean 'Function'?"
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 25,
         "msg": "',' expected."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 26,
         "msg": "',' expected."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 29,
         "msg": "'=>' expected."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 16,
         "msg": "Identifier expected."
     }

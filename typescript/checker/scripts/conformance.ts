@@ -93,7 +93,7 @@ function extract(content: string, shift: number): Error[] {
     const msg = msgWithPrefix.trim();
 
     errs.push({
-      line: parseInt(lineCol.split(",")[0]) + (shift === 0 ? 2 : shift + 1),
+      line: parseInt(lineCol.split(",")[0]) + shift + 1,
       column: parseInt(lineCol.split(",")[1]),
       msg
     });

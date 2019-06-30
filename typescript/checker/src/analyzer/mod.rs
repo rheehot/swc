@@ -538,10 +538,11 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     };
 
                     v.name.visit_with(&mut visitor);
+
+                    v.visit_with(self);
+
                     self.allow_ref_declaring = old;
                 }
-
-                v.visit_with(self);
 
                 //  Check if v_ty is assignable to ty
                 let value_ty = match self

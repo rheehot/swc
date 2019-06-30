@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 10,
         "msg": "'static' modifier already seen."
     }

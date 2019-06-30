@@ -1,11 +1,11 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 9,
         "msg": "Cannot find name 'a'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 3,
         "msg": "Expression expected."
     }

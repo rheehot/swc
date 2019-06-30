@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 17,
         "msg": "Cannot find name 'A'."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 29,
         "msg": "'implements' list cannot be empty."
     }

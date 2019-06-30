@@ -1,6 +1,6 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 5,
         "msg": "Jump target cannot cross function boundary."
     }

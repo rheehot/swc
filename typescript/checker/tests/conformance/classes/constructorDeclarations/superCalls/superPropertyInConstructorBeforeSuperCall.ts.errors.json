@@ -1,11 +1,11 @@
 [
     {
-        "line": 9,
+        "line": 8,
         "column": 9,
         "msg": "'super' must be called before accessing a property of 'super' in the constructor of a derived class."
     },
     {
-        "line": 15,
+        "line": 14,
         "column": 15,
         "msg": "'super' must be called before accessing a property of 'super' in the constructor of a derived class."
     }

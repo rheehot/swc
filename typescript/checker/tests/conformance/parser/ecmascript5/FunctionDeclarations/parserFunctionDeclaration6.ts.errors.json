@@ -1,6 +1,6 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 14,
         "msg": "Function implementation name must be 'foo'."
     }

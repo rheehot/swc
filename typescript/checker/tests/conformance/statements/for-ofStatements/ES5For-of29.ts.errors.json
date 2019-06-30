@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 13,
         "msg": "Property 'x' does not exist on type 'Number'."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 23,
         "msg": "Property 'y' does not exist on type 'Number'."
     }

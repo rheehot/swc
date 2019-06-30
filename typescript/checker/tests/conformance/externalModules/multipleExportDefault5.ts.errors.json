@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 25,
         "msg": "A module cannot have multiple default exports."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 22,
         "msg": "A module cannot have multiple default exports."
     }

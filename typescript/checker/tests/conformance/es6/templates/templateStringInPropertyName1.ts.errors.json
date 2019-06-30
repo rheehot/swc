@@ -1,26 +1,26 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 9,
         "msg": "Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 5,
         "msg": "Property assignment expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 8,
         "msg": "',' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 10,
         "msg": "Variable declaration expected."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 1,
         "msg": "Declaration or statement expected."
     }

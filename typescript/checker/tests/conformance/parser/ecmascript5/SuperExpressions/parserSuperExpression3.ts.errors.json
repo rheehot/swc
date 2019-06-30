@@ -1,11 +1,11 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 10,
         "msg": "Property 'super' does not exist on type 'C'."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 16,
         "msg": "Cannot find name 'T'."
     }

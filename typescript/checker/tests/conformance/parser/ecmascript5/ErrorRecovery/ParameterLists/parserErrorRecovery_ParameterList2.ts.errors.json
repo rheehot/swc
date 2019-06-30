@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 10,
         "msg": "Function implementation is missing or not immediately following the declaration."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 2,
         "msg": "')' expected."
     }

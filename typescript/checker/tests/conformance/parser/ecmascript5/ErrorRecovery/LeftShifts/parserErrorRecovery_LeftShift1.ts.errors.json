@@ -1,16 +1,16 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 1,
         "msg": "Cannot find name 'retValue'."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 12,
         "msg": "Cannot find name 'bfs'."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 29,
         "msg": "Expression expected."
     }

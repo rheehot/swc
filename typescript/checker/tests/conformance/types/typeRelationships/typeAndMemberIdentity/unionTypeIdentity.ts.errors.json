@@ -1,16 +1,16 @@
 [
     {
-        "line": 8,
+        "line": 7,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'string'."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'boolean'."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'strOrNum' must be of type 'string | boolean', but here has type 'number'."
     }

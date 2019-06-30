@@ -1,31 +1,31 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 1,
         "msg": "Cannot find name 'cla'."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 6,
         "msg": "Cannot find name 'ss'."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 9,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 3,
         "msg": "Cannot find name '_'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 5,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 15,
         "msg": "'{' expected."
     }

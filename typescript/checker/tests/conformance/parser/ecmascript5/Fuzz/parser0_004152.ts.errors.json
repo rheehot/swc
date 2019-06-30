@@ -1,161 +1,161 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 28,
         "msg": "Cannot find name 'DisplayPosition'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 45,
         "msg": "Expression or comma expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 46,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 49,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 51,
         "msg": "Duplicate identifier '3'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 52,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 54,
         "msg": "Duplicate identifier '3'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 55,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 57,
         "msg": "Duplicate identifier '3'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 58,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 60,
         "msg": "Duplicate identifier '3'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 61,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 64,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 66,
         "msg": "Duplicate identifier '3'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 67,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 69,
         "msg": "Duplicate identifier '3'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 70,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 72,
         "msg": "Duplicate identifier '3'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 73,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 75,
         "msg": "Duplicate identifier '3'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 76,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 78,
         "msg": "Duplicate identifier '3'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 79,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 81,
         "msg": "Duplicate identifier '3'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 82,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 84,
         "msg": "Duplicate identifier '0'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 85,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 86,
         "msg": "Unexpected token. A constructor, method, accessor, or property was expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 94,
         "msg": "';' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 96,
         "msg": "Duplicate identifier '0'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 97,
         "msg": "';' expected."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 25,
         "msg": "Cannot find name 'SeedCoords'."
     }

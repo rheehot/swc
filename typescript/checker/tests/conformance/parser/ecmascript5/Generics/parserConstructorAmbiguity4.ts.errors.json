@@ -1,16 +1,16 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 10,
         "msg": "Cannot find name 'A'."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 14,
         "msg": "Cannot find name 'B'."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 18,
         "msg": "Cannot find name 'C'."
     }

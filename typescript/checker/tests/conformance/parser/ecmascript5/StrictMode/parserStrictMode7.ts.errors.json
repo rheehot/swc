@@ -1,11 +1,11 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 3,
         "msg": "Invalid use of 'eval' in strict mode."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 3,
         "msg": "Cannot assign to 'eval' because it is not a variable."
     }

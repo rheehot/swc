@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 9,
         "msg": "Variable declaration list cannot be empty."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 13,
         "msg": "Cannot find name 'X'."
     }
