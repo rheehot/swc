@@ -1373,43 +1373,21 @@ enum ExtractKind {
     New,
 }
 
-/// Validates member expressions.
-impl Visit<MemberExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, expr: &MemberExpr) {
-        expr.visit_children(self);
+impl Visit<Stmt> for Analyzer<'_, '_> {
+    fn visit(&mut self, stmt: &Stmt) {
+        stmt.visit_children(self);
 
-        match self.type_of_member_expr(expr) {
-            Ok(..) => {}
-            Err(err) => {
-                self.info.errors.push(err);
-                return;
-            }
-        }
-    }
-}
-
-/// Validates call expressions.
-impl Visit<CallExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, expr: &CallExpr) {
-        let span = expr.span;
-        expr.visit_children(self);
-
-        match expr.callee {
-            ExprOrSuper::Expr(ref callee) => {
-                match self.extract_call_new_expr_member(
-                    callee,
-                    ExtractKind::Call,
-                    &expr.args,
-                    expr.type_args.as_ref(),
-                ) {
-                    Ok(..) => {}
-                    Err(err) => {
-                        self.info.errors.push(err);
-                    }
+        match *stmt {
+            // Validate expression statements
+            Stmt::Expr(ref expr) => match self.type_of(&expr) {
+                Ok(..) => {}
+                Err(err) => {
+                    self.info.errors.push(err);
+                    return;
                 }
-            }
+            },
 
-            ExprOrSuper::Super(..) => unimplemented!("validation super.foo(), super()"),
+            _ => {}
         }
     }
 }
