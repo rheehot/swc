@@ -153,6 +153,7 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
 
                     {}
                 }
+
                 _ => {}
             }
 
@@ -160,7 +161,12 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                 Some(ref c) => {
                     return try_assign(to, c, span);
                 }
-                None => {}
+                None => match to.normalize() {
+                    Type::TypeLit(TypeLit { ref members, .. }) if members.is_empty() => {
+                        return Ok(())
+                    }
+                    _ => {}
+                },
             }
 
             fail!()
