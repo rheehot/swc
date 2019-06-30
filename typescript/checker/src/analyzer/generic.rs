@@ -16,6 +16,8 @@ impl Analyzer<'_, '_> {
         mut ty: Cow<'b, Type<'a>>,
     ) -> Result<Cow<'b, Type<'a>>, Error> {
         match *ty.normalize() {
+            Type::TypeLit(..) | Type::Keyword(..) | Type::Lit(..) => return Ok(ty),
+
             Type::Simple(ref sty) => match **sty {
                 TsType::TsTypeRef(TsTypeRef {
                     type_name: TsEntityName::Ident(Ident { ref sym, .. }),
