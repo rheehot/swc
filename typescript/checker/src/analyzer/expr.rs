@@ -65,7 +65,7 @@ impl Analyzer<'_, '_> {
                 }
 
                 if self.declaring.contains(&i.sym) {
-                    if self.declaring_params {
+                    if !self.allow_ref_declaring {
                         return Err(Error::ReferencedInInit { span });
                     } else {
                         return Ok(Type::any(span).owned());

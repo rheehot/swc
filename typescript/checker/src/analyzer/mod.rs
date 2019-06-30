@@ -35,9 +35,9 @@ struct Analyzer<'a, 'b> {
     pending_exports: Vec<((JsWord, Span), Box<Expr>)>,
     inferred_return_types: RefCell<Vec<Type<'static>>>,
     scope: Scope<'a>,
-    /// This is true iff it should be treated as error when `1.contains()` is
+    /// This is false iff it should be treated as error when `1.contains()` is
     /// true
-    declaring_params: bool,
+    allow_ref_declaring: bool,
     declaring: Vec<JsWord>,
     path: Arc<PathBuf>,
     loader: &'b dyn Load,
@@ -245,7 +245,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             info: Default::default(),
             inferred_return_types: Default::default(),
             path,
-            declaring_params: false,
+            allow_ref_declaring: false,
             declaring: vec![],
             resolved_imports: Default::default(),
             errored_imports: Default::default(),
@@ -390,7 +390,8 @@ impl Analyzer<'_, '_> {
 
             f.params.iter().for_each(|pat| {
                 {
-                    child.declaring_params = true;
+                    let old = child.allow_ref_declaring;
+                    child.allow_ref_declaring = false;
                     child.declaring = vec![];
 
                     let mut visitor = VarVisitor {
@@ -398,7 +399,7 @@ impl Analyzer<'_, '_> {
                     };
 
                     pat.visit_with(&mut visitor);
-                    child.declaring_params = false;
+                    child.allow_ref_declaring = old;
                 }
 
                 child.declare_vars(VarDeclKind::Let, pat)
@@ -528,7 +529,8 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                 let span = init.span();
 
                 {
-                    self.declaring_params = false;
+                    let old = self.allow_ref_declaring;
+                    self.allow_ref_declaring = true;
                     self.declaring = vec![];
 
                     let mut visitor = VarVisitor {
@@ -536,6 +538,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     };
 
                     v.name.visit_with(&mut visitor);
+                    self.allow_ref_declaring = old;
                 }
 
                 v.visit_with(self);
