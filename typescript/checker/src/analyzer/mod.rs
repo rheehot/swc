@@ -702,8 +702,7 @@ impl Checker<'_> {
     }
 }
 
-#[test]
-fn assert_types() {
+fn _assert_types() {
     fn is_sync<T: Sync>() {}
     fn is_send<T: Send>() {}
     is_sync::<Info>();
