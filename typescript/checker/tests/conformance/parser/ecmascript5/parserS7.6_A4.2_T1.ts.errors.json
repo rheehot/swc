@@ -1,5 +1,10 @@
 [
     {
+        "line": 15,
+        "column": 3,
+        "msg": "Cannot find name '$ERROR'. Did you mean 'Error'?"
+    },
+    {
         "line": 19,
         "column": 3,
         "msg": "Cannot find name '$ERROR'. Did you mean 'Error'?"
@@ -47,7 +52,7 @@
     {
         "line": 55,
         "column": 3,
-        "msg": "Cannot find name '$ERROR'. Did you mean 'Error'?"
+        "msg": "Cannot find name '$ERROR'."
     },
     {
         "line": 59,
@@ -156,11 +161,6 @@
     },
     {
         "line": 143,
-        "column": 3,
-        "msg": "Cannot find name '$ERROR'."
-    },
-    {
-        "line": 147,
         "column": 3,
         "msg": "Cannot find name '$ERROR'."
     }

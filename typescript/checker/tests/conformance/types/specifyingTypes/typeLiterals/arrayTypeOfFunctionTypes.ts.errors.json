@@ -1,11 +1,11 @@
 [
     {
-        "line": 15,
+        "line": 12,
         "column": 11,
         "msg": "Only a void function can be called with the 'new' keyword."
     },
     {
-        "line": 20,
+        "line": 17,
         "column": 11,
         "msg": "Only a void function can be called with the 'new' keyword."
     }

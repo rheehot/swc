@@ -56,11 +56,14 @@ async function handle(f: string) {
     for (let i = 0; i < data.length; i++) {
       if (data[i].length === 0) {
         len++;
+      } else {
+        break;
       }
     }
   }
 
   const errors = extract(errorsText, len);
+  console.log(`\t${errors.length} errors`);
   const ref = `${dirname}/${basename}.errors.json`;
   await writeFile(ref, JSON.stringify(errors, undefined, "    "));
   console.info(`\tWritten file to: ${ref}`);
@@ -82,11 +85,14 @@ function extract(content: string, shift: number): Error[] {
   const errs = [];
 
   for (const line of lines) {
-    if (line === "") continue;
+    if (line.trim() === "") continue;
+    if (line.trim().startsWith("    ") || line.trim().startsWith("\t"))
+      continue;
     if (line.startsWith("===")) break;
 
     const [fqLoc, , msgWithPrefix] = line.split(":");
     if (fqLoc.split("(").length < 2 || !msgWithPrefix) {
+      console.error(`FUCKED UP!: ${fqLoc}\nLine: ${line}`);
       continue;
     }
     const lineCol = fqLoc.split("(")[1].replace(")", "");

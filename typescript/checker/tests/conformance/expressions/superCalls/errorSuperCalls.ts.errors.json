@@ -1,8 +1,23 @@
 [
     {
-        "line": 18,
+        "line": 5,
         "column": 9,
         "msg": "'super' can only be referenced in a derived class."
+    },
+    {
+        "line": 10,
+        "column": 9,
+        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
+    },
+    {
+        "line": 15,
+        "column": 9,
+        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
+    },
+    {
+        "line": 19,
+        "column": 9,
+        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     },
     {
         "line": 23,
@@ -10,62 +25,47 @@
         "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     },
     {
-        "line": 28,
+        "line": 27,
         "column": 9,
         "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     },
     {
-        "line": 32,
-        "column": 9,
-        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
-    },
-    {
-        "line": 36,
-        "column": 9,
-        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
-    },
-    {
-        "line": 40,
-        "column": 9,
-        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
-    },
-    {
-        "line": 44,
+        "line": 31,
         "column": 16,
         "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     },
     {
-        "line": 48,
+        "line": 35,
         "column": 9,
         "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     },
     {
-        "line": 52,
+        "line": 39,
         "column": 9,
         "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     },
     {
-        "line": 60,
+        "line": 47,
         "column": 14,
         "msg": "'super' may not use type arguments."
     },
     {
+        "line": 59,
+        "column": 9,
+        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
+    },
+    {
+        "line": 63,
+        "column": 9,
+        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
+    },
+    {
+        "line": 68,
+        "column": 9,
+        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
+    },
+    {
         "line": 72,
-        "column": 9,
-        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
-    },
-    {
-        "line": 76,
-        "column": 9,
-        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
-    },
-    {
-        "line": 81,
-        "column": 9,
-        "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
-    },
-    {
-        "line": 85,
         "column": 9,
         "msg": "Super calls are not permitted outside constructors or in nested functions inside constructors."
     }

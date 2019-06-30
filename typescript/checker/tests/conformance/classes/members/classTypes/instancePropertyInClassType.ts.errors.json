@@ -1,31 +1,31 @@
 [
     {
-        "line": 9,
+        "line": 5,
         "column": 13,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 12,
+        "line": 8,
         "column": 13,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 22,
+        "line": 18,
         "column": 14,
         "msg": "Cannot invoke an expression whose type lacks a call signature. Type 'Number' has no compatible call signatures."
     },
     {
-        "line": 29,
+        "line": 25,
         "column": 13,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 32,
+        "line": 28,
         "column": 13,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 42,
+        "line": 38,
         "column": 14,
         "msg": "Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures."
     }

@@ -1,22 +1,62 @@
 [
     {
-        "line": 10,
+        "line": 4,
+        "column": 14,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
+        "line": 4,
+        "column": 24,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
+        "line": 5,
+        "column": 22,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
+        "line": 5,
+        "column": 32,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
+        "line": 6,
+        "column": 20,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
+        "line": 6,
+        "column": 30,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
+        "line": 7,
+        "column": 14,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
+        "line": 8,
         "column": 14,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
         "line": 10,
-        "column": 24,
+        "column": 15,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
+        "line": 10,
+        "column": 34,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
         "line": 11,
-        "column": 22,
+        "column": 23,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
         "line": 11,
-        "column": 32,
+        "column": 42,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
@@ -26,12 +66,17 @@
     },
     {
         "line": 12,
-        "column": 30,
+        "column": 39,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
         "line": 13,
-        "column": 14,
+        "column": 11,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
+        "line": 13,
+        "column": 30,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
@@ -40,162 +85,117 @@
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 16,
-        "column": 15,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 16,
-        "column": 34,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 17,
-        "column": 23,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 17,
-        "column": 42,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 18,
-        "column": 20,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 18,
-        "column": 39,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 19,
-        "column": 11,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 19,
-        "column": 30,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 20,
-        "column": 14,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 20,
+        "line": 14,
         "column": 28,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 23,
+        "line": 17,
         "column": 9,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 23,
+        "line": 17,
         "column": 19,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 24,
+        "line": 18,
         "column": 10,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 24,
+        "line": 18,
         "column": 28,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 25,
+        "line": 19,
         "column": 13,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 25,
+        "line": 19,
         "column": 26,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 29,
+        "line": 23,
         "column": 6,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 29,
+        "line": 23,
         "column": 17,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 30,
+        "line": 24,
         "column": 6,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 30,
+        "line": 24,
         "column": 25,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 31,
+        "line": 25,
         "column": 9,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 31,
+        "line": 25,
         "column": 20,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
+        "line": 26,
+        "column": 9,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
+        "line": 27,
+        "column": 19,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
+        "line": 31,
+        "column": 9,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
+        "line": 31,
+        "column": 19,
+        "msg": "A parameter property is only allowed in a constructor implementation."
+    },
+    {
         "line": 32,
-        "column": 9,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 33,
-        "column": 19,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 37,
-        "column": 9,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 37,
-        "column": 19,
-        "msg": "A parameter property is only allowed in a constructor implementation."
-    },
-    {
-        "line": 38,
         "column": 10,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 38,
+        "line": 32,
         "column": 29,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 42,
+        "line": 36,
         "column": 9,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 43,
+        "line": 37,
         "column": 32,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 44,
+        "line": 38,
         "column": 12,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 44,
+        "line": 38,
         "column": 25,
         "msg": "A parameter property is only allowed in a constructor implementation."
     }

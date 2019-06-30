@@ -1,61 +1,61 @@
 [
     {
-        "line": 7,
+        "line": 4,
         "column": 19,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 8,
+        "line": 5,
         "column": 19,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 12,
+        "line": 9,
         "column": 26,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 13,
+        "line": 10,
         "column": 26,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 19,
+        "line": 16,
         "column": 3,
         "msg": "Property 'x' is protected and only accessible within class 'C' and its subclasses."
     },
     {
-        "line": 20,
+        "line": 17,
         "column": 3,
         "msg": "Property 'y' is protected and only accessible within class 'C' and its subclasses."
     },
     {
-        "line": 21,
+        "line": 18,
         "column": 3,
         "msg": "Property 'y' is protected and only accessible within class 'C' and its subclasses."
     },
     {
-        "line": 22,
+        "line": 19,
         "column": 3,
         "msg": "Property 'foo' is protected and only accessible within class 'C' and its subclasses."
     },
     {
-        "line": 24,
+        "line": 21,
         "column": 3,
         "msg": "Property 'a' is protected and only accessible within class 'C' and its subclasses."
     },
     {
-        "line": 25,
+        "line": 22,
         "column": 3,
         "msg": "Property 'b' is protected and only accessible within class 'C' and its subclasses."
     },
     {
-        "line": 26,
+        "line": 23,
         "column": 3,
         "msg": "Property 'b' is protected and only accessible within class 'C' and its subclasses."
     },
     {
-        "line": 27,
+        "line": 24,
         "column": 3,
         "msg": "Property 'foo' is protected and only accessible within class 'C' and its subclasses."
     }

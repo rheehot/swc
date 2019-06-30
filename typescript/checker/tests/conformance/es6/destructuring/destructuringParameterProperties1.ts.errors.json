@@ -1,5 +1,10 @@
 [
     {
+        "line": 3,
+        "column": 17,
+        "msg": "A parameter property may not be declared using a binding pattern."
+    },
+    {
         "line": 10,
         "column": 17,
         "msg": "A parameter property may not be declared using a binding pattern."
@@ -10,57 +15,52 @@
         "msg": "A parameter property may not be declared using a binding pattern."
     },
     {
-        "line": 24,
-        "column": 17,
-        "msg": "A parameter property may not be declared using a binding pattern."
-    },
-    {
-        "line": 30,
+        "line": 23,
         "column": 26,
         "msg": "Property 'x' does not exist on type 'C1'."
     },
     {
-        "line": 30,
+        "line": 23,
         "column": 35,
         "msg": "Property 'y' does not exist on type 'C1'."
     },
     {
-        "line": 30,
+        "line": 23,
         "column": 43,
         "msg": "Property 'y' does not exist on type 'C1'."
     },
     {
-        "line": 30,
+        "line": 23,
         "column": 52,
         "msg": "Property 'z' does not exist on type 'C1'."
     },
     {
-        "line": 33,
+        "line": 26,
         "column": 30,
         "msg": "Property 'x' does not exist on type 'C2'."
     },
     {
-        "line": 33,
+        "line": 26,
         "column": 36,
         "msg": "Property 'y' does not exist on type 'C2'."
     },
     {
-        "line": 33,
+        "line": 26,
         "column": 42,
         "msg": "Property 'z' does not exist on type 'C2'."
     },
     {
-        "line": 37,
+        "line": 30,
         "column": 30,
         "msg": "Property 'x' does not exist on type 'C3'."
     },
     {
-        "line": 37,
+        "line": 30,
         "column": 36,
         "msg": "Property 'y' does not exist on type 'C3'."
     },
     {
-        "line": 37,
+        "line": 30,
         "column": 42,
         "msg": "Property 'z' does not exist on type 'C3'."
     }

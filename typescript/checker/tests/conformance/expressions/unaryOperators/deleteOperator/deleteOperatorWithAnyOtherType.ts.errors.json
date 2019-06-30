@@ -1,11 +1,31 @@
 [
     {
-        "line": 32,
+        "line": 26,
         "column": 31,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 33,
+        "line": 27,
+        "column": 31,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 28,
+        "column": 31,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 29,
+        "column": 31,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 30,
+        "column": 31,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 31,
         "column": 31,
         "msg": "The operand of a delete operator must be a property reference."
     },
@@ -20,107 +40,87 @@
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 36,
-        "column": 31,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 37,
-        "column": 31,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 40,
-        "column": 31,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 41,
-        "column": 31,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 49,
+        "line": 43,
         "column": 32,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 50,
+        "line": 44,
+        "column": 32,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 45,
+        "column": 33,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 46,
+        "column": 33,
+        "msg": "Operator '+' cannot be applied to types 'null' and 'undefined'."
+    },
+    {
+        "line": 46,
+        "column": 33,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 47,
+        "column": 33,
+        "msg": "Operator '+' cannot be applied to types 'null' and 'null'."
+    },
+    {
+        "line": 47,
+        "column": 33,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 48,
+        "column": 33,
+        "msg": "Operator '+' cannot be applied to types 'undefined' and 'undefined'."
+    },
+    {
+        "line": 48,
+        "column": 33,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 51,
         "column": 32,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
         "line": 51,
-        "column": 33,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 52,
-        "column": 33,
-        "msg": "Operator '+' cannot be applied to types 'null' and 'undefined'."
-    },
-    {
-        "line": 52,
-        "column": 33,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 53,
-        "column": 33,
-        "msg": "Operator '+' cannot be applied to types 'null' and 'null'."
-    },
-    {
-        "line": 53,
-        "column": 33,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 54,
-        "column": 33,
-        "msg": "Operator '+' cannot be applied to types 'undefined' and 'undefined'."
-    },
-    {
-        "line": 54,
-        "column": 33,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 57,
-        "column": 32,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 57,
         "column": 39,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 58,
+        "line": 52,
         "column": 32,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 58,
+        "line": 52,
         "column": 39,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 58,
+        "line": 52,
         "column": 47,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 61,
+        "line": 55,
         "column": 8,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 62,
+        "line": 56,
         "column": 8,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 64,
+        "line": 58,
         "column": 8,
         "msg": "The operand of a delete operator must be a property reference."
     }

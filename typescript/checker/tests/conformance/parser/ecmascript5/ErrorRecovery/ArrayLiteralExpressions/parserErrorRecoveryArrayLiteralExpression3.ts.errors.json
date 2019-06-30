@@ -1,21 +1,21 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 54,
         "msg": "',' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 56,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 56,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 105,
         "msg": "';' expected."
     }

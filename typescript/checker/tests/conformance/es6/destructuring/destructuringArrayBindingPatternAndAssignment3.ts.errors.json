@@ -1,21 +1,21 @@
 [
     {
-        "line": 5,
+        "line": 3,
         "column": 22,
         "msg": "Block-scoped variable 'e' used before its declaration."
     },
     {
-        "line": 6,
+        "line": 4,
         "column": 22,
         "msg": "Block-scoped variable 'i' used before its declaration."
     },
     {
-        "line": 10,
+        "line": 8,
         "column": 27,
         "msg": "Parameter 'e' cannot be referenced in its initializer."
     },
     {
-        "line": 12,
+        "line": 10,
         "column": 27,
         "msg": "Initializer of parameter 'h' cannot reference identifier 'i' declared after it."
     }

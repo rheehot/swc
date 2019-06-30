@@ -1,11 +1,11 @@
 [
     {
-        "line": 18,
+        "line": 10,
         "column": 11,
         "msg": "Interface 'A' cannot simultaneously extend types 'C' and 'C2'."
     },
     {
-        "line": 40,
+        "line": 32,
         "column": 15,
         "msg": "Interface 'A' cannot simultaneously extend types 'C' and 'C2'."
     }

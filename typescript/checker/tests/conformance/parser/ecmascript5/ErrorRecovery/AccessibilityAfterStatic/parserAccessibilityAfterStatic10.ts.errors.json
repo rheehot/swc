@@ -1,6 +1,6 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 8,
         "msg": "'public' modifier must precede 'static' modifier."
     }

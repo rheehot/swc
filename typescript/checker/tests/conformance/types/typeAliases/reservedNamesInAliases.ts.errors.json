@@ -1,46 +1,46 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 6,
         "msg": "Type alias name cannot be 'any'."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 6,
         "msg": "Type alias name cannot be 'number'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 6,
         "msg": "Type alias name cannot be 'boolean'."
     },
     {
-        "line": 7,
+        "line": 6,
         "column": 6,
         "msg": "Type alias name cannot be 'string'."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 1,
         "msg": "Cannot find name 'type'."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 6,
         "msg": "';' expected."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 11,
         "msg": "Expression expected."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 13,
         "msg": "'I' only refers to a type, but is being used as a value here."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 6,
         "msg": "Type alias name cannot be 'object'."
     }

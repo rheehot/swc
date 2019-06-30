@@ -1,16 +1,16 @@
 [
     {
-        "line": 19,
+        "line": 8,
         "column": 18,
         "msg": "Cannot extend an interface 'Base'. Did you mean 'implements'?"
     },
     {
-        "line": 57,
+        "line": 46,
         "column": 18,
         "msg": "No base constructor has the specified number of type arguments."
     },
     {
-        "line": 68,
+        "line": 57,
         "column": 18,
         "msg": "Base constructors must all have the same return type."
     }

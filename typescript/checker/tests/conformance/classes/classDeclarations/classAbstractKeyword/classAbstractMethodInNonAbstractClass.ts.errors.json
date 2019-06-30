@@ -1,16 +1,16 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 5,
         "msg": "Abstract methods can only appear within an abstract class."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 5,
         "msg": "Abstract methods can only appear within an abstract class."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 14,
         "msg": "Method 'foo' cannot have an implementation because it is marked abstract."
     }

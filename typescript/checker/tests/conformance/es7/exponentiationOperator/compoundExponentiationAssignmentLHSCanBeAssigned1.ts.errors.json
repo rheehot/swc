@@ -1,31 +1,31 @@
 [
     {
-        "line": 16,
+        "line": 12,
         "column": 8,
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 17,
+        "line": 13,
         "column": 8,
         "msg": "Object is possibly 'undefined'."
     },
     {
-        "line": 23,
+        "line": 19,
         "column": 8,
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 24,
+        "line": 20,
         "column": 8,
         "msg": "Object is possibly 'undefined'."
     },
     {
-        "line": 30,
+        "line": 26,
         "column": 8,
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 31,
+        "line": 27,
         "column": 8,
         "msg": "Object is possibly 'undefined'."
     }

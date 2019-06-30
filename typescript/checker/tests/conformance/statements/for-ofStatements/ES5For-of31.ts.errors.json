@@ -1,11 +1,11 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 8,
         "msg": "Property 'a' does not exist on type 'undefined'."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 18,
         "msg": "Property 'b' does not exist on type 'undefined'."
     }

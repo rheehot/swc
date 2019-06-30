@@ -1,6 +1,6 @@
 [
     {
-        "line": 8,
+        "line": 7,
         "column": 9,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'any', but here has type 'any[]'."
     }

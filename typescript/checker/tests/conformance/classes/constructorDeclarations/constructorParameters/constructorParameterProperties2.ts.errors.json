@@ -1,8 +1,23 @@
 [
     {
-        "line": 20,
+        "line": 12,
         "column": 24,
         "msg": "Duplicate identifier 'y'."
+    },
+    {
+        "line": 19,
+        "column": 5,
+        "msg": "All declarations of 'y' must have identical modifiers."
+    },
+    {
+        "line": 20,
+        "column": 25,
+        "msg": "Duplicate identifier 'y'."
+    },
+    {
+        "line": 20,
+        "column": 25,
+        "msg": "All declarations of 'y' must have identical modifiers."
     },
     {
         "line": 27,
@@ -11,26 +26,11 @@
     },
     {
         "line": 28,
-        "column": 25,
-        "msg": "Duplicate identifier 'y'."
-    },
-    {
-        "line": 28,
-        "column": 25,
-        "msg": "All declarations of 'y' must have identical modifiers."
-    },
-    {
-        "line": 35,
-        "column": 5,
-        "msg": "All declarations of 'y' must have identical modifiers."
-    },
-    {
-        "line": 36,
         "column": 27,
         "msg": "Duplicate identifier 'y'."
     },
     {
-        "line": 36,
+        "line": 28,
         "column": 27,
         "msg": "All declarations of 'y' must have identical modifiers."
     }

@@ -1,151 +1,151 @@
 [
     {
-        "line": 9,
+        "line": 2,
         "column": 9,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 10,
+        "line": 3,
         "column": 14,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 11,
+        "line": 4,
         "column": 9,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 13,
+        "line": 6,
         "column": 16,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 13,
+        "line": 6,
         "column": 23,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 14,
+        "line": 7,
         "column": 12,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 19,
+        "line": 12,
         "column": 13,
+        "msg": "A 'this' type is available only in a non-static member of a class or interface."
+    },
+    {
+        "line": 13,
+        "column": 14,
+        "msg": "A 'this' type is available only in a non-static member of a class or interface."
+    },
+    {
+        "line": 14,
+        "column": 18,
+        "msg": "A 'this' type is available only in a non-static member of a class or interface."
+    },
+    {
+        "line": 15,
+        "column": 23,
+        "msg": "A 'this' type is available only in a non-static member of a class or interface."
+    },
+    {
+        "line": 16,
+        "column": 15,
+        "msg": "A 'this' type is available only in a non-static member of a class or interface."
+    },
+    {
+        "line": 16,
+        "column": 22,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
         "line": 20,
-        "column": 14,
-        "msg": "A 'this' type is available only in a non-static member of a class or interface."
-    },
-    {
-        "line": 21,
-        "column": 18,
-        "msg": "A 'this' type is available only in a non-static member of a class or interface."
-    },
-    {
-        "line": 22,
-        "column": 23,
-        "msg": "A 'this' type is available only in a non-static member of a class or interface."
-    },
-    {
-        "line": 23,
-        "column": 15,
-        "msg": "A 'this' type is available only in a non-static member of a class or interface."
-    },
-    {
-        "line": 23,
-        "column": 22,
-        "msg": "A 'this' type is available only in a non-static member of a class or interface."
-    },
-    {
-        "line": 27,
         "column": 13,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 28,
+        "line": 21,
         "column": 14,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 29,
+        "line": 22,
         "column": 18,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 30,
+        "line": 23,
         "column": 23,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 31,
+        "line": 24,
         "column": 15,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 31,
+        "line": 24,
         "column": 22,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 35,
+        "line": 28,
         "column": 15,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 36,
+        "line": 29,
         "column": 17,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 37,
+        "line": 30,
         "column": 19,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 37,
+        "line": 30,
         "column": 26,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 43,
+        "line": 36,
         "column": 19,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 44,
+        "line": 37,
         "column": 20,
         "msg": "'this' cannot be referenced in a module or namespace body."
     },
     {
-        "line": 49,
+        "line": 42,
         "column": 14,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 49,
+        "line": 42,
         "column": 21,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 54,
+        "line": 47,
         "column": 23,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 54,
+        "line": 47,
         "column": 30,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 58,
+        "line": 51,
         "column": 18,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     },
     {
-        "line": 58,
+        "line": 51,
         "column": 25,
         "msg": "A 'this' type is available only in a non-static member of a class or interface."
     }

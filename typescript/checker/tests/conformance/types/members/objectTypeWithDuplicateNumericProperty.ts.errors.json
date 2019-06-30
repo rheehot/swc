@@ -1,21 +1,36 @@
 [
     {
-        "line": 13,
+        "line": 7,
         "column": 5,
         "msg": "Duplicate identifier '1.0'."
     },
     {
-        "line": 14,
+        "line": 8,
         "column": 5,
         "msg": "Duplicate identifier '1.'."
     },
     {
-        "line": 15,
+        "line": 9,
         "column": 5,
         "msg": "Duplicate identifier '1.00'."
     },
     {
-        "line": 19,
+        "line": 13,
+        "column": 5,
+        "msg": "Duplicate identifier '1'."
+    },
+    {
+        "line": 14,
+        "column": 5,
+        "msg": "Duplicate identifier '1'."
+    },
+    {
+        "line": 15,
+        "column": 5,
+        "msg": "Duplicate identifier '1'."
+    },
+    {
+        "line": 16,
         "column": 5,
         "msg": "Duplicate identifier '1'."
     },
@@ -35,37 +50,22 @@
         "msg": "Duplicate identifier '1'."
     },
     {
-        "line": 26,
-        "column": 5,
-        "msg": "Duplicate identifier '1'."
-    },
-    {
-        "line": 27,
+        "line": 23,
         "column": 5,
         "msg": "Duplicate identifier '1'."
     },
     {
         "line": 28,
         "column": 5,
-        "msg": "Duplicate identifier '1'."
+        "msg": "Duplicate identifier '1.0'."
     },
     {
         "line": 29,
         "column": 5,
-        "msg": "Duplicate identifier '1'."
-    },
-    {
-        "line": 34,
-        "column": 5,
-        "msg": "Duplicate identifier '1.0'."
-    },
-    {
-        "line": 35,
-        "column": 5,
         "msg": "Duplicate identifier '1.'."
     },
     {
-        "line": 36,
+        "line": 30,
         "column": 5,
         "msg": "Duplicate identifier '1.00'."
     }

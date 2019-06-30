@@ -1,73 +1,398 @@
 [
     {
-        "line": 70,
+        "line": 5,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found."
     },
     {
-        "line": 74,
+        "line": 9,
         "column": 19,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 74,
+        "line": 9,
         "column": 32,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 74,
+        "line": 9,
         "column": 38,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 91,
+        "line": 26,
         "column": 15,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 91,
+        "line": 26,
         "column": 28,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 91,
+        "line": 26,
         "column": 54,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 95,
+        "line": 30,
         "column": 18,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 95,
+        "line": 30,
         "column": 31,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 107,
+        "line": 42,
         "column": 26,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 107,
+        "line": 42,
         "column": 39,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 107,
+        "line": 42,
         "column": 45,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 143,
+        "line": 78,
         "column": 26,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 143,
+        "line": 78,
         "column": 119,
         "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 95,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 96,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 97,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 98,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 99,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 100,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 101,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 102,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 103,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 104,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 105,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 106,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 107,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 108,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 109,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 110,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 111,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 112,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 113,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 114,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 115,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 116,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 117,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 118,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 119,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 120,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 121,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 122,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 123,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 124,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 125,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 126,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 127,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 128,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 129,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 130,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 131,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 132,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 133,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 134,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 135,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 136,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 137,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 138,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 139,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 140,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 141,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 142,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 143,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 144,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 145,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 146,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 147,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 148,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 149,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 150,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 151,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 152,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 153,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 154,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 155,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 156,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 157,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 158,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 159,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 160,
@@ -280,767 +605,442 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 202,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 203,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
         "line": 204,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 205,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 206,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 207,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 208,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 209,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 210,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 211,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 212,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 213,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 214,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 215,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 216,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 217,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 218,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 219,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 220,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 221,
-        "column": 34,
+        "column": 33,
         "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 222,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 223,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 224,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 225,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 226,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 227,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 228,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 229,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 230,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 231,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 232,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 233,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 234,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 235,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 236,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 237,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 238,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 239,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 240,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 241,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 242,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 243,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 244,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 245,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 246,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 247,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 248,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 249,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 250,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 251,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 252,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 253,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 254,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 255,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 256,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 257,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 258,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 259,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 260,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 261,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 262,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 263,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 264,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 265,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 266,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 269,
-        "column": 33,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 287,
         "column": 42,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 287,
+        "line": 222,
         "column": 59,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 291,
+        "line": 226,
         "column": 50,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 291,
+        "line": 226,
         "column": 67,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 309,
+        "line": 244,
         "column": 61,
         "msg": "Cannot find name 'UnaryExpression'."
     },
     {
-        "line": 309,
+        "line": 244,
         "column": 86,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 318,
+        "line": 253,
         "column": 62,
         "msg": "Cannot find name 'BinaryExpression'."
     },
     {
-        "line": 318,
+        "line": 253,
         "column": 88,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 336,
+        "line": 271,
         "column": 59,
         "msg": "Cannot find name 'TypeReference'."
     },
     {
-        "line": 336,
+        "line": 271,
         "column": 82,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 342,
+        "line": 277,
         "column": 60,
         "msg": "Cannot find name 'CallExpression'."
     },
     {
-        "line": 342,
+        "line": 277,
         "column": 84,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 347,
+        "line": 282,
         "column": 37,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 354,
+        "line": 289,
         "column": 63,
         "msg": "Cannot find name 'ConditionalExpression'."
     },
     {
-        "line": 354,
+        "line": 289,
         "column": 94,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 366,
+        "line": 301,
         "column": 54,
         "msg": "Cannot find name 'FuncDecl'."
     },
     {
-        "line": 366,
+        "line": 301,
         "column": 72,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 368,
+        "line": 303,
         "column": 32,
         "msg": "Cannot find name 'Identifier'."
     },
     {
-        "line": 371,
+        "line": 306,
         "column": 37,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 377,
+        "line": 312,
         "column": 31,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 381,
+        "line": 316,
         "column": 55,
         "msg": "Cannot find name 'BoundDecl'."
     },
     {
-        "line": 381,
+        "line": 316,
         "column": 74,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 383,
+        "line": 318,
         "column": 30,
         "msg": "Cannot find name 'Identifier'."
     },
     {
-        "line": 393,
+        "line": 328,
         "column": 61,
         "msg": "Cannot find name 'ReturnStatement'."
     },
     {
-        "line": 393,
+        "line": 328,
         "column": 86,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 399,
+        "line": 334,
         "column": 58,
         "msg": "Cannot find name 'ForStatement'."
     },
     {
-        "line": 399,
+        "line": 334,
         "column": 80,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 417,
+        "line": 352,
         "column": 60,
         "msg": "Cannot find name 'ForInStatement'."
     },
     {
-        "line": 417,
+        "line": 352,
         "column": 84,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 427,
+        "line": 362,
         "column": 57,
         "msg": "Cannot find name 'IfStatement'."
     },
     {
-        "line": 427,
+        "line": 362,
         "column": 78,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 437,
+        "line": 372,
         "column": 60,
         "msg": "Cannot find name 'WhileStatement'."
     },
     {
-        "line": 437,
+        "line": 372,
         "column": 84,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 444,
+        "line": 379,
         "column": 62,
         "msg": "Cannot find name 'DoWhileStatement'."
     },
     {
-        "line": 444,
+        "line": 379,
         "column": 88,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 451,
+        "line": 386,
         "column": 51,
         "msg": "Cannot find name 'Block'."
     },
     {
-        "line": 451,
+        "line": 386,
         "column": 66,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 453,
+        "line": 388,
         "column": 38,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 457,
+        "line": 392,
         "column": 59,
         "msg": "Cannot find name 'CaseStatement'."
     },
     {
-        "line": 457,
+        "line": 392,
         "column": 82,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 463,
+        "line": 398,
         "column": 32,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 467,
+        "line": 402,
         "column": 61,
         "msg": "Cannot find name 'SwitchStatement'."
     },
     {
-        "line": 467,
+        "line": 402,
         "column": 86,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 473,
+        "line": 408,
         "column": 36,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 477,
+        "line": 412,
         "column": 49,
         "msg": "Cannot find name 'Try'."
     },
     {
-        "line": 477,
+        "line": 412,
         "column": 62,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 483,
+        "line": 418,
         "column": 54,
         "msg": "Cannot find name 'TryCatch'."
     },
     {
-        "line": 483,
+        "line": 418,
         "column": 72,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 485,
+        "line": 420,
         "column": 35,
         "msg": "Cannot find name 'Try'."
     },
     {
-        "line": 489,
+        "line": 424,
         "column": 37,
         "msg": "Cannot find name 'Catch'."
     },
     {
-        "line": 493,
+        "line": 428,
         "column": 56,
         "msg": "Cannot find name 'TryFinally'."
     },
     {
-        "line": 493,
+        "line": 428,
         "column": 76,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 499,
+        "line": 434,
         "column": 39,
         "msg": "Cannot find name 'Finally'."
     },
     {
-        "line": 503,
+        "line": 438,
         "column": 53,
         "msg": "Cannot find name 'Finally'."
     },
     {
-        "line": 503,
+        "line": 438,
         "column": 70,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 509,
+        "line": 444,
         "column": 51,
         "msg": "Cannot find name 'Catch'."
     },
     {
-        "line": 509,
+        "line": 444,
         "column": 66,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 511,
+        "line": 446,
         "column": 33,
         "msg": "Cannot find name 'VarDecl'."
     },
     {
-        "line": 519,
+        "line": 454,
         "column": 52,
         "msg": "Cannot find name 'NamedDeclaration'."
     },
     {
-        "line": 519,
+        "line": 454,
         "column": 78,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 520,
+        "line": 455,
         "column": 28,
         "msg": "Cannot find name 'Identifier'."
     },
     {
-        "line": 522,
+        "line": 457,
         "column": 35,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 527,
+        "line": 462,
         "column": 55,
         "msg": "Cannot find name 'TypeDeclaration'."
     },
     {
-        "line": 527,
+        "line": 462,
         "column": 80,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 531,
+        "line": 466,
         "column": 55,
         "msg": "Cannot find name 'ClassDeclaration'."
     },
     {
-        "line": 531,
+        "line": 466,
         "column": 81,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 535,
+        "line": 470,
         "column": 39,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 539,
+        "line": 474,
         "column": 42,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 543,
+        "line": 478,
         "column": 52,
         "msg": "Cannot find name 'Script'."
     },
     {
-        "line": 543,
+        "line": 478,
         "column": 68,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 545,
+        "line": 480,
         "column": 31,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 549,
+        "line": 484,
         "column": 54,
         "msg": "Cannot find name 'InterfaceDeclaration'."
     },
     {
-        "line": 549,
+        "line": 484,
         "column": 84,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 554,
+        "line": 489,
         "column": 39,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 558,
+        "line": 493,
         "column": 42,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 562,
+        "line": 497,
         "column": 56,
         "msg": "Cannot find name 'ModuleDeclaration'."
     },
     {
-        "line": 562,
+        "line": 497,
         "column": 83,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 566,
+        "line": 501,
         "column": 56,
         "msg": "Cannot find name 'ImportDeclaration'."
     },
     {
-        "line": 566,
+        "line": 501,
         "column": 83,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 568,
+        "line": 503,
         "column": 30,
         "msg": "Cannot find name 'Identifier'."
     },
     {
-        "line": 575,
+        "line": 510,
         "column": 59,
         "msg": "Cannot find name 'WithStatement'."
     },
     {
-        "line": 575,
+        "line": 510,
         "column": 82,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 585,
+        "line": 520,
         "column": 51,
         "msg": "Cannot find name 'Label'."
     },
     {
-        "line": 585,
+        "line": 520,
         "column": 66,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 589,
+        "line": 524,
         "column": 62,
         "msg": "Cannot find name 'LabeledStatement'."
     },
     {
-        "line": 589,
+        "line": 524,
         "column": 88,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 590,
+        "line": 525,
         "column": 30,
         "msg": "Cannot find name 'ASTList'."
     }

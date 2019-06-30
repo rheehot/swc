@@ -1,76 +1,76 @@
 [
     {
-        "line": 31,
+        "line": 14,
         "column": 7,
         "msg": "Class 'Bar2' incorrectly extends base class 'Foo'."
     },
     {
-        "line": 31,
+        "line": 14,
         "column": 7,
         "msg": "Class 'Bar2' incorrectly implements interface 'I'."
     },
     {
-        "line": 36,
+        "line": 19,
         "column": 7,
         "msg": "Class 'Bar3' incorrectly extends base class 'Foo'."
     },
     {
-        "line": 36,
+        "line": 19,
         "column": 7,
         "msg": "Class 'Bar3' incorrectly implements interface 'I'."
     },
     {
-        "line": 60,
+        "line": 43,
         "column": 11,
         "msg": "Class 'Bar2' incorrectly extends base class 'Foo'."
     },
     {
-        "line": 60,
+        "line": 43,
         "column": 11,
         "msg": "Class 'Bar2' incorrectly implements interface 'I'."
     },
     {
-        "line": 65,
+        "line": 48,
         "column": 11,
         "msg": "Class 'Bar3' incorrectly extends base class 'Foo'."
     },
     {
-        "line": 65,
+        "line": 48,
         "column": 11,
         "msg": "Class 'Bar3' incorrectly implements interface 'I'."
     },
     {
-        "line": 85,
+        "line": 68,
         "column": 11,
         "msg": "Class 'Bar' incorrectly implements interface 'I'."
     },
     {
-        "line": 91,
+        "line": 74,
         "column": 16,
         "msg": "Property 'x' is private and only accessible within class 'Foo'."
     },
     {
-        "line": 92,
+        "line": 75,
         "column": 16,
         "msg": "Property 'y' does not exist on type 'Bar'."
     },
     {
-        "line": 94,
+        "line": 77,
         "column": 11,
         "msg": "Class 'Bar2' incorrectly extends base class 'Foo'."
     },
     {
-        "line": 94,
+        "line": 77,
         "column": 11,
         "msg": "Class 'Bar2' incorrectly implements interface 'I'."
     },
     {
-        "line": 99,
+        "line": 82,
         "column": 11,
         "msg": "Class 'Bar3' incorrectly extends base class 'Foo'."
     },
     {
-        "line": 99,
+        "line": 82,
         "column": 11,
         "msg": "Class 'Bar3' incorrectly implements interface 'I'."
     }

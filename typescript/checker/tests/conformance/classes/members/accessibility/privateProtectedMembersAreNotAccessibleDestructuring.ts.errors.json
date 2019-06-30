@@ -1,13 +1,33 @@
 [
     {
-        "line": 15,
+        "line": 13,
         "column": 13,
         "msg": "Property 'priv' is private and only accessible within class 'K'."
     },
     {
-        "line": 20,
+        "line": 18,
         "column": 5,
         "msg": "Property 'priv' is private and only accessible within class 'K'."
+    },
+    {
+        "line": 19,
+        "column": 5,
+        "msg": "Property 'prot' is protected and only accessible within class 'K' and its subclasses."
+    },
+    {
+        "line": 20,
+        "column": 5,
+        "msg": "Property 'privateMethod' is private and only accessible within class 'K'."
+    },
+    {
+        "line": 21,
+        "column": 5,
+        "msg": "Property 'priv' is private and only accessible within class 'K'."
+    },
+    {
+        "line": 21,
+        "column": 5,
+        "msg": "Property 'privateMethod' is private and only accessible within class 'K'."
     },
     {
         "line": 21,
@@ -16,36 +36,16 @@
     },
     {
         "line": 22,
-        "column": 5,
-        "msg": "Property 'privateMethod' is private and only accessible within class 'K'."
-    },
-    {
-        "line": 23,
-        "column": 5,
-        "msg": "Property 'priv' is private and only accessible within class 'K'."
-    },
-    {
-        "line": 23,
-        "column": 5,
-        "msg": "Property 'privateMethod' is private and only accessible within class 'K'."
-    },
-    {
-        "line": 23,
-        "column": 5,
-        "msg": "Property 'prot' is protected and only accessible within class 'K' and its subclasses."
-    },
-    {
-        "line": 24,
         "column": 12,
         "msg": "Property 'priv' is private and only accessible within class 'K'."
     },
     {
-        "line": 24,
+        "line": 22,
         "column": 12,
         "msg": "Property 'privateMethod' is private and only accessible within class 'K'."
     },
     {
-        "line": 24,
+        "line": 22,
         "column": 12,
         "msg": "Property 'prot' is protected and only accessible within class 'K' and its subclasses."
     }

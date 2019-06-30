@@ -1,51 +1,51 @@
 [
     {
-        "line": 10,
+        "line": 4,
         "column": 5,
         "msg": "Type 'number' is not assignable to type 'boolean'."
     },
     {
-        "line": 11,
+        "line": 5,
         "column": 5,
         "msg": "Type 'number' is not assignable to type 'string'."
     },
     {
-        "line": 12,
+        "line": 6,
         "column": 5,
         "msg": "Type 'number' is not assignable to type 'void'."
     },
     {
-        "line": 16,
+        "line": 10,
         "column": 5,
         "msg": "Type 'number' is not assignable to type 'C'."
     },
     {
-        "line": 19,
+        "line": 13,
         "column": 5,
         "msg": "Type 'number' is not assignable to type 'I'."
     },
     {
-        "line": 21,
+        "line": 15,
         "column": 5,
         "msg": "Type '1' is not assignable to type '{ baz"
     },
     {
-        "line": 22,
+        "line": 16,
         "column": 5,
         "msg": "Type '1' is not assignable to type '{ 0"
     },
     {
-        "line": 25,
+        "line": 19,
         "column": 1,
         "msg": "Cannot assign to 'M' because it is not a variable."
     },
     {
-        "line": 28,
+        "line": 22,
         "column": 5,
         "msg": "Type 'number' is not assignable to type 'T'."
     },
     {
-        "line": 30,
+        "line": 24,
         "column": 1,
         "msg": "Cannot assign to 'i' because it is not a variable."
     }

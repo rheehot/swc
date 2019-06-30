@@ -1,41 +1,41 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 1,
         "msg": "Cannot find name 'declare'."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 9,
         "msg": "';' expected."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 9,
         "msg": "Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 21,
         "msg": "';' expected."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 1,
         "msg": "Cannot find name 'declare'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 9,
         "msg": "';' expected."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 9,
         "msg": "Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 24,
         "msg": "';' expected."
     }

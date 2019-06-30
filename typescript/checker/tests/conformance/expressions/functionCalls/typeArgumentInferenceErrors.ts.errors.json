@@ -1,8 +1,13 @@
 [
     {
-        "line": 8,
+        "line": 4,
         "column": 31,
         "msg": "Argument of type '3' is not assignable to parameter of type 'string'."
+    },
+    {
+        "line": 8,
+        "column": 35,
+        "msg": "Argument of type '(x"
     },
     {
         "line": 12,
@@ -11,11 +16,6 @@
     },
     {
         "line": 16,
-        "column": 35,
-        "msg": "Argument of type '(x"
-    },
-    {
-        "line": 20,
         "column": 41,
         "msg": "Argument of type '(n"
     }

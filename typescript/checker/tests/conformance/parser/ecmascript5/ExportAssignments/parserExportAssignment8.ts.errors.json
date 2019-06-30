@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 1,
         "msg": "An export assignment cannot be used in a module with other exported elements."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 10,
         "msg": "Cannot find name 'B'."
     }

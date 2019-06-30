@@ -1,6 +1,6 @@
 [
     {
-        "line": 10,
+        "line": 9,
         "column": 16,
         "msg": "'super' must be called before accessing 'this' in the constructor of a derived class."
     }

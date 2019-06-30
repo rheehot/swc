@@ -1,7 +1,12 @@
 [
     {
-        "line": 4,
+        "line": 2,
         "column": 12,
+        "msg": "Duplicate identifier 'T'."
+    },
+    {
+        "line": 3,
+        "column": 16,
         "msg": "Duplicate identifier 'T'."
     },
     {
@@ -10,22 +15,17 @@
         "msg": "Duplicate identifier 'T'."
     },
     {
-        "line": 7,
-        "column": 16,
-        "msg": "Duplicate identifier 'T'."
-    },
-    {
-        "line": 8,
+        "line": 6,
         "column": 20,
         "msg": "Duplicate identifier 'T'."
     },
     {
-        "line": 10,
+        "line": 8,
         "column": 15,
         "msg": "Duplicate identifier 'T'."
     },
     {
-        "line": 11,
+        "line": 9,
         "column": 19,
         "msg": "Duplicate identifier 'T'."
     }

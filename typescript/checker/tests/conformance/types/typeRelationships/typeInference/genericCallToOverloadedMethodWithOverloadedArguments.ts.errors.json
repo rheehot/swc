@@ -1,21 +1,21 @@
 [
     {
-        "line": 48,
+        "line": 25,
         "column": 38,
         "msg": "Argument of type '{ (n"
     },
     {
-        "line": 77,
+        "line": 54,
         "column": 38,
         "msg": "Argument of type '{ (n"
     },
     {
-        "line": 93,
+        "line": 70,
         "column": 38,
         "msg": "Argument of type '{ (n"
     },
     {
-        "line": 109,
+        "line": 86,
         "column": 38,
         "msg": "Argument of type '{ (n"
     }

@@ -1,16 +1,16 @@
 [
     {
-        "line": 41,
+        "line": 35,
         "column": 24,
         "msg": "Object is possibly 'undefined'."
     },
     {
-        "line": 42,
+        "line": 36,
         "column": 23,
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 58,
+        "line": 52,
         "column": 1,
         "msg": "Left side of comma operator is unused and has no side effects."
     }

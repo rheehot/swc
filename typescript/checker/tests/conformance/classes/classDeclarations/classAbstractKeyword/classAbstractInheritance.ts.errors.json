@@ -1,16 +1,16 @@
 [
     {
-        "line": 23,
+        "line": 14,
         "column": 7,
         "msg": "Non-abstract class 'CC' does not implement inherited abstract member 'foo' from class 'AA'."
     },
     {
-        "line": 25,
+        "line": 16,
         "column": 7,
         "msg": "Non-abstract class 'DD' does not implement inherited abstract member 'foo' from class 'BB'."
     },
     {
-        "line": 29,
+        "line": 20,
         "column": 7,
         "msg": "Non-abstract class 'FF' does not implement inherited abstract member 'foo' from class 'CC'."
     }

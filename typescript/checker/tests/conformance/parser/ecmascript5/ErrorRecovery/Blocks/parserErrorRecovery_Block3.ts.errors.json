@@ -1,16 +1,16 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 18,
         "msg": "A function whose declared type is neither 'void' nor 'any' must return a value."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 5,
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 18,
         "msg": "A function whose declared type is neither 'void' nor 'any' must return a value."
     }

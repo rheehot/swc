@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 5,
         "msg": "A destructuring declaration must have an initializer."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 5,
         "msg": "A destructuring declaration must have an initializer."
     }

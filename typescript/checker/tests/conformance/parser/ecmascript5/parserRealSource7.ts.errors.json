@@ -1,1516 +1,1516 @@
 [
     {
-        "line": 105,
+        "line": 5,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found."
     },
     {
-        "line": 113,
+        "line": 13,
         "column": 38,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 113,
+        "line": 13,
         "column": 62,
         "msg": "Cannot find name 'TypeLink'."
     },
     {
-        "line": 117,
+        "line": 17,
         "column": 37,
         "msg": "Cannot find name 'TypeLink'. Did you mean 'typeLink'?"
     },
     {
-        "line": 117,
+        "line": 17,
         "column": 46,
         "msg": "An element access expression should take an argument."
     },
     {
-        "line": 122,
+        "line": 22,
         "column": 36,
         "msg": "Cannot find name 'TypeLink'. Did you mean 'typeLink'?"
     },
     {
-        "line": 130,
+        "line": 30,
         "column": 29,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 130,
+        "line": 30,
         "column": 45,
         "msg": "Cannot find name 'TypeDeclaration'."
     },
     {
-        "line": 135,
+        "line": 35,
         "column": 43,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 135,
+        "line": 35,
         "column": 54,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 135,
+        "line": 35,
         "column": 68,
         "msg": "Cannot find name 'TypeCollectionContext'."
     },
     {
-        "line": 136,
+        "line": 36,
         "column": 25,
         "msg": "Cannot find name 'ValueLocation'."
     },
     {
-        "line": 137,
+        "line": 37,
         "column": 30,
         "msg": "Cannot find name 'TypeLink'."
     },
     {
-        "line": 142,
+        "line": 42,
         "column": 17,
         "msg": "Cannot find name 'FieldSymbol'."
     },
     {
-        "line": 144,
+        "line": 44,
         "column": 31,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 144,
+        "line": 44,
         "column": 54,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 150,
+        "line": 50,
         "column": 58,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 151,
+        "line": 51,
         "column": 29,
         "msg": "Cannot find name 'Signature'."
     },
     {
-        "line": 152,
+        "line": 52,
         "column": 36,
         "msg": "Cannot find name 'TypeLink'."
     },
     {
-        "line": 156,
+        "line": 56,
         "column": 30,
         "msg": "Cannot find name 'SignatureGroup'."
     },
     {
-        "line": 160,
+        "line": 60,
         "column": 66,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 160,
+        "line": 60,
         "column": 80,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 161,
+        "line": 61,
         "column": 31,
         "msg": "Cannot find name 'SignatureGroup'."
     },
     {
-        "line": 162,
+        "line": 62,
         "column": 18,
         "msg": "Cannot find name 'Signature'."
     },
     {
-        "line": 169,
+        "line": 69,
         "column": 23,
         "msg": "Cannot find name 'Signature'."
     },
     {
-        "line": 174,
+        "line": 74,
         "column": 34,
         "msg": "Cannot find name 'TypeLink'."
     },
     {
-        "line": 184,
+        "line": 84,
         "column": 24,
         "msg": "Cannot find name 'ScopeChain'."
     },
     {
-        "line": 185,
+        "line": 85,
         "column": 18,
         "msg": "Cannot find name 'IHashTable'."
     },
     {
-        "line": 186,
+        "line": 86,
         "column": 20,
         "msg": "Cannot find name 'TypeCollectionContext'."
     },
     {
-        "line": 189,
+        "line": 89,
         "column": 67,
         "msg": "Cannot find name 'ScopeChain'."
     },
     {
-        "line": 199,
+        "line": 99,
         "column": 41,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 202,
+        "line": 102,
         "column": 18,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 203,
+        "line": 103,
         "column": 30,
         "msg": "Cannot find name 'Identifier'."
     },
     {
-        "line": 204,
+        "line": 104,
         "column": 33,
         "msg": "Cannot find name 'isQuoted'."
     },
     {
-        "line": 224,
+        "line": 124,
         "column": 18,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 225,
+        "line": 125,
         "column": 35,
         "msg": "Cannot find name 'BinaryExpression'."
     },
     {
-        "line": 228,
+        "line": 128,
         "column": 38,
         "msg": "Property 'getType' does not exist on type 'Symbol'."
     },
     {
-        "line": 239,
+        "line": 139,
         "column": 34,
         "msg": "Property 'getType' does not exist on type 'Symbol'."
     },
     {
-        "line": 251,
+        "line": 151,
         "column": 48,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 251,
+        "line": 151,
         "column": 61,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 251,
+        "line": 151,
         "column": 75,
         "msg": "Cannot find name 'TypeCollectionContext'."
     },
     {
-        "line": 253,
+        "line": 153,
         "column": 25,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 254,
+        "line": 154,
         "column": 22,
         "msg": "Cannot find name 'ModuleType'."
     },
     {
-        "line": 255,
+        "line": 155,
         "column": 27,
         "msg": "Cannot find name 'ImportDeclaration'."
     },
     {
-        "line": 256,
+        "line": 156,
         "column": 26,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 256,
+        "line": 156,
         "column": 55,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 263,
+        "line": 163,
         "column": 51,
         "msg": "Property 'getType' does not exist on type 'Symbol'."
     },
     {
-        "line": 266,
+        "line": 166,
         "column": 28,
         "msg": "Cannot find name 'ModuleType'."
     },
     {
-        "line": 270,
+        "line": 170,
         "column": 26,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 287,
+        "line": 187,
         "column": 48,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 287,
+        "line": 187,
         "column": 61,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 287,
+        "line": 187,
         "column": 75,
         "msg": "Cannot find name 'TypeCollectionContext'."
     },
     {
-        "line": 290,
+        "line": 190,
         "column": 25,
         "msg": "Cannot find name 'ModuleDeclaration'."
     },
     {
-        "line": 290,
+        "line": 190,
         "column": 46,
         "msg": "Cannot find name 'ModuleDeclaration'."
     },
     {
-        "line": 292,
+        "line": 192,
         "column": 25,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 292,
+        "line": 192,
         "column": 54,
         "msg": "Cannot find name 'ModuleFlags'."
     },
     {
-        "line": 293,
+        "line": 193,
         "column": 22,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 293,
+        "line": 193,
         "column": 51,
         "msg": "Cannot find name 'ModuleFlags'."
     },
     {
-        "line": 295,
+        "line": 195,
         "column": 26,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 295,
+        "line": 195,
         "column": 55,
         "msg": "Cannot find name 'ModuleFlags'."
     },
     {
-        "line": 296,
+        "line": 196,
         "column": 25,
         "msg": "Cannot find name 'Identifier'."
     },
     {
-        "line": 298,
+        "line": 198,
         "column": 25,
         "msg": "Cannot find name 'isQuoted'."
     },
     {
-        "line": 301,
+        "line": 201,
         "column": 25,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 302,
+        "line": 202,
         "column": 22,
         "msg": "Cannot find name 'ModuleType'."
     },
     {
-        "line": 303,
+        "line": 203,
         "column": 51,
         "msg": "Cannot find name 'SymbolKind'."
     },
     {
-        "line": 306,
+        "line": 206,
         "column": 41,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 306,
+        "line": 206,
         "column": 59,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 306,
+        "line": 206,
         "column": 83,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 306,
+        "line": 206,
         "column": 106,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 307,
+        "line": 207,
         "column": 48,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 307,
+        "line": 207,
         "column": 66,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 307,
+        "line": 207,
         "column": 90,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 307,
+        "line": 207,
         "column": 113,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 308,
+        "line": 208,
         "column": 31,
         "msg": "Cannot find name 'ModuleType'."
     },
     {
-        "line": 310,
+        "line": 210,
         "column": 42,
         "msg": "Cannot find name 'TypeFlags'."
     },
     {
-        "line": 312,
+        "line": 212,
         "column": 39,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 312,
+        "line": 212,
         "column": 57,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 312,
+        "line": 212,
         "column": 81,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 312,
+        "line": 212,
         "column": 104,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 313,
+        "line": 213,
         "column": 46,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 313,
+        "line": 213,
         "column": 64,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 313,
+        "line": 213,
         "column": 88,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 313,
+        "line": 213,
         "column": 111,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 317,
+        "line": 217,
         "column": 30,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 332,
+        "line": 232,
         "column": 72,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 335,
+        "line": 235,
         "column": 27,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 339,
+        "line": 239,
         "column": 80,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 340,
+        "line": 240,
         "column": 37,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 340,
+        "line": 240,
         "column": 55,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 340,
+        "line": 240,
         "column": 105,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 343,
+        "line": 243,
         "column": 94,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 344,
+        "line": 244,
         "column": 44,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 344,
+        "line": 244,
         "column": 62,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 344,
+        "line": 244,
         "column": 119,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 347,
+        "line": 247,
         "column": 68,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 348,
+        "line": 248,
         "column": 31,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 348,
+        "line": 248,
         "column": 49,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 348,
+        "line": 248,
         "column": 93,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 351,
+        "line": 251,
         "column": 82,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 352,
+        "line": 252,
         "column": 38,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 352,
+        "line": 252,
         "column": 56,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 352,
+        "line": 252,
         "column": 107,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 354,
+        "line": 254,
         "column": 27,
         "msg": "Cannot find name 'ModuleType'."
     },
     {
-        "line": 356,
+        "line": 256,
         "column": 38,
         "msg": "Cannot find name 'TypeFlags'."
     },
     {
-        "line": 373,
+        "line": 273,
         "column": 33,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 377,
+        "line": 277,
         "column": 33,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 381,
+        "line": 281,
         "column": 9,
         "msg": "Cannot find name 'pushTypeCollectionScope'."
     },
     {
-        "line": 390,
+        "line": 290,
         "column": 47,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 390,
+        "line": 290,
         "column": 60,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 390,
+        "line": 290,
         "column": 74,
         "msg": "Cannot find name 'TypeCollectionContext'."
     },
     {
-        "line": 392,
+        "line": 292,
         "column": 26,
         "msg": "Cannot find name 'ClassDeclaration'."
     },
     {
-        "line": 394,
+        "line": 294,
         "column": 24,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 395,
+        "line": 295,
         "column": 27,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 396,
+        "line": 296,
         "column": 25,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 397,
+        "line": 297,
         "column": 27,
         "msg": "Cannot find name 'Identifier'."
     },
     {
-        "line": 399,
+        "line": 299,
         "column": 25,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 399,
+        "line": 299,
         "column": 53,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 400,
+        "line": 300,
         "column": 26,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 400,
+        "line": 300,
         "column": 54,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 402,
+        "line": 302,
         "column": 29,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 405,
+        "line": 305,
         "column": 23,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 415,
+        "line": 315,
         "column": 51,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 416,
+        "line": 316,
         "column": 19,
         "msg": "Cannot find name 'FuncDecl'."
     },
     {
-        "line": 418,
+        "line": 318,
         "column": 31,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 422,
+        "line": 322,
         "column": 41,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 426,
+        "line": 326,
         "column": 41,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 441,
+        "line": 341,
         "column": 29,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 443,
+        "line": 343,
         "column": 32,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 446,
+        "line": 346,
         "column": 37,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 446,
+        "line": 346,
         "column": 55,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 446,
+        "line": 346,
         "column": 79,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 446,
+        "line": 346,
         "column": 102,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 447,
+        "line": 347,
         "column": 44,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 447,
+        "line": 347,
         "column": 62,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 447,
+        "line": 347,
         "column": 86,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 447,
+        "line": 347,
         "column": 109,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 449,
+        "line": 349,
         "column": 40,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 449,
+        "line": 349,
         "column": 58,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 449,
+        "line": 349,
         "column": 82,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 449,
+        "line": 349,
         "column": 105,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 450,
+        "line": 350,
         "column": 47,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 450,
+        "line": 350,
         "column": 65,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 450,
+        "line": 350,
         "column": 89,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 450,
+        "line": 350,
         "column": 112,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 451,
+        "line": 351,
         "column": 30,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 461,
+        "line": 361,
         "column": 37,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 465,
+        "line": 365,
         "column": 37,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 469,
+        "line": 369,
         "column": 37,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 488,
+        "line": 388,
         "column": 46,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 490,
+        "line": 390,
         "column": 54,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 490,
+        "line": 390,
         "column": 72,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 490,
+        "line": 390,
         "column": 96,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 490,
+        "line": 390,
         "column": 119,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 492,
+        "line": 392,
         "column": 41,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 492,
+        "line": 392,
         "column": 59,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 492,
+        "line": 392,
         "column": 83,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 492,
+        "line": 392,
         "column": 106,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 493,
+        "line": 393,
         "column": 48,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 493,
+        "line": 393,
         "column": 66,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 493,
+        "line": 393,
         "column": 90,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 493,
+        "line": 393,
         "column": 113,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 504,
+        "line": 404,
         "column": 115,
         "msg": "Cannot find name 'FuncDecl'."
     },
     {
-        "line": 511,
+        "line": 411,
         "column": 32,
         "msg": "Cannot find name 'TypeFlags'."
     },
     {
-        "line": 512,
+        "line": 412,
         "column": 35,
         "msg": "Cannot find name 'TypeFlags'."
     },
     {
-        "line": 515,
+        "line": 415,
         "column": 9,
         "msg": "Cannot find name 'pushTypeCollectionScope'."
     },
     {
-        "line": 520,
+        "line": 420,
         "column": 51,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 520,
+        "line": 420,
         "column": 64,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 520,
+        "line": 420,
         "column": 78,
         "msg": "Cannot find name 'TypeCollectionContext'."
     },
     {
-        "line": 522,
+        "line": 422,
         "column": 30,
         "msg": "Cannot find name 'InterfaceDeclaration'."
     },
     {
-        "line": 523,
+        "line": 423,
         "column": 30,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 524,
+        "line": 424,
         "column": 28,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 525,
+        "line": 425,
         "column": 26,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 525,
+        "line": 425,
         "column": 58,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 530,
+        "line": 430,
         "column": 31,
         "msg": "Cannot find name 'Identifier'."
     },
     {
-        "line": 531,
+        "line": 431,
         "column": 28,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 533,
+        "line": 433,
         "column": 33,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 534,
+        "line": 434,
         "column": 35,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 540,
+        "line": 440,
         "column": 41,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 540,
+        "line": 440,
         "column": 59,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 540,
+        "line": 440,
         "column": 83,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 540,
+        "line": 440,
         "column": 106,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 541,
+        "line": 441,
         "column": 48,
         "msg": "Cannot find name 'ScopedMembers'."
     },
     {
-        "line": 541,
+        "line": 441,
         "column": 66,
         "msg": "Cannot find name 'DualStringHashTable'."
     },
     {
-        "line": 541,
+        "line": 441,
         "column": 90,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 541,
+        "line": 441,
         "column": 113,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 558,
+        "line": 458,
         "column": 38,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 562,
+        "line": 462,
         "column": 38,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 569,
+        "line": 469,
         "column": 9,
         "msg": "Cannot find name 'pushTypeCollectionScope'."
     },
     {
-        "line": 574,
+        "line": 474,
         "column": 49,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 574,
+        "line": 474,
         "column": 62,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 574,
+        "line": 474,
         "column": 76,
         "msg": "Cannot find name 'TypeCollectionContext'."
     },
     {
-        "line": 576,
+        "line": 476,
         "column": 24,
         "msg": "Cannot find name 'ArgDecl'."
     },
     {
-        "line": 577,
+        "line": 477,
         "column": 13,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 577,
+        "line": 477,
         "column": 39,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 577,
+        "line": 477,
         "column": 57,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 578,
+        "line": 478,
         "column": 29,
         "msg": "Cannot find name 'ValueLocation'."
     },
     {
-        "line": 579,
+        "line": 479,
         "column": 29,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 579,
+        "line": 479,
         "column": 55,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 581,
+        "line": 481,
         "column": 21,
         "msg": "Cannot find name 'FieldSymbol'."
     },
     {
-        "line": 583,
+        "line": 483,
         "column": 34,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 583,
+        "line": 483,
         "column": 60,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 593,
+        "line": 493,
         "column": 30,
         "msg": "Cannot find name 'getTypeLink'."
     },
     {
-        "line": 599,
+        "line": 499,
         "column": 49,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 599,
+        "line": 499,
         "column": 62,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 599,
+        "line": 499,
         "column": 76,
         "msg": "Cannot find name 'TypeCollectionContext'."
     },
     {
-        "line": 601,
+        "line": 501,
         "column": 24,
         "msg": "Cannot find name 'VarDecl'."
     },
     {
-        "line": 602,
+        "line": 502,
         "column": 25,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 602,
+        "line": 502,
         "column": 51,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 603,
+        "line": 503,
         "column": 26,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 603,
+        "line": 503,
         "column": 52,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 605,
+        "line": 505,
         "column": 26,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 605,
+        "line": 505,
         "column": 52,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 606,
+        "line": 506,
         "column": 24,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 606,
+        "line": 506,
         "column": 50,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 607,
+        "line": 507,
         "column": 25,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 607,
+        "line": 507,
         "column": 51,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 608,
+        "line": 508,
         "column": 26,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 608,
+        "line": 508,
         "column": 52,
         "msg": "Cannot find name 'ASTFlags'."
     },
     {
-        "line": 619,
+        "line": 519,
         "column": 22,
         "msg": "Cannot find name 'FieldSymbol'."
     },
     {
-        "line": 632,
+        "line": 532,
         "column": 29,
         "msg": "Cannot find name 'ValueLocation'."
     },
     {
-        "line": 634,
+        "line": 534,
         "column": 21,
         "msg": "Cannot find name 'FieldSymbol'."
     },
     {
-        "line": 636,
+        "line": 536,
         "column": 53,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 636,
+        "line": 536,
         "column": 75,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 640,
+        "line": 540,
         "column": 38,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 646,
+        "line": 546,
         "column": 38,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 651,
+        "line": 551,
         "column": 17,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 651,
+        "line": 551,
         "column": 43,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 667,
+        "line": 567,
         "column": 17,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 667,
+        "line": 567,
         "column": 43,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 668,
+        "line": 568,
         "column": 38,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 671,
+        "line": 571,
         "column": 30,
         "msg": "Cannot find name 'getTypeLink'."
     },
     {
-        "line": 678,
+        "line": 578,
         "column": 50,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 678,
+        "line": 578,
         "column": 63,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 678,
+        "line": 578,
         "column": 77,
         "msg": "Cannot find name 'TypeCollectionContext'."
     },
     {
-        "line": 686,
+        "line": 586,
         "column": 25,
         "msg": "Cannot find name 'FuncDecl'."
     },
     {
-        "line": 687,
+        "line": 587,
         "column": 20,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 689,
+        "line": 589,
         "column": 26,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 689,
+        "line": 589,
         "column": 53,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 689,
+        "line": 589,
         "column": 73,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 690,
+        "line": 590,
         "column": 24,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 690,
+        "line": 590,
         "column": 51,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 691,
+        "line": 591,
         "column": 25,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 691,
+        "line": 591,
         "column": 52,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 693,
+        "line": 593,
         "column": 26,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 693,
+        "line": 593,
         "column": 40,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 694,
+        "line": 594,
         "column": 29,
         "msg": "Cannot find name 'SymbolScope'."
     },
     {
-        "line": 696,
+        "line": 596,
         "column": 43,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 696,
+        "line": 596,
         "column": 72,
         "msg": "Cannot find name 'ASTFlags'."
     },
     {
-        "line": 701,
+        "line": 601,
         "column": 30,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 701,
+        "line": 601,
         "column": 57,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 702,
+        "line": 602,
         "column": 29,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 714,
+        "line": 614,
         "column": 46,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 715,
+        "line": 615,
         "column": 15,
         "msg": "Cannot find name 'FuncDecl'."
     },
     {
-        "line": 721,
+        "line": 621,
         "column": 13,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 721,
+        "line": 621,
         "column": 40,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 731,
+        "line": 631,
         "column": 30,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 738,
+        "line": 638,
         "column": 34,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 747,
+        "line": 647,
         "column": 53,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 747,
+        "line": 647,
         "column": 80,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 747,
+        "line": 647,
         "column": 101,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 747,
+        "line": 647,
         "column": 122,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 775,
+        "line": 675,
         "column": 38,
         "msg": "Cannot find name 'SymbolKind'."
     },
     {
-        "line": 801,
+        "line": 701,
         "column": 34,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 805,
+        "line": 705,
         "column": 34,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 811,
+        "line": 711,
         "column": 69,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 811,
+        "line": 711,
         "column": 93,
         "msg": "Cannot find name 'FuncDecl'."
     },
     {
-        "line": 811,
+        "line": 711,
         "column": 136,
         "msg": "Cannot find name 'FuncDecl'."
     },
     {
-        "line": 825,
+        "line": 725,
         "column": 22,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 825,
+        "line": 725,
         "column": 83,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 830,
+        "line": 730,
         "column": 44,
         "msg": "Cannot find name 'SymbolKind'."
     },
     {
-        "line": 837,
+        "line": 737,
         "column": 55,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 848,
+        "line": 748,
         "column": 47,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 852,
+        "line": 752,
         "column": 65,
         "msg": "Cannot find name 'SymbolKind'."
     },
     {
-        "line": 853,
+        "line": 753,
         "column": 32,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 857,
+        "line": 757,
         "column": 43,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 862,
+        "line": 762,
         "column": 28,
         "msg": "Cannot find name 'SymbolFlags'."
     },
     {
-        "line": 868,
+        "line": 768,
         "column": 42,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 868,
+        "line": 768,
         "column": 55,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 868,
+        "line": 768,
         "column": 68,
         "msg": "Cannot find name 'IAstWalker'."
     },
     {
-        "line": 869,
+        "line": 769,
         "column": 22,
         "msg": "Cannot find name 'TypeCollectionContext'."
     },
     {
-        "line": 873,
+        "line": 773,
         "column": 29,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 874,
+        "line": 774,
         "column": 25,
         "msg": "Cannot find name 'Script'."
     },
     {
-        "line": 874,
+        "line": 774,
         "column": 35,
         "msg": "Cannot find name 'Script'."
     },
     {
-        "line": 878,
+        "line": 778,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 881,
+        "line": 781,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 884,
+        "line": 784,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 887,
+        "line": 787,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 890,
+        "line": 790,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 893,
+        "line": 793,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 896,
+        "line": 796,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 901,
+        "line": 801,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 904,
+        "line": 804,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 907,
+        "line": 807,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 919,
+        "line": 819,
         "column": 43,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 919,
+        "line": 819,
         "column": 56,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 919,
+        "line": 819,
         "column": 69,
         "msg": "Cannot find name 'IAstWalker'."
     },
     {
-        "line": 920,
+        "line": 820,
         "column": 22,
         "msg": "Cannot find name 'TypeCollectionContext'."
     },
     {
-        "line": 922,
+        "line": 822,
         "column": 29,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 923,
+        "line": 823,
         "column": 13,
         "msg": "Cannot find name 'popTypeCollectionScope'."
     },
     {
-        "line": 925,
+        "line": 825,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 926,
+        "line": 826,
         "column": 13,
         "msg": "Cannot find name 'popTypeCollectionScope'."
     },
     {
-        "line": 928,
+        "line": 828,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 929,
+        "line": 829,
         "column": 13,
         "msg": "Cannot find name 'popTypeCollectionScope'."
     }

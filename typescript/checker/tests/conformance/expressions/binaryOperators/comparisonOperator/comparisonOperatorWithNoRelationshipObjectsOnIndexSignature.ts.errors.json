@@ -1,123 +1,183 @@
 [
     {
-        "line": 49,
+        "line": 27,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types '{ [a"
     },
     {
-        "line": 50,
+        "line": 28,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types '{ [index"
     },
     {
-        "line": 51,
+        "line": 29,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types '{ [index"
     },
     {
-        "line": 54,
+        "line": 32,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types '{ [b"
     },
     {
-        "line": 55,
+        "line": 33,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types '{ [index"
     },
     {
-        "line": 56,
+        "line": 34,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types '{ [index"
     },
     {
-        "line": 60,
+        "line": 38,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types '{ [a"
     },
     {
-        "line": 61,
+        "line": 39,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types '{ [index"
     },
     {
-        "line": 62,
+        "line": 40,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types '{ [index"
     },
     {
-        "line": 65,
+        "line": 43,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types '{ [b"
     },
     {
-        "line": 66,
+        "line": 44,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types '{ [index"
     },
     {
-        "line": 67,
+        "line": 45,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types '{ [index"
     },
     {
-        "line": 71,
+        "line": 49,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types '{ [a"
     },
     {
-        "line": 72,
+        "line": 50,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types '{ [index"
     },
     {
-        "line": 73,
+        "line": 51,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types '{ [index"
     },
     {
-        "line": 76,
+        "line": 54,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types '{ [b"
     },
     {
-        "line": 77,
+        "line": 55,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types '{ [index"
     },
     {
-        "line": 78,
+        "line": 56,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types '{ [index"
     },
     {
-        "line": 82,
+        "line": 60,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types '{ [a"
     },
     {
-        "line": 83,
+        "line": 61,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types '{ [index"
     },
     {
-        "line": 84,
+        "line": 62,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types '{ [index"
     },
     {
-        "line": 87,
+        "line": 65,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types '{ [b"
     },
     {
-        "line": 88,
+        "line": 66,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types '{ [index"
     },
     {
-        "line": 89,
+        "line": 67,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types '{ [index"
+    },
+    {
+        "line": 71,
+        "column": 12,
+        "msg": "This condition will always return 'false' since the types '{ [a"
+    },
+    {
+        "line": 72,
+        "column": 12,
+        "msg": "This condition will always return 'false' since the types '{ [index"
+    },
+    {
+        "line": 73,
+        "column": 12,
+        "msg": "This condition will always return 'false' since the types '{ [index"
+    },
+    {
+        "line": 76,
+        "column": 12,
+        "msg": "This condition will always return 'false' since the types '{ [b"
+    },
+    {
+        "line": 77,
+        "column": 12,
+        "msg": "This condition will always return 'false' since the types '{ [index"
+    },
+    {
+        "line": 78,
+        "column": 12,
+        "msg": "This condition will always return 'false' since the types '{ [index"
+    },
+    {
+        "line": 82,
+        "column": 12,
+        "msg": "This condition will always return 'true' since the types '{ [a"
+    },
+    {
+        "line": 83,
+        "column": 12,
+        "msg": "This condition will always return 'true' since the types '{ [index"
+    },
+    {
+        "line": 84,
+        "column": 12,
+        "msg": "This condition will always return 'true' since the types '{ [index"
+    },
+    {
+        "line": 87,
+        "column": 12,
+        "msg": "This condition will always return 'true' since the types '{ [b"
+    },
+    {
+        "line": 88,
+        "column": 12,
+        "msg": "This condition will always return 'true' since the types '{ [index"
+    },
+    {
+        "line": 89,
+        "column": 12,
+        "msg": "This condition will always return 'true' since the types '{ [index"
     },
     {
         "line": 93,
@@ -176,66 +236,6 @@
     },
     {
         "line": 111,
-        "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ [index"
-    },
-    {
-        "line": 115,
-        "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ [a"
-    },
-    {
-        "line": 116,
-        "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ [index"
-    },
-    {
-        "line": 117,
-        "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ [index"
-    },
-    {
-        "line": 120,
-        "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ [b"
-    },
-    {
-        "line": 121,
-        "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ [index"
-    },
-    {
-        "line": 122,
-        "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ [index"
-    },
-    {
-        "line": 126,
-        "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ [a"
-    },
-    {
-        "line": 127,
-        "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ [index"
-    },
-    {
-        "line": 128,
-        "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ [index"
-    },
-    {
-        "line": 131,
-        "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ [b"
-    },
-    {
-        "line": 132,
-        "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ [index"
-    },
-    {
-        "line": 133,
         "column": 12,
         "msg": "This condition will always return 'true' since the types '{ [index"
     }

@@ -1,16 +1,16 @@
 [
     {
-        "line": 78,
+        "line": 45,
         "column": 5,
         "msg": "Type 'S' is not assignable to type 'T'."
     },
     {
-        "line": 92,
+        "line": 59,
         "column": 5,
         "msg": "Type 'S' is not assignable to type 'T'."
     },
     {
-        "line": 116,
+        "line": 83,
         "column": 5,
         "msg": "Type 'S' is not assignable to type 'T'."
     }

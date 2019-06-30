@@ -1,16 +1,16 @@
 [
     {
-        "line": 28,
+        "line": 21,
         "column": 12,
         "msg": "Cannot redeclare exported variable 'r5'."
     },
     {
-        "line": 29,
+        "line": 22,
         "column": 12,
         "msg": "Cannot redeclare exported variable 'r5'."
     },
     {
-        "line": 50,
+        "line": 43,
         "column": 12,
         "msg": "'r12' is referenced directly or indirectly in its own type annotation."
     }

@@ -1,16 +1,16 @@
 [
     {
-        "line": 8,
+        "line": 3,
         "column": 5,
         "msg": "Quoted constructors have previously been interpreted as methods, which is incorrect. In TypeScript 3.6, they will be correctly parsed as constructors. In the meantime, consider using 'constructor()' to write a constructor, or '[\"constructor\"]()' to write a method."
     },
     {
-        "line": 12,
+        "line": 7,
         "column": 5,
         "msg": "Quoted constructors have previously been interpreted as methods, which is incorrect. In TypeScript 3.6, they will be correctly parsed as constructors. In the meantime, consider using 'constructor()' to write a constructor, or '[\"constructor\"]()' to write a method."
     },
     {
-        "line": 20,
+        "line": 15,
         "column": 5,
         "msg": "Quoted constructors have previously been interpreted as methods, which is incorrect. In TypeScript 3.6, they will be correctly parsed as constructors. In the meantime, consider using 'constructor()' to write a constructor, or '[\"constructor\"]()' to write a method."
     }

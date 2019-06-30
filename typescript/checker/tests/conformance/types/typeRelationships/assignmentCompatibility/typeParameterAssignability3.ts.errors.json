@@ -1,21 +1,21 @@
 [
     {
-        "line": 20,
+        "line": 15,
         "column": 5,
         "msg": "Type 'U' is not assignable to type 'T'."
     },
     {
-        "line": 21,
+        "line": 16,
         "column": 5,
         "msg": "Type 'T' is not assignable to type 'U'."
     },
     {
-        "line": 28,
+        "line": 23,
         "column": 9,
         "msg": "Type 'U' is not assignable to type 'T'."
     },
     {
-        "line": 29,
+        "line": 24,
         "column": 9,
         "msg": "Type 'T' is not assignable to type 'U'."
     }

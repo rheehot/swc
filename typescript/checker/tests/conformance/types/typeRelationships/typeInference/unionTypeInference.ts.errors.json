@@ -1,6 +1,6 @@
 [
     {
-        "line": 17,
+        "line": 10,
         "column": 15,
         "msg": "Argument of type '2' is not assignable to parameter of type 'string | 1'."
     }

@@ -1,21 +1,26 @@
 [
     {
+        "line": 17,
+        "column": 5,
+        "msg": "Type '(x"
+    },
+    {
+        "line": 20,
+        "column": 5,
+        "msg": "Type '(x"
+    },
+    {
+        "line": 21,
+        "column": 5,
+        "msg": "Type '(x"
+    },
+    {
         "line": 23,
         "column": 5,
         "msg": "Type '(x"
     },
     {
-        "line": 26,
-        "column": 5,
-        "msg": "Type '(x"
-    },
-    {
-        "line": 27,
-        "column": 5,
-        "msg": "Type '(x"
-    },
-    {
-        "line": 29,
+        "line": 34,
         "column": 5,
         "msg": "Type '(x"
     },
@@ -26,11 +31,6 @@
     },
     {
         "line": 46,
-        "column": 5,
-        "msg": "Type '(x"
-    },
-    {
-        "line": 52,
         "column": 5,
         "msg": "Type '(x"
     }

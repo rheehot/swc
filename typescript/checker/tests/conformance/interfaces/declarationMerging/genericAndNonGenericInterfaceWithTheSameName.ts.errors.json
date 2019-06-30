@@ -1,31 +1,31 @@
 [
     {
-        "line": 12,
+        "line": 4,
         "column": 11,
         "msg": "All declarations of 'A' must have identical type parameters."
     },
     {
-        "line": 16,
+        "line": 8,
         "column": 11,
         "msg": "All declarations of 'A' must have identical type parameters."
     },
     {
-        "line": 21,
+        "line": 13,
         "column": 15,
         "msg": "All declarations of 'A' must have identical type parameters."
     },
     {
-        "line": 25,
+        "line": 17,
         "column": 15,
         "msg": "All declarations of 'A' must have identical type parameters."
     },
     {
-        "line": 43,
+        "line": 35,
         "column": 22,
         "msg": "All declarations of 'A' must have identical type parameters."
     },
     {
-        "line": 49,
+        "line": 41,
         "column": 22,
         "msg": "All declarations of 'A' must have identical type parameters."
     }

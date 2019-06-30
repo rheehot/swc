@@ -1,36 +1,36 @@
 [
     {
-        "line": 10,
+        "line": 3,
         "column": 5,
         "msg": "'c' is referenced directly or indirectly in its own type annotation."
     },
     {
-        "line": 12,
+        "line": 5,
         "column": 5,
         "msg": "'d' is referenced directly or indirectly in its own type annotation."
     },
     {
-        "line": 14,
+        "line": 7,
         "column": 5,
         "msg": "'e' is referenced directly or indirectly in its own type annotation."
     },
     {
-        "line": 18,
+        "line": 11,
         "column": 5,
         "msg": "'f' is referenced directly or indirectly in its own type annotation."
     },
     {
-        "line": 20,
+        "line": 13,
         "column": 5,
         "msg": "'f2' is referenced directly or indirectly in its own type annotation."
     },
     {
-        "line": 22,
+        "line": 15,
         "column": 5,
         "msg": "'f3' is referenced directly or indirectly in its own type annotation."
     },
     {
-        "line": 59,
+        "line": 52,
         "column": 5,
         "msg": "'hy3' is referenced directly or indirectly in its own type annotation."
     }

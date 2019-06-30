@@ -1,41 +1,41 @@
 [
     {
-        "line": 83,
+        "line": 80,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 89,
+        "line": 86,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 98,
+        "line": 95,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 104,
+        "line": 101,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 115,
+        "line": 112,
         "column": 25,
         "msg": "Only public and protected methods of the base class are accessible via the 'super' keyword."
     },
     {
-        "line": 123,
+        "line": 120,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 129,
+        "line": 126,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 221,
+        "line": 218,
         "column": 24,
         "msg": "Only public and protected methods of the base class are accessible via the 'super' keyword."
     }

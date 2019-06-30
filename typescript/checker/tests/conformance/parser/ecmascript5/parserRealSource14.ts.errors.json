@@ -1,143 +1,323 @@
 [
     {
-        "line": 97,
+        "line": 5,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found."
     },
     {
-        "line": 117,
+        "line": 25,
         "column": 33,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 131,
+        "line": 39,
         "column": 34,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 141,
+        "line": 49,
         "column": 37,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 161,
+        "line": 69,
         "column": 39,
         "msg": "Namespace 'TypeScript' has no exported member 'NodeType'."
     },
     {
-        "line": 163,
+        "line": 71,
         "column": 35,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 168,
+        "line": 76,
         "column": 32,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 172,
+        "line": 80,
         "column": 32,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 179,
+        "line": 87,
         "column": 47,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 187,
+        "line": 95,
         "column": 56,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 188,
+        "line": 96,
         "column": 56,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 189,
+        "line": 97,
         "column": 31,
         "msg": "Namespace 'TypeScript' has no exported member 'InterfaceDeclaration'."
     },
     {
-        "line": 196,
+        "line": 104,
         "column": 56,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 197,
+        "line": 105,
         "column": 56,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 106,
+        "column": 31,
+        "msg": "Namespace 'TypeScript' has no exported member 'InterfaceDeclaration'."
+    },
+    {
+        "line": 113,
+        "column": 56,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 114,
+        "column": 56,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 115,
+        "column": 31,
+        "msg": "Namespace 'TypeScript' has no exported member 'ArgDecl'."
+    },
+    {
+        "line": 122,
+        "column": 56,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 123,
+        "column": 56,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 124,
+        "column": 31,
+        "msg": "Namespace 'TypeScript' has no exported member 'VarDecl'."
+    },
+    {
+        "line": 131,
+        "column": 56,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 132,
+        "column": 56,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 133,
+        "column": 31,
+        "msg": "Namespace 'TypeScript' has no exported member 'ModuleDeclaration'."
+    },
+    {
+        "line": 140,
+        "column": 56,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 141,
+        "column": 56,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 142,
+        "column": 31,
+        "msg": "Namespace 'TypeScript' has no exported member 'FuncDecl'."
+    },
+    {
+        "line": 149,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 150,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 157,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 158,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 165,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 166,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 173,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 174,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 175,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 176,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 177,
+        "column": 31,
+        "msg": "Namespace 'TypeScript' has no exported member 'FuncDecl'."
+    },
+    {
+        "line": 178,
+        "column": 31,
+        "msg": "Namespace 'TypeScript' has no exported member 'FuncDecl'."
+    },
+    {
+        "line": 179,
+        "column": 31,
+        "msg": "Namespace 'TypeScript' has no exported member 'ClassDeclaration'."
+    },
+    {
+        "line": 186,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 187,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 192,
+        "column": 61,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 193,
+        "column": 28,
+        "msg": "Property 'hasFlag' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 193,
+        "column": 49,
+        "msg": "Namespace 'TypeScript' has no exported member 'ModuleDeclaration'."
+    },
+    {
+        "line": 193,
+        "column": 109,
+        "msg": "Property 'ModuleFlags' does not exist on type 'typeof TypeScript'."
     },
     {
         "line": 198,
-        "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'InterfaceDeclaration'."
-    },
-    {
-        "line": 205,
-        "column": 56,
+        "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
+        "line": 199,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 200,
+        "column": 31,
+        "msg": "Namespace 'TypeScript' has no exported member 'ModuleDeclaration'."
+    },
+    {
+        "line": 201,
+        "column": 28,
+        "msg": "Property 'hasFlag' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 201,
+        "column": 49,
+        "msg": "Namespace 'TypeScript' has no exported member 'ModuleDeclaration'."
+    },
+    {
+        "line": 201,
+        "column": 113,
+        "msg": "Property 'ModuleFlags' does not exist on type 'typeof TypeScript'."
+    },
+    {
         "line": 206,
-        "column": 56,
+        "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
         "line": 207,
         "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'ArgDecl'."
+        "msg": "Namespace 'TypeScript' has no exported member 'Script'."
     },
     {
-        "line": 214,
-        "column": 56,
+        "line": 212,
+        "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 215,
-        "column": 56,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 216,
+        "line": 213,
         "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'VarDecl'."
+        "msg": "Namespace 'TypeScript' has no exported member 'SwitchStatement'."
     },
     {
-        "line": 223,
-        "column": 56,
+        "line": 218,
+        "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 219,
+        "column": 31,
+        "msg": "Namespace 'TypeScript' has no exported member 'ModuleDeclaration'."
     },
     {
         "line": 224,
-        "column": 56,
+        "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
         "line": 225,
         "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'ModuleDeclaration'."
+        "msg": "Namespace 'TypeScript' has no exported member 'ClassDeclaration'."
     },
     {
-        "line": 232,
-        "column": 56,
+        "line": 230,
+        "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 233,
-        "column": 56,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 234,
+        "line": 231,
         "column": 31,
         "msg": "Namespace 'TypeScript' has no exported member 'FuncDecl'."
     },
     {
-        "line": 241,
+        "line": 236,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 237,
+        "column": 31,
+        "msg": "Namespace 'TypeScript' has no exported member 'InterfaceDeclaration'."
     },
     {
         "line": 242,
@@ -145,29 +325,39 @@
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
+        "line": 243,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'Block'."
+    },
+    {
+        "line": 248,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
         "line": 249,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'ForStatement'."
+    },
+    {
+        "line": 254,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 250,
+        "line": 255,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'CaseStatement'."
+    },
+    {
+        "line": 260,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 257,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 258,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 265,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+        "line": 261,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'Try'."
     },
     {
         "line": 266,
@@ -176,28 +366,18 @@
     },
     {
         "line": 267,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'Catch'."
+    },
+    {
+        "line": 272,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 268,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 269,
-        "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'FuncDecl'."
-    },
-    {
-        "line": 270,
-        "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'FuncDecl'."
-    },
-    {
-        "line": 271,
-        "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'ClassDeclaration'."
+        "line": 273,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'DoWhileStatement'."
     },
     {
         "line": 278,
@@ -206,28 +386,18 @@
     },
     {
         "line": 279,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'WhileStatement'."
+    },
+    {
+        "line": 284,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 284,
-        "column": 61,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
         "line": 285,
-        "column": 28,
-        "msg": "Property 'hasFlag' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 285,
-        "column": 49,
-        "msg": "Namespace 'TypeScript' has no exported member 'ModuleDeclaration'."
-    },
-    {
-        "line": 285,
-        "column": 109,
-        "msg": "Property 'ModuleFlags' does not exist on type 'typeof TypeScript'."
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'ForInStatement'."
     },
     {
         "line": 290,
@@ -236,48 +406,38 @@
     },
     {
         "line": 291,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'WithStatement'."
+    },
+    {
+        "line": 296,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 292,
-        "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'ModuleDeclaration'."
+        "line": 297,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'Finally'."
     },
     {
-        "line": 293,
-        "column": 28,
-        "msg": "Property 'hasFlag' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 293,
-        "column": 49,
-        "msg": "Namespace 'TypeScript' has no exported member 'ModuleDeclaration'."
-    },
-    {
-        "line": 293,
-        "column": 113,
-        "msg": "Property 'ModuleFlags' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 298,
+        "line": 302,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 299,
-        "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'Script'."
+        "line": 303,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
         "line": 304,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'SwitchStatement'."
     },
     {
-        "line": 305,
-        "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'SwitchStatement'."
+        "line": 309,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
         "line": 310,
@@ -286,28 +446,28 @@
     },
     {
         "line": 311,
-        "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'ModuleDeclaration'."
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'SwitchStatement'."
     },
     {
-        "line": 316,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+        "line": 312,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'SwitchStatement'."
     },
     {
         "line": 317,
-        "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'ClassDeclaration'."
-    },
-    {
-        "line": 322,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 323,
-        "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'FuncDecl'."
+        "line": 318,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 319,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'UnaryExpression'."
     },
     {
         "line": 328,
@@ -316,28 +476,48 @@
     },
     {
         "line": 329,
-        "column": 31,
-        "msg": "Namespace 'TypeScript' has no exported member 'InterfaceDeclaration'."
-    },
-    {
-        "line": 334,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 335,
+        "line": 330,
         "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'Block'."
+        "msg": "Namespace 'TypeScript' has no exported member 'UnaryExpression'."
     },
     {
-        "line": 340,
+        "line": 331,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'ASTList'."
+    },
+    {
+        "line": 336,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 341,
+        "line": 337,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 338,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 339,
         "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'ForStatement'."
+        "msg": "Namespace 'TypeScript' has no exported member 'UnaryExpression'."
+    },
+    {
+        "line": 344,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 345,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
         "line": 346,
@@ -346,93 +526,88 @@
     },
     {
         "line": 347,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'CaseStatement'."
-    },
-    {
-        "line": 352,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 348,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'UnaryExpression'."
     },
     {
         "line": 353,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'Try'."
-    },
-    {
-        "line": 358,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 359,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'Catch'."
-    },
-    {
-        "line": 364,
+        "line": 354,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 365,
+        "line": 355,
         "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'DoWhileStatement'."
+        "msg": "Namespace 'TypeScript' has no exported member 'UnaryExpression'."
     },
     {
-        "line": 370,
+        "line": 360,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 371,
+        "line": 361,
         "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'WhileStatement'."
+        "msg": "Namespace 'TypeScript' has no exported member 'BinaryExpression'."
     },
     {
-        "line": 376,
+        "line": 366,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 377,
+        "line": 367,
         "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'ForInStatement'."
+        "msg": "Namespace 'TypeScript' has no exported member 'BinaryExpression'."
     },
     {
-        "line": 382,
+        "line": 372,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 383,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'WithStatement'."
-    },
-    {
-        "line": 388,
+        "line": 378,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 389,
+        "line": 379,
         "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'Finally'."
+        "msg": "Namespace 'TypeScript' has no exported member 'IfStatement'."
+    },
+    {
+        "line": 384,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 385,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'IfStatement'."
     },
     {
         "line": 394,
-        "column": 65,
+        "column": 61,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
         "line": 395,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'ASTList'."
     },
     {
-        "line": 396,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'SwitchStatement'."
+        "line": 400,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
         "line": 401,
@@ -441,38 +616,38 @@
     },
     {
         "line": 402,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'FuncDecl'."
+    },
+    {
+        "line": 407,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 403,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'SwitchStatement'."
-    },
-    {
-        "line": 404,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'SwitchStatement'."
+        "line": 408,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
         "line": 409,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 410,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 411,
         "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'UnaryExpression'."
+        "msg": "Namespace 'TypeScript' has no exported member 'FuncDecl'."
     },
     {
-        "line": 420,
+        "line": 414,
         "column": 65,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 415,
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
+    },
+    {
+        "line": 416,
+        "column": 30,
+        "msg": "Namespace 'TypeScript' has no exported member 'CallExpression'."
     },
     {
         "line": 421,
@@ -481,13 +656,13 @@
     },
     {
         "line": 422,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'UnaryExpression'."
+        "column": 65,
+        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
         "line": 423,
         "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'ASTList'."
+        "msg": "Namespace 'TypeScript' has no exported member 'CallExpression'."
     },
     {
         "line": 428,
@@ -496,306 +671,131 @@
     },
     {
         "line": 429,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 430,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 431,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'UnaryExpression'."
-    },
-    {
-        "line": 436,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 437,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 438,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 439,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 440,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'UnaryExpression'."
-    },
-    {
-        "line": 445,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 446,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 447,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'UnaryExpression'."
-    },
-    {
-        "line": 452,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 453,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'BinaryExpression'."
-    },
-    {
-        "line": 458,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 459,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'BinaryExpression'."
-    },
-    {
-        "line": 464,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 470,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 471,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'IfStatement'."
-    },
-    {
-        "line": 476,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 477,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'IfStatement'."
-    },
-    {
-        "line": 486,
-        "column": 61,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 487,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'ASTList'."
-    },
-    {
-        "line": 492,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 493,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 494,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'FuncDecl'."
-    },
-    {
-        "line": 499,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 500,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 501,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'FuncDecl'."
-    },
-    {
-        "line": 506,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 507,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 508,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'CallExpression'."
-    },
-    {
-        "line": 513,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 514,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 515,
-        "column": 30,
-        "msg": "Namespace 'TypeScript' has no exported member 'CallExpression'."
-    },
-    {
-        "line": 520,
-        "column": 65,
-        "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
-    },
-    {
-        "line": 521,
         "column": 30,
         "msg": "Namespace 'TypeScript' has no exported member 'Block'."
     },
     {
-        "line": 525,
+        "line": 433,
         "column": 52,
         "msg": "Namespace 'TypeScript' has no exported member 'ASTSpan'."
     },
     {
-        "line": 555,
+        "line": 463,
         "column": 61,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 556,
+        "line": 464,
         "column": 52,
         "msg": "Namespace 'TypeScript' has no exported member 'Comment'."
     },
     {
-        "line": 571,
+        "line": 479,
         "column": 45,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 571,
+        "line": 479,
         "column": 69,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 571,
+        "line": 479,
         "column": 82,
         "msg": "Cannot find name 'IAstWalker'."
     },
     {
-        "line": 582,
+        "line": 490,
         "column": 21,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 583,
+        "line": 491,
         "column": 49,
         "msg": "Property 'NodeType' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 609,
+        "line": 517,
         "column": 22,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 618,
+        "line": 526,
         "column": 20,
         "msg": "Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 626,
+        "line": 534,
         "column": 62,
         "msg": "Namespace 'TypeScript' has no exported member 'Script'."
     },
     {
-        "line": 628,
+        "line": 536,
         "column": 36,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 628,
+        "line": 536,
         "column": 60,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 628,
+        "line": 536,
         "column": 84,
         "msg": "Namespace 'TypeScript' has no exported member 'IAstWalker'."
     },
     {
-        "line": 628,
+        "line": 536,
         "column": 108,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 644,
+        "line": 552,
         "column": 20,
         "msg": "Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'."
     },
     {
-        "line": 651,
+        "line": 559,
         "column": 45,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 651,
+        "line": 559,
         "column": 95,
         "msg": "Namespace 'TypeScript' has no exported member 'IAstWalker'."
     },
     {
-        "line": 652,
+        "line": 560,
         "column": 45,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 652,
+        "line": 560,
         "column": 69,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 652,
+        "line": 560,
         "column": 93,
         "msg": "Namespace 'TypeScript' has no exported member 'IAstWalker'."
     },
     {
-        "line": 658,
+        "line": 566,
         "column": 46,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 658,
+        "line": 566,
         "column": 70,
         "msg": "Namespace 'TypeScript' has no exported member 'AST'."
     },
     {
-        "line": 658,
+        "line": 566,
         "column": 94,
         "msg": "Namespace 'TypeScript' has no exported member 'IAstWalker'."
     },
     {
-        "line": 665,
+        "line": 573,
         "column": 20,
         "msg": "Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'."
     }

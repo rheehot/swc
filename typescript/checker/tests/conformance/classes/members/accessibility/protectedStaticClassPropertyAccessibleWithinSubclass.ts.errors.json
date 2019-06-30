@@ -1,36 +1,36 @@
 [
     {
-        "line": 13,
+        "line": 8,
         "column": 18,
         "msg": "Property 'x' is protected and only accessible within class 'Derived3' and its subclasses."
     },
     {
-        "line": 22,
+        "line": 17,
         "column": 18,
         "msg": "Property 'x' is protected and only accessible within class 'Derived3' and its subclasses."
     },
     {
-        "line": 31,
+        "line": 26,
         "column": 18,
         "msg": "Property 'x' is protected and only accessible within class 'Derived3' and its subclasses."
     },
     {
-        "line": 46,
+        "line": 41,
         "column": 6,
         "msg": "Property 'x' is protected and only accessible within class 'Base' and its subclasses."
     },
     {
-        "line": 47,
+        "line": 42,
         "column": 10,
         "msg": "Property 'x' is protected and only accessible within class 'Base' and its subclasses."
     },
     {
-        "line": 48,
+        "line": 43,
         "column": 10,
         "msg": "Property 'x' is protected and only accessible within class 'Base' and its subclasses."
     },
     {
-        "line": 49,
+        "line": 44,
         "column": 10,
         "msg": "Property 'x' is protected and only accessible within class 'Derived3' and its subclasses."
     }

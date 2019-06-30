@@ -1,56 +1,56 @@
 [
     {
-        "line": 25,
+        "line": 3,
         "column": 14,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     },
     {
-        "line": 88,
+        "line": 66,
         "column": 13,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 91,
+        "line": 69,
         "column": 13,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 98,
+        "line": 76,
         "column": 21,
         "msg": "Overload signatures must all be exported or non-exported."
     },
     {
-        "line": 102,
+        "line": 80,
         "column": 14,
         "msg": "Overload signatures must all be exported or non-exported."
     },
     {
-        "line": 108,
+        "line": 86,
         "column": 18,
         "msg": "Overload signatures must all be ambient or non-ambient."
     },
     {
-        "line": 113,
+        "line": 91,
         "column": 18,
         "msg": "Overload signatures must all be ambient or non-ambient."
+    },
+    {
+        "line": 95,
+        "column": 10,
+        "msg": "This overload signature is not compatible with its implementation signature."
+    },
+    {
+        "line": 100,
+        "column": 10,
+        "msg": "This overload signature is not compatible with its implementation signature."
+    },
+    {
+        "line": 104,
+        "column": 10,
+        "msg": "This overload signature is not compatible with its implementation signature."
     },
     {
         "line": 117,
-        "column": 10,
-        "msg": "This overload signature is not compatible with its implementation signature."
-    },
-    {
-        "line": 122,
-        "column": 10,
-        "msg": "This overload signature is not compatible with its implementation signature."
-    },
-    {
-        "line": 126,
-        "column": 10,
-        "msg": "This overload signature is not compatible with its implementation signature."
-    },
-    {
-        "line": 139,
         "column": 19,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     }

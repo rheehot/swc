@@ -1,36 +1,36 @@
 [
     {
-        "line": 12,
+        "line": 6,
         "column": 1,
         "msg": "Property 'foo' is missing in type '{}' but required in type '{ foo"
     },
     {
-        "line": 20,
+        "line": 14,
         "column": 1,
         "msg": "Type 'number' is not assignable to type 'object'."
     },
     {
-        "line": 21,
+        "line": 15,
         "column": 1,
         "msg": "Type 'true' is not assignable to type 'object'."
     },
     {
-        "line": 22,
+        "line": 16,
         "column": 1,
         "msg": "Type 'string' is not assignable to type 'object'."
     },
     {
-        "line": 24,
+        "line": 18,
         "column": 1,
         "msg": "Type 'object' is not assignable to type 'number'."
     },
     {
-        "line": 25,
+        "line": 19,
         "column": 1,
         "msg": "Type 'object' is not assignable to type 'boolean'."
     },
     {
-        "line": 26,
+        "line": 20,
         "column": 1,
         "msg": "Type 'object' is not assignable to type 'string'."
     }

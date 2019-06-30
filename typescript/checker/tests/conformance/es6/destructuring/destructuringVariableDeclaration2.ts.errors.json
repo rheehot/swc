@@ -1,21 +1,21 @@
 [
     {
-        "line": 7,
+        "line": 4,
         "column": 46,
         "msg": "Type 'true' is not assignable to type 'number'."
     },
     {
-        "line": 7,
+        "line": 4,
         "column": 56,
         "msg": "Type 'number' is not assignable to type 'string'."
     },
     {
-        "line": 8,
+        "line": 5,
         "column": 61,
         "msg": "Type 'false' is not assignable to type 'string'."
     },
     {
-        "line": 23,
+        "line": 20,
         "column": 16,
         "msg": "Type 'string' is not assignable to type 'number'."
     }

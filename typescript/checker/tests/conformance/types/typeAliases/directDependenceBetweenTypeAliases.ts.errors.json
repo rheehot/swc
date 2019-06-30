@@ -1,76 +1,76 @@
 [
     {
-        "line": 15,
+        "line": 5,
         "column": 6,
         "msg": "Type alias 'T0' circularly references itself."
     },
     {
-        "line": 16,
+        "line": 6,
         "column": 6,
         "msg": "Type alias 'T0_1' circularly references itself."
     },
     {
-        "line": 17,
+        "line": 7,
         "column": 6,
         "msg": "Type alias 'T0_2' circularly references itself."
     },
     {
-        "line": 18,
+        "line": 8,
         "column": 6,
         "msg": "Type alias 'T0_3' circularly references itself."
     },
     {
-        "line": 22,
+        "line": 12,
         "column": 6,
         "msg": "Type alias 'T1' circularly references itself."
     },
     {
-        "line": 25,
+        "line": 15,
         "column": 6,
         "msg": "Type alias 'T2' circularly references itself."
     },
     {
-        "line": 27,
+        "line": 17,
         "column": 6,
         "msg": "Type alias 'T2_1' circularly references itself."
     },
     {
-        "line": 30,
+        "line": 20,
         "column": 6,
         "msg": "Type alias 'T3' circularly references itself."
     },
     {
-        "line": 33,
+        "line": 23,
         "column": 6,
         "msg": "Type alias 'T4' circularly references itself."
     },
     {
-        "line": 36,
+        "line": 26,
         "column": 5,
         "msg": "'x' is referenced directly or indirectly in its own type annotation."
     },
     {
-        "line": 37,
+        "line": 27,
         "column": 6,
         "msg": "Type alias 'T5' circularly references itself."
     },
     {
-        "line": 40,
+        "line": 30,
         "column": 6,
         "msg": "Type alias 'T6' circularly references itself."
     },
     {
-        "line": 41,
+        "line": 31,
         "column": 6,
         "msg": "Type alias 'T7' circularly references itself."
     },
     {
-        "line": 42,
+        "line": 32,
         "column": 5,
         "msg": "'yy' is referenced directly or indirectly in its own type annotation."
     },
     {
-        "line": 43,
+        "line": 33,
         "column": 6,
         "msg": "Type alias 'T8' circularly references itself."
     }

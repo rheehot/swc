@@ -1,6 +1,6 @@
 [
     {
-        "line": 30,
+        "line": 5,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found."
     }

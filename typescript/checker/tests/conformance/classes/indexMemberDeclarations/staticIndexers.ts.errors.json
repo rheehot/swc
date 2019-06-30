@@ -1,21 +1,21 @@
 [
     {
-        "line": 8,
+        "line": 5,
         "column": 5,
         "msg": "'static' modifier cannot appear on an index signature."
     },
     {
-        "line": 12,
+        "line": 9,
         "column": 5,
         "msg": "'static' modifier cannot appear on an index signature."
     },
     {
-        "line": 16,
+        "line": 13,
         "column": 5,
         "msg": "'static' modifier cannot appear on an index signature."
     },
     {
-        "line": 16,
+        "line": 13,
         "column": 25,
         "msg": "Static members cannot reference class type parameters."
     }

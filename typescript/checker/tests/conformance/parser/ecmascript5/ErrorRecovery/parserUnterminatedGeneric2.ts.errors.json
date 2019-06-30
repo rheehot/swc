@@ -1,76 +1,76 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 5,
         "msg": "Cannot find name 'interfaceICompiledExpression'."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 34,
         "msg": "';' expected."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 42,
         "msg": "'=>' expected."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 9,
         "msg": "Cannot find name 'assign'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 16,
         "msg": "Cannot find name 'context'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 23,
         "msg": "',' expected."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 25,
         "msg": "'any' only refers to a type, but is being used as a value here."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 30,
         "msg": "Cannot find name 'value'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 35,
         "msg": "',' expected."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 37,
         "msg": "'any' only refers to a type, but is being used as a value here."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 41,
         "msg": "';' expected."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 43,
         "msg": "'any' only refers to a type, but is being used as a value here."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 23,
         "msg": "Cannot find name 'IPromise'."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 45,
         "msg": "Cannot find name 'IPromise'."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 54,
         "msg": "'>' expected."
     }

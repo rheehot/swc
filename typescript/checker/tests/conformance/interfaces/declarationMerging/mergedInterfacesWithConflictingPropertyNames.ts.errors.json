@@ -1,16 +1,16 @@
 [
     {
-        "line": 14,
+        "line": 7,
         "column": 5,
         "msg": "Subsequent property declarations must have the same type.  Property 'x' must be of type 'string', but here has type 'number'."
     },
     {
-        "line": 23,
+        "line": 16,
         "column": 9,
         "msg": "Subsequent property declarations must have the same type.  Property 'x' must be of type 'T', but here has type 'number'."
     },
     {
-        "line": 47,
+        "line": 40,
         "column": 9,
         "msg": "Subsequent property declarations must have the same type.  Property 'x' must be of type 'T', but here has type 'number'."
     }

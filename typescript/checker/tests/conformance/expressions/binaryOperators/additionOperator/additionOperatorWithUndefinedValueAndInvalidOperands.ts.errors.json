@@ -1,56 +1,56 @@
 [
     {
-        "line": 16,
+        "line": 12,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'boolean'."
     },
     {
-        "line": 17,
+        "line": 13,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'Object'."
     },
     {
-        "line": 18,
+        "line": 14,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'void'."
     },
     {
-        "line": 19,
+        "line": 15,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'boolean' and 'undefined'."
     },
     {
-        "line": 20,
+        "line": 16,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'Object' and 'undefined'."
     },
     {
-        "line": 21,
+        "line": 17,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'void'."
     },
     {
-        "line": 24,
+        "line": 20,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'Number'."
     },
     {
-        "line": 25,
+        "line": 21,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'true'."
     },
     {
-        "line": 26,
+        "line": 22,
         "column": 10,
         "msg": "Operator '+' cannot be applied to types 'undefined' and '{ a"
     },
     {
-        "line": 27,
+        "line": 23,
         "column": 11,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'void'."
     },
     {
-        "line": 28,
+        "line": 24,
         "column": 11,
         "msg": "Operator '+' cannot be applied to types 'undefined' and '() => void'."
     }

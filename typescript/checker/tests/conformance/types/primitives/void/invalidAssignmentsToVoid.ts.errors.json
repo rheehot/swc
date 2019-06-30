@@ -1,51 +1,51 @@
 [
     {
-        "line": 7,
+        "line": 3,
         "column": 1,
         "msg": "Type '1' is not assignable to type 'void'."
     },
     {
-        "line": 8,
+        "line": 4,
         "column": 1,
         "msg": "Type 'true' is not assignable to type 'void'."
     },
     {
-        "line": 9,
+        "line": 5,
         "column": 1,
         "msg": "Type '\"\"' is not assignable to type 'void'."
     },
     {
-        "line": 10,
+        "line": 6,
         "column": 1,
         "msg": "Type '{}' is not assignable to type 'void'."
     },
     {
-        "line": 14,
+        "line": 10,
         "column": 1,
         "msg": "Type 'typeof C' is not assignable to type 'void'."
     },
     {
-        "line": 15,
+        "line": 11,
         "column": 1,
         "msg": "Type 'C' is not assignable to type 'void'."
     },
     {
-        "line": 19,
+        "line": 15,
         "column": 1,
         "msg": "Type 'I' is not assignable to type 'void'."
     },
     {
-        "line": 22,
+        "line": 18,
         "column": 1,
         "msg": "Type 'typeof M' is not assignable to type 'void'."
     },
     {
-        "line": 25,
+        "line": 21,
         "column": 5,
         "msg": "Type 'T' is not assignable to type 'void'."
     },
     {
-        "line": 27,
+        "line": 23,
         "column": 5,
         "msg": "Type '<T>(a"
     }

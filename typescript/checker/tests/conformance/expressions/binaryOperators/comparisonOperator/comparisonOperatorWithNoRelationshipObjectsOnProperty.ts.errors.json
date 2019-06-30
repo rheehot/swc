@@ -1,161 +1,161 @@
 [
     {
-        "line": 44,
+        "line": 24,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'A1' and 'B1'."
     },
     {
-        "line": 45,
+        "line": 25,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'A2' and 'B2'."
     },
     {
-        "line": 47,
+        "line": 27,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'B1' and 'A1'."
     },
     {
-        "line": 48,
+        "line": 28,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'B2' and 'A2'."
     },
     {
-        "line": 51,
+        "line": 31,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'A1' and 'B1'."
     },
     {
-        "line": 52,
+        "line": 32,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'A2' and 'B2'."
     },
     {
-        "line": 54,
+        "line": 34,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'B1' and 'A1'."
     },
     {
-        "line": 55,
+        "line": 35,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'B2' and 'A2'."
     },
     {
-        "line": 58,
+        "line": 38,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'A1' and 'B1'."
     },
     {
-        "line": 59,
+        "line": 39,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'A2' and 'B2'."
     },
     {
-        "line": 61,
+        "line": 41,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'B1' and 'A1'."
     },
     {
-        "line": 62,
+        "line": 42,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'B2' and 'A2'."
     },
     {
-        "line": 65,
+        "line": 45,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'A1' and 'B1'."
     },
     {
-        "line": 66,
+        "line": 46,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'A2' and 'B2'."
     },
     {
-        "line": 68,
+        "line": 48,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'B1' and 'A1'."
     },
     {
-        "line": 69,
+        "line": 49,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'B2' and 'A2'."
     },
     {
-        "line": 72,
+        "line": 52,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'A1' and 'B1' have no overlap."
     },
     {
-        "line": 73,
+        "line": 53,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'A2' and 'B2' have no overlap."
     },
     {
-        "line": 75,
+        "line": 55,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'B1' and 'A1' have no overlap."
     },
     {
-        "line": 76,
+        "line": 56,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'B2' and 'A2' have no overlap."
     },
     {
-        "line": 79,
+        "line": 59,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'A1' and 'B1' have no overlap."
     },
     {
-        "line": 80,
+        "line": 60,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'A2' and 'B2' have no overlap."
     },
     {
-        "line": 82,
+        "line": 62,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'B1' and 'A1' have no overlap."
     },
     {
-        "line": 83,
+        "line": 63,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'B2' and 'A2' have no overlap."
     },
     {
-        "line": 86,
+        "line": 66,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'A1' and 'B1' have no overlap."
     },
     {
-        "line": 87,
+        "line": 67,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'A2' and 'B2' have no overlap."
     },
     {
-        "line": 89,
+        "line": 69,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'B1' and 'A1' have no overlap."
     },
     {
-        "line": 90,
+        "line": 70,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'B2' and 'A2' have no overlap."
     },
     {
-        "line": 93,
+        "line": 73,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'A1' and 'B1' have no overlap."
     },
     {
-        "line": 94,
+        "line": 74,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'A2' and 'B2' have no overlap."
     },
     {
-        "line": 96,
+        "line": 76,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'B1' and 'A1' have no overlap."
     },
     {
-        "line": 97,
+        "line": 77,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'B2' and 'A2' have no overlap."
     }

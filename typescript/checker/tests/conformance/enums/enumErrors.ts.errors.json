@@ -1,66 +1,66 @@
 [
     {
-        "line": 9,
+        "line": 3,
         "column": 6,
         "msg": "Enum name cannot be 'any'."
     },
     {
-        "line": 10,
+        "line": 4,
         "column": 6,
         "msg": "Enum name cannot be 'number'."
     },
     {
-        "line": 11,
+        "line": 5,
         "column": 6,
         "msg": "Enum name cannot be 'string'."
     },
     {
-        "line": 12,
+        "line": 6,
         "column": 6,
         "msg": "Enum name cannot be 'boolean'."
     },
     {
-        "line": 16,
+        "line": 10,
         "column": 9,
         "msg": "Type 'Number' is not assignable to type 'E5'."
     },
     {
-        "line": 33,
+        "line": 27,
         "column": 9,
         "msg": "Type 'true' is not assignable to type 'E11'."
     },
     {
-        "line": 34,
+        "line": 28,
         "column": 9,
         "msg": "Type 'Date' is not assignable to type 'E11'."
     },
     {
-        "line": 35,
+        "line": 29,
         "column": 9,
         "msg": "Type 'Window' is not assignable to type 'E11'."
     },
     {
-        "line": 36,
+        "line": 30,
         "column": 9,
         "msg": "Type '{}' is not assignable to type 'E11'."
     },
     {
-        "line": 42,
+        "line": 36,
         "column": 9,
         "msg": "Computed values are not permitted in an enum with string valued members."
     },
     {
-        "line": 43,
+        "line": 37,
         "column": 9,
         "msg": "Computed values are not permitted in an enum with string valued members."
     },
     {
-        "line": 44,
+        "line": 38,
         "column": 9,
         "msg": "Computed values are not permitted in an enum with string valued members."
     },
     {
-        "line": 45,
+        "line": 39,
         "column": 9,
         "msg": "Computed values are not permitted in an enum with string valued members."
     }

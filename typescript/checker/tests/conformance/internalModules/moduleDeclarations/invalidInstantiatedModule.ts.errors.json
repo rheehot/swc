@@ -1,16 +1,16 @@
 [
     {
-        "line": 7,
+        "line": 3,
         "column": 18,
         "msg": "Duplicate identifier 'Point'."
     },
     {
-        "line": 8,
+        "line": 4,
         "column": 16,
         "msg": "Duplicate identifier 'Point'."
     },
     {
-        "line": 17,
+        "line": 13,
         "column": 8,
         "msg": "Cannot find namespace 'm'."
     }

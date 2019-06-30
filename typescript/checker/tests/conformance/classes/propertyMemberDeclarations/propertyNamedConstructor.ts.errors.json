@@ -1,6 +1,6 @@
 [
     {
-        "line": 5,
+        "line": 3,
         "column": 3,
         "msg": "Classes may not have a field named 'constructor'."
     }

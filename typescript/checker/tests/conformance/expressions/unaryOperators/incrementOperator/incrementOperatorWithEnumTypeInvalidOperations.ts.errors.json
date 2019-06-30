@@ -1,51 +1,51 @@
 [
     {
-        "line": 14,
+        "line": 8,
         "column": 25,
         "msg": "Cannot assign to 'ENUM' because it is not a variable."
+    },
+    {
+        "line": 9,
+        "column": 25,
+        "msg": "Cannot assign to 'ENUM1' because it is not a variable."
+    },
+    {
+        "line": 11,
+        "column": 23,
+        "msg": "Cannot assign to 'ENUM' because it is not a variable."
+    },
+    {
+        "line": 12,
+        "column": 23,
+        "msg": "Cannot assign to 'ENUM1' because it is not a variable."
     },
     {
         "line": 15,
         "column": 25,
-        "msg": "Cannot assign to 'ENUM1' because it is not a variable."
+        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 17,
+        "line": 16,
         "column": 23,
+        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
+    },
+    {
+        "line": 19,
+        "column": 3,
         "msg": "Cannot assign to 'ENUM' because it is not a variable."
     },
     {
-        "line": 18,
-        "column": 23,
+        "line": 20,
+        "column": 3,
         "msg": "Cannot assign to 'ENUM1' because it is not a variable."
-    },
-    {
-        "line": 21,
-        "column": 25,
-        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 22,
-        "column": 23,
-        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
-    },
-    {
-        "line": 25,
-        "column": 3,
-        "msg": "Cannot assign to 'ENUM' because it is not a variable."
-    },
-    {
-        "line": 26,
-        "column": 3,
-        "msg": "Cannot assign to 'ENUM1' because it is not a variable."
-    },
-    {
-        "line": 28,
         "column": 1,
         "msg": "Cannot assign to 'ENUM' because it is not a variable."
     },
     {
-        "line": 29,
+        "line": 23,
         "column": 1,
         "msg": "Cannot assign to 'ENUM1' because it is not a variable."
     }

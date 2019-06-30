@@ -1,28 +1,38 @@
 [
     {
-        "line": 20,
+        "line": 14,
         "column": 5,
         "msg": "Type '(...args"
     },
     {
-        "line": 24,
+        "line": 18,
         "column": 5,
         "msg": "Type '(x?"
     },
     {
-        "line": 33,
+        "line": 27,
+        "column": 5,
+        "msg": "Type '(x"
+    },
+    {
+        "line": 36,
+        "column": 5,
+        "msg": "Type '(x"
+    },
+    {
+        "line": 37,
+        "column": 5,
+        "msg": "Type '(x"
+    },
+    {
+        "line": 38,
         "column": 5,
         "msg": "Type '(x"
     },
     {
         "line": 42,
         "column": 5,
-        "msg": "Type '(x"
-    },
-    {
-        "line": 43,
-        "column": 5,
-        "msg": "Type '(x"
+        "msg": "Type '(x?"
     },
     {
         "line": 44,
@@ -30,17 +40,7 @@
         "msg": "Type '(x"
     },
     {
-        "line": 48,
-        "column": 5,
-        "msg": "Type '(x?"
-    },
-    {
-        "line": 50,
-        "column": 5,
-        "msg": "Type '(x"
-    },
-    {
-        "line": 52,
+        "line": 46,
         "column": 5,
         "msg": "Type '(x"
     }

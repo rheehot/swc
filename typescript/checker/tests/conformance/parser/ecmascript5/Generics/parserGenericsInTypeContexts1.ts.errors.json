@@ -1,91 +1,91 @@
 [
     {
-        "line": 8,
+        "line": 2,
         "column": 17,
         "msg": "Cannot find name 'A'."
     },
     {
-        "line": 8,
+        "line": 2,
         "column": 19,
         "msg": "Cannot find name 'T'."
     },
     {
-        "line": 8,
+        "line": 2,
         "column": 33,
         "msg": "Cannot find name 'B'."
     },
     {
-        "line": 8,
+        "line": 2,
         "column": 35,
         "msg": "Cannot find name 'T'."
     },
     {
-        "line": 11,
+        "line": 5,
         "column": 9,
         "msg": "Type 'C' is not generic."
     },
     {
-        "line": 11,
+        "line": 5,
         "column": 11,
         "msg": "Cannot find name 'T'."
     },
     {
-        "line": 12,
+        "line": 6,
         "column": 9,
         "msg": "Cannot find name 'D'."
     },
     {
-        "line": 12,
+        "line": 6,
         "column": 11,
         "msg": "Cannot find name 'T'."
     },
     {
-        "line": 13,
+        "line": 7,
         "column": 9,
         "msg": "Cannot find namespace 'E'."
     },
     {
-        "line": 13,
+        "line": 7,
         "column": 13,
         "msg": "Cannot find name 'T'."
     },
     {
-        "line": 14,
+        "line": 8,
         "column": 9,
         "msg": "Cannot find namespace 'G'."
     },
     {
-        "line": 14,
+        "line": 8,
         "column": 15,
         "msg": "Cannot find name 'T'."
     },
     {
-        "line": 15,
+        "line": 9,
         "column": 9,
         "msg": "Cannot find name 'K'."
     },
     {
-        "line": 15,
+        "line": 9,
         "column": 11,
         "msg": "Cannot find name 'T'."
     },
     {
-        "line": 18,
+        "line": 12,
         "column": 16,
         "msg": "Cannot find name 'E'."
     },
     {
-        "line": 18,
+        "line": 12,
         "column": 18,
         "msg": "Cannot find name 'T'."
     },
     {
-        "line": 21,
+        "line": 15,
         "column": 16,
         "msg": "Cannot find name 'F'."
     },
     {
-        "line": 21,
+        "line": 15,
         "column": 18,
         "msg": "Cannot find name 'T'."
     }

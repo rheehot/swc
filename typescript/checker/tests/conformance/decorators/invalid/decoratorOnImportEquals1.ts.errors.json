@@ -1,6 +1,6 @@
 [
     {
-        "line": 11,
+        "line": 9,
         "column": 5,
         "msg": "Decorators are not valid here."
     }

@@ -1,26 +1,26 @@
 [
     {
-        "line": 24,
+        "line": 17,
         "column": 5,
         "msg": "Type 'new (x"
     },
     {
-        "line": 25,
+        "line": 18,
         "column": 5,
         "msg": "Type 'new (x"
     },
     {
-        "line": 27,
+        "line": 20,
         "column": 5,
         "msg": "Type 'new (x"
     },
     {
-        "line": 35,
+        "line": 28,
         "column": 5,
         "msg": "Type 'new (x"
     },
     {
-        "line": 43,
+        "line": 36,
         "column": 5,
         "msg": "Type 'new (x"
     }

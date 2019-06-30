@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 2,
         "msg": "Expected 0 arguments, but got 1."
     }

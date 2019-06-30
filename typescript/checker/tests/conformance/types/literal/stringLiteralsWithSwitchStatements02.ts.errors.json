@@ -1,11 +1,11 @@
 [
     {
-        "line": 13,
+        "line": 9,
         "column": 5,
         "msg": "This condition will always return 'false' since the types '\"foo\"' and '\"bar\"' have no overlap."
     },
     {
-        "line": 18,
+        "line": 14,
         "column": 5,
         "msg": "This condition will always return 'true' since the types '\"foo\"' and '\"bar\"' have no overlap."
     }

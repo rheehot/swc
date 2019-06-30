@@ -1,71 +1,71 @@
 [
     {
-        "line": 13,
+        "line": 6,
         "column": 12,
         "msg": "Expected 2 type arguments, but got 1."
     },
     {
-        "line": 14,
+        "line": 7,
         "column": 13,
         "msg": "Expected 2 type arguments, but got 3."
     },
     {
-        "line": 17,
+        "line": 10,
         "column": 13,
         "msg": "Expected 2 type arguments, but got 1."
     },
     {
-        "line": 18,
+        "line": 11,
         "column": 14,
         "msg": "Expected 2 type arguments, but got 3."
     },
     {
-        "line": 21,
+        "line": 14,
         "column": 13,
         "msg": "Expected 2 type arguments, but got 1."
+    },
+    {
+        "line": 15,
+        "column": 14,
+        "msg": "Expected 2 type arguments, but got 3."
     },
     {
         "line": 22,
-        "column": 14,
-        "msg": "Expected 2 type arguments, but got 3."
-    },
-    {
-        "line": 29,
         "column": 22,
         "msg": "Expected 2 type arguments, but got 1."
     },
     {
-        "line": 30,
+        "line": 23,
         "column": 23,
         "msg": "Expected 2 type arguments, but got 3."
     },
     {
-        "line": 36,
+        "line": 29,
         "column": 14,
         "msg": "Expected 2 type arguments, but got 1."
     },
     {
-        "line": 37,
+        "line": 30,
         "column": 15,
         "msg": "Expected 2 type arguments, but got 3."
     },
     {
-        "line": 44,
+        "line": 37,
         "column": 23,
         "msg": "Expected 0 type arguments, but got 1."
     },
     {
-        "line": 45,
+        "line": 38,
         "column": 24,
         "msg": "Expected 0 type arguments, but got 3."
     },
     {
-        "line": 51,
+        "line": 44,
         "column": 15,
         "msg": "Expected 0 type arguments, but got 1."
     },
     {
-        "line": 52,
+        "line": 45,
         "column": 16,
         "msg": "Expected 0 type arguments, but got 3."
     }

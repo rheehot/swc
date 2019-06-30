@@ -1,11 +1,11 @@
 [
     {
-        "line": 12,
+        "line": 6,
         "column": 5,
         "msg": "Type 'T' is not assignable to type 'T & U'."
     },
     {
-        "line": 13,
+        "line": 7,
         "column": 5,
         "msg": "Type 'U' is not assignable to type 'T & U'."
     }

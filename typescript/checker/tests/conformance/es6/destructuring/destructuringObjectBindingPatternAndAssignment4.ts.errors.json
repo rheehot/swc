@@ -1,11 +1,11 @@
 [
     {
-        "line": 8,
+        "line": 7,
         "column": 9,
         "msg": "Block-scoped variable 'f' used before its declaration."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 9,
         "msg": "Block-scoped variable 'f' used before its declaration."
     }

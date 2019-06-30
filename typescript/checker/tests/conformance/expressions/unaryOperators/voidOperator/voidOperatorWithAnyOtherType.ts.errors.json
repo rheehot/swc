@@ -1,16 +1,16 @@
 [
     {
-        "line": 54,
+        "line": 47,
         "column": 27,
         "msg": "Operator '+' cannot be applied to types 'null' and 'undefined'."
     },
     {
-        "line": 55,
+        "line": 48,
         "column": 27,
         "msg": "Operator '+' cannot be applied to types 'null' and 'null'."
     },
     {
-        "line": 56,
+        "line": 49,
         "column": 27,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'undefined'."
     }

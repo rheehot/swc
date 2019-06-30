@@ -1,41 +1,41 @@
 [
     {
-        "line": 22,
+        "line": 16,
         "column": 5,
         "msg": "Property 'c' of type 'number' is not assignable to string index type 'A'."
     },
     {
-        "line": 23,
+        "line": 17,
         "column": 5,
         "msg": "Property 'd' of type 'string' is not assignable to string index type 'A'."
     },
     {
-        "line": 30,
+        "line": 24,
         "column": 5,
         "msg": "Property 'c' of type 'number' is not assignable to string index type 'A'."
     },
     {
-        "line": 31,
+        "line": 25,
+        "column": 5,
+        "msg": "Property 'd' of type 'string' is not assignable to string index type 'A'."
+    },
+    {
+        "line": 32,
+        "column": 5,
+        "msg": "Property 'c' of type 'number' is not assignable to string index type 'A'."
+    },
+    {
+        "line": 33,
         "column": 5,
         "msg": "Property 'd' of type 'string' is not assignable to string index type 'A'."
     },
     {
         "line": 38,
-        "column": 5,
-        "msg": "Property 'c' of type 'number' is not assignable to string index type 'A'."
-    },
-    {
-        "line": 39,
-        "column": 5,
-        "msg": "Property 'd' of type 'string' is not assignable to string index type 'A'."
-    },
-    {
-        "line": 44,
         "column": 8,
         "msg": "Property 'foo' is missing in type 'typeof A' but required in type 'A'."
     },
     {
-        "line": 45,
+        "line": 39,
         "column": 8,
         "msg": "Property 'foo' is missing in type 'typeof B' but required in type 'A'."
     }

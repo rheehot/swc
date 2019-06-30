@@ -1,21 +1,21 @@
 [
     {
-        "line": 30,
+        "line": 23,
         "column": 7,
         "msg": "Property 'method' does not exist on type '{}'."
     },
     {
-        "line": 31,
+        "line": 24,
         "column": 5,
         "msg": "Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures."
     },
     {
-        "line": 36,
+        "line": 29,
         "column": 7,
         "msg": "Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?"
     },
     {
-        "line": 41,
+        "line": 34,
         "column": 7,
         "msg": "Property 'getHuors' does not exist on type 'Date'. Did you mean 'getHours'?"
     }

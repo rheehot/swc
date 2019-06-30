@@ -1,51 +1,51 @@
 [
     {
-        "line": 7,
+        "line": 5,
         "column": 9,
         "msg": "Cannot find name 'z'."
     },
     {
-        "line": 8,
+        "line": 6,
         "column": 15,
         "msg": "Cannot find name 'z'."
     },
     {
-        "line": 9,
+        "line": 7,
         "column": 14,
         "msg": "Property 'z' does not exist on type 'C'."
     },
     {
-        "line": 10,
+        "line": 8,
         "column": 15,
         "msg": "Cannot find name 'this'."
     },
     {
-        "line": 12,
+        "line": 10,
         "column": 9,
+        "msg": "Cannot find name 'z'."
+    },
+    {
+        "line": 15,
+        "column": 9,
+        "msg": "Cannot find name 'z'."
+    },
+    {
+        "line": 16,
+        "column": 15,
         "msg": "Cannot find name 'z'."
     },
     {
         "line": 17,
-        "column": 9,
-        "msg": "Cannot find name 'z'."
-    },
-    {
-        "line": 18,
-        "column": 15,
-        "msg": "Cannot find name 'z'."
-    },
-    {
-        "line": 19,
         "column": 14,
         "msg": "Property 'z' does not exist on type 'D<T>'."
     },
     {
-        "line": 20,
+        "line": 18,
         "column": 15,
         "msg": "Cannot find name 'this'."
     },
     {
-        "line": 22,
+        "line": 20,
         "column": 9,
         "msg": "Cannot find name 'z'."
     }

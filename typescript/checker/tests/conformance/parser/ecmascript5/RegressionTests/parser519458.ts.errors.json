@@ -1,16 +1,16 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 15,
         "msg": "Cannot find namespace 'module'."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 15,
         "msg": "Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 21,
         "msg": "';' expected."
     }

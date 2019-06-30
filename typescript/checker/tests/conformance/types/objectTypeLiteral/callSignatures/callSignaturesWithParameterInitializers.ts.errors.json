@@ -1,21 +1,21 @@
 [
     {
-        "line": 36,
+        "line": 25,
         "column": 6,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     },
     {
-        "line": 37,
+        "line": 26,
         "column": 20,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     },
     {
-        "line": 48,
+        "line": 37,
         "column": 6,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     },
     {
-        "line": 49,
+        "line": 38,
         "column": 9,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     }

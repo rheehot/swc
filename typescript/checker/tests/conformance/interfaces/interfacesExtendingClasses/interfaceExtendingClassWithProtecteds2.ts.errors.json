@@ -1,26 +1,26 @@
 [
     {
-        "line": 16,
+        "line": 10,
         "column": 11,
         "msg": "Interface 'I3' cannot simultaneously extend types 'Foo' and 'Bar'."
     },
     {
-        "line": 19,
+        "line": 13,
         "column": 11,
         "msg": "Interface 'I4' incorrectly extends interface 'Bar'."
     },
     {
-        "line": 19,
+        "line": 13,
         "column": 11,
         "msg": "Interface 'I4' incorrectly extends interface 'Foo'."
     },
     {
-        "line": 33,
+        "line": 27,
         "column": 12,
         "msg": "Property 'x' is protected and only accessible within class 'Foo' and its subclasses."
     },
     {
-        "line": 34,
+        "line": 28,
         "column": 12,
         "msg": "Property 'y' is protected and only accessible within class 'Baz' and its subclasses."
     }

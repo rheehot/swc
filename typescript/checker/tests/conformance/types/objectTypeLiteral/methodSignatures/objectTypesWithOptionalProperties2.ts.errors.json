@@ -1,66 +1,66 @@
 [
     {
-        "line": 12,
+        "line": 5,
         "column": 8,
         "msg": "';' expected."
     },
     {
-        "line": 12,
+        "line": 5,
         "column": 9,
         "msg": "Property or signature expected."
     },
     {
-        "line": 16,
+        "line": 9,
         "column": 8,
         "msg": "';' expected."
     },
     {
-        "line": 16,
+        "line": 9,
         "column": 9,
         "msg": "Property or signature expected."
     },
     {
-        "line": 20,
+        "line": 13,
         "column": 8,
         "msg": "'{' or ';' expected."
     },
     {
-        "line": 20,
+        "line": 13,
         "column": 9,
         "msg": "Unexpected token. A constructor, method, accessor, or property was expected."
     },
     {
-        "line": 24,
+        "line": 17,
         "column": 8,
         "msg": "';' expected."
     },
     {
-        "line": 24,
+        "line": 17,
         "column": 9,
         "msg": "Property or signature expected."
     },
     {
-        "line": 28,
+        "line": 21,
         "column": 8,
         "msg": "'{' or ';' expected."
     },
     {
-        "line": 28,
+        "line": 21,
         "column": 9,
         "msg": "Unexpected token. A constructor, method, accessor, or property was expected."
     },
     {
-        "line": 33,
+        "line": 26,
         "column": 8,
         "msg": "'{' expected."
     },
     {
-        "line": 33,
+        "line": 26,
         "column": 9,
         "msg": "Property assignment expected."
     },
     {
-        "line": 34,
+        "line": 27,
         "column": 1,
         "msg": "'"
     }

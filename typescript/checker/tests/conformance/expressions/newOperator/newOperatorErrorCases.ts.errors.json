@@ -1,21 +1,21 @@
 [
     {
-        "line": 38,
+        "line": 28,
         "column": 16,
         "msg": "',' expected."
     },
     {
-        "line": 38,
+        "line": 28,
         "column": 16,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 43,
+        "line": 33,
         "column": 23,
         "msg": "'(' expected."
     },
     {
-        "line": 48,
+        "line": 38,
         "column": 9,
         "msg": "Only a void function can be called with the 'new' keyword."
     }

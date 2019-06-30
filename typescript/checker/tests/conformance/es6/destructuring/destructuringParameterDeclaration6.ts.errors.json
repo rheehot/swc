@@ -1,66 +1,66 @@
 [
     {
-        "line": 13,
+        "line": 8,
         "column": 18,
         "msg": "'"
     },
     {
-        "line": 15,
+        "line": 10,
         "column": 14,
         "msg": "Array element destructuring pattern expected."
     },
     {
-        "line": 15,
+        "line": 10,
         "column": 19,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 15,
+        "line": 10,
         "column": 19,
         "msg": "'(' expected."
     },
     {
-        "line": 15,
+        "line": 10,
         "column": 21,
         "msg": "Expression expected."
     },
     {
-        "line": 15,
+        "line": 10,
         "column": 24,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 15,
+        "line": 10,
         "column": 24,
         "msg": "'(' expected."
     },
     {
-        "line": 15,
+        "line": 10,
         "column": 26,
         "msg": "Cannot find name 'public'."
     },
     {
-        "line": 15,
+        "line": 10,
         "column": 32,
         "msg": "';' expected."
     },
     {
-        "line": 15,
+        "line": 10,
         "column": 33,
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 16,
+        "line": 11,
         "column": 16,
         "msg": "Identifier expected."
     },
     {
-        "line": 16,
+        "line": 11,
         "column": 21,
         "msg": "'(' expected."
     },
     {
-        "line": 18,
+        "line": 13,
         "column": 13,
         "msg": "A rest parameter must be of an array type."
     }

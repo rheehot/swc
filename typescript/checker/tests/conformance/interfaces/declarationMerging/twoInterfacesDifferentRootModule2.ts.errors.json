@@ -1,21 +1,21 @@
 [
     {
-        "line": 27,
+        "line": 19,
         "column": 20,
         "msg": "Property 'foo' does not exist on type 'A'."
     },
     {
-        "line": 35,
+        "line": 27,
         "column": 20,
         "msg": "Property 'foo' does not exist on type 'B<string>'."
     },
     {
-        "line": 41,
+        "line": 33,
         "column": 16,
         "msg": "Property 'bar' does not exist on type 'A'."
     },
     {
-        "line": 45,
+        "line": 37,
         "column": 16,
         "msg": "Property 'bar' does not exist on type 'B<string>'."
     }

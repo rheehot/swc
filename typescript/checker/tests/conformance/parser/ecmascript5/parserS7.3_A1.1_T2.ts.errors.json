@@ -1,6 +1,6 @@
 [
     {
-        "line": 22,
+        "line": 18,
         "column": 3,
         "msg": "Cannot find name '$ERROR'. Did you mean 'Error'?"
     }

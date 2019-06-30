@@ -1,11 +1,11 @@
 [
     {
-        "line": 23,
+        "line": 17,
         "column": 1,
         "msg": "Type 'OwnerList<string>' is not assignable to type 'List<string>'."
     },
     {
-        "line": 28,
+        "line": 22,
         "column": 5,
         "msg": "Type 'OwnerList<T>' is not assignable to type 'List<T>'."
     }

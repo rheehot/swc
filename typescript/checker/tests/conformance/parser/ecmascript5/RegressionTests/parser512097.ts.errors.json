@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 12,
         "msg": "No value exists in scope for the shorthand property 'aa'. Either declare one or provide an initializer."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 14,
         "msg": "',' expected."
     }

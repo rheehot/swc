@@ -1,86 +1,86 @@
 [
     {
-        "line": 30,
+        "line": 9,
         "column": 21,
         "msg": "Parameter 'pInit' cannot be referenced in its initializer."
     },
     {
-        "line": 34,
+        "line": 13,
         "column": 14,
         "msg": "Property 'x' is used before its initialization."
     },
     {
-        "line": 54,
+        "line": 33,
         "column": 12,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 55,
+        "line": 34,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'."
     },
     {
-        "line": 56,
+        "line": 35,
         "column": 12,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 56,
+        "line": 35,
         "column": 12,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 58,
+        "line": 37,
         "column": 12,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 58,
+        "line": 37,
         "column": 12,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 58,
+        "line": 37,
         "column": 12,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 59,
+        "line": 38,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'co3' must be of type 'any', but here has type 'number'."
     },
     {
-        "line": 63,
+        "line": 42,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'as1' must be of type 'any', but here has type 'number'."
     },
     {
-        "line": 65,
+        "line": 44,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'as2' must be of type 'any', but here has type 'number'."
     },
     {
-        "line": 69,
+        "line": 48,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'cnd1' must be of type 'any', but here has type 'number'."
     },
     {
-        "line": 83,
+        "line": 62,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'and1' must be of type 'any', but here has type 'string'."
     },
     {
-        "line": 136,
+        "line": 115,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m"
     },
     {
-        "line": 147,
+        "line": 126,
         "column": 14,
         "msg": "Property 'n' is used before its initialization."
     },
     {
-        "line": 154,
+        "line": 133,
         "column": 19,
         "msg": "Property 'q' is used before its initialization."
     }

@@ -1,6 +1,6 @@
 [
     {
-        "line": 16,
+        "line": 12,
         "column": 11,
         "msg": "Property 'y' does not exist on type 'typeof A'."
     }

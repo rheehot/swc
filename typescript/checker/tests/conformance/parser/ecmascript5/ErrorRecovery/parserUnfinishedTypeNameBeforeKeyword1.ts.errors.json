@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 8,
         "msg": "Cannot find namespace 'TypeModule1'."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 20,
         "msg": "Identifier expected."
     }

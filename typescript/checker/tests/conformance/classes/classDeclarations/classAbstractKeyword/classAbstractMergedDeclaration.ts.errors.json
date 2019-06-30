@@ -1,81 +1,81 @@
 [
     {
-        "line": 24,
+        "line": 14,
         "column": 16,
         "msg": "Duplicate identifier 'CC1'."
     },
     {
-        "line": 25,
+        "line": 15,
         "column": 7,
         "msg": "Duplicate identifier 'CC1'."
+    },
+    {
+        "line": 17,
+        "column": 7,
+        "msg": "Duplicate identifier 'CC2'."
+    },
+    {
+        "line": 18,
+        "column": 16,
+        "msg": "Duplicate identifier 'CC2'."
+    },
+    {
+        "line": 26,
+        "column": 24,
+        "msg": "Duplicate identifier 'DCC1'."
     },
     {
         "line": 27,
-        "column": 7,
-        "msg": "Duplicate identifier 'CC2'."
+        "column": 15,
+        "msg": "Duplicate identifier 'DCC1'."
     },
     {
-        "line": 28,
-        "column": 16,
-        "msg": "Duplicate identifier 'CC2'."
+        "line": 29,
+        "column": 15,
+        "msg": "Duplicate identifier 'DCC2'."
+    },
+    {
+        "line": 30,
+        "column": 24,
+        "msg": "Duplicate identifier 'DCC2'."
+    },
+    {
+        "line": 32,
+        "column": 1,
+        "msg": "Cannot create an instance of an abstract class."
+    },
+    {
+        "line": 33,
+        "column": 1,
+        "msg": "Cannot create an instance of an abstract class."
+    },
+    {
+        "line": 34,
+        "column": 1,
+        "msg": "Cannot create an instance of an abstract class."
+    },
+    {
+        "line": 35,
+        "column": 1,
+        "msg": "Cannot create an instance of an abstract class."
     },
     {
         "line": 36,
-        "column": 24,
-        "msg": "Duplicate identifier 'DCC1'."
+        "column": 1,
+        "msg": "Cannot create an instance of an abstract class."
     },
     {
-        "line": 37,
-        "column": 15,
-        "msg": "Duplicate identifier 'DCC1'."
+        "line": 38,
+        "column": 1,
+        "msg": "Cannot create an instance of an abstract class."
     },
     {
         "line": 39,
-        "column": 15,
-        "msg": "Duplicate identifier 'DCC2'."
+        "column": 1,
+        "msg": "Cannot create an instance of an abstract class."
     },
     {
         "line": 40,
-        "column": 24,
-        "msg": "Duplicate identifier 'DCC2'."
-    },
-    {
-        "line": 42,
-        "column": 1,
-        "msg": "Cannot create an instance of an abstract class."
-    },
-    {
-        "line": 43,
-        "column": 1,
-        "msg": "Cannot create an instance of an abstract class."
-    },
-    {
-        "line": 44,
-        "column": 1,
-        "msg": "Cannot create an instance of an abstract class."
-    },
-    {
-        "line": 45,
-        "column": 1,
-        "msg": "Cannot create an instance of an abstract class."
-    },
-    {
-        "line": 46,
-        "column": 1,
-        "msg": "Cannot create an instance of an abstract class."
-    },
-    {
-        "line": 48,
-        "column": 1,
-        "msg": "Cannot create an instance of an abstract class."
-    },
-    {
-        "line": 49,
-        "column": 1,
-        "msg": "Cannot create an instance of an abstract class."
-    },
-    {
-        "line": 50,
         "column": 1,
         "msg": "Cannot create an instance of an abstract class."
     }

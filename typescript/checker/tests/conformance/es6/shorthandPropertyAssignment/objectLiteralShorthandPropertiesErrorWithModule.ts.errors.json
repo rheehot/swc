@@ -1,11 +1,11 @@
 [
     {
-        "line": 14,
+        "line": 11,
         "column": 10,
         "msg": "',' expected."
     },
     {
-        "line": 18,
+        "line": 15,
         "column": 3,
         "msg": "Property 'y' does not exist on type 'typeof m'."
     }

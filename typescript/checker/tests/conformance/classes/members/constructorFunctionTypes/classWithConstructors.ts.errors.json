@@ -1,31 +1,31 @@
 [
     {
-        "line": 18,
+        "line": 7,
         "column": 13,
         "msg": "Expected 1 arguments, but got 0."
     },
     {
-        "line": 27,
+        "line": 16,
         "column": 14,
         "msg": "Expected 1 arguments, but got 0."
     },
     {
-        "line": 33,
+        "line": 22,
         "column": 13,
         "msg": "Expected 1 arguments, but got 0."
     },
     {
-        "line": 43,
+        "line": 32,
         "column": 13,
         "msg": "Expected 1 arguments, but got 0."
     },
     {
-        "line": 52,
+        "line": 41,
         "column": 14,
         "msg": "Expected 1-2 arguments, but got 0."
     },
     {
-        "line": 58,
+        "line": 47,
         "column": 13,
         "msg": "Expected 1-2 arguments, but got 0."
     }
