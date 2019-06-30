@@ -402,7 +402,12 @@ impl Analyzer<'_, '_> {
                 pat.visit_with(&mut visitor);
 
                 debug_assert_eq!(child.allow_ref_declaring, false);
-                child.declare_vars(VarDeclKind::Let, pat);
+                match child.declare_vars(VarDeclKind::Let, pat) {
+                    Ok(()) => {}
+                    Err(err) => {
+                        child.info.errors.push(err);
+                    }
+                }
             });
 
             f.visit_children(child);
@@ -479,9 +484,14 @@ impl Visit<ArrowExpr> for Analyzer<'_, '_> {
                 None => {}
             }
 
-            f.params
-                .iter()
-                .for_each(|pat| child.declare_vars(VarDeclKind::Let, pat));
+            for pat in f.params.iter() {
+                match child.declare_vars(VarDeclKind::Let, pat) {
+                    Ok(()) => {}
+                    Err(err) => {
+                        child.info.errors.push(err);
+                    }
+                }
+            }
 
             f.visit_children(child);
 
@@ -641,7 +651,12 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
 
             debug_assert_eq!(self.allow_ref_declaring, true);
             self.allow_ref_declaring = old;
-            self.declare_vars(kind, &v.name);
+            match self.declare_vars(kind, &v.name) {
+                Ok(()) => {}
+                Err(err) => {
+                    self.info.errors.push(err);
+                }
+            }
         });
     }
 }

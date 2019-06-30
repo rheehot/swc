@@ -421,7 +421,7 @@ impl Analyzer<'_, '_> {
     ///
     /// This method should be called for function parameters including error
     /// variable from a catch clause.
-    pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) {
+    pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) -> Result<(), Error> {
         match *pat {
             Pat::Ident(ref i) => {
                 let ty = i
@@ -435,7 +435,7 @@ impl Analyzer<'_, '_> {
                         Ok(ty) => Some(ty.to_static()),
                         Err(err) => {
                             self.info.errors.push(err);
-                            return;
+                            return Ok(());
                         }
                     }
                 } else {
@@ -452,9 +452,19 @@ impl Analyzer<'_, '_> {
                     // allow_multiple
                     kind == VarDeclKind::Var,
                 );
+                return Ok(());
             }
             Pat::Assign(ref p) => {
-                self.declare_vars(kind, &p.left);
+                let ty = self.type_of(&p.right)?;
+                println!(
+                    "({}) declare_vars({:?}), ty = {:?}",
+                    self.scope.depth(),
+                    p.left,
+                    ty
+                );
+                self.declare_vars(kind, &p.left)?;
+
+                return Ok(());
             }
 
             Pat::Array(ArrayPat { ref elems, .. }) => {
@@ -463,12 +473,14 @@ impl Analyzer<'_, '_> {
                 for elem in elems {
                     match *elem {
                         Some(ref elem) => {
-                            self.declare_vars(kind, elem);
+                            self.declare_vars(kind, elem)?;
                         }
                         // Skip
                         None => {}
                     }
                 }
+
+                return Ok(());
             }
 
             _ => unimplemented!("declare_vars for patterns other than ident: {:#?}", pat),

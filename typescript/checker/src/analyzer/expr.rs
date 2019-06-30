@@ -41,14 +41,36 @@ impl Analyzer<'_, '_> {
                 }
 
                 if let Some(ty) = self.resolved_imports.get(&i.sym) {
+                    println!(
+                        "({}) type_of({}): resolved import",
+                        self.scope.depth(),
+                        i.sym
+                    );
                     return Ok(ty.static_cast());
                 }
 
                 if let Some(ty) = self.find_type(&i.sym) {
+                    println!("({}) type_of({}): find_type", self.scope.depth(), i.sym);
                     return Ok(ty.static_cast());
                 }
 
+                // Check `declaring` before checking variables.
+                if self.declaring.contains(&i.sym) {
+                    println!(
+                        "({}) reference in initialization: {}",
+                        self.scope.depth(),
+                        i.sym
+                    );
+
+                    if self.allow_ref_declaring {
+                        return Ok(Type::any(span).owned());
+                    } else {
+                        return Err(Error::ReferencedInInit { span });
+                    }
+                }
+
                 if let Some(ty) = self.find_var_type(&i.sym) {
+                    println!("({}) type_of({}): find_var_type", self.scope.depth(), i.sym);
                     return Ok(ty.static_cast());
                 }
 
@@ -62,14 +84,6 @@ impl Analyzer<'_, '_> {
 
                 if let Ok(ty) = builtin_types::get_var(self.libs, span, &i.sym) {
                     return Ok(ty.owned());
-                }
-
-                if self.declaring.contains(&i.sym) {
-                    if self.allow_ref_declaring {
-                        return Ok(Type::any(span).owned());
-                    } else {
-                        return Err(Error::ReferencedInInit { span });
-                    }
                 }
 
                 // println!(
