@@ -318,7 +318,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                         let fl = cm
                             .span_to_lines(span)
                             .expect("failed to get span of the error");
-                        assert!(fl.lines.len() == 1);
+                        assert!(fl.lines.len() == 1, "{:?}", fl.lines);
 
                         let li = fl.lines[0].line_index;
                         return li + 1;

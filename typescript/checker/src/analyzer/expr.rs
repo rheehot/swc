@@ -754,7 +754,10 @@ impl Analyzer<'_, '_> {
         Ok(Type::Class(c.clone()))
     }
 
-    pub(super) fn infer_return_type(&self, base_span: Span) -> Result<Type<'static>, Error> {
+    pub(super) fn infer_return_type(
+        &self,
+        base_span: Span,
+    ) -> Result<Option<Type<'static>>, Error> {
         let types = { ::std::mem::replace(&mut *self.inferred_return_types.borrow_mut(), vec![]) };
 
         // TODO: Handle recursive function.
@@ -767,9 +770,9 @@ impl Analyzer<'_, '_> {
         }
 
         match tys.len() {
-            0 => Ok(Type::any(span)),
-            1 => Ok(tys.into_iter().next().unwrap().into_owned()),
-            _ => Ok(Type::Union(Union { span, types: tys }).into()),
+            0 => Ok(None),
+            1 => Ok(Some(tys.into_iter().next().unwrap().into_owned())),
+            _ => Ok(Some(Type::Union(Union { span, types: tys }).into())),
         }
     }
 
@@ -787,7 +790,9 @@ impl Analyzer<'_, '_> {
         let inferred_return_type = self.infer_return_type(f.span)?;
         if let Some(ref declared) = declared_ret_ty {
             let span = inferred_return_type.span();
-            inferred_return_type.assign_to(declared, span)?;
+            if let Some(ref inffered) = inferred_return_type {
+                inffered.assign_to(declared, span)?;
+            }
         }
 
         Ok(ty::Function {
@@ -795,7 +800,11 @@ impl Analyzer<'_, '_> {
             params: f.params.iter().cloned().map(pat_to_ts_fn_param).collect(),
             type_params: f.type_params.clone().map(From::from),
             ret_ty: box declared_ret_ty
-                .unwrap_or_else(|| inferred_return_type.to_static())
+                .unwrap_or_else(|| {
+                    inferred_return_type
+                        .map(|v| v.to_static())
+                        .unwrap_or_else(|| Type::any(f.span))
+                })
                 .owned(),
         }
         .into())
@@ -815,15 +824,33 @@ impl Analyzer<'_, '_> {
         let inferred_return_type = f
             .body
             .as_ref()
-            .map(|body| -> Result<_, _> { self.infer_return_type(body.span) });
+            .map(|body| self.infer_return_type(body.span));
         let inferred_return_type = match inferred_return_type {
-            Some(Ok(inferred_return_type)) => {
+            Some(Ok(Some(inferred_return_type))) => {
                 if let Some(ref declared) = declared_ret_ty {
                     let span = inferred_return_type.span();
+
                     inferred_return_type.assign_to(declared, span)?;
                 }
 
                 inferred_return_type
+            }
+            Some(Ok(None)) => {
+                let mut span = f.span;
+
+                if let Some(ref declared) = declared_ret_ty {
+                    span = declared.span();
+
+                    match *declared.normalize() {
+                        Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsUnknownKeyword,
+                            ..
+                        }) => return Err(Error::ReturnRequired { span }),
+                        _ => {}
+                    }
+                }
+
+                Type::any(span)
             }
             Some(Err(err)) => return Err(err),
             None => Type::any(f.span),
