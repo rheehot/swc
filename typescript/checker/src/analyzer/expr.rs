@@ -151,6 +151,129 @@ impl Analyzer<'_, '_> {
                 .into_cow())
             }
 
+            Expr::Bin(BinExpr {
+                span,
+                op,
+                ref left,
+                ref right,
+            }) => {
+                match op {
+                    op!(bin, "+") => {
+                        let l_ty = self.type_of(&left)?;
+                        let r_ty = self.type_of(&right)?;
+
+                        //
+                        let c = Comparator {
+                            left: (&**left, &l_ty),
+                            right: (&**right, &r_ty),
+                        };
+
+                        if let Some(()) = c.take(|(_, l_ty), (_, _)| match **l_ty {
+                            Type::Keyword(TsKeywordType {
+                                kind: TsKeywordTypeKind::TsUnknownKeyword,
+                                ..
+                            }) => Some(()),
+
+                            _ => None,
+                        }) {
+                            return Err(Error::Unknown { span });
+                        }
+
+                        match *l_ty {
+                            Type::Keyword(TsKeywordType {
+                                kind: TsKeywordTypeKind::TsNumberKeyword,
+                                ..
+                            })
+                            | Type::Lit(TsLitType {
+                                lit: TsLit::Number(..),
+                                ..
+                            }) => match *r_ty {
+                                Type::Keyword(TsKeywordType {
+                                    kind: TsKeywordTypeKind::TsNumberKeyword,
+                                    ..
+                                })
+                                | Type::Lit(TsLitType {
+                                    lit: TsLit::Number(..),
+                                    ..
+                                }) => {
+                                    return Ok(Type::Keyword(TsKeywordType {
+                                        span,
+                                        kind: TsKeywordTypeKind::TsStringKeyword,
+                                    })
+                                    .owned())
+                                }
+                                _ => {}
+                            },
+                            _ => {}
+                        }
+
+                        if let Some(()) = c.take(|(_, l_ty), (_, _)| match **l_ty {
+                            Type::Keyword(TsKeywordType {
+                                kind: TsKeywordTypeKind::TsStringKeyword,
+                                ..
+                            })
+                            | Type::Lit(TsLitType {
+                                lit: TsLit::Str(..),
+                                ..
+                            }) => Some(()),
+
+                            _ => None,
+                        }) {
+                            return Ok(Type::Keyword(TsKeywordType {
+                                span,
+                                kind: TsKeywordTypeKind::TsStringKeyword,
+                            })
+                            .owned());
+                        }
+
+                        unimplemented!("type_of_bin(+)\nLeft: {:#?}\nRight: {:#?}", l_ty, r_ty)
+                    }
+                    op!("*") | op!("/") => {
+                        return Ok(Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                        })
+                        .owned())
+                    }
+
+                    op!(bin, "-")
+                    | op!("<<")
+                    | op!(">>")
+                    | op!(">>>")
+                    | op!("%")
+                    | op!("|")
+                    | op!("&")
+                    | op!("^")
+                    | op!("**") => {
+                        return Ok(Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                            span,
+                        })
+                        .into_cow())
+                    }
+
+                    op!("===")
+                    | op!("!==")
+                    | op!("!=")
+                    | op!("==")
+                    | op!("<=")
+                    | op!("<")
+                    | op!(">=")
+                    | op!(">")
+                    | op!("in")
+                    | op!("instanceof") => {
+                        return Ok(Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsBooleanKeyword,
+                        })
+                        .into_cow())
+                    }
+
+                    // TODO
+                    op!("||") | op!("&&") => return self.type_of(&right),
+                }
+            }
+
             Expr::Unary(UnaryExpr {
                 op: op!("!"),
                 ref arg,
@@ -312,135 +435,6 @@ impl Analyzer<'_, '_> {
             Expr::MetaProp(..) => unimplemented!("typeof(MetaProp)"),
 
             Expr::Assign(AssignExpr { ref right, .. }) => return self.type_of(right),
-
-            Expr::Bin(BinExpr {
-                op: op!(bin, "+"),
-                ref left,
-                ref right,
-                ..
-            }) => {
-                let l_ty = self.type_of(&left)?;
-                let r_ty = self.type_of(&right)?;
-
-                match *l_ty {
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsNumberKeyword,
-                        ..
-                    })
-                    | Type::Lit(TsLitType {
-                        lit: TsLit::Number(..),
-                        ..
-                    }) => match *r_ty {
-                        Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsNumberKeyword,
-                            ..
-                        })
-                        | Type::Lit(TsLitType {
-                            lit: TsLit::Number(..),
-                            ..
-                        }) => {
-                            return Ok(Type::Keyword(TsKeywordType {
-                                span,
-                                kind: TsKeywordTypeKind::TsStringKeyword,
-                            })
-                            .owned())
-                        }
-                        _ => {}
-                    },
-                    _ => {}
-                }
-
-                //
-                let c = Comparator {
-                    left: (&**left, &l_ty),
-                    right: (&**right, &r_ty),
-                };
-
-                if let Some(()) = c.take(|(_, l_ty), (_, _)| match **l_ty {
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsStringKeyword,
-                        ..
-                    })
-                    | Type::Lit(TsLitType {
-                        lit: TsLit::Str(..),
-                        ..
-                    }) => Some(()),
-
-                    _ => None,
-                }) {
-                    return Ok(Type::Keyword(TsKeywordType {
-                        span,
-                        kind: TsKeywordTypeKind::TsStringKeyword,
-                    })
-                    .owned());
-                }
-
-                if let Some(()) = c.take(|(_, l_ty), (_, _)| match **l_ty {
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsUnknownKeyword,
-                        ..
-                    }) => Some(()),
-
-                    _ => None,
-                }) {
-                    return Err(Error::Unknown { span });
-                }
-
-                unimplemented!("type_of_bin(+)\nLeft: {:#?}\nRight: {:#?}", l_ty, r_ty)
-            }
-
-            Expr::Bin(BinExpr {
-                op: op!("*"),
-                ref right,
-                ..
-            })
-            | Expr::Bin(BinExpr {
-                op: op!("/"),
-                ref right,
-                ..
-            }) => {
-                return Ok(Type::Keyword(TsKeywordType {
-                    span,
-                    kind: TsKeywordTypeKind::TsNumberKeyword,
-                })
-                .owned())
-            }
-
-            Expr::Bin(BinExpr {
-                op: op!("||"),
-                ref right,
-                ..
-            })
-            | Expr::Bin(BinExpr {
-                op: op!("&&"),
-                ref right,
-                ..
-            }) => return self.type_of(&right),
-
-            Expr::Bin(BinExpr {
-                op: op!(bin, "-"), ..
-            }) => {
-                return Ok(Type::Keyword(TsKeywordType {
-                    kind: TsKeywordTypeKind::TsNumberKeyword,
-                    span,
-                })
-                .into_cow())
-            }
-
-            Expr::Bin(BinExpr { op: op!("==="), .. })
-            | Expr::Bin(BinExpr { op: op!("!=="), .. })
-            | Expr::Bin(BinExpr { op: op!("!="), .. })
-            | Expr::Bin(BinExpr { op: op!("=="), .. })
-            | Expr::Bin(BinExpr { op: op!("<="), .. })
-            | Expr::Bin(BinExpr { op: op!("<"), .. })
-            | Expr::Bin(BinExpr { op: op!(">="), .. })
-            | Expr::Bin(BinExpr { op: op!(">"), .. }) => {
-                return Ok(Type::Keyword(TsKeywordType {
-                    span,
-                    kind: TsKeywordTypeKind::TsBooleanKeyword,
-                })
-                .into_cow())
-            }
 
             Expr::Unary(UnaryExpr {
                 op: op!("void"), ..
