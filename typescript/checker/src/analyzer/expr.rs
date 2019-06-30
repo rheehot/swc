@@ -1169,7 +1169,7 @@ impl Analyzer<'_, '_> {
                                             let ty = expand_type_params(
                                                 type_params.as_ref(),
                                                 tps,
-                                                &**ty,
+                                                Cow::Borrowed(&**ty),
                                             )?;
 
                                             return Ok(ty.into_owned().owned());
