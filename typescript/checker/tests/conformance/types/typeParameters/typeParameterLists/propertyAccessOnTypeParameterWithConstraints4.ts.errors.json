@@ -1,21 +1,21 @@
 [
     {
-        "line": 6,
+        "line": 5,
         "column": 22,
         "msg": "Property 'notHere' does not exist on type 'T'."
     },
     {
-        "line": 16,
+        "line": 15,
         "column": 16,
         "msg": "Property 'notHere' does not exist on type 'Date'."
     },
     {
-        "line": 22,
+        "line": 21,
         "column": 22,
         "msg": "Property 'notHere' does not exist on type 'Date'."
     },
     {
-        "line": 28,
+        "line": 27,
         "column": 22,
         "msg": "Property 'notHere' does not exist on type 'T'."
     }

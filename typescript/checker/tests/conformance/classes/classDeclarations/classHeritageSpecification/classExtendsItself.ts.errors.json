@@ -1,16 +1,16 @@
 [
     {
-        "line": 2,
+        "line": 1,
         "column": 7,
         "msg": "'C' is referenced directly or indirectly in its own base expression."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 7,
         "msg": "'D' is referenced directly or indirectly in its own base expression."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 7,
         "msg": "'E' is referenced directly or indirectly in its own base expression."
     }

@@ -1,6 +1,11 @@
 [
     {
-        "line": 17,
+        "line": 16,
+        "column": 5,
+        "msg": "Type '(x"
+    },
+    {
+        "line": 19,
         "column": 5,
         "msg": "Type '(x"
     },
@@ -10,27 +15,22 @@
         "msg": "Type '(x"
     },
     {
-        "line": 21,
+        "line": 22,
         "column": 5,
         "msg": "Type '(x"
     },
     {
-        "line": 23,
+        "line": 33,
         "column": 5,
         "msg": "Type '(x"
     },
     {
-        "line": 34,
+        "line": 39,
         "column": 5,
         "msg": "Type '(x"
     },
     {
-        "line": 40,
-        "column": 5,
-        "msg": "Type '(x"
-    },
-    {
-        "line": 46,
+        "line": 45,
         "column": 5,
         "msg": "Type '(x"
     }

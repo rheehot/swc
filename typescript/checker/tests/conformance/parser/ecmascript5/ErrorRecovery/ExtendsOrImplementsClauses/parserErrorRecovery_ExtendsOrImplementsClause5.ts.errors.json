@@ -1,21 +1,21 @@
 [
     {
-        "line": 2,
+        "line": 1,
         "column": 17,
         "msg": "Cannot find name 'A'."
     },
     {
-        "line": 2,
+        "line": 1,
         "column": 18,
         "msg": "Trailing comma not allowed."
     },
     {
-        "line": 2,
+        "line": 1,
         "column": 31,
         "msg": "Cannot find name 'B'."
     },
     {
-        "line": 2,
+        "line": 1,
         "column": 32,
         "msg": "Trailing comma not allowed."
     }

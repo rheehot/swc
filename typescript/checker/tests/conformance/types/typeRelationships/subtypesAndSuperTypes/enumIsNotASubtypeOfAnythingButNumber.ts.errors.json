@@ -1,81 +1,81 @@
 [
     {
-        "line": 19,
+        "line": 18,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'string'."
     },
     {
-        "line": 25,
+        "line": 24,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'boolean'."
     },
     {
-        "line": 31,
+        "line": 30,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'Date'."
     },
     {
-        "line": 37,
+        "line": 36,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'RegExp'."
     },
     {
-        "line": 43,
+        "line": 42,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type '{ bar"
     },
     {
-        "line": 49,
+        "line": 48,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'number[]'."
     },
     {
-        "line": 55,
+        "line": 54,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'I8'."
     },
     {
-        "line": 61,
+        "line": 60,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'A'."
     },
     {
-        "line": 67,
+        "line": 66,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'A2<number>'."
     },
     {
-        "line": 73,
+        "line": 72,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type '(x"
     },
     {
-        "line": 79,
+        "line": 78,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type '<T>(x"
     },
     {
-        "line": 86,
+        "line": 85,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'E2'."
     },
     {
-        "line": 96,
+        "line": 95,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'typeof f'."
     },
     {
-        "line": 106,
+        "line": 105,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'typeof c'."
     },
     {
-        "line": 112,
+        "line": 111,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'T'."
     },
     {
-        "line": 118,
+        "line": 117,
         "column": 5,
         "msg": "Property 'foo' of type 'E' is not assignable to string index type 'U'."
     }

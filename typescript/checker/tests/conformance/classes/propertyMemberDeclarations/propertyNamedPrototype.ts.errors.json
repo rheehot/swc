@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 12,
         "msg": "Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'C'."
     }

@@ -1,16 +1,16 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 8,
         "msg": "Variable declaration list cannot be empty."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 5,
         "msg": "Cannot find name 'let'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 10,
         "msg": "Variable declaration list cannot be empty."
     }

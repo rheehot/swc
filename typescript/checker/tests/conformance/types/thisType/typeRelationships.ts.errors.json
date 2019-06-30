@@ -1,16 +1,16 @@
 [
     {
-        "line": 10,
+        "line": 9,
         "column": 9,
         "msg": "Type 'C' is not assignable to type 'this'."
     },
     {
-        "line": 36,
+        "line": 35,
         "column": 9,
         "msg": "Type 'C' is missing the following properties from type 'D'"
     },
     {
-        "line": 37,
+        "line": 36,
         "column": 9,
         "msg": "Type 'D' is not assignable to type 'this'."
     }

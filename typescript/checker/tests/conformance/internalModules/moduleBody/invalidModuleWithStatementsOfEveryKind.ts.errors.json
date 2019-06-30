@@ -1,11 +1,16 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 5,
         "msg": "'public' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 7,
+        "line": 6,
+        "column": 5,
+        "msg": "'public' modifier cannot appear on a module or namespace element."
+    },
+    {
+        "line": 12,
         "column": 5,
         "msg": "'public' modifier cannot appear on a module or namespace element."
     },
@@ -15,32 +20,32 @@
         "msg": "'public' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 14,
+        "line": 15,
         "column": 5,
         "msg": "'public' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 16,
+        "line": 19,
         "column": 5,
         "msg": "'public' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 20,
+        "line": 25,
         "column": 5,
         "msg": "'public' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 26,
-        "column": 5,
-        "msg": "'public' modifier cannot appear on a module or namespace element."
-    },
-    {
-        "line": 30,
+        "line": 29,
         "column": 5,
         "msg": "'private' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 32,
+        "line": 31,
+        "column": 5,
+        "msg": "'private' modifier cannot appear on a module or namespace element."
+    },
+    {
+        "line": 37,
         "column": 5,
         "msg": "'private' modifier cannot appear on a module or namespace element."
     },
@@ -50,32 +55,32 @@
         "msg": "'private' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 39,
+        "line": 40,
         "column": 5,
         "msg": "'private' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 41,
+        "line": 44,
         "column": 5,
         "msg": "'private' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 45,
+        "line": 50,
         "column": 5,
         "msg": "'private' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 51,
-        "column": 5,
-        "msg": "'private' modifier cannot appear on a module or namespace element."
-    },
-    {
-        "line": 56,
+        "line": 55,
         "column": 5,
         "msg": "'static' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 58,
+        "line": 57,
+        "column": 5,
+        "msg": "'static' modifier cannot appear on a module or namespace element."
+    },
+    {
+        "line": 63,
         "column": 5,
         "msg": "'static' modifier cannot appear on a module or namespace element."
     },
@@ -85,22 +90,17 @@
         "msg": "'static' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 65,
+        "line": 66,
         "column": 5,
         "msg": "'static' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 67,
+        "line": 70,
         "column": 5,
         "msg": "'static' modifier cannot appear on a module or namespace element."
     },
     {
-        "line": 71,
-        "column": 5,
-        "msg": "'static' modifier cannot appear on a module or namespace element."
-    },
-    {
-        "line": 77,
+        "line": 76,
         "column": 5,
         "msg": "'static' modifier cannot appear on a module or namespace element."
     }

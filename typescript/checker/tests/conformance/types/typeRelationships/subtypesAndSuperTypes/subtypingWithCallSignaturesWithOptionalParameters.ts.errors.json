@@ -1,11 +1,11 @@
 [
     {
-        "line": 20,
+        "line": 19,
         "column": 11,
         "msg": "Interface 'I3' incorrectly extends interface 'Base'."
     },
     {
-        "line": 50,
+        "line": 49,
         "column": 11,
         "msg": "Interface 'I10' incorrectly extends interface 'Base'."
     },

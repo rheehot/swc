@@ -1,16 +1,21 @@
 [
     {
-        "line": 14,
+        "line": 13,
         "column": 5,
         "msg": "Type '(...args"
     },
     {
-        "line": 18,
+        "line": 17,
         "column": 5,
         "msg": "Type '(x?"
     },
     {
-        "line": 27,
+        "line": 26,
+        "column": 5,
+        "msg": "Type '(x"
+    },
+    {
+        "line": 35,
         "column": 5,
         "msg": "Type '(x"
     },
@@ -25,22 +30,17 @@
         "msg": "Type '(x"
     },
     {
-        "line": 38,
-        "column": 5,
-        "msg": "Type '(x"
-    },
-    {
-        "line": 42,
+        "line": 41,
         "column": 5,
         "msg": "Type '(x?"
     },
     {
-        "line": 44,
+        "line": 43,
         "column": 5,
         "msg": "Type '(x"
     },
     {
-        "line": 46,
+        "line": 45,
         "column": 5,
         "msg": "Type '(x"
     }

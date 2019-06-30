@@ -1,12 +1,17 @@
 [
     {
+        "line": 4,
+        "column": 22,
+        "msg": "Object is possibly 'null'."
+    },
+    {
         "line": 5,
         "column": 22,
         "msg": "Object is possibly 'null'."
     },
     {
         "line": 6,
-        "column": 22,
+        "column": 23,
         "msg": "Object is possibly 'null'."
     },
     {
@@ -15,8 +20,8 @@
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 8,
-        "column": 23,
+        "line": 13,
+        "column": 18,
         "msg": "Object is possibly 'null'."
     },
     {
@@ -35,8 +40,8 @@
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 17,
-        "column": 18,
+        "line": 32,
+        "column": 12,
         "msg": "Object is possibly 'null'."
     },
     {
@@ -70,8 +75,8 @@
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 39,
-        "column": 12,
+        "line": 40,
+        "column": 16,
         "msg": "Object is possibly 'null'."
     },
     {
@@ -105,8 +110,8 @@
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 47,
-        "column": 16,
+        "line": 49,
+        "column": 12,
         "msg": "Object is possibly 'null'."
     },
     {
@@ -140,8 +145,8 @@
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 56,
-        "column": 12,
+        "line": 57,
+        "column": 16,
         "msg": "Object is possibly 'null'."
     },
     {
@@ -175,8 +180,8 @@
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 64,
-        "column": 16,
+        "line": 66,
+        "column": 12,
         "msg": "Object is possibly 'null'."
     },
     {
@@ -210,8 +215,8 @@
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 73,
-        "column": 12,
+        "line": 74,
+        "column": 17,
         "msg": "Object is possibly 'null'."
     },
     {
@@ -245,8 +250,8 @@
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 81,
-        "column": 17,
+        "line": 83,
+        "column": 12,
         "msg": "Object is possibly 'null'."
     },
     {
@@ -280,8 +285,8 @@
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 90,
-        "column": 12,
+        "line": 91,
+        "column": 17,
         "msg": "Object is possibly 'null'."
     },
     {
@@ -311,11 +316,6 @@
     },
     {
         "line": 97,
-        "column": 17,
-        "msg": "Object is possibly 'null'."
-    },
-    {
-        "line": 98,
         "column": 17,
         "msg": "Object is possibly 'null'."
     }

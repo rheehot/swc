@@ -1,31 +1,31 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 9,
         "msg": "Cannot find name 'x'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 15,
         "msg": "Cannot find name 'x'."
     },
     {
-        "line": 11,
+        "line": 10,
         "column": 9,
         "msg": "Cannot find name 'x'. Did you mean the instance member 'this.x'?"
     },
     {
-        "line": 12,
+        "line": 11,
         "column": 15,
         "msg": "Cannot find name 'x'."
     },
     {
-        "line": 18,
+        "line": 17,
         "column": 15,
         "msg": "Cannot find name 'this'."
     },
     {
-        "line": 24,
+        "line": 23,
         "column": 9,
         "msg": "Cannot find name 'x'. Did you mean the instance member 'this.x'?"
     }

@@ -1,47 +1,52 @@
 [
     {
-        "line": 14,
+        "line": 13,
         "column": 12,
         "msg": "Property 'x' is protected and only accessible within class 'Derived3' and its subclasses."
     },
     {
-        "line": 27,
+        "line": 26,
         "column": 11,
+        "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived1'."
+    },
+    {
+        "line": 28,
+        "column": 12,
         "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived1'."
     },
     {
         "line": 29,
         "column": 12,
-        "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived1'."
+        "msg": "Property 'x' is protected and only accessible within class 'Derived3' and its subclasses."
     },
     {
         "line": 30,
         "column": 12,
-        "msg": "Property 'x' is protected and only accessible within class 'Derived3' and its subclasses."
-    },
-    {
-        "line": 31,
-        "column": 12,
         "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived1'."
     },
     {
-        "line": 43,
+        "line": 42,
         "column": 11,
         "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived2'."
     },
     {
-        "line": 44,
+        "line": 43,
         "column": 12,
         "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived2'."
     },
     {
-        "line": 46,
+        "line": 45,
         "column": 12,
         "msg": "Property 'x' is protected and only accessible within class 'Derived3' and its subclasses."
     },
     {
-        "line": 60,
+        "line": 59,
         "column": 11,
+        "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived3'."
+    },
+    {
+        "line": 60,
+        "column": 12,
         "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived3'."
     },
     {
@@ -50,18 +55,18 @@
         "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived3'."
     },
     {
-        "line": 62,
+        "line": 63,
         "column": 12,
         "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived3'."
     },
     {
-        "line": 64,
-        "column": 12,
-        "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived3'."
+        "line": 75,
+        "column": 11,
+        "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived4'."
     },
     {
         "line": 76,
-        "column": 11,
+        "column": 12,
         "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived4'."
     },
     {
@@ -72,16 +77,16 @@
     {
         "line": 78,
         "column": 12,
-        "msg": "Property 'x' is protected and only accessible through an instance of class 'Derived4'."
-    },
-    {
-        "line": 79,
-        "column": 12,
         "msg": "Property 'x' is protected and only accessible within class 'Derived3' and its subclasses."
     },
     {
-        "line": 91,
+        "line": 90,
         "column": 3,
+        "msg": "Property 'x' is protected and only accessible within class 'Base' and its subclasses."
+    },
+    {
+        "line": 91,
+        "column": 4,
         "msg": "Property 'x' is protected and only accessible within class 'Base' and its subclasses."
     },
     {
@@ -92,15 +97,10 @@
     {
         "line": 93,
         "column": 4,
-        "msg": "Property 'x' is protected and only accessible within class 'Base' and its subclasses."
-    },
-    {
-        "line": 94,
-        "column": 4,
         "msg": "Property 'x' is protected and only accessible within class 'Derived3' and its subclasses."
     },
     {
-        "line": 95,
+        "line": 94,
         "column": 4,
         "msg": "Property 'x' is protected and only accessible within class 'Base' and its subclasses."
     }

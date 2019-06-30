@@ -1,11 +1,11 @@
 [
     {
-        "line": 28,
+        "line": 27,
         "column": 11,
         "msg": "All declarations of 'I' must have identical type parameters."
     },
     {
-        "line": 33,
+        "line": 32,
         "column": 11,
         "msg": "All declarations of 'I' must have identical type parameters."
     }

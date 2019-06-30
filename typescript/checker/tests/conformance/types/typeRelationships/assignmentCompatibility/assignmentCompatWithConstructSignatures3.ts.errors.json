@@ -1,76 +1,76 @@
 [
     {
-        "line": 48,
+        "line": 47,
         "column": 1,
         "msg": "Type 'new (x"
     },
     {
-        "line": 51,
+        "line": 50,
         "column": 1,
         "msg": "Type 'new (x"
     },
     {
-        "line": 54,
+        "line": 53,
         "column": 1,
         "msg": "Type 'new (x"
     },
     {
-        "line": 57,
+        "line": 56,
         "column": 1,
         "msg": "Type 'new (x"
     },
     {
-        "line": 60,
+        "line": 59,
         "column": 1,
         "msg": "Type 'new (x"
     },
     {
-        "line": 63,
+        "line": 62,
         "column": 1,
         "msg": "Type 'new (x"
     },
     {
-        "line": 66,
+        "line": 65,
         "column": 1,
         "msg": "Type 'new (x"
     },
     {
-        "line": 69,
+        "line": 68,
         "column": 1,
         "msg": "Type 'new (x"
     },
     {
-        "line": 72,
+        "line": 71,
         "column": 1,
         "msg": "Type 'new (x"
     },
     {
-        "line": 75,
+        "line": 74,
         "column": 1,
         "msg": "Type 'new (...x"
     },
     {
-        "line": 78,
+        "line": 77,
         "column": 1,
         "msg": "Type 'new (x"
     },
     {
-        "line": 81,
+        "line": 80,
         "column": 1,
         "msg": "Type 'new (x"
     },
     {
-        "line": 84,
+        "line": 83,
         "column": 1,
         "msg": "Type 'new (x"
     },
     {
-        "line": 86,
+        "line": 85,
         "column": 1,
         "msg": "Type 'new <T>(x"
     },
     {
-        "line": 87,
+        "line": 86,
         "column": 1,
         "msg": "Type 'new (x"
     }

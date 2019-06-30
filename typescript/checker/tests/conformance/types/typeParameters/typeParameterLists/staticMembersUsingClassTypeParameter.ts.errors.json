@@ -1,31 +1,31 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 15,
         "msg": "Static members cannot reference class type parameters."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 17,
+        "msg": "Static members cannot reference class type parameters."
+    },
+    {
+        "line": 8,
+        "column": 15,
         "msg": "Static members cannot reference class type parameters."
     },
     {
         "line": 9,
-        "column": 15,
-        "msg": "Static members cannot reference class type parameters."
-    },
-    {
-        "line": 10,
         "column": 17,
         "msg": "Static members cannot reference class type parameters."
     },
     {
-        "line": 14,
+        "line": 13,
         "column": 15,
         "msg": "Static members cannot reference class type parameters."
     },
     {
-        "line": 15,
+        "line": 14,
         "column": 17,
         "msg": "Static members cannot reference class type parameters."
     }

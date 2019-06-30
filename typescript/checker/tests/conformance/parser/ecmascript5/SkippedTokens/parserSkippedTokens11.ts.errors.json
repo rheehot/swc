@@ -1,16 +1,16 @@
 [
     {
-        "line": 2,
+        "line": 1,
         "column": 3,
         "msg": "Invalid character."
     },
     {
-        "line": 2,
+        "line": 1,
         "column": 5,
         "msg": "Invalid character."
     },
     {
-        "line": 2,
+        "line": 1,
         "column": 7,
         "msg": "Invalid character."
     }

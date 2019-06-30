@@ -1,31 +1,31 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 9,
         "msg": "Cannot find name 'a'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 3,
         "msg": "Cannot find name 'f2'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 8,
         "msg": "';' expected."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 3,
         "msg": "Cannot find name 'f3'."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 8,
         "msg": "';' expected."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 2,
         "msg": "'}' expected."
     }

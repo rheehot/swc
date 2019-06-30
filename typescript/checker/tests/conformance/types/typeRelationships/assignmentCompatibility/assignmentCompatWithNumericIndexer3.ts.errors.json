@@ -1,16 +1,16 @@
 [
     {
-        "line": 15,
+        "line": 14,
         "column": 1,
         "msg": "Type '{ [x"
     },
     {
-        "line": 24,
+        "line": 23,
         "column": 1,
         "msg": "Type 'A' is not assignable to type '{ [x"
     },
     {
-        "line": 34,
+        "line": 33,
         "column": 9,
         "msg": "Type '{ [x"
     }

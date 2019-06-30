@@ -1,23 +1,28 @@
 [
     {
-        "line": 15,
+        "line": 14,
         "column": 13,
         "msg": "Type '(x"
     },
     {
-        "line": 24,
+        "line": 23,
         "column": 13,
         "msg": "Type '(x"
     },
     {
-        "line": 64,
+        "line": 63,
         "column": 9,
         "msg": "Type '() => T' is not assignable to type '<T>() => T'."
     },
     {
-        "line": 65,
+        "line": 64,
         "column": 9,
         "msg": "Type '(x?"
+    },
+    {
+        "line": 65,
+        "column": 9,
+        "msg": "Type '(x"
     },
     {
         "line": 66,
@@ -27,22 +32,22 @@
     {
         "line": 67,
         "column": 9,
-        "msg": "Type '(x"
-    },
-    {
-        "line": 68,
-        "column": 9,
         "msg": "Type '(x?"
     },
     {
-        "line": 70,
+        "line": 69,
         "column": 9,
         "msg": "Type '() => T' is not assignable to type '<T>(x?"
     },
     {
-        "line": 71,
+        "line": 70,
         "column": 9,
         "msg": "Type '(x?"
+    },
+    {
+        "line": 71,
+        "column": 9,
+        "msg": "Type '(x"
     },
     {
         "line": 72,
@@ -52,22 +57,22 @@
     {
         "line": 73,
         "column": 9,
-        "msg": "Type '(x"
-    },
-    {
-        "line": 74,
-        "column": 9,
         "msg": "Type '(x?"
     },
     {
-        "line": 76,
+        "line": 75,
         "column": 9,
         "msg": "Type '() => T' is not assignable to type '<T>(x"
     },
     {
-        "line": 77,
+        "line": 76,
         "column": 9,
         "msg": "Type '(x?"
+    },
+    {
+        "line": 77,
+        "column": 9,
+        "msg": "Type '(x"
     },
     {
         "line": 78,
@@ -77,22 +82,22 @@
     {
         "line": 79,
         "column": 9,
-        "msg": "Type '(x"
-    },
-    {
-        "line": 80,
-        "column": 9,
         "msg": "Type '(x?"
     },
     {
-        "line": 82,
+        "line": 81,
         "column": 9,
         "msg": "Type '() => T' is not assignable to type '<T>(x"
     },
     {
-        "line": 83,
+        "line": 82,
         "column": 9,
         "msg": "Type '(x?"
+    },
+    {
+        "line": 83,
+        "column": 9,
+        "msg": "Type '(x"
     },
     {
         "line": 84,
@@ -102,22 +107,22 @@
     {
         "line": 85,
         "column": 9,
-        "msg": "Type '(x"
-    },
-    {
-        "line": 86,
-        "column": 9,
         "msg": "Type '(x?"
     },
     {
-        "line": 88,
+        "line": 87,
         "column": 9,
         "msg": "Type '() => T' is not assignable to type '<T>(x?"
     },
     {
-        "line": 89,
+        "line": 88,
         "column": 9,
         "msg": "Type '(x?"
+    },
+    {
+        "line": 89,
+        "column": 9,
+        "msg": "Type '(x"
     },
     {
         "line": 90,
@@ -127,20 +132,15 @@
     {
         "line": 91,
         "column": 9,
-        "msg": "Type '(x"
-    },
-    {
-        "line": 92,
-        "column": 9,
         "msg": "Type '(x?"
     },
     {
-        "line": 108,
+        "line": 107,
         "column": 13,
         "msg": "Type '<T>(x"
     },
     {
-        "line": 117,
+        "line": 116,
         "column": 13,
         "msg": "Type '<T>(x"
     }

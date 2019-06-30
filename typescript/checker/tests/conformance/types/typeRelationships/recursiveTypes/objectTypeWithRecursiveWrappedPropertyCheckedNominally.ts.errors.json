@@ -1,26 +1,26 @@
 [
     {
-        "line": 21,
+        "line": 20,
         "column": 1,
         "msg": "Type 'MyList<string>' is not assignable to type 'List<number>'."
     },
     {
-        "line": 23,
+        "line": 22,
         "column": 1,
         "msg": "Type 'MyList<number>' is not assignable to type 'List<string>'."
     },
     {
-        "line": 31,
+        "line": 30,
         "column": 5,
         "msg": "Type 'U' is not assignable to type 'T'."
     },
     {
-        "line": 32,
+        "line": 31,
         "column": 5,
         "msg": "Type 'T' is not assignable to type 'U'."
     },
     {
-        "line": 43,
+        "line": 42,
         "column": 5,
         "msg": "Type 'U' is not assignable to type 'T'."
     }

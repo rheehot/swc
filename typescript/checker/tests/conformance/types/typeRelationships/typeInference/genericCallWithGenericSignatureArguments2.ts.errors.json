@@ -1,51 +1,51 @@
 [
     {
-        "line": 11,
+        "line": 10,
         "column": 51,
         "msg": "Argument of type '(x"
     },
     {
-        "line": 16,
+        "line": 15,
         "column": 21,
         "msg": "Argument of type 'Date' is not assignable to parameter of type 'T'."
     },
     {
-        "line": 17,
+        "line": 16,
         "column": 22,
         "msg": "Argument of type '1' is not assignable to parameter of type 'T'."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 23,
         "msg": "Argument of type '(a"
     },
     {
-        "line": 38,
+        "line": 37,
         "column": 43,
         "msg": "Type 'F' is not assignable to type 'E'."
     },
     {
-        "line": 51,
+        "line": 50,
         "column": 21,
         "msg": "Argument of type 'Date' is not assignable to parameter of type 'T'."
     },
     {
-        "line": 52,
+        "line": 51,
         "column": 22,
         "msg": "Argument of type '1' is not assignable to parameter of type 'T'."
     },
     {
-        "line": 61,
+        "line": 60,
         "column": 23,
         "msg": "Argument of type '(a"
     },
     {
-        "line": 68,
+        "line": 67,
         "column": 51,
         "msg": "Cannot find name 'U'."
     },
     {
-        "line": 68,
+        "line": 67,
         "column": 57,
         "msg": "Cannot find name 'U'."
     }

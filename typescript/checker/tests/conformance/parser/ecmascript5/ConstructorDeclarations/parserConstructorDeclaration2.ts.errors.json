@@ -1,6 +1,6 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 3,
         "msg": "'static' modifier cannot appear on a constructor declaration."
     }

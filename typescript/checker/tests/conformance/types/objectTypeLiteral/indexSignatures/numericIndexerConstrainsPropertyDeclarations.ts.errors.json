@@ -1,56 +1,56 @@
 [
     {
-        "line": 19,
+        "line": 18,
         "column": 5,
         "msg": "Property '2.0' of type 'number' is not assignable to numeric index type 'string'."
     },
     {
-        "line": 22,
+        "line": 21,
         "column": 5,
         "msg": "Property '3.0' of type 'MyNumber' is not assignable to numeric index type 'string'."
     },
     {
-        "line": 24,
+        "line": 23,
         "column": 9,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 27,
+        "line": 26,
         "column": 9,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 37,
+        "line": 36,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 51,
+        "line": 50,
         "column": 5,
         "msg": "Property '2.0' of type 'number' is not assignable to numeric index type 'string'."
     },
     {
-        "line": 69,
+        "line": 68,
         "column": 5,
         "msg": "Property '2.0' of type 'number' is not assignable to numeric index type 'string'."
     },
     {
-        "line": 86,
+        "line": 85,
         "column": 5,
         "msg": "Type 'number' is not assignable to type 'string'."
     },
     {
-        "line": 89,
+        "line": 88,
         "column": 9,
         "msg": "Cannot find name 'Myn'."
     },
     {
-        "line": 91,
+        "line": 90,
         "column": 9,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 94,
+        "line": 93,
         "column": 9,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     }

@@ -1,5 +1,10 @@
 [
     {
+        "line": 32,
+        "column": 9,
+        "msg": "'const' enum member initializer was evaluated to a non-finite value."
+    },
+    {
         "line": 33,
         "column": 9,
         "msg": "'const' enum member initializer was evaluated to a non-finite value."
@@ -12,7 +17,7 @@
     {
         "line": 35,
         "column": 9,
-        "msg": "'const' enum member initializer was evaluated to a non-finite value."
+        "msg": "'const' enum member initializer was evaluated to disallowed value 'NaN'."
     },
     {
         "line": 36,
@@ -22,15 +27,10 @@
     {
         "line": 37,
         "column": 9,
-        "msg": "'const' enum member initializer was evaluated to disallowed value 'NaN'."
-    },
-    {
-        "line": 38,
-        "column": 9,
         "msg": "'const' enum member initializer was evaluated to a non-finite value."
     },
     {
-        "line": 39,
+        "line": 38,
         "column": 9,
         "msg": "'const' enum member initializer was evaluated to a non-finite value."
     }

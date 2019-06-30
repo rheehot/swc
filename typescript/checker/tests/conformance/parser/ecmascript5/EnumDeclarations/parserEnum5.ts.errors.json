@@ -1,31 +1,31 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 12,
         "msg": "',' expected."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 14,
         "msg": "An enum member cannot have a numeric name."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 15,
         "msg": "',' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 17,
         "msg": "An enum member cannot have a numeric name."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 24,
         "msg": "',' expected."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 26,
         "msg": "An enum member cannot have a numeric name."
     }

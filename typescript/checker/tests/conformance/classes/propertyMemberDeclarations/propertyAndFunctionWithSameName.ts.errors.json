@@ -1,21 +1,21 @@
 [
     {
+        "line": 2,
+        "column": 5,
+        "msg": "Duplicate identifier 'x'."
+    },
+    {
         "line": 3,
         "column": 5,
         "msg": "Duplicate identifier 'x'."
     },
     {
-        "line": 4,
+        "line": 9,
         "column": 5,
         "msg": "Duplicate identifier 'x'."
     },
     {
         "line": 10,
-        "column": 5,
-        "msg": "Duplicate identifier 'x'."
-    },
-    {
-        "line": 11,
         "column": 5,
         "msg": "Duplicate identifier 'x'."
     }

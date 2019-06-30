@@ -1,16 +1,16 @@
 [
     {
-        "line": 16,
+        "line": 15,
         "column": 7,
         "msg": "Class 'B' incorrectly extends base class 'A'."
     },
     {
-        "line": 24,
+        "line": 23,
         "column": 7,
         "msg": "Class 'B2' incorrectly extends base class 'A2'."
     },
     {
-        "line": 32,
+        "line": 31,
         "column": 7,
         "msg": "Class 'B3' incorrectly extends base class 'A3'."
     }

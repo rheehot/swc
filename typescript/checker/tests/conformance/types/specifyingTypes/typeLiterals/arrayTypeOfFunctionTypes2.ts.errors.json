@@ -1,6 +1,6 @@
 [
     {
-        "line": 17,
+        "line": 16,
         "column": 11,
         "msg": "Value of type 'new () => string' is not callable. Did you mean to include 'new'?"
     }

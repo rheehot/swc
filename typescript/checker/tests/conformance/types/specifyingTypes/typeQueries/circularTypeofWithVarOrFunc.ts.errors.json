@@ -1,51 +1,51 @@
 [
     {
-        "line": 2,
+        "line": 1,
         "column": 6,
         "msg": "Type alias 'typeAlias1' circularly references itself."
     },
     {
-        "line": 3,
+        "line": 2,
         "column": 5,
         "msg": "'varOfAliasedType1' is referenced directly or indirectly in its own type annotation."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 5,
         "msg": "'varOfAliasedType2' is referenced directly or indirectly in its own type annotation."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 6,
         "msg": "Type alias 'typeAlias2' circularly references itself."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 18,
         "msg": "Return type annotation circularly references itself."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 6,
         "msg": "Type alias 'typeAlias3' circularly references itself."
     },
     {
-        "line": 19,
+        "line": 18,
         "column": 6,
         "msg": "Type alias 'R' circularly references itself."
     },
     {
-        "line": 20,
+        "line": 19,
         "column": 29,
         "msg": "Return type annotation circularly references itself."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 6,
         "msg": "Type alias 'R2' circularly references itself."
     },
     {
-        "line": 27,
+        "line": 26,
         "column": 15,
         "msg": "Return type annotation circularly references itself."
     }

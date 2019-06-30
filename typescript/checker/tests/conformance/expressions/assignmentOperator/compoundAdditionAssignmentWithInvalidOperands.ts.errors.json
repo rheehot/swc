@@ -1,136 +1,136 @@
 [
     {
-        "line": 7,
+        "line": 6,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'boolean' and 'void'."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'boolean' and 'true'."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'boolean' and '0'."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'boolean' and 'E.a'."
     },
     {
-        "line": 11,
+        "line": 10,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'boolean' and '{}'."
     },
     {
-        "line": 12,
+        "line": 11,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'boolean' and 'null'."
     },
     {
-        "line": 13,
+        "line": 12,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'boolean' and 'undefined'."
     },
     {
-        "line": 16,
+        "line": 15,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types '{}' and 'void'."
     },
     {
-        "line": 17,
+        "line": 16,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types '{}' and 'true'."
     },
     {
-        "line": 18,
+        "line": 17,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types '{}' and '0'."
     },
     {
-        "line": 19,
+        "line": 18,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types '{}' and 'E.a'."
     },
     {
-        "line": 20,
+        "line": 19,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types '{}' and '{}'."
     },
     {
-        "line": 21,
+        "line": 20,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types '{}' and 'null'."
     },
     {
-        "line": 22,
+        "line": 21,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types '{}' and 'undefined'."
     },
     {
-        "line": 25,
+        "line": 24,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'void' and 'void'."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'void' and 'true'."
     },
     {
-        "line": 27,
+        "line": 26,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'void' and '0'."
     },
     {
-        "line": 28,
+        "line": 27,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'void' and 'E.a'."
     },
     {
-        "line": 29,
+        "line": 28,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'void' and '{}'."
     },
     {
-        "line": 30,
+        "line": 29,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'void' and 'null'."
     },
     {
-        "line": 31,
+        "line": 30,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'void' and 'undefined'."
     },
     {
-        "line": 34,
+        "line": 33,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'number' and 'void'."
     },
     {
-        "line": 35,
+        "line": 34,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'number' and 'true'."
     },
     {
-        "line": 36,
+        "line": 35,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'number' and '{}'."
     },
     {
-        "line": 39,
+        "line": 38,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'E' and 'void'."
     },
     {
-        "line": 40,
+        "line": 39,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'E' and 'true'."
     },
     {
-        "line": 41,
+        "line": 40,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'E' and '{}'."
     }

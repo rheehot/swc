@@ -1,91 +1,91 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 5,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 7,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 7,
+        "line": 6,
         "column": 5,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 7,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 11,
+        "line": 10,
         "column": 5,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 13,
+        "line": 12,
         "column": 7,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 15,
+        "line": 14,
         "column": 5,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 17,
+        "line": 16,
         "column": 7,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 19,
+        "line": 18,
         "column": 5,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 22,
+        "line": 21,
         "column": 5,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 24,
+        "line": 23,
         "column": 8,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 27,
+        "line": 26,
         "column": 8,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 53,
+        "line": 52,
         "column": 5,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 55,
+        "line": 54,
         "column": 5,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 60,
+        "line": 59,
         "column": 13,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 64,
+        "line": 63,
         "column": 13,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 69,
+        "line": 68,
         "column": 13,
         "msg": "Line terminator not permitted before arrow."
     },
     {
-        "line": 73,
+        "line": 72,
         "column": 9,
         "msg": "Line terminator not permitted before arrow."
     }

@@ -1,5 +1,10 @@
 [
     {
+        "line": 1,
+        "column": 1,
+        "msg": "Cannot find name 'foo1'."
+    },
+    {
         "line": 2,
         "column": 1,
         "msg": "Cannot find name 'foo1'."
@@ -11,11 +16,6 @@
     },
     {
         "line": 4,
-        "column": 1,
-        "msg": "Cannot find name 'foo1'."
-    },
-    {
-        "line": 5,
         "column": 1,
         "msg": "Cannot find name 'static'."
     }

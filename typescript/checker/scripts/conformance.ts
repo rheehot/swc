@@ -52,6 +52,7 @@ async function handle(f: string) {
 
   let len = (content.match(/\/\/ \@|\/\/\@/g) || []).length;
   if (len === 0) {
+    len -=1;
     const data = content.split(/\r\n|\r|\n/);
     for (let i = 0; i < data.length; i++) {
       if (data[i].length === 0) {
@@ -92,7 +93,6 @@ function extract(content: string, shift: number): Error[] {
 
     const [fqLoc, , msgWithPrefix] = line.split(":");
     if (fqLoc.split("(").length < 2 || !msgWithPrefix) {
-      console.error(`FUCKED UP!: ${fqLoc}\nLine: ${line}`);
       continue;
     }
     const lineCol = fqLoc.split("(")[1].replace(")", "");

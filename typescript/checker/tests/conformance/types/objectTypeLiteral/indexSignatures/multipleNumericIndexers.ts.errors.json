@@ -1,46 +1,46 @@
 [
     {
-        "line": 6,
+        "line": 5,
         "column": 5,
         "msg": "Duplicate number index signature."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 11,
         "msg": "All declarations of 'I' must have identical type parameters."
     },
     {
-        "line": 11,
+        "line": 10,
         "column": 5,
         "msg": "Duplicate number index signature."
     },
     {
-        "line": 16,
+        "line": 15,
         "column": 5,
         "msg": "Duplicate number index signature."
     },
     {
-        "line": 21,
+        "line": 20,
         "column": 5,
         "msg": "Duplicate number index signature."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 5,
         "msg": "Duplicate number index signature."
+    },
+    {
+        "line": 28,
+        "column": 11,
+        "msg": "All declarations of 'I' must have identical type parameters."
     },
     {
         "line": 29,
-        "column": 11,
-        "msg": "All declarations of 'I' must have identical type parameters."
-    },
-    {
-        "line": 30,
         "column": 5,
         "msg": "Duplicate number index signature."
     },
     {
-        "line": 31,
+        "line": 30,
         "column": 5,
         "msg": "Duplicate number index signature."
     }

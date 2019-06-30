@@ -1,31 +1,31 @@
 [
     {
-        "line": 9,
+        "line": 8,
         "column": 5,
         "msg": "This condition will always return 'false' since the types '\"foo\"' and '\"bar\"' have no overlap."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 5,
         "msg": "This condition will always return 'false' since the types '\"bar\"' and '\"foo\"' have no overlap."
     },
     {
-        "line": 11,
+        "line": 10,
         "column": 5,
         "msg": "This condition will always return 'false' since the types '\"foo\"' and '\"bar\"' have no overlap."
     },
     {
-        "line": 18,
+        "line": 17,
         "column": 5,
         "msg": "This condition will always return 'true' since the types '\"foo\"' and '\"bar\"' have no overlap."
     },
     {
-        "line": 19,
+        "line": 18,
         "column": 5,
         "msg": "This condition will always return 'true' since the types '\"bar\"' and '\"foo\"' have no overlap."
     },
     {
-        "line": 20,
+        "line": 19,
         "column": 5,
         "msg": "This condition will always return 'true' since the types '\"foo\"' and '\"bar\"' have no overlap."
     }

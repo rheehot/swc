@@ -1,11 +1,11 @@
 [
     {
-        "line": 2,
+        "line": 1,
         "column": 6,
         "msg": "Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`."
     },
     {
-        "line": 2,
+        "line": 1,
         "column": 22,
         "msg": "Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`."
     }

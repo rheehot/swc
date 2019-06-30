@@ -1,5 +1,10 @@
 [
     {
+        "line": 13,
+        "column": 10,
+        "msg": "Object is possibly 'null'."
+    },
+    {
         "line": 14,
         "column": 10,
         "msg": "Object is possibly 'null'."
@@ -16,7 +21,7 @@
     },
     {
         "line": 17,
-        "column": 10,
+        "column": 15,
         "msg": "Object is possibly 'null'."
     },
     {
@@ -31,11 +36,6 @@
     },
     {
         "line": 20,
-        "column": 15,
-        "msg": "Object is possibly 'null'."
-    },
-    {
-        "line": 21,
         "column": 17,
         "msg": "Object is possibly 'null'."
     }

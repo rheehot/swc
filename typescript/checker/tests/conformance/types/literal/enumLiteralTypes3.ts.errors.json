@@ -1,8 +1,13 @@
 [
     {
-        "line": 11,
+        "line": 10,
         "column": 5,
         "msg": "Type 'YesNo' is not assignable to type 'Choice.Yes'."
+    },
+    {
+        "line": 11,
+        "column": 5,
+        "msg": "Type 'Choice' is not assignable to type 'Choice.Yes'."
     },
     {
         "line": 12,
@@ -10,9 +15,9 @@
         "msg": "Type 'Choice' is not assignable to type 'Choice.Yes'."
     },
     {
-        "line": 13,
+        "line": 18,
         "column": 5,
-        "msg": "Type 'Choice' is not assignable to type 'Choice.Yes'."
+        "msg": "Type 'Choice' is not assignable to type 'YesNo'."
     },
     {
         "line": 19,
@@ -20,52 +25,47 @@
         "msg": "Type 'Choice' is not assignable to type 'YesNo'."
     },
     {
-        "line": 20,
-        "column": 5,
-        "msg": "Type 'Choice' is not assignable to type 'YesNo'."
-    },
-    {
-        "line": 38,
+        "line": 37,
         "column": 5,
         "msg": "Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'."
     },
     {
-        "line": 40,
+        "line": 39,
         "column": 5,
         "msg": "Type 'Choice.No' is not assignable to type 'Choice.Yes'."
     },
     {
-        "line": 41,
+        "line": 40,
         "column": 5,
         "msg": "Type 'Choice.Unknown' is not assignable to type 'YesNo'."
     },
     {
-        "line": 53,
+        "line": 52,
         "column": 5,
         "msg": "This condition will always return 'false' since the types 'Choice.Yes' and 'Choice.Unknown' have no overlap."
     },
     {
-        "line": 55,
+        "line": 54,
         "column": 5,
         "msg": "This condition will always return 'false' since the types 'Choice.Yes' and 'Choice.No' have no overlap."
     },
     {
-        "line": 56,
+        "line": 55,
         "column": 5,
         "msg": "This condition will always return 'false' since the types 'YesNo' and 'Choice.Unknown' have no overlap."
     },
     {
-        "line": 88,
+        "line": 87,
         "column": 14,
         "msg": "Type 'Choice.Unknown' is not comparable to type 'Choice.Yes'."
     },
     {
-        "line": 90,
+        "line": 89,
         "column": 14,
         "msg": "Type 'Choice.No' is not comparable to type 'Choice.Yes'."
     },
     {
-        "line": 97,
+        "line": 96,
         "column": 14,
         "msg": "Type 'Choice.Unknown' is not comparable to type 'YesNo'."
     }

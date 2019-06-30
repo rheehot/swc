@@ -1,16 +1,16 @@
 [
     {
-        "line": 8,
+        "line": 7,
         "column": 8,
         "msg": "Cannot find name 'A'."
     },
     {
-        "line": 21,
+        "line": 20,
         "column": 9,
         "msg": "Type '{ [x"
     },
     {
-        "line": 22,
+        "line": 21,
         "column": 9,
         "msg": "Type 'A<T>' is not assignable to type '{ [x"
     }

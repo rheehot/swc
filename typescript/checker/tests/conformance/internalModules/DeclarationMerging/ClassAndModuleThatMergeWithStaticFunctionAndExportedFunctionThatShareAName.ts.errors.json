@@ -1,21 +1,21 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 12,
         "msg": "Duplicate identifier 'Origin'."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 21,
         "msg": "Duplicate identifier 'Origin'."
     },
     {
-        "line": 17,
+        "line": 16,
         "column": 16,
         "msg": "Duplicate identifier 'Origin'."
     },
     {
-        "line": 21,
+        "line": 20,
         "column": 25,
         "msg": "Duplicate identifier 'Origin'."
     }

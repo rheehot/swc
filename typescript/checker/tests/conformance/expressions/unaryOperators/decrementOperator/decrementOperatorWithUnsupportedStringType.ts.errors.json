@@ -1,12 +1,17 @@
 [
     {
+        "line": 18,
+        "column": 25,
+        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
+    },
+    {
         "line": 19,
         "column": 25,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 20,
-        "column": 25,
+        "line": 21,
+        "column": 23,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
@@ -15,8 +20,8 @@
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 23,
-        "column": 23,
+        "line": 25,
+        "column": 25,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
@@ -30,8 +35,8 @@
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 28,
-        "column": 25,
+        "line": 29,
+        "column": 23,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
@@ -41,12 +46,12 @@
     },
     {
         "line": 31,
-        "column": 23,
+        "column": 24,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 32,
-        "column": 24,
+        "line": 34,
+        "column": 26,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
@@ -75,8 +80,8 @@
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 40,
-        "column": 26,
+        "line": 41,
+        "column": 24,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
@@ -105,8 +110,8 @@
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 47,
-        "column": 24,
+        "line": 49,
+        "column": 3,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
@@ -145,8 +150,8 @@
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 57,
-        "column": 3,
+        "line": 58,
+        "column": 1,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
@@ -185,12 +190,7 @@
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 66,
-        "column": 1,
-        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
-    },
-    {
-        "line": 66,
+        "line": 65,
         "column": 11,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     }

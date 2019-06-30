@@ -1,11 +1,11 @@
 [
     {
-        "line": 25,
+        "line": 24,
         "column": 1,
         "msg": "Type 'Number' is not assignable to type 'number'."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 1,
         "msg": "Type 'NotNumber' is not assignable to type 'number'."
     }

@@ -1,96 +1,96 @@
 [
     {
-        "line": 19,
+        "line": 18,
         "column": 1,
         "msg": "Property 'foo1' is missing in type 'E' but required in type 'D'."
     },
     {
-        "line": 20,
+        "line": 19,
         "column": 1,
         "msg": "Type 'D | E' is not assignable to type 'D'."
     },
     {
-        "line": 21,
+        "line": 20,
         "column": 1,
         "msg": "Property 'foo2' is missing in type 'D' but required in type 'E'."
     },
     {
-        "line": 23,
+        "line": 22,
         "column": 1,
         "msg": "Type 'D | E' is not assignable to type 'E'."
     },
     {
-        "line": 25,
+        "line": 24,
         "column": 1,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 1,
         "msg": "Type 'string | number' is not assignable to type 'number'."
     },
     {
-        "line": 27,
+        "line": 26,
         "column": 1,
         "msg": "Type 'number' is not assignable to type 'string'."
     },
     {
-        "line": 29,
+        "line": 28,
         "column": 1,
         "msg": "Type 'string | number' is not assignable to type 'string'."
     },
     {
-        "line": 32,
+        "line": 31,
         "column": 1,
         "msg": "Property 'foo1' is missing in type 'C' but required in type 'D'."
     },
     {
-        "line": 33,
+        "line": 32,
         "column": 1,
         "msg": "Property 'foo2' is missing in type 'C' but required in type 'E'."
     },
     {
-        "line": 34,
+        "line": 33,
         "column": 1,
         "msg": "Type 'C' is not assignable to type 'D | E'."
     },
     {
-        "line": 36,
+        "line": 35,
         "column": 1,
         "msg": "Type 'D' is not assignable to type 'E'."
     },
     {
-        "line": 38,
+        "line": 37,
         "column": 1,
         "msg": "Type 'E' is not assignable to type 'D'."
     },
     {
-        "line": 42,
+        "line": 41,
         "column": 1,
         "msg": "Type 'number' is not assignable to type 'string'."
     },
     {
-        "line": 44,
+        "line": 43,
         "column": 1,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 65,
+        "line": 64,
         "column": 5,
         "msg": "Type 'U' is not assignable to type 'T'."
     },
     {
-        "line": 66,
+        "line": 65,
         "column": 5,
         "msg": "Type 'T' is not assignable to type 'U'."
     },
     {
-        "line": 71,
+        "line": 70,
         "column": 5,
         "msg": "Type 'T | U' is not assignable to type 'T'."
     },
     {
-        "line": 72,
+        "line": 71,
         "column": 5,
         "msg": "Type 'T | U' is not assignable to type 'U'."
     }

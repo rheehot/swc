@@ -1,13 +1,18 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 5,
         "msg": "Duplicate identifier '\"a b\"'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 12,
         "msg": "Duplicate identifier '\"c d\"'."
+    },
+    {
+        "line": 9,
+        "column": 5,
+        "msg": "Duplicate identifier 'a b'."
     },
     {
         "line": 10,
@@ -15,7 +20,7 @@
         "msg": "Duplicate identifier 'a b'."
     },
     {
-        "line": 11,
+        "line": 14,
         "column": 5,
         "msg": "Duplicate identifier 'a b'."
     },
@@ -25,12 +30,7 @@
         "msg": "Duplicate identifier 'a b'."
     },
     {
-        "line": 16,
-        "column": 5,
-        "msg": "Duplicate identifier 'a b'."
-    },
-    {
-        "line": 21,
+        "line": 20,
         "column": 5,
         "msg": "',' expected."
     }

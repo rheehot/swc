@@ -1,6 +1,6 @@
 [
     {
-        "line": 30,
+        "line": 29,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'b' must be of type 'unknown', but here has type '{}'."
     }

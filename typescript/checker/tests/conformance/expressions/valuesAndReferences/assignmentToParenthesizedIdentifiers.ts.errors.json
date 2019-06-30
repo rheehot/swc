@@ -1,11 +1,16 @@
 [
     {
+        "line": 4,
+        "column": 1,
+        "msg": "Type '\"\"' is not assignable to type 'number'."
+    },
+    {
         "line": 5,
         "column": 1,
         "msg": "Type '\"\"' is not assignable to type 'number'."
     },
     {
-        "line": 6,
+        "line": 13,
         "column": 1,
         "msg": "Type '\"\"' is not assignable to type 'number'."
     },
@@ -20,28 +25,28 @@
         "msg": "Type '\"\"' is not assignable to type 'number'."
     },
     {
-        "line": 16,
-        "column": 1,
-        "msg": "Type '\"\"' is not assignable to type 'number'."
-    },
-    {
-        "line": 18,
+        "line": 17,
         "column": 1,
         "msg": "Cannot assign to 'M' because it is not a variable."
     },
     {
-        "line": 19,
+        "line": 18,
         "column": 2,
         "msg": "Cannot assign to 'M' because it is not a variable."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 5,
         "msg": "Cannot assign to 'M3' because it is not a variable."
     },
     {
-        "line": 32,
+        "line": 31,
         "column": 11,
+        "msg": "Type 'string' is not assignable to type 'number'."
+    },
+    {
+        "line": 32,
+        "column": 13,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
@@ -50,19 +55,19 @@
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 34,
-        "column": 13,
-        "msg": "Type 'string' is not assignable to type 'number'."
-    },
-    {
-        "line": 38,
+        "line": 37,
         "column": 1,
         "msg": "Cannot assign to 'fn' because it is not a variable."
     },
     {
-        "line": 39,
+        "line": 38,
         "column": 2,
         "msg": "Cannot assign to 'fn' because it is not a variable."
+    },
+    {
+        "line": 43,
+        "column": 5,
+        "msg": "Type '\"\"' is not assignable to type 'number'."
     },
     {
         "line": 44,
@@ -70,7 +75,7 @@
         "msg": "Type '\"\"' is not assignable to type 'number'."
     },
     {
-        "line": 45,
+        "line": 48,
         "column": 5,
         "msg": "Type '\"\"' is not assignable to type 'number'."
     },
@@ -80,7 +85,7 @@
         "msg": "Type '\"\"' is not assignable to type 'number'."
     },
     {
-        "line": 50,
+        "line": 54,
         "column": 5,
         "msg": "Type '\"\"' is not assignable to type 'number'."
     },
@@ -95,27 +100,22 @@
         "msg": "Type '\"\"' is not assignable to type 'number'."
     },
     {
-        "line": 57,
-        "column": 5,
-        "msg": "Type '\"\"' is not assignable to type 'number'."
-    },
-    {
-        "line": 63,
+        "line": 62,
         "column": 1,
         "msg": "Cannot assign to 'E' because it is not a variable."
     },
     {
-        "line": 64,
+        "line": 63,
         "column": 2,
         "msg": "Cannot assign to 'E' because it is not a variable."
     },
     {
-        "line": 70,
+        "line": 69,
         "column": 1,
         "msg": "Cannot assign to 'C' because it is not a variable."
     },
     {
-        "line": 71,
+        "line": 70,
         "column": 2,
         "msg": "Cannot assign to 'C' because it is not a variable."
     }

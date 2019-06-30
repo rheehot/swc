@@ -1,18 +1,23 @@
 [
     {
-        "line": 25,
+        "line": 24,
         "column": 25,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 25,
         "msg": "Cannot assign to 'A' because it is not a variable."
     },
     {
-        "line": 27,
+        "line": 26,
         "column": 25,
         "msg": "Cannot assign to 'M' because it is not a variable."
+    },
+    {
+        "line": 27,
+        "column": 25,
+        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 28,
@@ -20,74 +25,74 @@
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 29,
-        "column": 25,
+        "line": 30,
+        "column": 23,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 31,
         "column": 23,
-        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "Cannot assign to 'A' because it is not a variable."
     },
     {
         "line": 32,
         "column": 23,
-        "msg": "Cannot assign to 'A' because it is not a variable."
+        "msg": "Cannot assign to 'M' because it is not a variable."
     },
     {
         "line": 33,
         "column": 23,
-        "msg": "Cannot assign to 'M' because it is not a variable."
-    },
-    {
-        "line": 34,
-        "column": 23,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 35,
+        "line": 34,
         "column": 24,
+        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
+    },
+    {
+        "line": 37,
+        "column": 26,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 38,
         "column": 26,
-        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
-    },
-    {
-        "line": 39,
-        "column": 26,
         "msg": "The operand of an increment or decrement operator must be a variable or a property access."
     },
     {
-        "line": 39,
+        "line": 38,
         "column": 26,
         "msg": "Object is possibly 'null'."
     },
     {
-        "line": 40,
+        "line": 39,
         "column": 26,
         "msg": "Cannot assign to 'undefined' because it is not a variable."
     },
     {
-        "line": 42,
+        "line": 41,
         "column": 24,
         "msg": "The operand of an increment or decrement operator must be a variable or a property access."
     },
     {
-        "line": 42,
+        "line": 41,
         "column": 24,
         "msg": "Object is possibly 'null'."
+    },
+    {
+        "line": 42,
+        "column": 24,
+        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 43,
         "column": 24,
-        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "Cannot assign to 'undefined' because it is not a variable."
     },
     {
-        "line": 44,
-        "column": 24,
-        "msg": "Cannot assign to 'undefined' because it is not a variable."
+        "line": 46,
+        "column": 26,
+        "msg": "The operand of an increment or decrement operator must be a variable or a property access."
     },
     {
         "line": 47,
@@ -100,34 +105,34 @@
         "msg": "The operand of an increment or decrement operator must be a variable or a property access."
     },
     {
-        "line": 49,
-        "column": 26,
-        "msg": "The operand of an increment or decrement operator must be a variable or a property access."
-    },
-    {
-        "line": 49,
+        "line": 48,
         "column": 27,
         "msg": "Operator '+' cannot be applied to types 'null' and 'undefined'."
     },
     {
-        "line": 50,
+        "line": 49,
         "column": 26,
         "msg": "The operand of an increment or decrement operator must be a variable or a property access."
     },
     {
-        "line": 50,
+        "line": 49,
         "column": 27,
         "msg": "Operator '+' cannot be applied to types 'null' and 'null'."
     },
     {
-        "line": 51,
+        "line": 50,
         "column": 26,
         "msg": "The operand of an increment or decrement operator must be a variable or a property access."
     },
     {
-        "line": 51,
+        "line": 50,
         "column": 27,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'undefined'."
+    },
+    {
+        "line": 51,
+        "column": 26,
+        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 52,
@@ -135,9 +140,9 @@
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 53,
-        "column": 26,
-        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
+        "line": 54,
+        "column": 24,
+        "msg": "The operand of an increment or decrement operator must be a variable or a property access."
     },
     {
         "line": 55,
@@ -150,34 +155,34 @@
         "msg": "The operand of an increment or decrement operator must be a variable or a property access."
     },
     {
-        "line": 57,
-        "column": 24,
-        "msg": "The operand of an increment or decrement operator must be a variable or a property access."
-    },
-    {
-        "line": 57,
+        "line": 56,
         "column": 25,
         "msg": "Operator '+' cannot be applied to types 'null' and 'undefined'."
     },
     {
-        "line": 58,
+        "line": 57,
         "column": 24,
         "msg": "The operand of an increment or decrement operator must be a variable or a property access."
     },
     {
-        "line": 58,
+        "line": 57,
         "column": 25,
         "msg": "Operator '+' cannot be applied to types 'null' and 'null'."
     },
     {
-        "line": 59,
+        "line": 58,
         "column": 24,
         "msg": "The operand of an increment or decrement operator must be a variable or a property access."
     },
     {
-        "line": 59,
+        "line": 58,
         "column": 25,
         "msg": "Operator '+' cannot be applied to types 'undefined' and 'undefined'."
+    },
+    {
+        "line": 59,
+        "column": 24,
+        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 60,
@@ -185,52 +190,47 @@
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 61,
-        "column": 24,
-        "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
-    },
-    {
-        "line": 64,
+        "line": 63,
         "column": 3,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 66,
+        "line": 65,
         "column": 1,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 68,
+        "line": 67,
         "column": 7,
         "msg": "';' expected."
     },
     {
-        "line": 68,
+        "line": 67,
         "column": 9,
         "msg": "Expression expected."
     },
     {
-        "line": 69,
+        "line": 68,
         "column": 3,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 69,
+        "line": 68,
         "column": 7,
         "msg": "';' expected."
     },
     {
-        "line": 69,
+        "line": 68,
         "column": 9,
         "msg": "Expression expected."
     },
     {
-        "line": 70,
+        "line": 69,
         "column": 10,
         "msg": "';' expected."
     },
     {
-        "line": 70,
+        "line": 69,
         "column": 12,
         "msg": "Expression expected."
     }

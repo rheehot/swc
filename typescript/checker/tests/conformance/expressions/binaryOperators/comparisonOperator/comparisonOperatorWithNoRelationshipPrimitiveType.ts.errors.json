@@ -1,721 +1,721 @@
 [
     {
-        "line": 11,
+        "line": 10,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'number' and 'boolean'."
     },
     {
-        "line": 12,
+        "line": 11,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'number' and 'string'."
     },
     {
-        "line": 13,
+        "line": 12,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'number' and 'void'."
     },
     {
-        "line": 16,
+        "line": 15,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'boolean' and 'number'."
     },
     {
-        "line": 17,
+        "line": 16,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'boolean' and 'string'."
     },
     {
-        "line": 18,
+        "line": 17,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'boolean' and 'void'."
     },
     {
-        "line": 19,
+        "line": 18,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'boolean' and 'E'."
     },
     {
-        "line": 21,
+        "line": 20,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'string' and 'number'."
     },
     {
-        "line": 22,
+        "line": 21,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'string' and 'boolean'."
     },
     {
-        "line": 23,
+        "line": 22,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'string' and 'void'."
     },
     {
-        "line": 24,
+        "line": 23,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'string' and 'E'."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'void' and 'number'."
     },
     {
-        "line": 27,
+        "line": 26,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'void' and 'boolean'."
     },
     {
-        "line": 28,
+        "line": 27,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'void' and 'string'."
     },
     {
-        "line": 29,
+        "line": 28,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'void' and 'E'."
     },
     {
-        "line": 32,
+        "line": 31,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'E' and 'boolean'."
     },
     {
-        "line": 33,
+        "line": 32,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'E' and 'string'."
     },
     {
-        "line": 34,
+        "line": 33,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types 'E' and 'void'."
     },
     {
-        "line": 37,
+        "line": 36,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'number' and 'boolean'."
     },
     {
-        "line": 38,
+        "line": 37,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'number' and 'string'."
     },
     {
-        "line": 39,
+        "line": 38,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'number' and 'void'."
     },
     {
-        "line": 42,
+        "line": 41,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'boolean' and 'number'."
     },
     {
-        "line": 43,
+        "line": 42,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'boolean' and 'string'."
     },
     {
-        "line": 44,
+        "line": 43,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'boolean' and 'void'."
     },
     {
-        "line": 45,
+        "line": 44,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'boolean' and 'E'."
     },
     {
-        "line": 47,
+        "line": 46,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'string' and 'number'."
     },
     {
-        "line": 48,
+        "line": 47,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'string' and 'boolean'."
     },
     {
-        "line": 49,
+        "line": 48,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'string' and 'void'."
     },
     {
-        "line": 50,
+        "line": 49,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'string' and 'E'."
     },
     {
-        "line": 52,
+        "line": 51,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'void' and 'number'."
     },
     {
-        "line": 53,
+        "line": 52,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'void' and 'boolean'."
     },
     {
-        "line": 54,
+        "line": 53,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'void' and 'string'."
     },
     {
-        "line": 55,
+        "line": 54,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'void' and 'E'."
     },
     {
-        "line": 58,
+        "line": 57,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'E' and 'boolean'."
     },
     {
-        "line": 59,
+        "line": 58,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'E' and 'string'."
     },
     {
-        "line": 60,
+        "line": 59,
         "column": 12,
         "msg": "Operator '>' cannot be applied to types 'E' and 'void'."
     },
     {
-        "line": 63,
+        "line": 62,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'number' and 'boolean'."
     },
     {
-        "line": 64,
+        "line": 63,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'number' and 'string'."
     },
     {
-        "line": 65,
+        "line": 64,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'number' and 'void'."
     },
     {
-        "line": 68,
+        "line": 67,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'boolean' and 'number'."
     },
     {
-        "line": 69,
+        "line": 68,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'boolean' and 'string'."
     },
     {
-        "line": 70,
+        "line": 69,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'boolean' and 'void'."
     },
     {
-        "line": 71,
+        "line": 70,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'boolean' and 'E'."
     },
     {
-        "line": 73,
+        "line": 72,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'string' and 'number'."
     },
     {
-        "line": 74,
+        "line": 73,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'string' and 'boolean'."
     },
     {
-        "line": 75,
+        "line": 74,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'string' and 'void'."
     },
     {
-        "line": 76,
+        "line": 75,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'string' and 'E'."
     },
     {
-        "line": 78,
+        "line": 77,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'void' and 'number'."
     },
     {
-        "line": 79,
+        "line": 78,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'void' and 'boolean'."
     },
     {
-        "line": 80,
+        "line": 79,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'void' and 'string'."
     },
     {
-        "line": 81,
+        "line": 80,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'void' and 'E'."
     },
     {
-        "line": 84,
+        "line": 83,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'E' and 'boolean'."
     },
     {
-        "line": 85,
+        "line": 84,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'E' and 'string'."
     },
     {
-        "line": 86,
+        "line": 85,
         "column": 12,
         "msg": "Operator '<=' cannot be applied to types 'E' and 'void'."
     },
     {
-        "line": 89,
+        "line": 88,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'number' and 'boolean'."
     },
     {
-        "line": 90,
+        "line": 89,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'number' and 'string'."
     },
     {
-        "line": 91,
+        "line": 90,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'number' and 'void'."
     },
     {
-        "line": 94,
+        "line": 93,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'boolean' and 'number'."
     },
     {
-        "line": 95,
+        "line": 94,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'boolean' and 'string'."
     },
     {
-        "line": 96,
+        "line": 95,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'boolean' and 'void'."
     },
     {
-        "line": 97,
+        "line": 96,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'boolean' and 'E'."
     },
     {
-        "line": 99,
+        "line": 98,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'string' and 'number'."
     },
     {
-        "line": 100,
+        "line": 99,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'string' and 'boolean'."
     },
     {
-        "line": 101,
+        "line": 100,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'string' and 'void'."
     },
     {
-        "line": 102,
+        "line": 101,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'string' and 'E'."
     },
     {
-        "line": 104,
+        "line": 103,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'void' and 'number'."
     },
     {
-        "line": 105,
+        "line": 104,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'void' and 'boolean'."
     },
     {
-        "line": 106,
+        "line": 105,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'void' and 'string'."
     },
     {
-        "line": 107,
+        "line": 106,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'void' and 'E'."
     },
     {
-        "line": 110,
+        "line": 109,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'E' and 'boolean'."
     },
     {
-        "line": 111,
+        "line": 110,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'E' and 'string'."
     },
     {
-        "line": 112,
+        "line": 111,
         "column": 12,
         "msg": "Operator '>=' cannot be applied to types 'E' and 'void'."
     },
     {
-        "line": 115,
+        "line": 114,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'number' and 'boolean' have no overlap."
+    },
+    {
+        "line": 115,
+        "column": 12,
+        "msg": "This condition will always return 'false' since the types 'number' and 'string' have no overlap."
     },
     {
         "line": 116,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'number' and 'string' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'number' and 'void' have no overlap."
     },
     {
-        "line": 117,
+        "line": 119,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'number' and 'void' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'boolean' and 'number' have no overlap."
     },
     {
         "line": 120,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'boolean' and 'number' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'boolean' and 'string' have no overlap."
     },
     {
         "line": 121,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'boolean' and 'string' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'boolean' and 'void' have no overlap."
     },
     {
         "line": 122,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'boolean' and 'void' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'boolean' and 'E' have no overlap."
     },
     {
-        "line": 123,
+        "line": 124,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'boolean' and 'E' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'string' and 'number' have no overlap."
     },
     {
         "line": 125,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'string' and 'number' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'string' and 'boolean' have no overlap."
     },
     {
         "line": 126,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'string' and 'boolean' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'string' and 'void' have no overlap."
     },
     {
         "line": 127,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'string' and 'void' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'string' and 'E' have no overlap."
     },
     {
-        "line": 128,
+        "line": 129,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'string' and 'E' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'void' and 'number' have no overlap."
     },
     {
         "line": 130,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'void' and 'number' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'void' and 'boolean' have no overlap."
     },
     {
         "line": 131,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'void' and 'boolean' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'void' and 'string' have no overlap."
     },
     {
         "line": 132,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'void' and 'string' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'void' and 'E' have no overlap."
     },
     {
-        "line": 133,
+        "line": 135,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'void' and 'E' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'E' and 'boolean' have no overlap."
     },
     {
         "line": 136,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'E' and 'boolean' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'E' and 'string' have no overlap."
     },
     {
         "line": 137,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'E' and 'string' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'E' and 'void' have no overlap."
     },
     {
-        "line": 138,
+        "line": 140,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'E' and 'void' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'number' and 'boolean' have no overlap."
     },
     {
         "line": 141,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'number' and 'boolean' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'number' and 'string' have no overlap."
     },
     {
         "line": 142,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'number' and 'string' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'number' and 'void' have no overlap."
     },
     {
-        "line": 143,
+        "line": 145,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'number' and 'void' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'boolean' and 'number' have no overlap."
     },
     {
         "line": 146,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'boolean' and 'number' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'boolean' and 'string' have no overlap."
     },
     {
         "line": 147,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'boolean' and 'string' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'boolean' and 'void' have no overlap."
     },
     {
         "line": 148,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'boolean' and 'void' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'boolean' and 'E' have no overlap."
     },
     {
-        "line": 149,
+        "line": 150,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'boolean' and 'E' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'string' and 'number' have no overlap."
     },
     {
         "line": 151,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'string' and 'number' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'string' and 'boolean' have no overlap."
     },
     {
         "line": 152,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'string' and 'boolean' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'string' and 'void' have no overlap."
     },
     {
         "line": 153,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'string' and 'void' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'string' and 'E' have no overlap."
     },
     {
-        "line": 154,
+        "line": 155,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'string' and 'E' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'void' and 'number' have no overlap."
     },
     {
         "line": 156,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'void' and 'number' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'void' and 'boolean' have no overlap."
     },
     {
         "line": 157,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'void' and 'boolean' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'void' and 'string' have no overlap."
     },
     {
         "line": 158,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'void' and 'string' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'void' and 'E' have no overlap."
     },
     {
-        "line": 159,
+        "line": 161,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'void' and 'E' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'E' and 'boolean' have no overlap."
     },
     {
         "line": 162,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'E' and 'boolean' have no overlap."
+        "msg": "This condition will always return 'true' since the types 'E' and 'string' have no overlap."
     },
     {
         "line": 163,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'E' and 'string' have no overlap."
-    },
-    {
-        "line": 164,
-        "column": 12,
         "msg": "This condition will always return 'true' since the types 'E' and 'void' have no overlap."
     },
     {
-        "line": 167,
+        "line": 166,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'number' and 'boolean' have no overlap."
     },
     {
-        "line": 168,
+        "line": 167,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'number' and 'string' have no overlap."
     },
     {
-        "line": 169,
+        "line": 168,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'number' and 'void' have no overlap."
     },
     {
-        "line": 172,
+        "line": 171,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'boolean' and 'number' have no overlap."
     },
     {
-        "line": 173,
+        "line": 172,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'boolean' and 'string' have no overlap."
     },
     {
-        "line": 174,
+        "line": 173,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'boolean' and 'void' have no overlap."
     },
     {
-        "line": 175,
+        "line": 174,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'boolean' and 'E' have no overlap."
     },
     {
-        "line": 177,
+        "line": 176,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'string' and 'number' have no overlap."
     },
     {
-        "line": 178,
+        "line": 177,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'string' and 'boolean' have no overlap."
     },
     {
-        "line": 179,
+        "line": 178,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'string' and 'void' have no overlap."
     },
     {
-        "line": 180,
+        "line": 179,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'string' and 'E' have no overlap."
     },
     {
-        "line": 182,
+        "line": 181,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'void' and 'number' have no overlap."
     },
     {
-        "line": 183,
+        "line": 182,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'void' and 'boolean' have no overlap."
     },
     {
-        "line": 184,
+        "line": 183,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'void' and 'string' have no overlap."
     },
     {
-        "line": 185,
+        "line": 184,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'void' and 'E' have no overlap."
     },
     {
-        "line": 188,
+        "line": 187,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'E' and 'boolean' have no overlap."
     },
     {
-        "line": 189,
+        "line": 188,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'E' and 'string' have no overlap."
     },
     {
-        "line": 190,
+        "line": 189,
         "column": 12,
         "msg": "This condition will always return 'false' since the types 'E' and 'void' have no overlap."
     },
     {
-        "line": 193,
+        "line": 192,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'number' and 'boolean' have no overlap."
     },
     {
-        "line": 194,
+        "line": 193,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'number' and 'string' have no overlap."
     },
     {
-        "line": 195,
+        "line": 194,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'number' and 'void' have no overlap."
     },
     {
-        "line": 198,
+        "line": 197,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'boolean' and 'number' have no overlap."
     },
     {
-        "line": 199,
+        "line": 198,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'boolean' and 'string' have no overlap."
     },
     {
-        "line": 200,
+        "line": 199,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'boolean' and 'void' have no overlap."
     },
     {
-        "line": 201,
+        "line": 200,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'boolean' and 'E' have no overlap."
     },
     {
-        "line": 203,
+        "line": 202,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'string' and 'number' have no overlap."
     },
     {
-        "line": 204,
+        "line": 203,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'string' and 'boolean' have no overlap."
     },
     {
-        "line": 205,
+        "line": 204,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'string' and 'void' have no overlap."
     },
     {
-        "line": 206,
+        "line": 205,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'string' and 'E' have no overlap."
     },
     {
-        "line": 208,
+        "line": 207,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'void' and 'number' have no overlap."
     },
     {
-        "line": 209,
+        "line": 208,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'void' and 'boolean' have no overlap."
     },
     {
-        "line": 210,
+        "line": 209,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'void' and 'string' have no overlap."
     },
     {
-        "line": 211,
+        "line": 210,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'void' and 'E' have no overlap."
     },
     {
-        "line": 214,
+        "line": 213,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'E' and 'boolean' have no overlap."
     },
     {
-        "line": 215,
+        "line": 214,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'E' and 'string' have no overlap."
     },
     {
-        "line": 216,
+        "line": 215,
         "column": 12,
         "msg": "This condition will always return 'true' since the types 'E' and 'void' have no overlap."
     }

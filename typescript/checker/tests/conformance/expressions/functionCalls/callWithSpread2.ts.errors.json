@@ -1,43 +1,48 @@
 [
     {
-        "line": 24,
+        "line": 23,
         "column": 13,
         "msg": "Expected 1 arguments, but got 2 or more."
     },
     {
-        "line": 25,
+        "line": 24,
         "column": 7,
         "msg": "Expected 0 arguments, but got 1 or more."
     },
     {
-        "line": 28,
+        "line": 27,
         "column": 5,
         "msg": "Argument of type 'string | number' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 29,
+        "line": 28,
         "column": 5,
         "msg": "Argument of type 'string' is not assignable to parameter of type 'number'."
+    },
+    {
+        "line": 29,
+        "column": 13,
+        "msg": "Argument of type 'string | number' is not assignable to parameter of type 'number'."
     },
     {
         "line": 30,
         "column": 13,
-        "msg": "Argument of type 'string | number' is not assignable to parameter of type 'number'."
+        "msg": "Argument of type 'string' is not assignable to parameter of type 'number'."
     },
     {
         "line": 31,
-        "column": 13,
-        "msg": "Argument of type 'string' is not assignable to parameter of type 'number'."
+        "column": 11,
+        "msg": "Argument of type 'string | number' is not assignable to parameter of type 'number'."
     },
     {
         "line": 32,
         "column": 11,
-        "msg": "Argument of type 'string | number' is not assignable to parameter of type 'number'."
+        "msg": "Argument of type 'string' is not assignable to parameter of type 'number'."
     },
     {
         "line": 33,
-        "column": 11,
-        "msg": "Argument of type 'string' is not assignable to parameter of type 'number'."
+        "column": 8,
+        "msg": "Expected 1-3 arguments, but got 0 or more."
     },
     {
         "line": 34,
@@ -47,15 +52,10 @@
     {
         "line": 35,
         "column": 8,
-        "msg": "Expected 1-3 arguments, but got 0 or more."
-    },
-    {
-        "line": 36,
-        "column": 8,
         "msg": "Argument of type 'number' is not assignable to parameter of type 'string'."
     },
     {
-        "line": 37,
+        "line": 36,
         "column": 14,
         "msg": "Expected 2-4 arguments, but got 1 or more."
     }

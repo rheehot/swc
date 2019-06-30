@@ -1,8 +1,13 @@
 [
     {
-        "line": 36,
+        "line": 35,
         "column": 12,
         "msg": "Operator '<' cannot be applied to types '{ fn()"
+    },
+    {
+        "line": 36,
+        "column": 12,
+        "msg": "Operator '<' cannot be applied to types '{ fn(a"
     },
     {
         "line": 37,
@@ -12,27 +17,27 @@
     {
         "line": 38,
         "column": 12,
-        "msg": "Operator '<' cannot be applied to types '{ fn(a"
+        "msg": "Operator '<' cannot be applied to types '{ fn()"
     },
     {
         "line": 39,
         "column": 12,
-        "msg": "Operator '<' cannot be applied to types '{ fn()"
+        "msg": "Operator '<' cannot be applied to types '{ fn(a?"
     },
     {
         "line": 40,
         "column": 12,
-        "msg": "Operator '<' cannot be applied to types '{ fn(a?"
+        "msg": "Operator '<' cannot be applied to types '{ fn(...a"
     },
     {
-        "line": 41,
+        "line": 43,
         "column": 12,
-        "msg": "Operator '<' cannot be applied to types '{ fn(...a"
+        "msg": "Operator '<' cannot be applied to types 'new () => Base' and '{ fn()"
     },
     {
         "line": 44,
         "column": 12,
-        "msg": "Operator '<' cannot be applied to types 'new () => Base' and '{ fn()"
+        "msg": "Operator '<' cannot be applied to types '{ fn(a"
     },
     {
         "line": 45,
@@ -42,27 +47,27 @@
     {
         "line": 46,
         "column": 12,
-        "msg": "Operator '<' cannot be applied to types '{ fn(a"
+        "msg": "Operator '<' cannot be applied to types '{ fn()"
     },
     {
         "line": 47,
         "column": 12,
-        "msg": "Operator '<' cannot be applied to types '{ fn()"
+        "msg": "Operator '<' cannot be applied to types '{ fn(a?"
     },
     {
         "line": 48,
         "column": 12,
-        "msg": "Operator '<' cannot be applied to types '{ fn(a?"
+        "msg": "Operator '<' cannot be applied to types '{ fn(...a"
     },
     {
-        "line": 49,
+        "line": 52,
         "column": 12,
-        "msg": "Operator '<' cannot be applied to types '{ fn(...a"
+        "msg": "Operator '>' cannot be applied to types '{ fn()"
     },
     {
         "line": 53,
         "column": 12,
-        "msg": "Operator '>' cannot be applied to types '{ fn()"
+        "msg": "Operator '>' cannot be applied to types '{ fn(a"
     },
     {
         "line": 54,
@@ -72,27 +77,27 @@
     {
         "line": 55,
         "column": 12,
-        "msg": "Operator '>' cannot be applied to types '{ fn(a"
+        "msg": "Operator '>' cannot be applied to types '{ fn()"
     },
     {
         "line": 56,
         "column": 12,
-        "msg": "Operator '>' cannot be applied to types '{ fn()"
+        "msg": "Operator '>' cannot be applied to types '{ fn(a?"
     },
     {
         "line": 57,
         "column": 12,
-        "msg": "Operator '>' cannot be applied to types '{ fn(a?"
+        "msg": "Operator '>' cannot be applied to types '{ fn(...a"
     },
     {
-        "line": 58,
+        "line": 60,
         "column": 12,
-        "msg": "Operator '>' cannot be applied to types '{ fn(...a"
+        "msg": "Operator '>' cannot be applied to types 'new () => Base' and '{ fn()"
     },
     {
         "line": 61,
         "column": 12,
-        "msg": "Operator '>' cannot be applied to types 'new () => Base' and '{ fn()"
+        "msg": "Operator '>' cannot be applied to types '{ fn(a"
     },
     {
         "line": 62,
@@ -102,27 +107,27 @@
     {
         "line": 63,
         "column": 12,
-        "msg": "Operator '>' cannot be applied to types '{ fn(a"
+        "msg": "Operator '>' cannot be applied to types '{ fn()"
     },
     {
         "line": 64,
         "column": 12,
-        "msg": "Operator '>' cannot be applied to types '{ fn()"
+        "msg": "Operator '>' cannot be applied to types '{ fn(a?"
     },
     {
         "line": 65,
         "column": 12,
-        "msg": "Operator '>' cannot be applied to types '{ fn(a?"
+        "msg": "Operator '>' cannot be applied to types '{ fn(...a"
     },
     {
-        "line": 66,
+        "line": 69,
         "column": 12,
-        "msg": "Operator '>' cannot be applied to types '{ fn(...a"
+        "msg": "Operator '<=' cannot be applied to types '{ fn()"
     },
     {
         "line": 70,
         "column": 12,
-        "msg": "Operator '<=' cannot be applied to types '{ fn()"
+        "msg": "Operator '<=' cannot be applied to types '{ fn(a"
     },
     {
         "line": 71,
@@ -132,27 +137,27 @@
     {
         "line": 72,
         "column": 12,
-        "msg": "Operator '<=' cannot be applied to types '{ fn(a"
+        "msg": "Operator '<=' cannot be applied to types '{ fn()"
     },
     {
         "line": 73,
         "column": 12,
-        "msg": "Operator '<=' cannot be applied to types '{ fn()"
+        "msg": "Operator '<=' cannot be applied to types '{ fn(a?"
     },
     {
         "line": 74,
         "column": 12,
-        "msg": "Operator '<=' cannot be applied to types '{ fn(a?"
+        "msg": "Operator '<=' cannot be applied to types '{ fn(...a"
     },
     {
-        "line": 75,
+        "line": 77,
         "column": 12,
-        "msg": "Operator '<=' cannot be applied to types '{ fn(...a"
+        "msg": "Operator '<=' cannot be applied to types 'new () => Base' and '{ fn()"
     },
     {
         "line": 78,
         "column": 12,
-        "msg": "Operator '<=' cannot be applied to types 'new () => Base' and '{ fn()"
+        "msg": "Operator '<=' cannot be applied to types '{ fn(a"
     },
     {
         "line": 79,
@@ -162,27 +167,27 @@
     {
         "line": 80,
         "column": 12,
-        "msg": "Operator '<=' cannot be applied to types '{ fn(a"
+        "msg": "Operator '<=' cannot be applied to types '{ fn()"
     },
     {
         "line": 81,
         "column": 12,
-        "msg": "Operator '<=' cannot be applied to types '{ fn()"
+        "msg": "Operator '<=' cannot be applied to types '{ fn(a?"
     },
     {
         "line": 82,
         "column": 12,
-        "msg": "Operator '<=' cannot be applied to types '{ fn(a?"
+        "msg": "Operator '<=' cannot be applied to types '{ fn(...a"
     },
     {
-        "line": 83,
+        "line": 86,
         "column": 12,
-        "msg": "Operator '<=' cannot be applied to types '{ fn(...a"
+        "msg": "Operator '>=' cannot be applied to types '{ fn()"
     },
     {
         "line": 87,
         "column": 12,
-        "msg": "Operator '>=' cannot be applied to types '{ fn()"
+        "msg": "Operator '>=' cannot be applied to types '{ fn(a"
     },
     {
         "line": 88,
@@ -192,27 +197,27 @@
     {
         "line": 89,
         "column": 12,
-        "msg": "Operator '>=' cannot be applied to types '{ fn(a"
+        "msg": "Operator '>=' cannot be applied to types '{ fn()"
     },
     {
         "line": 90,
         "column": 12,
-        "msg": "Operator '>=' cannot be applied to types '{ fn()"
+        "msg": "Operator '>=' cannot be applied to types '{ fn(a?"
     },
     {
         "line": 91,
         "column": 12,
-        "msg": "Operator '>=' cannot be applied to types '{ fn(a?"
+        "msg": "Operator '>=' cannot be applied to types '{ fn(...a"
     },
     {
-        "line": 92,
+        "line": 94,
         "column": 12,
-        "msg": "Operator '>=' cannot be applied to types '{ fn(...a"
+        "msg": "Operator '>=' cannot be applied to types 'new () => Base' and '{ fn()"
     },
     {
         "line": 95,
         "column": 12,
-        "msg": "Operator '>=' cannot be applied to types 'new () => Base' and '{ fn()"
+        "msg": "Operator '>=' cannot be applied to types '{ fn(a"
     },
     {
         "line": 96,
@@ -222,27 +227,27 @@
     {
         "line": 97,
         "column": 12,
-        "msg": "Operator '>=' cannot be applied to types '{ fn(a"
+        "msg": "Operator '>=' cannot be applied to types '{ fn()"
     },
     {
         "line": 98,
         "column": 12,
-        "msg": "Operator '>=' cannot be applied to types '{ fn()"
+        "msg": "Operator '>=' cannot be applied to types '{ fn(a?"
     },
     {
         "line": 99,
         "column": 12,
-        "msg": "Operator '>=' cannot be applied to types '{ fn(a?"
+        "msg": "Operator '>=' cannot be applied to types '{ fn(...a"
     },
     {
-        "line": 100,
+        "line": 103,
         "column": 12,
-        "msg": "Operator '>=' cannot be applied to types '{ fn(...a"
+        "msg": "This condition will always return 'false' since the types '{ fn()"
     },
     {
         "line": 104,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn()"
+        "msg": "This condition will always return 'false' since the types '{ fn(a"
     },
     {
         "line": 105,
@@ -252,27 +257,27 @@
     {
         "line": 106,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn(a"
+        "msg": "This condition will always return 'false' since the types '{ fn()"
     },
     {
         "line": 107,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn()"
+        "msg": "This condition will always return 'false' since the types '{ fn(a?"
     },
     {
         "line": 108,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn(a?"
+        "msg": "This condition will always return 'false' since the types '{ fn(...a"
     },
     {
-        "line": 109,
+        "line": 111,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn(...a"
+        "msg": "This condition will always return 'false' since the types 'new () => Base' and '{ fn()"
     },
     {
         "line": 112,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'new () => Base' and '{ fn()"
+        "msg": "This condition will always return 'false' since the types '{ fn(a"
     },
     {
         "line": 113,
@@ -282,27 +287,27 @@
     {
         "line": 114,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn(a"
+        "msg": "This condition will always return 'false' since the types '{ fn()"
     },
     {
         "line": 115,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn()"
+        "msg": "This condition will always return 'false' since the types '{ fn(a?"
     },
     {
         "line": 116,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn(a?"
+        "msg": "This condition will always return 'false' since the types '{ fn(...a"
     },
     {
-        "line": 117,
+        "line": 120,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn(...a"
+        "msg": "This condition will always return 'true' since the types '{ fn()"
     },
     {
         "line": 121,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn()"
+        "msg": "This condition will always return 'true' since the types '{ fn(a"
     },
     {
         "line": 122,
@@ -312,27 +317,27 @@
     {
         "line": 123,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn(a"
+        "msg": "This condition will always return 'true' since the types '{ fn()"
     },
     {
         "line": 124,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn()"
+        "msg": "This condition will always return 'true' since the types '{ fn(a?"
     },
     {
         "line": 125,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn(a?"
+        "msg": "This condition will always return 'true' since the types '{ fn(...a"
     },
     {
-        "line": 126,
+        "line": 128,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn(...a"
+        "msg": "This condition will always return 'true' since the types 'new () => Base' and '{ fn()"
     },
     {
         "line": 129,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'new () => Base' and '{ fn()"
+        "msg": "This condition will always return 'true' since the types '{ fn(a"
     },
     {
         "line": 130,
@@ -342,27 +347,27 @@
     {
         "line": 131,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn(a"
+        "msg": "This condition will always return 'true' since the types '{ fn()"
     },
     {
         "line": 132,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn()"
+        "msg": "This condition will always return 'true' since the types '{ fn(a?"
     },
     {
         "line": 133,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn(a?"
+        "msg": "This condition will always return 'true' since the types '{ fn(...a"
     },
     {
-        "line": 134,
+        "line": 137,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn(...a"
+        "msg": "This condition will always return 'false' since the types '{ fn()"
     },
     {
         "line": 138,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn()"
+        "msg": "This condition will always return 'false' since the types '{ fn(a"
     },
     {
         "line": 139,
@@ -372,27 +377,27 @@
     {
         "line": 140,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn(a"
+        "msg": "This condition will always return 'false' since the types '{ fn()"
     },
     {
         "line": 141,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn()"
+        "msg": "This condition will always return 'false' since the types '{ fn(a?"
     },
     {
         "line": 142,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn(a?"
+        "msg": "This condition will always return 'false' since the types '{ fn(...a"
     },
     {
-        "line": 143,
+        "line": 145,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn(...a"
+        "msg": "This condition will always return 'false' since the types 'new () => Base' and '{ fn()"
     },
     {
         "line": 146,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types 'new () => Base' and '{ fn()"
+        "msg": "This condition will always return 'false' since the types '{ fn(a"
     },
     {
         "line": 147,
@@ -402,27 +407,27 @@
     {
         "line": 148,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn(a"
+        "msg": "This condition will always return 'false' since the types '{ fn()"
     },
     {
         "line": 149,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn()"
+        "msg": "This condition will always return 'false' since the types '{ fn(a?"
     },
     {
         "line": 150,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn(a?"
+        "msg": "This condition will always return 'false' since the types '{ fn(...a"
     },
     {
-        "line": 151,
+        "line": 154,
         "column": 12,
-        "msg": "This condition will always return 'false' since the types '{ fn(...a"
+        "msg": "This condition will always return 'true' since the types '{ fn()"
     },
     {
         "line": 155,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn()"
+        "msg": "This condition will always return 'true' since the types '{ fn(a"
     },
     {
         "line": 156,
@@ -432,27 +437,27 @@
     {
         "line": 157,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn(a"
+        "msg": "This condition will always return 'true' since the types '{ fn()"
     },
     {
         "line": 158,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn()"
+        "msg": "This condition will always return 'true' since the types '{ fn(a?"
     },
     {
         "line": 159,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn(a?"
+        "msg": "This condition will always return 'true' since the types '{ fn(...a"
     },
     {
-        "line": 160,
+        "line": 162,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn(...a"
+        "msg": "This condition will always return 'true' since the types 'new () => Base' and '{ fn()"
     },
     {
         "line": 163,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types 'new () => Base' and '{ fn()"
+        "msg": "This condition will always return 'true' since the types '{ fn(a"
     },
     {
         "line": 164,
@@ -462,20 +467,15 @@
     {
         "line": 165,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn(a"
+        "msg": "This condition will always return 'true' since the types '{ fn()"
     },
     {
         "line": 166,
         "column": 12,
-        "msg": "This condition will always return 'true' since the types '{ fn()"
-    },
-    {
-        "line": 167,
-        "column": 12,
         "msg": "This condition will always return 'true' since the types '{ fn(a?"
     },
     {
-        "line": 168,
+        "line": 167,
         "column": 12,
         "msg": "This condition will always return 'true' since the types '{ fn(...a"
     }

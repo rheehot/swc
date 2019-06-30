@@ -1,13 +1,18 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 5,
         "msg": "'try' expected."
     },
     {
-        "line": 7,
+        "line": 6,
         "column": 12,
         "msg": "'finally' expected."
+    },
+    {
+        "line": 10,
+        "column": 5,
+        "msg": "'try' expected."
     },
     {
         "line": 11,
@@ -15,22 +20,17 @@
         "msg": "'try' expected."
     },
     {
-        "line": 12,
+        "line": 15,
         "column": 5,
         "msg": "'try' expected."
     },
     {
-        "line": 16,
+        "line": 17,
         "column": 5,
         "msg": "'try' expected."
     },
     {
-        "line": 18,
-        "column": 5,
-        "msg": "'try' expected."
-    },
-    {
-        "line": 20,
+        "line": 19,
         "column": 20,
         "msg": "Identifier expected."
     }

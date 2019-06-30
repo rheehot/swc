@@ -1,6 +1,11 @@
 [
     {
-        "line": 18,
+        "line": 17,
+        "column": 31,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 20,
         "column": 31,
         "msg": "The operand of a delete operator must be a property reference."
     },
@@ -10,7 +15,7 @@
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 22,
+        "line": 26,
         "column": 31,
         "msg": "The operand of a delete operator must be a property reference."
     },
@@ -20,18 +25,18 @@
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 28,
+        "line": 30,
         "column": 31,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 31,
-        "column": 31,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 31,
+        "line": 30,
         "column": 38,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 33,
+        "column": 8,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
@@ -46,11 +51,6 @@
     },
     {
         "line": 36,
-        "column": 8,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 37,
         "column": 8,
         "msg": "The operand of a delete operator must be a property reference."
     }

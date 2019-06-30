@@ -1,21 +1,21 @@
 [
     {
-        "line": 33,
+        "line": 32,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'number' and 'null'."
     },
     {
-        "line": 34,
+        "line": 33,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'number' and 'undefined'."
     },
     {
-        "line": 40,
+        "line": 39,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'E' and 'null'."
     },
     {
-        "line": 41,
+        "line": 40,
         "column": 1,
         "msg": "Operator '+=' cannot be applied to types 'E' and 'undefined'."
     }
