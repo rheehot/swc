@@ -94,6 +94,9 @@ pub enum Type<'a> {
 
     Interface(Interface<'a>),
     Enum(TsEnumDecl),
+
+    Mapped(Mapped<'a>),
+
     /// export type A<B> = Foo<B>;
     Alias(Alias<'a>),
     Namespace(TsNamespaceDecl),
@@ -104,6 +107,15 @@ pub enum Type<'a> {
     ///
     /// Don't match on this directly. Instead, use `.normalize()`.
     Static(Static),
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct Mapped<'a> {
+    pub span: Span,
+    pub readonly: Option<TruePlusMinus>,
+    pub optional: Option<TruePlusMinus>,
+    pub type_param: TypeParam<'a>,
+    pub ty: Option<Box<TypeRef<'a>>>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
@@ -382,6 +394,8 @@ impl Type<'_> {
         }
 
         match self {
+            Type::Mapped(ty) => Type::Mapped(Mapped { span, ..ty }),
+
             Type::Conditional(cond) => Type::Conditional(Conditional { span, ..cond }),
 
             Type::This(this) => Type::This(TsThisType { span, ..this }),
@@ -444,6 +458,7 @@ where
 impl Type<'_> {
     pub fn into_static(self) -> Type<'static> {
         match self {
+            Type::Mapped(ty) => Type::Mapped(ty.into_static()),
             Type::Conditional(cond) => Type::Conditional(cond.into_static()),
             Type::This(this) => Type::This(this),
             Type::TypeLit(lit) => Type::TypeLit(lit.into_static()),
@@ -712,6 +727,18 @@ impl Conditional<'_> {
             extends_type: box static_type(*self.extends_type),
             true_type: box static_type(*self.true_type),
             false_type: box static_type(*self.false_type),
+        }
+    }
+}
+
+impl Mapped<'_> {
+    pub fn into_static(self) -> Mapped<'static> {
+        Mapped {
+            span: self.span,
+            readonly: self.readonly,
+            optional: self.optional,
+            type_param: self.type_param.into_static(),
+            ty: self.ty.map(|ty| box static_type(*ty)),
         }
     }
 }
