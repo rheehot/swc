@@ -310,23 +310,29 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
             let errors = checker.check(file_name.into());
             if let Some(ref mut ref_error_lines) = ref_error_lines {
                 assert_eq!(mode, Mode::Conformance);
+                // Line of errors (actual result)
+                let err_lines = errors
+                    .iter()
+                    .map(|e| {
+                        let span = e.span();
+                        let fl = cm
+                            .span_to_lines(span)
+                            .expect("failed to get span of the error");
+                        assert!(fl.lines.len() == 1);
+
+                        let li = fl.lines[0].line_index;
+                        return li + 1;
+                    })
+                    .collect::<Vec<_>>();
 
                 // We only emit errors which has wrong line.
-                if ref_error_lines.len() != errors.len() {
+                if *ref_error_lines != err_lines {
                     checker.run(|| {
-                        for e in errors {
-                            let span = e.span();
-                            let fl = cm
-                                .span_to_lines(span)
-                                .expect("failed to get span of the error");
-                            assert!(fl.lines.len() == 1);
-
-                            let li = fl.lines[0].line_index;
-                            println!("{}", li);
-                            if !ref_error_lines.contains(&(li + 1)) {
+                        for (e, li) in errors.into_iter().zip(err_lines) {
+                            if !ref_error_lines.contains(&li) {
                                 e.emit(&handler);
                             } else {
-                                ref_error_lines.remove_item(&(li + 1));
+                                assert!(ref_error_lines.remove_item(&li).is_some());
                             }
                         }
                     });
