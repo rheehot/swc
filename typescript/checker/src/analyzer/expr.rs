@@ -64,6 +64,10 @@ impl Analyzer<'_, '_> {
                     return Ok(ty.owned());
                 }
 
+                if self.declaring.contains(&i.sym) {
+                    return Err(Error::ReferencedInInit { span });
+                }
+
                 // println!(
                 //     "({}) undefined symbol: {}\n{:#?}",
                 //     self.scope.depth(),

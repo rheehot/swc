@@ -35,6 +35,8 @@ struct Analyzer<'a, 'b> {
     pending_exports: Vec<((JsWord, Span), Box<Expr>)>,
     inferred_return_types: RefCell<Vec<Type<'static>>>,
     scope: Scope<'a>,
+    /// Used in variable declarartions
+    declaring: Vec<JsWord>,
     path: Arc<PathBuf>,
     loader: &'b dyn Load,
     libs: &'b [Lib],
@@ -234,8 +236,6 @@ impl<'a, 'b> Analyzer<'a, 'b> {
         path: Arc<PathBuf>,
         loader: &'b dyn Load,
     ) -> Self {
-        debug_assert_ne!(libs, &[]);
-
         Analyzer {
             libs,
             rule,
@@ -243,6 +243,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             info: Default::default(),
             inferred_return_types: Default::default(),
             path,
+            declaring: vec![],
             resolved_imports: Default::default(),
             errored_imports: Default::default(),
             pending_exports: Default::default(),
@@ -384,9 +385,19 @@ impl Analyzer<'_, '_> {
                 None => {}
             }
 
-            f.params
-                .iter()
-                .for_each(|pat| child.declare_vars(VarDeclKind::Let, pat));
+            f.params.iter().for_each(|pat| {
+                {
+                    child.declaring = vec![];
+
+                    let mut visitor = VarVisitor {
+                        names: &mut child.declaring,
+                    };
+
+                    pat.visit_with(&mut visitor);
+                }
+
+                child.declare_vars(VarDeclKind::Let, pat)
+            });
 
             f.visit_children(child);
 
@@ -508,10 +519,10 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
         let kind = var.kind;
 
         var.decls.iter().for_each(|v| {
-            v.visit_with(self);
-
             if let Some(ref init) = v.init {
                 let span = init.span();
+
+                v.visit_with(self);
 
                 //  Check if v_ty is assignable to ty
                 let value_ty = match self
@@ -699,6 +710,20 @@ impl Checker<'_> {
 
             a.info
         })
+    }
+}
+
+struct VarVisitor<'a> {
+    pub names: &'a mut Vec<JsWord>,
+}
+
+impl Visit<Expr> for VarVisitor<'_> {
+    fn visit(&mut self, _: &Expr) {}
+}
+
+impl Visit<Ident> for VarVisitor<'_> {
+    fn visit(&mut self, i: &Ident) {
+        self.names.push(i.sym.clone())
     }
 }
 
