@@ -975,6 +975,11 @@ impl Analyzer<'_, '_> {
                 ..
             }) => return Ok(Type::any(span)),
 
+            Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsUnknownKeyword,
+                ..
+            }) => return Err(Error::Unknown { span }),
+
             Type::Function(ty::Function {
                 ref params,
                 ref type_params,
@@ -1368,6 +1373,7 @@ enum ExtractKind {
     New,
 }
 
+/// Validates member expressions.
 impl Visit<MemberExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, expr: &MemberExpr) {
         expr.visit_children(self);
@@ -1378,6 +1384,32 @@ impl Visit<MemberExpr> for Analyzer<'_, '_> {
                 self.info.errors.push(err);
                 return;
             }
+        }
+    }
+}
+
+/// Validates call expressions.
+impl Visit<CallExpr> for Analyzer<'_, '_> {
+    fn visit(&mut self, expr: &CallExpr) {
+        let span = expr.span;
+        expr.visit_children(self);
+
+        match expr.callee {
+            ExprOrSuper::Expr(ref callee) => {
+                match self.extract_call_new_expr_member(
+                    callee,
+                    ExtractKind::Call,
+                    &expr.args,
+                    expr.type_args.as_ref(),
+                ) {
+                    Ok(..) => {}
+                    Err(err) => {
+                        self.info.errors.push(err);
+                    }
+                }
+            }
+
+            ExprOrSuper::Super(..) => unimplemented!("validation super.foo(), super()"),
         }
     }
 }
