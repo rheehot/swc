@@ -542,19 +542,19 @@ impl Analyzer<'_, '_> {
 
 /// SImple utility to check (l, r) and (r, l) with same code.
 #[derive(Debug, Clone, Copy)]
-struct Comparator<T>
+pub(super) struct Comparator<T>
 where
     T: Copy,
 {
-    left: T,
-    right: T,
+    pub left: T,
+    pub right: T,
 }
 
 impl<T> Comparator<T>
 where
     T: Copy,
 {
-    fn take<F, R>(&self, mut op: F) -> Option<R>
+    pub fn take<F, R>(&self, mut op: F) -> Option<R>
     where
         F: FnMut(T, T) -> Option<R>,
     {
