@@ -157,12 +157,31 @@ impl Analyzer<'_, '_> {
                 ref left,
                 ref right,
             }) => {
+                let l_ty = self.type_of(&left)?;
+                let r_ty = self.type_of(&right)?;
+                macro_rules! no_unknown {
+                    () => {{
+                        dbg!(&l_ty);
+                        no_unknown!(l_ty);
+                        no_unknown!(r_ty);
+                    }};
+                    ($ty:expr) => {{
+                        match *$ty {
+                            Type::Keyword(TsKeywordType {
+                                kind: TsKeywordTypeKind::TsUnknownKeyword,
+                                ..
+                            }) => {
+                                return Err(Error::Unknown { span });
+                            }
+                            _ => {}
+                        }
+                    }};
+                }
+
                 match op {
                     op!(bin, "+") => {
-                        let l_ty = self.type_of(&left)?;
-                        let r_ty = self.type_of(&right)?;
+                        no_unknown!();
 
-                        //
                         let c = Comparator {
                             left: (&**left, &l_ty),
                             right: (&**right, &r_ty),
@@ -229,11 +248,13 @@ impl Analyzer<'_, '_> {
                         unimplemented!("type_of_bin(+)\nLeft: {:#?}\nRight: {:#?}", l_ty, r_ty)
                     }
                     op!("*") | op!("/") => {
+                        no_unknown!();
+
                         return Ok(Type::Keyword(TsKeywordType {
                             span,
                             kind: TsKeywordTypeKind::TsNumberKeyword,
                         })
-                        .owned())
+                        .owned());
                     }
 
                     op!(bin, "-")
@@ -245,49 +266,75 @@ impl Analyzer<'_, '_> {
                     | op!("&")
                     | op!("^")
                     | op!("**") => {
+                        no_unknown!();
+
                         return Ok(Type::Keyword(TsKeywordType {
                             kind: TsKeywordTypeKind::TsNumberKeyword,
                             span,
                         })
-                        .into_cow())
+                        .into_cow());
                     }
 
-                    op!("===")
-                    | op!("!==")
-                    | op!("!=")
-                    | op!("==")
-                    | op!("<=")
-                    | op!("<")
-                    | op!(">=")
-                    | op!(">")
-                    | op!("in")
-                    | op!("instanceof") => {
+                    op!("===") | op!("!==") | op!("!=") | op!("==") => {
                         return Ok(Type::Keyword(TsKeywordType {
                             span,
                             kind: TsKeywordTypeKind::TsBooleanKeyword,
                         })
-                        .into_cow())
+                        .owned())
+                    }
+
+                    op!("<=") | op!("<") | op!(">=") | op!(">") | op!("in") | op!("instanceof") => {
+                        no_unknown!();
+
+                        return Ok(Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsBooleanKeyword,
+                        })
+                        .owned());
                     }
 
                     // TODO
-                    op!("||") | op!("&&") => return self.type_of(&right),
+                    op!("||") | op!("&&") => {
+                        no_unknown!();
+
+                        return self.type_of(&right);
+                    }
                 }
             }
 
-            Expr::Unary(UnaryExpr {
-                op: op!("!"),
-                ref arg,
-                ..
-            }) => return Ok(negate(self.type_of(arg)?.into_owned()).into_cow()),
+            Expr::Unary(UnaryExpr { op, ref arg, .. }) => {
+                let arg_ty = self.type_of(arg)?;
+                match *arg_ty {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsUnknownKeyword,
+                        ..
+                    }) => return Err(Error::Unknown { span }),
+                    _ => {}
+                }
 
-            Expr::Unary(UnaryExpr {
-                op: op!("typeof"), ..
-            }) => {
-                return Ok(Type::Keyword(TsKeywordType {
-                    span,
-                    kind: TsKeywordTypeKind::TsStringKeyword,
-                })
-                .into_cow())
+                match op {
+                    op!("!") => return Ok(negate(self.type_of(arg)?.into_owned()).into_cow()),
+
+                    op!("typeof") => {
+                        return Ok(Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsStringKeyword,
+                        })
+                        .into_cow())
+                    }
+
+                    op!("void") => return Ok(Type::undefined(span).owned()),
+
+                    op!(unary, "-") | op!(unary, "+") => {
+                        return Ok(Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                        })
+                        .owned())
+                    }
+
+                    op => unimplemented!("type_of(Unary(op: {:?}))", op),
+                }
             }
 
             Expr::TsAs(TsAsExpr { ref type_ann, .. }) => return Ok(type_ann.clone().into_cow()),
@@ -435,25 +482,6 @@ impl Analyzer<'_, '_> {
             Expr::MetaProp(..) => unimplemented!("typeof(MetaProp)"),
 
             Expr::Assign(AssignExpr { ref right, .. }) => return self.type_of(right),
-
-            Expr::Unary(UnaryExpr {
-                op: op!("void"), ..
-            }) => return Ok(Type::undefined(span).owned()),
-
-            Expr::Unary(UnaryExpr {
-                op: op!(unary, "-"),
-                ..
-            })
-            | Expr::Unary(UnaryExpr {
-                op: op!(unary, "+"),
-                ..
-            }) => {
-                return Ok(Type::Keyword(TsKeywordType {
-                    span,
-                    kind: TsKeywordTypeKind::TsNumberKeyword,
-                })
-                .owned())
-            }
 
             _ => unimplemented!("typeof ({:#?})", expr),
         }
