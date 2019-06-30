@@ -1,0 +1,6 @@
+error: Expected Comma, got Some(Arrow)
+ --> $DIR/tests/conformance/types/contextualTypes/logicalAnd/contextuallyTypeLogicalAnd03.ts:6:8
+  |
+6 | x = (a => a) && (b => b);
+  |        ^^
+
