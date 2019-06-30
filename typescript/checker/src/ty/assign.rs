@@ -77,7 +77,7 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                     // TODO: Assign property to proerty, instead of checking equality
                     let mut missing_fields = vec![];
 
-                    'outer: for m in members.iter() {
+                    'members: for m in members.iter() {
                         if let Some(l_key) = m.key() {
                             for rm in rhs_members {
                                 if rm.key() == Some(l_key) {
@@ -93,7 +93,7 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                                                         .unwrap_or(&Type::any(span).owned()),
                                                     span,
                                                 )?;
-                                                continue 'outer;
+                                                continue 'members;
                                             }
                                             _ => {}
                                         },
