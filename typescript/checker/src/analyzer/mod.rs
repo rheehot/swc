@@ -35,7 +35,9 @@ struct Analyzer<'a, 'b> {
     pending_exports: Vec<((JsWord, Span), Box<Expr>)>,
     inferred_return_types: RefCell<Vec<Type<'static>>>,
     scope: Scope<'a>,
-    /// Used in variable declarartions
+    /// This is true iff it should be treated as error when `1.contains()` is
+    /// true
+    declaring_params: bool,
     declaring: Vec<JsWord>,
     path: Arc<PathBuf>,
     loader: &'b dyn Load,
@@ -243,6 +245,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             info: Default::default(),
             inferred_return_types: Default::default(),
             path,
+            declaring_params: false,
             declaring: vec![],
             resolved_imports: Default::default(),
             errored_imports: Default::default(),
@@ -387,6 +390,7 @@ impl Analyzer<'_, '_> {
 
             f.params.iter().for_each(|pat| {
                 {
+                    child.declaring_params = true;
                     child.declaring = vec![];
 
                     let mut visitor = VarVisitor {
@@ -394,6 +398,7 @@ impl Analyzer<'_, '_> {
                     };
 
                     pat.visit_with(&mut visitor);
+                    child.declaring_params = false;
                 }
 
                 child.declare_vars(VarDeclKind::Let, pat)
@@ -521,6 +526,17 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
         var.decls.iter().for_each(|v| {
             if let Some(ref init) = v.init {
                 let span = init.span();
+
+                {
+                    self.declaring_params = false;
+                    self.declaring = vec![];
+
+                    let mut visitor = VarVisitor {
+                        names: &mut self.declaring,
+                    };
+
+                    v.name.visit_with(&mut visitor);
+                }
 
                 v.visit_with(self);
 
