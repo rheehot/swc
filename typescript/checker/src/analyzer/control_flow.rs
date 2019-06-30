@@ -292,7 +292,9 @@ impl Analyzer<'_, '_> {
                                 None
                             };
                             if let Some(var_ty) = var_ty {
-                                if var_info.ty.is_none() || !var_info.ty.as_ref().unwrap().is_any()
+                                if var_info.ty.is_none()
+                                    || (!var_info.ty.as_ref().unwrap().is_any()
+                                        && !var_info.ty.as_ref().unwrap().is_unknown())
                                 {
                                     var_info.ty = Some(var_ty);
                                 }
