@@ -1,0 +1,32 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            256,
+        ),
+        hi: BytePos(
+            262,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/parserUnicode1.ts:6:5
+  |
+6 |     $ERROR('#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
+  |     ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            343,
+        ),
+        hi: BytePos(
+            349,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/parser/ecmascript5/parserUnicode1.ts:10:5
+   |
+10 |     $ERROR('#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
+   |     ^^^^^^
+

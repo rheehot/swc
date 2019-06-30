@@ -1,0 +1,16 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            333,
+        ),
+        hi: BytePos(
+            340,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/RegressionTests/parser509534.ts:2:14
+  |
+2 | var config = require("../config");
+  |              ^^^^^^^
+

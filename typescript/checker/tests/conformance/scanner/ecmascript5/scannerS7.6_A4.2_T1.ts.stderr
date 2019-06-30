@@ -1,0 +1,528 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2291,
+        ),
+        hi: BytePos(
+            2297,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:14:3
+   |
+14 |   $ERROR('#А');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2342,
+        ),
+        hi: BytePos(
+            2348,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:18:3
+   |
+18 |   $ERROR('#Б');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2393,
+        ),
+        hi: BytePos(
+            2399,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:22:3
+   |
+22 |   $ERROR('#В');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2444,
+        ),
+        hi: BytePos(
+            2450,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:26:3
+   |
+26 |   $ERROR('#Г');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2495,
+        ),
+        hi: BytePos(
+            2501,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:30:3
+   |
+30 |   $ERROR('#Д');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2546,
+        ),
+        hi: BytePos(
+            2552,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:34:3
+   |
+34 |   $ERROR('#Е');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2597,
+        ),
+        hi: BytePos(
+            2603,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:38:3
+   |
+38 |   $ERROR('#Ж');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2648,
+        ),
+        hi: BytePos(
+            2654,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:42:3
+   |
+42 |   $ERROR('#З');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2699,
+        ),
+        hi: BytePos(
+            2705,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:46:3
+   |
+46 |   $ERROR('#И');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2750,
+        ),
+        hi: BytePos(
+            2756,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:50:3
+   |
+50 |   $ERROR('#Й');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2801,
+        ),
+        hi: BytePos(
+            2807,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:54:3
+   |
+54 |   $ERROR('#К');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2852,
+        ),
+        hi: BytePos(
+            2858,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:58:3
+   |
+58 |   $ERROR('#Л');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2903,
+        ),
+        hi: BytePos(
+            2909,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:62:3
+   |
+62 |   $ERROR('#М');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            2954,
+        ),
+        hi: BytePos(
+            2960,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:66:3
+   |
+66 |   $ERROR('#Н');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3005,
+        ),
+        hi: BytePos(
+            3011,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:70:3
+   |
+70 |   $ERROR('#О');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3056,
+        ),
+        hi: BytePos(
+            3062,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:74:3
+   |
+74 |   $ERROR('#П');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3107,
+        ),
+        hi: BytePos(
+            3113,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:78:3
+   |
+78 |   $ERROR('#Р');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3158,
+        ),
+        hi: BytePos(
+            3164,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:82:3
+   |
+82 |   $ERROR('#С');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3209,
+        ),
+        hi: BytePos(
+            3215,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:86:3
+   |
+86 |   $ERROR('#Т');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3260,
+        ),
+        hi: BytePos(
+            3266,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:90:3
+   |
+90 |   $ERROR('#У');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3311,
+        ),
+        hi: BytePos(
+            3317,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:94:3
+   |
+94 |   $ERROR('#Ф');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3362,
+        ),
+        hi: BytePos(
+            3368,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:98:3
+   |
+98 |   $ERROR('#Х');
+   |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3413,
+        ),
+        hi: BytePos(
+            3419,
+        ),
+        ctxt: #0,
+    },
+}
+   --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:102:3
+    |
+102 |   $ERROR('#Ц');
+    |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3464,
+        ),
+        hi: BytePos(
+            3470,
+        ),
+        ctxt: #0,
+    },
+}
+   --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:106:3
+    |
+106 |   $ERROR('#Ч');
+    |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3515,
+        ),
+        hi: BytePos(
+            3521,
+        ),
+        ctxt: #0,
+    },
+}
+   --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:110:3
+    |
+110 |   $ERROR('#Ш');
+    |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3566,
+        ),
+        hi: BytePos(
+            3572,
+        ),
+        ctxt: #0,
+    },
+}
+   --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:114:3
+    |
+114 |   $ERROR('#Щ');
+    |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3617,
+        ),
+        hi: BytePos(
+            3623,
+        ),
+        ctxt: #0,
+    },
+}
+   --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:118:3
+    |
+118 |   $ERROR('#Ъ');
+    |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3668,
+        ),
+        hi: BytePos(
+            3674,
+        ),
+        ctxt: #0,
+    },
+}
+   --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:122:3
+    |
+122 |   $ERROR('#Ы');
+    |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3719,
+        ),
+        hi: BytePos(
+            3725,
+        ),
+        ctxt: #0,
+    },
+}
+   --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:126:3
+    |
+126 |   $ERROR('#Ь');
+    |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3770,
+        ),
+        hi: BytePos(
+            3776,
+        ),
+        ctxt: #0,
+    },
+}
+   --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:130:3
+    |
+130 |   $ERROR('#Э');
+    |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3821,
+        ),
+        hi: BytePos(
+            3827,
+        ),
+        ctxt: #0,
+    },
+}
+   --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:134:3
+    |
+134 |   $ERROR('#Ю');
+    |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3872,
+        ),
+        hi: BytePos(
+            3878,
+        ),
+        ctxt: #0,
+    },
+}
+   --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:138:3
+    |
+138 |   $ERROR('#Я');
+    |   ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            3923,
+        ),
+        hi: BytePos(
+            3929,
+        ),
+        ctxt: #0,
+    },
+}
+   --> $DIR/tests/conformance/scanner/ecmascript5/scannerS7.6_A4.2_T1.ts:142:3
+    |
+142 |   $ERROR('#Ё');
+    |   ^^^^^^
+

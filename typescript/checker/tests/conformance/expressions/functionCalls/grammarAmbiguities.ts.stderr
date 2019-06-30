@@ -1,0 +1,54 @@
+error: WrongParams {
+    span: Span {
+        lo: BytePos(
+            360,
+        ),
+        hi: BytePos(
+            361,
+        ),
+        ctxt: #0,
+    },
+    callee: Span {
+        lo: BytePos(
+            217,
+        ),
+        hi: BytePos(
+            252,
+        ),
+        ctxt: #0,
+    },
+    expected: 1..=1,
+    actual: 2,
+}
+ --> $DIR/tests/conformance/expressions/functionCalls/grammarAmbiguities.ts:8:1
+  |
+8 | f(g < A, B > 7); // Should error
+  | ^
+
+error: WrongParams {
+    span: Span {
+        lo: BytePos(
+            394,
+        ),
+        hi: BytePos(
+            395,
+        ),
+        ctxt: #0,
+    },
+    callee: Span {
+        lo: BytePos(
+            217,
+        ),
+        hi: BytePos(
+            252,
+        ),
+        ctxt: #0,
+    },
+    expected: 1..=1,
+    actual: 2,
+}
+ --> $DIR/tests/conformance/expressions/functionCalls/grammarAmbiguities.ts:9:1
+  |
+9 | f(g < A, B > +(7)); // Should error
+  | ^
+
