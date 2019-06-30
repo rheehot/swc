@@ -89,6 +89,8 @@ pub enum Type<'a> {
     Function(Function<'a>),
     Constructor(Constructor<'a>),
 
+    Operator(Operator<'a>),
+
     Param(Param<'a>),
     EnumVariant(EnumVariant),
 
@@ -132,6 +134,13 @@ pub struct Static {
     pub span: Span,
     #[fold(ignore)]
     pub ty: &'static Type<'static>,
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct Operator<'a> {
+    pub span: Span,
+    pub op: TsTypeOperatorOp,
+    pub ty: Box<TypeRef<'a>>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
@@ -394,6 +403,8 @@ impl Type<'_> {
         }
 
         match self {
+            Type::Operator(ty) => Type::Operator(Operator { span, ..ty }),
+
             Type::Mapped(ty) => Type::Mapped(Mapped { span, ..ty }),
 
             Type::Conditional(cond) => Type::Conditional(Conditional { span, ..cond }),
@@ -458,6 +469,7 @@ where
 impl Type<'_> {
     pub fn into_static(self) -> Type<'static> {
         match self {
+            Type::Operator(ty) => Type::Operator(ty.into_static()),
             Type::Mapped(ty) => Type::Mapped(ty.into_static()),
             Type::Conditional(cond) => Type::Conditional(cond.into_static()),
             Type::This(this) => Type::This(this),
@@ -739,6 +751,16 @@ impl Mapped<'_> {
             optional: self.optional,
             type_param: self.type_param.into_static(),
             ty: self.ty.map(|ty| box static_type(*ty)),
+        }
+    }
+}
+
+impl Operator<'_> {
+    pub fn into_static(self) -> Operator<'static> {
+        Operator {
+            span: self.span,
+            op: self.op,
+            ty: box static_type(*self.ty),
         }
     }
 }

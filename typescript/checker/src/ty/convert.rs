@@ -1,7 +1,8 @@
 use super::{
     Alias, Array, CallSignature, Conditional, Constructor, ConstructorSignature, Function,
-    IndexSignature, Interface, Intersection, Mapped, MethodSignature, PropertySignature, TsExpr,
-    Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
+    IndexSignature, Interface, Intersection, Mapped, MethodSignature, Operator, PropertySignature,
+    TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation,
+    Union,
 };
 use crate::util::IntoCow;
 use swc_ecma_ast::*;
@@ -125,6 +126,7 @@ impl From<TsType> for Type<'_> {
             TsType::TsTypeLit(lit) => Type::TypeLit(lit.into()),
             TsType::TsConditionalType(cond) => Type::Conditional(cond.into()),
             TsType::TsMappedType(ty) => Type::Mapped(ty.into()),
+            TsType::TsTypeOperator(ty) => Type::Operator(ty.into()),
             _ => Type::Simple(ty.into_cow()),
         }
     }
@@ -268,6 +270,16 @@ impl From<TsMappedType> for Mapped<'_> {
             optional: ty.optional,
             type_param: ty.type_param.into(),
             ty: ty.type_ann.map(|v| box v.into_cow()),
+        }
+    }
+}
+
+impl From<TsTypeOperator> for Operator<'_> {
+    fn from(ty: TsTypeOperator) -> Self {
+        Operator {
+            span: ty.span,
+            op: ty.op,
+            ty: box ty.type_ann.into_cow(),
         }
     }
 }

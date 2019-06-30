@@ -51,7 +51,8 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                         | TsType::TsThisType(..)
                         | TsType::TsTupleType(..)
                         | TsType::TsConditionalType(..)
-                        | TsType::TsMappedType(..) => {
+                        | TsType::TsMappedType(..)
+                        | TsType::TsTypeOperator(..) => {
                             unreachable!("this type should be converted to `Type`")
                         }
                         _ => {}
