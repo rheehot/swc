@@ -161,7 +161,6 @@ impl Analyzer<'_, '_> {
                 let r_ty = self.type_of(&right)?;
                 macro_rules! no_unknown {
                     () => {{
-                        dbg!(&l_ty);
                         no_unknown!(l_ty);
                         no_unknown!(r_ty);
                     }};
