@@ -303,6 +303,16 @@ impl Analyzer<'_, '_> {
             }
 
             Expr::Unary(UnaryExpr { op, ref arg, .. }) => {
+                match op {
+                    op!("typeof") => {
+                        return Ok(Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsStringKeyword,
+                        })
+                        .into_cow())
+                    }
+                    _ => {}
+                }
                 let arg_ty = self.type_of(arg)?;
                 match *arg_ty {
                     Type::Keyword(TsKeywordType {
@@ -314,14 +324,6 @@ impl Analyzer<'_, '_> {
 
                 match op {
                     op!("!") => return Ok(negate(self.type_of(arg)?.into_owned()).into_cow()),
-
-                    op!("typeof") => {
-                        return Ok(Type::Keyword(TsKeywordType {
-                            span,
-                            kind: TsKeywordTypeKind::TsStringKeyword,
-                        })
-                        .into_cow())
-                    }
 
                     op!("void") => return Ok(Type::undefined(span).owned()),
 
