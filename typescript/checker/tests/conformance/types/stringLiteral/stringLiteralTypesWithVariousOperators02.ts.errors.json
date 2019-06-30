@@ -1,56 +1,56 @@
 [
     {
-        "line": 6,
+        "line": 8,
         "column": 9,
         "msg": "Operator '+' cannot be applied to types 'number | \"ABC\" | \"XYZ\"' and '100'."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 9,
         "msg": "Operator '+' cannot be applied to types '100' and 'number | \"ABC\" | \"XYZ\"'."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 9,
         "msg": "Operator '+' cannot be applied to types 'number | \"ABC\" | \"XYZ\"' and 'number | \"ABC\" | \"XYZ\"'."
     },
     {
-        "line": 9,
+        "line": 11,
         "column": 9,
         "msg": "Operator '+' cannot be applied to types 'number | \"ABC\" | \"XYZ\"' and 'true'."
     },
     {
-        "line": 10,
+        "line": 12,
         "column": 9,
         "msg": "Operator '+' cannot be applied to types 'false' and 'number | \"ABC\" | \"XYZ\"'."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 9,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 12,
+        "line": 14,
         "column": 11,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 13,
-        "column": 9,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
-    },
-    {
-        "line": 14,
+        "line": 15,
         "column": 9,
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 16,
         "column": 9,
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+    },
+    {
+        "line": 18,
+        "column": 9,
         "msg": "This condition will always return 'false' since the types '\"ABC\"' and '\"XYZ\"' have no overlap."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 9,
         "msg": "This condition will always return 'true' since the types '\"ABC\"' and '\"XYZ\"' have no overlap."
     }

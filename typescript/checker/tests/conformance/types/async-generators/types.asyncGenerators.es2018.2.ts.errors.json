@@ -1,31 +1,31 @@
 [
     {
-        "line": 2,
+        "line": 6,
         "column": 12,
         "msg": "Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator."
     },
     {
-        "line": 8,
+        "line": 12,
         "column": 12,
         "msg": "Type 'Promise<number[]>' must have a '[Symbol.asyncIterator]()' method that returns an async iterator."
     },
     {
-        "line": 10,
+        "line": 14,
         "column": 7,
         "msg": "Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterableIterator<number>'."
     },
     {
-        "line": 13,
+        "line": 17,
         "column": 7,
         "msg": "Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterableIterator<number>'."
     },
     {
-        "line": 16,
+        "line": 20,
         "column": 7,
         "msg": "Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterableIterator<number>'."
     },
     {
-        "line": 19,
+        "line": 23,
         "column": 7,
         "msg": "Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterable<number>'."
     },
@@ -35,87 +35,87 @@
         "msg": "any) => Promise<IteratorResult<number>>'."
     },
     {
-        "line": 22,
+        "line": 26,
         "column": 7,
         "msg": "Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterable<number>'."
     },
     {
-        "line": 25,
+        "line": 29,
         "column": 7,
         "msg": "Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterable<number>'."
     },
     {
-        "line": 28,
+        "line": 32,
         "column": 7,
         "msg": "Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterator<number>'."
     },
     {
-        "line": 31,
-        "column": 7,
-        "msg": "Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterator<number>'."
-    },
-    {
-        "line": 34,
+        "line": 35,
         "column": 7,
         "msg": "Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterator<number>'."
     },
     {
         "line": 38,
+        "column": 7,
+        "msg": "Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterator<number>'."
+    },
+    {
+        "line": 42,
         "column": 11,
         "msg": "Type '\"a\"' is not assignable to type 'number'."
     },
     {
-        "line": 41,
+        "line": 45,
         "column": 12,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 44,
+        "line": 48,
         "column": 12,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 47,
+        "line": 51,
         "column": 11,
         "msg": "Type '\"a\"' is not assignable to type 'number'."
     },
     {
-        "line": 50,
+        "line": 54,
         "column": 12,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 53,
+        "line": 57,
         "column": 12,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 56,
+        "line": 60,
         "column": 11,
         "msg": "Type '\"a\"' is not assignable to type 'number'."
     },
     {
-        "line": 59,
+        "line": 63,
         "column": 12,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 62,
+        "line": 66,
         "column": 12,
         "msg": "Type 'string' is not assignable to type 'number'."
     },
     {
-        "line": 64,
+        "line": 68,
         "column": 42,
         "msg": "Property '[Symbol.iterator]' is missing in type 'AsyncIterableIterator<any>' but required in type 'IterableIterator<number>'."
     },
     {
-        "line": 67,
+        "line": 71,
         "column": 42,
         "msg": "Property '[Symbol.iterator]' is missing in type 'AsyncIterableIterator<any>' but required in type 'Iterable<number>'."
     },
     {
-        "line": 70,
+        "line": 74,
         "column": 42,
         "msg": "Type 'AsyncIterableIterator<any>' is not assignable to type 'Iterator<number>'."
     },
@@ -125,7 +125,7 @@
         "msg": "any) => IteratorResult<number>'."
     },
     {
-        "line": 74,
+        "line": 78,
         "column": 12,
         "msg": "Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator."
     }

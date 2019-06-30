@@ -1,16 +1,16 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 2,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 3,
+        "line": 5,
         "column": 2,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 2,
         "msg": "Overload signatures must all be public, private or protected."
     }

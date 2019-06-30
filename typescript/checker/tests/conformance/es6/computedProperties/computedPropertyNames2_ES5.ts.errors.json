@@ -1,11 +1,11 @@
 [
     {
-        "line": 6,
+        "line": 8,
         "column": 9,
         "msg": "A 'get' accessor must return a value."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 16,
         "msg": "A 'get' accessor must return a value."
     }

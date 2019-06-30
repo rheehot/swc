@@ -1,6 +1,6 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 20,
         "msg": "Parameter 'yield' cannot be referenced in its initializer."
     }

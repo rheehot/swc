@@ -1,6 +1,6 @@
 [
     {
-        "line": 3,
+        "line": 8,
         "column": 11,
         "msg": "Cannot use namespace 'exports' as a type."
     }

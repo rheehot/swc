@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 7,
         "column": 5,
         "msg": "Unable to resolve signature of method decorator when called as an expression."
     }

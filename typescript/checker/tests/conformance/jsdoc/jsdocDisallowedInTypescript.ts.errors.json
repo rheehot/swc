@@ -1,47 +1,37 @@
 [
     {
-        "line": 2,
-        "column": 15,
-        "msg": "JSDoc types can only be used inside documentation comments."
-    },
-    {
         "line": 4,
         "column": 15,
         "msg": "JSDoc types can only be used inside documentation comments."
     },
     {
-        "line": 4,
+        "line": 6,
+        "column": 15,
+        "msg": "JSDoc types can only be used inside documentation comments."
+    },
+    {
+        "line": 6,
         "column": 32,
         "msg": "JSDoc types can only be used inside documentation comments."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 20,
         "msg": "JSDoc types can only be used inside documentation comments."
     },
     {
-        "line": 10,
+        "line": 12,
         "column": 18,
         "msg": "JSDoc types can only be used inside documentation comments."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 18,
         "msg": "Expected 1 arguments, but got 2."
     },
     {
-        "line": 13,
-        "column": 14,
-        "msg": "JSDoc types can only be used inside documentation comments."
-    },
-    {
-        "line": 14,
-        "column": 11,
-        "msg": "JSDoc types can only be used inside documentation comments."
-    },
-    {
         "line": 15,
-        "column": 8,
+        "column": 14,
         "msg": "JSDoc types can only be used inside documentation comments."
     },
     {
@@ -51,31 +41,41 @@
     },
     {
         "line": 17,
-        "column": 17,
+        "column": 8,
         "msg": "JSDoc types can only be used inside documentation comments."
     },
     {
         "line": 18,
-        "column": 5,
-        "msg": "Type 'undefined' is not assignable to type 'number | null'."
+        "column": 11,
+        "msg": "JSDoc types can only be used inside documentation comments."
     },
     {
-        "line": 18,
+        "line": 19,
         "column": 17,
         "msg": "JSDoc types can only be used inside documentation comments."
     },
     {
         "line": 20,
-        "column": 16,
-        "msg": "JSDoc types can only be used inside documentation comments."
+        "column": 5,
+        "msg": "Type 'undefined' is not assignable to type 'number | null'."
     },
     {
-        "line": 21,
-        "column": 16,
+        "line": 20,
+        "column": 17,
         "msg": "JSDoc types can only be used inside documentation comments."
     },
     {
         "line": 22,
+        "column": 16,
+        "msg": "JSDoc types can only be used inside documentation comments."
+    },
+    {
+        "line": 23,
+        "column": 16,
+        "msg": "JSDoc types can only be used inside documentation comments."
+    },
+    {
+        "line": 24,
         "column": 17,
         "msg": "JSDoc types can only be used inside documentation comments."
     }

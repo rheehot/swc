@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 7,
         "column": 5,
         "msg": "'dec' accepts too few arguments to be used as a decorator here. Did you mean to call it first and write '@dec()'?"
     }

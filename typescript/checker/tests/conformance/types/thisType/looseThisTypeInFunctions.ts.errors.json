@@ -1,26 +1,26 @@
 [
     {
-        "line": 21,
+        "line": 24,
         "column": 1,
         "msg": "Type '(this"
     },
     {
-        "line": 25,
+        "line": 28,
         "column": 27,
         "msg": "Property 'length' does not exist on type 'number'."
     },
     {
-        "line": 33,
+        "line": 36,
         "column": 28,
         "msg": "Property 'length' does not exist on type 'number'."
     },
     {
-        "line": 37,
+        "line": 40,
         "column": 9,
         "msg": "The 'this' context of type 'void' is not assignable to method's 'this' of type 'I'."
     },
     {
-        "line": 46,
+        "line": 49,
         "column": 20,
         "msg": "Property 'length' does not exist on type 'number'."
     }

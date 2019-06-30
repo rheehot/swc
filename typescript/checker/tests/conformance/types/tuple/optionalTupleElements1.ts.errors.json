@@ -1,36 +1,36 @@
 [
     {
-        "line": 11,
+        "line": 14,
         "column": 29,
         "msg": "A required element cannot follow an optional element."
     },
     {
-        "line": 15,
+        "line": 18,
         "column": 5,
         "msg": "Type '[number, string, (boolean | undefined)?]' is not assignable to type '[number, string, boolean]'."
     },
     {
-        "line": 16,
+        "line": 19,
         "column": 5,
         "msg": "Type '[number, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, string, boolean]'."
     },
     {
-        "line": 17,
+        "line": 20,
         "column": 5,
         "msg": "Type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, string, boolean]'."
     },
     {
-        "line": 20,
+        "line": 23,
         "column": 5,
         "msg": "Type '[number, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, string, (boolean | undefined)?]'."
     },
     {
-        "line": 21,
+        "line": 24,
         "column": 5,
         "msg": "Type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, string, (boolean | undefined)?]'."
     },
     {
-        "line": 25,
+        "line": 28,
         "column": 5,
         "msg": "Type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'."
     }

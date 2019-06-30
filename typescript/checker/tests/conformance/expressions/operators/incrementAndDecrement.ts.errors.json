@@ -1,48 +1,28 @@
 [
     {
-        "line": 5,
+        "line": 7,
         "column": 9,
         "msg": "Cannot find name 'window'."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 5,
         "msg": "';' expected."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 5,
         "msg": "';' expected."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 5,
         "msg": "';' expected."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 5,
         "msg": "';' expected."
-    },
-    {
-        "line": 24,
-        "column": 4,
-        "msg": "';' expected."
-    },
-    {
-        "line": 24,
-        "column": 6,
-        "msg": "Expression expected."
-    },
-    {
-        "line": 25,
-        "column": 4,
-        "msg": "';' expected."
-    },
-    {
-        "line": 25,
-        "column": 6,
-        "msg": "Expression expected."
     },
     {
         "line": 26,
@@ -65,22 +45,22 @@
         "msg": "Expression expected."
     },
     {
-        "line": 34,
+        "line": 28,
         "column": 4,
         "msg": "';' expected."
     },
     {
-        "line": 34,
+        "line": 28,
         "column": 6,
         "msg": "Expression expected."
     },
     {
-        "line": 35,
+        "line": 29,
         "column": 4,
         "msg": "';' expected."
     },
     {
-        "line": 35,
+        "line": 29,
         "column": 6,
         "msg": "Expression expected."
     },
@@ -105,22 +85,22 @@
         "msg": "Expression expected."
     },
     {
-        "line": 44,
+        "line": 38,
         "column": 4,
         "msg": "';' expected."
     },
     {
-        "line": 44,
+        "line": 38,
         "column": 6,
         "msg": "Expression expected."
     },
     {
-        "line": 45,
+        "line": 39,
         "column": 4,
         "msg": "';' expected."
     },
     {
-        "line": 45,
+        "line": 39,
         "column": 6,
         "msg": "Expression expected."
     },
@@ -145,22 +125,22 @@
         "msg": "Expression expected."
     },
     {
-        "line": 55,
+        "line": 48,
         "column": 4,
         "msg": "';' expected."
     },
     {
-        "line": 55,
+        "line": 48,
         "column": 6,
         "msg": "Expression expected."
     },
     {
-        "line": 56,
+        "line": 49,
         "column": 4,
         "msg": "';' expected."
     },
     {
-        "line": 56,
+        "line": 49,
         "column": 6,
         "msg": "Expression expected."
     },
@@ -181,6 +161,26 @@
     },
     {
         "line": 58,
+        "column": 6,
+        "msg": "Expression expected."
+    },
+    {
+        "line": 59,
+        "column": 4,
+        "msg": "';' expected."
+    },
+    {
+        "line": 59,
+        "column": 6,
+        "msg": "Expression expected."
+    },
+    {
+        "line": 60,
+        "column": 4,
+        "msg": "';' expected."
+    },
+    {
+        "line": 60,
         "column": 6,
         "msg": "Expression expected."
     }

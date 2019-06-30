@@ -1,36 +1,36 @@
 [
     {
-        "line": 1,
+        "line": 4,
         "column": 20,
         "msg": "Parameter declaration expected."
     },
     {
-        "line": 1,
+        "line": 4,
         "column": 20,
         "msg": "Cannot find name 'await'."
     },
     {
-        "line": 1,
+        "line": 4,
         "column": 25,
         "msg": "';' expected."
     },
     {
-        "line": 1,
+        "line": 4,
         "column": 26,
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 1,
+        "line": 4,
         "column": 28,
         "msg": "Operator '>' cannot be applied to types 'boolean' and '{}'."
     },
     {
-        "line": 1,
+        "line": 4,
         "column": 36,
         "msg": "Object is possibly 'undefined'."
     },
     {
-        "line": 1,
+        "line": 4,
         "column": 40,
         "msg": "Expression expected."
     }

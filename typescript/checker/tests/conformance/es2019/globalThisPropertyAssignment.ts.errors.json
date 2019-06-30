@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 9,
         "column": 8,
         "msg": "Property 'z' does not exist on type 'Window'."
     }

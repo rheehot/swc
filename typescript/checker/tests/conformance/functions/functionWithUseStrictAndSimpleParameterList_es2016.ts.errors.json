@@ -1,96 +1,96 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 12,
         "msg": "This parameter is not allowed with 'use strict' directive."
     },
     {
-        "line": 2,
+        "line": 4,
         "column": 5,
         "msg": "'use strict' directive cannot be used with non-simple parameter list."
     },
     {
-        "line": 15,
+        "line": 17,
         "column": 15,
         "msg": "This parameter is not allowed with 'use strict' directive."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 5,
         "msg": "'use strict' directive cannot be used with non-simple parameter list."
     },
     {
-        "line": 19,
+        "line": 21,
         "column": 16,
         "msg": "This parameter is not allowed with 'use strict' directive."
     },
     {
-        "line": 19,
+        "line": 21,
         "column": 23,
         "msg": "This parameter is not allowed with 'use strict' directive."
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 5,
         "msg": "'use strict' directive cannot be used with non-simple parameter list."
     },
     {
-        "line": 23,
+        "line": 25,
         "column": 23,
         "msg": "This parameter is not allowed with 'use strict' directive."
     },
     {
-        "line": 24,
+        "line": 26,
         "column": 5,
         "msg": "'use strict' directive cannot be used with non-simple parameter list."
     },
     {
-        "line": 27,
+        "line": 29,
         "column": 31,
         "msg": "This parameter is not allowed with 'use strict' directive."
     },
     {
-        "line": 28,
+        "line": 30,
         "column": 5,
         "msg": "'use strict' directive cannot be used with non-simple parameter list."
     },
     {
-        "line": 31,
+        "line": 33,
         "column": 30,
         "msg": "This parameter is not allowed with 'use strict' directive."
     },
     {
-        "line": 32,
+        "line": 34,
         "column": 5,
         "msg": "'use strict' directive cannot be used with non-simple parameter list."
     },
     {
-        "line": 35,
+        "line": 37,
         "column": 24,
         "msg": "This parameter is not allowed with 'use strict' directive."
     },
     {
-        "line": 35,
+        "line": 37,
         "column": 32,
         "msg": "This parameter is not allowed with 'use strict' directive."
     },
     {
-        "line": 36,
+        "line": 38,
         "column": 5,
         "msg": "'use strict' directive cannot be used with non-simple parameter list."
     },
     {
-        "line": 39,
+        "line": 41,
         "column": 23,
         "msg": "This parameter is not allowed with 'use strict' directive."
     },
     {
-        "line": 39,
+        "line": 41,
         "column": 31,
         "msg": "This parameter is not allowed with 'use strict' directive."
     },
     {
-        "line": 41,
+        "line": 43,
         "column": 5,
         "msg": "'use strict' directive cannot be used with non-simple parameter list."
     }

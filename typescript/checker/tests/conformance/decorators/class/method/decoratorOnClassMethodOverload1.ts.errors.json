@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 7,
         "column": 5,
         "msg": "A decorator can only decorate a method implementation, not an overload."
     }

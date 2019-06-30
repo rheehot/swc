@@ -1,48 +1,38 @@
 [
     {
-        "line": 2,
-        "column": 1,
-        "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
-    },
-    {
-        "line": 3,
-        "column": 1,
-        "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
-    },
-    {
         "line": 4,
-        "column": 6,
+        "column": 1,
         "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
         "line": 5,
+        "column": 1,
+        "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
+    },
+    {
+        "line": 6,
         "column": 6,
         "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
-        "line": 6,
+        "line": 7,
+        "column": 6,
+        "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
+    },
+    {
+        "line": 8,
         "column": 1,
         "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
-        "line": 6,
+        "line": 8,
         "column": 7,
         "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 1,
         "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
-    },
-    {
-        "line": 11,
-        "column": 1,
-        "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
-    },
-    {
-        "line": 12,
-        "column": 1,
-        "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
         "line": 13,
@@ -56,12 +46,12 @@
     },
     {
         "line": 15,
-        "column": 6,
+        "column": 1,
         "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
         "line": 16,
-        "column": 6,
+        "column": 1,
         "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
@@ -75,14 +65,14 @@
         "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
-        "line": 20,
-        "column": 1,
+        "line": 19,
+        "column": 6,
         "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
-        "line": 21,
-        "column": 1,
-        "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
+        "line": 20,
+        "column": 6,
+        "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
         "line": 22,
@@ -97,12 +87,12 @@
     {
         "line": 24,
         "column": 1,
-        "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
+        "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
         "line": 25,
         "column": 1,
-        "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
+        "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
         "line": 26,
@@ -117,12 +107,12 @@
     {
         "line": 28,
         "column": 1,
-        "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
+        "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
         "line": 29,
         "column": 1,
-        "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
+        "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
         "line": 30,
@@ -137,12 +127,12 @@
     {
         "line": 32,
         "column": 1,
-        "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
+        "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
         "line": 33,
         "column": 1,
-        "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
+        "msg": "An unary expression with the '-' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     },
     {
         "line": 34,
@@ -151,6 +141,16 @@
     },
     {
         "line": 35,
+        "column": 1,
+        "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
+    },
+    {
+        "line": 36,
+        "column": 1,
+        "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
+    },
+    {
+        "line": 37,
         "column": 1,
         "msg": "An unary expression with the '+' operator is not allowed in the left-hand side of an exponentiation expression. Consider enclosing the expression in parentheses."
     }

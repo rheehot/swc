@@ -1,76 +1,76 @@
 [
     {
-        "line": 4,
+        "line": 7,
         "column": 10,
         "msg": "A type predicate is only allowed in return type position for functions and methods."
     },
     {
-        "line": 5,
+        "line": 8,
         "column": 17,
         "msg": "A type predicate is only allowed in return type position for functions and methods."
     },
     {
-        "line": 11,
+        "line": 14,
         "column": 22,
         "msg": "A type predicate is only allowed in return type position for functions and methods."
     },
     {
-        "line": 14,
+        "line": 17,
         "column": 16,
         "msg": "A type predicate is only allowed in return type position for functions and methods."
     },
     {
-        "line": 34,
+        "line": 37,
         "column": 8,
         "msg": "Property 'content' does not exist on type 'FileSystemObject'."
     },
     {
-        "line": 36,
+        "line": 39,
         "column": 9,
         "msg": "Property 'host' does not exist on type 'FileSystemObject'."
     },
     {
-        "line": 37,
+        "line": 40,
         "column": 9,
         "msg": "Property 'content' does not exist on type 'FileSystemObject'."
-    },
-    {
-        "line": 41,
-        "column": 8,
-        "msg": "Property 'children' does not exist on type 'FileSystemObject'."
     },
     {
         "line": 44,
         "column": 8,
+        "msg": "Property 'children' does not exist on type 'FileSystemObject'."
+    },
+    {
+        "line": 47,
+        "column": 8,
         "msg": "Property 'host' does not exist on type 'FileSystemObject'."
     },
     {
-        "line": 57,
+        "line": 60,
         "column": 13,
         "msg": "A type predicate is only allowed in return type position for functions and methods."
     },
     {
-        "line": 58,
+        "line": 61,
         "column": 15,
         "msg": "A type predicate is only allowed in return type position for functions and methods."
     },
     {
-        "line": 63,
+        "line": 66,
         "column": 9,
         "msg": "Property 'lead' does not exist on type 'GenericGuard<File>'."
     },
     {
-        "line": 66,
+        "line": 69,
         "column": 9,
         "msg": "Property 'follow' does not exist on type 'GenericGuard<File>'."
     },
     {
-        "line": 70,
+        "line": 73,
         "column": 19,
         "msg": "A type predicate is only allowed in return type position for functions and methods."
     },
     {
-        "line": 79,
+        "line": 82,
         "column": 11,
         "msg": "Property 'do' does not exist on type 'SpecificGuard'."
     }

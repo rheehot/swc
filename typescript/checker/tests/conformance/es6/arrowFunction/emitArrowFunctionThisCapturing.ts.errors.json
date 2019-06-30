@@ -1,6 +1,6 @@
 [
     {
-        "line": 6,
+        "line": 8,
         "column": 10,
         "msg": "Property 'name' does not exist on type 'typeof globalThis'."
     }

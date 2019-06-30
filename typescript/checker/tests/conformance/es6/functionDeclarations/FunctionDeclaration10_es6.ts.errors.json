@@ -1,26 +1,26 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 16,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 26,
         "msg": "',' expected."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 29,
         "msg": "Parameter declaration expected."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 29,
         "msg": "Cannot find name 'yield'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 34,
         "msg": "';' expected."
     }

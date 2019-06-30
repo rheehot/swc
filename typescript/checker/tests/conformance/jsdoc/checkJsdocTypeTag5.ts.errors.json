@@ -1,41 +1,41 @@
 [
     {
-        "line": 3,
+        "line": 8,
         "column": 17,
-        "msg": "Type 'number' is not assignable to type 'string'."
-    },
-    {
-        "line": 5,
-        "column": 14,
-        "msg": "Type 'number' is not assignable to type 'string'."
-    },
-    {
-        "line": 7,
-        "column": 24,
         "msg": "Type 'number' is not assignable to type 'string'."
     },
     {
         "line": 10,
-        "column": 17,
-        "msg": "Type 'number' is not assignable to type 'string'."
-    },
-    {
-        "line": 12,
         "column": 14,
         "msg": "Type 'number' is not assignable to type 'string'."
     },
     {
-        "line": 14,
+        "line": 12,
         "column": 24,
         "msg": "Type 'number' is not assignable to type 'string'."
     },
     {
-        "line": 28,
+        "line": 15,
+        "column": 17,
+        "msg": "Type 'number' is not assignable to type 'string'."
+    },
+    {
+        "line": 17,
+        "column": 14,
+        "msg": "Type 'number' is not assignable to type 'string'."
+    },
+    {
+        "line": 19,
+        "column": 24,
+        "msg": "Type 'number' is not assignable to type 'string'."
+    },
+    {
+        "line": 33,
         "column": 5,
         "msg": "The type of a function declaration must match the function's signature."
     },
     {
-        "line": 34,
+        "line": 39,
         "column": 5,
         "msg": "Type '1 | 2' is not assignable to type '2 | 3'."
     }

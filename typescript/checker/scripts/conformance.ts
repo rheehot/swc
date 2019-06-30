@@ -39,17 +39,20 @@ async function handle(f: string) {
     .split(".")
     .slice(0, -1)
     .join(".");
-  const content = await readFile(f);
+  const content = await readFile(f, "utf-8");
 
   let errorsText = "";
   try {
     const refFile = __dirname + `/../tests/reference/${filenane}.errors.txt`;
 
-    if (!content.includes("@filename")) {
-      errorsText = await readFile(refFile, { encoding: "utf-8" });
-    }
+    // if (!content.includes("@filename")) {
+    errorsText = await readFile(refFile, { encoding: "utf-8" });
+    // }
   } catch (e) {}
-  const errors = extract(errorsText);
+
+  const len = (content.match(/\/\/ \@/g) || []).length;
+
+  const errors = extract(errorsText, len);
   const ref = `${dirname}/${basename}.errors.json`;
   await writeFile(ref, JSON.stringify(errors, undefined, "    "));
   console.info(`\tWritten file to: ${ref}`);
@@ -66,7 +69,7 @@ interface Error {
   msg: string;
 }
 
-function extract(content: string): Error[] {
+function extract(content: string, shift: number): Error[] {
   const lines = content.split("\n");
   const errs = [];
 
@@ -82,7 +85,7 @@ function extract(content: string): Error[] {
     const msg = msgWithPrefix.trim();
 
     errs.push({
-      line: parseInt(lineCol.split(",")[0]),
+      line: parseInt(lineCol.split(",")[0]) + (shift === 0 ? 0 : shift + 1),
       column: parseInt(lineCol.split(",")[1]),
       msg
     });

@@ -1,6 +1,6 @@
 [
     {
-        "line": 3,
+        "line": 7,
         "column": 21,
         "msg": "Type 'PromiseAlias' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value."
     }

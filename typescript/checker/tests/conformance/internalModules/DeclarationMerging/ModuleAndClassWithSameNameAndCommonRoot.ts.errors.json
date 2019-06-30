@@ -1,16 +1,16 @@
 [
     {
-        "line": 2,
+        "line": 6,
         "column": 19,
         "msg": "A namespace declaration cannot be in a different file from a class or function with which it is merged."
     },
     {
-        "line": 1,
+        "line": 5,
         "column": 8,
         "msg": "A namespace declaration cannot be located prior to a class or function with which it is merged."
     },
     {
-        "line": 2,
+        "line": 6,
         "column": 31,
         "msg": "Class 'A' used before its declaration."
     }

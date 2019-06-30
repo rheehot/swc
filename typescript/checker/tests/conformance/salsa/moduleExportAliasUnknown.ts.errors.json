@@ -1,11 +1,11 @@
 [
     {
-        "line": 1,
+        "line": 6,
         "column": 25,
         "msg": "Property 'nonprop' does not exist on type 'Window'."
     },
     {
-        "line": 2,
+        "line": 7,
         "column": 15,
         "msg": "Cannot find name 'bar'."
     }

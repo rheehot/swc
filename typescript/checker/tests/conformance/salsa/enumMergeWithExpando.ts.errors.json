@@ -1,11 +1,11 @@
 [
     {
-        "line": 2,
+        "line": 8,
         "column": 10,
         "msg": "Cannot assign to 'DESC' because it is a read-only property."
     },
     {
-        "line": 3,
+        "line": 9,
         "column": 10,
         "msg": "Cannot assign to 'ASC' because it is a read-only property."
     }

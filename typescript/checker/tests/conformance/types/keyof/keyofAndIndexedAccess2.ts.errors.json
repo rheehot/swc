@@ -1,116 +1,116 @@
 [
     {
-        "line": 4,
+        "line": 7,
         "column": 5,
         "msg": "Type '\"x\"' is not assignable to type 'number'."
     },
     {
-        "line": 6,
+        "line": 9,
         "column": 5,
         "msg": "Type '2' is not assignable to type '0 | 1'."
     },
     {
-        "line": 7,
+        "line": 10,
         "column": 5,
         "msg": "Type '\"x\"' is not assignable to type '0 | 1'."
     },
     {
-        "line": 8,
+        "line": 11,
         "column": 5,
         "msg": "Type '1' is not assignable to type 'never'."
     },
     {
-        "line": 9,
+        "line": 12,
         "column": 5,
         "msg": "Type '2' is not assignable to type 'never'."
     },
     {
-        "line": 10,
+        "line": 13,
         "column": 5,
         "msg": "Type '\"x\"' is not assignable to type 'never'."
     },
     {
-        "line": 14,
+        "line": 17,
         "column": 5,
         "msg": "Type '{ [key"
-    },
-    {
-        "line": 15,
-        "column": 5,
-        "msg": "Type 'T' is not assignable to type '{ x"
     },
     {
         "line": 18,
         "column": 5,
+        "msg": "Type 'T' is not assignable to type '{ x"
+    },
+    {
+        "line": 21,
+        "column": 5,
         "msg": "Type '{ x"
     },
     {
-        "line": 19,
+        "line": 22,
         "column": 5,
         "msg": "Type '{ [key"
     },
     {
-        "line": 26,
+        "line": 29,
         "column": 7,
         "msg": "Property 'x' does not exist on type 'T'."
     },
     {
-        "line": 27,
+        "line": 30,
         "column": 5,
         "msg": "Type '1' is not assignable to type 'T[keyof T]'."
     },
     {
-        "line": 31,
+        "line": 34,
         "column": 5,
         "msg": "Type '{ [key"
     },
     {
-        "line": 38,
+        "line": 41,
         "column": 5,
         "msg": "Type '{ [x"
     },
     {
-        "line": 50,
+        "line": 53,
         "column": 3,
         "msg": "Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'Item'."
     },
     {
-        "line": 51,
+        "line": 54,
         "column": 3,
         "msg": "Type '123' is not assignable to type 'never'."
     },
     {
-        "line": 52,
+        "line": 55,
         "column": 3,
         "msg": "Type '123' is not assignable to type 'T[keyof T]'."
     },
     {
-        "line": 53,
+        "line": 56,
         "column": 3,
         "msg": "Type '123' is not assignable to type 'T[K]'."
     },
     {
-        "line": 65,
+        "line": 68,
         "column": 7,
         "msg": "Property 'foo' does not exist on type 'T'."
     },
     {
-        "line": 66,
+        "line": 69,
         "column": 3,
         "msg": "Type 'string' cannot be used to index type 'T'."
     },
     {
-        "line": 67,
+        "line": 70,
         "column": 3,
         "msg": "Type '123' is not assignable to type 'T[keyof T]'."
     },
     {
-        "line": 68,
+        "line": 71,
         "column": 3,
         "msg": "Type '123' is not assignable to type 'T[K]'."
     },
     {
-        "line": 108,
+        "line": 111,
         "column": 5,
         "msg": "Type '123' is not assignable to type 'Type[K]'."
     }

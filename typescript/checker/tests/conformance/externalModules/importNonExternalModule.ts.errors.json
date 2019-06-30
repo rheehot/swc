@@ -1,6 +1,6 @@
 [
     {
-        "line": 1,
+        "line": 5,
         "column": 22,
         "msg": "File 'tests/cases/conformance/externalModules/foo_0.ts' is not a module."
     }

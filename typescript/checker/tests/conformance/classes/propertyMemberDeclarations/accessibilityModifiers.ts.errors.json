@@ -1,15 +1,5 @@
 [
     {
-        "line": 21,
-        "column": 12,
-        "msg": "'private' modifier must precede 'static' modifier."
-    },
-    {
-        "line": 22,
-        "column": 12,
-        "msg": "'private' modifier must precede 'static' modifier."
-    },
-    {
         "line": 23,
         "column": 12,
         "msg": "'private' modifier must precede 'static' modifier."
@@ -20,14 +10,14 @@
         "msg": "'private' modifier must precede 'static' modifier."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 12,
-        "msg": "'protected' modifier must precede 'static' modifier."
+        "msg": "'private' modifier must precede 'static' modifier."
     },
     {
-        "line": 27,
+        "line": 26,
         "column": 12,
-        "msg": "'protected' modifier must precede 'static' modifier."
+        "msg": "'private' modifier must precede 'static' modifier."
     },
     {
         "line": 28,
@@ -40,14 +30,14 @@
         "msg": "'protected' modifier must precede 'static' modifier."
     },
     {
-        "line": 31,
+        "line": 30,
         "column": 12,
-        "msg": "'public' modifier must precede 'static' modifier."
+        "msg": "'protected' modifier must precede 'static' modifier."
     },
     {
-        "line": 32,
+        "line": 31,
         "column": 12,
-        "msg": "'public' modifier must precede 'static' modifier."
+        "msg": "'protected' modifier must precede 'static' modifier."
     },
     {
         "line": 33,
@@ -60,14 +50,14 @@
         "msg": "'public' modifier must precede 'static' modifier."
     },
     {
-        "line": 39,
-        "column": 13,
-        "msg": "Accessibility modifier already seen."
+        "line": 35,
+        "column": 12,
+        "msg": "'public' modifier must precede 'static' modifier."
     },
     {
-        "line": 40,
+        "line": 36,
         "column": 12,
-        "msg": "Accessibility modifier already seen."
+        "msg": "'public' modifier must precede 'static' modifier."
     },
     {
         "line": 41,
@@ -76,6 +66,16 @@
     },
     {
         "line": 42,
+        "column": 12,
+        "msg": "Accessibility modifier already seen."
+    },
+    {
+        "line": 43,
+        "column": 13,
+        "msg": "Accessibility modifier already seen."
+    },
+    {
+        "line": 44,
         "column": 12,
         "msg": "Accessibility modifier already seen."
     }

@@ -1,96 +1,96 @@
 [
     {
-        "line": 23,
+        "line": 26,
         "column": 5,
         "msg": "Type 'T' is not assignable to type 'Required<T>'."
-    },
-    {
-        "line": 24,
-        "column": 5,
-        "msg": "Type 'Partial<T>' is not assignable to type 'Required<T>'."
     },
     {
         "line": 27,
         "column": 5,
+        "msg": "Type 'Partial<T>' is not assignable to type 'Required<T>'."
+    },
+    {
+        "line": 30,
+        "column": 5,
         "msg": "Type 'Partial<T>' is not assignable to type 'T'."
     },
     {
-        "line": 37,
+        "line": 40,
         "column": 5,
         "msg": "Type 'Required<T>' is not assignable to type 'Denullified<T>'."
     },
     {
-        "line": 38,
+        "line": 41,
         "column": 5,
         "msg": "Type 'T' is not assignable to type 'Denullified<T>'."
     },
     {
-        "line": 39,
+        "line": 42,
         "column": 5,
         "msg": "Type 'Partial<T>' is not assignable to type 'Denullified<T>'."
     },
     {
-        "line": 42,
+        "line": 45,
         "column": 5,
         "msg": "Type 'T' is not assignable to type 'Required<T>'."
     },
     {
-        "line": 43,
+        "line": 46,
         "column": 5,
         "msg": "Type 'Partial<T>' is not assignable to type 'Required<T>'."
     },
     {
-        "line": 47,
+        "line": 50,
         "column": 5,
         "msg": "Type 'Partial<T>' is not assignable to type 'T'."
     },
     {
-        "line": 56,
+        "line": 59,
         "column": 5,
         "msg": "Type '{}' is not assignable to type 'Denullified<T>'."
     },
     {
-        "line": 57,
+        "line": 60,
         "column": 5,
         "msg": "Type '{}' is not assignable to type 'Required<T>'."
     },
     {
-        "line": 58,
+        "line": 61,
         "column": 5,
         "msg": "Type '{}' is not assignable to type 'T'."
     },
     {
-        "line": 92,
+        "line": 95,
         "column": 1,
         "msg": "Property 'b' is missing in type '{ a"
     },
     {
-        "line": 104,
+        "line": 107,
         "column": 1,
         "msg": "Type '{ a"
     },
     {
-        "line": 105,
+        "line": 108,
         "column": 1,
         "msg": "Type '{ a"
     },
     {
-        "line": 106,
+        "line": 109,
         "column": 1,
         "msg": "Property 'd' is missing in type '{ a"
     },
     {
-        "line": 116,
+        "line": 119,
         "column": 4,
         "msg": "Cannot assign to 'b' because it is a read-only property."
     },
     {
-        "line": 119,
+        "line": 122,
         "column": 4,
         "msg": "Cannot assign to 'a' because it is a read-only property."
     },
     {
-        "line": 120,
+        "line": 123,
         "column": 4,
         "msg": "Cannot assign to 'b' because it is a read-only property."
     }

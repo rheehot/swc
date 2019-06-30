@@ -1,6 +1,6 @@
 [
     {
-        "line": 1,
+        "line": 4,
         "column": 9,
         "msg": "'async' modifier cannot be used in an ambient context."
     }

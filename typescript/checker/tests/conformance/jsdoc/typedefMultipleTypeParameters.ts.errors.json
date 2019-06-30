@@ -1,16 +1,16 @@
 [
     {
-        "line": 12,
+        "line": 18,
         "column": 23,
         "msg": "Type '{ a"
     },
     {
-        "line": 15,
+        "line": 21,
         "column": 12,
         "msg": "Generic type 'Everything' requires 5 type argument(s)."
     },
     {
-        "line": 1,
+        "line": 7,
         "column": 34,
         "msg": "Type '{ a"
     }

@@ -1,21 +1,21 @@
 [
     {
-        "line": 2,
+        "line": 9,
         "column": 7,
         "msg": "Argument of type '\"no\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 3,
+        "line": 10,
         "column": 7,
         "msg": "Argument of type '\"also no\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 4,
+        "line": 11,
         "column": 7,
         "msg": "Argument of type '0' is not assignable to parameter of type 'string'."
     },
     {
-        "line": 5,
+        "line": 12,
         "column": 7,
         "msg": "Argument of type '1' is not assignable to parameter of type 'string'."
     }

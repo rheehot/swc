@@ -1,31 +1,31 @@
 [
     {
-        "line": 12,
+        "line": 18,
         "column": 21,
         "msg": "Property 'x' does not exist on type 'typeof A'."
     },
     {
-        "line": 15,
+        "line": 21,
         "column": 5,
         "msg": "Argument of type '\"no\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 16,
+        "line": 22,
         "column": 5,
         "msg": "Argument of type '\"not really\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 17,
+        "line": 23,
         "column": 5,
         "msg": "Argument of type '\"still no\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 18,
+        "line": 24,
         "column": 5,
         "msg": "Argument of type '\"not here either\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 19,
+        "line": 25,
         "column": 1,
         "msg": "Type '10' is not assignable to type '1'."
     }

@@ -1,31 +1,31 @@
 [
     {
-        "line": 1,
+        "line": 5,
         "column": 11,
         "msg": "Cannot find name 'async'."
     },
     {
-        "line": 1,
+        "line": 5,
         "column": 18,
         "msg": "Cannot find name 'await'."
     },
     {
-        "line": 1,
+        "line": 5,
         "column": 24,
         "msg": "',' expected."
     },
     {
-        "line": 1,
+        "line": 5,
         "column": 26,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'Promise' must be of type 'PromiseConstructor', but here has type 'any'."
     },
     {
-        "line": 1,
+        "line": 5,
         "column": 33,
         "msg": "',' expected."
     },
     {
-        "line": 1,
+        "line": 5,
         "column": 40,
         "msg": "Expression expected."
     }

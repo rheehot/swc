@@ -1,21 +1,21 @@
 [
     {
-        "line": 2,
+        "line": 18,
         "column": 25,
         "msg": "Could not find a declaration file for module 'foo/sub'. '/node_modules/foo/sub.js' implicitly has an 'any' type."
     },
     {
-        "line": 3,
+        "line": 19,
         "column": 25,
         "msg": "Could not find a declaration file for module 'bar/sub'. '/node_modules/bar/sub.js' implicitly has an 'any' type."
     },
     {
-        "line": 5,
+        "line": 21,
         "column": 30,
         "msg": "Could not find a declaration file for module '@scope/foo/sub'. '/node_modules/@scope/foo/sub.js' implicitly has an 'any' type."
     },
     {
-        "line": 6,
+        "line": 22,
         "column": 30,
         "msg": "Could not find a declaration file for module '@scope/bar/sub'. '/node_modules/@scope/bar/sub.js' implicitly has an 'any' type."
     }

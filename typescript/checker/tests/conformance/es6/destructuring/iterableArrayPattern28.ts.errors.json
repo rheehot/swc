@@ -1,6 +1,6 @@
 [
     {
-        "line": 2,
+        "line": 5,
         "column": 52,
         "msg": "Type 'true' is not assignable to type 'number'."
     }

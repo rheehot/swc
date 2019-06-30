@@ -1,31 +1,31 @@
 [
     {
-        "line": 1,
+        "line": 8,
         "column": 7,
         "msg": "'C' is referenced directly or indirectly in its own base expression."
     },
     {
-        "line": 1,
+        "line": 8,
         "column": 7,
         "msg": "'D' is referenced directly or indirectly in its own base expression."
     },
     {
-        "line": 1,
+        "line": 8,
         "column": 7,
         "msg": "'E' is referenced directly or indirectly in its own base expression."
     },
     {
-        "line": 1,
+        "line": 8,
         "column": 7,
         "msg": "'C2' is referenced directly or indirectly in its own base expression."
     },
     {
-        "line": 1,
+        "line": 8,
         "column": 7,
         "msg": "'D2' is referenced directly or indirectly in its own base expression."
     },
     {
-        "line": 1,
+        "line": 8,
         "column": 7,
         "msg": "'E2' is referenced directly or indirectly in its own base expression."
     }

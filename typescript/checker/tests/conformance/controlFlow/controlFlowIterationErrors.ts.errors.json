@@ -1,21 +1,21 @@
 [
     {
-        "line": 11,
+        "line": 13,
         "column": 17,
         "msg": "Argument of type 'string | number' is not assignable to parameter of type 'string'."
     },
     {
-        "line": 22,
+        "line": 24,
         "column": 17,
         "msg": "Argument of type 'string | number' is not assignable to parameter of type 'string'."
     },
     {
-        "line": 34,
+        "line": 36,
         "column": 17,
         "msg": "Argument of type 'string | number' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 45,
+        "line": 47,
         "column": 17,
         "msg": "Argument of type 'string | number' is not assignable to parameter of type 'number'."
     }

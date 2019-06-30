@@ -1,6 +1,6 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 13,
         "msg": "A 'set' accessor cannot have an optional parameter."
     }

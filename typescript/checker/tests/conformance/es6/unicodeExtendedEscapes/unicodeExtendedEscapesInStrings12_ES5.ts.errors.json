@@ -1,6 +1,6 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 21,
         "msg": "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive."
     }

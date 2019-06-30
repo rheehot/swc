@@ -1,11 +1,11 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 5,
         "msg": "'export' modifier cannot appear on a class element."
     },
     {
-        "line": 2,
+        "line": 4,
         "column": 16,
         "msg": "A 'get' accessor must return a value."
     }

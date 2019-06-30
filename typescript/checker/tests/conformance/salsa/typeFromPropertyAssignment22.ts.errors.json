@@ -1,6 +1,6 @@
 [
     {
-        "line": 7,
+        "line": 13,
         "column": 9,
         "msg": "Type '\"hi\"' is not assignable to type 'number'."
     }

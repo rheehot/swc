@@ -1,6 +1,6 @@
 [
     {
-        "line": 6,
+        "line": 9,
         "column": 21,
         "msg": "The return type of an async function or method must be the global Promise<T> type."
     }

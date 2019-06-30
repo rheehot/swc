@@ -1,21 +1,21 @@
 [
     {
-        "line": 3,
+        "line": 5,
         "column": 9,
         "msg": "Duplicate identifier 'foo'."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 9,
         "msg": "A 'set' accessor must have exactly one parameter."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 9,
         "msg": "An object literal cannot have multiple get/set accessors with the same name."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 9,
         "msg": "Duplicate identifier 'foo'."
     }

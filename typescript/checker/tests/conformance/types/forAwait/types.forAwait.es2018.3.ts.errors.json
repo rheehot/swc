@@ -1,21 +1,21 @@
 [
     {
-        "line": 3,
+        "line": 7,
         "column": 27,
         "msg": "Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator."
     },
     {
-        "line": 5,
+        "line": 9,
         "column": 21,
         "msg": "Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator."
     },
     {
-        "line": 10,
+        "line": 14,
         "column": 27,
         "msg": "Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator."
     },
     {
-        "line": 12,
+        "line": 16,
         "column": 21,
         "msg": "Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator."
     }

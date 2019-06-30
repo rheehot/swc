@@ -1,41 +1,41 @@
 [
     {
-        "line": 8,
+        "line": 10,
         "column": 15,
         "msg": "Tuple type '[string, number]' of length '2' has no element at index '2'."
     },
     {
-        "line": 13,
+        "line": 15,
         "column": 15,
         "msg": "Property '2' does not exist on type 'T2'."
     },
     {
-        "line": 27,
+        "line": 29,
         "column": 20,
         "msg": "Tuple type '[string, number]' of length '2' has no element at index '2'."
     },
     {
-        "line": 28,
+        "line": 30,
         "column": 20,
         "msg": "Property '2' does not exist on type 'T2'."
     },
     {
-        "line": 31,
+        "line": 33,
         "column": 16,
         "msg": "Tuple type '[string, number]' of length '2' has no element at index '2'."
     },
     {
-        "line": 32,
+        "line": 34,
         "column": 16,
         "msg": "Property '2' does not exist on type 'T2'."
     },
     {
-        "line": 37,
+        "line": 39,
         "column": 18,
         "msg": "Tuple type '[string, number]' of length '2' has no element at index '2'."
     },
     {
-        "line": 41,
+        "line": 43,
         "column": 18,
         "msg": "Property '2' does not exist on type 'T2'."
     }

@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 5,
         "column": 11,
         "msg": "An object member cannot be declared optional."
     },
     {
-        "line": 3,
+        "line": 5,
         "column": 16,
         "msg": "An object member cannot be declared optional."
     }

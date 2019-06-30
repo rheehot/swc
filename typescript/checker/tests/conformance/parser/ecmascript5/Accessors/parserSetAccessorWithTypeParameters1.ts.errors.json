@@ -1,6 +1,6 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 8,
         "msg": "An accessor cannot have type parameters."
     }

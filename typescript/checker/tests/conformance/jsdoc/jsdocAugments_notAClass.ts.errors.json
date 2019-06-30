@@ -1,6 +1,6 @@
 [
     {
-        "line": 3,
+        "line": 8,
         "column": 10,
         "msg": "JSDoc '@augments' is not attached to a class."
     }

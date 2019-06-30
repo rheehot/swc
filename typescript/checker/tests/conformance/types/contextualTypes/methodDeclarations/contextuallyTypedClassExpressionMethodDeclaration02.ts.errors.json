@@ -1,31 +1,31 @@
 [
     {
-        "line": 20,
+        "line": 22,
         "column": 17,
         "msg": "Parameter 'arg' implicitly has an 'any' type."
     },
     {
-        "line": 23,
+        "line": 25,
         "column": 17,
         "msg": "Parameter 'arg' implicitly has an 'any' type."
     },
     {
-        "line": 31,
+        "line": 33,
         "column": 20,
         "msg": "Parameter 'arg' implicitly has an 'any' type."
     },
     {
-        "line": 34,
+        "line": 36,
         "column": 20,
         "msg": "Parameter 'arg' implicitly has an 'any' type."
     },
     {
-        "line": 42,
+        "line": 44,
         "column": 29,
         "msg": "Parameter 'arg' implicitly has an 'any' type."
     },
     {
-        "line": 45,
+        "line": 47,
         "column": 29,
         "msg": "Parameter 'arg' implicitly has an 'any' type."
     }

@@ -1,6 +1,6 @@
 [
     {
-        "line": 8,
+        "line": 10,
         "column": 9,
         "msg": "Type '\"string\"' is not assignable to type 'number'."
     }

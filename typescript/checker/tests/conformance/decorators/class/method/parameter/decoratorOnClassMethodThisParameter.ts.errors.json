@@ -1,11 +1,11 @@
 [
     {
-        "line": 4,
+        "line": 7,
         "column": 17,
         "msg": "Identifier expected."
     },
     {
-        "line": 4,
+        "line": 7,
         "column": 17,
         "msg": "A 'this' parameter must be the first parameter."
     }
