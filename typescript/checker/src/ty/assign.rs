@@ -98,8 +98,8 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                                             _ => {}
                                         },
 
-                                        TypeElement::Method(ref el) => match rm {
-                                            TypeElement::Method(ref r_el) => unimplemented!(
+                                        TypeElement::Method(..) => match rm {
+                                            TypeElement::Method(..) => unimplemented!(
                                                 "assignment: method property in type literal"
                                             ),
                                             _ => {}
@@ -132,6 +132,22 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                 _ => {}
             }
         }};
+    }
+
+    match *to.normalize() {
+        // let a: any = 'foo'
+        Type::Keyword(TsKeywordType {
+            kind: TsKeywordTypeKind::TsAnyKeyword,
+            ..
+        }) => return Ok(()),
+
+        // Anything is assignable to unknown
+        Type::Keyword(TsKeywordType {
+            kind: TsKeywordTypeKind::TsUnknownKeyword,
+            ..
+        }) => return Ok(()),
+
+        _ => {}
     }
 
     match *rhs.normalize() {
@@ -267,18 +283,6 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
 
             return Ok(());
         }
-
-        // let a: any = 'foo'
-        Type::Keyword(TsKeywordType {
-            kind: TsKeywordTypeKind::TsAnyKeyword,
-            ..
-        }) => return Ok(()),
-
-        // let a: unknown = undefined
-        Type::Keyword(TsKeywordType {
-            kind: TsKeywordTypeKind::TsUnknownKeyword,
-            ..
-        }) => return Ok(()),
 
         Type::Keyword(TsKeywordType {
             kind: TsKeywordTypeKind::TsObjectKeyword,
