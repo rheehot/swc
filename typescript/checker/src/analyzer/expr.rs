@@ -1160,25 +1160,19 @@ impl Analyzer<'_, '_> {
                                             return Ok(ty.static_cast());
                                         }
 
+                                        // Expand type parameters.
                                         Type::Alias(Alias {
                                             type_params: Some(ref tps),
                                             ref ty,
                                             ..
                                         }) => {
-                                            // Expand type parameters.
-
                                             let ty = expand_type_params(
                                                 type_params.as_ref(),
                                                 tps,
                                                 &**ty,
                                             )?;
 
-                                            unimplemented!(
-                                                "expanding type alias with type params.\nType: \
-                                                 {:#?}\nParams: {:#?}",
-                                                ty,
-                                                tps
-                                            )
+                                            return Ok(ty.into_owned().owned());
                                         }
 
                                         _ => unimplemented!(

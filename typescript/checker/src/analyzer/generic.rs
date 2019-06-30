@@ -1,6 +1,6 @@
 use crate::{
     errors::Error,
-    ty::{Conditional, Type, TypeParamDecl},
+    ty::{Conditional, Type, TypeParamDecl, TypeRefExt},
     util::IntoCow,
 };
 use std::borrow::Cow;
@@ -21,8 +21,14 @@ pub(super) fn expand_type_params<'a, 'b>(
                 for (idx, p) in decl.params.iter().enumerate() {
                     if p.name == *sym {
                         if let Some(i) = i {
-                            return Ok(Type::from(i.params[idx].clone()).into_cow());
+                            return Ok(Type::from(i.params[idx].clone()).owned());
                         }
+
+                        if let Some(ref default) = p.default {
+                            return Ok(default.to_static().owned());
+                        }
+
+                        unimplemented!("expand_type_param: type inference")
                     }
                 }
 
@@ -40,6 +46,13 @@ pub(super) fn expand_type_params<'a, 'b>(
             ..
         }) => {
             let check_type = expand_type_params(i, decl, check_type)?;
+            if let Some(v) = extends(&check_type, &extends_type) {
+                return Ok(if v {
+                    *true_type.clone()
+                } else {
+                    *false_type.clone()
+                });
+            }
 
             //
             unimplemented!(
@@ -57,4 +70,23 @@ pub(super) fn expand_type_params<'a, 'b>(
     }
 
     unimplemented!("expand_type_params({:#?})", ty)
+}
+
+/// Returns `Some(true)` if `child` extends `parent`.
+fn extends(child: &Type, parent: &Type) -> Option<bool> {
+    match *parent {
+        Type::Keyword(TsKeywordType {
+            kind: TsKeywordTypeKind::TsUnknownKeyword,
+            ..
+        }) => return Some(false),
+
+        Type::Keyword(TsKeywordType {
+            kind: TsKeywordTypeKind::TsAnyKeyword,
+            ..
+        }) => return Some(true),
+
+        _ => {}
+    }
+
+    None
 }
