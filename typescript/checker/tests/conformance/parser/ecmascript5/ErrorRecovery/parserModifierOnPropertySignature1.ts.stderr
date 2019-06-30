@@ -1,0 +1,6 @@
+error: Expected Semi, got Some(Word(biz))
+ --> $DIR/tests/conformance/parser/ecmascript5/ErrorRecovery/parserModifierOnPropertySignature1.ts:2:12
+  |
+2 |     public biz;
+  |            ^^^
+

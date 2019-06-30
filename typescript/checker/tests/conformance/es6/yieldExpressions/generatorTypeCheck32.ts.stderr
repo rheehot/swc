@@ -1,0 +1,6 @@
+error: Expected Semi, got Some(Word(s))
+ --> $DIR/tests/conformance/es6/yieldExpressions/generatorTypeCheck32.ts:3:35
+  |
+3 | var f: () => number = () => yield s;
+  |                                   ^
+

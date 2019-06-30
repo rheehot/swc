@@ -1,0 +1,6 @@
+error: Parenthized expression cannot be empty
+ --> $DIR/tests/conformance/parser/ecmascript5/ErrorRecovery/parserEmptyParenthesizedExpression1.ts:2:4
+  |
+2 |    ().toString();
+  |    ^^
+

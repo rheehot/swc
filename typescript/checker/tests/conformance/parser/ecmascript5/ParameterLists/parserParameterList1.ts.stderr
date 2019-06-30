@@ -1,0 +1,6 @@
+error: Expected RParen, got Some(Comma)
+ --> $DIR/tests/conformance/parser/ecmascript5/ParameterLists/parserParameterList1.ts:2:10
+  |
+2 |    F(...A, B) { }
+  |          ^
+

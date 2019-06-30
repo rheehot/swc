@@ -1,0 +1,6 @@
+error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'public', 'static', or 'yield' cannot be used as an identifier in strict mode
+ --> $DIR/tests/conformance/es6/functionDeclarations/FunctionDeclaration3_es6.ts:2:12
+  |
+2 | function f(yield = yield) {
+  |            ^^^^^
+

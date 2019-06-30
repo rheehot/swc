@@ -1,0 +1,6 @@
+error: Unexpected token Some(Word(intI))
+ --> $DIR/tests/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic7.ts:3:15
+  |
+3 | static public intI() {}
+  |               ^^^^
+

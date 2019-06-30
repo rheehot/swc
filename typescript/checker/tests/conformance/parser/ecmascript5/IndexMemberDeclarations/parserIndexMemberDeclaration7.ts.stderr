@@ -1,0 +1,6 @@
+error: Expected RBracket, got Some(Colon)
+ --> $DIR/tests/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration7.ts:2:13
+  |
+2 |    public [x: string]: string;
+  |             ^
+

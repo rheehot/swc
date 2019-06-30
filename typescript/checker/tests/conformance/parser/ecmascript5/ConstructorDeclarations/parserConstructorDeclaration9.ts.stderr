@@ -1,0 +1,6 @@
+error: Expected LParen, got Some(BinOp(Lt))
+ --> $DIR/tests/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration9.ts:2:14
+  |
+2 |   constructor<T>() { }
+  |              ^
+

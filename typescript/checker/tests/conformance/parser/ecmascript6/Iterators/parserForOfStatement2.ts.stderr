@@ -1,0 +1,6 @@
+error: Expected Semi, got Some(Word(X))
+ --> $DIR/tests/conformance/parser/ecmascript6/Iterators/parserForOfStatement2.ts:2:13
+  |
+2 | for (var of X) {
+  |             ^
+

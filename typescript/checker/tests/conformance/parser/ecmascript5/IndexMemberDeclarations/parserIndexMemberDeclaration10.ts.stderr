@@ -1,0 +1,6 @@
+error: Unexpected token Some(LBracket)
+ --> $DIR/tests/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration10.ts:2:18
+  |
+2 |    static static [x: string]: string;
+  |                  ^
+

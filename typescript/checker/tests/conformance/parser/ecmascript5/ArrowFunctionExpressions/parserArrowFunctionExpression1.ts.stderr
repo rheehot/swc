@@ -1,0 +1,6 @@
+error: Expected Comma, got Some(Word(x))
+ --> $DIR/tests/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression1.ts:1:17
+  |
+1 | var v = (public x: string) => { };
+  |                 ^
+

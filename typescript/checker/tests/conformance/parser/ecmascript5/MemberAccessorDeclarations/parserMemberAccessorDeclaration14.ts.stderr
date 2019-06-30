@@ -1,0 +1,6 @@
+error: Expected RParen, got Some(Comma)
+ --> $DIR/tests/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration14.ts:3:21
+  |
+3 |    set Foo(a: number, b: number) { }
+  |                     ^
+

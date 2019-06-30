@@ -1,0 +1,6 @@
+error: Parenthized expression cannot be empty
+ --> $DIR/tests/conformance/parser/ecmascript5/ErrorRecovery/Expressions/parserErrorRecovery_Expression1.ts:1:9
+  |
+1 | var v = ()({});
+  |         ^^
+

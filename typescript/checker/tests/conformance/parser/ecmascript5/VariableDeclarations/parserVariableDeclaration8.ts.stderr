@@ -1,0 +1,6 @@
+error: Unexpected token Some(Semi)
+ --> $DIR/tests/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration8.ts:1:5
+  |
+1 | var ;
+  |     ^
+

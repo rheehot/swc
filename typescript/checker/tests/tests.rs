@@ -121,7 +121,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             || input.contains("@filename")
             || input.contains("@Filename")
             || input.contains("@module")
-            || (mode == Mode::Conformance && !file_name.contains("types/unknown/unknownType1"));
+            || (mode == Mode::Conformance && !file_name.contains(""));
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);
@@ -152,8 +152,9 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
         Mode::Conformance => {
             let fname = file_name.file_name().unwrap();
             let errors_file =
-                file_name.with_file_name(format!("{}.errors.txt", fname.to_string_lossy()));
+                file_name.with_file_name(format!("{}.errors.json", fname.to_string_lossy()));
             if !errors_file.exists() {
+                println!("errors file does not exists: {}", errors_file.display());
                 Some(vec![])
             } else {
                 let errors: Vec<Error> = serde_json::from_reader(

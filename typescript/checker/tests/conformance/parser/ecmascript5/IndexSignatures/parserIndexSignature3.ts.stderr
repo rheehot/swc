@@ -1,0 +1,6 @@
+error: Unexpected token Some(RBracket)
+ --> $DIR/tests/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature3.ts:2:6
+  |
+2 |   [a?]
+  |      ^
+

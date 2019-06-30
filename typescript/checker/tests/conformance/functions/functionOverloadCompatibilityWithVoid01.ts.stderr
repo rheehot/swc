@@ -1,0 +1,45 @@
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            146,
+        ),
+        hi: BytePos(
+            153,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    134,
+                ),
+                hi: BytePos(
+                    138,
+                ),
+                ctxt: #0,
+            },
+            kind: TsVoidKeyword,
+        },
+    ),
+    right: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    146,
+                ),
+                hi: BytePos(
+                    153,
+                ),
+                ctxt: #0,
+            },
+            kind: TsUndefinedKeyword,
+        },
+    ),
+    cause: [],
+}
+ --> $DIR/tests/conformance/functions/functionOverloadCompatibilityWithVoid01.ts:3:5
+  |
+3 |     return;
+  |     ^^^^^^^
+

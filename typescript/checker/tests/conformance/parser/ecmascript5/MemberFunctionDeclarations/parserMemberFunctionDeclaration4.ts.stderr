@@ -1,0 +1,6 @@
+error: Unexpected token Some(Word(Foo))
+ --> $DIR/tests/conformance/parser/ecmascript5/MemberFunctionDeclarations/parserMemberFunctionDeclaration4.ts:2:12
+  |
+2 |     export Foo() { }
+  |            ^^^
+

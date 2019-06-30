@@ -1,0 +1,12 @@
+error: Expected ';', '}' or <eof>
+ --> $DIR/tests/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement6.ts:5:10
+  |
+5 |   public f2() {
+  |          ^^
+  |
+note: This is the expression part of an expression statement
+ --> $DIR/tests/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement6.ts:5:3
+  |
+5 |   public f2() {
+  |   ^^^^^^
+

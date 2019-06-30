@@ -1,0 +1,6 @@
+error: 'eval' and 'arguments' cannot be used as a binding identifier in string mode
+ --> $DIR/tests/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments16.ts:4:9
+  |
+4 |     var arguments = "hello";
+  |         ^^^^^^^^^
+

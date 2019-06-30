@@ -1,0 +1,6 @@
+error: Invalid unciode code point
+ --> $DIR/tests/conformance/es6/unicodeExtendedEscapes/unicodeExtendedEscapesInStrings07_ES6.ts:5:13
+  |
+5 | var x = "\u{110000}";
+  |             ^^^^^^
+

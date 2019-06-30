@@ -1,0 +1,6 @@
+error: Unexpected token Some(DotDotDot)
+ --> $DIR/tests/conformance/parser/ecmascript5/RegressionTests/parser509668.ts:3:23
+  |
+3 |   constructor (public ...args: string[]) { }
+  |                       ^^^
+

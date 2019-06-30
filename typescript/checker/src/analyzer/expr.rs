@@ -1,6 +1,4 @@
-use super::{
-    control_flow::RemoveTypes, export::pat_to_ts_fn_param, generic::expand_type_params, Analyzer,
-};
+use super::{control_flow::RemoveTypes, export::pat_to_ts_fn_param, Analyzer};
 use crate::{
     builtin_types,
     errors::Error,
@@ -1166,7 +1164,7 @@ impl Analyzer<'_, '_> {
                                             ref ty,
                                             ..
                                         }) => {
-                                            let ty = expand_type_params(
+                                            let ty = self.expand_type_params(
                                                 type_params.as_ref(),
                                                 tps,
                                                 Cow::Borrowed(&**ty),

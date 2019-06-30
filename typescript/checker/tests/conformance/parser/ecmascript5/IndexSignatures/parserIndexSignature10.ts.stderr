@@ -1,0 +1,6 @@
+error: Expected RBracket, got Some(Comma)
+ --> $DIR/tests/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature10.ts:2:6
+  |
+2 |    [a, b]: number
+  |      ^
+

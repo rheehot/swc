@@ -1,0 +1,927 @@
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            293,
+        ),
+        hi: BytePos(
+            294,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    286,
+                ),
+                hi: BytePos(
+                    290,
+                ),
+                ctxt: #0,
+            },
+            kind: TsVoidKeyword,
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    297,
+                ),
+                hi: BytePos(
+                    298,
+                ),
+                ctxt: #0,
+            },
+            lit: Number(
+                Number {
+                    span: Span {
+                        lo: BytePos(
+                            297,
+                        ),
+                        hi: BytePos(
+                            298,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: 1.0,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+ --> $DIR/tests/conformance/types/primitives/void/invalidVoidValues.ts:2:1
+  |
+2 | x = 1;
+  | ^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            301,
+        ),
+        hi: BytePos(
+            302,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    286,
+                ),
+                hi: BytePos(
+                    290,
+                ),
+                ctxt: #0,
+            },
+            kind: TsVoidKeyword,
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    305,
+                ),
+                hi: BytePos(
+                    307,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            305,
+                        ),
+                        hi: BytePos(
+                            307,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+ --> $DIR/tests/conformance/types/primitives/void/invalidVoidValues.ts:3:1
+  |
+3 | x = '';
+  | ^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            310,
+        ),
+        hi: BytePos(
+            311,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    286,
+                ),
+                hi: BytePos(
+                    290,
+                ),
+                ctxt: #0,
+            },
+            kind: TsVoidKeyword,
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    314,
+                ),
+                hi: BytePos(
+                    318,
+                ),
+                ctxt: #0,
+            },
+            lit: Bool(
+                Bool {
+                    span: Span {
+                        lo: BytePos(
+                            314,
+                        ),
+                        hi: BytePos(
+                            318,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: true,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+ --> $DIR/tests/conformance/types/primitives/void/invalidVoidValues.ts:4:1
+  |
+4 | x = true;
+  | ^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            337,
+        ),
+        hi: BytePos(
+            338,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    286,
+                ),
+                hi: BytePos(
+                    290,
+                ),
+                ctxt: #0,
+            },
+            kind: TsVoidKeyword,
+        },
+    ),
+    right: Enum(
+        TsEnumDecl {
+            span: Span {
+                lo: BytePos(
+                    323,
+                ),
+                hi: BytePos(
+                    335,
+                ),
+                ctxt: #0,
+            },
+            declare: false,
+            is_const: false,
+            id: Ident {
+                span: Span {
+                    lo: BytePos(
+                        328,
+                    ),
+                    hi: BytePos(
+                        329,
+                    ),
+                    ctxt: #0,
+                },
+                sym: Atom('E' type=inline),
+                type_ann: None,
+                optional: false,
+            },
+            members: [
+                TsEnumMember {
+                    span: Span {
+                        lo: BytePos(
+                            332,
+                        ),
+                        hi: BytePos(
+                            333,
+                        ),
+                        ctxt: #0,
+                    },
+                    id: Ident(
+                        Ident {
+                            span: Span {
+                                lo: BytePos(
+                                    332,
+                                ),
+                                hi: BytePos(
+                                    333,
+                                ),
+                                ctxt: #0,
+                            },
+                            sym: Atom('A' type=inline),
+                            type_ann: None,
+                            optional: false,
+                        },
+                    ),
+                    init: None,
+                },
+            ],
+        },
+    ),
+    cause: [],
+}
+ --> $DIR/tests/conformance/types/primitives/void/invalidVoidValues.ts:7:1
+  |
+7 | x = E;
+  | ^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            345,
+        ),
+        hi: BytePos(
+            346,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    286,
+                ),
+                hi: BytePos(
+                    290,
+                ),
+                ctxt: #0,
+            },
+            kind: TsVoidKeyword,
+        },
+    ),
+    right: EnumVariant(
+        EnumVariant {
+            span: Span {
+                lo: BytePos(
+                    350,
+                ),
+                hi: BytePos(
+                    352,
+                ),
+                ctxt: #0,
+            },
+            enum_name: Atom('E' type=inline),
+            name: Atom('A' type=inline),
+        },
+    ),
+    cause: [],
+}
+ --> $DIR/tests/conformance/types/primitives/void/invalidVoidValues.ts:8:1
+  |
+8 | x = E.A;
+  | ^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            393,
+        ),
+        hi: BytePos(
+            394,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    286,
+                ),
+                hi: BytePos(
+                    290,
+                ),
+                ctxt: #0,
+            },
+            kind: TsVoidKeyword,
+        },
+    ),
+    right: Class(
+        Class {
+            span: Span {
+                lo: BytePos(
+                    357,
+                ),
+                hi: BytePos(
+                    380,
+                ),
+                ctxt: #0,
+            },
+            decorators: [],
+            body: [
+                ClassProp(
+                    ClassProp {
+                        span: Span {
+                            lo: BytePos(
+                                367,
+                            ),
+                            hi: BytePos(
+                                378,
+                            ),
+                            ctxt: #0,
+                        },
+                        key: Ident(
+                            Ident {
+                                span: Span {
+                                    lo: BytePos(
+                                        367,
+                                    ),
+                                    hi: BytePos(
+                                        370,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                sym: Atom('foo' type=inline),
+                                type_ann: None,
+                                optional: false,
+                            },
+                        ),
+                        value: None,
+                        type_ann: Some(
+                            TsTypeAnn {
+                                span: Span {
+                                    lo: BytePos(
+                                        370,
+                                    ),
+                                    hi: BytePos(
+                                        378,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                type_ann: TsKeywordType(
+                                    TsKeywordType {
+                                        span: Span {
+                                            lo: BytePos(
+                                                372,
+                                            ),
+                                            hi: BytePos(
+                                                378,
+                                            ),
+                                            ctxt: #0,
+                                        },
+                                        kind: TsStringKeyword,
+                                    },
+                                ),
+                            },
+                        ),
+                        is_static: false,
+                        decorators: [],
+                        computed: false,
+                        accessibility: None,
+                        is_abstract: false,
+                        is_optional: false,
+                        readonly: false,
+                        definite: false,
+                    },
+                ),
+            ],
+            super_class: None,
+            is_abstract: false,
+            type_params: None,
+            super_type_params: None,
+            implements: [],
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/types/primitives/void/invalidVoidValues.ts:12:1
+   |
+12 | x = a;
+   | ^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            443,
+        ),
+        hi: BytePos(
+            444,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    286,
+                ),
+                hi: BytePos(
+                    290,
+                ),
+                ctxt: #0,
+            },
+            kind: TsVoidKeyword,
+        },
+    ),
+    right: Interface(
+        Interface {
+            span: Span {
+                lo: BytePos(
+                    413,
+                ),
+                hi: BytePos(
+                    430,
+                ),
+                ctxt: #0,
+            },
+            type_params: None,
+            extends: [],
+            body: [
+                Property(
+                    PropertySignature {
+                        span: Span {
+                            lo: BytePos(
+                                417,
+                            ),
+                            hi: BytePos(
+                                428,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Ident(
+                            Ident {
+                                span: Span {
+                                    lo: BytePos(
+                                        417,
+                                    ),
+                                    hi: BytePos(
+                                        420,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                sym: Atom('foo' type=inline),
+                                type_ann: None,
+                                optional: false,
+                            },
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        type_ann: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            422,
+                                        ),
+                                        hi: BytePos(
+                                            428,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+            ],
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/types/primitives/void/invalidVoidValues.ts:16:1
+   |
+16 | x = b;
+   | ^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            453,
+        ),
+        hi: BytePos(
+            454,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    286,
+                ),
+                hi: BytePos(
+                    290,
+                ),
+                ctxt: #0,
+            },
+            kind: TsVoidKeyword,
+        },
+    ),
+    right: TypeLit(
+        TypeLit {
+            span: Span {
+                lo: BytePos(
+                    457,
+                ),
+                hi: BytePos(
+                    467,
+                ),
+                ctxt: #0,
+            },
+            members: [
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                459,
+                            ),
+                            hi: BytePos(
+                                465,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Ident(
+                            Ident {
+                                span: Span {
+                                    lo: BytePos(
+                                        459,
+                                    ),
+                                    hi: BytePos(
+                                        460,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                sym: Atom('f' type=inline),
+                                type_ann: None,
+                                optional: false,
+                            },
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        ret_ty: None,
+                        type_params: None,
+                    },
+                ),
+            ],
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/types/primitives/void/invalidVoidValues.ts:18:1
+   |
+18 | x = { f() {} }
+   | ^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            503,
+        ),
+        hi: BytePos(
+            504,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    286,
+                ),
+                hi: BytePos(
+                    290,
+                ),
+                ctxt: #0,
+            },
+            kind: TsVoidKeyword,
+        },
+    ),
+    right: Module(
+        TsModuleDecl {
+            span: Span {
+                lo: BytePos(
+                    471,
+                ),
+                hi: BytePos(
+                    501,
+                ),
+                ctxt: #0,
+            },
+            declare: false,
+            global: false,
+            id: Ident(
+                Ident {
+                    span: Span {
+                        lo: BytePos(
+                            478,
+                        ),
+                        hi: BytePos(
+                            479,
+                        ),
+                        ctxt: #0,
+                    },
+                    sym: Atom('M' type=inline),
+                    type_ann: None,
+                    optional: false,
+                },
+            ),
+            body: Some(
+                TsModuleBlock(
+                    TsModuleBlock {
+                        span: Span {
+                            lo: BytePos(
+                                480,
+                            ),
+                            hi: BytePos(
+                                501,
+                            ),
+                            ctxt: #0,
+                        },
+                        body: [
+                            ModuleDecl(
+                                ExportDecl(
+                                    ExportDecl {
+                                        span: Span {
+                                            lo: BytePos(
+                                                482,
+                                            ),
+                                            hi: BytePos(
+                                                499,
+                                            ),
+                                            ctxt: #0,
+                                        },
+                                        decl: Var(
+                                            VarDecl {
+                                                span: Span {
+                                                    lo: BytePos(
+                                                        489,
+                                                    ),
+                                                    hi: BytePos(
+                                                        499,
+                                                    ),
+                                                    ctxt: #0,
+                                                },
+                                                kind: "var",
+                                                declare: false,
+                                                decls: [
+                                                    VarDeclarator {
+                                                        span: Span {
+                                                            lo: BytePos(
+                                                                493,
+                                                            ),
+                                                            hi: BytePos(
+                                                                498,
+                                                            ),
+                                                            ctxt: #0,
+                                                        },
+                                                        name: Ident(
+                                                            Ident {
+                                                                span: Span {
+                                                                    lo: BytePos(
+                                                                        493,
+                                                                    ),
+                                                                    hi: BytePos(
+                                                                        494,
+                                                                    ),
+                                                                    ctxt: #0,
+                                                                },
+                                                                sym: Atom('x' type=inline),
+                                                                type_ann: None,
+                                                                optional: false,
+                                                            },
+                                                        ),
+                                                        init: Some(
+                                                            Lit(
+                                                                Num(
+                                                                    Number {
+                                                                        span: Span {
+                                                                            lo: BytePos(
+                                                                                497,
+                                                                            ),
+                                                                            hi: BytePos(
+                                                                                498,
+                                                                            ),
+                                                                            ctxt: #0,
+                                                                        },
+                                                                        value: 1.0,
+                                                                    },
+                                                                ),
+                                                            ),
+                                                        ),
+                                                        definite: false,
+                                                    },
+                                                ],
+                                            },
+                                        ),
+                                    },
+                                ),
+                            ),
+                        ],
+                    },
+                ),
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/types/primitives/void/invalidVoidValues.ts:21:1
+   |
+21 | x = M;
+   | ^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            540,
+        ),
+        hi: BytePos(
+            541,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/types/primitives/void/invalidVoidValues.ts:24:5
+   |
+24 |     x = a;
+   |     ^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            551,
+        ),
+        hi: BytePos(
+            552,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    286,
+                ),
+                hi: BytePos(
+                    290,
+                ),
+                ctxt: #0,
+            },
+            kind: TsVoidKeyword,
+        },
+    ),
+    right: Function(
+        Function {
+            span: Span {
+                lo: BytePos(
+                    513,
+                ),
+                hi: BytePos(
+                    549,
+                ),
+                ctxt: #0,
+            },
+            type_params: Some(
+                TypeParamDecl {
+                    span: Span {
+                        lo: BytePos(
+                            523,
+                        ),
+                        hi: BytePos(
+                            526,
+                        ),
+                        ctxt: #0,
+                    },
+                    params: [
+                        TypeParam {
+                            span: Span {
+                                lo: BytePos(
+                                    524,
+                                ),
+                                hi: BytePos(
+                                    525,
+                                ),
+                                ctxt: #0,
+                            },
+                            name: Atom('T' type=inline),
+                            constraint: None,
+                            default: None,
+                        },
+                    ],
+                },
+            ),
+            params: [
+                Ident(
+                    Ident {
+                        span: Span {
+                            lo: BytePos(
+                                527,
+                            ),
+                            hi: BytePos(
+                                528,
+                            ),
+                            ctxt: #0,
+                        },
+                        sym: Atom('a' type=inline),
+                        type_ann: Some(
+                            TsTypeAnn {
+                                span: Span {
+                                    lo: BytePos(
+                                        528,
+                                    ),
+                                    hi: BytePos(
+                                        531,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                type_ann: TsTypeRef(
+                                    TsTypeRef {
+                                        span: Span {
+                                            lo: BytePos(
+                                                530,
+                                            ),
+                                            hi: BytePos(
+                                                531,
+                                            ),
+                                            ctxt: #0,
+                                        },
+                                        type_name: Ident(
+                                            Ident {
+                                                span: Span {
+                                                    lo: BytePos(
+                                                        530,
+                                                    ),
+                                                    hi: BytePos(
+                                                        531,
+                                                    ),
+                                                    ctxt: #0,
+                                                },
+                                                sym: Atom('T' type=inline),
+                                                type_ann: None,
+                                                optional: false,
+                                            },
+                                        ),
+                                        type_params: None,
+                                    },
+                                ),
+                            },
+                        ),
+                        optional: false,
+                    },
+                ),
+            ],
+            ret_ty: Keyword(
+                TsKeywordType {
+                    span: Span {
+                        lo: BytePos(
+                            533,
+                        ),
+                        hi: BytePos(
+                            549,
+                        ),
+                        ctxt: #0,
+                    },
+                    kind: TsAnyKeyword,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/types/primitives/void/invalidVoidValues.ts:26:1
+   |
+26 | x = f;
+   | ^
+

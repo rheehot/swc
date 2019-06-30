@@ -1,0 +1,231 @@
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            584,
+        ),
+        hi: BytePos(
+            642,
+        ),
+        ctxt: #0,
+    },
+    left: TypeLit(
+        TypeLit {
+            span: Span {
+                lo: BytePos(
+                    587,
+                ),
+                hi: BytePos(
+                    600,
+                ),
+                ctxt: #0,
+            },
+            members: [
+                Property(
+                    PropertySignature {
+                        span: Span {
+                            lo: BytePos(
+                                589,
+                            ),
+                            hi: BytePos(
+                                598,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Ident(
+                            Ident {
+                                span: Span {
+                                    lo: BytePos(
+                                        589,
+                                    ),
+                                    hi: BytePos(
+                                        590,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                sym: Atom('a' type=inline),
+                                type_ann: None,
+                                optional: false,
+                            },
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        type_ann: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            592,
+                                        ),
+                                        hi: BytePos(
+                                            598,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+            ],
+        },
+    ),
+    right: TypeLit(
+        TypeLit {
+            span: Span {
+                lo: BytePos(
+                    624,
+                ),
+                hi: BytePos(
+                    642,
+                ),
+                ctxt: #0,
+            },
+            members: [
+                Property(
+                    PropertySignature {
+                        span: Span {
+                            lo: BytePos(
+                                626,
+                            ),
+                            hi: BytePos(
+                                631,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Ident(
+                            Ident {
+                                span: Span {
+                                    lo: BytePos(
+                                        626,
+                                    ),
+                                    hi: BytePos(
+                                        627,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                sym: Atom('a' type=inline),
+                                type_ann: None,
+                                optional: false,
+                            },
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        type_ann: None,
+                        type_params: None,
+                    },
+                ),
+                Property(
+                    PropertySignature {
+                        span: Span {
+                            lo: BytePos(
+                                633,
+                            ),
+                            hi: BytePos(
+                                640,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Ident(
+                            Ident {
+                                span: Span {
+                                    lo: BytePos(
+                                        633,
+                                    ),
+                                    hi: BytePos(
+                                        634,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                sym: Atom('b' type=inline),
+                                type_ann: None,
+                                optional: false,
+                            },
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        type_ann: None,
+                        type_params: None,
+                    },
+                ),
+            ],
+        },
+    ),
+    cause: [
+        MissingFields {
+            span: Span {
+                lo: BytePos(
+                    584,
+                ),
+                hi: BytePos(
+                    642,
+                ),
+                ctxt: #0,
+            },
+            fields: [
+                Property(
+                    PropertySignature {
+                        span: Span {
+                            lo: BytePos(
+                                589,
+                            ),
+                            hi: BytePos(
+                                598,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Ident(
+                            Ident {
+                                span: Span {
+                                    lo: BytePos(
+                                        589,
+                                    ),
+                                    hi: BytePos(
+                                        590,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                sym: Atom('a' type=inline),
+                                type_ann: None,
+                                optional: false,
+                            },
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        type_ann: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            592,
+                                        ),
+                                        hi: BytePos(
+                                            598,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+            ],
+        },
+    ],
+}
+ --> $DIR/tests/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts:6:5
+  |
+6 | var r: { a: string } = { a: '', b: 123 } || { a: '', b: true };
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

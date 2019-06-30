@@ -1,0 +1,6 @@
+error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'public', 'static', or 'yield' cannot be used as an identifier in strict mode
+ --> $DIR/tests/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration15.ts:3:12
+  |
+3 |    set Foo(public a: number) { }
+  |            ^^^^^^
+

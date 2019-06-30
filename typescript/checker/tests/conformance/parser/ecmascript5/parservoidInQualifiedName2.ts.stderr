@@ -1,0 +1,6 @@
+error: Expected ident
+ --> $DIR/tests/conformance/parser/ecmascript5/parservoidInQualifiedName2.ts:1:11
+  |
+1 | var v : x.void;
+  |           ^^^^
+

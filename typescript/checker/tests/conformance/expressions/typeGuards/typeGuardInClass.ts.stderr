@@ -1,0 +1,256 @@
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            383,
+        ),
+        hi: BytePos(
+            396,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    386,
+                ),
+                hi: BytePos(
+                    392,
+                ),
+                ctxt: #0,
+            },
+            kind: TsStringKeyword,
+        },
+    ),
+    right: Union(
+        Union {
+            span: Span {
+                lo: BytePos(
+                    271,
+                ),
+                hi: BytePos(
+                    286,
+                ),
+                ctxt: #0,
+            },
+            types: [
+                Keyword(
+                    TsKeywordType {
+                        span: Span {
+                            lo: BytePos(
+                                271,
+                            ),
+                            hi: BytePos(
+                                277,
+                            ),
+                            ctxt: #0,
+                        },
+                        kind: TsStringKeyword,
+                    },
+                ),
+                Keyword(
+                    TsKeywordType {
+                        span: Span {
+                            lo: BytePos(
+                                280,
+                            ),
+                            hi: BytePos(
+                                286,
+                            ),
+                            ctxt: #0,
+                        },
+                        kind: TsNumberKeyword,
+                    },
+                ),
+            ],
+        },
+    ),
+    cause: [
+        UnionError {
+            span: Span {
+                lo: BytePos(
+                    271,
+                ),
+                hi: BytePos(
+                    286,
+                ),
+                ctxt: #0,
+            },
+            errors: [
+                AssignFailed {
+                    span: Span {
+                        lo: BytePos(
+                            271,
+                        ),
+                        hi: BytePos(
+                            286,
+                        ),
+                        ctxt: #0,
+                    },
+                    left: Keyword(
+                        TsKeywordType {
+                            span: Span {
+                                lo: BytePos(
+                                    386,
+                                ),
+                                hi: BytePos(
+                                    392,
+                                ),
+                                ctxt: #0,
+                            },
+                            kind: TsStringKeyword,
+                        },
+                    ),
+                    right: Keyword(
+                        TsKeywordType {
+                            span: Span {
+                                lo: BytePos(
+                                    280,
+                                ),
+                                hi: BytePos(
+                                    286,
+                                ),
+                                ctxt: #0,
+                            },
+                            kind: TsNumberKeyword,
+                        },
+                    ),
+                    cause: [],
+                },
+            ],
+        },
+    ],
+}
+ --> $DIR/tests/conformance/expressions/typeGuards/typeGuardInClass.ts:6:17
+  |
+6 |             let y: string = x;
+  |                 ^^^^^^^^^^^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            490,
+        ),
+        hi: BytePos(
+            503,
+        ),
+        ctxt: #0,
+    },
+    left: Keyword(
+        TsKeywordType {
+            span: Span {
+                lo: BytePos(
+                    493,
+                ),
+                hi: BytePos(
+                    499,
+                ),
+                ctxt: #0,
+            },
+            kind: TsNumberKeyword,
+        },
+    ),
+    right: Union(
+        Union {
+            span: Span {
+                lo: BytePos(
+                    271,
+                ),
+                hi: BytePos(
+                    286,
+                ),
+                ctxt: #0,
+            },
+            types: [
+                Keyword(
+                    TsKeywordType {
+                        span: Span {
+                            lo: BytePos(
+                                271,
+                            ),
+                            hi: BytePos(
+                                277,
+                            ),
+                            ctxt: #0,
+                        },
+                        kind: TsStringKeyword,
+                    },
+                ),
+                Keyword(
+                    TsKeywordType {
+                        span: Span {
+                            lo: BytePos(
+                                280,
+                            ),
+                            hi: BytePos(
+                                286,
+                            ),
+                            ctxt: #0,
+                        },
+                        kind: TsNumberKeyword,
+                    },
+                ),
+            ],
+        },
+    ),
+    cause: [
+        UnionError {
+            span: Span {
+                lo: BytePos(
+                    271,
+                ),
+                hi: BytePos(
+                    286,
+                ),
+                ctxt: #0,
+            },
+            errors: [
+                AssignFailed {
+                    span: Span {
+                        lo: BytePos(
+                            271,
+                        ),
+                        hi: BytePos(
+                            286,
+                        ),
+                        ctxt: #0,
+                    },
+                    left: Keyword(
+                        TsKeywordType {
+                            span: Span {
+                                lo: BytePos(
+                                    493,
+                                ),
+                                hi: BytePos(
+                                    499,
+                                ),
+                                ctxt: #0,
+                            },
+                            kind: TsNumberKeyword,
+                        },
+                    ),
+                    right: Keyword(
+                        TsKeywordType {
+                            span: Span {
+                                lo: BytePos(
+                                    271,
+                                ),
+                                hi: BytePos(
+                                    277,
+                                ),
+                                ctxt: #0,
+                            },
+                            kind: TsStringKeyword,
+                        },
+                    ),
+                    cause: [],
+                },
+            ],
+        },
+    ],
+}
+  --> $DIR/tests/conformance/expressions/typeGuards/typeGuardInClass.ts:13:17
+   |
+13 |             let y: number = x;
+   |                 ^^^^^^^^^^^^^
+

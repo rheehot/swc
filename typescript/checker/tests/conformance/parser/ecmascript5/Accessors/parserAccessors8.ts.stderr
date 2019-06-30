@@ -1,0 +1,6 @@
+error: Unexpected token Some(RParen)
+ --> $DIR/tests/conformance/parser/ecmascript5/Accessors/parserAccessors8.ts:2:19
+  |
+2 | var v = { set foo() { } }
+  |                   ^
+

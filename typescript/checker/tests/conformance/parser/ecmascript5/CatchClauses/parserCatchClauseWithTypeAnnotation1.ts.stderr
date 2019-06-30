@@ -1,0 +1,6 @@
+error: Expected RParen, got Some(Colon)
+ --> $DIR/tests/conformance/parser/ecmascript5/CatchClauses/parserCatchClauseWithTypeAnnotation1.ts:2:11
+  |
+2 | } catch (e: Error) {
+  |           ^
+

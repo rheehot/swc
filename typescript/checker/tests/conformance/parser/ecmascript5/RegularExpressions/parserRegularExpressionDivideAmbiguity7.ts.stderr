@@ -1,0 +1,13 @@
+error: Expected ';', '}' or <eof>
+ --> $DIR/tests/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity7.ts:2:3
+  |
+2 |  ){}
+  |   ^
+  |
+note: This is the expression part of an expression statement
+ --> $DIR/tests/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity7.ts:1:1
+  |
+1 | / (a/8
+2 | |  ){}
+  | |__^
+
