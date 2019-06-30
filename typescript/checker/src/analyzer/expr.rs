@@ -1178,9 +1178,10 @@ impl Analyzer<'_, '_> {
                                                 tps,
                                                 Cow::Borrowed(&**ty),
                                             )?;
+                                            let ty = self.expand_type(span, ty.static_cast())?;
 
                                             verify!(ty);
-                                            return Ok(ty.into_owned().owned());
+                                            return Ok(ty.to_static().owned());
                                         }
 
                                         _ => unimplemented!(
