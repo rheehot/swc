@@ -14,6 +14,10 @@ pub enum Error {
         span: Span,
     },
 
+    ReferencedInInit {
+        span: Span,
+    },
+
     NotGeneric {
         span: Span,
     },
