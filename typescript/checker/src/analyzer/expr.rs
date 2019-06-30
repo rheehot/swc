@@ -571,7 +571,7 @@ impl Analyzer<'_, '_> {
             Type::Lit(..) => unreachable!(),
 
             Type::Enum(ref e) => {
-                // TODO(kdy1): Check if variant exists.
+                // TODO: Check if variant exists.
                 match *prop {
                     Expr::Ident(ref v) if !computed => {
                         return Ok(Cow::Owned(Type::EnumVariant(EnumVariant {
@@ -719,24 +719,24 @@ impl Analyzer<'_, '_> {
         //                     type_ann: box ty.into_owned(),
         //                 }),
 
-        //                 // TODO(kdy1):
+        //                 // TODO:
         //                 computed: false,
 
-        //                 // TODO(kdy1):
+        //                 // TODO:
         //                 params: Default::default(),
 
-        //                 // TODO(kdy1):
+        //                 // TODO:
         //                 type_params: Default::default(),
         //             }));
         //         }
 
-        //         // TODO(kdy1):
+        //         // TODO:
         //         ClassMember::Constructor(ref c) => {
         //             type_props.push(TypeElement::TsConstructSignatureDecl(
         //                 TsConstructSignatureDecl {
         //                     span,
 
-        //                     // TODO(kdy1):
+        //                     // TODO:
         //                     type_ann: None,
 
         //                     params: c
@@ -757,16 +757,16 @@ impl Analyzer<'_, '_> {
         //                         })
         //                         .collect(),
 
-        //                     // TODO(kdy1):
+        //                     // TODO:
         //                     type_params: Default::default(),
         //                 },
         //             ));
         //         }
 
-        //         // TODO(kdy1):
+        //         // TODO:
         //         ClassMember::Method(..) => {}
 
-        //         // TODO(kdy1):
+        //         // TODO:
         //         ClassMember::TsIndexSignature(..) => {}
 
         //         ClassMember::PrivateMethod(..) | ClassMember::PrivateProp(..) => {}

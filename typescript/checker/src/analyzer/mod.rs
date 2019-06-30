@@ -102,7 +102,7 @@ where
 
 impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, decl: &TsModuleDecl) {
-        // TODO(kdy1): Uncomment the line below.
+        // TODO: Uncomment the line below.
         // Uncommenting the line somehow returns without excuting subsequent codes.
         // decl.visit_children(self);
 
@@ -150,7 +150,7 @@ impl Visit<TsTypeAliasDecl> for Analyzer<'_, '_> {
             }),
         );
 
-        // TODO(kdy1): Validate type
+        // TODO: Validate type
     }
 }
 

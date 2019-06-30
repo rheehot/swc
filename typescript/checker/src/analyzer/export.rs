@@ -31,7 +31,7 @@ impl Analyzer<'_, '_> {
         let pending_exports: Vec<_> = mem::replace(&mut self.pending_exports, Default::default());
 
         for ((sym, _), expr) in pending_exports {
-            // TODO(kdy1): Allow multiple exports with same name.
+            // TODO: Allow multiple exports with same name.
 
             debug_assert_eq!(self.info.exports.get(&sym), None);
 
@@ -101,7 +101,7 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
             Decl::Class(..) => unimplemented!("export class Foo"),
             Decl::Var(..) => unimplemented!("export var Foo = a;"),
             Decl::TsEnum(ref e) => {
-                // TODO(kdy1): Allow multiple exports with same name.
+                // TODO: Allow multiple exports with same name.
                 debug_assert_eq!(self.info.exports.get(&e.id.sym), None);
                 self.info
                     .exports
@@ -112,7 +112,7 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
                 // export type Foo = 'a' | 'b';
                 // export type Foo = {};
 
-                // TODO(kdy1): Handle type parameters.
+                // TODO: Handle type parameters.
 
                 self.export(decl.span, decl.id.sym.clone(), None)
             }

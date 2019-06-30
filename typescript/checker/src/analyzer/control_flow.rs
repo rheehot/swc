@@ -257,7 +257,7 @@ impl Analyzer<'_, '_> {
     pub(super) fn try_assign(&mut self, lhs: &PatOrExpr, ty: &Type) {
         match *lhs {
             PatOrExpr::Expr(ref expr) | PatOrExpr::Pat(box Pat::Expr(ref expr)) => match **expr {
-                // TODO(kdy1): Validate
+                // TODO: Validate
                 Expr::Member(MemberExpr { .. }) => return,
                 _ => unimplemented!(
                     "assign: {:?} = {:?}\nFile: {}",
