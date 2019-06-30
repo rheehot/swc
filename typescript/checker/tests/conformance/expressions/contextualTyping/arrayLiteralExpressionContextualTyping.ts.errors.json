@@ -1,21 +1,21 @@
 [
     {
-        "line": 6,
+        "line": 8,
         "column": 5,
         "msg": "Type '[number, number, number, number]' is not assignable to type '[number, number, number]'."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 5,
         "msg": "Type '[number, number, number, string]' is not assignable to type '[string | number, string | number, string | number]'."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 5,
         "msg": "Type '[number, number, number, string]' is not assignable to type '[number, number, number]'."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 5,
         "msg": "Type '[number, number, number, ...number[]]' is not assignable to type '[number, number, number]'."
     }

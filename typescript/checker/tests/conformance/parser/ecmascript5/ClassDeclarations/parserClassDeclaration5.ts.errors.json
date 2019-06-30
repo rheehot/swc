@@ -1,16 +1,16 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 17,
         "msg": "Cannot find name 'A'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 30,
         "msg": "Cannot find name 'B'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 32,
         "msg": "'implements' clause already seen."
     }

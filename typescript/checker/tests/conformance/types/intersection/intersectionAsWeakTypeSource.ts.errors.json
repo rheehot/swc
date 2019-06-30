@@ -1,11 +1,11 @@
 [
     {
-        "line": 8,
+        "line": 10,
         "column": 7,
         "msg": "Type 'XY' has no properties in common with type 'Z'."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 7,
         "msg": "Type 'Number & { __brand"
     }

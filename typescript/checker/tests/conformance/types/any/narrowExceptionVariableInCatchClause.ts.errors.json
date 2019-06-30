@@ -1,11 +1,11 @@
 [
     {
-        "line": 11,
+        "line": 13,
         "column": 17,
         "msg": "Property 'doPanic' does not exist on type '{ type"
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 17,
         "msg": "Property 'massage' does not exist on type 'Error'. Did you mean 'message'?"
     }

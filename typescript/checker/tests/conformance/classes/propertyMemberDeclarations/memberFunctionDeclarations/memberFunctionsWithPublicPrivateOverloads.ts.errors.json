@@ -1,76 +1,76 @@
 [
     {
-        "line": 3,
+        "line": 5,
         "column": 12,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 12,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 12,
+        "line": 14,
         "column": 19,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 15,
+        "line": 17,
         "column": 15,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 15,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 19,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 19,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 32,
+        "line": 34,
         "column": 12,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 36,
+        "line": 38,
         "column": 12,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 41,
+        "line": 43,
         "column": 15,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 45,
+        "line": 47,
         "column": 19,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 49,
+        "line": 51,
         "column": 19,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 53,
+        "line": 55,
         "column": 19,
         "msg": "Overload signatures must all be public, private or protected."
     },
     {
-        "line": 59,
+        "line": 61,
         "column": 11,
         "msg": "Property 'foo' is private and only accessible within class 'C'."
     },
     {
-        "line": 62,
+        "line": 64,
         "column": 12,
         "msg": "Property 'foo' is private and only accessible within class 'D<T>'."
     }

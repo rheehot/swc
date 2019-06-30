@@ -1,11 +1,11 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 7,
         "msg": "'const' declarations must be initialized."
     },
     {
-        "line": 2,
+        "line": 4,
         "column": 6,
         "msg": "Cannot assign to 'v' because it is a constant."
     }

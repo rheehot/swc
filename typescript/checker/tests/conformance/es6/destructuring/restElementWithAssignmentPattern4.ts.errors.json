@@ -1,6 +1,6 @@
 [
     {
-        "line": 3,
+        "line": 5,
         "column": 18,
         "msg": "Property 'b' does not exist on type '[string, number]'."
     }

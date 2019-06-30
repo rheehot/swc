@@ -1,6 +1,6 @@
 [
     {
-        "line": 18,
+        "line": 20,
         "column": 11,
         "msg": "Interface 'I1C' incorrectly extends interface 'Base'."
     },
@@ -10,7 +10,7 @@
         "msg": "number[]) => number'."
     },
     {
-        "line": 34,
+        "line": 36,
         "column": 11,
         "msg": "Interface 'I3B' incorrectly extends interface 'Base'."
     },
@@ -20,7 +20,7 @@
         "msg": "number[]) => number'."
     },
     {
-        "line": 60,
+        "line": 62,
         "column": 11,
         "msg": "Interface 'I6C' incorrectly extends interface 'Base'."
     },
@@ -30,7 +30,7 @@
         "msg": "string[]) => number' is not assignable to type '(x"
     },
     {
-        "line": 90,
+        "line": 92,
         "column": 11,
         "msg": "Interface 'I10B' incorrectly extends interface 'Base'."
     },
@@ -40,7 +40,7 @@
         "msg": "number, z?"
     },
     {
-        "line": 94,
+        "line": 96,
         "column": 11,
         "msg": "Interface 'I10C' incorrectly extends interface 'Base'."
     },
@@ -50,7 +50,7 @@
         "msg": "number[]) => number' is not assignable to type '(x"
     },
     {
-        "line": 98,
+        "line": 100,
         "column": 11,
         "msg": "Interface 'I10D' incorrectly extends interface 'Base'."
     },
@@ -60,7 +60,7 @@
         "msg": "string, z?"
     },
     {
-        "line": 102,
+        "line": 104,
         "column": 11,
         "msg": "Interface 'I10E' incorrectly extends interface 'Base'."
     },
@@ -70,7 +70,7 @@
         "msg": "string[]) => number' is not assignable to type '(x"
     },
     {
-        "line": 110,
+        "line": 112,
         "column": 11,
         "msg": "Interface 'I12' incorrectly extends interface 'Base'."
     },
@@ -80,7 +80,7 @@
         "msg": "number) => number' is not assignable to type '(x?"
     },
     {
-        "line": 118,
+        "line": 120,
         "column": 11,
         "msg": "Interface 'I14' incorrectly extends interface 'Base'."
     },
@@ -90,7 +90,7 @@
         "msg": "number) => number' is not assignable to type '(x?"
     },
     {
-        "line": 126,
+        "line": 128,
         "column": 11,
         "msg": "Interface 'I16' incorrectly extends interface 'Base'."
     },
@@ -100,7 +100,7 @@
         "msg": "string[]) => number' is not assignable to type '(x?"
     },
     {
-        "line": 130,
+        "line": 132,
         "column": 11,
         "msg": "Interface 'I17' incorrectly extends interface 'Base'."
     },

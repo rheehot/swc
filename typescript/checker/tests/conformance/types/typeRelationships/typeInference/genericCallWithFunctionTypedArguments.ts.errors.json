@@ -1,26 +1,26 @@
 [
     {
-        "line": 26,
+        "line": 28,
         "column": 18,
         "msg": "Argument of type '(a"
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 23,
-        "msg": "Argument of type '(x"
-    },
-    {
-        "line": 33,
-        "column": 23,
-        "msg": "Argument of type '(x"
-    },
-    {
-        "line": 34,
-        "column": 24,
         "msg": "Argument of type '(x"
     },
     {
         "line": 35,
+        "column": 23,
+        "msg": "Argument of type '(x"
+    },
+    {
+        "line": 36,
+        "column": 24,
+        "msg": "Argument of type '(x"
+    },
+    {
+        "line": 37,
         "column": 23,
         "msg": "Argument of type '(a"
     }

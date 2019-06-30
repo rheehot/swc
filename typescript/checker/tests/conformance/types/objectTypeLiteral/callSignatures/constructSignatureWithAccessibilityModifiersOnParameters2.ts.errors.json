@@ -1,86 +1,86 @@
 [
     {
-        "line": 4,
+        "line": 6,
         "column": 17,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 4,
+        "line": 6,
         "column": 27,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 5,
+        "line": 7,
         "column": 24,
         "msg": "Duplicate identifier 'x'."
     },
     {
-        "line": 5,
+        "line": 7,
         "column": 35,
         "msg": "Duplicate identifier 'y'."
     },
     {
-        "line": 9,
+        "line": 11,
         "column": 17,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 9,
+        "line": 11,
         "column": 25,
         "msg": "All declarations of 'x' must have identical modifiers."
     },
     {
-        "line": 10,
+        "line": 12,
         "column": 24,
         "msg": "Duplicate identifier 'x'."
     },
     {
-        "line": 10,
+        "line": 12,
         "column": 24,
         "msg": "All declarations of 'x' must have identical modifiers."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 17,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 19,
+        "line": 21,
         "column": 10,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 10,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 24,
+        "line": 26,
         "column": 10,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 10,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 10,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 10,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 34,
+        "line": 36,
         "column": 10,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 35,
+        "line": 37,
         "column": 10,
         "msg": "A parameter property is only allowed in a constructor implementation."
     }

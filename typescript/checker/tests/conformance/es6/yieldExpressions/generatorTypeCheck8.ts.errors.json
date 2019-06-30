@@ -1,6 +1,6 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 17,
         "msg": "Type 'IterableIterator<string>' is not assignable to type 'BadGenerator'."
     },

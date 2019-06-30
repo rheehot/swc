@@ -1,46 +1,41 @@
 [
     {
-        "line": 4,
+        "line": 6,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found."
     },
     {
-        "line": 13,
+        "line": 15,
         "column": 22,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 24,
         "msg": "Cannot find name 'ASTFlags'."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 38,
         "msg": "Cannot find name 'CompilerDiagnostics'."
     },
     {
-        "line": 24,
+        "line": 26,
         "column": 39,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 36,
+        "line": 38,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 38,
+        "line": 40,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 39,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 42,
+        "line": 41,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
@@ -50,17 +45,17 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 47,
+        "line": 46,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 48,
+        "line": 49,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 51,
+        "line": 50,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
@@ -70,62 +65,62 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 54,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
         "line": 55,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 64,
+        "line": 56,
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 57,
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 66,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 64,
+        "line": 66,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 67,
+        "line": 69,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 69,
+        "line": 71,
         "column": 45,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 69,
+        "line": 71,
         "column": 79,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 77,
+        "line": 79,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 82,
+        "line": 84,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 87,
+        "line": 89,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 92,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 97,
+        "line": 94,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
@@ -135,232 +130,227 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 100,
+        "line": 101,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 103,
+        "line": 102,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 108,
+        "line": 105,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 119,
+        "line": 110,
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 121,
         "column": 31,
         "msg": "Cannot find name 'PrintContext'."
     },
     {
-        "line": 130,
+        "line": 132,
         "column": 17,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 130,
+        "line": 132,
         "column": 37,
         "msg": "Cannot find name 'ASTFlags'."
     },
     {
-        "line": 137,
+        "line": 139,
         "column": 17,
         "msg": "Cannot find name 'nodeTypeTable'."
     },
     {
-        "line": 138,
+        "line": 140,
         "column": 24,
         "msg": "Cannot find name 'nodeTypeTable'."
     },
     {
-        "line": 141,
+        "line": 143,
         "column": 30,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 145,
+        "line": 147,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 151,
+        "line": 153,
         "column": 57,
         "msg": "Cannot find name 'StringHashTable'."
     },
     {
-        "line": 155,
+        "line": 157,
         "column": 26,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 184,
+        "line": 186,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 192,
+        "line": 194,
         "column": 32,
         "msg": "Cannot find name 'SymbolScope'."
     },
     {
-        "line": 193,
+        "line": 195,
         "column": 41,
         "msg": "An element access expression should take an argument."
     },
     {
-        "line": 196,
+        "line": 198,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 199,
+        "line": 201,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 219,
+        "line": 221,
         "column": 33,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 231,
+        "line": 233,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 231,
+        "line": 233,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 233,
+        "line": 235,
         "column": 52,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 237,
+        "line": 239,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 268,
+        "line": 270,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 298,
+        "line": 300,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 302,
+        "line": 304,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 302,
+        "line": 304,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 306,
+        "line": 308,
         "column": 40,
         "msg": "Cannot find name 'Token'."
     },
     {
-        "line": 307,
+        "line": 309,
         "column": 54,
         "msg": "Cannot find name 'IdentifierToken'."
     },
     {
-        "line": 320,
+        "line": 322,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 320,
+        "line": 322,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 327,
+        "line": 329,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 332,
+        "line": 334,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 337,
+        "line": 339,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 337,
+        "line": 339,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 350,
+        "line": 352,
         "column": 32,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 360,
+        "line": 362,
         "column": 28,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 363,
+        "line": 365,
         "column": 32,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 367,
+        "line": 369,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 370,
+        "line": 372,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 375,
+        "line": 377,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 377,
+        "line": 379,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 380,
+        "line": 382,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 383,
+        "line": 385,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 384,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 387,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 388,
+        "line": 386,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
@@ -375,254 +365,259 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 393,
+        "line": 391,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 397,
+        "line": 392,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 401,
+        "line": 395,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 406,
+        "line": 399,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 411,
+        "line": 403,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 416,
+        "line": 408,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 427,
+        "line": 413,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 441,
+        "line": 418,
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 429,
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 443,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 441,
+        "line": 443,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 445,
+        "line": 447,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 446,
+        "line": 448,
         "column": 58,
         "msg": "Cannot find name 'TokenID'."
-    },
-    {
-        "line": 449,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 451,
-        "column": 58,
-        "msg": "Cannot find name 'TokenID'."
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 453,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 454,
         "column": 58,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 457,
+        "line": 455,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 460,
+        "line": 456,
+        "column": 58,
+        "msg": "Cannot find name 'TokenID'."
+    },
+    {
+        "line": 459,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 463,
+        "line": 462,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 465,
-        "column": 58,
-        "msg": "Cannot find name 'TokenID'."
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 467,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
+        "column": 58,
+        "msg": "Cannot find name 'TokenID'."
     },
     {
         "line": 469,
-        "column": 50,
+        "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 472,
-        "column": 58,
-        "msg": "Cannot find name 'TokenID'."
+        "line": 471,
+        "column": 50,
+        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 474,
+        "column": 58,
+        "msg": "Cannot find name 'TokenID'."
+    },
+    {
+        "line": 476,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 476,
+        "line": 478,
         "column": 50,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 479,
+        "line": 481,
         "column": 58,
         "msg": "Cannot find name 'TokenID'."
-    },
-    {
-        "line": 481,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 483,
-        "column": 58,
-        "msg": "Cannot find name 'TokenID'."
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 485,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
+        "column": 58,
+        "msg": "Cannot find name 'TokenID'."
     },
     {
         "line": 487,
-        "column": 58,
-        "msg": "Cannot find name 'TokenID'."
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 489,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
+        "column": 58,
+        "msg": "Cannot find name 'TokenID'."
     },
     {
         "line": 491,
-        "column": 58,
-        "msg": "Cannot find name 'TokenID'."
-    },
-    {
-        "line": 494,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 493,
+        "column": 58,
+        "msg": "Cannot find name 'TokenID'."
     },
     {
         "line": 496,
-        "column": 58,
-        "msg": "Cannot find name 'TokenID'."
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 498,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
+        "column": 58,
+        "msg": "Cannot find name 'TokenID'."
     },
     {
         "line": 500,
-        "column": 58,
-        "msg": "Cannot find name 'TokenID'."
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 502,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
+        "column": 58,
+        "msg": "Cannot find name 'TokenID'."
     },
     {
         "line": 504,
-        "column": 58,
-        "msg": "Cannot find name 'TokenID'."
-    },
-    {
-        "line": 506,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 507,
+        "line": 506,
         "column": 58,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 518,
+        "line": 508,
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 509,
+        "column": 58,
+        "msg": "Cannot find name 'TokenID'."
+    },
+    {
+        "line": 520,
         "column": 32,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 520,
+        "line": 522,
         "column": 29,
         "msg": "Invalid use of 'arguments'. Class definitions are automatically in strict mode."
     },
     {
-        "line": 525,
+        "line": 527,
         "column": 27,
         "msg": "Cannot find name 'Signature'."
     },
     {
-        "line": 527,
+        "line": 529,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 528,
+        "line": 530,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 536,
+        "line": 538,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 536,
+        "line": 538,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 540,
+        "line": 542,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 553,
+        "line": 555,
         "column": 32,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 557,
+        "line": 559,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
-    },
-    {
-        "line": 559,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 561,
@@ -631,11 +626,6 @@
     },
     {
         "line": 563,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 564,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
@@ -665,6 +655,11 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
+        "line": 570,
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
         "line": 571,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
@@ -675,33 +670,28 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 574,
+        "line": 575,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 577,
+        "line": 576,
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 579,
         "column": 32,
         "msg": "Cannot find name 'nodeTypeTable'."
     },
     {
-        "line": 581,
+        "line": 583,
         "column": 32,
         "msg": "Cannot find name 'nodeTypeTable'."
     },
     {
-        "line": 582,
+        "line": 584,
         "column": 84,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 586,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 587,
-        "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
@@ -725,6 +715,11 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
+        "line": 592,
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
         "line": 593,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
@@ -735,7 +730,7 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 598,
+        "line": 597,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
@@ -746,11 +741,6 @@
     },
     {
         "line": 602,
-        "column": 22,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 603,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
@@ -780,6 +770,11 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
+        "line": 609,
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
         "line": 610,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
@@ -790,12 +785,12 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 613,
+        "line": 614,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 614,
+        "line": 615,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
@@ -805,12 +800,12 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 617,
+        "line": 618,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 618,
+        "line": 619,
         "column": 22,
         "msg": "Cannot find name 'NodeType'."
     },
@@ -835,128 +830,128 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 635,
+        "line": 628,
+        "column": 22,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 637,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 635,
+        "line": 637,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 636,
+        "line": 638,
         "column": 30,
         "msg": "Cannot find name 'nodeTypeToTokTable'."
     },
     {
-        "line": 644,
+        "line": 646,
         "column": 21,
         "msg": "Cannot find name 'tokenTable'."
     },
     {
-        "line": 647,
+        "line": 649,
         "column": 26,
         "msg": "Cannot find name 'tokenTable'."
     },
     {
-        "line": 651,
+        "line": 653,
         "column": 58,
         "msg": "Cannot find name 'tokenTable'."
     },
     {
-        "line": 658,
+        "line": 660,
         "column": 26,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 660,
+        "line": 662,
         "column": 67,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 665,
+        "line": 667,
         "column": 26,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 669,
+        "line": 671,
         "column": 26,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 670,
+        "line": 672,
         "column": 55,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 672,
+        "line": 674,
         "column": 33,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 672,
+        "line": 674,
         "column": 60,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 678,
+        "line": 680,
         "column": 67,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 681,
+        "line": 683,
         "column": 67,
-        "msg": "Cannot find name 'TokenID'."
-    },
-    {
-        "line": 684,
-        "column": 63,
         "msg": "Cannot find name 'TokenID'."
     },
     {
         "line": 686,
-        "column": 26,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 687,
         "column": 63,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 694,
+        "line": 688,
+        "column": 26,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 689,
         "column": 63,
         "msg": "Cannot find name 'TokenID'."
     },
     {
         "line": 696,
+        "column": 63,
+        "msg": "Cannot find name 'TokenID'."
+    },
+    {
+        "line": 698,
         "column": 26,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 711,
+        "line": 713,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 714,
+        "line": 716,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 718,
+        "line": 720,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 718,
+        "line": 720,
         "column": 48,
-        "msg": "Cannot find name 'TokenID'."
-    },
-    {
-        "line": 721,
-        "column": 51,
         "msg": "Cannot find name 'TokenID'."
     },
     {
@@ -970,1158 +965,1158 @@
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 733,
+        "line": 727,
+        "column": 51,
+        "msg": "Cannot find name 'TokenID'."
+    },
+    {
+        "line": 735,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 738,
+        "line": 740,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 747,
+        "line": 749,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 747,
+        "line": 749,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 778,
+        "line": 780,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 781,
+        "line": 783,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 786,
+        "line": 788,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 786,
+        "line": 788,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 797,
+        "line": 799,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 800,
+        "line": 802,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 800,
+        "line": 802,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 808,
+        "line": 810,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 823,
+        "line": 825,
         "column": 32,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 830,
+        "line": 832,
         "column": 27,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 834,
+        "line": 836,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 837,
+        "line": 839,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 837,
+        "line": 839,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 838,
+        "line": 840,
         "column": 24,
         "msg": "Cannot find name 'ModuleType'."
     },
     {
-        "line": 841,
+        "line": 843,
         "column": 61,
         "msg": "Cannot find name 'TypeSymbol'."
     },
     {
-        "line": 850,
+        "line": 852,
         "column": 52,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 863,
+        "line": 865,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 868,
+        "line": 870,
         "column": 38,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 877,
+        "line": 879,
         "column": 40,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 891,
+        "line": 893,
         "column": 27,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 894,
+        "line": 896,
         "column": 55,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 900,
+        "line": 902,
         "column": 37,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 900,
+        "line": 902,
         "column": 60,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 901,
+        "line": 903,
         "column": 36,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 901,
+        "line": 903,
         "column": 59,
-        "msg": "Cannot find name 'VarFlags'."
-    },
-    {
-        "line": 902,
-        "column": 38,
-        "msg": "Cannot find name 'hasFlag'."
-    },
-    {
-        "line": 902,
-        "column": 61,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
         "line": 904,
-        "column": 36,
-        "msg": "Cannot find name 'TypeFlow'."
-    },
-    {
-        "line": 915,
-        "column": 23,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 918,
-        "column": 37,
-        "msg": "Cannot find name 'hasFlag'."
-    },
-    {
-        "line": 918,
-        "column": 60,
-        "msg": "Cannot find name 'VarFlags'."
-    },
-    {
-        "line": 919,
         "column": 38,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 919,
+        "line": 904,
         "column": 61,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 920,
+        "line": 906,
         "column": 36,
-        "msg": "Cannot find name 'hasFlag'."
+        "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 920,
-        "column": 59,
-        "msg": "Cannot find name 'VarFlags'."
-    },
-    {
-        "line": 922,
-        "column": 30,
-        "msg": "Cannot find name 'Emitter'."
-    },
-    {
-        "line": 922,
-        "column": 48,
-        "msg": "Cannot find name 'TokenID'."
-    },
-    {
-        "line": 933,
+        "line": 917,
         "column": 23,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 944,
+        "line": 920,
+        "column": 37,
+        "msg": "Cannot find name 'hasFlag'."
+    },
+    {
+        "line": 920,
+        "column": 60,
+        "msg": "Cannot find name 'VarFlags'."
+    },
+    {
+        "line": 921,
+        "column": 38,
+        "msg": "Cannot find name 'hasFlag'."
+    },
+    {
+        "line": 921,
+        "column": 61,
+        "msg": "Cannot find name 'VarFlags'."
+    },
+    {
+        "line": 922,
+        "column": 36,
+        "msg": "Cannot find name 'hasFlag'."
+    },
+    {
+        "line": 922,
+        "column": 59,
+        "msg": "Cannot find name 'VarFlags'."
+    },
+    {
+        "line": 924,
+        "column": 30,
+        "msg": "Cannot find name 'Emitter'."
+    },
+    {
+        "line": 924,
+        "column": 48,
+        "msg": "Cannot find name 'TokenID'."
+    },
+    {
+        "line": 935,
+        "column": 23,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 946,
         "column": 38,
         "msg": "Cannot find name 'FieldSymbol'."
     },
     {
-        "line": 946,
+        "line": 948,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 946,
+        "line": 948,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 959,
+        "line": 961,
         "column": 27,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 961,
+        "line": 963,
         "column": 25,
         "msg": "Cannot find name 'IHashTable'."
     },
     {
-        "line": 963,
+        "line": 965,
         "column": 27,
         "msg": "Cannot find name 'Signature'."
     },
     {
-        "line": 981,
+        "line": 983,
         "column": 27,
         "msg": "Cannot find name 'Type'."
     },
     {
-        "line": 985,
+        "line": 987,
         "column": 29,
         "msg": "Invalid use of 'arguments'. Class definitions are automatically in strict mode."
     },
     {
-        "line": 1004,
+        "line": 1006,
         "column": 44,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1004,
+        "line": 1006,
         "column": 67,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1005,
+        "line": 1007,
         "column": 57,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1009,
+        "line": 1011,
         "column": 46,
         "msg": "An element access expression should take an argument."
     },
     {
-        "line": 1014,
+        "line": 1016,
         "column": 65,
         "msg": "Property 'container' does not exist on type 'Symbol'."
     },
     {
-        "line": 1024,
+        "line": 1026,
         "column": 48,
         "msg": "An element access expression should take an argument."
     },
     {
-        "line": 1026,
+        "line": 1028,
         "column": 41,
         "msg": "Property 'name' does not exist on type 'Symbol'."
     },
     {
-        "line": 1032,
+        "line": 1034,
         "column": 36,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 1033,
+        "line": 1035,
         "column": 29,
-        "msg": "Cannot find name 'BasicBlock'."
-    },
-    {
-        "line": 1034,
-        "column": 28,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
         "line": 1036,
+        "column": 28,
+        "msg": "Cannot find name 'BasicBlock'."
+    },
+    {
+        "line": 1038,
         "column": 31,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 1038,
+        "line": 1040,
         "column": 69,
         "msg": "Cannot find name 'IAstWalker'."
     },
     {
-        "line": 1043,
+        "line": 1045,
         "column": 26,
         "msg": "Cannot find name 'getAstWalkerFactory'."
     },
     {
-        "line": 1050,
+        "line": 1052,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1054,
+        "line": 1056,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1054,
+        "line": 1056,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1068,
+        "line": 1070,
         "column": 37,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1068,
+        "line": 1070,
         "column": 57,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1071,
+        "line": 1073,
         "column": 40,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1071,
+        "line": 1073,
         "column": 63,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1072,
+        "line": 1074,
         "column": 45,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1072,
+        "line": 1074,
         "column": 68,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1073,
+        "line": 1075,
         "column": 43,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1073,
+        "line": 1075,
         "column": 66,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1076,
+        "line": 1078,
         "column": 38,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1076,
+        "line": 1078,
         "column": 61,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1076,
+        "line": 1078,
         "column": 86,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1076,
+        "line": 1078,
         "column": 109,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1077,
+        "line": 1079,
         "column": 41,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1077,
-        "column": 64,
-        "msg": "Cannot find name 'FncFlags'."
-    },
-    {
-        "line": 1078,
-        "column": 41,
-        "msg": "Cannot find name 'hasFlag'."
-    },
-    {
-        "line": 1078,
-        "column": 64,
-        "msg": "Cannot find name 'FncFlags'."
-    },
-    {
         "line": 1079,
-        "column": 37,
-        "msg": "Cannot find name 'hasFlag'."
-    },
-    {
-        "line": 1079,
-        "column": 60,
+        "column": 64,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
         "line": 1080,
+        "column": 41,
+        "msg": "Cannot find name 'hasFlag'."
+    },
+    {
+        "line": 1080,
+        "column": 64,
+        "msg": "Cannot find name 'FncFlags'."
+    },
+    {
+        "line": 1081,
+        "column": 37,
+        "msg": "Cannot find name 'hasFlag'."
+    },
+    {
+        "line": 1081,
+        "column": 60,
+        "msg": "Cannot find name 'FncFlags'."
+    },
+    {
+        "line": 1082,
         "column": 38,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1080,
+        "line": 1082,
         "column": 61,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1081,
+        "line": 1083,
         "column": 37,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1081,
+        "line": 1083,
         "column": 60,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1082,
+        "line": 1084,
         "column": 36,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1082,
+        "line": 1084,
         "column": 59,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1083,
+        "line": 1085,
         "column": 36,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1083,
+        "line": 1085,
         "column": 59,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1095,
+        "line": 1097,
         "column": 29,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1098,
+        "line": 1100,
         "column": 56,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1098,
+        "line": 1100,
         "column": 79,
         "msg": "Cannot find name 'FncFlags'."
     },
     {
-        "line": 1111,
+        "line": 1113,
         "column": 33,
         "msg": "Cannot find name 'IFileReference'."
     },
     {
-        "line": 1127,
+        "line": 1129,
         "column": 84,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1132,
+        "line": 1134,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1144,
+        "line": 1146,
         "column": 42,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1145,
+        "line": 1147,
         "column": 30,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1145,
+        "line": 1147,
         "column": 74,
         "msg": "Cannot find name 'ModuleFlags'."
     },
     {
-        "line": 1145,
+        "line": 1147,
         "column": 109,
         "msg": "Cannot find name 'ModuleFlags'."
     },
     {
-        "line": 1149,
+        "line": 1151,
         "column": 47,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1150,
+        "line": 1152,
         "column": 30,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1150,
+        "line": 1152,
         "column": 77,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 1154,
+        "line": 1156,
         "column": 47,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1155,
+        "line": 1157,
         "column": 30,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1155,
+        "line": 1157,
         "column": 64,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 1159,
+        "line": 1161,
         "column": 47,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1164,
+        "line": 1166,
         "column": 47,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1164,
+        "line": 1166,
         "column": 97,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1172,
+        "line": 1174,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1172,
+        "line": 1174,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1176,
+        "line": 1178,
         "column": 60,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1187,
+        "line": 1189,
         "column": 32,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1195,
+        "line": 1197,
         "column": 27,
         "msg": "Cannot find name 'ModuleFlags'."
     },
     {
-        "line": 1196,
+        "line": 1198,
         "column": 21,
         "msg": "Cannot find name 'ModuleType'."
     },
     {
-        "line": 1206,
+        "line": 1208,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1213,
+        "line": 1215,
         "column": 38,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1213,
+        "line": 1215,
         "column": 61,
         "msg": "Cannot find name 'ModuleFlags'."
     },
     {
-        "line": 1214,
+        "line": 1216,
         "column": 37,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1214,
+        "line": 1216,
         "column": 60,
         "msg": "Cannot find name 'ModuleFlags'."
     },
     {
-        "line": 1215,
+        "line": 1217,
         "column": 34,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1215,
+        "line": 1217,
         "column": 57,
         "msg": "Cannot find name 'ModuleFlags'."
     },
     {
-        "line": 1218,
+        "line": 1220,
         "column": 31,
         "msg": "Cannot find name 'ModuleFlags'."
     },
     {
-        "line": 1221,
+        "line": 1223,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1225,
+        "line": 1227,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1225,
+        "line": 1227,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1226,
+        "line": 1228,
         "column": 18,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1226,
+        "line": 1228,
         "column": 41,
         "msg": "Cannot find name 'ModuleFlags'."
     },
     {
-        "line": 1237,
+        "line": 1239,
         "column": 27,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 1239,
+        "line": 1241,
         "column": 32,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1248,
+        "line": 1250,
         "column": 20,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1248,
+        "line": 1250,
         "column": 43,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 1252,
+        "line": 1254,
         "column": 20,
         "msg": "Cannot find name 'hasFlag'."
     },
     {
-        "line": 1252,
+        "line": 1254,
         "column": 43,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 1266,
+        "line": 1268,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1269,
+        "line": 1271,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1273,
+        "line": 1275,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1273,
+        "line": 1275,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1283,
+        "line": 1285,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1286,
+        "line": 1288,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1290,
+        "line": 1292,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1290,
+        "line": 1292,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
-    },
-    {
-        "line": 1295,
-        "column": 32,
-        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 1297,
+        "column": 32,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 1299,
         "column": 27,
         "msg": "Cannot find name 'ASTFlags'."
     },
     {
-        "line": 1306,
+        "line": 1308,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1314,
+        "line": 1316,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1317,
+        "line": 1319,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1317,
+        "line": 1319,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1331,
+        "line": 1333,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1337,
+        "line": 1339,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 1339,
+        "line": 1341,
         "column": 26,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1348,
+        "line": 1350,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1351,
+        "line": 1353,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1351,
+        "line": 1353,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1362,
+        "line": 1364,
         "column": 67,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1374,
+        "line": 1376,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 1375,
+        "line": 1377,
         "column": 37,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1388,
+        "line": 1390,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1405,
+        "line": 1407,
         "column": 32,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1409,
+        "line": 1411,
         "column": 42,
         "msg": "Cannot find name 'Parser'."
     },
     {
-        "line": 1414,
+        "line": 1416,
         "column": 35,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1419,
+        "line": 1421,
         "column": 39,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1430,
+        "line": 1432,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 1432,
+        "line": 1434,
         "column": 80,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1435,
+        "line": 1437,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1435,
+        "line": 1437,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1438,
+        "line": 1440,
         "column": 34,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1457,
+        "line": 1459,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1462,
+        "line": 1464,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1462,
+        "line": 1464,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1467,
+        "line": 1469,
         "column": 47,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1475,
+        "line": 1477,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1479,
+        "line": 1481,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 1481,
+        "line": 1483,
         "column": 33,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1482,
+        "line": 1484,
         "column": 33,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1488,
+        "line": 1490,
         "column": 29,
         "msg": "Cannot find name 'ITargetInfo'."
     },
     {
-        "line": 1490,
+        "line": 1492,
         "column": 39,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1515,
+        "line": 1517,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1518,
+        "line": 1520,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1518,
+        "line": 1520,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1528,
+        "line": 1530,
         "column": 47,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1535,
+        "line": 1537,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1539,
+        "line": 1541,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 1541,
+        "line": 1543,
         "column": 33,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1542,
+        "line": 1544,
         "column": 33,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1545,
+        "line": 1547,
         "column": 29,
         "msg": "Cannot find name 'ITargetInfo'."
     },
     {
-        "line": 1572,
+        "line": 1574,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1577,
+        "line": 1579,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1577,
+        "line": 1579,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1583,
+        "line": 1585,
         "column": 47,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1596,
+        "line": 1598,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1600,
+        "line": 1602,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 1602,
+        "line": 1604,
         "column": 31,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1606,
+        "line": 1608,
         "column": 35,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1615,
+        "line": 1617,
         "column": 39,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1651,
+        "line": 1653,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1654,
+        "line": 1656,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1654,
+        "line": 1656,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1660,
+        "line": 1662,
         "column": 63,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1670,
+        "line": 1672,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 1675,
+        "line": 1677,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1682,
+        "line": 1684,
         "column": 19,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 1688,
-        "column": 19,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 1689,
-        "column": 53,
         "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 1690,
+        "column": 19,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 1691,
+        "column": 53,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 1692,
         "column": 52,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 1701,
+        "line": 1703,
         "column": 43,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1712,
-        "column": 48,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 1718,
+        "line": 1714,
         "column": 48,
         "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 1720,
-        "column": 46,
+        "column": 48,
         "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 1722,
-        "column": 52,
+        "column": 46,
         "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 1724,
+        "column": 52,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 1726,
         "column": 65,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1725,
+        "line": 1727,
         "column": 59,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1732,
+        "line": 1734,
         "column": 66,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1733,
+        "line": 1735,
         "column": 73,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1749,
+        "line": 1751,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1749,
+        "line": 1751,
         "column": 48,
-        "msg": "Cannot find name 'TokenID'."
-    },
-    {
-        "line": 1755,
-        "column": 47,
         "msg": "Cannot find name 'TokenID'."
     },
     {
         "line": 1757,
+        "column": 47,
+        "msg": "Cannot find name 'TokenID'."
+    },
+    {
+        "line": 1759,
         "column": 46,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1766,
+        "line": 1768,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1775,
+        "line": 1777,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 1784,
+        "line": 1786,
         "column": 33,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1785,
+        "line": 1787,
         "column": 33,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1811,
+        "line": 1813,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1816,
+        "line": 1818,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1816,
+        "line": 1818,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1822,
+        "line": 1824,
         "column": 43,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1823,
+        "line": 1825,
         "column": 55,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1827,
+        "line": 1829,
         "column": 65,
-        "msg": "Cannot find name 'TokenID'."
-    },
-    {
-        "line": 1831,
-        "column": 47,
         "msg": "Cannot find name 'TokenID'."
     },
     {
@@ -2130,427 +2125,432 @@
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1841,
+        "line": 1835,
+        "column": 47,
+        "msg": "Cannot find name 'TokenID'."
+    },
+    {
+        "line": 1843,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1845,
+        "line": 1847,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 1850,
+        "line": 1852,
         "column": 33,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1851,
+        "line": 1853,
         "column": 33,
-        "msg": "Cannot find name 'BasicBlock'."
-    },
-    {
-        "line": 1855,
-        "column": 28,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
         "line": 1857,
-        "column": 25,
+        "column": 28,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
         "line": 1859,
+        "column": 25,
+        "msg": "Cannot find name 'BasicBlock'."
+    },
+    {
+        "line": 1861,
         "column": 30,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1865,
+        "line": 1867,
         "column": 39,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1868,
+        "line": 1870,
         "column": 29,
         "msg": "Cannot find name 'ITargetInfo'."
     },
     {
-        "line": 1908,
+        "line": 1910,
         "column": 25,
         "msg": "Cannot find name 'WithSymbol'."
     },
     {
-        "line": 1911,
+        "line": 1913,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1914,
+        "line": 1916,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1914,
+        "line": 1916,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1919,
+        "line": 1921,
         "column": 51,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1928,
+        "line": 1930,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1939,
+        "line": 1941,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 1944,
+        "line": 1946,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 1944,
+        "line": 1946,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1950,
+        "line": 1952,
         "column": 46,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1958,
+        "line": 1960,
         "column": 50,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 1969,
+        "line": 1971,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 1981,
+        "line": 1983,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 1984,
+        "line": 1986,
         "column": 33,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 1985,
+        "line": 1987,
         "column": 35,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 2014,
+        "line": 2016,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 2017,
+        "line": 2019,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 2017,
+        "line": 2019,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2022,
+        "line": 2024,
         "column": 51,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2033,
+        "line": 2035,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 2042,
+        "line": 2044,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 2043,
+        "line": 2045,
         "column": 33,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 2047,
+        "line": 2049,
         "column": 37,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 2067,
+        "line": 2069,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 2070,
+        "line": 2072,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 2070,
+        "line": 2072,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2074,
+        "line": 2076,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 2077,
+        "line": 2079,
         "column": 28,
         "msg": "Cannot find name 'getTypeLink'."
     },
     {
-        "line": 2100,
+        "line": 2102,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 2105,
+        "line": 2107,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 2105,
+        "line": 2107,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2107,
+        "line": 2109,
         "column": 50,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2108,
+        "line": 2110,
         "column": 54,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2112,
+        "line": 2114,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 2119,
+        "line": 2121,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 2120,
+        "line": 2122,
         "column": 36,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 2122,
+        "line": 2124,
         "column": 32,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 2145,
+        "line": 2147,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 2150,
+        "line": 2152,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 2150,
+        "line": 2152,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2153,
+        "line": 2155,
         "column": 50,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2154,
+        "line": 2156,
         "column": 52,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2159,
+        "line": 2161,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 2161,
+        "line": 2163,
         "column": 32,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 2164,
+        "line": 2166,
         "column": 37,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 2172,
+        "line": 2174,
         "column": 35,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 2185,
+        "line": 2187,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 2195,
+        "line": 2197,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 2198,
+        "line": 2200,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 2198,
+        "line": 2200,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2202,
+        "line": 2204,
         "column": 47,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2207,
+        "line": 2209,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 2212,
+        "line": 2214,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 2223,
+        "line": 2225,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 2225,
+        "line": 2227,
         "column": 40,
         "msg": "Cannot find name 'VarFlags'."
     },
     {
-        "line": 2229,
+        "line": 2231,
         "column": 32,
         "msg": "Cannot find name 'SymbolScope'."
     },
     {
-        "line": 2231,
+        "line": 2233,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 2231,
+        "line": 2233,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2237,
+        "line": 2239,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2240,
+        "line": 2242,
         "column": 47,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2245,
+        "line": 2247,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 2248,
+        "line": 2250,
         "column": 36,
         "msg": "Cannot find name 'BasicBlock'."
     },
     {
-        "line": 2259,
+        "line": 2261,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 2263,
+        "line": 2265,
         "column": 33,
         "msg": "Cannot find name 'ValueLocation'."
     },
     {
-        "line": 2264,
+        "line": 2266,
         "column": 30,
         "msg": "Cannot find name 'VariableSymbol'."
     },
     {
-        "line": 2269,
+        "line": 2271,
         "column": 38,
         "msg": "Cannot find name 'TypeLink'."
     },
     {
-        "line": 2300,
+        "line": 2302,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 2303,
+        "line": 2305,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 2303,
+        "line": 2305,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2307,
+        "line": 2309,
         "column": 47,
         "msg": "Cannot find name 'TokenID'."
     },
     {
-        "line": 2312,
+        "line": 2314,
         "column": 42,
         "msg": "Cannot find name 'ControlFlowContext'."
     },
     {
-        "line": 2320,
+        "line": 2322,
         "column": 36,
         "msg": "Cannot find name 'TypeFlow'."
     },
     {
-        "line": 2331,
+        "line": 2333,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 2353,
+        "line": 2355,
         "column": 19,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 2356,
+        "line": 2358,
         "column": 30,
         "msg": "Cannot find name 'Emitter'."
     },
     {
-        "line": 2356,
+        "line": 2358,
         "column": 48,
         "msg": "Cannot find name 'TokenID'."
     }

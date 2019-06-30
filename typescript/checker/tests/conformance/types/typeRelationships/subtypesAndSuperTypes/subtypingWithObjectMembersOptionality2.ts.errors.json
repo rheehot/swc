@@ -1,16 +1,16 @@
 [
     {
-        "line": 10,
+        "line": 12,
         "column": 11,
         "msg": "Interface 'S' incorrectly extends interface 'T'."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 11,
         "msg": "Interface 'S2' incorrectly extends interface 'T2'."
     },
     {
-        "line": 26,
+        "line": 28,
         "column": 11,
         "msg": "Interface 'S3' incorrectly extends interface 'T3'."
     }

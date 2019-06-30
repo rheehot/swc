@@ -1,6 +1,6 @@
 [
     {
-        "line": 15,
+        "line": 17,
         "column": 14,
         "msg": "Argument of type 'symbol[]' is not assignable to parameter of type 'number | ConcatArray<number>'."
     },

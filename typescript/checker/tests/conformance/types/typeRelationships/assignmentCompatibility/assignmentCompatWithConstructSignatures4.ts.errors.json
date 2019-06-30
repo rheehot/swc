@@ -1,61 +1,61 @@
 [
     {
-        "line": 45,
+        "line": 47,
         "column": 9,
         "msg": "Type 'new (x"
     },
     {
-        "line": 49,
+        "line": 51,
         "column": 9,
         "msg": "Type 'new (x"
     },
     {
-        "line": 52,
+        "line": 54,
         "column": 9,
         "msg": "Type 'new <T extends Base, U extends Derived>(x"
     },
     {
-        "line": 53,
+        "line": 55,
         "column": 9,
         "msg": "Type 'new (x"
     },
     {
-        "line": 58,
+        "line": 60,
         "column": 9,
         "msg": "Type 'new (...x"
     },
     {
-        "line": 62,
+        "line": 64,
         "column": 9,
         "msg": "Type 'new (x"
     },
     {
-        "line": 66,
+        "line": 68,
         "column": 9,
         "msg": "Type 'new (x"
     },
     {
-        "line": 69,
+        "line": 71,
         "column": 9,
         "msg": "Type 'new <T>(x"
     },
     {
-        "line": 70,
+        "line": 72,
         "column": 9,
         "msg": "Type 'new (x"
     },
     {
-        "line": 73,
+        "line": 75,
         "column": 9,
         "msg": "Type 'new <T extends Base>(x"
     },
     {
-        "line": 74,
+        "line": 76,
         "column": 9,
         "msg": "Type 'new (x"
     },
     {
-        "line": 77,
+        "line": 79,
         "column": 9,
         "msg": "Type 'new <T>(x"
     },
@@ -70,7 +70,7 @@
         "msg": "number; new (a?"
     },
     {
-        "line": 78,
+        "line": 80,
         "column": 9,
         "msg": "Type '{ new (x"
     },
@@ -85,7 +85,7 @@
         "msg": "number)"
     },
     {
-        "line": 81,
+        "line": 83,
         "column": 9,
         "msg": "Type 'new <T>(x"
     },
@@ -100,7 +100,7 @@
         "msg": "T; new <T extends Base>(a"
     },
     {
-        "line": 82,
+        "line": 84,
         "column": 9,
         "msg": "Type '{ new (x"
     },
@@ -115,22 +115,22 @@
         "msg": "T)"
     },
     {
-        "line": 89,
+        "line": 91,
         "column": 9,
         "msg": "Type 'new <T>(x"
     },
     {
-        "line": 90,
+        "line": 92,
         "column": 9,
         "msg": "Type 'new <T>(x"
     },
     {
-        "line": 95,
+        "line": 97,
         "column": 9,
         "msg": "Type 'new <T>(x"
     },
     {
-        "line": 96,
+        "line": 98,
         "column": 9,
         "msg": "Type 'new <T>(x"
     }

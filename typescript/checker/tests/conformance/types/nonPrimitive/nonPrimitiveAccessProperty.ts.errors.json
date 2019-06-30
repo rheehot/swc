@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 5,
         "column": 3,
         "msg": "Property 'nonExist' does not exist on type 'object'."
     },
     {
-        "line": 5,
+        "line": 7,
         "column": 7,
         "msg": "Property 'destructuring' does not exist on type '{}'."
     }

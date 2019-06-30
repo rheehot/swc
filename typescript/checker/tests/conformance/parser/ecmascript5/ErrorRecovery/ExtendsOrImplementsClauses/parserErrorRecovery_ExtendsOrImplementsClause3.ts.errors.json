@@ -1,11 +1,11 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 16,
         "msg": "'extends' list cannot be empty."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 28,
         "msg": "Cannot find name 'A'."
     }

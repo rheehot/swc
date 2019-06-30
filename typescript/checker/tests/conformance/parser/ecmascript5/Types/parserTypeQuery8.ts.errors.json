@@ -1,21 +1,21 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 15,
         "msg": "Cannot find name 'A'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 16,
         "msg": "',' expected."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 17,
         "msg": "Cannot find name 'B'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 19,
         "msg": "Expression expected."
     }

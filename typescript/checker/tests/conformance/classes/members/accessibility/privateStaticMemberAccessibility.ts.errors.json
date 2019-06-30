@@ -1,11 +1,11 @@
 [
     {
-        "line": 6,
+        "line": 8,
         "column": 23,
         "msg": "Property 'foo' is private and only accessible within class 'Base'."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 23,
         "msg": "Property 'foo' is private and only accessible within class 'Base'."
     }

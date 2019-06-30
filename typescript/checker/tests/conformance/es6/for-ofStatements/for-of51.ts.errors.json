@@ -1,6 +1,6 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 10,
         "msg": "'let' is not allowed to be used as a name in 'let' or 'const' declarations."
     }

@@ -1,41 +1,41 @@
 [
     {
-        "line": 15,
+        "line": 17,
         "column": 20,
         "msg": "Property 'x' is private and only accessible within class 'C'."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 20,
         "msg": "Property 'a' is private and only accessible within class 'C'."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 20,
         "msg": "Property 'b' is private and only accessible within class 'C'."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 20,
         "msg": "Property 'c' is private and only accessible within class 'C'."
     },
     {
-        "line": 19,
+        "line": 21,
         "column": 20,
         "msg": "Property 'd' is private and only accessible within class 'C'."
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 20,
         "msg": "Property 'e' is private and only accessible within class 'C'."
     },
     {
-        "line": 21,
+        "line": 23,
         "column": 20,
         "msg": "Property 'f' is private and only accessible within class 'C'."
     },
     {
-        "line": 22,
+        "line": 24,
         "column": 20,
         "msg": "Property 'g' is private and only accessible within class 'C'."
     }

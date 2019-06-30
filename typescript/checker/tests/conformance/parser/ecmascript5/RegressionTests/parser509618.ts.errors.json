@@ -1,6 +1,6 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 20,
         "msg": "Statements are not allowed in ambient contexts."
     }

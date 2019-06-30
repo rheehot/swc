@@ -1,21 +1,11 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 9,
         "msg": "Cannot find name 'Foo'."
     },
     {
-        "line": 1,
-        "column": 13,
-        "msg": "Cannot find name 'T'."
-    },
-    {
-        "line": 2,
-        "column": 9,
-        "msg": "Cannot find name 'Foo'."
-    },
-    {
-        "line": 2,
+        "line": 3,
         "column": 13,
         "msg": "Cannot find name 'T'."
     },
@@ -26,26 +16,21 @@
     },
     {
         "line": 4,
+        "column": 13,
+        "msg": "Cannot find name 'T'."
+    },
+    {
+        "line": 6,
+        "column": 9,
+        "msg": "Cannot find name 'Foo'."
+    },
+    {
+        "line": 6,
         "column": 13,
         "msg": "Cannot find name 'Bar'."
     },
     {
-        "line": 4,
-        "column": 17,
-        "msg": "Cannot find name 'T'."
-    },
-    {
-        "line": 5,
-        "column": 9,
-        "msg": "Cannot find name 'Foo'."
-    },
-    {
-        "line": 5,
-        "column": 13,
-        "msg": "Cannot find name 'Bar'."
-    },
-    {
-        "line": 5,
+        "line": 6,
         "column": 17,
         "msg": "Cannot find name 'T'."
     },
@@ -61,31 +46,46 @@
     },
     {
         "line": 7,
+        "column": 17,
+        "msg": "Cannot find name 'T'."
+    },
+    {
+        "line": 9,
+        "column": 9,
+        "msg": "Cannot find name 'Foo'."
+    },
+    {
+        "line": 9,
+        "column": 13,
+        "msg": "Cannot find name 'Bar'."
+    },
+    {
+        "line": 9,
         "column": 17,
         "msg": "Cannot find name 'Quux'."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 22,
         "msg": "Cannot find name 'T'."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 9,
         "msg": "Cannot find name 'Foo'."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 13,
         "msg": "Cannot find name 'Bar'."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 17,
         "msg": "Cannot find name 'Quux'."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 22,
         "msg": "Cannot find name 'T'."
     }

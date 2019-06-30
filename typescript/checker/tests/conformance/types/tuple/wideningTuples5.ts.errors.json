@@ -1,11 +1,11 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 6,
         "msg": "Binding element 'a' implicitly has an 'any' type."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 9,
         "msg": "Binding element 'b' implicitly has an 'any' type."
     }

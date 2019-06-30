@@ -1,6 +1,6 @@
 [
     {
-        "line": 10,
+        "line": 12,
         "column": 17,
         "msg": "Type 'SymbolIterator' must have a '[Symbol.iterator]()' method that returns an iterator."
     }

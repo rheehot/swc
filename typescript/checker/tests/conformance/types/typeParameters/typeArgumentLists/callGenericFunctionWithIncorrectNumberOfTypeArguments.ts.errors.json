@@ -1,71 +1,71 @@
 [
     {
-        "line": 5,
+        "line": 7,
         "column": 12,
         "msg": "Expected 2 type arguments, but got 1."
     },
     {
-        "line": 6,
+        "line": 8,
         "column": 13,
         "msg": "Expected 2 type arguments, but got 3."
     },
     {
-        "line": 9,
-        "column": 13,
-        "msg": "Expected 2 type arguments, but got 1."
-    },
-    {
-        "line": 10,
-        "column": 14,
-        "msg": "Expected 2 type arguments, but got 3."
-    },
-    {
-        "line": 13,
+        "line": 11,
         "column": 13,
         "msg": "Expected 2 type arguments, but got 1."
     },
     {
-        "line": 14,
+        "line": 12,
         "column": 14,
         "msg": "Expected 2 type arguments, but got 3."
     },
     {
-        "line": 21,
+        "line": 15,
+        "column": 13,
+        "msg": "Expected 2 type arguments, but got 1."
+    },
+    {
+        "line": 16,
+        "column": 14,
+        "msg": "Expected 2 type arguments, but got 3."
+    },
+    {
+        "line": 23,
         "column": 22,
         "msg": "Expected 2 type arguments, but got 1."
     },
     {
-        "line": 22,
+        "line": 24,
         "column": 23,
         "msg": "Expected 2 type arguments, but got 3."
     },
     {
-        "line": 28,
+        "line": 30,
         "column": 14,
         "msg": "Expected 2 type arguments, but got 1."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 15,
         "msg": "Expected 2 type arguments, but got 3."
     },
     {
-        "line": 36,
+        "line": 38,
         "column": 23,
         "msg": "Expected 0 type arguments, but got 1."
     },
     {
-        "line": 37,
+        "line": 39,
         "column": 24,
         "msg": "Expected 0 type arguments, but got 3."
     },
     {
-        "line": 43,
+        "line": 45,
         "column": 15,
         "msg": "Expected 0 type arguments, but got 1."
     },
     {
-        "line": 44,
+        "line": 46,
         "column": 16,
         "msg": "Expected 0 type arguments, but got 3."
     }

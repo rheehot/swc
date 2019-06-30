@@ -1,6 +1,6 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 15,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     }

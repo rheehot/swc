@@ -1,11 +1,11 @@
 [
     {
-        "line": 5,
+        "line": 7,
         "column": 13,
         "msg": "'private' modifier cannot be used with 'abstract' modifier."
     },
     {
-        "line": 12,
+        "line": 14,
         "column": 13,
         "msg": "'private' modifier cannot be used with 'abstract' modifier."
     }

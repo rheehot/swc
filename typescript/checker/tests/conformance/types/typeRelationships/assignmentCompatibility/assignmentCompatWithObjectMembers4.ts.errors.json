@@ -1,51 +1,41 @@
 [
     {
-        "line": 24,
+        "line": 26,
         "column": 5,
         "msg": "Type 'T' is not assignable to type 'S'."
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 5,
         "msg": "Type 'S' is not assignable to type 'T'."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 5,
         "msg": "Type 'T2' is not assignable to type 'S2'."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 5,
         "msg": "Type 'S2' is not assignable to type 'T2'."
     },
     {
-        "line": 31,
+        "line": 33,
         "column": 5,
         "msg": "Type 'T' is not assignable to type 'S2'."
     },
     {
-        "line": 32,
+        "line": 34,
         "column": 5,
         "msg": "Type '{ foo"
     },
     {
-        "line": 35,
+        "line": 37,
         "column": 5,
         "msg": "Type '{ foo"
     },
     {
-        "line": 36,
-        "column": 5,
-        "msg": "Type '{ foo"
-    },
-    {
-        "line": 41,
-        "column": 5,
-        "msg": "Type '{ foo"
-    },
-    {
-        "line": 42,
+        "line": 38,
         "column": 5,
         "msg": "Type '{ foo"
     },
@@ -57,30 +47,40 @@
     {
         "line": 44,
         "column": 5,
-        "msg": "Type 'T2' is not assignable to type '{ foo"
+        "msg": "Type '{ foo"
     },
     {
         "line": 45,
         "column": 5,
+        "msg": "Type '{ foo"
+    },
+    {
+        "line": 46,
+        "column": 5,
+        "msg": "Type 'T2' is not assignable to type '{ foo"
+    },
+    {
+        "line": 47,
+        "column": 5,
         "msg": "Type 'T' is not assignable to type '{ foo"
     },
     {
-        "line": 70,
+        "line": 72,
         "column": 5,
         "msg": "Type 'S' is not assignable to type 'T'."
     },
     {
-        "line": 75,
+        "line": 77,
         "column": 5,
         "msg": "Type 'S2' is not assignable to type 'T2'."
     },
     {
-        "line": 81,
+        "line": 83,
         "column": 5,
         "msg": "Type '{ foo"
     },
     {
-        "line": 87,
+        "line": 89,
         "column": 5,
         "msg": "Type '{ foo"
     }

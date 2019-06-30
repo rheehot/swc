@@ -1,11 +1,11 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 5,
         "msg": "Argument of type 'FooIterator' is not assignable to parameter of type '[Bar, Bar]'."
     },
     {
-        "line": 2,
+        "line": 4,
         "column": 12,
         "msg": "Class 'FooIteratorIterator' used before its declaration."
     }

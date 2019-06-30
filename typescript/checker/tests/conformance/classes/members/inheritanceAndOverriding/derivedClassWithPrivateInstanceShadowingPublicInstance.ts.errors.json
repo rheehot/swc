@@ -1,66 +1,66 @@
 [
     {
-        "line": 7,
+        "line": 9,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 12,
+        "line": 14,
         "column": 7,
         "msg": "Class 'Derived' incorrectly extends base class 'Base'."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 17,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 19,
+        "line": 21,
         "column": 17,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 22,
+        "line": 24,
         "column": 14,
         "msg": "Property 'x' does not exist on type 'typeof Base'."
     },
     {
-        "line": 23,
+        "line": 25,
         "column": 18,
         "msg": "Property 'x' does not exist on type 'typeof Derived'."
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 15,
         "msg": "Property 'fn' does not exist on type 'typeof Base'."
     },
     {
-        "line": 26,
+        "line": 28,
         "column": 18,
         "msg": "Property 'fn' does not exist on type 'typeof Derived'."
     },
     {
-        "line": 28,
+        "line": 30,
         "column": 15,
         "msg": "Property 'a' does not exist on type 'typeof Base'."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 6,
         "msg": "Property 'a' does not exist on type 'typeof Base'."
     },
     {
-        "line": 31,
+        "line": 33,
         "column": 18,
         "msg": "Property 'a' does not exist on type 'typeof Derived'."
     },
     {
-        "line": 32,
+        "line": 34,
         "column": 9,
         "msg": "Property 'a' does not exist on type 'typeof Derived'."
     }

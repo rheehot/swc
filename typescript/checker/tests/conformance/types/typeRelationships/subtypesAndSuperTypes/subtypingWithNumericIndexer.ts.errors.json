@@ -1,11 +1,11 @@
 [
     {
-        "line": 32,
+        "line": 34,
         "column": 11,
         "msg": "Class 'B3<T>' incorrectly extends base class 'A<T>'."
     },
     {
-        "line": 36,
+        "line": 38,
         "column": 11,
         "msg": "Class 'B4<T>' incorrectly extends base class 'A<T>'."
     }

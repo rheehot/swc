@@ -1,11 +1,11 @@
 [
     {
-        "line": 16,
+        "line": 18,
         "column": 42,
         "msg": "Argument of type '\"0\"' is not assignable to parameter of type 'boolean'."
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 1,
         "msg": "Cannot find name 'runTestCase'."
     }

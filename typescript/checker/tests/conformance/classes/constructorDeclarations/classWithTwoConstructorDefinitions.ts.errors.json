@@ -1,21 +1,21 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 5,
         "msg": "Multiple constructor implementations are not allowed."
     },
     {
-        "line": 3,
+        "line": 5,
         "column": 5,
         "msg": "Multiple constructor implementations are not allowed."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 5,
         "msg": "Multiple constructor implementations are not allowed."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 5,
         "msg": "Multiple constructor implementations are not allowed."
     }

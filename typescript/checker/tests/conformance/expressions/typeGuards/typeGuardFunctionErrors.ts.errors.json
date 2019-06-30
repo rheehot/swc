@@ -1,101 +1,101 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 7,
         "msg": "Duplicate identifier 'A'."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 5,
         "msg": "Type '\"\"' is not assignable to type 'boolean'."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 55,
         "msg": "'x' refers to a value, but is being used as a type here."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 57,
         "msg": "'{' or ';' expected."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 60,
         "msg": "';' expected."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 62,
         "msg": "';' expected."
     },
     {
-        "line": 21,
+        "line": 23,
         "column": 33,
         "msg": "'x' refers to a value, but is being used as a type here."
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 33,
         "msg": "Cannot find parameter 'x'."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 10,
         "msg": "Function implementation is missing or not immediately following the declaration."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 5,
         "msg": "Property or signature expected."
     },
     {
-        "line": 31,
+        "line": 33,
         "column": 1,
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 33,
+        "line": 35,
         "column": 38,
         "msg": "Cannot find parameter 'x'."
     },
     {
-        "line": 37,
+        "line": 39,
         "column": 51,
         "msg": "A type predicate's type must be assignable to its parameter's type."
     },
     {
-        "line": 41,
+        "line": 43,
         "column": 56,
         "msg": "A type predicate's type must be assignable to its parameter's type."
     },
     {
-        "line": 45,
+        "line": 47,
         "column": 56,
         "msg": "A type predicate's type must be assignable to its parameter's type."
     },
     {
-        "line": 59,
+        "line": 61,
         "column": 7,
         "msg": "Property 'propB' does not exist on type 'A'. Did you mean 'propA'?"
     },
     {
-        "line": 64,
+        "line": 66,
         "column": 7,
         "msg": "Property 'propB' does not exist on type 'A'. Did you mean 'propA'?"
     },
     {
-        "line": 69,
+        "line": 71,
         "column": 7,
         "msg": "Property 'propB' does not exist on type 'A'. Did you mean 'propA'?"
     },
     {
-        "line": 74,
+        "line": 76,
         "column": 46,
         "msg": "Argument of type '(p1"
     },
     {
-        "line": 78,
+        "line": 80,
         "column": 1,
         "msg": "Type '(p1"
     },
@@ -105,182 +105,182 @@
         "msg": "any)"
     },
     {
-        "line": 84,
+        "line": 86,
         "column": 1,
         "msg": "Type '(p1"
     },
     {
-        "line": 90,
+        "line": 92,
         "column": 1,
         "msg": "Type '(p1"
     },
     {
-        "line": 95,
+        "line": 97,
         "column": 9,
         "msg": "'b' refers to a value, but is being used as a type here."
     },
     {
-        "line": 95,
+        "line": 97,
         "column": 11,
         "msg": "',' expected."
     },
     {
-        "line": 95,
+        "line": 97,
         "column": 14,
         "msg": "',' expected."
     },
     {
-        "line": 95,
+        "line": 97,
         "column": 14,
         "msg": "Duplicate identifier 'A'."
     },
     {
-        "line": 96,
+        "line": 98,
         "column": 16,
         "msg": "'b' refers to a value, but is being used as a type here."
     },
     {
-        "line": 96,
+        "line": 98,
         "column": 18,
         "msg": "',' expected."
     },
     {
-        "line": 96,
+        "line": 98,
         "column": 21,
         "msg": "',' expected."
     },
     {
-        "line": 97,
+        "line": 99,
         "column": 20,
         "msg": "'b' refers to a value, but is being used as a type here."
     },
     {
-        "line": 97,
+        "line": 99,
         "column": 22,
         "msg": "'{' or ';' expected."
     },
     {
-        "line": 97,
+        "line": 99,
         "column": 25,
         "msg": "';' expected."
     },
     {
-        "line": 97,
+        "line": 99,
         "column": 27,
         "msg": "';' expected."
     },
     {
-        "line": 103,
+        "line": 105,
         "column": 25,
         "msg": "A type predicate is only allowed in return type position for functions and methods."
     },
     {
-        "line": 104,
+        "line": 106,
         "column": 9,
         "msg": "Type 'true' is not assignable to type 'D'."
     },
     {
-        "line": 104,
+        "line": 106,
         "column": 9,
         "msg": "Return type of constructor signature must be assignable to the instance type of the class."
     },
     {
-        "line": 106,
+        "line": 108,
         "column": 20,
         "msg": "A type predicate is only allowed in return type position for functions and methods."
     },
     {
-        "line": 109,
+        "line": 111,
         "column": 20,
         "msg": "A type predicate is only allowed in return type position for functions and methods."
     },
     {
-        "line": 110,
+        "line": 112,
         "column": 9,
         "msg": "Setters cannot return a value."
     },
     {
-        "line": 115,
+        "line": 117,
         "column": 18,
         "msg": "A type predicate is only allowed in return type position for functions and methods."
     },
     {
-        "line": 119,
+        "line": 121,
         "column": 22,
         "msg": "Cannot find name 'p1'."
     },
     {
-        "line": 119,
+        "line": 121,
         "column": 25,
         "msg": "';' expected."
     },
     {
-        "line": 119,
+        "line": 121,
         "column": 28,
         "msg": "';' expected."
     },
     {
-        "line": 120,
+        "line": 122,
         "column": 1,
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 123,
+        "line": 125,
         "column": 20,
         "msg": "A type predicate cannot reference a rest parameter."
     },
     {
-        "line": 128,
+        "line": 130,
         "column": 34,
         "msg": "A type predicate cannot reference element 'p1' in a binding pattern."
     },
     {
-        "line": 132,
+        "line": 134,
         "column": 34,
         "msg": "A type predicate cannot reference element 'p1' in a binding pattern."
     },
     {
-        "line": 136,
+        "line": 138,
         "column": 39,
         "msg": "A type predicate cannot reference element 'p1' in a binding pattern."
     },
     {
-        "line": 152,
+        "line": 154,
         "column": 68,
         "msg": "Type 'T | \"d\"' does not satisfy the constraint 'Keys'."
     },
     {
-        "line": 159,
+        "line": 161,
         "column": 31,
         "msg": "Type 'Bar' does not satisfy the constraint 'Foo'."
-    },
-    {
-        "line": 162,
-        "column": 31,
-        "msg": "Type 'Bar' does not satisfy the constraint 'Foo'."
-    },
-    {
-        "line": 163,
-        "column": 35,
-        "msg": "Type 'number' does not satisfy the constraint 'Foo'."
     },
     {
         "line": 164,
-        "column": 51,
+        "column": 31,
         "msg": "Type 'Bar' does not satisfy the constraint 'Foo'."
     },
     {
         "line": 165,
-        "column": 51,
+        "column": 35,
         "msg": "Type 'number' does not satisfy the constraint 'Foo'."
     },
     {
         "line": 166,
+        "column": 51,
+        "msg": "Type 'Bar' does not satisfy the constraint 'Foo'."
+    },
+    {
+        "line": 167,
+        "column": 51,
+        "msg": "Type 'number' does not satisfy the constraint 'Foo'."
+    },
+    {
+        "line": 168,
         "column": 45,
         "msg": "A type predicate's type must be assignable to its parameter's type."
     },
     {
-        "line": 166,
+        "line": 168,
         "column": 54,
         "msg": "Type 'number' does not satisfy the constraint 'Foo'."
     }

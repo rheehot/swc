@@ -1,6 +1,6 @@
 [
     {
-        "line": 18,
+        "line": 20,
         "column": 32,
         "msg": "Property 'y' is missing in type 'Derived2' but required in type 'Derived'."
     }

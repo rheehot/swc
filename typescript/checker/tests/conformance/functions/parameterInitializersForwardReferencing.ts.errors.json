@@ -1,51 +1,51 @@
 [
     {
-        "line": 6,
+        "line": 8,
         "column": 20,
         "msg": "Initializer of parameter 'a' cannot reference identifier 'b' declared after it."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 21,
         "msg": "Initializer of parameter 'a' cannot reference identifier 'b' declared after it."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 28,
         "msg": "Initializer of parameter 'b' cannot reference identifier 'c' declared after it."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 21,
         "msg": "Initializer of parameter 'a' cannot reference identifier 'b' declared after it."
     },
     {
-        "line": 23,
+        "line": 25,
         "column": 25,
         "msg": "Initializer of parameter 'a' cannot reference identifier 'b' declared after it."
     },
     {
-        "line": 32,
+        "line": 34,
         "column": 21,
         "msg": "Initializer of parameter 'a' cannot reference identifier 'b' declared after it."
     },
     {
-        "line": 33,
+        "line": 35,
         "column": 16,
         "msg": "Initializer of parameter 'a' cannot reference identifier 'b' declared after it."
     },
     {
-        "line": 37,
+        "line": 39,
         "column": 14,
         "msg": "Initializer of parameter 'a' cannot reference identifier 'b' declared after it."
     },
     {
-        "line": 37,
+        "line": 39,
         "column": 21,
         "msg": "Initializer of parameter 'b' cannot reference identifier 'c' declared after it."
     },
     {
-        "line": 37,
+        "line": 39,
         "column": 28,
         "msg": "Initializer of parameter 'c' cannot reference identifier 'd' declared after it."
     }

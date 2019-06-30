@@ -1,6 +1,6 @@
 [
     {
-        "line": 10,
+        "line": 12,
         "column": 22,
         "msg": "Property 'bar' is protected and only accessible within class 'C' and its subclasses."
     }

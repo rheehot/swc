@@ -1,11 +1,11 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 21,
         "msg": "Cannot find name 'A'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 23,
         "msg": "'extends' clause already seen."
     }

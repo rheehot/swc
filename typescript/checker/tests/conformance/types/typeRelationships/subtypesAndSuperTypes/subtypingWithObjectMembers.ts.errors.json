@@ -1,31 +1,31 @@
 [
     {
-        "line": 14,
+        "line": 16,
         "column": 5,
         "msg": "Property 'bar' in type 'B' is not assignable to the same property in base type 'A'."
     },
     {
-        "line": 24,
+        "line": 26,
         "column": 5,
         "msg": "Property '2' in type 'B2' is not assignable to the same property in base type 'A2'."
     },
     {
-        "line": 34,
+        "line": 36,
         "column": 5,
         "msg": "Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'."
     },
     {
-        "line": 45,
+        "line": 47,
         "column": 9,
         "msg": "Property 'bar' in type 'B' is not assignable to the same property in base type 'A'."
     },
     {
-        "line": 55,
+        "line": 57,
         "column": 9,
         "msg": "Property '2' in type 'B2' is not assignable to the same property in base type 'A2'."
     },
     {
-        "line": 65,
+        "line": 67,
         "column": 9,
         "msg": "Property ''2.0'' in type 'B3' is not assignable to the same property in base type 'A3'."
     }

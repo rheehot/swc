@@ -1,6 +1,6 @@
 [
     {
-        "line": 5,
+        "line": 7,
         "column": 6,
         "msg": "An index signature parameter type must be 'string' or 'number'."
     }

@@ -1,91 +1,91 @@
 [
     {
-        "line": 5,
+        "line": 7,
         "column": 9,
         "msg": "Expected 0 type arguments, but got 1."
     },
     {
-        "line": 31,
+        "line": 33,
         "column": 12,
         "msg": "Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first."
     },
     {
-        "line": 35,
+        "line": 37,
         "column": 15,
         "msg": "Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first."
     },
     {
-        "line": 37,
+        "line": 39,
         "column": 13,
         "msg": "Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first."
     },
     {
-        "line": 38,
+        "line": 40,
         "column": 13,
         "msg": "Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first."
     },
     {
-        "line": 44,
+        "line": 46,
         "column": 5,
         "msg": "'numOrStr' refers to a value, but is being used as a type here."
     },
     {
-        "line": 44,
+        "line": 46,
         "column": 14,
         "msg": "'>' expected."
     },
     {
-        "line": 44,
+        "line": 46,
         "column": 14,
         "msg": "Cannot find name 'is'."
     },
     {
-        "line": 44,
+        "line": 46,
         "column": 17,
         "msg": "')' expected."
     },
     {
-        "line": 44,
+        "line": 46,
         "column": 17,
         "msg": "'string' only refers to a type, but is being used as a value here."
     },
     {
-        "line": 44,
+        "line": 46,
         "column": 48,
         "msg": "';' expected."
     },
     {
-        "line": 45,
+        "line": 47,
         "column": 2,
         "msg": "Type 'string | number' is not assignable to type 'string'."
     },
     {
-        "line": 48,
+        "line": 50,
         "column": 32,
         "msg": "'numOrStr' refers to a value, but is being used as a type here."
     },
     {
-        "line": 48,
+        "line": 50,
         "column": 41,
         "msg": "')' expected."
     },
     {
-        "line": 48,
+        "line": 50,
         "column": 41,
         "msg": "Cannot find name 'is'."
     },
     {
-        "line": 48,
+        "line": 50,
         "column": 44,
         "msg": "';' expected."
     },
     {
-        "line": 48,
+        "line": 50,
         "column": 44,
         "msg": "'string' only refers to a type, but is being used as a value here."
     },
     {
-        "line": 48,
+        "line": 50,
         "column": 50,
         "msg": "';' expected."
     }

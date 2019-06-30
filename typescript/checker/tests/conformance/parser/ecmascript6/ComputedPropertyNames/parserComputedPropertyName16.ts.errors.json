@@ -1,6 +1,6 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 3,
         "msg": "Computed property names are not allowed in enums."
     }

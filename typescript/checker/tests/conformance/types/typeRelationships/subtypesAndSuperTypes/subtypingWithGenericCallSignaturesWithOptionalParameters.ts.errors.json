@@ -1,11 +1,11 @@
 [
     {
-        "line": 20,
+        "line": 22,
         "column": 15,
         "msg": "Interface 'I3<T>' incorrectly extends interface 'Base<T>'."
     },
     {
-        "line": 50,
+        "line": 52,
         "column": 15,
         "msg": "Interface 'I10<T>' incorrectly extends interface 'Base<T>'."
     },
@@ -15,27 +15,27 @@
         "msg": "T) => T' is not assignable to type '(x"
     },
     {
-        "line": 100,
+        "line": 102,
         "column": 15,
         "msg": "Interface 'I1<T>' incorrectly extends interface 'Base2'."
     },
     {
-        "line": 104,
+        "line": 106,
         "column": 15,
         "msg": "Interface 'I2<T>' incorrectly extends interface 'Base2'."
     },
     {
-        "line": 108,
+        "line": 110,
         "column": 15,
         "msg": "Interface 'I3<T>' incorrectly extends interface 'Base2'."
     },
     {
-        "line": 113,
+        "line": 115,
         "column": 15,
         "msg": "Interface 'I4<T>' incorrectly extends interface 'Base2'."
     },
     {
-        "line": 117,
+        "line": 119,
         "column": 15,
         "msg": "Interface 'I5<T>' incorrectly extends interface 'Base2'."
     },
@@ -45,7 +45,7 @@
         "msg": "T) => T'."
     },
     {
-        "line": 121,
+        "line": 123,
         "column": 15,
         "msg": "Interface 'I6<T>' incorrectly extends interface 'Base2'."
     },
@@ -55,12 +55,12 @@
         "msg": "T) => T'."
     },
     {
-        "line": 126,
+        "line": 128,
         "column": 15,
         "msg": "Interface 'I7<T>' incorrectly extends interface 'Base2'."
     },
     {
-        "line": 130,
+        "line": 132,
         "column": 15,
         "msg": "Interface 'I8<T>' incorrectly extends interface 'Base2'."
     },
@@ -70,7 +70,7 @@
         "msg": "T) => T'."
     },
     {
-        "line": 134,
+        "line": 136,
         "column": 15,
         "msg": "Interface 'I9<T>' incorrectly extends interface 'Base2'."
     },
@@ -80,7 +80,7 @@
         "msg": "T) => T'."
     },
     {
-        "line": 138,
+        "line": 140,
         "column": 15,
         "msg": "Interface 'I10<T>' incorrectly extends interface 'Base2'."
     },
@@ -90,7 +90,7 @@
         "msg": "T) => T' is not assignable to type '<T>(x"
     },
     {
-        "line": 143,
+        "line": 145,
         "column": 15,
         "msg": "Interface 'I11<T>' incorrectly extends interface 'Base2'."
     },
@@ -100,7 +100,7 @@
         "msg": "T) => T'."
     },
     {
-        "line": 147,
+        "line": 149,
         "column": 15,
         "msg": "Interface 'I12<T>' incorrectly extends interface 'Base2'."
     },
@@ -110,7 +110,7 @@
         "msg": "T) => T' is not assignable to type '<T>(x"
     },
     {
-        "line": 151,
+        "line": 153,
         "column": 15,
         "msg": "Interface 'I13<T>' incorrectly extends interface 'Base2'."
     },
@@ -120,7 +120,7 @@
         "msg": "T, y?"
     },
     {
-        "line": 155,
+        "line": 157,
         "column": 15,
         "msg": "Interface 'I14<T>' incorrectly extends interface 'Base2'."
     },
@@ -130,7 +130,7 @@
         "msg": "T) => T' is not assignable to type '<T>(x"
     },
     {
-        "line": 160,
+        "line": 162,
         "column": 15,
         "msg": "Interface 'I15<T>' incorrectly extends interface 'Base2'."
     },
@@ -140,7 +140,7 @@
         "msg": "T) => T'."
     },
     {
-        "line": 164,
+        "line": 166,
         "column": 15,
         "msg": "Interface 'I16<T>' incorrectly extends interface 'Base2'."
     },
@@ -150,7 +150,7 @@
         "msg": "T) => T' is not assignable to type '<T>(x?"
     },
     {
-        "line": 168,
+        "line": 170,
         "column": 15,
         "msg": "Interface 'I17<T>' incorrectly extends interface 'Base2'."
     },
@@ -160,7 +160,7 @@
         "msg": "T, y?"
     },
     {
-        "line": 172,
+        "line": 174,
         "column": 15,
         "msg": "Interface 'I18<T>' incorrectly extends interface 'Base2'."
     },
@@ -170,12 +170,12 @@
         "msg": "T) => T' is not assignable to type '<T>(x?"
     },
     {
-        "line": 196,
+        "line": 198,
         "column": 15,
         "msg": "Interface 'I3' incorrectly extends interface 'Base2'."
     },
     {
-        "line": 226,
+        "line": 228,
         "column": 15,
         "msg": "Interface 'I10' incorrectly extends interface 'Base2'."
     },

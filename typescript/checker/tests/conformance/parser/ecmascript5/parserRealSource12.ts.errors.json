@@ -1,83 +1,73 @@
 [
     {
-        "line": 4,
+        "line": 6,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 19,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 32,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 38,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 15,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 28,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 54,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 18,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 31,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 41,
+        "line": 43,
         "column": 26,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 41,
+        "line": 43,
         "column": 39,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 41,
+        "line": 43,
         "column": 45,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 77,
+        "line": 79,
         "column": 26,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 77,
+        "line": 79,
         "column": 119,
         "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 94,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
-    },
-    {
-        "line": 95,
-        "column": 34,
-        "msg": "Cannot find name 'NodeType'."
     },
     {
         "line": 96,
@@ -605,442 +595,452 @@
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 203,
+        "line": 201,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 202,
+        "column": 34,
+        "msg": "Cannot find name 'NodeType'."
+    },
+    {
+        "line": 205,
         "column": 33,
         "msg": "Cannot find name 'NodeType'."
     },
     {
-        "line": 221,
+        "line": 223,
         "column": 42,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 221,
+        "line": 223,
         "column": 59,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 225,
+        "line": 227,
         "column": 50,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 225,
+        "line": 227,
         "column": 67,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 243,
+        "line": 245,
         "column": 61,
         "msg": "Cannot find name 'UnaryExpression'."
     },
     {
-        "line": 243,
+        "line": 245,
         "column": 86,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 252,
+        "line": 254,
         "column": 62,
         "msg": "Cannot find name 'BinaryExpression'."
     },
     {
-        "line": 252,
+        "line": 254,
         "column": 88,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 270,
+        "line": 272,
         "column": 59,
         "msg": "Cannot find name 'TypeReference'."
     },
     {
-        "line": 270,
+        "line": 272,
         "column": 82,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 276,
+        "line": 278,
         "column": 60,
         "msg": "Cannot find name 'CallExpression'."
     },
     {
-        "line": 276,
+        "line": 278,
         "column": 84,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 281,
+        "line": 283,
         "column": 37,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 288,
+        "line": 290,
         "column": 63,
         "msg": "Cannot find name 'ConditionalExpression'."
     },
     {
-        "line": 288,
+        "line": 290,
         "column": 94,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 300,
+        "line": 302,
         "column": 54,
         "msg": "Cannot find name 'FuncDecl'."
     },
     {
-        "line": 300,
+        "line": 302,
         "column": 72,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 302,
+        "line": 304,
         "column": 32,
         "msg": "Cannot find name 'Identifier'."
     },
     {
-        "line": 305,
+        "line": 307,
         "column": 37,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 311,
+        "line": 313,
         "column": 31,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 315,
+        "line": 317,
         "column": 55,
         "msg": "Cannot find name 'BoundDecl'."
     },
     {
-        "line": 315,
+        "line": 317,
         "column": 74,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 317,
+        "line": 319,
         "column": 30,
         "msg": "Cannot find name 'Identifier'."
     },
     {
-        "line": 327,
+        "line": 329,
         "column": 61,
         "msg": "Cannot find name 'ReturnStatement'."
     },
     {
-        "line": 327,
+        "line": 329,
         "column": 86,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 333,
+        "line": 335,
         "column": 58,
         "msg": "Cannot find name 'ForStatement'."
     },
     {
-        "line": 333,
+        "line": 335,
         "column": 80,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 351,
+        "line": 353,
         "column": 60,
         "msg": "Cannot find name 'ForInStatement'."
     },
     {
-        "line": 351,
+        "line": 353,
         "column": 84,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 361,
+        "line": 363,
         "column": 57,
         "msg": "Cannot find name 'IfStatement'."
     },
     {
-        "line": 361,
+        "line": 363,
         "column": 78,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 371,
+        "line": 373,
         "column": 60,
         "msg": "Cannot find name 'WhileStatement'."
     },
     {
-        "line": 371,
+        "line": 373,
         "column": 84,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 378,
+        "line": 380,
         "column": 62,
         "msg": "Cannot find name 'DoWhileStatement'."
     },
     {
-        "line": 378,
+        "line": 380,
         "column": 88,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 385,
+        "line": 387,
         "column": 51,
         "msg": "Cannot find name 'Block'."
     },
     {
-        "line": 385,
+        "line": 387,
         "column": 66,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 387,
+        "line": 389,
         "column": 38,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 391,
+        "line": 393,
         "column": 59,
         "msg": "Cannot find name 'CaseStatement'."
     },
     {
-        "line": 391,
+        "line": 393,
         "column": 82,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 397,
+        "line": 399,
         "column": 32,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 401,
+        "line": 403,
         "column": 61,
         "msg": "Cannot find name 'SwitchStatement'."
     },
     {
-        "line": 401,
+        "line": 403,
         "column": 86,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 407,
+        "line": 409,
         "column": 36,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 411,
+        "line": 413,
         "column": 49,
         "msg": "Cannot find name 'Try'."
     },
     {
-        "line": 411,
+        "line": 413,
         "column": 62,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 417,
+        "line": 419,
         "column": 54,
         "msg": "Cannot find name 'TryCatch'."
     },
     {
-        "line": 417,
+        "line": 419,
         "column": 72,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 419,
+        "line": 421,
         "column": 35,
         "msg": "Cannot find name 'Try'."
     },
     {
-        "line": 423,
+        "line": 425,
         "column": 37,
         "msg": "Cannot find name 'Catch'."
     },
     {
-        "line": 427,
+        "line": 429,
         "column": 56,
         "msg": "Cannot find name 'TryFinally'."
     },
     {
-        "line": 427,
+        "line": 429,
         "column": 76,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 433,
+        "line": 435,
         "column": 39,
         "msg": "Cannot find name 'Finally'."
     },
     {
-        "line": 437,
+        "line": 439,
         "column": 53,
         "msg": "Cannot find name 'Finally'."
     },
     {
-        "line": 437,
+        "line": 439,
         "column": 70,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 443,
+        "line": 445,
         "column": 51,
         "msg": "Cannot find name 'Catch'."
     },
     {
-        "line": 443,
+        "line": 445,
         "column": 66,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 445,
+        "line": 447,
         "column": 33,
         "msg": "Cannot find name 'VarDecl'."
     },
     {
-        "line": 453,
+        "line": 455,
         "column": 52,
         "msg": "Cannot find name 'NamedDeclaration'."
     },
     {
-        "line": 453,
+        "line": 455,
         "column": 78,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 454,
+        "line": 456,
         "column": 28,
         "msg": "Cannot find name 'Identifier'."
     },
     {
-        "line": 456,
+        "line": 458,
         "column": 35,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 461,
+        "line": 463,
         "column": 55,
         "msg": "Cannot find name 'TypeDeclaration'."
     },
     {
-        "line": 461,
+        "line": 463,
         "column": 80,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 465,
+        "line": 467,
         "column": 55,
         "msg": "Cannot find name 'ClassDeclaration'."
     },
     {
-        "line": 465,
+        "line": 467,
         "column": 81,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 469,
+        "line": 471,
         "column": 39,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 473,
+        "line": 475,
         "column": 42,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 477,
+        "line": 479,
         "column": 52,
         "msg": "Cannot find name 'Script'."
     },
     {
-        "line": 477,
+        "line": 479,
         "column": 68,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 479,
+        "line": 481,
         "column": 31,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 483,
+        "line": 485,
         "column": 54,
         "msg": "Cannot find name 'InterfaceDeclaration'."
     },
     {
-        "line": 483,
+        "line": 485,
         "column": 84,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 488,
+        "line": 490,
         "column": 39,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 492,
+        "line": 494,
         "column": 42,
         "msg": "Cannot find name 'ASTList'."
     },
     {
-        "line": 496,
+        "line": 498,
         "column": 56,
         "msg": "Cannot find name 'ModuleDeclaration'."
     },
     {
-        "line": 496,
-        "column": 83,
-        "msg": "Cannot find name 'AST'."
-    },
-    {
-        "line": 500,
-        "column": 56,
-        "msg": "Cannot find name 'ImportDeclaration'."
-    },
-    {
-        "line": 500,
+        "line": 498,
         "column": 83,
         "msg": "Cannot find name 'AST'."
     },
     {
         "line": 502,
+        "column": 56,
+        "msg": "Cannot find name 'ImportDeclaration'."
+    },
+    {
+        "line": 502,
+        "column": 83,
+        "msg": "Cannot find name 'AST'."
+    },
+    {
+        "line": 504,
         "column": 30,
         "msg": "Cannot find name 'Identifier'."
     },
     {
-        "line": 509,
+        "line": 511,
         "column": 59,
         "msg": "Cannot find name 'WithStatement'."
     },
     {
-        "line": 509,
+        "line": 511,
         "column": 82,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 519,
+        "line": 521,
         "column": 51,
         "msg": "Cannot find name 'Label'."
     },
     {
-        "line": 519,
+        "line": 521,
         "column": 66,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 523,
+        "line": 525,
         "column": 62,
         "msg": "Cannot find name 'LabeledStatement'."
     },
     {
-        "line": 523,
+        "line": 525,
         "column": 88,
         "msg": "Cannot find name 'AST'."
     },
     {
-        "line": 524,
+        "line": 526,
         "column": 30,
         "msg": "Cannot find name 'ASTList'."
     }

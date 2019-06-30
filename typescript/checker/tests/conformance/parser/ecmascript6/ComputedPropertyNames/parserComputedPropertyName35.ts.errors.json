@@ -1,11 +1,11 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 6,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 2,
+        "line": 4,
         "column": 6,
         "msg": "A comma expression is not allowed in a computed property name."
     }

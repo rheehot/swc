@@ -1,38 +1,28 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 6,
         "msg": "The left-hand side of a 'for...in' statement must be of type 'string' or 'any'."
     },
     {
-        "line": 5,
-        "column": 6,
-        "msg": "The left-hand side of a 'for...in' statement must be of type 'string' or 'any'."
-    },
-    {
-        "line": 8,
+        "line": 7,
         "column": 6,
         "msg": "The left-hand side of a 'for...in' statement must be of type 'string' or 'any'."
     },
     {
         "line": 10,
+        "column": 6,
+        "msg": "The left-hand side of a 'for...in' statement must be of type 'string' or 'any'."
+    },
+    {
+        "line": 12,
         "column": 10,
         "msg": "The left-hand side of a 'for...in' statement cannot use a type annotation."
     },
     {
-        "line": 13,
+        "line": 15,
         "column": 15,
         "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'void'."
-    },
-    {
-        "line": 17,
-        "column": 15,
-        "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'."
-    },
-    {
-        "line": 18,
-        "column": 15,
-        "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'."
     },
     {
         "line": 19,
@@ -45,42 +35,52 @@
         "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'."
     },
     {
+        "line": 21,
+        "column": 15,
+        "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'."
+    },
+    {
         "line": 22,
         "column": 15,
         "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'."
     },
     {
-        "line": 29,
+        "line": 24,
+        "column": 15,
+        "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'string'."
+    },
+    {
+        "line": 31,
         "column": 23,
         "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'."
     },
     {
-        "line": 31,
+        "line": 33,
         "column": 18,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'."
     },
     {
-        "line": 38,
-        "column": 23,
-        "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'."
-    },
-    {
-        "line": 46,
+        "line": 40,
         "column": 23,
         "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'."
     },
     {
         "line": 48,
-        "column": 18,
-        "msg": "Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'."
-    },
-    {
-        "line": 51,
         "column": 23,
         "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'."
     },
     {
-        "line": 62,
+        "line": 50,
+        "column": 18,
+        "msg": "Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'Extract<keyof this, string>'."
+    },
+    {
+        "line": 53,
+        "column": 23,
+        "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'."
+    },
+    {
+        "line": 64,
         "column": 15,
         "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'number'."
     }

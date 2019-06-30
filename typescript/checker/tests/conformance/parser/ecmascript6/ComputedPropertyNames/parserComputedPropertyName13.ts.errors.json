@@ -1,11 +1,11 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 10,
         "msg": "A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 11,
         "msg": "Cannot find name 'e'."
     }

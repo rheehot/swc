@@ -1,11 +1,11 @@
 [
     {
-        "line": 32,
+        "line": 34,
         "column": 19,
         "msg": "Argument of type '(a1"
     },
     {
-        "line": 33,
+        "line": 35,
         "column": 69,
         "msg": "Argument of type '(a2"
     }

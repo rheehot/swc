@@ -1,66 +1,66 @@
 [
     {
-        "line": 7,
+        "line": 9,
         "column": 31,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 31,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 31,
         "msg": "The operand of a delete operator cannot be a read-only property."
     },
     {
-        "line": 12,
+        "line": 14,
         "column": 32,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 15,
+        "line": 17,
         "column": 31,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 15,
+        "line": 17,
         "column": 38,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 31,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 38,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 46,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 19,
-        "column": 8,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 20,
-        "column": 8,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
         "line": 21,
         "column": 8,
-        "msg": "The operand of a delete operator cannot be a read-only property."
+        "msg": "The operand of a delete operator must be a property reference."
     },
     {
         "line": 22,
+        "column": 8,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 23,
+        "column": 8,
+        "msg": "The operand of a delete operator cannot be a read-only property."
+    },
+    {
+        "line": 24,
         "column": 8,
         "msg": "The operand of a delete operator must be a property reference."
     }

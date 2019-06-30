@@ -1,15 +1,5 @@
 [
     {
-        "line": 4,
-        "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
-    },
-    {
-        "line": 5,
-        "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
-    },
-    {
         "line": 6,
         "column": 1,
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
@@ -25,12 +15,12 @@
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 1,
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 11,
+        "line": 10,
         "column": 1,
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
@@ -50,12 +40,12 @@
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 16,
+        "line": 15,
         "column": 1,
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 17,
+        "line": 16,
         "column": 1,
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
@@ -75,13 +65,13 @@
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 22,
-        "column": 6,
+        "line": 21,
+        "column": 1,
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 23,
-        "column": 6,
+        "line": 22,
+        "column": 1,
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
@@ -100,24 +90,14 @@
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 28,
-        "column": 1,
+        "line": 27,
+        "column": 6,
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 28,
-        "column": 9,
-        "msg": "The operand of a delete operator must be a property reference."
-    },
-    {
-        "line": 29,
-        "column": 1,
+        "column": 6,
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
-    },
-    {
-        "line": 29,
-        "column": 9,
-        "msg": "The operand of a delete operator must be a property reference."
     },
     {
         "line": 30,
@@ -140,23 +120,23 @@
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 33,
-        "column": 6,
+        "line": 32,
+        "column": 1,
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 33,
-        "column": 14,
+        "line": 32,
+        "column": 9,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
-        "line": 34,
-        "column": 6,
+        "line": 33,
+        "column": 1,
         "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 34,
-        "column": 14,
+        "line": 33,
+        "column": 9,
         "msg": "The operand of a delete operator must be a property reference."
     },
     {
@@ -176,6 +156,26 @@
     },
     {
         "line": 36,
+        "column": 14,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 37,
+        "column": 6,
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+    },
+    {
+        "line": 37,
+        "column": 14,
+        "msg": "The operand of a delete operator must be a property reference."
+    },
+    {
+        "line": 38,
+        "column": 6,
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+    },
+    {
+        "line": 38,
         "column": 14,
         "msg": "The operand of a delete operator must be a property reference."
     }

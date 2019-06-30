@@ -1,6 +1,6 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 5,
         "msg": "An export assignment cannot be used in a namespace."
     }

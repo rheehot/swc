@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 5,
         "column": 7,
         "msg": "Type 'false' is not assignable to type 'string'."
     },
     {
-        "line": 3,
+        "line": 5,
         "column": 18,
         "msg": "Type '\"\"' is not assignable to type 'boolean'."
     }

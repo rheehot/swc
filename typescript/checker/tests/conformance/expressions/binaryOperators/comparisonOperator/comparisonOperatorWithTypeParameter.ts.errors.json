@@ -1,33 +1,23 @@
 [
     {
-        "line": 6,
+        "line": 8,
         "column": 15,
         "msg": "Operator '<' cannot be applied to types 'T' and 'U'."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 15,
         "msg": "Operator '>' cannot be applied to types 'T' and 'U'."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 15,
         "msg": "Operator '<=' cannot be applied to types 'T' and 'U'."
     },
     {
-        "line": 9,
-        "column": 15,
-        "msg": "Operator '>=' cannot be applied to types 'T' and 'U'."
-    },
-    {
-        "line": 10,
-        "column": 15,
-        "msg": "This condition will always return 'false' since the types 'T' and 'U' have no overlap."
-    },
-    {
         "line": 11,
         "column": 15,
-        "msg": "This condition will always return 'true' since the types 'T' and 'U' have no overlap."
+        "msg": "Operator '>=' cannot be applied to types 'T' and 'U'."
     },
     {
         "line": 12,
@@ -40,34 +30,34 @@
         "msg": "This condition will always return 'true' since the types 'T' and 'U' have no overlap."
     },
     {
-        "line": 15,
+        "line": 14,
         "column": 15,
-        "msg": "Operator '<' cannot be applied to types 'U' and 'T'."
+        "msg": "This condition will always return 'false' since the types 'T' and 'U' have no overlap."
     },
     {
-        "line": 16,
+        "line": 15,
         "column": 15,
-        "msg": "Operator '>' cannot be applied to types 'U' and 'T'."
+        "msg": "This condition will always return 'true' since the types 'T' and 'U' have no overlap."
     },
     {
         "line": 17,
         "column": 15,
-        "msg": "Operator '<=' cannot be applied to types 'U' and 'T'."
+        "msg": "Operator '<' cannot be applied to types 'U' and 'T'."
     },
     {
         "line": 18,
         "column": 15,
-        "msg": "Operator '>=' cannot be applied to types 'U' and 'T'."
+        "msg": "Operator '>' cannot be applied to types 'U' and 'T'."
     },
     {
         "line": 19,
         "column": 15,
-        "msg": "This condition will always return 'false' since the types 'U' and 'T' have no overlap."
+        "msg": "Operator '<=' cannot be applied to types 'U' and 'T'."
     },
     {
         "line": 20,
         "column": 15,
-        "msg": "This condition will always return 'true' since the types 'U' and 'T' have no overlap."
+        "msg": "Operator '>=' cannot be applied to types 'U' and 'T'."
     },
     {
         "line": 21,
@@ -80,34 +70,34 @@
         "msg": "This condition will always return 'true' since the types 'U' and 'T' have no overlap."
     },
     {
-        "line": 24,
+        "line": 23,
         "column": 15,
-        "msg": "Operator '<' cannot be applied to types 'T' and 'V'."
+        "msg": "This condition will always return 'false' since the types 'U' and 'T' have no overlap."
     },
     {
-        "line": 25,
+        "line": 24,
         "column": 15,
-        "msg": "Operator '>' cannot be applied to types 'T' and 'V'."
+        "msg": "This condition will always return 'true' since the types 'U' and 'T' have no overlap."
     },
     {
         "line": 26,
         "column": 15,
-        "msg": "Operator '<=' cannot be applied to types 'T' and 'V'."
+        "msg": "Operator '<' cannot be applied to types 'T' and 'V'."
     },
     {
         "line": 27,
         "column": 15,
-        "msg": "Operator '>=' cannot be applied to types 'T' and 'V'."
+        "msg": "Operator '>' cannot be applied to types 'T' and 'V'."
     },
     {
         "line": 28,
         "column": 15,
-        "msg": "This condition will always return 'false' since the types 'T' and 'V' have no overlap."
+        "msg": "Operator '<=' cannot be applied to types 'T' and 'V'."
     },
     {
         "line": 29,
         "column": 15,
-        "msg": "This condition will always return 'true' since the types 'T' and 'V' have no overlap."
+        "msg": "Operator '>=' cannot be applied to types 'T' and 'V'."
     },
     {
         "line": 30,
@@ -120,34 +110,34 @@
         "msg": "This condition will always return 'true' since the types 'T' and 'V' have no overlap."
     },
     {
-        "line": 33,
+        "line": 32,
         "column": 15,
-        "msg": "Operator '<' cannot be applied to types 'V' and 'T'."
+        "msg": "This condition will always return 'false' since the types 'T' and 'V' have no overlap."
     },
     {
-        "line": 34,
+        "line": 33,
         "column": 15,
-        "msg": "Operator '>' cannot be applied to types 'V' and 'T'."
+        "msg": "This condition will always return 'true' since the types 'T' and 'V' have no overlap."
     },
     {
         "line": 35,
         "column": 15,
-        "msg": "Operator '<=' cannot be applied to types 'V' and 'T'."
+        "msg": "Operator '<' cannot be applied to types 'V' and 'T'."
     },
     {
         "line": 36,
         "column": 15,
-        "msg": "Operator '>=' cannot be applied to types 'V' and 'T'."
+        "msg": "Operator '>' cannot be applied to types 'V' and 'T'."
     },
     {
         "line": 37,
         "column": 15,
-        "msg": "This condition will always return 'false' since the types 'V' and 'T' have no overlap."
+        "msg": "Operator '<=' cannot be applied to types 'V' and 'T'."
     },
     {
         "line": 38,
         "column": 15,
-        "msg": "This condition will always return 'true' since the types 'V' and 'T' have no overlap."
+        "msg": "Operator '>=' cannot be applied to types 'V' and 'T'."
     },
     {
         "line": 39,
@@ -156,6 +146,16 @@
     },
     {
         "line": 40,
+        "column": 15,
+        "msg": "This condition will always return 'true' since the types 'V' and 'T' have no overlap."
+    },
+    {
+        "line": 41,
+        "column": 15,
+        "msg": "This condition will always return 'false' since the types 'V' and 'T' have no overlap."
+    },
+    {
+        "line": 42,
         "column": 15,
         "msg": "This condition will always return 'true' since the types 'V' and 'T' have no overlap."
     }

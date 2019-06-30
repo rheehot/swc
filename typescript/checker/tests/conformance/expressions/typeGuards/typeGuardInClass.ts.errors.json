@@ -1,11 +1,11 @@
 [
     {
-        "line": 6,
+        "line": 8,
         "column": 17,
         "msg": "Type 'string | number' is not assignable to type 'string'."
     },
     {
-        "line": 13,
+        "line": 15,
         "column": 17,
         "msg": "Type 'string | number' is not assignable to type 'number'."
     }

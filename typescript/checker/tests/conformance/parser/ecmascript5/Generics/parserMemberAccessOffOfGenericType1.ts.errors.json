@@ -1,21 +1,21 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 9,
         "msg": "Cannot find name 'List'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 21,
         "msg": "'(' expected."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 22,
         "msg": "Cannot find name 'makeChild'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 33,
         "msg": "')' expected."
     }

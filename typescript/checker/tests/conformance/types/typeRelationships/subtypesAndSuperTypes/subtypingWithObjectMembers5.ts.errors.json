@@ -1,31 +1,31 @@
 [
     {
-        "line": 16,
+        "line": 18,
         "column": 11,
         "msg": "Class 'B' incorrectly implements interface 'A'."
     },
     {
-        "line": 24,
+        "line": 26,
         "column": 11,
         "msg": "Class 'B2' incorrectly implements interface 'A2'."
     },
     {
-        "line": 32,
+        "line": 34,
         "column": 11,
         "msg": "Class 'B3' incorrectly implements interface 'A3'."
     },
     {
-        "line": 43,
+        "line": 45,
         "column": 11,
         "msg": "Type 'B' has no properties in common with type 'A'."
     },
     {
-        "line": 51,
+        "line": 53,
         "column": 11,
         "msg": "Type 'B2' has no properties in common with type 'A2'."
     },
     {
-        "line": 59,
+        "line": 61,
         "column": 11,
         "msg": "Type 'B3' has no properties in common with type 'A3'."
     }

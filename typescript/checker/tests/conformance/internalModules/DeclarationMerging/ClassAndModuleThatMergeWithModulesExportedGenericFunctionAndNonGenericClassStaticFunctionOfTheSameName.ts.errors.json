@@ -1,11 +1,11 @@
 [
     {
-        "line": 5,
+        "line": 7,
         "column": 12,
         "msg": "Duplicate identifier 'fn'."
     },
     {
-        "line": 10,
+        "line": 12,
         "column": 21,
         "msg": "Duplicate identifier 'fn'."
     }

@@ -1,16 +1,16 @@
 [
     {
-        "line": 1,
-        "column": 5,
-        "msg": "Variable declaration expected."
-    },
-    {
         "line": 3,
         "column": 5,
         "msg": "Variable declaration expected."
     },
     {
-        "line": 3,
+        "line": 5,
+        "column": 5,
+        "msg": "Variable declaration expected."
+    },
+    {
+        "line": 5,
         "column": 10,
         "msg": "'{' expected."
     }

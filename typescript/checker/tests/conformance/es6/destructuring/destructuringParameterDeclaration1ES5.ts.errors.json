@@ -1,21 +1,21 @@
 [
     {
-        "line": 12,
+        "line": 14,
         "column": 4,
         "msg": "Argument of type '[number, number, string[][], number]' is not assignable to parameter of type '[number, number, string[][]]'."
     },
     {
-        "line": 57,
+        "line": 59,
         "column": 4,
         "msg": "Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'."
     },
     {
-        "line": 62,
+        "line": 64,
         "column": 10,
         "msg": "Duplicate function implementation."
     },
     {
-        "line": 63,
+        "line": 65,
         "column": 10,
         "msg": "Duplicate function implementation."
     }

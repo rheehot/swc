@@ -1,121 +1,121 @@
 [
     {
-        "line": 8,
+        "line": 10,
         "column": 8,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 10,
+        "line": 12,
         "column": 13,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 14,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 18,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 12,
+        "line": 14,
         "column": 11,
         "msg": "An index signature parameter type must be 'string' or 'number'."
     },
     {
-        "line": 12,
+        "line": 14,
         "column": 14,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 12,
+        "line": 14,
         "column": 18,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 13,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 28,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 15,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 19,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 30,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 23,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 27,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 38,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 17,
         "msg": "Cannot extend an interface 'I'. Did you mean 'implements'?"
     },
     {
-        "line": 23,
+        "line": 25,
         "column": 21,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 18,
         "msg": "Cannot use namespace 'M' as a value."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 24,
         "msg": "Generic type 'E<T>' requires 1 type argument(s)."
     },
     {
-        "line": 31,
+        "line": 33,
         "column": 24,
         "msg": "Namespace 'M' has no exported member 'C'."
     },
     {
-        "line": 33,
+        "line": 35,
         "column": 22,
         "msg": "Generic type 'I<T>' requires 1 type argument(s)."
     },
     {
-        "line": 34,
+        "line": 36,
         "column": 22,
         "msg": "Generic type 'E<T>' requires 1 type argument(s)."
     },
     {
-        "line": 36,
+        "line": 38,
         "column": 10,
         "msg": "Cannot find name 'C'."
     },
     {
-        "line": 37,
+        "line": 39,
         "column": 10,
         "msg": "Generic type 'E<T>' requires 1 type argument(s)."
     }

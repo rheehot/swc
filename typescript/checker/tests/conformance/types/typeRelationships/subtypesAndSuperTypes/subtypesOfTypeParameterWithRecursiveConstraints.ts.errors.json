@@ -1,121 +1,121 @@
 [
     {
-        "line": 68,
+        "line": 70,
         "column": 9,
         "msg": "Property 'foo' of type 'U' is not assignable to string index type 'T'."
     },
     {
-        "line": 68,
+        "line": 70,
         "column": 9,
         "msg": "Property 'foo' in type 'D2<T, U, V>' is not assignable to the same property in base type 'Base<T>'."
     },
     {
-        "line": 73,
+        "line": 75,
         "column": 9,
         "msg": "Property 'foo' of type 'V' is not assignable to string index type 'T'."
     },
     {
-        "line": 73,
+        "line": 75,
         "column": 9,
         "msg": "Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'Base<T>'."
     },
     {
-        "line": 78,
+        "line": 80,
         "column": 9,
         "msg": "Property 'foo' of type 'T' is not assignable to string index type 'U'."
     },
     {
-        "line": 78,
+        "line": 80,
         "column": 9,
         "msg": "Property 'foo' in type 'D4<T, U, V>' is not assignable to the same property in base type 'Base<U>'."
     },
     {
-        "line": 88,
+        "line": 90,
         "column": 9,
         "msg": "Property 'foo' of type 'V' is not assignable to string index type 'U'."
     },
     {
-        "line": 88,
+        "line": 90,
         "column": 9,
         "msg": "Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'Base<U>'."
     },
     {
-        "line": 93,
+        "line": 95,
         "column": 9,
         "msg": "Property 'foo' of type 'T' is not assignable to string index type 'V'."
     },
     {
-        "line": 93,
+        "line": 95,
         "column": 9,
         "msg": "Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'Base<V>'."
     },
     {
-        "line": 98,
+        "line": 100,
         "column": 9,
         "msg": "Property 'foo' of type 'U' is not assignable to string index type 'V'."
     },
     {
-        "line": 98,
+        "line": 100,
         "column": 9,
         "msg": "Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'Base<V>'."
     },
     {
-        "line": 115,
+        "line": 117,
         "column": 9,
         "msg": "Property 'foo' in type 'D1<T, U, V>' is not assignable to the same property in base type 'Base2<T>'."
     },
     {
-        "line": 120,
+        "line": 122,
         "column": 9,
         "msg": "Property 'foo' of type 'U' is not assignable to string index type 'T'."
     },
     {
-        "line": 125,
+        "line": 127,
         "column": 9,
         "msg": "Property 'foo' of type 'V' is not assignable to string index type 'T'."
     },
     {
-        "line": 125,
+        "line": 127,
         "column": 9,
         "msg": "Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'Base2<T>'."
     },
     {
-        "line": 130,
+        "line": 132,
         "column": 9,
         "msg": "Property 'foo' of type 'T' is not assignable to string index type 'U'."
     },
     {
-        "line": 135,
+        "line": 137,
         "column": 9,
         "msg": "Property 'foo' in type 'D5<T, U, V>' is not assignable to the same property in base type 'Base2<U>'."
     },
     {
-        "line": 140,
+        "line": 142,
         "column": 9,
         "msg": "Property 'foo' of type 'V' is not assignable to string index type 'U'."
     },
     {
-        "line": 140,
+        "line": 142,
         "column": 9,
         "msg": "Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'Base2<U>'."
     },
     {
-        "line": 145,
+        "line": 147,
         "column": 9,
         "msg": "Property 'foo' of type 'T' is not assignable to string index type 'V'."
     },
     {
-        "line": 145,
+        "line": 147,
         "column": 9,
         "msg": "Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'Base2<V>'."
     },
     {
-        "line": 150,
+        "line": 152,
         "column": 9,
         "msg": "Property 'foo' of type 'U' is not assignable to string index type 'V'."
     },
     {
-        "line": 150,
+        "line": 152,
         "column": 9,
         "msg": "Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'Base2<V>'."
     }

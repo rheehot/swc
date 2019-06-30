@@ -1,11 +1,11 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 14,
         "msg": "'readonly' modifier already seen."
     },
     {
-        "line": 3,
+        "line": 5,
         "column": 26,
         "msg": "'readonly' modifier already seen."
     }

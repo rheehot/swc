@@ -1,26 +1,26 @@
 [
     {
-        "line": 17,
+        "line": 19,
         "column": 6,
         "msg": "Cannot assign to 'value' because it is a read-only property."
     },
     {
-        "line": 19,
+        "line": 21,
         "column": 11,
         "msg": "Cannot assign to 'value' because it is a read-only property."
     },
     {
-        "line": 21,
+        "line": 23,
         "column": 9,
         "msg": "Cannot assign to 'value' because it is a read-only property."
     },
     {
-        "line": 23,
+        "line": 25,
         "column": 15,
         "msg": "Cannot assign to 'value' because it is a read-only property."
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 15,
         "msg": "Property 'value' does not exist on type 'Base | DifferentName'."
     }

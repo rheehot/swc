@@ -1,26 +1,26 @@
 [
     {
-        "line": 11,
+        "line": 13,
         "column": 11,
         "msg": "Interface 'B' incorrectly extends interface 'A'."
     },
     {
-        "line": 24,
+        "line": 26,
         "column": 27,
         "msg": "Type 'Base' does not satisfy the constraint 'Derived'."
     },
     {
-        "line": 32,
+        "line": 34,
         "column": 15,
         "msg": "Interface 'B3<T>' incorrectly extends interface 'A<T>'."
     },
     {
-        "line": 36,
+        "line": 38,
         "column": 15,
         "msg": "Interface 'B4<T>' incorrectly extends interface 'A<T>'."
     },
     {
-        "line": 40,
+        "line": 42,
         "column": 15,
         "msg": "Interface 'B5<T>' incorrectly extends interface 'A<T>'."
     }

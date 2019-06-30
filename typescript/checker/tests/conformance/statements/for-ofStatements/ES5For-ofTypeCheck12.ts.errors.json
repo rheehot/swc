@@ -1,6 +1,6 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 17,
         "msg": "Type '0' is not an array type or a string type."
     }

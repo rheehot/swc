@@ -1,51 +1,51 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 2,
+        "line": 4,
         "column": 16,
         "msg": "Duplicate identifier 'x'."
     },
     {
-        "line": 3,
+        "line": 5,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 3,
+        "line": 5,
         "column": 16,
         "msg": "Duplicate identifier 'x'."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 16,
         "msg": "Duplicate identifier 'x'."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 16,
         "msg": "Duplicate identifier 'x'."
     },
     {
-        "line": 12,
+        "line": 14,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 15,
+        "line": 17,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     }

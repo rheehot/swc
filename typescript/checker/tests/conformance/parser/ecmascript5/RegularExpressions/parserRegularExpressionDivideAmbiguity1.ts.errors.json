@@ -1,11 +1,11 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 2,
         "msg": "Cannot find name 'notregexp'."
     },
     {
-        "line": 2,
+        "line": 4,
         "column": 12,
         "msg": "Cannot find name 'a'."
     }

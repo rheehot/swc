@@ -1,11 +1,11 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 3,
         "msg": "A default export can only be used in an ECMAScript-style module."
     },
     {
-        "line": 6,
+        "line": 8,
         "column": 3,
         "msg": "A default export can only be used in an ECMAScript-style module."
     }

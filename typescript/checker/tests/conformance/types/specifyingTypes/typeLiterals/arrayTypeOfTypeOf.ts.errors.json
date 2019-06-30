@@ -1,21 +1,21 @@
 [
     {
-        "line": 6,
+        "line": 8,
         "column": 22,
         "msg": "',' expected."
     },
     {
-        "line": 6,
+        "line": 8,
         "column": 30,
         "msg": "Expression expected."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 22,
         "msg": "',' expected."
     },
     {
-        "line": 7,
+        "line": 9,
         "column": 32,
         "msg": "Expression expected."
     }

@@ -1,6 +1,6 @@
 [
     {
-        "line": 24,
+        "line": 26,
         "column": 11,
         "msg": "Interface 'I<T>' incorrectly extends interface 'A'."
     },
@@ -10,7 +10,7 @@
         "msg": "T) => T[]'."
     },
     {
-        "line": 28,
+        "line": 30,
         "column": 11,
         "msg": "Interface 'I2<T>' incorrectly extends interface 'A'."
     },
@@ -20,7 +20,7 @@
         "msg": "T) => string[]'."
     },
     {
-        "line": 32,
+        "line": 34,
         "column": 11,
         "msg": "Interface 'I3<T>' incorrectly extends interface 'A'."
     },
@@ -30,7 +30,7 @@
         "msg": "T) => void'."
     },
     {
-        "line": 36,
+        "line": 38,
         "column": 11,
         "msg": "Interface 'I4<T>' incorrectly extends interface 'A'."
     },
@@ -40,7 +40,7 @@
         "msg": "U) => string' is not assignable to type 'new <T, U>(x"
     },
     {
-        "line": 40,
+        "line": 42,
         "column": 11,
         "msg": "Interface 'I5<T>' incorrectly extends interface 'A'."
     },
@@ -50,7 +50,7 @@
         "msg": "T) => U) => T' is not assignable to type 'new <T, U>(x"
     },
     {
-        "line": 44,
+        "line": 46,
         "column": 11,
         "msg": "Interface 'I7<T>' incorrectly extends interface 'A'."
     },
@@ -60,7 +60,7 @@
         "msg": "T; }, y"
     },
     {
-        "line": 48,
+        "line": 50,
         "column": 11,
         "msg": "Interface 'I9<T>' incorrectly extends interface 'A'."
     },

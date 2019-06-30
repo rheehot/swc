@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 5,
         "column": 17,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     },
     {
-        "line": 10,
+        "line": 12,
         "column": 17,
         "msg": "A parameter initializer is only allowed in a function or constructor implementation."
     }

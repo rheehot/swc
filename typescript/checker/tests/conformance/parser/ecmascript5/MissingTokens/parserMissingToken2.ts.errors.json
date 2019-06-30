@@ -1,6 +1,6 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 2,
         "msg": "Unterminated regular expression literal."
     }

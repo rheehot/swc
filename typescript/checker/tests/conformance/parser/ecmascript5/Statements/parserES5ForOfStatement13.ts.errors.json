@@ -1,6 +1,6 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 20,
         "msg": "Cannot find name 'X'."
     }

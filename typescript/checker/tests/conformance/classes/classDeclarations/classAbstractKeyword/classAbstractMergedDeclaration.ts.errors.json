@@ -1,53 +1,43 @@
 [
     {
-        "line": 13,
+        "line": 15,
         "column": 16,
-        "msg": "Duplicate identifier 'CC1'."
-    },
-    {
-        "line": 14,
-        "column": 7,
         "msg": "Duplicate identifier 'CC1'."
     },
     {
         "line": 16,
         "column": 7,
+        "msg": "Duplicate identifier 'CC1'."
+    },
+    {
+        "line": 18,
+        "column": 7,
         "msg": "Duplicate identifier 'CC2'."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 16,
         "msg": "Duplicate identifier 'CC2'."
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 24,
-        "msg": "Duplicate identifier 'DCC1'."
-    },
-    {
-        "line": 26,
-        "column": 15,
         "msg": "Duplicate identifier 'DCC1'."
     },
     {
         "line": 28,
         "column": 15,
-        "msg": "Duplicate identifier 'DCC2'."
+        "msg": "Duplicate identifier 'DCC1'."
     },
     {
-        "line": 29,
-        "column": 24,
+        "line": 30,
+        "column": 15,
         "msg": "Duplicate identifier 'DCC2'."
     },
     {
         "line": 31,
-        "column": 1,
-        "msg": "Cannot create an instance of an abstract class."
-    },
-    {
-        "line": 32,
-        "column": 1,
-        "msg": "Cannot create an instance of an abstract class."
+        "column": 24,
+        "msg": "Duplicate identifier 'DCC2'."
     },
     {
         "line": 33,
@@ -65,17 +55,27 @@
         "msg": "Cannot create an instance of an abstract class."
     },
     {
+        "line": 36,
+        "column": 1,
+        "msg": "Cannot create an instance of an abstract class."
+    },
+    {
         "line": 37,
         "column": 1,
         "msg": "Cannot create an instance of an abstract class."
     },
     {
-        "line": 38,
+        "line": 39,
         "column": 1,
         "msg": "Cannot create an instance of an abstract class."
     },
     {
-        "line": 39,
+        "line": 40,
+        "column": 1,
+        "msg": "Cannot create an instance of an abstract class."
+    },
+    {
+        "line": 41,
         "column": 1,
         "msg": "Cannot create an instance of an abstract class."
     }

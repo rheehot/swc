@@ -1,46 +1,46 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 1,
         "msg": "Cannot find name 'Foo'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 1,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 1,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 5,
         "msg": "Cannot find name 'A'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 7,
         "msg": "Cannot find name 'B'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 9,
         "msg": "Invalid character."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 11,
         "msg": "Cannot find name 'C'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 14,
         "msg": "Left side of comma operator is unused and has no side effects."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 14,
         "msg": "Left side of comma operator is unused and has no side effects."
     }

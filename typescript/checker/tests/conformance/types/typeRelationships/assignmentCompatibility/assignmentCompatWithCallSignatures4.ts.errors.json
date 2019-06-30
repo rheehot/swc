@@ -1,76 +1,76 @@
 [
     {
-        "line": 45,
+        "line": 47,
         "column": 9,
         "msg": "Type '(x"
     },
     {
-        "line": 49,
+        "line": 51,
         "column": 9,
         "msg": "Type '(x"
     },
     {
-        "line": 52,
+        "line": 54,
         "column": 9,
         "msg": "Type '<T extends Base, U extends Derived>(x"
     },
     {
-        "line": 53,
+        "line": 55,
         "column": 9,
         "msg": "Type '(x"
     },
     {
-        "line": 58,
+        "line": 60,
         "column": 9,
         "msg": "Type '(...x"
     },
     {
-        "line": 62,
+        "line": 64,
         "column": 9,
         "msg": "Type '(x"
     },
     {
-        "line": 66,
+        "line": 68,
         "column": 9,
         "msg": "Type '(x"
     },
     {
-        "line": 69,
+        "line": 71,
         "column": 9,
         "msg": "Type '<T>(x"
     },
     {
-        "line": 70,
+        "line": 72,
         "column": 9,
         "msg": "Type '(x"
     },
     {
-        "line": 73,
+        "line": 75,
         "column": 9,
         "msg": "Type '<T extends Base>(x"
     },
     {
-        "line": 74,
+        "line": 76,
         "column": 9,
         "msg": "Type '(x"
     },
     {
-        "line": 89,
+        "line": 91,
         "column": 9,
         "msg": "Type '<T>(x"
     },
     {
-        "line": 90,
+        "line": 92,
         "column": 9,
         "msg": "Type '<T>(x"
     },
     {
-        "line": 95,
+        "line": 97,
         "column": 9,
         "msg": "Type '<T>(x"
     },
     {
-        "line": 96,
+        "line": 98,
         "column": 9,
         "msg": "Type '<T>(x"
     }

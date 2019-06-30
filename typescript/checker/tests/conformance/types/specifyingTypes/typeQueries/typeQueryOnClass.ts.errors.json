@@ -1,31 +1,31 @@
 [
     {
-        "line": 15,
+        "line": 17,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 21,
+        "line": 23,
         "column": 16,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 9,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 33,
+        "line": 35,
         "column": 9,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 36,
+        "line": 38,
         "column": 9,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     }

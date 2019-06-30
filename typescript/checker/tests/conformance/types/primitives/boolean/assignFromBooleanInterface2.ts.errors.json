@@ -1,16 +1,16 @@
 [
     {
-        "line": 14,
+        "line": 16,
         "column": 1,
         "msg": "Type 'NotBoolean' is not assignable to type 'Boolean'."
     },
     {
-        "line": 19,
+        "line": 21,
         "column": 1,
         "msg": "Type 'Boolean' is not assignable to type 'boolean'."
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 1,
         "msg": "Type 'NotBoolean' is not assignable to type 'boolean'."
     }

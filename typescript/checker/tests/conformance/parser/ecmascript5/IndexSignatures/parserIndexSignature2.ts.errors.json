@@ -1,11 +1,11 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 4,
         "msg": "A parameter property is only allowed in a constructor implementation."
     },
     {
-        "line": 2,
+        "line": 4,
         "column": 11,
         "msg": "An index signature parameter cannot have an accessibility modifier."
     }

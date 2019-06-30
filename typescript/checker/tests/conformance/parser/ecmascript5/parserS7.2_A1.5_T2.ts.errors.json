@@ -1,11 +1,11 @@
 [
     {
-        "line": 14,
+        "line": 16,
         "column": 3,
         "msg": "Cannot find name '$ERROR'. Did you mean 'Error'?"
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 3,
         "msg": "Cannot find name '$ERROR'. Did you mean 'Error'?"
     }

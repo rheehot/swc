@@ -1,11 +1,11 @@
 [
     {
-        "line": 7,
+        "line": 9,
         "column": 5,
         "msg": "Argument of type '() => (x"
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 5,
         "msg": "Argument of type '() => (x"
     }

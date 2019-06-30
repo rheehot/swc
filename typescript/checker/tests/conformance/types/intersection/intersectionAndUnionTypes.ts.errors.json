@@ -1,71 +1,71 @@
 [
     {
-        "line": 19,
+        "line": 21,
         "column": 1,
         "msg": "Type 'A' is not assignable to type 'A & B'."
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 1,
         "msg": "Type 'B' is not assignable to type 'A & B'."
     },
     {
-        "line": 23,
+        "line": 25,
         "column": 1,
         "msg": "Type 'A | B' is not assignable to type '(A & B) | (C & D)'."
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 1,
         "msg": "Type 'C | D' is not assignable to type '(A & B) | (C & D)'."
     },
     {
-        "line": 26,
+        "line": 28,
         "column": 1,
         "msg": "Type '(A & B) | (C & D)' is not assignable to type 'A & B'."
     },
     {
-        "line": 27,
+        "line": 29,
         "column": 1,
         "msg": "Type '(A & B) | (C & D)' is not assignable to type 'A | B'."
     },
     {
-        "line": 28,
+        "line": 30,
         "column": 1,
         "msg": "Type '(A & B) | (C & D)' is not assignable to type 'C & D'."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 1,
         "msg": "Type '(A & B) | (C & D)' is not assignable to type 'C | D'."
     },
     {
-        "line": 31,
+        "line": 33,
         "column": 1,
         "msg": "Type 'A & B' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'."
     },
     {
-        "line": 32,
+        "line": 34,
         "column": 1,
         "msg": "Type 'A | B' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'."
     },
     {
-        "line": 33,
+        "line": 35,
         "column": 1,
         "msg": "Type 'C & D' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'."
     },
     {
-        "line": 34,
+        "line": 36,
         "column": 1,
         "msg": "Type 'C | D' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'."
     },
     {
-        "line": 35,
+        "line": 37,
         "column": 1,
         "msg": "Type '(A & C) | (A & D) | (B & C) | (B & D)' is not assignable to type 'A & B'."
     },
     {
-        "line": 37,
+        "line": 39,
         "column": 1,
         "msg": "Type '(A & C) | (A & D) | (B & C) | (B & D)' is not assignable to type 'C & D'."
     }

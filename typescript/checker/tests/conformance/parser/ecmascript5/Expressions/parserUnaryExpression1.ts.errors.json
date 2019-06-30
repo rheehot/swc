@@ -1,6 +1,6 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 3,
         "msg": "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type."
     }

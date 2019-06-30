@@ -1,6 +1,6 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 10,
         "msg": "A parameter property is only allowed in a constructor implementation."
     }

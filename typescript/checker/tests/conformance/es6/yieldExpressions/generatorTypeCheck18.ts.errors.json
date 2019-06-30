@@ -1,6 +1,6 @@
 [
     {
-        "line": 5,
+        "line": 7,
         "column": 11,
         "msg": "Property 'x' is missing in type 'Baz' but required in type 'Foo'."
     }

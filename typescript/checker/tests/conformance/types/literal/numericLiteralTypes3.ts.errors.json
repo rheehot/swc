@@ -1,141 +1,141 @@
 [
     {
-        "line": 8,
+        "line": 10,
         "column": 5,
         "msg": "Type 'B' is not assignable to type '1'."
     },
     {
-        "line": 9,
+        "line": 11,
         "column": 5,
         "msg": "Type 'C' is not assignable to type '1'."
     },
     {
-        "line": 10,
+        "line": 12,
         "column": 5,
         "msg": "Type 'D' is not assignable to type '1'."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 5,
         "msg": "Type '1' is not assignable to type 'B'."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 5,
         "msg": "Type 'C' is not assignable to type 'B'."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 5,
         "msg": "Type 'D' is not assignable to type 'B'."
     },
     {
-        "line": 24,
+        "line": 26,
         "column": 5,
         "msg": "Type 'D' is not assignable to type 'C'."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 5,
         "msg": "Type 'B' is not assignable to type 'D'."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 5,
         "msg": "Type 'C' is not assignable to type 'D'."
     },
     {
-        "line": 35,
+        "line": 37,
         "column": 5,
         "msg": "Type '0' is not assignable to type '1'."
     },
     {
-        "line": 37,
+        "line": 39,
         "column": 5,
         "msg": "Type '2' is not assignable to type '1'."
     },
     {
-        "line": 38,
+        "line": 40,
         "column": 5,
         "msg": "Type '3' is not assignable to type '1'."
     },
     {
-        "line": 39,
+        "line": 41,
         "column": 5,
         "msg": "Type '0' is not assignable to type 'B'."
     },
     {
-        "line": 40,
+        "line": 42,
         "column": 5,
         "msg": "Type '1' is not assignable to type 'B'."
     },
     {
-        "line": 43,
+        "line": 45,
         "column": 5,
         "msg": "Type '0' is not assignable to type 'C'."
     },
     {
-        "line": 50,
+        "line": 52,
         "column": 5,
         "msg": "Type '3' is not assignable to type 'D'."
     },
     {
-        "line": 54,
+        "line": 56,
         "column": 5,
         "msg": "This condition will always return 'false' since the types '1' and '0' have no overlap."
     },
     {
-        "line": 56,
+        "line": 58,
         "column": 5,
         "msg": "This condition will always return 'false' since the types '1' and '2' have no overlap."
     },
     {
-        "line": 57,
+        "line": 59,
         "column": 5,
         "msg": "This condition will always return 'false' since the types '1' and '3' have no overlap."
     },
     {
-        "line": 58,
+        "line": 60,
         "column": 5,
         "msg": "This condition will always return 'false' since the types 'B' and '0' have no overlap."
     },
     {
-        "line": 59,
+        "line": 61,
         "column": 5,
         "msg": "This condition will always return 'false' since the types 'B' and '1' have no overlap."
     },
     {
-        "line": 62,
+        "line": 64,
         "column": 5,
         "msg": "This condition will always return 'false' since the types 'C' and '0' have no overlap."
     },
     {
-        "line": 69,
+        "line": 71,
         "column": 5,
         "msg": "This condition will always return 'false' since the types 'D' and '3' have no overlap."
     },
     {
-        "line": 74,
+        "line": 76,
         "column": 5,
         "msg": "This condition will always return 'false' since the types '1' and 'B' have no overlap."
     },
     {
-        "line": 77,
+        "line": 79,
         "column": 5,
         "msg": "This condition will always return 'false' since the types 'B' and '1' have no overlap."
     },
     {
-        "line": 94,
+        "line": 96,
         "column": 14,
         "msg": "Type '1' is not comparable to type '0 | 2 | 4'."
     },
     {
-        "line": 96,
+        "line": 98,
         "column": 14,
         "msg": "Type '3' is not comparable to type '0 | 2 | 4'."
     },
     {
-        "line": 98,
+        "line": 100,
         "column": 14,
         "msg": "Type '5' is not comparable to type '0 | 2 | 4'."
     }

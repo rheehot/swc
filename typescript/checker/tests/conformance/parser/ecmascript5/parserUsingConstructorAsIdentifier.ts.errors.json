@@ -1,36 +1,36 @@
 [
     {
-        "line": 3,
+        "line": 5,
         "column": 13,
         "msg": "Cannot find name 'PluginUtilities'."
     },
     {
-        "line": 5,
+        "line": 7,
         "column": 17,
         "msg": "Cannot find name 'initializeProperties'."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 17,
         "msg": "Cannot find name 'initializeProperties'."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 17,
         "msg": "Cannot find name 'PluginUtilities'."
     },
     {
-        "line": 21,
+        "line": 23,
         "column": 21,
         "msg": "Cannot find name 'initializeProperties'."
     },
     {
-        "line": 24,
+        "line": 26,
         "column": 21,
         "msg": "Cannot find name 'initializeProperties'."
     },
     {
-        "line": 36,
+        "line": 38,
         "column": 17,
         "msg": "Cannot find name 'initializeProperties'."
     }

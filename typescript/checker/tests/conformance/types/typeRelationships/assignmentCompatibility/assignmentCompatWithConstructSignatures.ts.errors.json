@@ -1,6 +1,6 @@
 [
     {
-        "line": 28,
+        "line": 30,
         "column": 1,
         "msg": "Type 'S2' is not assignable to type 'T'."
     },
@@ -8,26 +8,6 @@
         "line": null,
         "column": null,
         "msg": "void'."
-    },
-    {
-        "line": 29,
-        "column": 1,
-        "msg": "Type '(x"
-    },
-    {
-        "line": null,
-        "column": null,
-        "msg": "number)"
-    },
-    {
-        "line": 30,
-        "column": 1,
-        "msg": "Type '(x"
-    },
-    {
-        "line": null,
-        "column": null,
-        "msg": "number)"
     },
     {
         "line": 31,
@@ -42,12 +22,12 @@
     {
         "line": 32,
         "column": 1,
-        "msg": "Type 'S2' is not assignable to type 'new (x"
+        "msg": "Type '(x"
     },
     {
         "line": null,
         "column": null,
-        "msg": "void'."
+        "msg": "number)"
     },
     {
         "line": 33,
@@ -62,6 +42,16 @@
     {
         "line": 34,
         "column": 1,
+        "msg": "Type 'S2' is not assignable to type 'new (x"
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "void'."
+    },
+    {
+        "line": 35,
+        "column": 1,
         "msg": "Type '(x"
     },
     {
@@ -70,7 +60,17 @@
         "msg": "number)"
     },
     {
-        "line": 35,
+        "line": 36,
+        "column": 1,
+        "msg": "Type '(x"
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "number)"
+    },
+    {
+        "line": 37,
         "column": 1,
         "msg": "Type '(x"
     },

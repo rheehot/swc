@@ -1,26 +1,26 @@
 [
     {
-        "line": 17,
+        "line": 19,
         "column": 14,
         "msg": "Tuple type '[C, base]' of length '2' has no element at index '4'."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 14,
         "msg": "Tuple type '[C, D]' of length '2' has no element at index '4'."
     },
     {
-        "line": 19,
+        "line": 21,
         "column": 14,
         "msg": "Tuple type '[C1, D1]' of length '2' has no element at index '4'."
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 14,
         "msg": "Tuple type '[base1, C1]' of length '2' has no element at index '2'."
     },
     {
-        "line": 21,
+        "line": 23,
         "column": 14,
         "msg": "Tuple type '[C1, F]' of length '2' has no element at index '2'."
     }

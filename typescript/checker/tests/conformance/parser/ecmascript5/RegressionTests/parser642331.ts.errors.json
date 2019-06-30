@@ -1,6 +1,6 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 18,
         "msg": "Identifier expected. 'static' is a reserved word in strict mode. Class definitions are automatically in strict mode."
     }

@@ -1,21 +1,21 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 16,
         "msg": "Binary digit expected."
     },
     {
-        "line": 3,
+        "line": 5,
         "column": 17,
         "msg": "Binary digit expected."
     },
     {
-        "line": 4,
+        "line": 6,
         "column": 15,
         "msg": "Octal digit expected."
     },
     {
-        "line": 5,
+        "line": 7,
         "column": 15,
         "msg": "Octal digit expected."
     }

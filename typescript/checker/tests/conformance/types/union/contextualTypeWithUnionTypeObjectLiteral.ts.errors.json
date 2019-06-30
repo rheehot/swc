@@ -1,31 +1,31 @@
 [
     {
-        "line": 14,
+        "line": 16,
         "column": 5,
         "msg": "Type '{ prop"
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 5,
         "msg": "Type '{ prop"
     },
     {
-        "line": 21,
+        "line": 23,
         "column": 5,
         "msg": "Type '{ prop"
     },
     {
-        "line": 25,
+        "line": 27,
         "column": 5,
         "msg": "Type '{ prop"
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 5,
         "msg": "Type '{ prop"
     },
     {
-        "line": 58,
+        "line": 60,
         "column": 5,
         "msg": "Type '(a"
     },

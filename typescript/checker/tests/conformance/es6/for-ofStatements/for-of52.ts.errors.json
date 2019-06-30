@@ -1,11 +1,11 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 11,
         "msg": "Cannot redeclare block-scoped variable 'v'."
     },
     {
-        "line": 1,
+        "line": 3,
         "column": 14,
         "msg": "Cannot redeclare block-scoped variable 'v'."
     }

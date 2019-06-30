@@ -1,21 +1,21 @@
 [
     {
-        "line": 57,
+        "line": 59,
         "column": 29,
         "msg": "Argument of type '(x"
     },
     {
-        "line": 60,
+        "line": 62,
         "column": 30,
         "msg": "Argument of type '(x"
     },
     {
-        "line": 61,
+        "line": 63,
         "column": 31,
         "msg": "Argument of type '(x"
     },
     {
-        "line": 62,
+        "line": 64,
         "column": 30,
         "msg": "Argument of type '(a"
     }

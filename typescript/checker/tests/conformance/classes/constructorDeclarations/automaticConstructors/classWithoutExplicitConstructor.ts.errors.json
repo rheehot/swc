@@ -1,11 +1,11 @@
 [
     {
-        "line": 7,
+        "line": 9,
         "column": 16,
         "msg": "Expected 0 arguments, but got 1."
     },
     {
-        "line": 15,
+        "line": 17,
         "column": 16,
         "msg": "Expected 0 arguments, but got 1."
     }

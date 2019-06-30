@@ -1,21 +1,21 @@
 [
     {
-        "line": 8,
+        "line": 10,
         "column": 15,
         "msg": "Expected 0 type arguments, but got 1."
     },
     {
-        "line": 11,
+        "line": 13,
         "column": 17,
         "msg": "Expected 0 type arguments, but got 1."
     },
     {
-        "line": 14,
+        "line": 16,
         "column": 16,
         "msg": "Expected 0 type arguments, but got 1."
     },
     {
-        "line": 18,
+        "line": 20,
         "column": 10,
         "msg": "Untyped function calls may not accept type arguments."
     }

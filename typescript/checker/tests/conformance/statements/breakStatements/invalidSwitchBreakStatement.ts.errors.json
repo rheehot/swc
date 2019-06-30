@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 6,
         "column": 10,
         "msg": "Type '5' is not comparable to type '12'."
     }

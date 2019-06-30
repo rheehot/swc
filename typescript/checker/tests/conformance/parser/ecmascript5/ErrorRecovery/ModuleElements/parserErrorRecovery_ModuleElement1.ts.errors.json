@@ -1,11 +1,11 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 1,
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 4,
+        "line": 6,
         "column": 1,
         "msg": "Declaration or statement expected."
     }

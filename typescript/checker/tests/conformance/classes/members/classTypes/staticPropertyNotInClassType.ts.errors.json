@@ -1,56 +1,56 @@
 [
     {
-        "line": 4,
+        "line": 6,
         "column": 20,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 5,
+        "line": 7,
         "column": 20,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
-    },
-    {
-        "line": 16,
-        "column": 16,
-        "msg": "Property 'foo' is a static member of type 'C'"
-    },
-    {
-        "line": 17,
-        "column": 16,
-        "msg": "Property 'bar' does not exist on type 'C'."
     },
     {
         "line": 18,
         "column": 16,
+        "msg": "Property 'foo' is a static member of type 'C'"
+    },
+    {
+        "line": 19,
+        "column": 16,
+        "msg": "Property 'bar' does not exist on type 'C'."
+    },
+    {
+        "line": 20,
+        "column": 16,
         "msg": "Property 'x' is a static member of type 'C'"
     },
     {
-        "line": 24,
-        "column": 20,
-        "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
-    },
-    {
-        "line": 25,
+        "line": 26,
         "column": 20,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
         "line": 27,
+        "column": 20,
+        "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
+    },
+    {
+        "line": 29,
         "column": 21,
         "msg": "Static members cannot reference class type parameters."
     },
     {
-        "line": 36,
+        "line": 38,
         "column": 16,
         "msg": "Property 'foo' is a static member of type 'C<number, string>'"
     },
     {
-        "line": 37,
+        "line": 39,
         "column": 16,
         "msg": "Property 'bar' does not exist on type 'C<number, string>'."
     },
     {
-        "line": 38,
+        "line": 40,
         "column": 16,
         "msg": "Property 'x' is a static member of type 'C<number, string>'"
     }

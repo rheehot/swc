@@ -1,46 +1,46 @@
 [
     {
-        "line": 7,
+        "line": 9,
         "column": 23,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 8,
+        "line": 10,
         "column": 23,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 13,
+        "line": 15,
         "column": 7,
         "msg": "Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base'."
     },
     {
-        "line": 19,
+        "line": 21,
         "column": 24,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 24,
         "msg": "Accessors are only available when targeting ECMAScript 5 and higher."
     },
     {
-        "line": 24,
+        "line": 26,
         "column": 18,
         "msg": "Property 'x' is private and only accessible within class 'Derived'."
     },
     {
-        "line": 27,
+        "line": 29,
         "column": 18,
         "msg": "Property 'fn' is private and only accessible within class 'Derived'."
     },
     {
-        "line": 32,
+        "line": 34,
         "column": 18,
         "msg": "Property 'a' is private and only accessible within class 'Derived'."
     },
     {
-        "line": 33,
+        "line": 35,
         "column": 9,
         "msg": "Property 'a' is private and only accessible within class 'Derived'."
     }

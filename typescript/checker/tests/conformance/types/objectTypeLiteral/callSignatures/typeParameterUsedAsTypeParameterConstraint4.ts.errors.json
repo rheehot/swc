@@ -1,51 +1,51 @@
 [
     {
-        "line": 5,
+        "line": 7,
         "column": 8,
         "msg": "Cannot find name 'W'."
     },
     {
-        "line": 15,
+        "line": 17,
         "column": 8,
         "msg": "Cannot find name 'W'."
     },
     {
-        "line": 19,
+        "line": 21,
         "column": 43,
         "msg": "Cannot find name 'V'."
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 47,
         "msg": "Cannot find name 'X'."
     },
     {
-        "line": 28,
+        "line": 30,
         "column": 44,
         "msg": "Cannot find name 'W'."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 47,
         "msg": "Cannot find name 'Y'."
     },
     {
-        "line": 38,
+        "line": 40,
         "column": 47,
         "msg": "Cannot find name 'X'."
     },
     {
-        "line": 38,
+        "line": 40,
         "column": 53,
         "msg": "Cannot find name 'Y'."
     },
     {
-        "line": 46,
+        "line": 48,
         "column": 30,
         "msg": "Cannot find name 'V'."
     },
     {
-        "line": 46,
+        "line": 48,
         "column": 36,
         "msg": "Cannot find name 'X'."
     }

@@ -1,16 +1,16 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 4,
         "msg": "Cannot find name 'bar'."
     },
     {
-        "line": 2,
+        "line": 4,
         "column": 8,
         "msg": "Cannot find name 'a'."
     },
     {
-        "line": 3,
+        "line": 5,
         "column": 4,
         "msg": "Argument expression expected."
     }

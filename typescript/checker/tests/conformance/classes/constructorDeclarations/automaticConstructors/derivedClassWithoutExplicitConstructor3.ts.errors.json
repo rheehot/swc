@@ -1,21 +1,21 @@
 [
     {
-        "line": 21,
+        "line": 23,
         "column": 9,
         "msg": "Expected 2 arguments, but got 0."
     },
     {
-        "line": 22,
+        "line": 24,
         "column": 10,
         "msg": "Expected 2 arguments, but got 1."
     },
     {
-        "line": 44,
+        "line": 46,
         "column": 9,
         "msg": "Expected 2 arguments, but got 0."
     },
     {
-        "line": 45,
+        "line": 47,
         "column": 10,
         "msg": "Expected 2 arguments, but got 1."
     }

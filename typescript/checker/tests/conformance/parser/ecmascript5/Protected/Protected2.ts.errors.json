@@ -1,6 +1,6 @@
 [
     {
-        "line": 1,
+        "line": 3,
         "column": 1,
         "msg": "'protected' modifier cannot appear on a module or namespace element."
     }

@@ -1,66 +1,66 @@
 [
     {
-        "line": 11,
+        "line": 13,
         "column": 17,
         "msg": "Type '{}' does not satisfy the constraint 'number'."
     },
     {
-        "line": 16,
+        "line": 18,
         "column": 23,
         "msg": "Type 'number' does not satisfy the constraint 'string'."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 23,
         "msg": "Type '{}' does not satisfy the constraint 'number'."
     },
     {
-        "line": 33,
+        "line": 35,
         "column": 21,
         "msg": "Type 'string' is not assignable to type 'Window'."
     },
     {
-        "line": 35,
+        "line": 37,
         "column": 15,
         "msg": "Type 'number' does not satisfy the constraint 'Window'."
     },
     {
-        "line": 41,
+        "line": 43,
         "column": 35,
         "msg": "Argument of type '(x"
     },
     {
-        "line": 48,
+        "line": 50,
         "column": 35,
         "msg": "Argument of type '(x"
     },
     {
-        "line": 49,
+        "line": 51,
         "column": 15,
         "msg": "Type 'string' does not satisfy the constraint 'number'."
     },
     {
-        "line": 55,
+        "line": 57,
         "column": 41,
         "msg": "Argument of type '(n"
     },
     {
-        "line": 66,
+        "line": 68,
         "column": 31,
         "msg": "Argument of type '<A, B extends string, C>(a"
     },
     {
-        "line": 73,
+        "line": 75,
         "column": 29,
         "msg": "Argument of type '0' is not assignable to parameter of type '\"\"'."
     },
     {
-        "line": 88,
+        "line": 90,
         "column": 5,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x"
     },
     {
-        "line": 89,
+        "line": 91,
         "column": 70,
         "msg": "Argument of type '{ x"
     }

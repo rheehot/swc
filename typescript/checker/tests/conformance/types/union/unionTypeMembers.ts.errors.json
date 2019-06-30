@@ -1,26 +1,26 @@
 [
     {
-        "line": 44,
+        "line": 46,
         "column": 38,
         "msg": "Argument of type 'string | number' is not assignable to parameter of type 'never'."
     },
     {
-        "line": 51,
+        "line": 53,
         "column": 3,
         "msg": "Property 'propertyOnlyInI1' does not exist on type 'I1<number> | I2<number>'."
     },
     {
-        "line": 52,
+        "line": 54,
         "column": 3,
         "msg": "Property 'propertyOnlyInI2' does not exist on type 'I1<number> | I2<number>'."
     },
     {
-        "line": 53,
+        "line": 55,
         "column": 3,
         "msg": "Property 'methodOnlyInI1' does not exist on type 'I1<number> | I2<number>'."
     },
     {
-        "line": 54,
+        "line": 56,
         "column": 3,
         "msg": "Property 'methodOnlyInI2' does not exist on type 'I1<number> | I2<number>'."
     }

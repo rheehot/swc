@@ -1,51 +1,51 @@
 [
     {
-        "line": 3,
+        "line": 5,
         "column": 5,
         "msg": "Type 'true' is not assignable to type 'number'."
     },
     {
-        "line": 4,
+        "line": 6,
         "column": 5,
         "msg": "Type 'true' is not assignable to type 'string'."
     },
     {
-        "line": 5,
+        "line": 7,
         "column": 5,
         "msg": "Type 'true' is not assignable to type 'void'."
     },
     {
-        "line": 9,
+        "line": 11,
         "column": 5,
         "msg": "Type 'true' is not assignable to type 'E'."
     },
     {
-        "line": 12,
+        "line": 14,
         "column": 5,
         "msg": "Type 'true' is not assignable to type 'C'."
     },
     {
-        "line": 15,
+        "line": 17,
         "column": 5,
         "msg": "Type 'true' is not assignable to type 'I'."
     },
     {
-        "line": 17,
+        "line": 19,
         "column": 5,
         "msg": "Type 'true' is not assignable to type '() => string'."
     },
     {
-        "line": 21,
+        "line": 23,
         "column": 1,
         "msg": "Cannot assign to 'M' because it is not a variable."
     },
     {
-        "line": 24,
+        "line": 26,
         "column": 5,
         "msg": "Type 'boolean' is not assignable to type 'T'."
     },
     {
-        "line": 26,
+        "line": 28,
         "column": 1,
         "msg": "Cannot assign to 'i' because it is not a variable."
     }

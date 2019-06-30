@@ -1,6 +1,6 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 6,
         "msg": "A rest parameter must be last in a parameter list."
     }

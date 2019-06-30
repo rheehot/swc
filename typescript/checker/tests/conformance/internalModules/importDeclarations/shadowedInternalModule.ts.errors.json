@@ -1,11 +1,11 @@
 [
     {
-        "line": 13,
+        "line": 15,
         "column": 20,
         "msg": "Module 'A' is hidden by a local declaration with the same name."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 5,
         "msg": "Import declaration conflicts with local declaration of 'Y'."
     }

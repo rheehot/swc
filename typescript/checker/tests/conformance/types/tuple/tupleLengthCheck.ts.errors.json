@@ -1,11 +1,11 @@
 [
     {
-        "line": 5,
+        "line": 7,
         "column": 14,
         "msg": "Tuple type '[number, string]' of length '2' has no element at index '2'."
     },
     {
-        "line": 6,
+        "line": 8,
         "column": 14,
         "msg": "Tuple type '[number, string]' of length '2' has no element at index '1000'."
     }

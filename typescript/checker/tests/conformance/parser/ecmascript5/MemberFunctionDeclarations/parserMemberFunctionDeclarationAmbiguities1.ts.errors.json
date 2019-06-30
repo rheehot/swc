@@ -1,41 +1,41 @@
 [
     {
-        "line": 2,
-        "column": 3,
-        "msg": "Duplicate function implementation."
-    },
-    {
-        "line": 3,
+        "line": 4,
         "column": 3,
         "msg": "Duplicate function implementation."
     },
     {
         "line": 5,
-        "column": 10,
+        "column": 3,
         "msg": "Duplicate function implementation."
     },
     {
-        "line": 6,
+        "line": 7,
         "column": 10,
         "msg": "Duplicate function implementation."
     },
     {
         "line": 8,
-        "column": 17,
+        "column": 10,
         "msg": "Duplicate function implementation."
     },
     {
-        "line": 9,
+        "line": 10,
         "column": 17,
         "msg": "Duplicate function implementation."
     },
     {
         "line": 11,
+        "column": 17,
+        "msg": "Duplicate function implementation."
+    },
+    {
+        "line": 13,
         "column": 10,
         "msg": "Duplicate function implementation."
     },
     {
-        "line": 12,
+        "line": 14,
         "column": 10,
         "msg": "Duplicate function implementation."
     }

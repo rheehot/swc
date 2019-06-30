@@ -1,46 +1,46 @@
 [
     {
-        "line": 17,
+        "line": 19,
         "column": 10,
         "msg": "Property 'p' is private and only accessible within class 'MyClass'."
     },
     {
-        "line": 20,
+        "line": 22,
         "column": 13,
         "msg": "Property 'sp' is private and only accessible within class 'MyClass'."
     },
     {
-        "line": 21,
+        "line": 23,
         "column": 13,
         "msg": "Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses."
     },
     {
-        "line": 26,
+        "line": 28,
         "column": 10,
         "msg": "Property 'p' is private and only accessible within class 'MyClass'."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 13,
         "msg": "Property 'sp' is private and only accessible within class 'MyClass'."
     },
     {
-        "line": 30,
+        "line": 32,
         "column": 13,
         "msg": "Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses."
     },
     {
-        "line": 35,
+        "line": 37,
         "column": 10,
         "msg": "Property 'p' is private and only accessible within class 'MyClass'."
     },
     {
-        "line": 38,
+        "line": 40,
         "column": 13,
         "msg": "Property 'sp' is private and only accessible within class 'MyClass'."
     },
     {
-        "line": 39,
+        "line": 41,
         "column": 13,
         "msg": "Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses."
     }

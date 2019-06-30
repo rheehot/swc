@@ -1,151 +1,151 @@
 [
     {
-        "line": 15,
+        "line": 17,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'number'."
     },
     {
-        "line": 21,
+        "line": 23,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'string'."
     },
     {
-        "line": 22,
+        "line": 24,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type 'string'."
     },
     {
-        "line": 28,
+        "line": 30,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'boolean'."
     },
     {
-        "line": 29,
+        "line": 31,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type 'boolean'."
     },
     {
-        "line": 35,
+        "line": 37,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'Date'."
     },
     {
-        "line": 36,
+        "line": 38,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type 'Date'."
     },
     {
-        "line": 42,
+        "line": 44,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'RegExp'."
     },
     {
-        "line": 43,
+        "line": 45,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type 'RegExp'."
     },
     {
-        "line": 49,
+        "line": 51,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type '{ bar"
     },
     {
-        "line": 50,
+        "line": 52,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type '{ bar"
     },
     {
-        "line": 56,
+        "line": 58,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'number[]'."
     },
     {
-        "line": 57,
+        "line": 59,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type 'number[]'."
     },
     {
-        "line": 63,
+        "line": 65,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'I8'."
     },
     {
-        "line": 64,
+        "line": 66,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type 'I8'."
     },
     {
-        "line": 70,
+        "line": 72,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'A'."
     },
     {
-        "line": 71,
+        "line": 73,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type 'A'."
     },
     {
-        "line": 77,
+        "line": 79,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'A2<number>'."
     },
     {
-        "line": 78,
+        "line": 80,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type 'A2<number>'."
     },
     {
-        "line": 84,
+        "line": 86,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type '(x"
     },
     {
-        "line": 85,
+        "line": 87,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type '(x"
     },
     {
-        "line": 91,
+        "line": 93,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type '<T>(x"
     },
     {
-        "line": 92,
+        "line": 94,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type '<T>(x"
     },
     {
-        "line": 99,
+        "line": 101,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'E2'."
     },
     {
-        "line": 110,
+        "line": 112,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'typeof f'."
     },
     {
-        "line": 111,
+        "line": 113,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type 'typeof f'."
     },
     {
-        "line": 121,
+        "line": 123,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'typeof c'."
     },
     {
-        "line": 122,
+        "line": 124,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type 'typeof c'."
     },
     {
-        "line": 128,
+        "line": 130,
         "column": 5,
         "msg": "Property 'foo' of type 'string | number' is not assignable to string index type 'T'."
     },
     {
-        "line": 129,
+        "line": 131,
         "column": 5,
         "msg": "Property 'foo2' of type 'number' is not assignable to string index type 'T'."
     }

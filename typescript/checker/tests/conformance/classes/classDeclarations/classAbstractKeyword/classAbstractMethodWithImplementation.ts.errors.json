@@ -1,6 +1,6 @@
 [
     {
-        "line": 2,
+        "line": 4,
         "column": 14,
         "msg": "Method 'foo' cannot have an implementation because it is marked abstract."
     }
