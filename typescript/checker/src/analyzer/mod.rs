@@ -542,6 +542,7 @@ impl Visit<BlockStmt> for Analyzer<'_, '_> {
 impl Visit<AssignExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, expr: &AssignExpr) {
         let span = expr.span();
+        expr.visit_children(self);
 
         let rhs_ty = match self
             .type_of(&expr.right)
