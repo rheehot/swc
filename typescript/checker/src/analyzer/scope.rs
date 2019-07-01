@@ -361,6 +361,14 @@ impl<'a> Scope<'a> {
 
                 v.ty = if let Some(ty) = ty {
                     Some(if let Some(var_ty) = v.ty {
+                        match ty {
+                            Type::Function(..) => {}
+                            _ => {
+                                if !ty.eq_ignore_name_and_span(&var_ty) {
+                                    return Err(Error::RedclaredVarWithDifferentType { span });
+                                }
+                            }
+                        }
                         merge_type(ty, var_ty)
                     } else {
                         ty
@@ -373,8 +381,7 @@ impl<'a> Scope<'a> {
                     }
                 };
 
-                let info = VarInfo { ..v };
-                self.vars.insert(k, info);
+                self.vars.insert(k, v);
             }
             Entry::Vacant(e) => {
                 let info = VarInfo {
