@@ -695,7 +695,6 @@ impl Analyzer<'_, '_> {
                     Some(ref ty) => {
                         let ty = Type::from(ty.clone());
                         if ty.is_any() || ty.is_unknown() {
-
                         } else {
                             if prop.value.is_none() {
                                 self.info
