@@ -504,6 +504,32 @@ impl Analyzer<'_, '_> {
 
             Expr::MetaProp(..) => unimplemented!("typeof(MetaProp)"),
 
+            Expr::Assign(AssignExpr {
+                left: PatOrExpr::Pat(box Pat::Ident(ref i)),
+                ref right,
+                ..
+            }) => {
+                match self.type_of(&Expr::Ident(i.clone())) {
+                    Ok(..) => {}
+                    Err(Error::ReferencedInInit { .. }) => return Ok(Type::any(span).owned()),
+                    Err(err) => return Err(err),
+                }
+                return self.type_of(right);
+            }
+
+            Expr::Assign(AssignExpr {
+                left: PatOrExpr::Expr(ref left),
+                ref right,
+                ..
+            }) => {
+                match self.type_of(&left) {
+                    Ok(..) => {}
+                    Err(Error::ReferencedInInit { .. }) => return Ok(Type::any(span).owned()),
+                    Err(err) => return Err(err),
+                }
+                return self.type_of(right);
+            }
+
             Expr::Assign(AssignExpr { ref right, .. }) => return self.type_of(right),
 
             _ => unimplemented!("typeof ({:#?})", expr),
@@ -1674,9 +1700,7 @@ impl Visit<SeqExpr> for Analyzer<'_, '_> {
 impl Visit<ClassProp> for Analyzer<'_, '_> {
     fn visit(&mut self, prop: &ClassProp) {
         match *prop.key {
-            Expr::Ident(Ident { ref sym, .. }) => {
-                self.scope.declaring_prop = Some(sym.clone())
-            }
+            Expr::Ident(Ident { ref sym, .. }) => self.scope.declaring_prop = Some(sym.clone()),
             _ => {}
         }
 
