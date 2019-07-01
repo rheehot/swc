@@ -10,6 +10,10 @@ pub enum Error {
         span: Span,
     },
 
+    RedclaredVarWithDifferentType {
+        span: Span,
+    },
+
     DuplicateName {
         span: Span,
     },
