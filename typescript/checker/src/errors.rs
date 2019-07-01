@@ -10,6 +10,10 @@ pub enum Error {
         span: Span,
     },
 
+    UselessSeqExpr {
+        span: Span,
+    },
+
     ClassPropertyInitRequired {
         span: Span,
     },

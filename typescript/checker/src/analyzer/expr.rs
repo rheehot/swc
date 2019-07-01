@@ -1624,3 +1624,19 @@ impl Visit<Stmt> for Analyzer<'_, '_> {
         }
     }
 }
+
+impl Visit<SeqExpr> for Analyzer<'_, '_> {
+    fn visit(&mut self, expr: &SeqExpr) {
+        for expr in expr.exprs[..expr.exprs.len() - 1].iter() {
+            let span = expr.span();
+
+            match **expr {
+                Expr::Ident(..) | Expr::Lit(..) => {
+                    self.info.errors.push(Error::UselessSeqExpr { span });
+                }
+
+                _ => {}
+            }
+        }
+    }
+}
