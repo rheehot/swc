@@ -39,7 +39,6 @@ struct Analyzer<'a, 'b> {
     /// true
     allow_ref_declaring: bool,
     declaring: Vec<JsWord>,
-    declaring_fn: Option<JsWord>,
     path: Arc<PathBuf>,
     loader: &'b dyn Load,
     libs: &'b [Lib],
@@ -248,7 +247,6 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             path,
             allow_ref_declaring: false,
             declaring: vec![],
-            declaring_fn: None,
             resolved_imports: Default::default(),
             errored_imports: Default::default(),
             pending_exports: Default::default(),
@@ -415,8 +413,8 @@ impl Analyzer<'_, '_> {
             });
 
             if let Some(name) = name {
-                assert_eq!(child.declaring_fn, None);
-                child.declaring_fn = Some(name.sym.clone());
+                assert_eq!(child.scope.declaring_fn, None);
+                child.scope.declaring_fn = Some(name.sym.clone());
             }
 
             f.visit_children(child);
@@ -424,7 +422,7 @@ impl Analyzer<'_, '_> {
             let fn_ty = child.type_of_fn(f)?;
 
             if let Some(name) = name {
-                child.declaring_fn = None;
+                child.scope.declaring_fn = None;
             }
 
             debug_assert_eq!(child.allow_ref_declaring, false);

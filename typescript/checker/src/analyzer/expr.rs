@@ -1287,17 +1287,8 @@ impl Analyzer<'_, '_> {
                     expr_name: TsEntityName::Ident(Ident { ref sym, .. }),
                     ..
                 }) => {
-                    println!(
-                        "({}) TsTypeQuery: {}\n{:?}",
-                        self.scope.depth(),
-                        sym,
-                        self.declaring_fn
-                    );
-                    if let Some(ref d_fn) = self.declaring_fn {
-                        if *d_fn == *sym {
-                            println!("\t({}) returning any: {}", self.scope.depth(), sym);
-                            return Ok(Type::any(span));
-                        }
+                    if self.scope.find_declaring_fn(sym) {
+                        return Ok(Type::any(span));
                     } else {
                         panic!()
                     }

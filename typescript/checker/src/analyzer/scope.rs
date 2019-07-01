@@ -42,6 +42,8 @@ pub(super) struct Scope<'a> {
     pub(super) types: FxHashMap<JsWord, Type<'static>>,
     pub(super) this: Option<Type<'static>>,
 
+    pub(super) declaring_fn: Option<JsWord>,
+
     kind: ScopeKind,
     /// Declared variables and parameters.
     ///
@@ -60,6 +62,7 @@ impl<'a> Scope<'a> {
             kind,
             vars: Default::default(),
             facts,
+            declaring_fn: None,
         }
     }
 
@@ -71,11 +74,25 @@ impl<'a> Scope<'a> {
             kind: ScopeKind::Fn,
             vars: Default::default(),
             facts: Default::default(),
+            declaring_fn: None,
         }
     }
 }
 
 impl<'a> Scope<'a> {
+    pub(super) fn find_declaring_fn(&self, name: &JsWord) -> bool {
+        if let Some(ref d_fn) = self.declaring_fn {
+            if *d_fn == *name {
+                return true;
+            }
+        }
+
+        match self.parent {
+            Some(ref parent) => parent.find_declaring_fn(name),
+            None => false,
+        }
+    }
+
     pub(super) fn depth(&self) -> usize {
         match self.parent {
             Some(ref p) => p.depth() + 1,
