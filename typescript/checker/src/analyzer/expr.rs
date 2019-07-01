@@ -1685,6 +1685,7 @@ impl Visit<SeqExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, expr: &SeqExpr) {
         for expr in expr.exprs[..expr.exprs.len() - 1].iter() {
             let span = expr.span();
+            expr.visit_with(self);
 
             match **expr {
                 Expr::Ident(..) | Expr::Lit(..) => {
