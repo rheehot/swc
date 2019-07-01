@@ -392,14 +392,19 @@ impl Analyzer<'_, '_> {
             child.allow_ref_declaring = false;
 
             f.params.iter().for_each(|pat| {
-                debug_assert_eq!(child.allow_ref_declaring, false);
-                child.declaring = vec![];
-
-                let mut visitor = VarVisitor {
-                    names: &mut child.declaring,
+                let debug_declaring = if cfg!(debug_assertions) {
+                    Some(child.declaring.clone())
+                } else {
+                    None
                 };
+                debug_assert_eq!(child.allow_ref_declaring, false);
+
+                let mut names = vec![];
+
+                let mut visitor = VarVisitor { names: &mut names };
 
                 pat.visit_with(&mut visitor);
+                child.declaring.extend_from_slice(&names);
 
                 debug_assert_eq!(child.allow_ref_declaring, false);
                 match child.declare_vars(VarDeclKind::Let, pat) {
@@ -408,11 +413,24 @@ impl Analyzer<'_, '_> {
                         child.info.errors.push(err);
                     }
                 }
+                for n in names {
+                    child.declaring.remove_item(&n).unwrap();
+                }
+                debug_assert_eq!(Some(child.declaring.clone()), debug_declaring);
             });
 
+            if let Some(name) = name {
+                child.declaring.push(name.sym.clone());
+            }
             f.visit_children(child);
 
             let fn_ty = child.type_of_fn(f)?;
+            if let Some(name) = name {
+                let opt = child.declaring.remove_item(&name.sym);
+                if cfg!(debug_assertions) {
+                    opt.unwrap();
+                }
+            }
 
             debug_assert_eq!(child.allow_ref_declaring, false);
             child.allow_ref_declaring = old;
@@ -540,18 +558,24 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
         var.decls.iter().for_each(|v| {
             let old = self.allow_ref_declaring;
 
+            let debug_declaring = if cfg!(debug_assertions) {
+                Some(self.declaring.clone())
+            } else {
+                None
+            };
+            let mut names = vec![];
+
             if let Some(ref init) = v.init {
                 let span = init.span();
 
                 self.allow_ref_declaring = true;
-                self.declaring = vec![];
 
                 {
-                    let mut visitor = VarVisitor {
-                        names: &mut self.declaring,
-                    };
+                    let mut visitor = VarVisitor { names: &mut names };
 
                     v.name.visit_with(&mut visitor);
+
+                    self.declaring.extend_from_slice(&names);
 
                     v.visit_with(self);
                 }
@@ -657,6 +681,11 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     self.info.errors.push(err);
                 }
             }
+
+            for n in names {
+                self.declaring.remove_item(&n).unwrap();
+            }
+            debug_assert_eq!(Some(self.declaring.clone()), debug_declaring);
         });
     }
 }

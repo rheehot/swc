@@ -5,6 +5,7 @@
 #![feature(box_patterns)]
 #![feature(box_syntax)]
 #![feature(specialization)]
+#![feature(vec_remove_item)]
 #![recursion_limit = "1024"]
 
 extern crate backtrace;

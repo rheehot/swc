@@ -86,12 +86,12 @@ impl Analyzer<'_, '_> {
                     return Ok(ty.owned());
                 }
 
-                // println!(
-                //     "({}) undefined symbol: {}\n{:#?}",
-                //     self.scope.depth(),
-                //     i.sym,
-                //     self.scope
-                // );
+                println!(
+                    "({}) type_of(): undefined symbol: {}\n{:#?}",
+                    self.scope.depth(),
+                    i.sym,
+                    self.scope
+                );
 
                 return Err(Error::UndefinedSymbol { span: i.span });
             }
@@ -1068,6 +1068,8 @@ impl Analyzer<'_, '_> {
                 if computed {
                     unimplemented!("typeeof(CallExpr): {:?}[{:?}]()", callee, prop)
                 } else {
+                    dbg!("extract_call_or_new_expr");
+
                     Err(if kind == ExtractKind::Call {
                         Error::NoCallSignature {
                             span,
@@ -1110,6 +1112,8 @@ impl Analyzer<'_, '_> {
 
         macro_rules! ret_err {
             () => {{
+                println!("ret_err!(): {:?}", ty);
+
                 match kind {
                     ExtractKind::Call => {
                         return Err(Error::NoCallSignature {
@@ -1277,6 +1281,22 @@ impl Analyzer<'_, '_> {
 
                 return Ok(ty.clone());
             }
+
+            Type::Simple(ref sty) => match **sty {
+                TsType::TsTypeQuery(TsTypeQuery {
+                    expr_name: TsEntityName::Ident(Ident { ref sym, .. }),
+                    ..
+                }) => {
+                    println!("({}) TsTypeQuery: {}", self.scope.depth(), sym);
+                    if self.declaring.contains(sym) {
+                        println!("\t({}) returning any: {}", self.scope.depth(), sym);
+                        return Ok(Type::any(span));
+                    }
+
+                    ret_err!();
+                }
+                _ => ret_err!(),
+            },
 
             _ => ret_err!(),
         }
