@@ -298,7 +298,7 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
         if let Some(ref i) = c.ident {
             self.scope.register_type(i.sym.clone(), ty.clone());
 
-            self.scope.declare_var(
+            match self.scope.declare_var(
                 VarDeclKind::Var,
                 i.sym.clone(),
                 Some(ty),
@@ -306,7 +306,12 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
                 true,
                 // declare Class does not allow multiple declarations.
                 false,
-            );
+            ) {
+                Ok(()) => {}
+                Err(err) => {
+                    self.info.errors.push(err);
+                }
+            }
         }
 
         c.visit_children(self);
@@ -329,7 +334,7 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
 
         self.scope.register_type(c.ident.sym.clone(), ty.clone());
 
-        self.scope.declare_var(
+        match self.scope.declare_var(
             VarDeclKind::Var,
             c.ident.sym.clone(),
             Some(ty),
@@ -337,7 +342,12 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
             true,
             // declare Class does not allow multiple declarations.
             false,
-        );
+        ) {
+            Ok(()) => {}
+            Err(err) => {
+                self.info.errors.push(err);
+            }
+        }
 
         c.visit_children(self);
 
@@ -351,7 +361,7 @@ impl Analyzer<'_, '_> {
         let fn_ty = self.with_child(ScopeKind::Fn, Default::default(), |child| {
             if let Some(name) = name {
                 // We use `typeof function` to infer recursive function's return type.
-                child.scope.declare_var(
+                match child.scope.declare_var(
                     VarDeclKind::Var,
                     name.sym.clone(),
                     Some(Type::Simple(Cow::Owned(
@@ -365,7 +375,12 @@ impl Analyzer<'_, '_> {
                     true,
                     // Allow overriding
                     true,
-                );
+                ) {
+                    Ok(()) => {}
+                    Err(err) => {
+                        child.info.errors.push(err);
+                    }
+                }
             }
 
             match f.type_params {
@@ -653,7 +668,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                              should handle it"
                         ),
                     };
-                    self.scope.declare_var(
+                    match self.scope.declare_var(
                         kind,
                         sym,
                         ty,
@@ -661,7 +676,12 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                         false,
                         // allow_multiple
                         kind == VarDeclKind::Var,
-                    );
+                    ) {
+                        Ok(()) => {}
+                        Err(err) => {
+                            self.info.errors.push(err);
+                        }
+                    };
                     return;
                 }
             }

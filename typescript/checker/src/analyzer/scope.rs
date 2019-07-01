@@ -5,7 +5,7 @@ use crate::{
         IndexSignature, Interface, PropertySignature, Tuple, Type, TypeElement, TypeLit, TypeRef,
         TypeRefExt, Union,
     },
-    util::IntoCow,
+    util::{EqIgnoreNameAndSpan, IntoCow},
 };
 use fxhash::FxHashMap;
 use std::{collections::hash_map::Entry, iter::repeat_with};
@@ -37,8 +37,6 @@ pub(super) struct Scope<'a> {
     ///
     /// e.g. `interface Foo { name: string; }` is saved as `{ 'Foo': { name:
     /// string; } }`
-    ///
-    /// TODO: Use vector (for performance)
     pub(super) types: FxHashMap<JsWord, Type<'static>>,
     pub(super) this: Option<Type<'static>>,
 
@@ -132,7 +130,7 @@ impl<'a> Scope<'a> {
         name: JsWord,
         ty: Type<'static>,
     ) -> Result<(), Error> {
-        self.declare_var(kind, name, Some(ty), true, true);
+        self.declare_var(kind, name, Some(ty), true, true)?;
 
         Ok(())
     }
@@ -156,7 +154,7 @@ impl<'a> Scope<'a> {
                     // let/const declarations does not allow multiple declarations with
                     // same name
                     kind == VarDeclKind::Var,
-                );
+                )?;
                 Ok(())
             }
 
@@ -337,7 +335,9 @@ impl<'a> Scope<'a> {
         ty: Option<Type<'static>>,
         initialized: bool,
         allow_multiple: bool,
-    ) {
+    ) -> Result<(), Error> {
+        let span = ty.span();
+
         if cfg!(debug_assertions) {
             match ty {
                 Some(Type::Simple(ref t)) => match **t {
@@ -348,20 +348,42 @@ impl<'a> Scope<'a> {
             }
         }
 
-        let info = VarInfo {
-            kind,
-            ty,
-            initialized,
-            copied: false,
-        };
-        if !allow_multiple {
-            assert!(
-                self.vars.get(&name).is_none(),
-                "unimplemnted: error reporting: variable with same name"
-            );
+        match self.vars.entry(name) {
+            Entry::Occupied(e) => {
+                if !allow_multiple {
+                    return Err(Error::DuplicateName { span });
+                }
+                let (k, mut v) = e.remove_entry();
+
+                v.ty = if let Some(ty) = ty {
+                    Some(if let Some(var_ty) = v.ty {
+                        merge_type(ty, var_ty)
+                    } else {
+                        ty
+                    })
+                } else {
+                    if let Some(var_ty) = v.ty {
+                        Some(var_ty)
+                    } else {
+                        None
+                    }
+                };
+
+                let info = VarInfo { ..v };
+                self.vars.insert(k, info);
+            }
+            Entry::Vacant(e) => {
+                let info = VarInfo {
+                    kind,
+                    ty,
+                    initialized,
+                    copied: false,
+                };
+                e.insert(info);
+            }
         }
 
-        self.vars.insert(name, info);
+        Ok(())
     }
 
     /// This method does cannot handle imported types.
@@ -468,7 +490,7 @@ impl Analyzer<'_, '_> {
                     true,
                     // allow_multiple
                     kind == VarDeclKind::Var,
-                );
+                )?;
                 return Ok(());
             }
             Pat::Assign(ref p) => {
@@ -583,4 +605,28 @@ impl Analyzer<'_, '_> {
 
         None
     }
+}
+
+fn merge_type<'a>(l: Type<'a>, r: Type<'a>) -> Type<'a> {
+    let span = l.span();
+    if l.eq_ignore_name_and_span(&r) {
+        return l;
+    }
+    let mut buf = Vec::with_capacity(2);
+
+    macro_rules! handle {
+        ($ty:expr) => {{
+            match $ty {
+                Type::Union(Union { types, .. }) => {
+                    buf.extend(types);
+                }
+                ty => buf.push(ty.into_cow()),
+            }
+        }};
+    }
+
+    handle!(l);
+    handle!(r);
+
+    Type::Union(Union { span, types: buf })
 }

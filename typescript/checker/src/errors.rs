@@ -10,6 +10,10 @@ pub enum Error {
         span: Span,
     },
 
+    DuplicateName {
+        span: Span,
+    },
+
     UselessSeqExpr {
         span: Span,
     },
