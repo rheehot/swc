@@ -41,6 +41,8 @@ pub(super) struct Scope<'a> {
     pub(super) this: Option<Type<'static>>,
 
     pub(super) declaring_fn: Option<JsWord>,
+    /// `Some(name)` while declaring a class property.
+    pub(super) declaring_prop: Option<JsWord>,
 
     kind: ScopeKind,
     /// Declared variables and parameters.
@@ -61,6 +63,7 @@ impl<'a> Scope<'a> {
             vars: Default::default(),
             facts,
             declaring_fn: None,
+            declaring_prop: Default::default(),
         }
     }
 
@@ -73,6 +76,7 @@ impl<'a> Scope<'a> {
             vars: Default::default(),
             facts: Default::default(),
             declaring_fn: None,
+            declaring_prop: Default::default(),
         }
     }
 }

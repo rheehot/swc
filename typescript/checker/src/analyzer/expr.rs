@@ -638,6 +638,14 @@ impl Analyzer<'_, '_> {
                 for v in c.body.iter() {
                     match v {
                         ClassMember::ClassProp(ref class_prop) => {
+                            match *class_prop.key {
+                                Expr::Ident(ref i) => {
+                                    if self.scope.declaring_prop.as_ref() == Some(&i.sym) {
+                                        return Err(Error::ReferencedInInit { span });
+                                    }
+                                }
+                                _ => {}
+                            }
                             //
                             if (*class_prop.key).eq_ignore_span(&*prop) {
                                 return Ok(
@@ -1660,5 +1668,30 @@ impl Visit<SeqExpr> for Analyzer<'_, '_> {
                 _ => {}
             }
         }
+    }
+}
+
+impl Visit<ClassProp> for Analyzer<'_, '_> {
+    fn visit(&mut self, prop: &ClassProp) {
+        match *prop.key {
+            Expr::Ident(Ident { ref sym, .. }) => {
+                self.scope.declaring_prop = Some(sym.clone())
+            }
+            _ => {}
+        }
+
+        prop.visit_children(self);
+
+        match prop.value {
+            Some(ref value) => match self.type_of(value) {
+                Ok(..) => {}
+                Err(err) => {
+                    self.info.errors.push(err);
+                }
+            },
+            _ => {}
+        }
+
+        self.scope.declaring_prop = None;
     }
 }
