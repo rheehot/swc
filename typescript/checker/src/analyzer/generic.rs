@@ -92,9 +92,9 @@ impl Analyzer<'_, '_> {
             }
 
             Type::Mapped(Mapped {
-                readonly,
-                optional,
-                ty: ref type_ann,
+                readonly: _,
+                optional: _,
+                ty: _,
                 ref type_param,
                 ..
             }) => {

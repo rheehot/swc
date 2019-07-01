@@ -559,7 +559,7 @@ impl Analyzer<'_, '_> {
         let span = prop.span();
 
         match *prop {
-            Prop::Shorthand(ref i) => PropertySignature {
+            Prop::Shorthand(..) => PropertySignature {
                 span: prop.span(),
                 key: prop_key_to_expr(&prop),
                 params: Default::default(),
@@ -571,7 +571,7 @@ impl Analyzer<'_, '_> {
             }
             .into(),
 
-            Prop::KeyValue(ref p) => PropertySignature {
+            Prop::KeyValue(..) => PropertySignature {
                 span: prop.span(),
                 key: prop_key_to_expr(&prop),
                 params: Default::default(),
@@ -1310,7 +1310,7 @@ impl Analyzer<'_, '_> {
                 ret_err!()
             }
 
-            Type::Class(ref c) if kind == ExtractKind::New => {
+            Type::Class(..) if kind == ExtractKind::New => {
                 // The class does not have a constructor.
                 // We should check parent class' constructor.
 
@@ -1364,9 +1364,9 @@ impl Analyzer<'_, '_> {
         callee_span: Span,
         ret_type: &Type<'a>,
         param_decls: &[TsFnParam],
-        ty_params_decl: Option<&TypeParamDecl>,
+        _ty_params_decl: Option<&TypeParamDecl>,
         args: &[ExprOrSpread],
-        i: Option<&TsTypeParamInstantiation>,
+        _i: Option<&TsTypeParamInstantiation>,
     ) -> Result<Type<'a>, Error> {
         {
             // let type_params_len = ty_params_decl.map(|decl|

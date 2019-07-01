@@ -779,7 +779,7 @@ impl TypeElement<'_> {
 
         match *self {
             TypeElement::Call(..) => None,
-            TypeElement::Constructor(ref el) => Some(&CONSTRUCTOR_EXPR),
+            TypeElement::Constructor(..) => Some(&CONSTRUCTOR_EXPR),
             TypeElement::Index(..) => None,
             TypeElement::Method(ref el) => Some(&el.key),
             TypeElement::Property(ref el) => Some(&el.key),

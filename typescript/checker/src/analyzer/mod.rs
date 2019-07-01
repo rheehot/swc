@@ -437,7 +437,7 @@ impl Analyzer<'_, '_> {
             let fn_ty = child.type_of_fn(f)?;
 
             if let Some(name) = name {
-                child.scope.declaring_fn = None;
+                child.scope.declaring_fn = Some(name.sym.clone());
             }
 
             debug_assert_eq!(child.allow_ref_declaring, false);

@@ -403,7 +403,6 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
 
         Type::Function(Function {
             type_params: None,
-            ref params,
             ref ret_ty,
             ..
         }) => {
@@ -411,7 +410,7 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
             match *rhs {
                 Type::Function(Function {
                     type_params: None,
-                    params: ref r_params,
+                    params: _,
                     ret_ty: ref r_ret_ty,
                     ..
                 }) => {
