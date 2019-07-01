@@ -1061,13 +1061,38 @@ impl Analyzer<'_, '_> {
                         search_members_for_prop!(&t.members, prop);
                     }
 
+                    Type::Class(Class { ref body, .. }) => {
+                        for member in body.iter() {
+                            match *member {
+                                ClassMember::Method(ClassMethod {
+                                    ref key,
+                                    ref function,
+                                    ..
+                                }) => {
+                                    if prop_name_to_expr(key).eq_ignore_span(&*prop) {
+                                        if let Some(ref ret_ty) = function.return_type {
+                                            return Ok(Type::from(ret_ty.clone()).owned());
+                                        } else {
+                                            return Ok(Type::any(span).owned());
+                                        }
+                                    }
+                                }
+                                _ => {}
+                            }
+                        }
+                    }
+
                     _ => {}
                 }
 
                 if computed {
                     unimplemented!("typeeof(CallExpr): {:?}[{:?}]()", callee, prop)
                 } else {
-                    dbg!("extract_call_or_new_expr");
+                    println!(
+                        "extract_call_or_new_expr: \nobj_type: {:?}\ntype_of(callee): {:?}",
+                        obj_type,
+                        self.type_of(callee)?
+                    );
 
                     Err(if kind == ExtractKind::Call {
                         Error::NoCallSignature {
@@ -1288,8 +1313,6 @@ impl Analyzer<'_, '_> {
                 }) => {
                     if self.scope.find_declaring_fn(sym) {
                         return Ok(Type::any(span));
-                    } else {
-                        panic!()
                     }
 
                     ret_err!();
