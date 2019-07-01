@@ -360,11 +360,21 @@ impl<'a> Scope<'a> {
                 let (k, mut v) = e.remove_entry();
 
                 v.ty = if let Some(ty) = ty {
+                    let ty = ty.generalize_lit().into_owned();
+
                     Some(if let Some(var_ty) = v.ty {
+                        let var_ty = var_ty.generalize_lit().into_owned();
+
                         match ty {
                             Type::Function(..) => {}
                             _ => {
                                 if !ty.eq_ignore_name_and_span(&var_ty) {
+                                    println!(
+                                        "Type: {:?}\n VarType: {:?}\n{:?}",
+                                        ty,
+                                        var_ty,
+                                        backtrace::Backtrace::new()
+                                    );
                                     return Err(Error::RedclaredVarWithDifferentType { span });
                                 }
                             }

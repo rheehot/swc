@@ -591,10 +591,10 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                 debug_assert_eq!(self.allow_ref_declaring, true);
 
                 //  Check if v_ty is assignable to ty
-                let value_ty = match self
-                    .type_of(&init)
-                    .and_then(|ty| self.expand_type(span, ty))
-                {
+                let value_ty = match self.type_of(&init).and_then(|ty| {
+                    println!("VALUE_TY: {:#?}", ty);
+                    self.expand_type(span, ty)
+                }) {
                     Ok(ty) => ty,
                     Err(err) => {
                         self.info.errors.push(err);
@@ -654,7 +654,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                         }) => (
                             sym.clone(),
                             match type_ann.as_ref().map(|t| Type::from(t.type_ann.clone())) {
-                                Some(ty) => match self.expand_type(span, ty.into_cow()) {
+                                Some(ty) => match self.expand_type(span, ty.owned()) {
                                     Ok(ty) => Some(ty.to_static()),
                                     Err(err) => {
                                         self.info.errors.push(err);
