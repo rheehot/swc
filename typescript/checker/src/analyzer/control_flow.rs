@@ -327,12 +327,7 @@ impl Analyzer<'_, '_> {
                                 }
 
                                 if self.allow_ref_declaring && self.declaring.contains(&i.sym) {
-                                    VarInfo {
-                                        ty: Some(Type::any(i.span)),
-                                        kind: VarDeclKind::Var,
-                                        copied: true,
-                                        initialized: true,
-                                    }
+                                    return;
                                 } else {
                                     // undefined symbol
                                     self.info

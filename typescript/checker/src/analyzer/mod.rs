@@ -663,54 +663,50 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     }
                 }
             } else {
-                if !var.declare {
-                    let (span, sym, ty) = match v.name {
-                        Pat::Ident(Ident {
-                            span,
-                            ref sym,
-                            ref type_ann,
-                            ..
-                        }) => {
-                            (
-                                span,
-                                sym.clone(),
-                                match type_ann.as_ref().map(|t| Type::from(t.type_ann.clone())) {
-                                    Some(ty) => match self.expand_type(span, ty.owned()) {
-                                        Ok(ty) => Some(ty.to_static()),
-                                        Err(err) => {
-                                            self.info.errors.push(err);
-                                            remove_declaring!();
-                                            return;
-                                        }
-                                    },
-                                    None => None,
-                                },
-                            )
-                        }
-                        _ => unreachable!(
-                            "complex pattern without initializer is invalid syntax and parser \
-                             should handle it"
-                        ),
-                    };
-                    // println!("Visit<VarDecl>: declaring variable.\n{:?}", ty);
-                    match self.scope.declare_var(
+                let (span, sym, ty) = match v.name {
+                    Pat::Ident(Ident {
                         span,
-                        kind,
-                        sym,
-                        ty,
-                        // initialized
-                        false,
-                        // allow_multiple
-                        kind == VarDeclKind::Var,
-                    ) {
-                        Ok(()) => {}
-                        Err(err) => {
-                            self.info.errors.push(err);
-                        }
-                    };
-                    remove_declaring!();
-                    return;
-                }
+                        ref sym,
+                        ref type_ann,
+                        ..
+                    }) => (
+                        span,
+                        sym.clone(),
+                        match type_ann.as_ref().map(|t| Type::from(t.type_ann.clone())) {
+                            Some(ty) => match self.expand_type(span, ty.owned()) {
+                                Ok(ty) => Some(ty.to_static()),
+                                Err(err) => {
+                                    self.info.errors.push(err);
+                                    remove_declaring!();
+                                    return;
+                                }
+                            },
+                            None => None,
+                        },
+                    ),
+                    _ => unreachable!(
+                        "complex pattern without initializer is invalid syntax and parser should \
+                         handle it"
+                    ),
+                };
+                // println!("Visit<VarDecl>: declaring variable.\n{:?}", ty);
+                match self.scope.declare_var(
+                    span,
+                    kind,
+                    sym,
+                    ty,
+                    // initialized
+                    false,
+                    // allow_multiple
+                    kind == VarDeclKind::Var,
+                ) {
+                    Ok(()) => {}
+                    Err(err) => {
+                        self.info.errors.push(err);
+                    }
+                };
+                remove_declaring!();
+                return;
             }
 
             debug_assert_eq!(self.allow_ref_declaring, true);

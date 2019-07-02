@@ -122,7 +122,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             || input.contains("@filename")
             || input.contains("@Filename")
             || input.contains("@module")
-            || (mode == Mode::Conformance && !file_name.contains("types/witness"));
+            || (mode == Mode::Conformance && !file_name.contains(""));
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);

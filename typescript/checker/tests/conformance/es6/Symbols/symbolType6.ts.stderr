@@ -14,7 +14,7 @@ error: UndefinedSymbol {
 2 | var s = Symbol.for("add");
   |         ^^^^^^
 
-error: ReferencedInInit {
+error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
             231,
@@ -30,7 +30,7 @@ error: ReferencedInInit {
 4 | s + s;
   | ^
 
-error: ReferencedInInit {
+error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
             316,

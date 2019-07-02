@@ -539,11 +539,10 @@ impl Analyzer<'_, '_> {
                 ref right,
                 ..
             }) => {
-                match self.type_of(&Expr::Ident(i.clone())) {
-                    Ok(..) => {}
-                    Err(Error::ReferencedInInit { .. }) => return Ok(Type::any(span).owned()),
-                    Err(err) => return Err(err),
+                if self.declaring.contains(&i.sym) {
+                    return Ok(Type::any(span).owned());
                 }
+
                 return self.type_of(right);
             }
 
@@ -552,11 +551,15 @@ impl Analyzer<'_, '_> {
                 ref right,
                 ..
             }) => {
-                match self.type_of(&left) {
-                    Ok(..) => {}
-                    Err(Error::ReferencedInInit { .. }) => return Ok(Type::any(span).owned()),
-                    Err(err) => return Err(err),
+                match **left {
+                    Expr::Ident(ref i) => {
+                        if self.declaring.contains(&i.sym) {
+                            return Ok(Type::any(span).owned());
+                        }
+                    }
+                    _ => {}
                 }
+
                 return self.type_of(right);
             }
 
