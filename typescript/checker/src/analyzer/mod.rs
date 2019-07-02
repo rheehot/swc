@@ -598,7 +598,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
 
                     self.declaring.extend_from_slice(&names);
 
-                    v.visit_with(self);
+                    v.visit_children(self);
                 }
                 debug_assert_eq!(self.allow_ref_declaring, true);
 
@@ -693,7 +693,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                              should handle it"
                         ),
                     };
-                    println!("Visit<VarDecl>: declaring variable.\n{:?}", ty);
+                    // println!("Visit<VarDecl>: declaring variable.\n{:?}", ty);
                     match self.scope.declare_var(
                         span,
                         kind,
