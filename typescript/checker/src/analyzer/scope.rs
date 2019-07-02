@@ -366,6 +366,7 @@ impl<'a> Scope<'a> {
                 if !allow_multiple {
                     return Err(Error::DuplicateName { span });
                 }
+                println!("\tdeclare_var: found entry ({:?})", e.get());
                 let (k, mut v) = e.remove_entry();
 
                 macro_rules! restore {
@@ -378,6 +379,7 @@ impl<'a> Scope<'a> {
                     let ty = ty.generalize_lit().into_owned();
 
                     Some(if let Some(var_ty) = v.ty {
+                        println!("\tdeclare_var: ty = {:?}", ty);
                         let var_ty = var_ty.generalize_lit().into_owned();
 
                         // if k.as_ref() == "co1" {
@@ -411,6 +413,8 @@ impl<'a> Scope<'a> {
                 self.vars.insert(k, v);
             }
             Entry::Vacant(e) => {
+                println!("\tdeclare_var: no entry");
+
                 let info = VarInfo {
                     kind,
                     ty,
