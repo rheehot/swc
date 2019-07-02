@@ -343,6 +343,14 @@ impl<'a> Scope<'a> {
         initialized: bool,
         allow_multiple: bool,
     ) -> Result<(), Error> {
+        println!(
+            "({}) declare_var({}, initialized = {:?}): {:?}",
+            self.depth(),
+            name,
+            initialized,
+            span,
+        );
+
         if cfg!(debug_assertions) {
             match ty {
                 Some(Type::Simple(ref t)) => match **t {
