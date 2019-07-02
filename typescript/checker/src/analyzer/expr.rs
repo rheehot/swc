@@ -483,6 +483,20 @@ impl Analyzer<'_, '_> {
             Expr::Seq(SeqExpr { ref exprs, .. }) => {
                 assert!(exprs.len() >= 1);
 
+                let mut is_any = false;
+                for e in exprs.iter() {
+                    match self.type_of(e) {
+                        Ok(..) => {}
+                        Err(Error::ReferencedInInit { .. }) => {
+                            is_any = true;
+                        }
+                        Err(..) => {}
+                    }
+                }
+                if is_any {
+                    return Ok(Type::any(span).owned());
+                }
+
                 return self.type_of(&exprs.last().unwrap());
             }
 
