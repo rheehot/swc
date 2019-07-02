@@ -314,11 +314,19 @@ impl Analyzer<'_, '_> {
                         .owned());
                     }
 
-                    // TODO
                     op!("||") | op!("&&") => {
                         no_unknown!();
 
-                        return self.type_of(&right);
+                        match l_ty.normalize() {
+                            Type::Keyword(TsKeywordType {
+                                kind: TsKeywordTypeKind::TsAnyKeyword,
+                                ..
+                            }) => return Ok(Type::any(span).owned()),
+
+                            _ => {}
+                        }
+
+                        return Ok(r_ty);
                     }
                 }
             }
