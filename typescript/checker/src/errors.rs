@@ -10,6 +10,15 @@ pub enum Error {
         span: Span,
     },
 
+    ImplicitAny {
+        span: Span,
+    },
+
+    Errors {
+        span: Span,
+        errors: Vec<Error>,
+    },
+
     RedclaredVarWithDifferentType {
         span: Span,
     },
@@ -155,5 +164,19 @@ impl Error {
         };
 
         err.set_span(span).emit();
+    }
+
+    #[cold]
+    pub fn flatten(vec: Vec<Error>) -> Vec<Error> {
+        let mut buf = Vec::with_capacity(vec.len());
+
+        for e in vec {
+            match e {
+                Error::Errors { errors, .. } => buf.extend(errors),
+                _ => buf.push(e),
+            }
+        }
+
+        buf
     }
 }

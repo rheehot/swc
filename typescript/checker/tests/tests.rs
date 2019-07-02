@@ -307,7 +307,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 },
             );
 
-            let errors = checker.check(file_name.into());
+            let errors = ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
             if let Some(ref mut ref_error_lines) = ref_error_lines {
                 assert_eq!(mode, Mode::Conformance);
                 // Line of errors (actual result)
