@@ -10,7 +10,7 @@ use crate::{
 use fxhash::FxHashMap;
 use std::{collections::hash_map::Entry, iter::repeat_with};
 use swc_atoms::JsWord;
-use swc_common::{Spanned, DUMMY_SP};
+use swc_common::{Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone)]
@@ -134,7 +134,7 @@ impl<'a> Scope<'a> {
         name: JsWord,
         ty: Type<'static>,
     ) -> Result<(), Error> {
-        self.declare_var(kind, name, Some(ty), true, true)?;
+        self.declare_var(ty.span(), kind, name, Some(ty), true, true)?;
 
         Ok(())
     }
@@ -149,7 +149,9 @@ impl<'a> Scope<'a> {
 
         match *pat {
             Pat::Ident(ref i) => {
+                println!("declare_complex_vars: declaring {}", i.sym);
                 self.declare_var(
+                    span,
                     kind,
                     i.sym.clone(),
                     Some(ty),
@@ -334,14 +336,13 @@ impl<'a> Scope<'a> {
 
     pub fn declare_var(
         &mut self,
+        span: Span,
         kind: VarDeclKind,
         name: JsWord,
         ty: Option<Type<'static>>,
         initialized: bool,
         allow_multiple: bool,
     ) -> Result<(), Error> {
-        let span = ty.span();
-
         if cfg!(debug_assertions) {
             match ty {
                 Some(Type::Simple(ref t)) => match **t {
@@ -365,16 +366,12 @@ impl<'a> Scope<'a> {
                     Some(if let Some(var_ty) = v.ty {
                         let var_ty = var_ty.generalize_lit().into_owned();
 
+                        println!("!:: {}: Type: {:?}\nVarType: {:?}", k, ty, var_ty,);
+
                         match ty {
                             Type::Function(..) => {}
                             _ => {
                                 if !ty.eq_ignore_name_and_span(&var_ty) {
-                                    println!(
-                                        "Type: {:?}\n VarType: {:?}\n{:?}",
-                                        ty,
-                                        var_ty,
-                                        backtrace::Backtrace::new()
-                                    );
                                     return Err(Error::RedclaredVarWithDifferentType { span });
                                 }
                             }
@@ -400,6 +397,7 @@ impl<'a> Scope<'a> {
                     initialized,
                     copied: false,
                 };
+                println!("!:: {}: {:?}", e.key(), info.ty);
                 e.insert(info);
             }
         }
@@ -504,6 +502,7 @@ impl Analyzer<'_, '_> {
 
                 let name = i.sym.clone();
                 self.scope.declare_var(
+                    ty.span(),
                     kind,
                     name,
                     ty,

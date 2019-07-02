@@ -299,6 +299,7 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
             self.scope.register_type(i.sym.clone(), ty.clone());
 
             match self.scope.declare_var(
+                ty.span(),
                 VarDeclKind::Var,
                 i.sym.clone(),
                 Some(ty),
@@ -335,6 +336,7 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
         self.scope.register_type(c.ident.sym.clone(), ty.clone());
 
         match self.scope.declare_var(
+            ty.span(),
             VarDeclKind::Var,
             c.ident.sym.clone(),
             Some(ty),
@@ -362,6 +364,7 @@ impl Analyzer<'_, '_> {
             if let Some(name) = name {
                 // We use `typeof function` to infer recursive function's return type.
                 match child.scope.declare_var(
+                    f.span,
                     VarDeclKind::Var,
                     name.sym.clone(),
                     Some(Type::Simple(Cow::Owned(
@@ -574,6 +577,15 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
             };
             let mut names = vec![];
 
+            macro_rules! remove_declaring {
+                () => {{
+                    for n in names {
+                        self.declaring.remove_item(&n).unwrap();
+                    }
+                    debug_assert_eq!(Some(self.declaring.clone()), debug_declaring);
+                }};
+            }
+
             if let Some(ref init) = v.init {
                 let span = init.span();
 
@@ -598,6 +610,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     Ok(ty) => ty,
                     Err(err) => {
                         self.info.errors.push(err);
+                        remove_declaring!();
                         return;
                     }
                 };
@@ -640,36 +653,44 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 self.info.errors.push(err);
                             }
                         }
+                        remove_declaring!();
                         return;
                     }
                 }
             } else {
                 if !var.declare {
-                    let (sym, ty) = match v.name {
+                    let (span, sym, ty) = match v.name {
                         Pat::Ident(Ident {
                             span,
                             ref sym,
                             ref type_ann,
                             ..
-                        }) => (
-                            sym.clone(),
-                            match type_ann.as_ref().map(|t| Type::from(t.type_ann.clone())) {
-                                Some(ty) => match self.expand_type(span, ty.owned()) {
-                                    Ok(ty) => Some(ty.to_static()),
-                                    Err(err) => {
-                                        self.info.errors.push(err);
-                                        return;
-                                    }
+                        }) => {
+                            println!("SYM!: {}; ty: {:?}", sym, type_ann);
+                            (
+                                span,
+                                sym.clone(),
+                                match type_ann.as_ref().map(|t| Type::from(t.type_ann.clone())) {
+                                    Some(ty) => match self.expand_type(span, ty.owned()) {
+                                        Ok(ty) => Some(ty.to_static()),
+                                        Err(err) => {
+                                            self.info.errors.push(err);
+                                            remove_declaring!();
+                                            return;
+                                        }
+                                    },
+                                    None => None,
                                 },
-                                None => None,
-                            },
-                        ),
+                            )
+                        }
                         _ => unreachable!(
                             "complex pattern without initializer is invalid syntax and parser \
                              should handle it"
                         ),
                     };
+                    println!("Type(672): {:?}", ty);
                     match self.scope.declare_var(
+                        span,
                         kind,
                         sym,
                         ty,
@@ -683,6 +704,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                             self.info.errors.push(err);
                         }
                     };
+                    remove_declaring!();
                     return;
                 }
             }
@@ -696,10 +718,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                 }
             }
 
-            for n in names {
-                self.declaring.remove_item(&n).unwrap();
-            }
-            debug_assert_eq!(Some(self.declaring.clone()), debug_declaring);
+            remove_declaring!();
         });
     }
 }

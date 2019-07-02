@@ -493,6 +493,7 @@ impl Analyzer<'_, '_> {
                         Err(..) => {}
                     }
                 }
+                println!("IS_ANY: {}", is_any);
                 if is_any {
                     return Ok(Type::any(span).owned());
                 }
