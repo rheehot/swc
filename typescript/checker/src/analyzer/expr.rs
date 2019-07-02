@@ -97,15 +97,34 @@ impl Analyzer<'_, '_> {
             }
 
             Expr::Array(ArrayLit { ref elems, .. }) => {
+                let mut errs = vec![];
                 let mut types: Vec<TypeRef> = vec![];
 
                 for elem in elems {
+                    let span = elem.span();
                     match elem {
                         Some(ExprOrSpread {
                             spread: None,
                             ref expr,
                         }) => {
-                            let ty = self.type_of(expr)?;
+                            let mut ty = self.type_of(expr)?;
+                            match *ty.normalize() {
+                                Type::Keyword(TsKeywordType {
+                                    kind: TsKeywordTypeKind::TsNullKeyword,
+                                    ..
+                                })
+                                | Type::Keyword(TsKeywordType {
+                                    kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                                    ..
+                                }) => {
+                                    // Widen tuple type.
+                                    ty = Type::any(span).owned();
+                                    if self.rule.no_implicit_any {
+                                        errs.push(Error::ImplicitAny { span });
+                                    }
+                                }
+                                _ => {}
+                            }
                             types.push(ty)
                         }
                         Some(ExprOrSpread {
@@ -116,6 +135,10 @@ impl Analyzer<'_, '_> {
                             types.push(ty.into_cow())
                         }
                     }
+                }
+
+                if !errs.is_empty() {
+                    return Err(Error::Errors { span, errors: errs });
                 }
 
                 return Ok(Type::Tuple(Tuple { span, types }).into_cow());
