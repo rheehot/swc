@@ -493,6 +493,14 @@ impl Analyzer<'_, '_> {
 
                 let mut is_any = false;
                 for e in exprs.iter() {
+                    match **e {
+                        Expr::Ident(ref i) => {
+                            if self.declaring.contains(&i.sym) {
+                                is_any = true;
+                            }
+                        }
+                        _ => {}
+                    }
                     match self.type_of(e) {
                         Ok(..) => {}
                         Err(Error::ReferencedInInit { .. }) => {
@@ -501,7 +509,6 @@ impl Analyzer<'_, '_> {
                         Err(..) => {}
                     }
                 }
-                println!("IS_ANY: {}", is_any);
                 if is_any {
                     return Ok(Type::any(span).owned());
                 }
