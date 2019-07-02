@@ -409,7 +409,6 @@ impl<'a> Scope<'a> {
                     initialized,
                     copied: false,
                 };
-                println!("!:: {}: {:?}", e.key(), info.ty);
                 e.insert(info);
             }
         }

@@ -671,7 +671,6 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                             ref type_ann,
                             ..
                         }) => {
-                            println!("SYM!: {}; ty: {:?}", sym, type_ann);
                             (
                                 span,
                                 sym.clone(),
