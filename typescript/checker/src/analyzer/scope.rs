@@ -360,6 +360,12 @@ impl<'a> Scope<'a> {
                 }
                 let (k, mut v) = e.remove_entry();
 
+                macro_rules! restore {
+                    () => {{
+                        self.vars.insert(k, v);
+                    }};
+                }
+
                 v.ty = if let Some(ty) = ty {
                     let ty = ty.generalize_lit().into_owned();
 
@@ -367,13 +373,17 @@ impl<'a> Scope<'a> {
                         let var_ty = var_ty.generalize_lit().into_owned();
 
                         // if k.as_ref() == "co1" {
-                        //     panic!("!:: {}: Type: {:?}\nVarType: {:?}", k, ty, var_ty,);
+                        //     v.ty = Some(var_ty);
+                        //     restore!();
+                        //     return Err(Error::RedclaredVarWithDifferentType { span });
                         // }
 
                         match ty {
                             Type::Function(..) => {}
                             _ => {
                                 if !ty.eq_ignore_name_and_span(&var_ty) {
+                                    v.ty = Some(var_ty);
+                                    restore!();
                                     return Err(Error::RedclaredVarWithDifferentType { span });
                                 }
                             }
