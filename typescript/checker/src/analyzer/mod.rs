@@ -604,7 +604,10 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
 
                 //  Check if v_ty is assignable to ty
                 let value_ty = match self.type_of(&init).and_then(|ty| {
-                    println!("VALUE_TY: {:#?}", ty);
+                    println!(
+                        "Visit<VarDecl>: [{:?}] type_of(initializer): {:#?}",
+                        self.declaring, ty
+                    );
                     self.expand_type(span, ty)
                 }) {
                     Ok(ty) => ty,
@@ -622,6 +625,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                             Ok(ty) => ty,
                             Err(err) => {
                                 self.info.errors.push(err);
+                                remove_declaring!();
                                 return;
                             }
                         };
@@ -635,6 +639,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                         self.info.errors.push(err);
                                     }
                                 }
+                                remove_declaring!();
                                 return;
                             }
                             Err(err) => {
@@ -688,7 +693,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                              should handle it"
                         ),
                     };
-                    println!("Type(672): {:?}", ty);
+                    println!("Visit<VarDecl>: declaring variable.\n{:?}", ty);
                     match self.scope.declare_var(
                         span,
                         kind,

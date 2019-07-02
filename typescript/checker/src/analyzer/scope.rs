@@ -366,7 +366,9 @@ impl<'a> Scope<'a> {
                     Some(if let Some(var_ty) = v.ty {
                         let var_ty = var_ty.generalize_lit().into_owned();
 
-                        println!("!:: {}: Type: {:?}\nVarType: {:?}", k, ty, var_ty,);
+                        // if k.as_ref() == "co1" {
+                        //     panic!("!:: {}: Type: {:?}\nVarType: {:?}", k, ty, var_ty,);
+                        // }
 
                         match ty {
                             Type::Function(..) => {}
