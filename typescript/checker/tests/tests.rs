@@ -121,7 +121,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             || input.contains("@filename")
             || input.contains("@Filename")
             || input.contains("@module")
-            || (mode == Mode::Conformance && !file_name.contains(""));
+            || (mode == Mode::Conformance && !file_name.contains("types/tuple/wideningTuples"));
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);
