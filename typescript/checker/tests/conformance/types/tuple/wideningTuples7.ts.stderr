@@ -1,0 +1,16 @@
+error: ImplicitAny {
+    span: Span {
+        lo: BytePos(
+            240,
+        ),
+        hi: BytePos(
+            249,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/types/tuple/wideningTuples7.ts:4:28
+  |
+4 |     return intermediate = [undefined];
+  |                            ^^^^^^^^^
+
