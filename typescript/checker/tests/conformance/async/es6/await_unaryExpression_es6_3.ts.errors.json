@@ -1,11 +1,11 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 7,
         "msg": "Expression expected."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 7,
         "msg": "Expression expected."
     }

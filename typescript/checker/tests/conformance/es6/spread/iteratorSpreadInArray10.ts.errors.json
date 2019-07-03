@@ -1,6 +1,6 @@
 [
     {
-        "line": 9,
+        "line": 8,
         "column": 17,
         "msg": "An iterator must have a 'next()' method."
     }

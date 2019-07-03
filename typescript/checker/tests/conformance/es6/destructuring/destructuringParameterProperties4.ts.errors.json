@@ -1,51 +1,51 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 31,
         "msg": "A parameter property may not be declared using a binding pattern."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 59,
         "msg": "Property 'b' does not exist on type 'C1<T, U, V>'."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 83,
         "msg": "Property 'c' does not exist on type 'C1<T, U, V>'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 18,
         "msg": "Property 'a' does not exist on type 'C1<T, U, V>'."
     },
     {
-        "line": 11,
+        "line": 10,
         "column": 21,
         "msg": "Property 'a' does not exist on type 'C1<T, U, V>'."
     },
     {
-        "line": 15,
+        "line": 14,
         "column": 21,
         "msg": "Property 'b' does not exist on type 'C1<T, U, V>'."
     },
     {
-        "line": 19,
+        "line": 18,
         "column": 21,
         "msg": "Property 'c' does not exist on type 'C1<T, U, V>'."
     },
     {
-        "line": 25,
+        "line": 24,
         "column": 24,
         "msg": "Property 'a' does not exist on type 'C2'."
     },
     {
-        "line": 25,
+        "line": 24,
         "column": 34,
         "msg": "Property 'b' does not exist on type 'C2'."
     },
     {
-        "line": 25,
+        "line": 24,
         "column": 44,
         "msg": "Property 'c' does not exist on type 'C2'."
     }

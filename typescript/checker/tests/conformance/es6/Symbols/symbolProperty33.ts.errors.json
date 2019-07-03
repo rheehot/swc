@@ -1,11 +1,11 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 18,
         "msg": "Class 'C2' used before its declaration."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 6,
         "msg": "An index signature parameter type must be 'string' or 'number'."
     }

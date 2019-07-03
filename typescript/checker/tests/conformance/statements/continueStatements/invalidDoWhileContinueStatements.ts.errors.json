@@ -1,31 +1,31 @@
 [
     {
-        "line": 7,
+        "line": 6,
         "column": 1,
         "msg": "A 'continue' statement can only be used within an enclosing iteration statement."
     },
     {
-        "line": 11,
+        "line": 10,
         "column": 4,
         "msg": "A 'continue' statement can only jump to a label of an enclosing iteration statement."
     },
     {
-        "line": 17,
+        "line": 16,
         "column": 9,
         "msg": "Jump target cannot cross function boundary."
     },
     {
-        "line": 24,
+        "line": 23,
         "column": 9,
         "msg": "Jump target cannot cross function boundary."
     },
     {
-        "line": 30,
+        "line": 29,
         "column": 5,
         "msg": "A 'continue' statement can only jump to a label of an enclosing iteration statement."
     },
     {
-        "line": 40,
+        "line": 39,
         "column": 5,
         "msg": "A 'continue' statement can only jump to a label of an enclosing iteration statement."
     }

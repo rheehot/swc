@@ -1,5 +1,10 @@
 [
     {
+        "line": 3,
+        "column": 1,
+        "msg": "'A label is not allowed here."
+    },
+    {
         "line": 4,
         "column": 1,
         "msg": "'A label is not allowed here."
@@ -40,9 +45,14 @@
         "msg": "'A label is not allowed here."
     },
     {
-        "line": 12,
+        "line": 13,
         "column": 1,
         "msg": "'A label is not allowed here."
+    },
+    {
+        "line": 13,
+        "column": 8,
+        "msg": "A namespace declaration is only allowed in a namespace or module."
     },
     {
         "line": 14,
@@ -56,16 +66,6 @@
     },
     {
         "line": 15,
-        "column": 1,
-        "msg": "'A label is not allowed here."
-    },
-    {
-        "line": 15,
-        "column": 8,
-        "msg": "A namespace declaration is only allowed in a namespace or module."
-    },
-    {
-        "line": 16,
         "column": 1,
         "msg": "'A label is not allowed here."
     }

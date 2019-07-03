@@ -1,6 +1,6 @@
 [
     {
-        "line": 9,
+        "line": 8,
         "column": 5,
         "msg": "Type 'string' is not assignable to type '\"foo\" | \"bar\"'."
     }

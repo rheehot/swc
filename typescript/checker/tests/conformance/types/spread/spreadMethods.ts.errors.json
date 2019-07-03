@@ -1,21 +1,21 @@
 [
     {
-        "line": 18,
+        "line": 17,
         "column": 4,
         "msg": "Property 'm' does not exist on type '{ p"
     },
     {
-        "line": 19,
+        "line": 18,
         "column": 4,
         "msg": "Property 'g' does not exist on type '{ p"
     },
     {
-        "line": 21,
+        "line": 20,
         "column": 5,
         "msg": "Property 'm' does not exist on type '{ p"
     },
     {
-        "line": 22,
+        "line": 21,
         "column": 5,
         "msg": "Property 'g' does not exist on type '{ p"
     }

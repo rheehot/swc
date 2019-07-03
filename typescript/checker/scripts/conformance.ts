@@ -51,7 +51,6 @@ async function handle(f: string) {
   } catch (e) {}
 
   let len = (content.match(/\/\/ \@|\/\/\@/g) || []).length;
-  if (len === 0) {
     len -= 1;
     const data = content.split(/\r\n|\r|\n/);
     for (let i = 0; i < data.length; i++) {
@@ -60,7 +59,6 @@ async function handle(f: string) {
       } else {
         break;
       }
-    }
   }
 
   const errors = extract(errorsText, len + 1);

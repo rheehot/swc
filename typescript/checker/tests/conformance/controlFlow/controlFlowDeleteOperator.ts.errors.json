@@ -1,6 +1,6 @@
 [
     {
-        "line": 16,
+        "line": 15,
         "column": 12,
         "msg": "The operand of a delete operator must be a property reference."
     }

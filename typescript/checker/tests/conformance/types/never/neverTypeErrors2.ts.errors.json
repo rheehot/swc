@@ -1,61 +1,61 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 5,
         "msg": "Type '1' is not assignable to type 'never'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 5,
         "msg": "Type '\"abc\"' is not assignable to type 'never'."
     },
     {
-        "line": 7,
+        "line": 6,
         "column": 5,
         "msg": "Type 'false' is not assignable to type 'never'."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 5,
         "msg": "Type 'undefined' is not assignable to type 'never'."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 5,
         "msg": "Type 'null' is not assignable to type 'never'."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 5,
         "msg": "Type '{}' is not assignable to type 'never'."
     },
     {
-        "line": 11,
+        "line": 10,
         "column": 5,
         "msg": "Cannot invoke an expression whose type lacks a call signature. Type 'never' has no compatible call signatures."
     },
     {
-        "line": 15,
+        "line": 14,
         "column": 5,
         "msg": "Type 'undefined' is not assignable to type 'never'."
     },
     {
-        "line": 19,
+        "line": 18,
         "column": 5,
         "msg": "Type '1' is not assignable to type 'never'."
     },
     {
-        "line": 22,
+        "line": 21,
         "column": 16,
         "msg": "A function returning 'never' cannot have a reachable end point."
     },
     {
-        "line": 25,
+        "line": 24,
         "column": 17,
         "msg": "Type 'never' must have a '[Symbol.iterator]()' method that returns an iterator."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 17,
         "msg": "The right-hand side of a 'for...in' statement must be of type 'any', an object type or a type parameter, but here has type 'never'."
     }

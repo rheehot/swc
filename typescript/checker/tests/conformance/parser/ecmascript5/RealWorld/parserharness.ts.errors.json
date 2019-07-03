@@ -1,128 +1,133 @@
 [
     {
-        "line": 19,
+        "line": 18,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/compiler/io.ts' not found."
     },
     {
-        "line": 20,
+        "line": 19,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/compiler/typescript.ts' not found."
     },
     {
-        "line": 21,
+        "line": 20,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/services/typescriptServices.ts' not found."
     },
     {
-        "line": 22,
+        "line": 21,
         "column": 21,
         "msg": "File 'tests/cases/conformance/parser/ecmascript5/RealWorld/diff.ts' not found."
     },
     {
-        "line": 24,
+        "line": 23,
         "column": 29,
         "msg": "Namespace 'Harness' has no exported member 'Assert'."
     },
     {
-        "line": 28,
+        "line": 27,
         "column": 17,
         "msg": "Cannot find name 'IIO'."
     },
     {
-        "line": 44,
+        "line": 43,
         "column": 12,
         "msg": "Cannot find name 'ActiveXObject'."
     },
     {
-        "line": 46,
+        "line": 45,
         "column": 19,
         "msg": "Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node`."
     },
     {
-        "line": 47,
+        "line": 46,
         "column": 14,
         "msg": "Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node`."
     },
     {
-        "line": 344,
+        "line": 343,
         "column": 13,
         "msg": "Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?"
     },
     {
-        "line": 350,
+        "line": 349,
         "column": 13,
         "msg": "Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?"
     },
     {
-        "line": 354,
+        "line": 353,
         "column": 17,
         "msg": "Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?"
     },
     {
-        "line": 357,
+        "line": 356,
         "column": 17,
         "msg": "Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?"
     },
     {
-        "line": 357,
+        "line": 356,
         "column": 35,
         "msg": "Cannot find name 'errorHandlerStack'. Did you mean the static member 'Runnable.errorHandlerStack'?"
     },
     {
-        "line": 694,
+        "line": 693,
         "column": 50,
         "msg": "Cannot find name 'ITextWriter'."
     },
     {
-        "line": 719,
+        "line": 718,
         "column": 47,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 724,
+        "line": 723,
         "column": 62,
         "msg": "Cannot find name 'ITextWriter'."
     },
     {
-        "line": 727,
+        "line": 726,
         "column": 29,
         "msg": "Cannot find name 'ITextWriter'."
     },
     {
-        "line": 757,
+        "line": 756,
         "column": 53,
         "msg": "Cannot find name 'TypeScript'. Did you mean 'TypeScriptLS'?"
     },
     {
-        "line": 767,
+        "line": 766,
         "column": 56,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 768,
+        "line": 767,
         "column": 37,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 770,
+        "line": 769,
         "column": 47,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 779,
+        "line": 778,
         "column": 13,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 779,
+        "line": 778,
         "column": 42,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 784,
+        "line": 783,
         "column": 23,
         "msg": "Cannot find namespace 'TypeScript'."
+    },
+    {
+        "line": 796,
+        "column": 49,
+        "msg": "Cannot find name 'TypeScript'."
     },
     {
         "line": 797,
@@ -130,44 +135,44 @@
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 798,
-        "column": 49,
-        "msg": "Cannot find name 'TypeScript'."
-    },
-    {
-        "line": 990,
+        "line": 989,
         "column": 53,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 990,
+        "line": 989,
         "column": 89,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 990,
+        "line": 989,
         "column": 115,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 990,
+        "line": 989,
         "column": 145,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 991,
+        "line": 990,
         "column": 43,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1002,
+        "line": 1001,
         "column": 40,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1044,
+        "line": 1043,
         "column": 43,
         "msg": "Cannot find namespace 'TypeScript'."
+    },
+    {
+        "line": 1046,
+        "column": 26,
+        "msg": "Cannot find name 'TypeScript'."
     },
     {
         "line": 1047,
@@ -215,337 +220,332 @@
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1056,
+        "line": 1057,
         "column": 26,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1058,
+        "line": 1060,
         "column": 26,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
         "line": 1061,
-        "column": 26,
-        "msg": "Cannot find name 'TypeScript'."
-    },
-    {
-        "line": 1062,
         "column": 34,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1064,
+        "line": 1063,
+        "column": 26,
+        "msg": "Cannot find name 'TypeScript'."
+    },
+    {
+        "line": 1066,
         "column": 26,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
         "line": 1067,
-        "column": 26,
-        "msg": "Cannot find name 'TypeScript'."
-    },
-    {
-        "line": 1068,
         "column": 34,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1070,
+        "line": 1069,
+        "column": 26,
+        "msg": "Cannot find name 'TypeScript'."
+    },
+    {
+        "line": 1072,
         "column": 26,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
         "line": 1073,
-        "column": 26,
-        "msg": "Cannot find name 'TypeScript'."
-    },
-    {
-        "line": 1074,
         "column": 34,
         "msg": "Cannot find namespace 'TypeScript'."
+    },
+    {
+        "line": 1075,
+        "column": 26,
+        "msg": "Cannot find name 'TypeScript'."
     },
     {
         "line": 1076,
-        "column": 26,
-        "msg": "Cannot find name 'TypeScript'."
-    },
-    {
-        "line": 1077,
         "column": 34,
         "msg": "Cannot find namespace 'TypeScript'."
+    },
+    {
+        "line": 1078,
+        "column": 26,
+        "msg": "Cannot find name 'TypeScript'."
     },
     {
         "line": 1079,
-        "column": 26,
-        "msg": "Cannot find name 'TypeScript'."
-    },
-    {
-        "line": 1080,
         "column": 34,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1082,
+        "line": 1081,
         "column": 26,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1083,
+        "line": 1082,
         "column": 35,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1083,
+        "line": 1082,
         "column": 74,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1110,
+        "line": 1109,
         "column": 173,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1179,
+        "line": 1178,
         "column": 132,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1196,
+        "line": 1195,
         "column": 29,
         "msg": "Cannot find name 'WScript'."
     },
     {
-        "line": 1259,
+        "line": 1258,
         "column": 126,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1260,
+        "line": 1259,
         "column": 25,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1266,
+        "line": 1265,
         "column": 31,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1283,
+        "line": 1282,
         "column": 45,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1289,
+        "line": 1288,
         "column": 124,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1289,
+        "line": 1288,
         "column": 209,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1297,
+        "line": 1296,
         "column": 142,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1297,
+        "line": 1296,
         "column": 227,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1305,
+        "line": 1304,
         "column": 43,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1307,
+        "line": 1306,
         "column": 39,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1310,
+        "line": 1309,
         "column": 38,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1314,
+        "line": 1313,
         "column": 45,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1324,
+        "line": 1323,
         "column": 21,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1343,
+        "line": 1342,
         "column": 38,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1347,
+        "line": 1346,
         "column": 165,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1348,
+        "line": 1347,
         "column": 26,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1429,
+        "line": 1428,
         "column": 25,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1433,
+        "line": 1432,
         "column": 9,
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 1433,
+        "line": 1432,
         "column": 17,
         "msg": "Cannot find name 'optionRegex'."
     },
     {
-        "line": 1443,
+        "line": 1442,
         "column": 29,
         "msg": "Cannot find name 'optionRegex'."
     },
     {
-        "line": 1464,
+        "line": 1463,
         "column": 23,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1469,
+        "line": 1468,
         "column": 36,
         "msg": "Cannot find name 'optionRegex'."
     },
     {
-        "line": 1487,
+        "line": 1486,
         "column": 21,
         "msg": "Cannot find name 'optionRegex'."
     },
     {
-        "line": 1551,
+        "line": 1550,
         "column": 57,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1574,
+        "line": 1573,
         "column": 32,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1585,
+        "line": 1584,
         "column": 59,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1594,
+        "line": 1593,
         "column": 24,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1603,
+        "line": 1602,
         "column": 24,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1607,
+        "line": 1606,
         "column": 42,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 1608,
+        "line": 1607,
         "column": 21,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 1708,
+        "line": 1707,
         "column": 38,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 1709,
+        "line": 1708,
         "column": 26,
         "msg": "Cannot find name 'Services'."
     },
     {
-        "line": 1716,
+        "line": 1715,
         "column": 62,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1716,
+        "line": 1715,
         "column": 87,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1717,
+        "line": 1716,
         "column": 30,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1727,
+        "line": 1726,
         "column": 34,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1742,
+        "line": 1741,
         "column": 20,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1749,
+        "line": 1748,
         "column": 80,
         "msg": "Cannot find namespace 'TypeScript'."
     },
     {
-        "line": 1753,
+        "line": 1752,
         "column": 26,
         "msg": "Cannot find name 'TypeScript'."
     },
     {
-        "line": 1761,
+        "line": 1760,
         "column": 84,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 1772,
+        "line": 1771,
         "column": 51,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 1787,
+        "line": 1786,
         "column": 39,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 1787,
+        "line": 1786,
         "column": 61,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 1788,
+        "line": 1787,
         "column": 25,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 1790,
+        "line": 1789,
         "column": 38,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 1790,
+        "line": 1789,
         "column": 68,
         "msg": "Cannot find namespace 'Services'."
     },
     {
-        "line": 2033,
+        "line": 2032,
         "column": 32,
         "msg": "Cannot find name 'Diff'."
     }

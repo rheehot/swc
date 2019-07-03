@@ -1,28 +1,38 @@
 [
     {
-        "line": 7,
+        "line": 6,
         "column": 9,
         "msg": "Cannot find name 'window'."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 5,
         "msg": "';' expected."
     },
     {
-        "line": 13,
+        "line": 12,
         "column": 5,
         "msg": "';' expected."
     },
     {
-        "line": 16,
+        "line": 15,
         "column": 5,
         "msg": "';' expected."
     },
     {
-        "line": 19,
+        "line": 18,
         "column": 5,
         "msg": "';' expected."
+    },
+    {
+        "line": 25,
+        "column": 4,
+        "msg": "';' expected."
+    },
+    {
+        "line": 25,
+        "column": 6,
+        "msg": "Expression expected."
     },
     {
         "line": 26,
@@ -55,12 +65,12 @@
         "msg": "Expression expected."
     },
     {
-        "line": 29,
+        "line": 35,
         "column": 4,
         "msg": "';' expected."
     },
     {
-        "line": 29,
+        "line": 35,
         "column": 6,
         "msg": "Expression expected."
     },
@@ -95,12 +105,12 @@
         "msg": "Expression expected."
     },
     {
-        "line": 39,
+        "line": 45,
         "column": 4,
         "msg": "';' expected."
     },
     {
-        "line": 39,
+        "line": 45,
         "column": 6,
         "msg": "Expression expected."
     },
@@ -135,12 +145,12 @@
         "msg": "Expression expected."
     },
     {
-        "line": 49,
+        "line": 56,
         "column": 4,
         "msg": "';' expected."
     },
     {
-        "line": 49,
+        "line": 56,
         "column": 6,
         "msg": "Expression expected."
     },
@@ -171,16 +181,6 @@
     },
     {
         "line": 59,
-        "column": 6,
-        "msg": "Expression expected."
-    },
-    {
-        "line": 60,
-        "column": 4,
-        "msg": "';' expected."
-    },
-    {
-        "line": 60,
         "column": 6,
         "msg": "Expression expected."
     }

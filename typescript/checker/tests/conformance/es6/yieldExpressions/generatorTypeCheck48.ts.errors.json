@@ -1,11 +1,11 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 11,
         "msg": "'g', which lacks return-type annotation, implicitly has an 'any' return type."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 11,
         "msg": "'h', which lacks return-type annotation, implicitly has an 'any' return type."
     }

@@ -1,51 +1,51 @@
 [
     {
-        "line": 16,
+        "line": 15,
         "column": 13,
         "msg": "Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyTestClass'."
     },
     {
-        "line": 20,
+        "line": 19,
         "column": 13,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 13,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'."
     },
     {
-        "line": 31,
+        "line": 30,
         "column": 13,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'."
     },
     {
-        "line": 39,
+        "line": 38,
         "column": 13,
         "msg": "Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyTestClass'."
     },
     {
-        "line": 85,
+        "line": 84,
         "column": 13,
         "msg": "Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'."
     },
     {
-        "line": 89,
+        "line": 88,
         "column": 13,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'."
     },
     {
-        "line": 95,
+        "line": 94,
         "column": 13,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'."
     },
     {
-        "line": 100,
+        "line": 99,
         "column": 13,
         "msg": "Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'."
     },
     {
-        "line": 108,
+        "line": 107,
         "column": 13,
         "msg": "Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'."
     }

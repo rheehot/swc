@@ -1,11 +1,11 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 12,
         "msg": "'public' modifier must precede 'static' modifier."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 23,
         "msg": "A 'get' accessor must return a value."
     }

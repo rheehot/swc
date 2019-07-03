@@ -1,6 +1,6 @@
 [
     {
-        "line": 17,
+        "line": 16,
         "column": 5,
         "msg": "'foo', which lacks return-type annotation, implicitly has an 'any' return type."
     }

@@ -1,6 +1,6 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 27,
         "msg": "Unterminated Unicode escape sequence."
     }

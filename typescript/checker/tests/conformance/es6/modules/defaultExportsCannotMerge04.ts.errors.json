@@ -1,21 +1,21 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 25,
         "msg": "Merged declaration 'Foo' cannot include a default export declaration. Consider adding a separate 'export default Foo' declaration instead."
     },
     {
-        "line": 7,
+        "line": 6,
         "column": 11,
         "msg": "Merged declaration 'Foo' cannot include a default export declaration. Consider adding a separate 'export default Foo' declaration instead."
     },
     {
-        "line": 11,
+        "line": 10,
         "column": 11,
         "msg": "Individual declarations in merged declaration 'Foo' must be all exported or all local."
     },
     {
-        "line": 14,
+        "line": 13,
         "column": 18,
         "msg": "Individual declarations in merged declaration 'Foo' must be all exported or all local."
     }

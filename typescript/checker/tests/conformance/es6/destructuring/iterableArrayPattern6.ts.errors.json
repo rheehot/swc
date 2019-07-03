@@ -1,6 +1,6 @@
 [
     {
-        "line": 19,
+        "line": 18,
         "column": 8,
         "msg": "Type 'Foo[]' is not assignable to type 'string[]'."
     }

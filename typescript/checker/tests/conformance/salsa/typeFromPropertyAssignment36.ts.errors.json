@@ -1,16 +1,16 @@
 [
     {
-        "line": 13,
+        "line": 12,
         "column": 7,
         "msg": "Property 'q' is used before being assigned."
     },
     {
-        "line": 44,
+        "line": 43,
         "column": 3,
         "msg": "Property 'q' is used before being assigned."
     },
     {
-        "line": 66,
+        "line": 65,
         "column": 3,
         "msg": "Property 'expando' is used before being assigned."
     }

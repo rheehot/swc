@@ -1,6 +1,6 @@
 [
     {
-        "line": 10,
+        "line": 9,
         "column": 20,
         "msg": "JSDoc '@param' tag has name 'unrelated', but there is no parameter with that name."
     }

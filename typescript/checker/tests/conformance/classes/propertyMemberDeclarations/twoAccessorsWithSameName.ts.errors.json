@@ -1,11 +1,16 @@
 [
     {
+        "line": 3,
+        "column": 9,
+        "msg": "Duplicate identifier 'x'."
+    },
+    {
         "line": 4,
         "column": 9,
         "msg": "Duplicate identifier 'x'."
     },
     {
-        "line": 5,
+        "line": 8,
         "column": 9,
         "msg": "Duplicate identifier 'x'."
     },
@@ -15,22 +20,17 @@
         "msg": "Duplicate identifier 'x'."
     },
     {
-        "line": 10,
+        "line": 20,
         "column": 9,
         "msg": "Duplicate identifier 'x'."
     },
     {
-        "line": 21,
-        "column": 9,
-        "msg": "Duplicate identifier 'x'."
-    },
-    {
-        "line": 26,
+        "line": 25,
         "column": 9,
         "msg": "An object literal cannot have multiple get/set accessors with the same name."
     },
     {
-        "line": 26,
+        "line": 25,
         "column": 9,
         "msg": "Duplicate identifier 'x'."
     }

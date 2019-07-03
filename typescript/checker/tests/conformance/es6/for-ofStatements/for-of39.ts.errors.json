@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 37,
         "msg": "Type 'number' is not assignable to type 'boolean'."
     }

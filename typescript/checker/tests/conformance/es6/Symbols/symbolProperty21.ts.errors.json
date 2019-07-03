@@ -1,6 +1,6 @@
 [
     {
-        "line": 12,
+        "line": 11,
         "column": 5,
         "msg": "Argument of type '{ [Symbol.isConcatSpreadable]"
     }

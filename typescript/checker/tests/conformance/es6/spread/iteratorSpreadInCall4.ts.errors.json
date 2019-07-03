@@ -1,6 +1,6 @@
 [
     {
-        "line": 17,
+        "line": 16,
         "column": 5,
         "msg": "Expected at least 1 arguments, but got 0 or more."
     }

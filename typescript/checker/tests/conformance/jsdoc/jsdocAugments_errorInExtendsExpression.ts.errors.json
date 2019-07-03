@@ -1,6 +1,6 @@
 [
     {
-        "line": 8,
+        "line": 7,
         "column": 17,
         "msg": "Cannot find name 'err'."
     }

@@ -1,21 +1,21 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 15,
         "msg": "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 19,
         "msg": "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression."
     },
     {
-        "line": 15,
+        "line": 14,
         "column": 13,
         "msg": "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression."
     },
     {
-        "line": 21,
+        "line": 20,
         "column": 15,
         "msg": "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression."
     }

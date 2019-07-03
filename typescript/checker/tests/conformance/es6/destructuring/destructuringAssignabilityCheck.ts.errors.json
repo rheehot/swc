@@ -1,41 +1,41 @@
 [
     {
-        "line": 3,
+        "line": 2,
         "column": 7,
         "msg": "Type '{}' is not an array type."
     },
     {
-        "line": 4,
+        "line": 3,
         "column": 7,
         "msg": "Object is possibly 'undefined'."
+    },
+    {
+        "line": 4,
+        "column": 3,
+        "msg": "Type '{}' is not an array type."
     },
     {
         "line": 5,
         "column": 3,
-        "msg": "Type '{}' is not an array type."
-    },
-    {
-        "line": 6,
-        "column": 3,
         "msg": "Object is possibly 'undefined'."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 14,
         "msg": "Object is possibly 'undefined'."
     },
     {
-        "line": 11,
+        "line": 10,
         "column": 14,
         "msg": "Type '{}' is not an array type."
     },
     {
-        "line": 15,
+        "line": 14,
         "column": 7,
         "msg": "Object is possibly 'undefined'."
     },
     {
-        "line": 17,
+        "line": 16,
         "column": 7,
         "msg": "Type '{}' is not an array type."
     }

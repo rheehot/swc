@@ -1,141 +1,141 @@
 [
     {
-        "line": 14,
+        "line": 13,
         "column": 5,
         "msg": "Type 'T[keyof T]' is not assignable to type 'U[keyof T]'."
     },
     {
-        "line": 19,
+        "line": 18,
         "column": 5,
         "msg": "Type 'T[K]' is not assignable to type 'U[K]'."
     },
     {
-        "line": 23,
+        "line": 22,
         "column": 5,
         "msg": "Type 'keyof U' cannot be used to index type 'T'."
     },
     {
-        "line": 24,
+        "line": 23,
         "column": 12,
         "msg": "Type 'keyof U' cannot be used to index type 'T'."
+    },
+    {
+        "line": 27,
+        "column": 5,
+        "msg": "Type 'K' cannot be used to index type 'T'."
     },
     {
         "line": 28,
-        "column": 5,
-        "msg": "Type 'K' cannot be used to index type 'T'."
-    },
-    {
-        "line": 29,
         "column": 12,
         "msg": "Type 'K' cannot be used to index type 'T'."
     },
     {
-        "line": 33,
+        "line": 32,
         "column": 5,
         "msg": "Type 'T[keyof T] | undefined' is not assignable to type 'T[keyof T]'."
     },
     {
-        "line": 38,
+        "line": 37,
         "column": 5,
         "msg": "Type 'T[K] | undefined' is not assignable to type 'T[K]'."
     },
     {
-        "line": 43,
+        "line": 42,
         "column": 5,
         "msg": "Type 'U[keyof T] | undefined' is not assignable to type 'T[keyof T]'."
     },
     {
-        "line": 44,
+        "line": 43,
         "column": 5,
         "msg": "Type 'T[keyof T]' is not assignable to type 'U[keyof T] | undefined'."
     },
     {
-        "line": 48,
+        "line": 47,
         "column": 5,
         "msg": "Type 'U[K] | undefined' is not assignable to type 'T[K]'."
     },
     {
-        "line": 49,
+        "line": 48,
         "column": 5,
         "msg": "Type 'T[K]' is not assignable to type 'U[K] | undefined'."
     },
     {
-        "line": 54,
+        "line": 53,
         "column": 5,
         "msg": "Index signature in type 'Readonly<T>' only permits reading."
     },
     {
-        "line": 59,
+        "line": 58,
         "column": 5,
         "msg": "Index signature in type 'Readonly<T>' only permits reading."
     },
     {
-        "line": 64,
+        "line": 63,
         "column": 5,
         "msg": "Type 'T[keyof T]' is not assignable to type 'U[keyof T]'."
     },
     {
-        "line": 64,
+        "line": 63,
         "column": 5,
         "msg": "Index signature in type 'Readonly<U>' only permits reading."
     },
     {
-        "line": 69,
+        "line": 68,
         "column": 5,
         "msg": "Type 'T[K]' is not assignable to type 'U[K]'."
     },
     {
-        "line": 69,
+        "line": 68,
         "column": 5,
         "msg": "Index signature in type 'Readonly<U>' only permits reading."
     },
     {
-        "line": 75,
+        "line": 74,
         "column": 5,
         "msg": "Type 'Partial<T>' is not assignable to type 'T'."
     },
     {
-        "line": 81,
+        "line": 80,
         "column": 5,
         "msg": "Type 'Partial<Thing>' is not assignable to type 'Partial<T>'."
     },
     {
-        "line": 91,
+        "line": 90,
         "column": 5,
         "msg": "Type 'Readonly<Thing>' is not assignable to type 'Readonly<T>'."
     },
     {
-        "line": 130,
+        "line": 129,
         "column": 5,
         "msg": "Type 'Partial<U>' is not assignable to type 'Identity<U>'."
     },
     {
-        "line": 146,
+        "line": 145,
         "column": 5,
         "msg": "Type '{ [P in keyof T]"
     },
     {
-        "line": 151,
+        "line": 150,
         "column": 5,
         "msg": "Type '{ [P in keyof T]"
     },
     {
-        "line": 156,
+        "line": 155,
         "column": 5,
         "msg": "Type '{ [P in K]"
     },
     {
-        "line": 161,
+        "line": 160,
         "column": 5,
         "msg": "Type '{ [P in K]"
     },
     {
-        "line": 166,
+        "line": 165,
         "column": 5,
         "msg": "Type '{ [P in K]"
     },
     {
-        "line": 171,
+        "line": 170,
         "column": 5,
         "msg": "Type '{ [P in K]"
     }

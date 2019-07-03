@@ -1,16 +1,16 @@
 [
     {
-        "line": 6,
+        "line": 5,
         "column": 5,
         "msg": "The type of a function declaration must match the function's signature."
     },
     {
-        "line": 12,
+        "line": 11,
         "column": 5,
         "msg": "Property 'prop' is missing in type '(prop"
     },
     {
-        "line": 15,
+        "line": 14,
         "column": 5,
         "msg": "The type of a function declaration must match the function's signature."
     }

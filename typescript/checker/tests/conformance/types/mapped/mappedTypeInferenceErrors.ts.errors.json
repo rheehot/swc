@@ -1,6 +1,6 @@
 [
     {
-        "line": 18,
+        "line": 17,
         "column": 9,
         "msg": "Type 'number' is not assignable to type '() => unknown'."
     }

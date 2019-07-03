@@ -1,11 +1,11 @@
 [
     {
-        "line": 8,
+        "line": 7,
         "column": 15,
         "msg": "Type argument list cannot be empty."
     },
     {
-        "line": 9,
+        "line": 8,
         "column": 22,
         "msg": "Trailing comma not allowed."
     }

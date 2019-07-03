@@ -1,26 +1,26 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 15,
         "msg": "Cannot find module 'mod'."
     },
     {
-        "line": 6,
+        "line": 5,
         "column": 17,
         "msg": "Cannot find module 'mod'."
     },
     {
-        "line": 8,
+        "line": 7,
         "column": 20,
         "msg": "Cannot find module 'mod'."
     },
     {
-        "line": 16,
+        "line": 15,
         "column": 15,
         "msg": "Cannot find module 'mod'."
     },
     {
-        "line": 18,
+        "line": 17,
         "column": 17,
         "msg": "Cannot find module 'mod'."
     }

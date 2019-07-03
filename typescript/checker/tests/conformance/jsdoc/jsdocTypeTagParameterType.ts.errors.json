@@ -1,11 +1,11 @@
 [
     {
-        "line": 10,
+        "line": 9,
         "column": 5,
         "msg": "Type '1' is not assignable to type 'string'."
     },
     {
-        "line": 14,
+        "line": 13,
         "column": 5,
         "msg": "Type '1' is not assignable to type 'string'."
     }

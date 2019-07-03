@@ -1,31 +1,31 @@
 [
     {
-        "line": 9,
+        "line": 8,
         "column": 23,
         "msg": "Duplicate identifier 'Foo'."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 7,
         "msg": "Duplicate identifier 'Foo'."
     },
     {
-        "line": 12,
+        "line": 11,
         "column": 23,
         "msg": "Duplicate identifier 'Bar'."
     },
     {
-        "line": 13,
+        "line": 12,
         "column": 9,
         "msg": "Duplicate identifier 'Bar'."
     },
     {
-        "line": 15,
+        "line": 14,
         "column": 5,
         "msg": "Duplicate identifier 'Baz'."
     },
     {
-        "line": 17,
+        "line": 16,
         "column": 5,
         "msg": "Duplicate identifier 'Baz'."
     }

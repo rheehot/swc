@@ -1,137 +1,142 @@
 [
     {
-        "line": 18,
+        "line": 17,
         "column": 15,
         "msg": "Property 'n' does not exist on type 'void'."
     },
     {
-        "line": 41,
+        "line": 40,
         "column": 21,
         "msg": "Property 'a' does not exist on type 'void'."
     },
     {
-        "line": 51,
+        "line": 50,
         "column": 1,
         "msg": "The 'this' context of type 'void' is not assignable to method's 'this' of type '{ a"
     },
     {
-        "line": 53,
+        "line": 52,
         "column": 1,
         "msg": "The 'this' context of type 'void' is not assignable to method's 'this' of type 'I'."
     },
     {
-        "line": 58,
+        "line": 57,
         "column": 21,
         "msg": "Property 'notFound' does not exist on type '{ y"
     },
     {
-        "line": 61,
+        "line": 60,
         "column": 21,
         "msg": "Property 'notSpecified' does not exist on type 'void'."
     },
     {
-        "line": 63,
+        "line": 62,
         "column": 79,
         "msg": "Type '{ y"
     },
     {
-        "line": 64,
+        "line": 63,
         "column": 97,
         "msg": "Type '{ y"
     },
     {
-        "line": 65,
+        "line": 64,
         "column": 110,
         "msg": "Type '{ wrongName"
     },
     {
-        "line": 67,
+        "line": 66,
         "column": 4,
         "msg": "Expected 1 arguments, but got 0."
     },
     {
-        "line": 68,
+        "line": 67,
         "column": 6,
         "msg": "Argument of type '\"wrong type\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 69,
+        "line": 68,
         "column": 10,
         "msg": "Expected 1 arguments, but got 2."
     },
     {
-        "line": 70,
+        "line": 69,
         "column": 1,
         "msg": "The 'this' context of type '{ y"
     },
     {
-        "line": 71,
+        "line": 70,
         "column": 1,
         "msg": "The 'this' context of type '{ wrongName"
     },
     {
-        "line": 74,
+        "line": 73,
         "column": 3,
         "msg": "Expected 1 arguments, but got 0."
     },
     {
-        "line": 75,
+        "line": 74,
         "column": 13,
         "msg": "Argument of type '\"wrong type\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 76,
+        "line": 75,
         "column": 17,
         "msg": "Expected 1 arguments, but got 2."
     },
     {
-        "line": 77,
+        "line": 76,
         "column": 3,
         "msg": "Expected 1 arguments, but got 0."
+    },
+    {
+        "line": 77,
+        "column": 16,
+        "msg": "Argument of type '\"wrong type 2\"' is not assignable to parameter of type 'number'."
     },
     {
         "line": 78,
-        "column": 16,
-        "msg": "Argument of type '\"wrong type 2\"' is not assignable to parameter of type 'number'."
+        "column": 20,
+        "msg": "Expected 1 arguments, but got 2."
     },
     {
         "line": 79,
-        "column": 20,
-        "msg": "Expected 1 arguments, but got 2."
-    },
-    {
-        "line": 80,
         "column": 3,
         "msg": "Expected 1 arguments, but got 0."
     },
     {
-        "line": 81,
+        "line": 80,
         "column": 16,
         "msg": "Argument of type '\"wrong type 2\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 82,
+        "line": 81,
         "column": 20,
         "msg": "Expected 1 arguments, but got 2."
     },
     {
-        "line": 83,
+        "line": 82,
         "column": 3,
         "msg": "Expected 1 arguments, but got 0."
     },
     {
-        "line": 84,
+        "line": 83,
         "column": 20,
         "msg": "Argument of type '\"wrong type 3\"' is not assignable to parameter of type 'number'."
     },
     {
-        "line": 85,
+        "line": 84,
         "column": 24,
         "msg": "Expected 1 arguments, but got 2."
     },
     {
-        "line": 88,
+        "line": 87,
         "column": 5,
+        "msg": "Type '(this"
+    },
+    {
+        "line": 108,
+        "column": 1,
         "msg": "Type '(this"
     },
     {
@@ -140,7 +145,7 @@
         "msg": "Type '(this"
     },
     {
-        "line": 110,
+        "line": 111,
         "column": 1,
         "msg": "Type '(this"
     },
@@ -180,14 +185,14 @@
         "msg": "Type '(this"
     },
     {
-        "line": 119,
-        "column": 1,
-        "msg": "Type '(this"
-    },
-    {
-        "line": 127,
+        "line": 126,
         "column": 69,
         "msg": "Property 'x' does not exist on type 'typeof Base1'."
+    },
+    {
+        "line": 146,
+        "column": 1,
+        "msg": "Type '(this"
     },
     {
         "line": 147,
@@ -195,132 +200,127 @@
         "msg": "Type '(this"
     },
     {
-        "line": 148,
+        "line": 149,
         "column": 1,
         "msg": "Type '(this"
     },
     {
-        "line": 150,
-        "column": 1,
-        "msg": "Type '(this"
-    },
-    {
-        "line": 156,
+        "line": 155,
         "column": 16,
         "msg": "A function that is called with the 'new' keyword cannot have a 'this' type that is 'void'."
     },
     {
-        "line": 160,
+        "line": 159,
         "column": 17,
         "msg": "A constructor cannot have a 'this' parameter."
     },
     {
-        "line": 164,
+        "line": 163,
         "column": 9,
         "msg": "A constructor cannot have a 'this' parameter."
     },
     {
-        "line": 166,
+        "line": 165,
         "column": 31,
         "msg": "A constructor cannot have a 'this' parameter."
     },
     {
-        "line": 167,
+        "line": 166,
         "column": 30,
         "msg": "A 'this' parameter must be the first parameter."
     },
     {
-        "line": 170,
+        "line": 169,
         "column": 26,
         "msg": "Identifier expected."
     },
     {
-        "line": 170,
+        "line": 169,
         "column": 26,
+        "msg": "A 'this' parameter must be the first parameter."
+    },
+    {
+        "line": 170,
+        "column": 23,
+        "msg": "Identifier expected."
+    },
+    {
+        "line": 170,
+        "column": 23,
         "msg": "A 'this' parameter must be the first parameter."
     },
     {
         "line": 171,
         "column": 23,
-        "msg": "Identifier expected."
-    },
-    {
-        "line": 171,
-        "column": 23,
-        "msg": "A 'this' parameter must be the first parameter."
+        "msg": "',' expected."
     },
     {
         "line": 172,
-        "column": 23,
-        "msg": "',' expected."
-    },
-    {
-        "line": 173,
         "column": 28,
         "msg": "Identifier expected."
     },
     {
-        "line": 173,
+        "line": 172,
         "column": 28,
         "msg": "A 'this' parameter must be the first parameter."
     },
     {
-        "line": 174,
+        "line": 173,
         "column": 30,
         "msg": "',' expected."
     },
     {
-        "line": 174,
+        "line": 173,
         "column": 32,
         "msg": "Identifier expected."
     },
     {
-        "line": 174,
+        "line": 173,
         "column": 37,
         "msg": "',' expected."
     },
     {
-        "line": 174,
+        "line": 173,
         "column": 38,
         "msg": "Expression expected."
     },
     {
-        "line": 174,
+        "line": 173,
         "column": 39,
         "msg": "';' expected."
     },
     {
-        "line": 174,
+        "line": 173,
         "column": 40,
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 174,
+        "line": 173,
         "column": 42,
         "msg": "'number' only refers to a type, but is being used as a value here."
     },
     {
-        "line": 174,
+        "line": 173,
         "column": 49,
         "msg": "';' expected."
     },
     {
-        "line": 177,
+        "line": 176,
         "column": 23,
         "msg": "An arrow function cannot have a 'this' parameter."
     },
     {
-        "line": 178,
+        "line": 177,
         "column": 16,
         "msg": "An arrow function cannot have a 'this' parameter."
     },
     {
-        "line": 179,
+        "line": 178,
         "column": 19,
         "msg": "An arrow function cannot have a 'this' parameter."
     },
     {
-        "line": 180,
+        "line": 179,
         "column": 22,
         "msg": "An arrow function cannot have a 'this' parameter."
     }

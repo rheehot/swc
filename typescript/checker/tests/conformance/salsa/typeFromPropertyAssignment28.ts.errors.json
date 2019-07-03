@@ -1,11 +1,11 @@
 [
     {
-        "line": 12,
+        "line": 11,
         "column": 17,
         "msg": "Type '{ q"
     },
     {
-        "line": 16,
+        "line": 15,
         "column": 3,
         "msg": "Property 'q' does not exist on type 'C'."
     }

@@ -1,6 +1,6 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 5,
         "msg": "Duplicate identifier '[Symbol.isConcatSpreadable]'."
     }

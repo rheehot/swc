@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 3,
         "column": 17,
         "msg": "Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher."
     }

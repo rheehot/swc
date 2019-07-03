@@ -1,11 +1,11 @@
 [
     {
-        "line": 67,
+        "line": 66,
         "column": 5,
         "msg": "Variable 'v' is used before being assigned."
     },
     {
-        "line": 75,
+        "line": 74,
         "column": 5,
         "msg": "Variable 'v' is used before being assigned."
     }

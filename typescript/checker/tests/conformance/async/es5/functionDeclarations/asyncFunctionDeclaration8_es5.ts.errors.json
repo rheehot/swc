@@ -1,11 +1,11 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 12,
         "msg": "Cannot find name 'await'."
     },
     {
-        "line": 5,
+        "line": 4,
         "column": 20,
         "msg": "Cannot find name 'foo'."
     }

@@ -1,206 +1,206 @@
 [
     {
-        "line": 5,
+        "line": 4,
         "column": 12,
         "msg": "Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'."
     },
     {
-        "line": 10,
+        "line": 9,
         "column": 12,
         "msg": "Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'."
     },
     {
-        "line": 16,
+        "line": 15,
         "column": 12,
         "msg": "Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'."
     },
     {
-        "line": 21,
+        "line": 20,
         "column": 12,
         "msg": "Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn'."
     },
     {
-        "line": 27,
+        "line": 26,
         "column": 12,
         "msg": "Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'."
     },
     {
-        "line": 32,
+        "line": 31,
         "column": 12,
         "msg": "Duplicate identifier 'prototype'."
     },
     {
-        "line": 32,
+        "line": 31,
         "column": 12,
         "msg": "Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'."
     },
     {
-        "line": 38,
+        "line": 37,
         "column": 12,
         "msg": "Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'."
     },
     {
-        "line": 43,
+        "line": 42,
         "column": 12,
         "msg": "Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'."
     },
     {
-        "line": 49,
+        "line": 48,
         "column": 12,
         "msg": "Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'."
     },
     {
-        "line": 54,
+        "line": 53,
         "column": 12,
         "msg": "Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'."
     },
     {
-        "line": 64,
+        "line": 63,
         "column": 12,
         "msg": "Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName_Anonymous'."
     },
     {
-        "line": 69,
+        "line": 68,
         "column": 12,
         "msg": "Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn_Anonymous'."
     },
     {
-        "line": 75,
+        "line": 74,
         "column": 12,
         "msg": "Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength_Anonymous'."
     },
     {
-        "line": 80,
+        "line": 79,
         "column": 12,
         "msg": "Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn_Anonymous'."
     },
     {
-        "line": 86,
+        "line": 85,
         "column": 12,
         "msg": "Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype_Anonymous'."
     },
     {
-        "line": 91,
+        "line": 90,
         "column": 12,
         "msg": "Duplicate identifier 'prototype'."
     },
     {
-        "line": 91,
+        "line": 90,
         "column": 12,
         "msg": "Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn_Anonymous'."
     },
     {
-        "line": 97,
+        "line": 96,
         "column": 12,
         "msg": "Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller_Anonymous'."
     },
     {
-        "line": 102,
+        "line": 101,
         "column": 12,
         "msg": "Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn_Anonymous'."
     },
     {
-        "line": 108,
+        "line": 107,
         "column": 12,
         "msg": "Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments_Anonymous'."
     },
     {
-        "line": 113,
+        "line": 112,
         "column": 12,
         "msg": "Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn_Anonymous'."
     },
     {
-        "line": 123,
+        "line": 122,
         "column": 16,
         "msg": "Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticName'."
     },
     {
-        "line": 130,
+        "line": 129,
         "column": 16,
         "msg": "Static property 'name' conflicts with built-in property 'Function.name' of constructor function 'StaticNameFn'."
     },
     {
-        "line": 137,
+        "line": 136,
         "column": 12,
         "msg": "A default export can only be used in an ECMAScript-style module."
     },
     {
-        "line": 138,
+        "line": 137,
         "column": 16,
         "msg": "Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLength'."
     },
     {
-        "line": 144,
+        "line": 143,
         "column": 12,
         "msg": "A default export can only be used in an ECMAScript-style module."
     },
     {
-        "line": 145,
+        "line": 144,
         "column": 16,
         "msg": "Static property 'length' conflicts with built-in property 'Function.length' of constructor function 'StaticLengthFn'."
     },
     {
-        "line": 152,
+        "line": 151,
         "column": 12,
         "msg": "A default export can only be used in an ECMAScript-style module."
     },
     {
-        "line": 153,
+        "line": 152,
         "column": 16,
         "msg": "Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototype'."
     },
     {
-        "line": 159,
+        "line": 158,
         "column": 12,
         "msg": "A default export can only be used in an ECMAScript-style module."
     },
     {
-        "line": 160,
+        "line": 159,
         "column": 16,
         "msg": "Duplicate identifier 'prototype'."
     },
     {
-        "line": 160,
+        "line": 159,
         "column": 16,
         "msg": "Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'StaticPrototypeFn'."
     },
     {
-        "line": 167,
+        "line": 166,
         "column": 12,
         "msg": "A default export can only be used in an ECMAScript-style module."
     },
     {
-        "line": 168,
+        "line": 167,
         "column": 16,
         "msg": "Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCaller'."
     },
     {
-        "line": 174,
+        "line": 173,
         "column": 12,
         "msg": "A default export can only be used in an ECMAScript-style module."
     },
     {
-        "line": 175,
+        "line": 174,
         "column": 16,
         "msg": "Static property 'caller' conflicts with built-in property 'Function.caller' of constructor function 'StaticCallerFn'."
     },
     {
-        "line": 182,
+        "line": 181,
         "column": 12,
         "msg": "A default export can only be used in an ECMAScript-style module."
     },
     {
-        "line": 183,
+        "line": 182,
         "column": 16,
         "msg": "Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArguments'."
     },
     {
-        "line": 189,
+        "line": 188,
         "column": 12,
         "msg": "A default export can only be used in an ECMAScript-style module."
     },
     {
-        "line": 190,
+        "line": 189,
         "column": 16,
         "msg": "Static property 'arguments' conflicts with built-in property 'Function.arguments' of constructor function 'StaticArgumentsFn'."
     }

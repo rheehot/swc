@@ -1,6 +1,6 @@
 [
     {
-        "line": 8,
+        "line": 7,
         "column": 12,
         "msg": "'this' cannot be referenced in a computed property name."
     }

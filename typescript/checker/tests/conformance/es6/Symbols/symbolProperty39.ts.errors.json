@@ -1,5 +1,10 @@
 [
     {
+        "line": 3,
+        "column": 5,
+        "msg": "Duplicate function implementation."
+    },
+    {
         "line": 4,
         "column": 5,
         "msg": "Duplicate function implementation."
@@ -10,12 +15,7 @@
         "msg": "Duplicate function implementation."
     },
     {
-        "line": 6,
-        "column": 5,
-        "msg": "Duplicate function implementation."
-    },
-    {
-        "line": 9,
+        "line": 8,
         "column": 5,
         "msg": "Duplicate function implementation."
     }

@@ -1,6 +1,6 @@
 [
     {
-        "line": 6,
+        "line": 5,
         "column": 7,
         "msg": "'const' declarations must be initialized."
     }
