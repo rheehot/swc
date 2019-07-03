@@ -52,7 +52,7 @@ async function handle(f: string) {
 
   let len = (content.match(/\/\/ \@|\/\/\@/g) || []).length;
   if (len === 0) {
-    len -=1;
+    len -= 1;
     const data = content.split(/\r\n|\r|\n/);
     for (let i = 0; i < data.length; i++) {
       if (data[i].length === 0) {
@@ -63,7 +63,7 @@ async function handle(f: string) {
     }
   }
 
-  const errors = extract(errorsText, len);
+  const errors = extract(errorsText, len + 1);
   console.log(`\t${errors.length} errors`);
   const ref = `${dirname}/${basename}.errors.json`;
   await writeFile(ref, JSON.stringify(errors, undefined, "    "));
@@ -99,7 +99,7 @@ function extract(content: string, shift: number): Error[] {
     const msg = msgWithPrefix.trim();
 
     errs.push({
-      line: parseInt(lineCol.split(",")[0]) + shift + 1,
+      line: parseInt(lineCol.split(",")[0]) + shift,
       column: parseInt(lineCol.split(",")[1]),
       msg
     });
