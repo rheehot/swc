@@ -429,6 +429,10 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                 Type::Tuple(Tuple {
                     types: ref r_types, ..
                 }) => {
+                    if types.len() < r_types.len() {
+                        fail!();
+                    }
+
                     for (l, r) in types.into_iter().zip(r_types) {
                         match try_assign(l, r, span) {
                             // Great
