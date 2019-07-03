@@ -1,0 +1,16 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            83,
+        ),
+        hi: BytePos(
+            88,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/es6/yieldExpressions/YieldExpression8_es6.ts:2:1
+  |
+2 | yield(foo);
+  | ^^^^^
+
