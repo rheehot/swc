@@ -1,6 +1,0 @@
-error: Unexpected token Some(RParen)
- --> $DIR/tests/conformance/parser/ecmascript6/Iterators/parserForOfStatement21.ts:2:15
-  |
-2 | for (var of of) { }
-  |               ^
-

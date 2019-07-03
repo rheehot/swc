@@ -1,6 +1,0 @@
-error: Unexpected token Some(Word(constructor))
- --> $DIR/tests/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration3.ts:2:10
-  |
-2 |   export constructor() { }
-  |          ^^^^^^^^^^^
-

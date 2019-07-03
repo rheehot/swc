@@ -1,6 +1,0 @@
-error: Unexpected token Some(RBrace)
- --> $DIR/tests/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers03.ts:2:15
-  |
-2 | var { "while" } = { while: 1 }
-  |               ^
-

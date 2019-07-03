@@ -1,6 +1,0 @@
-error: Expected RBrace, got None
- --> $DIR/tests/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic6.ts:3:8
-  |
-3 | static public
-  |        ^^^^^^
-

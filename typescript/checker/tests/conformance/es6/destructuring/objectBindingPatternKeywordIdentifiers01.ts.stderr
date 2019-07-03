@@ -1,6 +1,0 @@
-error: Cannot use a reserved word as a shorthand property
- --> $DIR/tests/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers01.ts:2:7
-  |
-2 | var { while } = { while: 1 }
-  |       ^^^^^
-

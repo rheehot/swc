@@ -1,6 +1,0 @@
-error: Cannot assign to this
- --> $DIR/tests/conformance/parser/ecmascript5/Expressions/parserUnaryExpression4.ts:1:3
-  |
-1 | ++{};
-  |   ^^
-

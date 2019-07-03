@@ -1,6 +1,0 @@
-error: Expected ident
- --> $DIR/tests/conformance/async/es2017/asyncArrowFunction/asyncArrowFunction3_es2017.ts:3:12
-  |
-3 | function f(await = await) {
-  |            ^^^^^
-

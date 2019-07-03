@@ -1,6 +1,0 @@
-error: Unexpected token Some(Word(Foo))
- --> $DIR/tests/conformance/parser/ecmascript5/MemberVariableDeclarations/parserMemberVariableDeclaration3.ts:2:17
-  |
-2 |   static public Foo;
-  |                 ^^^
-

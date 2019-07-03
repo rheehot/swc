@@ -1,6 +1,0 @@
-error: Expected LBrace, got Some(Colon)
- --> $DIR/tests/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration10.ts:2:16
-  |
-2 |   constructor(): number { }
-  |                ^
-

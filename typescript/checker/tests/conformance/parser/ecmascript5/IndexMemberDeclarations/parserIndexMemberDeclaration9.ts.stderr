@@ -1,6 +1,0 @@
-error: Unexpected token Some(LBracket)
- --> $DIR/tests/conformance/parser/ecmascript5/IndexMemberDeclarations/parserIndexMemberDeclaration9.ts:2:11
-  |
-2 |    export [x: string]: string;
-  |           ^
-

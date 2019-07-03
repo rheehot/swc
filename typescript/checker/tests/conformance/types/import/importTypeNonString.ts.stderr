@@ -1,6 +1,0 @@
-error: Unexpected token Some(Word(import))
- --> $DIR/tests/conformance/types/import/importTypeNonString.ts:3:17
-  |
-3 | export const x: import({x: 12}) = undefined as any;
-  |                 ^^^^^^
-

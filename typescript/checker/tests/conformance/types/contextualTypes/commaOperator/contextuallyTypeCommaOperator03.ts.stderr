@@ -1,6 +1,0 @@
-error: Expected Comma, got Some(Arrow)
- --> $DIR/tests/conformance/types/contextualTypes/commaOperator/contextuallyTypeCommaOperator03.ts:6:8
-  |
-6 | x = (a => a, b => b);
-  |        ^^
-

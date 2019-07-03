@@ -1,6 +1,0 @@
-error: Unexpected token Some(At)
- --> $DIR/tests/conformance/decorators/class/method/decoratorOnClassMethod12.ts:8:9
-  |
-8 |         @super.decorator
-  |         ^
-

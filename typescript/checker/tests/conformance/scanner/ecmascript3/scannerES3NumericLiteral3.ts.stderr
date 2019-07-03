@@ -1,6 +1,0 @@
-error: Legacy octal escape is not permitted in strict mode
- --> $DIR/tests/conformance/scanner/ecmascript3/scannerES3NumericLiteral3.ts:1:1
-  |
-1 | 01.0
-  | ^^
-

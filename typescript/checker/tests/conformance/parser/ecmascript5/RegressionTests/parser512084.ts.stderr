@@ -1,6 +1,0 @@
-error: Expected RBrace, got None
- --> $DIR/tests/conformance/parser/ecmascript5/RegressionTests/parser512084.ts:1:11
-  |
-1 | class foo {
-  |           ^
-

@@ -1,6 +1,0 @@
-error: Unexpected token Some(Word(m))
- --> $DIR/tests/conformance/parser/ecmascript5/Protected/Protected4.ts:2:20
-  |
-2 |   protected public m() { }
-  |                    ^
-

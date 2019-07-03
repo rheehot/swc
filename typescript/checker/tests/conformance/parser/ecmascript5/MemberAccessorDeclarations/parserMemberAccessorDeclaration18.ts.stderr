@@ -1,6 +1,0 @@
-error: Unexpected token Some(DotDotDot)
- --> $DIR/tests/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration18.ts:3:12
-  |
-3 |    set Foo(...a) { }
-  |            ^^^
-

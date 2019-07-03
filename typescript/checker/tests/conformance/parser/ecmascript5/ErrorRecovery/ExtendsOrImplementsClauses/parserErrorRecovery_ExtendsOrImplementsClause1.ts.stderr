@@ -1,6 +1,0 @@
-error: Expected LBrace, got None
- --> $DIR/tests/conformance/parser/ecmascript5/ErrorRecovery/ExtendsOrImplementsClauses/parserErrorRecovery_ExtendsOrImplementsClause1.ts:2:1
-  |
-2 | }
-  | ^
-

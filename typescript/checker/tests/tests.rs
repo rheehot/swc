@@ -90,7 +90,6 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
 
     for entry in WalkDir::new(&dir).into_iter() {
         let entry = entry?;
-        println!("{}", entry.file_name().to_string_lossy());
         let is_ts = entry.file_name().to_string_lossy().ends_with(".ts")
             || entry.file_name().to_string_lossy().ends_with(".tsx");
         if entry.file_type().is_dir() || !is_ts {
@@ -149,7 +148,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
 
 fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(), StdErr> {
     let fname = file_name.display().to_string();
-    let mut ref_error_lines = match mode {
+    let mut ref_errors = match mode {
         Mode::Conformance => {
             let fname = file_name.file_name().unwrap();
             let errors_file =
@@ -165,13 +164,18 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
                 // TODO: Match column and message
 
-                Some(errors.into_iter().map(|e| e.line).collect::<Vec<_>>())
+                Some(
+                    errors
+                        .into_iter()
+                        .map(|e| (e.line, e.column))
+                        .collect::<Vec<_>>(),
+                )
             }
         }
         _ => None,
     };
-    let full_ref_err_lines = ref_error_lines.clone();
-    let ref_err_cnt = ref_error_lines.as_ref().map(Vec::len).unwrap_or(0);
+    let all_ref_errors = ref_errors.clone();
+    let ref_err_cnt = ref_errors.as_ref().map(Vec::len).unwrap_or(0);
 
     let res = ::testing::run_test(treat_error_as_bug, |cm, handler| {
         CM.set(&cm.clone(), || {
@@ -308,31 +312,28 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
             );
 
             let errors = ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
-            if let Some(ref mut ref_error_lines) = ref_error_lines {
+            if let Some(ref mut ref_errors) = ref_errors {
                 assert_eq!(mode, Mode::Conformance);
                 // Line of errors (actual result)
-                let err_lines = errors
+                let actual_errors = errors
                     .iter()
                     .map(|e| {
                         let span = e.span();
-                        let fl = cm
-                            .span_to_lines(span)
-                            .expect("failed to get span of the error");
-                        assert!(fl.lines.len() == 1, "{:?}", fl.lines);
+                        let cp = cm.lookup_char_pos(span.lo());
 
-                        let li = fl.lines[0].line_index;
-                        return li + 1;
+                        return (cp.line, cp.col_display);
                     })
                     .collect::<Vec<_>>();
 
+                println!("REF: {:?}", ref_errors);
+                println!("ACTUAL: {:?}", actual_errors);
+
                 // We only emit errors which has wrong line.
-                if *ref_error_lines != err_lines {
+                if *ref_errors != actual_errors {
                     checker.run(|| {
-                        for (e, li) in errors.into_iter().zip(err_lines) {
-                            if !ref_error_lines.contains(&li) {
+                        for (e, line_col) in errors.into_iter().zip(actual_errors) {
+                            if let None = ref_errors.remove_item(&line_col) {
                                 e.emit(&handler);
-                            } else {
-                                assert!(ref_error_lines.remove_item(&li).is_some());
                             }
                         }
                     });
@@ -375,19 +376,28 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
             let mut err_lines = err.lines().enumerate().filter(|(_, l)| l.contains("$DIR"));
 
             let err_count = err_lines.clone().count();
-            let error_lines = err_lines
+            let error_line_columns = err_lines
                 .clone()
                 .map(|(_, s)| {
-                    s.split(":")
-                        .nth(1)
+                    let mut s = s.split(":");
+                    s.next();
+                    let line = s
+                        .next()
                         .unwrap()
                         .parse::<usize>()
-                        .expect("failed to parse line")
+                        .expect("failed to parse line");
+                    let column = s
+                        .next()
+                        .unwrap()
+                        .parse::<usize>()
+                        .expect("failed to parse column");
+
+                    (line, column)
                 })
                 .collect::<Vec<_>>();
 
             let all = err_lines.all(|(_, v)| {
-                for l in ref_error_lines.as_ref().unwrap() {
+                for (l, _column) in ref_errors.as_ref().unwrap() {
                     if v.contains(&l.to_string()) {
                         return true;
                     }
@@ -395,17 +405,17 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 false
             });
 
-            if err_count != ref_error_lines.as_ref().unwrap().len() || !all {
+            if err_count != ref_errors.as_ref().unwrap().len() || !all {
                 panic!(
-                    "{:?}\n{} unmatched errors out of {} errors. Got {}\nRef lines: {:?}\nReal \
-                     Lines: {:?}\nFull: {:?}",
+                    "{:?}\n{} unmatched errors out of {} errors. Got {}\nExpected: {:?}\nActual: \
+                     {:?}\nFull: {:?}",
                     err,
-                    ref_error_lines.as_ref().unwrap().len(),
+                    ref_errors.as_ref().unwrap().len(),
                     ref_err_cnt,
                     err_count,
-                    ref_error_lines.as_ref().unwrap(),
-                    error_lines,
-                    full_ref_err_lines.as_ref().unwrap()
+                    ref_errors.as_ref().unwrap(),
+                    error_line_columns,
+                    all_ref_errors.as_ref().unwrap()
                 );
             }
 

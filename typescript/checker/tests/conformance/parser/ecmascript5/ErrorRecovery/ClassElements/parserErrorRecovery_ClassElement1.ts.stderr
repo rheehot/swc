@@ -1,6 +1,0 @@
-error: Unexpected token Some(Word(D))
- --> $DIR/tests/conformance/parser/ecmascript5/ErrorRecovery/ClassElements/parserErrorRecovery_ClassElement1.ts:5:7
-  |
-5 | class D {
-  |       ^
-

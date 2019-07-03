@@ -1,6 +1,0 @@
-error: Expected RParen, got Some(Word(A))
- --> $DIR/tests/conformance/parser/ecmascript5/ParameterLists/parserParameterList6.ts:2:26
-  |
-2 |   constructor(C: (public A) => any) {
-  |                          ^
-

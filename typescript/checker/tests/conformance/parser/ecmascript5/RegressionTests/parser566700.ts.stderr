@@ -1,6 +1,0 @@
-error: Parenthized expression cannot be empty
- --> $DIR/tests/conformance/parser/ecmascript5/RegressionTests/parser566700.ts:1:9
-  |
-1 | var v = ()({});
-  |         ^^
-
