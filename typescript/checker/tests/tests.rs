@@ -121,7 +121,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             || input.contains("@filename")
             || input.contains("@Filename")
             || input.contains("@module")
-            || (mode == Mode::Conformance && !file_name.contains("types/tuple/wideningTuples"));
+            || (mode == Mode::Conformance && !file_name.contains(""));
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);
@@ -397,8 +397,8 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 .collect::<Vec<_>>();
 
             let all = err_lines.all(|(_, v)| {
-                for (l, _column) in ref_errors.as_ref().unwrap() {
-                    if v.contains(&l.to_string()) {
+                for (l, column) in ref_errors.as_ref().unwrap() {
+                    if v.contains(&format!("{}:{}", l, column)) {
                         return true;
                     }
                 }
