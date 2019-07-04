@@ -1717,13 +1717,17 @@ impl Visit<Stmt> for Analyzer<'_, '_> {
 
 impl Visit<SeqExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, expr: &SeqExpr) {
+        let first_span = expr.exprs[0].span();
+
         for expr in expr.exprs[..expr.exprs.len() - 1].iter() {
             let span = expr.span();
             expr.visit_with(self);
 
             match **expr {
                 Expr::Ident(..) | Expr::Lit(..) => {
-                    self.info.errors.push(Error::UselessSeqExpr { span });
+                    self.info.errors.push(Error::UselessSeqExpr {
+                        span: span.with_lo(first_span.lo()),
+                    });
                 }
 
                 _ => {}
