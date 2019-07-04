@@ -7,9 +7,9 @@ use crate::{
     builtin_types,
     errors::Error,
     ty::{
-        self, Alias, Array, CallSignature, ConstructorSignature, EnumVariant, Intersection,
-        MethodSignature, PropertySignature, Tuple, Type, TypeElement, TypeLit, TypeParamDecl,
-        TypeRef, TypeRefExt, Union,
+        self, Alias, Array, CallSignature, ConstructorSignature, EnumVariant, IndexSignature,
+        Interface, Intersection, MethodSignature, PropertySignature, Tuple, Type, TypeElement,
+        TypeLit, TypeParamDecl, TypeRef, TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
@@ -744,11 +744,64 @@ impl Analyzer<'_, '_> {
             }) => return Err(Error::Unknown { span: obj.span() }),
 
             Type::Array(Array { .. }) => {
-                let ty = builtin_types::get_type(self.libs, span, &js_word!("Array"))
+                let array_ty = builtin_types::get_type(self.libs, span, &js_word!("Array"))
                     .expect("Array should be loaded")
                     .owned();
 
-                return self.access_property(span, ty, prop, computed);
+                // TODO: Array<elem_type>
+
+                return self.access_property(span, array_ty, prop, computed);
+            }
+
+            Type::Interface(Interface { ref body, .. }) => {
+                let prop_ty = self.type_of(prop)?.generalize_lit();
+
+                for el in body.iter() {
+                    match el {
+                        TypeElement::Index(IndexSignature {
+                            ref params,
+                            ref type_ann,
+                            ..
+                        }) => {
+                            if params.len() != 1 {
+                                unimplemented!("Index signature with multiple parameters")
+                            }
+                            match params[0] {
+                                TsFnParam::Ident(ref i) => {
+                                    assert!(i.type_ann.is_some());
+
+                                    let index_ty = Type::from(i.type_ann.as_ref().unwrap().clone());
+                                    if index_ty.eq_ignore_name_and_span(&*prop_ty) {
+                                        if let Some(ref type_ann) = type_ann {
+                                            return Ok(type_ann.to_static().owned());
+                                        }
+                                        return Ok(Type::any(span).owned());
+                                    }
+                                }
+
+                                _ => unimplemented!("TsFnParam other than index in IndexSignature"),
+                            }
+                        }
+                        _ => {}
+                    }
+
+                    if let Some(key) = el.key() {
+                        if key.eq_ignore_span(prop) {
+                            match el {
+                                TypeElement::Property(ref p) => {
+                                    if let Some(ref type_ann) = p.type_ann {
+                                        return Ok(type_ann.to_static().owned());
+                                    }
+
+                                    // TODO: no implicit any?
+                                    return Ok(Type::any(span).owned());
+                                }
+
+                                _ => {}
+                            }
+                        }
+                    }
+                }
             }
 
             _ => {}
