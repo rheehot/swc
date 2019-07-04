@@ -97,8 +97,7 @@ impl Analyzer<'_, '_> {
             }
 
             Expr::Array(ArrayLit { ref elems, .. }) => {
-                let mut errs = vec![];
-                let mut types: Vec<TypeRef> = vec![];
+                let mut types: Vec<TypeRef> = Vec::with_capacity(elems.len());
 
                 for elem in elems {
                     let span = elem.span();
@@ -119,9 +118,6 @@ impl Analyzer<'_, '_> {
                                 }) => {
                                     // Widen tuple type.
                                     ty = Type::any(span).owned();
-                                    if self.rule.no_implicit_any {
-                                        errs.push(Error::ImplicitAny { span });
-                                    }
                                 }
                                 _ => {}
                             }
@@ -135,10 +131,6 @@ impl Analyzer<'_, '_> {
                             types.push(ty.into_cow())
                         }
                     }
-                }
-
-                if !errs.is_empty() {
-                    return Err(Error::Errors { span, errors: errs });
                 }
 
                 return Ok(Type::Tuple(Tuple { span, types }).into_cow());
