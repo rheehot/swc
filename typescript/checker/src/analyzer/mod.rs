@@ -1,14 +1,14 @@
 pub use self::name::Name;
 use self::{
     scope::{Scope, ScopeKind},
-    util::PatExt,
+    util::{NormalizeMut, PatExt},
 };
 use super::Checker;
 use crate::{
     builtin_types::Lib,
     errors::Error,
     loader::Load,
-    ty::{Alias, Param, Tuple, Type, TypeRefExt},
+    ty::{self, Alias, Param, Tuple, Type, TypeRefExt},
     util::IntoCow,
     Rule,
 };
@@ -361,6 +361,8 @@ impl Analyzer<'_, '_> {
     /// TODO: Handle recursive funciton
     fn visit_fn(&mut self, name: Option<&Ident>, f: &Function) -> Type<'static> {
         let fn_ty = self.with_child(ScopeKind::Fn, Default::default(), |child| {
+            let no_implicit_any_span = name.as_ref().map(|name| name.span);
+
             if let Some(name) = name {
                 // We use `typeof function` to infer recursive function's return type.
                 match child.scope.declare_var(
@@ -437,7 +439,42 @@ impl Analyzer<'_, '_> {
 
             f.visit_children(child);
 
-            let fn_ty = child.type_of_fn(f)?;
+            let mut fn_ty = child.type_of_fn(f)?;
+            match fn_ty {
+                // Handle tuple widening of the return type.
+                Type::Function(ty::Function { ref mut ret_ty, .. }) => {
+                    match *ret_ty.normalize_mut() {
+                        Type::Tuple(Tuple { ref mut types, .. }) => {
+                            for t in types.iter_mut() {
+                                let span = t.span();
+
+                                match t.normalize() {
+                                    Type::Keyword(TsKeywordType {
+                                        kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                                        ..
+                                    })
+                                    | Type::Keyword(TsKeywordType {
+                                        kind: TsKeywordTypeKind::TsNullKeyword,
+                                        ..
+                                    }) => {}
+                                    _ => continue,
+                                }
+
+                                if child.rule.no_implicit_any {
+                                    child.info.errors.push(Error::ImplicitAny {
+                                        span: no_implicit_any_span.unwrap_or(span),
+                                    });
+                                }
+
+                                *t = Type::any(span).owned();
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+
+                _ => unreachable!(),
+            }
 
             if let Some(name) = name {
                 child.scope.declaring_fn = Some(name.sym.clone());

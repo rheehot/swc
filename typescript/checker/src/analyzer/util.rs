@@ -1,3 +1,5 @@
+use crate::ty::Type;
+use std::borrow::Cow;
 use swc_common::Spanned;
 use swc_ecma_ast::*;
 
@@ -45,6 +47,43 @@ impl PatExt for Pat {
             Pat::Expr(ref pat) => {
                 unreachable!("Cannot set type annottation for expression\n{:?}", pat)
             }
+        }
+    }
+}
+
+pub trait NormalizeMut<'b> {
+    fn normalize_mut(&mut self) -> &mut Type<'b>;
+}
+
+impl<'b, T> NormalizeMut<'b> for Box<T>
+where
+    T: NormalizeMut<'b>,
+{
+    fn normalize_mut(&mut self) -> &mut Type<'b> {
+        self.as_mut().normalize_mut()
+    }
+}
+
+impl<'b, T> NormalizeMut<'b> for &'_ mut T
+where
+    T: NormalizeMut<'b>,
+{
+    fn normalize_mut(&mut self) -> &mut Type<'b> {
+        (*self).normalize_mut()
+    }
+}
+
+impl<'a, 'b> NormalizeMut<'b> for Cow<'a, Type<'b>> {
+    fn normalize_mut(&mut self) -> &mut Type<'b> {
+        match *self {
+            Cow::Borrowed(borrowed) => {
+                *self = Cow::Owned(borrowed.to_owned());
+                match *self {
+                    Cow::Borrowed(..) => unreachable!(),
+                    Cow::Owned(ref mut owned) => owned,
+                }
+            }
+            Cow::Owned(ref mut owned) => owned,
         }
     }
 }
