@@ -1,6 +1,6 @@
 [
     {
-        "line": 4,
+        "line": 5,
         "column": 22,
         "msg": "Cannot find module './test/foo'."
     }

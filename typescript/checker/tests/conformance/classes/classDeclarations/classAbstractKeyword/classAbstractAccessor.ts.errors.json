@@ -1,11 +1,11 @@
 [
     {
-        "line": 4,
+        "line": 5,
         "column": 17,
         "msg": "An abstract accessor cannot have an implementation."
     },
     {
-        "line": 6,
+        "line": 7,
         "column": 17,
         "msg": "An abstract accessor cannot have an implementation."
     }

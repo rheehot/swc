@@ -1,16 +1,16 @@
 [
     {
-        "line": 14,
+        "line": 15,
         "column": 5,
         "msg": "Type 'P<A>' is not assignable to type 'P<B>'."
     },
     {
-        "line": 19,
+        "line": 20,
         "column": 5,
         "msg": "Type 'Promise<A>' is not assignable to type 'Promise<B>'."
     },
     {
-        "line": 32,
+        "line": 33,
         "column": 5,
         "msg": "Type 'AList1' is not assignable to type 'BList1'."
     },
@@ -20,7 +20,7 @@
         "msg": "A) => void) => void' is not assignable to type '(cb"
     },
     {
-        "line": 45,
+        "line": 46,
         "column": 5,
         "msg": "Type 'AList2' is not assignable to type 'BList2'."
     },
@@ -30,7 +30,7 @@
         "msg": "A) => boolean) => void' is not assignable to type '(cb"
     },
     {
-        "line": 58,
+        "line": 59,
         "column": 5,
         "msg": "Type 'AList3' is not assignable to type 'BList3'."
     },
@@ -40,7 +40,7 @@
         "msg": "A) => void) => void' is not assignable to type '(cb"
     },
     {
-        "line": 71,
+        "line": 72,
         "column": 5,
         "msg": "Type 'AList4' is not assignable to type 'BList4'."
     },

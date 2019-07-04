@@ -1,26 +1,26 @@
 [
     {
-        "line": 8,
+        "line": 9,
         "column": 8,
         "msg": "Dynamic import's specifier must be of type 'string', but here has type 'boolean'."
     },
     {
-        "line": 9,
+        "line": 10,
         "column": 17,
         "msg": "Dynamic import's specifier must be of type 'string', but here has type 'boolean'."
     },
     {
-        "line": 10,
+        "line": 11,
         "column": 19,
         "msg": "Dynamic import's specifier must be of type 'string', but here has type 'boolean | \"defaulPath\"'."
     },
     {
-        "line": 15,
+        "line": 16,
         "column": 17,
         "msg": "Dynamic import's specifier must be of type 'string', but here has type 'string[]'."
     },
     {
-        "line": 16,
+        "line": 17,
         "column": 17,
         "msg": "Dynamic import's specifier must be of type 'string', but here has type '() => string'."
     }

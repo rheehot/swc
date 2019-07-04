@@ -1,11 +1,11 @@
 [
     {
-        "line": 2,
+        "line": 3,
         "column": 16,
         "msg": "Duplicate identifier 'a'."
     },
     {
-        "line": 2,
+        "line": 3,
         "column": 27,
         "msg": "Duplicate identifier 'a'."
     }

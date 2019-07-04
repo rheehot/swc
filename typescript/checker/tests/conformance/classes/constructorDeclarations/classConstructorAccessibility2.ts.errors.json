@@ -1,26 +1,26 @@
 [
     {
-        "line": 32,
+        "line": 33,
         "column": 24,
         "msg": "Cannot extend a class 'BaseC'. Class constructor is marked as private."
     },
     {
-        "line": 35,
+        "line": 36,
         "column": 28,
         "msg": "Constructor of class 'BaseC' is private and only accessible within the class declaration."
     },
     {
-        "line": 36,
+        "line": 37,
         "column": 35,
         "msg": "Constructor of class 'BaseC' is private and only accessible within the class declaration."
     },
     {
-        "line": 40,
+        "line": 41,
         "column": 10,
         "msg": "Constructor of class 'BaseB' is protected and only accessible within the class declaration."
     },
     {
-        "line": 41,
+        "line": 42,
         "column": 10,
         "msg": "Constructor of class 'BaseC' is private and only accessible within the class declaration."
     }

@@ -1,21 +1,21 @@
 [
     {
-        "line": 2,
+        "line": 3,
         "column": 8,
         "msg": "Cannot find name 'z'."
     },
     {
-        "line": 2,
+        "line": 3,
         "column": 8,
         "msg": "Exported variable 'y' has or is using private name 'z'."
     },
     {
-        "line": 2,
+        "line": 3,
         "column": 10,
         "msg": "',' expected."
     },
     {
-        "line": 2,
+        "line": 3,
         "column": 13,
         "msg": "',' expected."
     }

@@ -1,11 +1,11 @@
 [
     {
-        "line": 2,
+        "line": 3,
         "column": 5,
         "msg": "Type '\"AB\\nC\"' is not assignable to type '\"AB\\r\\nC\"'."
     },
     {
-        "line": 4,
+        "line": 5,
         "column": 5,
         "msg": "Type 'string' is not assignable to type '\"DE\\nF\"'."
     }

@@ -1,11 +1,11 @@
 [
     {
-        "line": 4,
+        "line": 5,
         "column": 16,
         "msg": "A definite assignment assertion '!' is not permitted in this context."
     },
     {
-        "line": 7,
+        "line": 8,
         "column": 7,
         "msg": "An object member cannot be declared optional."
     }

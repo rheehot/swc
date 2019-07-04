@@ -1,13 +1,8 @@
 [
     {
-        "line": 47,
+        "line": 48,
         "column": 32,
         "msg": "Cannot assign to 'x' because it is a read-only property."
-    },
-    {
-        "line": 64,
-        "column": 10,
-        "msg": "A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals."
     },
     {
         "line": 65,
@@ -16,6 +11,11 @@
     },
     {
         "line": 66,
+        "column": 10,
+        "msg": "A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals."
+    },
+    {
+        "line": 67,
         "column": 10,
         "msg": "A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals."
     }

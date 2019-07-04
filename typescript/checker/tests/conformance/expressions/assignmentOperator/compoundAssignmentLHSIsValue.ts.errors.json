@@ -1,37 +1,32 @@
 [
     {
-        "line": 8,
-        "column": 9,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
-    },
-    {
         "line": 9,
         "column": 9,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 12,
+        "line": 10,
         "column": 9,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 13,
         "column": 9,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 16,
+        "line": 14,
         "column": 9,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 17,
         "column": 9,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 22,
-        "column": 5,
+        "line": 18,
+        "column": 9,
         "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
@@ -40,19 +35,19 @@
         "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
-        "line": 26,
-        "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "line": 24,
+        "column": 5,
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 27,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 31,
+        "line": 28,
         "column": 1,
-        "msg": "Cannot assign to 'M' because it is not a variable."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 32,
@@ -60,9 +55,9 @@
         "msg": "Cannot assign to 'M' because it is not a variable."
     },
     {
-        "line": 34,
+        "line": 33,
         "column": 1,
-        "msg": "Cannot assign to 'C' because it is not a variable."
+        "msg": "Cannot assign to 'M' because it is not a variable."
     },
     {
         "line": 35,
@@ -70,9 +65,9 @@
         "msg": "Cannot assign to 'C' because it is not a variable."
     },
     {
-        "line": 38,
+        "line": 36,
         "column": 1,
-        "msg": "Cannot assign to 'E' because it is not a variable."
+        "msg": "Cannot assign to 'C' because it is not a variable."
     },
     {
         "line": 39,
@@ -80,9 +75,9 @@
         "msg": "Cannot assign to 'E' because it is not a variable."
     },
     {
-        "line": 41,
+        "line": 40,
         "column": 1,
-        "msg": "Cannot assign to 'foo' because it is not a variable."
+        "msg": "Cannot assign to 'E' because it is not a variable."
     },
     {
         "line": 42,
@@ -90,14 +85,9 @@
         "msg": "Cannot assign to 'foo' because it is not a variable."
     },
     {
-        "line": 45,
+        "line": 43,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
-    },
-    {
-        "line": 45,
-        "column": 1,
-        "msg": "Object is possibly 'null'."
+        "msg": "Cannot assign to 'foo' because it is not a variable."
     },
     {
         "line": 46,
@@ -105,24 +95,29 @@
         "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
+        "line": 46,
+        "column": 1,
+        "msg": "Object is possibly 'null'."
+    },
+    {
         "line": 47,
         "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 48,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 49,
         "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 50,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 51,
@@ -137,27 +132,27 @@
     {
         "line": 53,
         "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 54,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 55,
         "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 56,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 59,
-        "column": 9,
-        "msg": "Declaration or statement expected."
+        "line": 57,
+        "column": 1,
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 60,
@@ -165,19 +160,19 @@
         "msg": "Declaration or statement expected."
     },
     {
-        "line": 63,
-        "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "line": 61,
+        "column": 9,
+        "msg": "Declaration or statement expected."
     },
     {
         "line": 64,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 70,
-        "column": 15,
-        "msg": "'super' must be followed by an argument list or member access."
+        "line": 65,
+        "column": 1,
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 71,
@@ -185,7 +180,7 @@
         "msg": "'super' must be followed by an argument list or member access."
     },
     {
-        "line": 75,
+        "line": 72,
         "column": 15,
         "msg": "'super' must be followed by an argument list or member access."
     },
@@ -195,7 +190,7 @@
         "msg": "'super' must be followed by an argument list or member access."
     },
     {
-        "line": 80,
+        "line": 77,
         "column": 15,
         "msg": "'super' must be followed by an argument list or member access."
     },
@@ -205,9 +200,9 @@
         "msg": "'super' must be followed by an argument list or member access."
     },
     {
-        "line": 86,
-        "column": 21,
-        "msg": "Declaration or statement expected."
+        "line": 82,
+        "column": 15,
+        "msg": "'super' must be followed by an argument list or member access."
     },
     {
         "line": 87,
@@ -216,8 +211,8 @@
     },
     {
         "line": 88,
-        "column": 11,
-        "msg": "';' expected."
+        "column": 21,
+        "msg": "Declaration or statement expected."
     },
     {
         "line": 89,
@@ -225,29 +220,29 @@
         "msg": "';' expected."
     },
     {
-        "line": 92,
-        "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "line": 90,
+        "column": 11,
+        "msg": "';' expected."
     },
     {
         "line": 93,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
-        "line": 96,
+        "line": 94,
         "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 97,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 98,
-        "column": 2,
-        "msg": "Cannot assign to 'M' because it is not a variable."
+        "column": 1,
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 99,
@@ -257,7 +252,7 @@
     {
         "line": 100,
         "column": 2,
-        "msg": "Cannot assign to 'C' because it is not a variable."
+        "msg": "Cannot assign to 'M' because it is not a variable."
     },
     {
         "line": 101,
@@ -267,7 +262,7 @@
     {
         "line": 102,
         "column": 2,
-        "msg": "Cannot assign to 'E' because it is not a variable."
+        "msg": "Cannot assign to 'C' because it is not a variable."
     },
     {
         "line": 103,
@@ -277,7 +272,7 @@
     {
         "line": 104,
         "column": 2,
-        "msg": "Cannot assign to 'foo' because it is not a variable."
+        "msg": "Cannot assign to 'E' because it is not a variable."
     },
     {
         "line": 105,
@@ -286,13 +281,8 @@
     },
     {
         "line": 106,
-        "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
-    },
-    {
-        "line": 106,
-        "column": 1,
-        "msg": "Object is possibly 'null'."
+        "column": 2,
+        "msg": "Cannot assign to 'foo' because it is not a variable."
     },
     {
         "line": 107,
@@ -300,14 +290,19 @@
         "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
+        "line": 107,
+        "column": 1,
+        "msg": "Object is possibly 'null'."
+    },
+    {
         "line": 108,
         "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 109,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 110,
@@ -322,60 +317,65 @@
     {
         "line": 112,
         "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 113,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 114,
         "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 115,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 116,
         "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 117,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 118,
         "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 119,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 120,
         "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 121,
         "column": 1,
-        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
     },
     {
         "line": 122,
         "column": 1,
-        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+        "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     },
     {
         "line": 123,
+        "column": 1,
+        "msg": "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type."
+    },
+    {
+        "line": 124,
         "column": 1,
         "msg": "The left-hand side of an assignment expression must be a variable or a property access."
     }

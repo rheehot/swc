@@ -1,71 +1,71 @@
 [
     {
-        "line": 5,
+        "line": 6,
         "column": 22,
         "msg": "A required element cannot follow an optional element."
     },
     {
-        "line": 10,
+        "line": 11,
         "column": 13,
         "msg": "A rest element must be last in a tuple type."
     },
     {
-        "line": 11,
-        "column": 13,
-        "msg": "A rest element type must be an array type."
-    },
-    {
         "line": 12,
         "column": 13,
         "msg": "A rest element type must be an array type."
     },
     {
-        "line": 12,
+        "line": 13,
+        "column": 13,
+        "msg": "A rest element type must be an array type."
+    },
+    {
+        "line": 13,
         "column": 16,
         "msg": "JSDoc types can only be used inside documentation comments."
     },
     {
-        "line": 25,
+        "line": 26,
         "column": 31,
         "msg": "Type 'number[]' does not satisfy the constraint '[number, ...number[]]'."
     },
     {
-        "line": 26,
+        "line": 27,
         "column": 31,
         "msg": "Type '[]' does not satisfy the constraint '[number, ...number[]]'."
     },
     {
-        "line": 31,
+        "line": 32,
         "column": 18,
         "msg": "Type 'number[]' does not satisfy the constraint '[number]'."
     },
     {
-        "line": 32,
+        "line": 33,
         "column": 18,
         "msg": "Type '[number, ...number[]]' does not satisfy the constraint '[number]'."
     },
     {
-        "line": 34,
+        "line": 35,
         "column": 31,
         "msg": "Type '[number, ...string[]]' does not satisfy the constraint '[number, ...number[]]'."
     },
     {
-        "line": 35,
+        "line": 36,
         "column": 31,
         "msg": "Type '[string, ...number[]]' does not satisfy the constraint '[number, ...number[]]'."
     },
     {
-        "line": 36,
+        "line": 37,
         "column": 31,
         "msg": "Type '[number, number, string]' does not satisfy the constraint '[number, ...number[]]'."
     },
     {
-        "line": 37,
+        "line": 38,
         "column": 31,
         "msg": "Type '[number, number, number, string]' does not satisfy the constraint '[number, ...number[]]'."
     },
     {
-        "line": 61,
+        "line": 62,
         "column": 4,
         "msg": "Argument of type '[]' is not assignable to parameter of type '[unknown, ...unknown[]]'."
     }

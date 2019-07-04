@@ -1,26 +1,26 @@
 [
     {
-        "line": 15,
-        "column": 9,
-        "msg": "Type '{ sn"
-    },
-    {
         "line": 16,
         "column": 9,
         "msg": "Type '{ sn"
     },
     {
-        "line": 19,
+        "line": 17,
         "column": 9,
         "msg": "Type '{ sn"
     },
     {
-        "line": 29,
+        "line": 20,
+        "column": 9,
+        "msg": "Type '{ sn"
+    },
+    {
+        "line": 30,
         "column": 26,
         "msg": "Type 'undefined' is not assignable to type 'string'."
     },
     {
-        "line": 43,
+        "line": 44,
         "column": 5,
         "msg": "Type '{ foo"
     }

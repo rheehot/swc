@@ -1,6 +1,6 @@
 [
     {
-        "line": 25,
+        "line": 26,
         "column": 16,
         "msg": "Property 'notAValue' does not exist on type 'Data'."
     }

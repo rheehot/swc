@@ -1,46 +1,46 @@
 [
     {
-        "line": 8,
+        "line": 9,
         "column": 11,
         "msg": "Identifier expected."
     },
     {
-        "line": 8,
+        "line": 9,
         "column": 11,
         "msg": "JSDoc '@param' tag has name '', but there is no parameter with that name."
     },
     {
-        "line": 11,
+        "line": 12,
         "column": 4,
         "msg": "Identifier expected."
     },
     {
-        "line": 11,
+        "line": 12,
         "column": 4,
         "msg": "JSDoc '@param' tag has name '', but there is no parameter with that name."
     },
     {
-        "line": 12,
+        "line": 13,
         "column": 20,
         "msg": "Identifier expected."
     },
     {
-        "line": 12,
+        "line": 13,
         "column": 20,
         "msg": "JSDoc '@param' tag has name '', but there is no parameter with that name."
     },
     {
-        "line": 15,
+        "line": 16,
         "column": 14,
         "msg": "Parameter 'x' implicitly has an 'any' type."
     },
     {
-        "line": 15,
+        "line": 16,
         "column": 17,
         "msg": "Parameter 'y' implicitly has an 'any' type."
     },
     {
-        "line": 15,
+        "line": 16,
         "column": 20,
         "msg": "Parameter 'z' implicitly has an 'any' type."
     }

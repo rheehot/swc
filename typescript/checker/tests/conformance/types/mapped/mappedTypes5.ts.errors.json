@@ -1,16 +1,16 @@
 [
     {
-        "line": 7,
+        "line": 8,
         "column": 9,
         "msg": "Type 'Partial<T>' is not assignable to type 'Readonly<T>'."
     },
     {
-        "line": 9,
+        "line": 10,
         "column": 9,
         "msg": "Type 'Partial<Readonly<T>>' is not assignable to type 'Readonly<T>'."
     },
     {
-        "line": 10,
+        "line": 11,
         "column": 9,
         "msg": "Type 'Readonly<Partial<T>>' is not assignable to type 'Readonly<T>'."
     }

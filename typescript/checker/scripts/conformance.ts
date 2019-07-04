@@ -51,16 +51,14 @@ async function handle(f: string) {
   } catch (e) {}
 
   let ln = (content.match(/\/\/ \@|\/\/\@/g) || []).length;
-  ln -= 1;
   const data = content.split(/\r\n|\r|\n/);
-  for (let i = 0; i < data.length; i++) {
+  for (let i = ln; i < data.length; i++) {
     if (data[i].length === 0) {
       ln++;
     } else {
       break;
     }
   }
-  ln++;
 
   const errors = extract(errorsText, ln);
   function assert(fn: string, line: number) {
@@ -72,7 +70,9 @@ async function handle(f: string) {
         }
         lines.push(e.line);
       }
-      throw new Error(`Assertion failed: ${f}: Expected ${line}; Got ${lines}`);
+      throw new Error(
+        `Assertion failed: ${f}: Expected ${line}; Got [${lines}]\nLn: ${ln}\n${data}`
+      );
     }
   }
   assert("ES5SymbolProperty1.ts", 8);
