@@ -50,18 +50,35 @@ async function handle(f: string) {
     // }
   } catch (e) {}
 
-  let len = (content.match(/\/\/ \@|\/\/\@/g) || []).length;
-    len -= 1;
-    const data = content.split(/\r\n|\r|\n/);
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].length === 0) {
-        len++;
-      } else {
-        break;
-      }
+  let ln = (content.match(/\/\/ \@|\/\/\@/g) || []).length;
+  ln -= 1;
+  const data = content.split(/\r\n|\r|\n/);
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].length === 0) {
+      ln++;
+    } else {
+      break;
+    }
   }
+  ln++;
 
-  const errors = extract(errorsText, len + 1);
+  const errors = extract(errorsText, ln);
+  function assert(fn: string, line: number) {
+    if (f.includes(`/${fn}`)) {
+      const lines = [];
+      for (const e of errors) {
+        if (e.line === line) {
+          return;
+        }
+        lines.push(e.line);
+      }
+      throw new Error(`Assertion failed: ${f}: Expected ${line}; Got ${lines}`);
+    }
+  }
+  assert("ES5SymbolProperty1.ts", 8);
+  assert("asyncArrowFunction3_es5.ts", 4);
+  assert("unknownType2.ts", 218);
+
   console.log(`\t${errors.length} errors`);
   const ref = `${dirname}/${basename}.errors.json`;
   await writeFile(ref, JSON.stringify(errors, undefined, "    "));
