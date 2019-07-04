@@ -636,8 +636,8 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
 
             if let Some(ref init) = v.init {
                 let span = init.span();
-                let ret_ty = v.name.get_ty();
-                if ret_ty.is_some() {
+                let declared_ty = v.name.get_ty();
+                if declared_ty.is_some() {
                     self.span_allowed_implicit_any = span;
                 }
 
@@ -670,7 +670,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     }
                 };
 
-                match ret_ty {
+                match declared_ty {
                     Some(ty) => {
                         let ty = Type::from(ty.clone());
                         let ty = match self.expand_type(span, Cow::Owned(ty)) {
