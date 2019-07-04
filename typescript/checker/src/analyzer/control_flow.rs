@@ -579,10 +579,11 @@ where
 }
 
 impl Analyzer<'_, '_> {
+    /// - `span`: Span of the return statement.
     pub(super) fn visit_return_arg(&mut self, span: Span, arg: Option<&Expr>) {
         let ty = match arg {
             Some(ref expr) => {
-                let span = expr.span();
+                // let span = expr.span();
                 match self
                     .type_of(&expr)
                     .and_then(|ty| self.expand_type(span, ty))
