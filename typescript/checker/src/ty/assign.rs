@@ -80,31 +80,33 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
                     'members: for m in members.iter() {
                         if let Some(l_key) = m.key() {
                             for rm in rhs_members {
-                                if rm.key() == Some(l_key) {
-                                    match m {
-                                        TypeElement::Property(ref el) => match rm {
-                                            TypeElement::Property(ref r_el) => {
-                                                try_assign(
-                                                    el.type_ann
-                                                        .as_ref()
-                                                        .unwrap_or(&Type::any(span).owned()),
-                                                    r_el.type_ann
-                                                        .as_ref()
-                                                        .unwrap_or(&Type::any(span).owned()),
-                                                    span,
-                                                )?;
-                                                continue 'members;
-                                            }
-                                            _ => {}
-                                        },
+                                if let Some(r_key) = rm.key() {
+                                    if l_key.eq_ignore_span(r_key) {
+                                        match m {
+                                            TypeElement::Property(ref el) => match rm {
+                                                TypeElement::Property(ref r_el) => {
+                                                    try_assign(
+                                                        el.type_ann
+                                                            .as_ref()
+                                                            .unwrap_or(&Type::any(span).owned()),
+                                                        r_el.type_ann
+                                                            .as_ref()
+                                                            .unwrap_or(&Type::any(span).owned()),
+                                                        span,
+                                                    )?;
+                                                    continue 'members;
+                                                }
+                                                _ => {}
+                                            },
 
-                                        TypeElement::Method(..) => match rm {
-                                            TypeElement::Method(..) => unimplemented!(
-                                                "assignment: method property in type literal"
-                                            ),
+                                            TypeElement::Method(..) => match rm {
+                                                TypeElement::Method(..) => unimplemented!(
+                                                    "assignment: method property in type literal"
+                                                ),
+                                                _ => {}
+                                            },
                                             _ => {}
-                                        },
-                                        _ => {}
+                                        }
                                     }
                                 }
                             }
