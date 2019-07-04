@@ -225,6 +225,13 @@ fn try_assign(to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
     }
 
     match *to.normalize() {
+        Type::Param(Param {
+            constraint: Some(ref c),
+            ..
+        }) => {
+            return try_assign(c, rhs, span);
+        }
+
         Type::Array(Array { ref elem_type, .. }) => match rhs {
             Type::Array(Array {
                 elem_type: ref rhs_elem_type,
