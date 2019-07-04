@@ -324,7 +324,24 @@ impl<'a> Scope<'a> {
                     Type::Keyword(TsKeywordType {
                         kind: TsKeywordTypeKind::TsUnknownKeyword,
                         ..
-                    }) => return Err(Error::Unknown { span }),
+                    }) => {
+                        // TODO: Somehow get precise logic of determining span.
+                        //
+                        // let { ...a } = x;
+                        //          ^
+                        //
+
+                        // WTF...
+                        for p in props.iter().rev() {
+                            let span = match p {
+                                ObjectPatProp::Rest(RestPat { ref arg, .. }) => arg.span(),
+                                _ => p.span(),
+                            };
+                            return Err(Error::Unknown { span });
+                        }
+
+                        return Err(Error::Unknown { span });
+                    }
 
                     _ => unimplemented!("declare_complex_vars({:#?}, {:#?})", pat, ty),
                 }
