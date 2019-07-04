@@ -8,7 +8,7 @@ use crate::{
     builtin_types::Lib,
     errors::Error,
     loader::Load,
-    ty::{Alias, Param, Type, TypeRefExt},
+    ty::{Alias, Param, Tuple, Type, TypeRefExt},
     util::IntoCow,
     Rule,
 };
@@ -649,8 +649,33 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     }
                     None => {
                         // infer type from value.
-
                         let ty = value_ty.to_static();
+
+                        let mut type_errors = vec![];
+
+                        // Handle implicit any
+                        if self.rule.no_implicit_any {
+                            match ty {
+                                Type::Tuple(Tuple { ref types, .. }) => {
+                                    for (i, t) in types.iter().enumerate() {
+                                        match v.name {
+                                            Pat::Array(ArrayPat { ref elems, .. }) => {
+                                                let span = elems[i].span();
+                                                type_errors.push(Error::ImplicitAny { span });
+                                            }
+                                            _ => {}
+                                        }
+                                    }
+                                }
+                                _ => {}
+                            }
+                        }
+
+                        if !type_errors.is_empty() {
+                            self.info.errors.extend(type_errors);
+                            remove_declaring!();
+                            return;
+                        }
 
                         match self.scope.declare_complex_vars(kind, &v.name, ty) {
                             Ok(()) => {}
