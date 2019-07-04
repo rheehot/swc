@@ -582,6 +582,24 @@ impl Analyzer<'_, '_> {
                 return Ok(());
             }
 
+            Pat::Object(ObjectPat { ref props, .. }) => {
+                for prop in props {
+                    match *prop {
+                        ObjectPatProp::KeyValue(KeyValuePatProp { .. }) => {
+                            unimplemented!("ket value pattern in object pattern")
+                        }
+                        ObjectPatProp::Assign(AssignPatProp { .. }) => {
+                            unimplemented!("assign pattern in object pattern")
+                        }
+                        ObjectPatProp::Rest(RestPat { .. }) => {
+                            unimplemented!("rest pattern in object pattern")
+                        }
+                    }
+                }
+
+                return Ok(());
+            }
+
             _ => unimplemented!("declare_vars for patterns other than ident: {:#?}", pat),
         }
     }
