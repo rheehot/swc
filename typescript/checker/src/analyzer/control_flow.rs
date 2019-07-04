@@ -579,6 +579,7 @@ where
 }
 
 impl Analyzer<'_, '_> {
+    /// 
     /// - `span`: Span of the return statement.
     pub(super) fn visit_return_arg(&mut self, span: Span, arg: Option<&Expr>) {
         let ty = match arg {
