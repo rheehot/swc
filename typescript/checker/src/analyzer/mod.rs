@@ -658,6 +658,8 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                         match ty {
                             Type::Tuple(Tuple { ref mut types, .. }) => {
                                 for (i, t) in types.iter_mut().enumerate() {
+                                    let span = t.span();
+
                                     match *t.normalize() {
                                         Type::Keyword(TsKeywordType {
                                             kind: TsKeywordTypeKind::TsUndefinedKeyword,
