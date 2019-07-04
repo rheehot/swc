@@ -43,8 +43,6 @@ struct Analyzer<'a, 'b> {
     loader: &'b dyn Load,
     libs: &'b [Lib],
     rule: Rule,
-    
-    
 }
 
 impl<T> Visit<Vec<T>> for Analyzer<'_, '_>
