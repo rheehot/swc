@@ -7,7 +7,7 @@ use crate::{
     builtin_types,
     errors::Error,
     ty::{
-        self, Alias, CallSignature, ConstructorSignature, EnumVariant, Intersection,
+        self, Alias, Array, CallSignature, ConstructorSignature, EnumVariant, Intersection,
         MethodSignature, PropertySignature, Tuple, Type, TypeElement, TypeLit, TypeParamDecl,
         TypeRef, TypeRefExt, Union,
     },
@@ -742,6 +742,14 @@ impl Analyzer<'_, '_> {
                 kind: TsKeywordTypeKind::TsUnknownKeyword,
                 ..
             }) => return Err(Error::Unknown { span: obj.span() }),
+
+            Type::Array(Array { .. }) => {
+                let ty = builtin_types::get_type(self.libs, span, &js_word!("Array"))
+                    .expect("Array should be loaded")
+                    .owned();
+
+                return self.access_property(span, ty, prop, computed);
+            }
 
             _ => {}
         }
