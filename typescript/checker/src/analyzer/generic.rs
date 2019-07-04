@@ -178,7 +178,8 @@ impl Analyzer<'_, '_> {
     /// Returns `Some(true)` if `child` extends `parent`.
     fn extends(&self, child: &Type, parent: &Type) -> Option<bool> {
         let span = child.span();
-        match child.assign_to(parent, span) {
+
+        match self.rule.assign(parent, child, span) {
             Ok(()) => return Some(true),
             _ => return Some(false),
         }

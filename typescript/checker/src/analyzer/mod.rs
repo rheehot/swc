@@ -681,7 +681,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 return;
                             }
                         };
-                        let error = value_ty.assign_to(&ty, v.span());
+                        let error = self.rule.assign(&ty, &value_ty, v.span());
                         let ty = ty.to_static();
                         match error {
                             Ok(()) => {

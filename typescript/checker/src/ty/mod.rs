@@ -4,7 +4,6 @@ use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
-mod assign;
 mod convert;
 pub mod merge;
 

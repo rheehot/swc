@@ -282,7 +282,7 @@ impl Analyzer<'_, '_> {
                                 // let foo: string;
                                 // let foo = 'value';
 
-                                let error = ty.assign_to(&var_ty, i.span);
+                                let error = self.rule.assign(&var_ty, ty, i.span);
                                 match error {
                                     Ok(()) => Some(ty.to_static()),
                                     Err(err) => {

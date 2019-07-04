@@ -1,22 +1,23 @@
-use super::{
-    Array, Function, Interface, Intersection, Param, Tuple, Type, TypeElement, TypeLit, TypeRefExt,
-    Union,
-};
 use crate::{
     errors::Error,
+    ty::{
+        Array, Function, Interface, Intersection, Param, Tuple, Type, TypeElement, TypeLit,
+        TypeRefExt, Union,
+    },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
+    Rule,
 };
 use swc_common::Span;
 use swc_ecma_ast::*;
 
-impl Type<'_> {
-    pub fn assign_to(&self, to: &Type, span: Span) -> Result<(), Error> {
-        try_assign(to, self, span).map_err(|err| match err {
+impl Rule {
+    pub fn assign(&self, left: &Type, right: &Type, span: Span) -> Result<(), Error> {
+        try_assign(left, right, span).map_err(|err| match err {
             Error::AssignFailed { .. } => err,
             _ => Error::AssignFailed {
                 span,
-                left: to.to_static(),
-                right: self.to_static(),
+                left: left.to_static(),
+                right: right.to_static(),
                 cause: vec![err],
             },
         })
