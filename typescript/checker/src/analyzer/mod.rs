@@ -658,7 +658,26 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                             match ty {
                                 Type::Tuple(Tuple { ref types, .. }) => {
                                     for (i, t) in types.iter().enumerate() {
+                                        match *t.normalize() {
+                                            Type::Keyword(TsKeywordType {
+                                                kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                                                ..
+                                            })
+                                            | Type::Keyword(TsKeywordType {
+                                                kind: TsKeywordTypeKind::TsNullKeyword,
+                                                ..
+                                            }) => {}
+                                            _ => {
+                                                continue;
+                                            }
+                                        }
+
                                         match v.name {
+                                            Pat::Ident(ref i) => {
+                                                let span = i.span;
+                                                type_errors.push(Error::ImplicitAny { span });
+                                                break;
+                                            }
                                             Pat::Array(ArrayPat { ref elems, .. }) => {
                                                 let span = elems[i].span();
                                                 type_errors.push(Error::ImplicitAny { span });
