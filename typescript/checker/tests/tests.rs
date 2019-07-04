@@ -329,8 +329,6 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 if *ref_errors != actual_errors {
                     checker.run(|| {
                         for (e, line_col) in errors.into_iter().zip(actual_errors) {
-                            println!("Removing {:?}", line_col);
-
                             if let None = ref_errors.remove_item(&line_col) {
                                 e.emit(&handler);
                             }
