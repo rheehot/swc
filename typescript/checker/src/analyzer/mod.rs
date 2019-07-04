@@ -16,7 +16,7 @@ use fxhash::{FxHashMap, FxHashSet};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use std::{borrow::Cow, cell::RefCell, path::PathBuf, sync::Arc};
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_common::{Span, Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 mod control_flow;
@@ -43,6 +43,14 @@ struct Analyzer<'a, 'b> {
     loader: &'b dyn Load,
     libs: &'b [Lib],
     rule: Rule,
+
+    /// The code below is valid even when `noImplicitAny` is given.
+    ///
+    /// ```typescript
+    /// 
+    /// var foo: () => [any] = function bar() {}
+    /// ```
+    span_allowed_implicit_any: Span,
 }
 
 impl<T> Visit<Vec<T>> for Analyzer<'_, '_>
@@ -251,6 +259,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             errored_imports: Default::default(),
             pending_exports: Default::default(),
             loader,
+            span_allowed_implicit_any: DUMMY_SP,
         }
     }
 }
@@ -460,7 +469,9 @@ impl Analyzer<'_, '_> {
                                     _ => continue,
                                 }
 
-                                if child.rule.no_implicit_any {
+                                if child.rule.no_implicit_any
+                                    && child.span_allowed_implicit_any != f.span
+                                {
                                     child.info.errors.push(Error::ImplicitAny {
                                         span: no_implicit_any_span.unwrap_or(span),
                                     });
@@ -625,6 +636,10 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
 
             if let Some(ref init) = v.init {
                 let span = init.span();
+                let ret_ty = v.name.get_ty();
+                if ret_ty.is_some() {
+                    self.span_allowed_implicit_any = span;
+                }
 
                 self.allow_ref_declaring = true;
 
@@ -655,7 +670,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     }
                 };
 
-                match v.name.get_ty() {
+                match ret_ty {
                     Some(ty) => {
                         let ty = Type::from(ty.clone());
                         let ty = match self.expand_type(span, Cow::Owned(ty)) {

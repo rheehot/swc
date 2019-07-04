@@ -206,13 +206,17 @@ impl BitOr for CondFacts {
 impl Analyzer<'_, '_> {
     #[inline]
     fn child(&self, kind: ScopeKind, facts: CondFacts) -> Analyzer {
-        Analyzer::new(
+        let mut child = Analyzer::new(
             self.libs,
             self.rule,
             Scope::new(&self.scope, kind, facts),
             self.path.clone(),
             self.loader,
-        )
+        );
+        child.allow_ref_declaring = self.allow_ref_declaring;
+        child.span_allowed_implicit_any = self.span_allowed_implicit_any;
+
+        child
     }
 
     pub(super) fn with_child<Ret, F>(&mut self, kind: ScopeKind, facts: CondFacts, op: F) -> Ret
