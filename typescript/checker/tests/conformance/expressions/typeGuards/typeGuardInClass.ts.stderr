@@ -26,10 +26,10 @@ error: AssignFailed {
         Union {
             span: Span {
                 lo: BytePos(
-                    271,
+                    395,
                 ),
                 hi: BytePos(
-                    286,
+                    396,
                 ),
                 ctxt: #0,
             },
@@ -69,10 +69,10 @@ error: AssignFailed {
         UnionError {
             span: Span {
                 lo: BytePos(
-                    271,
+                    395,
                 ),
                 hi: BytePos(
-                    286,
+                    396,
                 ),
                 ctxt: #0,
             },
@@ -80,10 +80,10 @@ error: AssignFailed {
                 AssignFailed {
                     span: Span {
                         lo: BytePos(
-                            271,
+                            395,
                         ),
                         hi: BytePos(
-                            286,
+                            396,
                         ),
                         ctxt: #0,
                     },
@@ -154,10 +154,10 @@ error: AssignFailed {
         Union {
             span: Span {
                 lo: BytePos(
-                    271,
+                    502,
                 ),
                 hi: BytePos(
-                    286,
+                    503,
                 ),
                 ctxt: #0,
             },
@@ -197,10 +197,10 @@ error: AssignFailed {
         UnionError {
             span: Span {
                 lo: BytePos(
-                    271,
+                    502,
                 ),
                 hi: BytePos(
-                    286,
+                    503,
                 ),
                 ctxt: #0,
             },
@@ -208,10 +208,10 @@ error: AssignFailed {
                 AssignFailed {
                     span: Span {
                         lo: BytePos(
-                            271,
+                            502,
                         ),
                         hi: BytePos(
-                            286,
+                            503,
                         ),
                         ctxt: #0,
                     },
