@@ -649,29 +649,32 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     }
                     None => {
                         // infer type from value.
-                        let ty = value_ty.to_static();
+                        let mut ty = value_ty.to_static();
 
                         let mut type_errors = vec![];
 
                         // Handle implicit any
-                        if self.rule.no_implicit_any {
-                            match ty {
-                                Type::Tuple(Tuple { ref types, .. }) => {
-                                    for (i, t) in types.iter().enumerate() {
-                                        match *t.normalize() {
-                                            Type::Keyword(TsKeywordType {
-                                                kind: TsKeywordTypeKind::TsUndefinedKeyword,
-                                                ..
-                                            })
-                                            | Type::Keyword(TsKeywordType {
-                                                kind: TsKeywordTypeKind::TsNullKeyword,
-                                                ..
-                                            }) => {}
-                                            _ => {
-                                                continue;
-                                            }
-                                        }
 
+                        match ty {
+                            Type::Tuple(Tuple { ref mut types, .. }) => {
+                                for (i, t) in types.iter_mut().enumerate() {
+                                    match *t.normalize() {
+                                        Type::Keyword(TsKeywordType {
+                                            kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                                            ..
+                                        })
+                                        | Type::Keyword(TsKeywordType {
+                                            kind: TsKeywordTypeKind::TsNullKeyword,
+                                            ..
+                                        }) => {}
+                                        _ => {
+                                            continue;
+                                        }
+                                    }
+                                    // Widen tuple types
+                                    *t = Type::any(span).owned();
+
+                                    if self.rule.no_implicit_any {
                                         match v.name {
                                             Pat::Ident(ref i) => {
                                                 let span = i.span;
@@ -686,8 +689,8 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                         }
                                     }
                                 }
-                                _ => {}
                             }
+                            _ => {}
                         }
 
                         if !type_errors.is_empty() {
