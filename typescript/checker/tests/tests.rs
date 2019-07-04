@@ -325,9 +325,6 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                     })
                     .collect::<Vec<_>>();
 
-                println!("REF: {:?}", ref_errors);
-                println!("ACTUAL: {:?}", actual_errors);
-
                 // We only emit errors which has wrong line.
                 if *ref_errors != actual_errors {
                     checker.run(|| {
