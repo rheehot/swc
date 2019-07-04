@@ -51,7 +51,7 @@ impl Analyzer<'_, '_> {
 
                 if let Some(ty) = self.find_type(&i.sym) {
                     println!("({}) type_of({}): find_type", self.scope.depth(), i.sym);
-                    return Ok(ty.static_cast());
+                    return Ok(ty.clone().respan(span).owned());
                 }
 
                 // Check `declaring` before checking variables.
@@ -71,7 +71,7 @@ impl Analyzer<'_, '_> {
 
                 if let Some(ty) = self.find_var_type(&i.sym) {
                     println!("({}) type_of({}): find_var_type", self.scope.depth(), i.sym);
-                    return Ok(ty.static_cast());
+                    return Ok(ty.clone().respan(span).owned());
                 }
 
                 if let Some(_var) = self.find_var(&i.sym) {
@@ -741,7 +741,7 @@ impl Analyzer<'_, '_> {
             Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsUnknownKeyword,
                 ..
-            }) => return Err(Error::Unknown { span }),
+            }) => return Err(Error::Unknown { span: obj.span() }),
 
             _ => {}
         }
