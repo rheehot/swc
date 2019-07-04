@@ -106,21 +106,7 @@ impl Analyzer<'_, '_> {
                             spread: None,
                             ref expr,
                         }) => {
-                            let mut ty = self.type_of(expr)?;
-                            match *ty.normalize() {
-                                Type::Keyword(TsKeywordType {
-                                    kind: TsKeywordTypeKind::TsNullKeyword,
-                                    ..
-                                })
-                                | Type::Keyword(TsKeywordType {
-                                    kind: TsKeywordTypeKind::TsUndefinedKeyword,
-                                    ..
-                                }) => {
-                                    // Widen tuple type.
-                                    ty = Type::any(span).owned();
-                                }
-                                _ => {}
-                            }
+                            let ty = self.type_of(expr)?;
                             types.push(ty)
                         }
                         Some(ExprOrSpread {
