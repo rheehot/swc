@@ -942,6 +942,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
         // member expression
         // $obj.name
         if eat!('.') {
+            let start = cur_pos!();
             let prop: Box<Expr> = Box::new(self.parse_maybe_private_name().map(|e| match e {
                 Either::Left(p) => Expr::PrivateName(p),
                 Either::Right(i) => Expr::Ident(i),
