@@ -348,7 +348,7 @@ impl Analyzer<'_, '_> {
                     Type::Keyword(TsKeywordType {
                         kind: TsKeywordTypeKind::TsUnknownKeyword,
                         ..
-                    }) => return Err(Error::Unknown { span }),
+                    }) => return Err(Error::Unknown { span: arg.span() }),
                     _ => {}
                 }
 
