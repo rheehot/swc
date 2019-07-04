@@ -321,7 +321,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                         let span = e.span();
                         let cp = cm.lookup_char_pos(span.lo());
 
-                        return (cp.line, cp.col_display);
+                        return (cp.line, cp.col.0 + 1);
                     })
                     .collect::<Vec<_>>();
 
@@ -329,6 +329,8 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 if *ref_errors != actual_errors {
                     checker.run(|| {
                         for (e, line_col) in errors.into_iter().zip(actual_errors) {
+                            println!("Removing {:?}", line_col);
+
                             if let None = ref_errors.remove_item(&line_col) {
                                 e.emit(&handler);
                             }
@@ -404,8 +406,8 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
             if err_count != ref_errors.as_ref().unwrap().len() || !all {
                 panic!(
-                    "{:?}\n{} unmatched errors out of {} errors. Got {}\nExpected: {:?}\nActual: \
-                     {:?}\nFull: {:?}",
+                    "{:?}\n{} unmatched errors out of {} errors. Got {} errors.\nExpected: \
+                     {:?}\nActual: {:?}\nFull: {:?}",
                     err,
                     ref_errors.as_ref().unwrap().len(),
                     ref_err_cnt,
