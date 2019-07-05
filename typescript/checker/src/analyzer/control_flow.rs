@@ -285,23 +285,20 @@ impl Analyzer<'_, '_> {
                             }
                         }
                         if let Some(var_info) = self.scope.vars.get_mut(&i.sym) {
-                            let var_ty = if let Some(ref var_ty) = var_info.ty {
+                            let var_ty = match err {
                                 // let foo: string;
                                 // let foo = 'value';
-
-                                match err {
-                                    Some(Ok(())) => Some(ty.to_static()),
-                                    Some(Err(err)) => {
-                                        self.info.errors.push(err);
-                                        None
-                                    }
-                                    None => None,
+                                Some(Ok(())) => Some(ty.to_static()),
+                                Some(Err(err)) => {
+                                    self.info.errors.push(err);
+                                    None
                                 }
-                            } else {
+
                                 // let v = foo;
                                 // v = bar;
-                                None
+                                None => None,
                             };
+
                             if let Some(var_ty) = var_ty {
                                 if var_info.ty.is_none()
                                     || (!var_info.ty.as_ref().unwrap().is_any()
