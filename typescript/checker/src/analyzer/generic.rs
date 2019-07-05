@@ -1,4 +1,4 @@
-use super::Analyzer;
+use super::{util::NormalizeMut, Analyzer};
 use crate::{
     errors::Error,
     ty::{Conditional, Mapped, Tuple, Type, TypeParam, TypeParamDecl, TypeRefExt},
@@ -49,11 +49,10 @@ impl Analyzer<'_, '_> {
                 let expanded = self.expand_type_params(i, decl, Cow::Borrowed(&op.ty))?;
 
                 if let Cow::Owned(expanded) = expanded {
-                    match ty.to_mut() {
+                    match ty.normalize_mut() {
                         Type::Operator(ref mut operator) => {
                             operator.ty = box Cow::Owned(expanded);
                         }
-                        Type::Static(..) => unimplemented!("Type::Static(Type::Operator(..))"),
 
                         ref ty => unreachable!("{:#?}", ty),
                     }
@@ -107,12 +106,10 @@ impl Analyzer<'_, '_> {
                 //     type T52 = T50<unknown>;  // {}
 
                 if let Cow::Owned(type_param) = type_param {
-                    match ty.to_mut() {
+                    match ty.normalize_mut() {
                         Type::Mapped(ref mut ty) => {
                             ty.type_param = type_param;
                         }
-
-                        Type::Static(..) => unimplemented!("Type::Static(Type::Mapped(..))"),
 
                         ref ty => unreachable!("{:#?}", ty),
                     }
@@ -132,12 +129,10 @@ impl Analyzer<'_, '_> {
                 }
 
                 for (idx, t) in buf {
-                    match ty.to_mut() {
+                    match ty.normalize_mut() {
                         Type::Tuple(ref mut tuple) => {
                             tuple.types[idx] = Cow::Owned(t);
                         }
-
-                        Type::Static(..) => unimplemented!("Type::Static(Type::Tuple(..))"),
 
                         _ => unreachable!(),
                     }
@@ -145,6 +140,7 @@ impl Analyzer<'_, '_> {
 
                 return Ok(ty);
             }
+
             _ => {}
         }
 

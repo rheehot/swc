@@ -75,7 +75,7 @@ where
 
 impl<'a, 'b> NormalizeMut<'b> for Cow<'a, Type<'b>> {
     fn normalize_mut(&mut self) -> &mut Type<'b> {
-        match *self {
+        let mut owned = match *self {
             Cow::Borrowed(borrowed) => {
                 *self = Cow::Owned(borrowed.to_owned());
                 match *self {
@@ -84,6 +84,15 @@ impl<'a, 'b> NormalizeMut<'b> for Cow<'a, Type<'b>> {
                 }
             }
             Cow::Owned(ref mut owned) => owned,
+        };
+
+        match *owned {
+            Type::Static(s) => {
+                *owned = s.ty.clone().owned().into_owned();
+                owned
+            }
+
+            _ => owned,
         }
     }
 }
