@@ -155,6 +155,15 @@ impl Rule {
         }
 
         match *rhs.normalize() {
+            // When strict null check is disabled, we can assign null / undefined to anything.
+            Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                ..
+            })
+            | Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsNullKeyword,
+                ..
+            }) if !self.strict_null_checks => return Ok(()),
             Type::Union(Union {
                 ref types, span, ..
             }) => {
