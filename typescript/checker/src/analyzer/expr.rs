@@ -566,6 +566,10 @@ impl Analyzer<'_, '_> {
 
             Expr::Assign(AssignExpr { ref right, .. }) => return self.type_of(right),
 
+            Expr::TsTypeAssertion(TsTypeAssertion { ref type_ann, .. }) => {
+                return Ok(Type::from(type_ann.clone()).owned())
+            }
+
             _ => unimplemented!("typeof ({:#?})", expr),
         }
     }
@@ -1817,5 +1821,19 @@ impl Visit<ClassProp> for Analyzer<'_, '_> {
         }
 
         self.scope.declaring_prop = None;
+    }
+}
+
+impl Visit<TsTypeAssertion> for Analyzer<'_, '_> {
+    fn visit(&mut self, expr: &TsTypeAssertion) {
+        // TODO: Check type
+        expr.visit_children(self);
+    }
+}
+
+impl Visit<TsAsExpr> for Analyzer<'_, '_> {
+    fn visit(&mut self, expr: &TsAsExpr) {
+        // TODO: Check type
+        expr.visit_children(self);
     }
 }
