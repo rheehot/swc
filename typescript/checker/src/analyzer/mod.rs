@@ -408,6 +408,11 @@ impl Analyzer<'_, '_> {
                             default: param.default.as_ref().map(|v| box v.clone().into_cow()),
                         });
 
+                        println!(
+                            "({}) Registering type parameter {}",
+                            child.scope.depth(),
+                            param.name.sym
+                        );
                         child
                             .scope
                             .facts
