@@ -972,7 +972,7 @@ impl Analyzer<'_, '_> {
         if let Some(ref declared) = declared_ret_ty {
             let span = inferred_return_type.span();
             if let Some(ref inffered) = inferred_return_type {
-                self.rule.assign(declared, inffered, span)?;
+                self.assign(declared, inffered, span)?;
             }
         }
 
@@ -1011,7 +1011,7 @@ impl Analyzer<'_, '_> {
                 if let Some(ref declared) = declared_ret_ty {
                     let span = inferred_return_type.span();
 
-                    self.rule.assign(&declared, &inferred_return_type, span)?;
+                    self.assign(&declared, &inferred_return_type, span)?;
                 }
 
                 inferred_return_type

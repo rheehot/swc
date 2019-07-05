@@ -19,6 +19,7 @@ use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
+mod assign;
 mod control_flow;
 pub mod export;
 mod expr;
@@ -681,7 +682,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 return;
                             }
                         };
-                        let error = self.rule.assign(&ty, &value_ty, v.span());
+                        let error = self.assign(&ty, &value_ty, v.span());
                         let ty = ty.to_static();
                         match error {
                             Ok(()) => {

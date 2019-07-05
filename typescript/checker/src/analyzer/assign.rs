@@ -1,3 +1,4 @@
+use super::Analyzer;
 use crate::{
     errors::Error,
     ty::{
@@ -5,12 +6,11 @@ use crate::{
         TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
-    Rule,
 };
 use swc_common::Span;
 use swc_ecma_ast::*;
 
-impl Rule {
+impl Analyzer<'_, '_> {
     pub fn assign(&self, left: &Type, right: &Type, span: Span) -> Result<(), Error> {
         self.assign_inner(left, right, span)
             .map_err(|err| match err {
@@ -163,7 +163,7 @@ impl Rule {
             | Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsNullKeyword,
                 ..
-            }) if !self.strict_null_checks => return Ok(()),
+            }) if !self.rule.strict_null_checks => return Ok(()),
             Type::Union(Union {
                 ref types, span, ..
             }) => {

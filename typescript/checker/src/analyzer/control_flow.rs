@@ -275,20 +275,27 @@ impl Analyzer<'_, '_> {
                 // Update variable's type
                 match **pat {
                     Pat::Ident(ref i) => {
-                        if let Some(var_info) = self.scope.vars.get_mut(&i.sym) {
-                            // Variable is declared.
+                        let mut err = None;
+                        if let Some(ref var_info) = self.scope.vars.get(&i.sym) {
+                            if let Some(ref var_ty) = var_info.ty {
+                                // let foo: string;
+                                // let foo = 'value';
 
+                                err = Some(self.assign(&var_ty, ty, i.span));
+                            }
+                        }
+                        if let Some(var_info) = self.scope.vars.get_mut(&i.sym) {
                             let var_ty = if let Some(ref var_ty) = var_info.ty {
                                 // let foo: string;
                                 // let foo = 'value';
 
-                                let error = self.rule.assign(&var_ty, ty, i.span);
-                                match error {
-                                    Ok(()) => Some(ty.to_static()),
-                                    Err(err) => {
+                                match err {
+                                    Some(Ok(())) => Some(ty.to_static()),
+                                    Some(Err(err)) => {
                                         self.info.errors.push(err);
                                         None
                                     }
+                                    None => None,
                                 }
                             } else {
                                 // let v = foo;
@@ -344,6 +351,7 @@ impl Analyzer<'_, '_> {
                             //
                             // We copy varinfo with enhanced type.
                             self.scope.vars.insert(i.sym.clone(), var_info);
+                            return;
                         }
                     }
 

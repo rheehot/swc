@@ -179,7 +179,7 @@ impl Analyzer<'_, '_> {
     fn extends(&self, child: &Type, parent: &Type) -> Option<bool> {
         let span = child.span();
 
-        match self.rule.assign(parent, child, span) {
+        match self.assign(parent, child, span) {
             Ok(()) => return Some(true),
             _ => return Some(false),
         }

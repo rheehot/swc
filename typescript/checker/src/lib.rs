@@ -36,7 +36,6 @@ use swc_ecma_ast::Module;
 use swc_ecma_parser::{Parser, Session, SourceFileInput, Syntax, TsConfig};
 
 pub mod analyzer;
-mod assign;
 mod builtin_types;
 pub mod errors;
 pub mod loader;
