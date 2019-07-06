@@ -1,6 +1,6 @@
 use smallvec::{smallvec, SmallVec};
 use std::convert::TryFrom;
-use swc_atoms::JsWord;
+use swc_atoms::{js_word, JsWord};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -42,6 +42,15 @@ impl TryFrom<&'_ Expr> for Name {
             Expr::Ident(ref i) => Ok(i.into()),
             // TODO
             _ => Err(()),
+        }
+    }
+}
+
+impl From<&'_ TsThisTypeOrIdent> for Name {
+    fn from(ty: &TsThisTypeOrIdent) -> Self {
+        match *ty {
+            TsThisTypeOrIdent::TsThisType(..) => Name::from(js_word!("this")),
+            TsThisTypeOrIdent::Ident(ref i) => Name::from(i),
         }
     }
 }

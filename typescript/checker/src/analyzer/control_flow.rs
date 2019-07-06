@@ -73,6 +73,7 @@ impl BitOr for Facts {
 pub(super) struct CondFacts {
     pub facts: FxHashMap<Name, TypeFacts>,
     pub vars: FxHashMap<Name, Type<'static>>,
+    pub excludes: FxHashMap<Name, Vec<Type<'static>>>,
     pub types: FxHashMap<JsWord, Type<'static>>,
 }
 
@@ -105,6 +106,12 @@ impl CondFacts {
 
 trait Merge {
     fn or(&mut self, other: Self);
+}
+
+impl<T> Merge for Vec<T> {
+    fn or(&mut self, other: Self) {
+        self.extend(other)
+    }
 }
 
 impl Merge for TypeFacts {
@@ -150,6 +157,7 @@ impl AddAssign for CondFacts {
     fn add_assign(&mut self, rhs: Self) {
         self.types.extend(rhs.types);
         self.vars.extend(rhs.vars);
+        self.excludes.extend(rhs.excludes);
     }
 }
 
@@ -171,6 +179,7 @@ impl BitOr for CondFacts {
             facts: CondFacts::or(self.facts, rhs.facts),
             vars: CondFacts::or(self.vars, rhs.vars),
             types: CondFacts::or(self.types, rhs.types),
+            excludes: CondFacts::or(self.excludes, rhs.excludes),
         }
     }
 }
@@ -336,15 +345,8 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    fn add_true_false(&self, facts: &mut Facts, sym: &JsWord, ty: &Type) {
-        facts.true_facts.vars.insert(
-            sym.into(),
-            ty.clone().remove_falsy().into_owned().into_static(),
-        );
-        facts.false_facts.vars.insert(
-            sym.into(),
-            ty.clone().remove_falsy().into_owned().into_static(),
-        );
+    fn add_true_false(&self, facts: &mut Facts, sym: &JsWord, ty: &Type<'static>) {
+        facts.insert_var(sym, ty.clone(), false);
     }
 
     /// Returns (type facts when test is matched, type facts when test is not
@@ -361,8 +363,25 @@ impl Analyzer<'_, '_> {
             | Expr::MetaProp(..)
             | Expr::JSXFragment(..)
             | Expr::JSXNamespacedName(..)
-            | Expr::JSXEmpty(..)
-            | Expr::Call(..) => return Ok(()),
+            | Expr::JSXEmpty(..) => return Ok(()),
+
+            Expr::Call(..) => {
+                let ty = self.type_of(&test)?;
+                match *ty.normalize() {
+                    Type::Simple(ref sty) => match **sty {
+                        TsType::TsTypePredicate(ref pred) => {
+                            //
+                            let name = Name::from(&pred.param_name);
+                            let ty = Type::from(pred.type_ann.clone());
+                            facts.insert_var(name.clone(), ty.clone(), false);
+                        }
+                        _ => {}
+                    },
+                    _ => {}
+                }
+
+                return Ok(());
+            }
 
             // Object literal *may* have side effect.
             Expr::Object(..) => {}
@@ -384,7 +403,7 @@ impl Analyzer<'_, '_> {
             Expr::Paren(ParenExpr { ref expr, .. }) => self.detect_facts(expr, facts)?,
 
             Expr::Ident(ref i) => {
-                let ty = self.type_of(test)?;
+                let ty = self.type_of(test)?.to_static();
                 self.add_true_false(facts, &i.sym, &ty);
             }
 
@@ -487,9 +506,9 @@ impl Analyzer<'_, '_> {
                         }) {
                             Some((Ok(name), ty)) => {
                                 if is_eq {
-                                    facts.true_facts.vars.insert(name, ty);
+                                    facts.insert_var(name.clone(), ty.clone(), false);
                                 } else {
-                                    facts.false_facts.vars.insert(name, ty);
+                                    facts.insert_var(name.clone(), ty.clone(), true);
                                 }
                                 return Ok(());
                             }
@@ -509,6 +528,7 @@ impl Analyzer<'_, '_> {
                                     .true_facts
                                     .vars
                                     .insert(Name::from(&i.sym), r_ty.to_static());
+
                                 return Ok(());
                             }
 
@@ -872,6 +892,20 @@ where
         match self.last() {
             Some(ref stmt) => stmt.ends_with_ret(),
             _ => false,
+        }
+    }
+}
+
+impl Facts {
+    fn insert_var<N: Into<Name>>(&mut self, name: N, ty: Type<'static>, negate: bool) {
+        let name = name.into();
+
+        if negate {
+            self.false_facts.vars.insert(name.clone(), ty.clone());
+            self.true_facts.excludes.entry(name).or_default().push(ty);
+        } else {
+            self.true_facts.vars.insert(name.clone(), ty.clone());
+            self.false_facts.excludes.entry(name).or_default().push(ty);
         }
     }
 }
