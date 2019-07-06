@@ -75,7 +75,7 @@ where
 
 impl<'a, 'b> NormalizeMut<'b> for Cow<'a, Type<'b>> {
     fn normalize_mut(&mut self) -> &mut Type<'b> {
-        let mut owned = match *self {
+        let owned = match *self {
             Cow::Borrowed(borrowed) => {
                 *self = Cow::Owned(borrowed.to_owned());
                 match *self {

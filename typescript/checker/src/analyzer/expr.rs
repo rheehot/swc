@@ -930,7 +930,7 @@ impl Analyzer<'_, '_> {
 
     pub(super) fn infer_return_type(
         &self,
-        base_span: Span,
+        _base_span: Span,
     ) -> Result<Option<Type<'static>>, Error> {
         let types = { ::std::mem::replace(&mut *self.inferred_return_types.borrow_mut(), vec![]) };
 

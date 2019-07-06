@@ -122,10 +122,10 @@ impl Merge for VarInfo {
 }
 
 impl Merge for Type<'_> {
-    fn or(&mut self, mut r: Self) {
+    fn or(&mut self, r: Self) {
         let l_span = self.span();
 
-        let mut l = mem::replace(self, Type::never(l_span));
+        let l = mem::replace(self, Type::never(l_span));
 
         *self = Type::union(once(l).chain(once(r)));
     }
