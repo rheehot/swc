@@ -435,8 +435,25 @@ impl Analyzer<'_, '_> {
             }
 
             Expr::Cond(CondExpr {
-                ref cons, ref alt, ..
+                ref test,
+                ref cons,
+                ref alt,
+                ..
             }) => {
+                match **test {
+                    Expr::Ident(ref i) => {
+                        // Check `declaring` before checking variables.
+                        if self.declaring.contains(&i.sym) {
+                            if self.allow_ref_declaring {
+                                return Ok(Type::any(span).owned());
+                            } else {
+                                return Err(Error::ReferencedInInit { span });
+                            }
+                        }
+                    }
+                    _ => {}
+                }
+
                 let cons_ty = self.type_of(cons)?.into_owned();
                 let alt_ty = self.type_of(alt)?.into_owned();
 
