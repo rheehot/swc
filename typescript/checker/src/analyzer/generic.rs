@@ -1,17 +1,43 @@
 use super::{util::NormalizeMut, Analyzer};
 use crate::{
     errors::Error,
-    ty::{Conditional, Mapped, Tuple, Type, TypeParam, TypeParamDecl, TypeRefExt},
+    ty::{self, Conditional, Mapped, Tuple, Type, TypeParam, TypeParamDecl, TypeRefExt},
     util::IntoCow,
 };
 use std::borrow::Cow;
-use swc_common::Spanned;
+use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
+    pub(super) fn infer_arg_types(
+        &self,
+        args: &[ExprOrSpread],
+        type_params: &TypeParamDecl,
+        params: &[TsFnParam],
+    ) -> Result<TsTypeParamInstantiation, Error> {
+        let mut arg_types = Vec::with_capacity(args.len());
+
+        for arg in args {
+            match *arg {
+                ExprOrSpread {
+                    spread: Some(..), ..
+                } => unimplemented!("type parameter inference with spread element"),
+                ExprOrSpread {
+                    spread: None,
+                    ref expr,
+                    ..
+                } => {
+                    arg_types.push(self.type_of(expr)?);
+                }
+            }
+        }
+
+        unimplemented!("infer_arg_types()")
+    }
+
     pub(super) fn expand_type_params<'a, 'b>(
         &self,
-        i: Option<&TsTypeParamInstantiation>,
+        i: &TsTypeParamInstantiation,
         decl: &TypeParamDecl,
         mut ty: Cow<'b, Type<'a>>,
     ) -> Result<Cow<'b, Type<'a>>, Error> {
@@ -26,15 +52,7 @@ impl Analyzer<'_, '_> {
                     // Handle references to type parameters
                     for (idx, p) in decl.params.iter().enumerate() {
                         if p.name == *sym {
-                            if let Some(i) = i {
-                                return Ok(Type::from(i.params[idx].clone()).owned());
-                            }
-
-                            if let Some(ref default) = p.default {
-                                return Ok(default.to_static().owned());
-                            }
-
-                            unimplemented!("expand_type_param: type inference")
+                            return Ok(Type::from(i.params[idx].clone()).owned());
                         }
                     }
 
@@ -141,6 +159,27 @@ impl Analyzer<'_, '_> {
                 return Ok(ty);
             }
 
+            Type::Function(ty::Function {
+                span,
+                ref params,
+                ref type_params,
+                ref ret_ty,
+                ..
+            }) => {
+                // assert_eq!(type_params.as_ref(), Some(decl));
+                let mut v = GenericExpander { decl, i };
+                let ret_ty = ret_ty.clone().fold_with(&mut v);
+                let params = params.clone().fold_with(&mut v);
+                let type_params = type_params.clone().fold_with(&mut v);
+                return Ok(Type::Function(ty::Function {
+                    span,
+                    params,
+                    type_params,
+                    ret_ty,
+                })
+                .into_cow());
+            }
+
             _ => {}
         }
 
@@ -154,7 +193,7 @@ impl Analyzer<'_, '_> {
 
     fn expand_type_param<'a, 'b>(
         &self,
-        i: Option<&TsTypeParamInstantiation>,
+        i: &TsTypeParamInstantiation,
         decl: &TypeParamDecl,
         type_param: &'a TypeParam<'b>,
     ) -> Result<Cow<'a, TypeParam<'b>>, Error> {
@@ -178,6 +217,39 @@ impl Analyzer<'_, '_> {
         match self.assign(parent, child, span) {
             Ok(()) => return Some(true),
             _ => return Some(false),
+        }
+    }
+}
+
+struct GenericExpander<'a, 'b> {
+    decl: &'a TypeParamDecl<'b>,
+    i: &'a TsTypeParamInstantiation,
+}
+
+impl<'a, 'b> Fold<Cow<'a, Type<'b>>> for GenericExpander<'_, '_> {
+    fn fold(&mut self, ty: Cow<'a, Type<'b>>) -> Cow<'a, Type<'b>> {
+        let ty = ty.fold_children(self);
+
+        match ty.normalize() {
+            Type::Simple(ref sty) => match **sty {
+                TsType::TsTypeRef(TsTypeRef {
+                    type_name: TsEntityName::Ident(Ident { ref sym, .. }),
+                    type_params: None,
+                    ..
+                }) => {
+                    // Handle references to type parameters
+                    for (idx, p) in self.decl.params.iter().enumerate() {
+                        if p.name == *sym {
+                            return Type::from(self.i.params[idx].clone()).owned();
+                        }
+                    }
+
+                    // Normal type reference
+                    return ty;
+                }
+                _ => return ty,
+            },
+            _ => return ty,
         }
     }
 }

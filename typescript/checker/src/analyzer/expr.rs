@@ -1521,6 +1521,12 @@ impl Analyzer<'_, '_> {
     ) -> Result<Type<'a>, Error> {
         let param_decls = &fn_type.params;
         let decl = &fn_type.type_params;
+        let type_params = if let Some(ref type_params) = fn_type.type_params {
+            type_params
+        } else {
+            // TODO: Report an error if i is not None
+            return Ok((*fn_type.ret_ty).clone().into_owned());
+        };
 
         {
             // TODO: Handle default parameters
@@ -1544,6 +1550,16 @@ impl Analyzer<'_, '_> {
                 });
             }
         }
+
+        let v;
+
+        let i = match i {
+            Some(i) => i,
+            None => {
+                v = self.infer_arg_types(args, &type_params, &fn_type.params)?;
+                &v
+            }
+        };
 
         if let Some(ref decl) = decl {
             // To handle
@@ -1649,11 +1665,15 @@ impl Analyzer<'_, '_> {
                                             ref ty,
                                             ..
                                         }) => {
-                                            let ty = self.expand_type_params(
-                                                type_params.as_ref(),
-                                                tps,
-                                                Cow::Borrowed(&**ty),
-                                            )?;
+                                            let ty = if let Some(i) = type_params {
+                                                self.expand_type_params(
+                                                    i,
+                                                    tps,
+                                                    Cow::Borrowed(&**ty),
+                                                )?
+                                            } else {
+                                                *ty.clone()
+                                            };
                                             let ty = self.expand_type(span, ty.static_cast())?;
 
                                             verify!(ty);
