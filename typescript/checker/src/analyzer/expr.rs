@@ -1745,6 +1745,14 @@ impl Analyzer<'_, '_> {
                 .into_cow())
             }
 
+            Type::Array(Array {
+                span,
+                box elem_type,
+            }) => {
+                let elem_type = box self.expand_type(elem_type.span(), elem_type)?;
+                return Ok(Array { span, elem_type }.into_cow());
+            }
+
             ty => ty,
         };
 
