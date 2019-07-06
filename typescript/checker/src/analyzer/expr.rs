@@ -13,7 +13,7 @@ use crate::{
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
-use std::borrow::Cow;
+use std::{borrow::Cow, iter::once};
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
@@ -437,17 +437,10 @@ impl Analyzer<'_, '_> {
             Expr::Cond(CondExpr {
                 ref cons, ref alt, ..
             }) => {
-                let cons_ty = self.type_of(cons)?;
-                let alt_ty = self.type_of(alt)?;
-                return Ok(if cons_ty.eq_ignore_name_and_span(&alt_ty) {
-                    cons_ty
-                } else {
-                    Union {
-                        span,
-                        types: vec![cons_ty, alt_ty],
-                    }
-                    .into_cow()
-                });
+                let cons_ty = self.type_of(cons)?.into_owned();
+                let alt_ty = self.type_of(alt)?.into_owned();
+
+                return Ok(Type::union(once(cons_ty).chain(once(alt_ty))).into_cow());
             }
 
             Expr::New(NewExpr {
@@ -947,13 +940,12 @@ impl Analyzer<'_, '_> {
         let mut span = base_span;
         for ty in types {
             span = ty.span();
-            tys.push(ty.owned());
+            tys.push(ty);
         }
 
         match tys.len() {
             0 => Ok(None),
-            1 => Ok(Some(tys.into_iter().next().unwrap().into_owned())),
-            _ => Ok(Some(Type::Union(Union { span, types: tys }).into())),
+            _ => Ok(Some(Type::union(tys))),
         }
     }
 
@@ -1738,14 +1730,11 @@ impl Analyzer<'_, '_> {
 
         let ty = match ty.into_owned() {
             Type::Union(Union { span, types }) => {
-                return Ok(Union {
-                    span,
-                    types: types
-                        .into_iter()
-                        .map(|ty| Ok(self.expand_type(span, ty)?))
-                        .collect::<Result<_, _>>()?,
-                }
-                .into_cow())
+                let v = types
+                    .into_iter()
+                    .map(|ty| Ok(self.expand_type(span, ty)?.into_owned()))
+                    .collect::<Result<Vec<_>, _>>()?;
+                return Ok(Type::union(v).into_cow());
             }
             Type::Intersection(Intersection { span, types }) => {
                 return Ok(Intersection {

@@ -8,7 +8,10 @@ use crate::{
     util::{EqIgnoreNameAndSpan, IntoCow},
 };
 use fxhash::FxHashMap;
-use std::{collections::hash_map::Entry, iter::repeat_with};
+use std::{
+    collections::hash_map::Entry,
+    iter::{once, repeat_with},
+};
 use swc_atoms::JsWord;
 use swc_common::{Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -415,7 +418,7 @@ impl<'a> Scope<'a> {
                                 }
                             }
                         }
-                        merge_type(ty, var_ty)
+                        Type::union(once(ty).chain(once(var_ty)))
                     } else {
                         ty
                     })
@@ -683,28 +686,4 @@ impl Analyzer<'_, '_> {
 
         None
     }
-}
-
-fn merge_type<'a>(l: Type<'a>, r: Type<'a>) -> Type<'a> {
-    let span = l.span();
-    if l.eq_ignore_name_and_span(&r) {
-        return l;
-    }
-    let mut buf = Vec::with_capacity(2);
-
-    macro_rules! handle {
-        ($ty:expr) => {{
-            match $ty {
-                Type::Union(Union { types, .. }) => {
-                    buf.extend(types);
-                }
-                ty => buf.push(ty.into_cow()),
-            }
-        }};
-    }
-
-    handle!(l);
-    handle!(r);
-
-    Type::Union(Union { span, types: buf })
 }

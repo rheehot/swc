@@ -309,6 +309,36 @@ pub struct Constructor<'a> {
 }
 
 impl Type<'_> {
+    pub fn union<I: IntoIterator<Item = Self>>(iter: I) -> Self {
+        let mut span = DUMMY_SP;
+
+        let mut tys = vec![];
+
+        for ty in iter {
+            if span.is_dummy() {
+                span = ty.span();
+            }
+
+            match ty {
+                Type::Union(Union { types, .. }) => {
+                    assert_ne!(types, vec![]);
+                    tys.extend(types);
+                }
+
+                _ => tys.push(ty.into_cow()),
+            }
+        }
+
+        match tys.len() {
+            0 => unreachable!("Type::union() should not be called with an empty iterator"),
+            1 => {
+                let v = tys.into_iter().next().unwrap();
+                v.into_owned()
+            }
+            _ => Type::Union(Union { span, types: tys }),
+        }
+    }
+
     pub fn contains_void(&self) -> bool {
         match *self.normalize() {
             Type::Keyword(TsKeywordType {

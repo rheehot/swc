@@ -14,6 +14,7 @@ use std::{
     collections::hash_map::Entry,
     convert::TryFrom,
     hash::Hash,
+    iter::once,
     mem,
     ops::{AddAssign, BitOr, Not},
 };
@@ -126,36 +127,7 @@ impl Merge for Type<'_> {
 
         let mut l = mem::replace(self, Type::never(l_span));
 
-        let mut tys = vec![];
-        macro_rules! check {
-            ($ty:expr) => {{
-                match $ty {
-                    Type::Union(Union { ref mut types, .. }) => {
-                        tys.append(types);
-                    }
-
-                    _ => tys.push($ty.into_cow()),
-                }
-            }};
-        }
-        check!(l);
-        check!(r);
-
-        match tys.len() {
-            0 => unreachable!(),
-            1 => {
-                *self = {
-                    let v = tys.into_iter().next().unwrap();
-                    v.into_owned()
-                }
-            }
-            _ => {
-                *self = Type::Union(Union {
-                    span: l_span,
-                    types: tys,
-                })
-            }
-        }
+        *self = Type::union(once(l).chain(once(r)));
     }
 }
 
