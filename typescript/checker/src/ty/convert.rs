@@ -127,6 +127,7 @@ impl From<TsType> for Type<'_> {
             TsType::TsConditionalType(cond) => Type::Conditional(cond.into()),
             TsType::TsMappedType(ty) => Type::Mapped(ty.into()),
             TsType::TsTypeOperator(ty) => Type::Operator(ty.into()),
+            TsType::TsParenthesizedType(TsParenthesizedType { type_ann, .. }) => type_ann.into(),
             _ => Type::Simple(ty.into_cow()),
         }
     }
