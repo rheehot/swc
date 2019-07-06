@@ -347,6 +347,12 @@ impl Analyzer<'_, '_> {
                             // Variable is defined on parent scope.
                             //
                             // We copy varinfo with enhanced type.
+                            println!(
+                                "({}) vars.inseart({}, {:?})",
+                                self.scope.depth(),
+                                i.sym,
+                                var_info
+                            );
                             self.scope.vars.insert(i.sym.clone(), var_info);
                             return;
                         }
