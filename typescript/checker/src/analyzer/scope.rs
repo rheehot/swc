@@ -412,7 +412,8 @@ impl<'a> Scope<'a> {
                         match ty {
                             Type::Function(..) => {}
                             _ => {
-                                if !ty.eq_ignore_name_and_span(&var_ty) {
+                                let generalized_var_ty = var_ty.clone().generalize_lit();
+                                if !ty.eq_ignore_name_and_span(&generalized_var_ty) {
                                     v.ty = Some(var_ty);
                                     restore!();
                                     return Err(Error::RedclaredVarWithDifferentType { span });
