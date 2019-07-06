@@ -1,4 +1,4 @@
-use crate::util::IntoCow;
+use crate::util::{EqIgnoreNameAndSpan, IntoCow};
 use std::{borrow::Cow, mem::transmute};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
@@ -26,6 +26,19 @@ pub trait TypeRefExt<'a>: Sized + Clone {
                     },
                 })
                 .owned()
+            }
+            Type::Union(Union { ref types, .. }) => {
+                let mut tys: Vec<Type> = Vec::with_capacity(types.len());
+
+                for ty in types {
+                    let ty = ty.clone().generalize_lit();
+                    let dup = tys.iter().any(|t| t.eq_ignore_name_and_span(&ty));
+                    if !dup {
+                        tys.push(ty.into_owned());
+                    }
+                }
+
+                return Type::union(tys).into_cow();
             }
             _ => {}
         }
