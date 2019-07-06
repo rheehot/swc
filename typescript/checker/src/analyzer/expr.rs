@@ -1300,7 +1300,7 @@ impl Analyzer<'_, '_> {
                             ..
                         }) if kind == ExtractKind::Call => {
                             //
-                            match self.try_instantiate(
+                            match self.try_instantiate_simple(
                                 span,
                                 ty.span(),
                                 &ret_ty.as_ref().unwrap_or(&Type::any(span).owned()),
@@ -1320,7 +1320,7 @@ impl Analyzer<'_, '_> {
                             ref ret_ty,
                             ..
                         }) if kind == ExtractKind::New => {
-                            match self.try_instantiate(
+                            match self.try_instantiate_simple(
                                 span,
                                 ty.span(),
                                 &ret_ty.as_ref().unwrap_or(&Type::any(span).owned()),
@@ -1354,27 +1354,16 @@ impl Analyzer<'_, '_> {
                 ..
             }) => return Err(Error::Unknown { span }),
 
-            Type::Function(ty::Function {
-                ref params,
-                ref type_params,
-                ref ret_ty,
-                ..
-            }) if kind == ExtractKind::Call => self.try_instantiate(
-                span,
-                ty.span(),
-                &ret_ty,
-                params,
-                type_params.as_ref(),
-                args,
-                type_args,
-            ),
+            Type::Function(ref f) if kind == ExtractKind::Call => {
+                self.try_instantiate(span, ty.span(), &*f, args, type_args)
+            }
 
             Type::Constructor(ty::Constructor {
                 ref params,
                 ref type_params,
                 ref ret_ty,
                 ..
-            }) if kind == ExtractKind::New => self.try_instantiate(
+            }) if kind == ExtractKind::New => self.try_instantiate_simple(
                 span,
                 ty.span(),
                 &ret_ty,
@@ -1457,7 +1446,7 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    fn try_instantiate<'a>(
+    fn try_instantiate_simple<'a>(
         &'a self,
         span: Span,
         callee_span: Span,
@@ -1513,11 +1502,68 @@ impl Analyzer<'_, '_> {
         }
 
         if let Some(ref decl) = decl {
-            Ok(self
-                .expand_type_params(i, decl, Cow::Borrowed(ret_type))?
-                .into_owned())
+            unimplemented!(
+                "try_instantiate should be used instead of try_instantiate_simple as type \
+                 parameter is deefined on the function"
+            )
         } else {
             Ok(ret_type.clone())
+        }
+    }
+
+    fn try_instantiate<'a>(
+        &'a self,
+        span: Span,
+        callee_span: Span,
+        fn_type: &ty::Function<'a>,
+        args: &[ExprOrSpread],
+        i: Option<&TsTypeParamInstantiation>,
+    ) -> Result<Type<'a>, Error> {
+        let param_decls = &fn_type.params;
+        let decl = &fn_type.type_params;
+
+        {
+            // TODO: Handle default parameters
+            // TODO: Handle multiple definitions
+
+            let min = param_decls
+                .iter()
+                .filter(|p| match p {
+                    TsFnParam::Ident(Ident { optional: true, .. }) => false,
+                    _ => true,
+                })
+                .count();
+
+            let expected = min..=param_decls.len();
+            if !expected.contains(&args.len()) {
+                return Err(Error::WrongParams {
+                    span,
+                    callee: callee_span,
+                    expected,
+                    actual: args.len(),
+                });
+            }
+        }
+
+        if let Some(ref decl) = decl {
+            // To handle
+            //
+            // function foo<T extends "foo">(f: (x: T) => T) {
+            //     return f;
+            // }
+            //
+            // we should expand the whole function, because return type contains type
+            // parameter declared on the function.
+            let expanded_fn_type = self
+                .expand_type_params(i, decl, Cow::Owned(Type::Function(fn_type.clone())))?
+                .into_owned();
+            let expanded_fn_type = match expanded_fn_type {
+                Type::Function(f) => f,
+                _ => unreachable!(),
+            };
+            Ok((*expanded_fn_type.ret_ty).clone().into_owned())
+        } else {
+            Ok((*fn_type.ret_ty).clone().into_owned())
         }
     }
 
