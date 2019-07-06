@@ -1,0 +1,48 @@
+error: RedclaredVarWithDifferentType {
+    span: Span {
+        lo: BytePos(
+            546,
+        ),
+        hi: BytePos(
+            554,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeIdentity.ts:6:5
+  |
+6 | var strOrNum: string; // error
+  |     ^^^^^^^^
+
+error: RedclaredVarWithDifferentType {
+    span: Span {
+        lo: BytePos(
+            578,
+        ),
+        hi: BytePos(
+            586,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeIdentity.ts:7:5
+  |
+7 | var strOrNum: boolean; // error
+  |     ^^^^^^^^
+
+error: RedclaredVarWithDifferentType {
+    span: Span {
+        lo: BytePos(
+            611,
+        ),
+        hi: BytePos(
+            619,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/types/typeRelationships/typeAndMemberIdentity/unionTypeIdentity.ts:8:5
+  |
+8 | var strOrNum: number; // error
+  |     ^^^^^^^^
+

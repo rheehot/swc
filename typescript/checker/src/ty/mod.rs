@@ -276,10 +276,40 @@ pub struct Array<'a> {
 }
 
 /// a | b
-#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+#[derive(Debug, Fold, Clone, Spanned)]
 pub struct Union<'a> {
     pub span: Span,
     pub types: Vec<TypeRef<'a>>,
+}
+
+/// This impl is wrong.
+///
+/// This will be moved to EqIgnoreNameAndSpan in future. (I'll do this after
+/// implementing a derive macro for EqIgnoreNameAndSpan)
+impl PartialEq for Union<'_> {
+    fn eq(&self, other: &Self) -> bool {
+        if self.span != other.span || self.types.len() != other.types.len() {
+            return false;
+        }
+
+        // A | B is equal to B | A
+        //
+        //
+        // TODO: Make derive(EqIgnoreNameAndSpan) and move this to `impl
+        // EqIgnoreNameAndSpan for Union`
+        for ty in &self.types {
+            if other
+                .types
+                .iter()
+                .any(|oty| oty.eq_ignore_name_and_span(ty))
+            {
+                continue;
+            }
+            return false;
+        }
+
+        true
+    }
 }
 
 /// a & b
