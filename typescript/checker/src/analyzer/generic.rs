@@ -1,7 +1,7 @@
 use super::{util::NormalizeMut, Analyzer};
 use crate::{
     errors::Error,
-    ty::{self, Conditional, Mapped, Tuple, Type, TypeParam, TypeParamDecl, TypeRefExt},
+    ty::{self, Conditional, Mapped, Tuple, Type, TypeParam, TypeParamDecl},
     util::IntoCow,
 };
 use std::borrow::Cow;
@@ -12,8 +12,8 @@ impl Analyzer<'_, '_> {
     pub(super) fn infer_arg_types(
         &self,
         args: &[ExprOrSpread],
-        type_params: &TypeParamDecl,
-        params: &[TsFnParam],
+        _type_params: &TypeParamDecl,
+        _params: &[TsFnParam],
     ) -> Result<TsTypeParamInstantiation, Error> {
         let mut arg_types = Vec::with_capacity(args.len());
 
