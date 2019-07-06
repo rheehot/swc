@@ -15,7 +15,7 @@ error: AssignFailed {
                     4862,
                 ),
                 hi: BytePos(
-                    4882,
+                    4867,
                 ),
                 ctxt: #0,
             },

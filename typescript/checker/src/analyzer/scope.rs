@@ -1,4 +1,4 @@
-use super::{control_flow::CondFacts, Analyzer, Name};
+use super::{control_flow::CondFacts, util::NormalizeMut, Analyzer, Name};
 use crate::{
     errors::Error,
     ty::{
@@ -9,6 +9,7 @@ use crate::{
 };
 use fxhash::FxHashMap;
 use std::{
+    borrow::Cow,
     collections::hash_map::Entry,
     iter::{once, repeat_with},
 };
@@ -450,13 +451,14 @@ impl<'a> Scope<'a> {
 
     /// This method does cannot handle imported types.
     pub(super) fn find_type(&self, name: &JsWord) -> Option<&Type<'static>> {
-        if let Some(ty) = self.types.get(name) {
-            println!("({}) find_type({}): Found", self.depth(), name);
+        if let Some(ty) = self.facts.types.get(name) {
+            println!("({}) find_type({}): Found (cond facts)", self.depth(), name);
             return Some(&ty);
         }
 
-        if let Some(ty) = self.facts.types.get(name) {
-            println!("({}) find_type({}): Found (cond facts)", self.depth(), name);
+        if let Some(ty) = self.types.get(name) {
+            println!("({}) find_type({}): Found", self.depth(), name);
+
             return Some(&ty);
         }
 
@@ -656,10 +658,31 @@ impl Analyzer<'_, '_> {
                 name
             );
 
-            match var.ty {
-                Some(ref ty) => return Some(ty),
-                _ => {}
+            let name = Name::from(name);
+
+            let ty = match var.ty {
+                Some(ref ty) => ty,
+                _ => return None,
+            };
+
+            if let Some(ref excludes) = self.scope.facts.excludes.get(&name) {
+                let mut ty = Cow::Borrowed(ty);
+                match *ty.normalize_mut() {
+                    Type::Union(Union { ref mut types, .. }) => {
+                        for ty in types {
+                            let span = ty.span();
+                            for excluded_ty in excludes.iter() {
+                                if ty.eq_ignore_name_and_span(excluded_ty) {
+                                    *ty = Type::never(span).owned()
+                                }
+                            }
+                        }
+                    }
+                    _ => {}
+                }
             }
+
+            return Some(ty);
         }
 
         None
