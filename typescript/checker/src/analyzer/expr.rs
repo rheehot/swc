@@ -662,6 +662,59 @@ impl Analyzer<'_, '_> {
         prop: &Expr,
         computed: bool,
     ) -> Result<TypeRef<'a>, Error> {
+        macro_rules! handle_type_els {
+            ($members:expr) => {{
+                let prop_ty = self.type_of(prop)?.generalize_lit();
+
+                for el in $members.iter() {
+                    match el {
+                        TypeElement::Index(IndexSignature {
+                            ref params,
+                            ref type_ann,
+                            ..
+                        }) => {
+                            if params.len() != 1 {
+                                unimplemented!("Index signature with multiple parameters")
+                            }
+                            match params[0] {
+                                TsFnParam::Ident(ref i) => {
+                                    assert!(i.type_ann.is_some());
+
+                                    let index_ty = Type::from(i.type_ann.as_ref().unwrap().clone());
+                                    if index_ty.eq_ignore_name_and_span(&*prop_ty) {
+                                        if let Some(ref type_ann) = type_ann {
+                                            return Ok(type_ann.to_static().owned());
+                                        }
+                                        return Ok(Type::any(span).owned());
+                                    }
+                                }
+
+                                _ => unimplemented!("TsFnParam other than index in IndexSignature"),
+                            }
+                        }
+                        _ => {}
+                    }
+
+                    if let Some(key) = el.key() {
+                        if key.eq_ignore_span(prop) {
+                            match el {
+                                TypeElement::Property(ref p) => {
+                                    if let Some(ref type_ann) = p.type_ann {
+                                        return Ok(type_ann.to_static().owned());
+                                    }
+
+                                    // TODO: no implicit any?
+                                    return Ok(Type::any(span).owned());
+                                }
+
+                                _ => {}
+                            }
+                        }
+                    }
+                }
+            }};
+        }
+
         let obj = obj.generalize_lit();
         match *obj.normalize() {
             Type::Lit(..) => unreachable!(),
@@ -768,54 +821,11 @@ impl Analyzer<'_, '_> {
             }
 
             Type::Interface(Interface { ref body, .. }) => {
-                let prop_ty = self.type_of(prop)?.generalize_lit();
+                handle_type_els!(body);
+            }
 
-                for el in body.iter() {
-                    match el {
-                        TypeElement::Index(IndexSignature {
-                            ref params,
-                            ref type_ann,
-                            ..
-                        }) => {
-                            if params.len() != 1 {
-                                unimplemented!("Index signature with multiple parameters")
-                            }
-                            match params[0] {
-                                TsFnParam::Ident(ref i) => {
-                                    assert!(i.type_ann.is_some());
-
-                                    let index_ty = Type::from(i.type_ann.as_ref().unwrap().clone());
-                                    if index_ty.eq_ignore_name_and_span(&*prop_ty) {
-                                        if let Some(ref type_ann) = type_ann {
-                                            return Ok(type_ann.to_static().owned());
-                                        }
-                                        return Ok(Type::any(span).owned());
-                                    }
-                                }
-
-                                _ => unimplemented!("TsFnParam other than index in IndexSignature"),
-                            }
-                        }
-                        _ => {}
-                    }
-
-                    if let Some(key) = el.key() {
-                        if key.eq_ignore_span(prop) {
-                            match el {
-                                TypeElement::Property(ref p) => {
-                                    if let Some(ref type_ann) = p.type_ann {
-                                        return Ok(type_ann.to_static().owned());
-                                    }
-
-                                    // TODO: no implicit any?
-                                    return Ok(Type::any(span).owned());
-                                }
-
-                                _ => {}
-                            }
-                        }
-                    }
-                }
+            Type::TypeLit(TypeLit { ref members, .. }) => {
+                handle_type_els!(members);
             }
 
             Type::Union(Union { ref types, .. }) => {
