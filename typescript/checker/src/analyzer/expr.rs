@@ -18,6 +18,23 @@ use swc_atoms::js_word;
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(super) enum TypeOfMode {
+    /// Used for l-values.
+    ///
+    /// This is used to allow
+    ///
+    /// ```ts
+    /// type Num = { '0': string } | { [n: number]: number }
+    /// declare var num: Num
+    /// num[0] = 1
+    /// num['0'] = 'ok'
+    /// ```
+    LValue,
+    /// Use for r-values.
+    RValue,
+}
+
 impl Analyzer<'_, '_> {
     pub(super) fn type_of<'e>(&'e self, expr: &Expr) -> Result<TypeRef<'e>, Error> {
         let span = expr.span();
