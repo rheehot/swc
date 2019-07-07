@@ -681,11 +681,40 @@ impl Analyzer<'_, '_> {
     ) -> Result<TypeRef<'a>, Error> {
         macro_rules! handle_type_els {
             ($members:expr) => {{
-                let prop_ty = self.type_of(prop)?.generalize_lit();
+                let prop_ty = if computed {
+                    self.type_of(prop)?.generalize_lit()
+                } else {
+                    match prop {
+                        Expr::Ident(ref i) => Type::Simple(
+                            TsTypeRef {
+                                span: i.span,
+                                type_name: i.clone().into(),
+                                type_params: Default::default(),
+                            }
+                            .into_cow(),
+                        )
+                        .owned(),
+
+                        _ => unreachable!(),
+                    }
+                };
 
                 for el in $members.iter() {
                     if let Some(key) = el.key() {
-                        if key.eq_ignore_span(prop) {
+                        let is_eq = match prop {
+                            Expr::Ident(Ident { sym: ref value, .. })
+                            | Expr::Lit(Lit::Str(Str { ref value, .. })) => match key {
+                                Expr::Ident(Ident {
+                                    sym: ref r_value, ..
+                                })
+                                | Expr::Lit(Lit::Str(Str {
+                                    value: ref r_value, ..
+                                })) => value == r_value,
+                                _ => false,
+                            },
+                            _ => false,
+                        };
+                        if is_eq || key.eq_ignore_span(prop) {
                             match el {
                                 TypeElement::Property(ref p) => {
                                     if let Some(ref type_ann) = p.type_ann {
@@ -839,10 +868,16 @@ impl Analyzer<'_, '_> {
 
             Type::Interface(Interface { ref body, .. }) => {
                 handle_type_els!(body);
+
+                // TODO: Check parent interfaces
+
+                return Err(Error::NoSuchProperty { span });
             }
 
             Type::TypeLit(TypeLit { ref members, .. }) => {
                 handle_type_els!(members);
+
+                return Err(Error::NoSuchProperty { span });
             }
 
             Type::Union(Union { ref types, .. }) => {
@@ -858,8 +893,16 @@ impl Analyzer<'_, '_> {
                     }
                 }
 
-                if !errors.is_empty() {
-                    return Err(Error::UnionError { span, errors });
+                if self.type_mode != TypeOfMode::LValue {
+                    if !errors.is_empty() {
+                        return Err(Error::UnionError { span, errors });
+                    }
+                } else {
+                    // In l-value context, it's success if one of types matches it.
+                    if tys.is_empty() {
+                        assert_ne!(errors.len(), 0);
+                        return Err(Error::UnionError { span, errors });
+                    }
                 }
 
                 // TODO: Validate that the ty has same type instead of returning union.

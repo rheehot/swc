@@ -1,4 +1,5 @@
 use super::{
+    expr::TypeOfMode,
     scope::{Scope, ScopeKind, VarInfo},
     type_facts::TypeFacts,
     Analyzer, Name,
@@ -240,108 +241,123 @@ impl Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     pub(super) fn try_assign(&mut self, lhs: &PatOrExpr, ty: &Type) {
-        match *lhs {
-            PatOrExpr::Expr(ref expr) | PatOrExpr::Pat(box Pat::Expr(ref expr)) => match **expr {
-                // TODO: Validate
-                Expr::Member(MemberExpr { .. }) => return,
-                _ => unimplemented!(
-                    "assign: {:?} = {:?}\nFile: {}",
-                    expr,
-                    ty,
-                    self.path.display()
-                ),
-            },
+        let res: Result<(), Error> = try {
+            match *lhs {
+                PatOrExpr::Expr(ref expr) | PatOrExpr::Pat(box Pat::Expr(ref expr)) => {
+                    let old = self.type_mode;
+                    self.type_mode = TypeOfMode::LValue;
+                    let lhs_ty = self.type_of(expr)?;
+                    self.type_mode = old;
 
-            PatOrExpr::Pat(ref pat) => {
-                // Update variable's type
-                match **pat {
-                    Pat::Ident(ref i) => {
-                        let mut err = None;
-                        if let Some(ref var_info) = self.scope.vars.get(&i.sym) {
-                            if let Some(ref var_ty) = var_info.ty {
-                                // let foo: string;
-                                // let foo = 'value';
+                    match **expr {
+                        // TODO: Validate
+                        Expr::Member(MemberExpr { .. }) => return,
+                        _ => unimplemented!(
+                            "assign: {:?} = {:?}\nFile: {}",
+                            expr,
+                            ty,
+                            self.path.display()
+                        ),
+                    }
+                }
 
-                                err = Some(self.assign(&var_ty, ty, i.span));
-                            }
-                        }
-                        if let Some(var_info) = self.scope.vars.get_mut(&i.sym) {
-                            let var_ty = match err {
-                                // let foo: string;
-                                // let foo = 'value';
-                                Some(Ok(())) => Some(ty.to_static()),
-                                Some(Err(err)) => {
-                                    self.info.errors.push(err);
-                                    None
-                                }
+                PatOrExpr::Pat(ref pat) => {
+                    // Update variable's type
+                    match **pat {
+                        Pat::Ident(ref i) => {
+                            let mut err = None;
+                            if let Some(ref var_info) = self.scope.vars.get(&i.sym) {
+                                if let Some(ref var_ty) = var_info.ty {
+                                    // let foo: string;
+                                    // let foo = 'value';
 
-                                // let v = foo;
-                                // v = bar;
-                                None => None,
-                            };
-
-                            if let Some(var_ty) = var_ty {
-                                if var_info.ty.is_none()
-                                    || (!var_info.ty.as_ref().unwrap().is_any()
-                                        && !var_info.ty.as_ref().unwrap().is_unknown())
-                                {
-                                    var_info.ty = Some(var_ty);
+                                    err = Some(self.assign(&var_ty, ty, i.span));
                                 }
                             }
-                        } else {
-                            let var_info = if let Some(var_info) = self.scope.search_parent(&i.sym)
-                            {
-                                let ty = if var_info.ty.is_some()
-                                    && var_info.ty.as_ref().unwrap().is_any()
-                                {
-                                    Some(Type::any(var_info.ty.as_ref().unwrap().span()))
-                                } else if var_info.ty.is_some()
-                                    && var_info.ty.as_ref().unwrap().is_unknown()
-                                {
-                                    Some(Type::unknown(var_info.ty.as_ref().unwrap().span()))
-                                } else {
-                                    Some(ty.to_static())
+                            if let Some(var_info) = self.scope.vars.get_mut(&i.sym) {
+                                let var_ty = match err {
+                                    // let foo: string;
+                                    // let foo = 'value';
+                                    Some(Ok(())) => Some(ty.to_static()),
+                                    Some(Err(err)) => {
+                                        self.info.errors.push(err);
+                                        None
+                                    }
+
+                                    // let v = foo;
+                                    // v = bar;
+                                    None => None,
                                 };
-                                VarInfo {
-                                    ty,
-                                    copied: true,
-                                    ..var_info.clone()
+
+                                if let Some(var_ty) = var_ty {
+                                    if var_info.ty.is_none()
+                                        || (!var_info.ty.as_ref().unwrap().is_any()
+                                            && !var_info.ty.as_ref().unwrap().is_unknown())
+                                    {
+                                        var_info.ty = Some(var_ty);
+                                    }
                                 }
                             } else {
-                                if let Some(Type::Module(..)) = self.scope.find_type(&i.sym) {
-                                    self.info.errors.push(Error::NotVariable {
-                                        span: i.span,
-                                        left: lhs.span(),
-                                    });
-                                }
-
-                                if self.allow_ref_declaring && self.declaring.contains(&i.sym) {
-                                    return;
+                                let var_info = if let Some(var_info) =
+                                    self.scope.search_parent(&i.sym)
+                                {
+                                    let ty = if var_info.ty.is_some()
+                                        && var_info.ty.as_ref().unwrap().is_any()
+                                    {
+                                        Some(Type::any(var_info.ty.as_ref().unwrap().span()))
+                                    } else if var_info.ty.is_some()
+                                        && var_info.ty.as_ref().unwrap().is_unknown()
+                                    {
+                                        Some(Type::unknown(var_info.ty.as_ref().unwrap().span()))
+                                    } else {
+                                        Some(ty.to_static())
+                                    };
+                                    VarInfo {
+                                        ty,
+                                        copied: true,
+                                        ..var_info.clone()
+                                    }
                                 } else {
-                                    // undefined symbol
-                                    self.info
-                                        .errors
-                                        .push(Error::UndefinedSymbol { span: i.span });
-                                    return;
-                                }
-                            };
-                            // Variable is defined on parent scope.
-                            //
-                            // We copy varinfo with enhanced type.
-                            println!(
-                                "({}) vars.inseart({}, {:?})",
-                                self.scope.depth(),
-                                i.sym,
-                                var_info
-                            );
-                            self.scope.vars.insert(i.sym.clone(), var_info);
-                            return;
-                        }
-                    }
+                                    if let Some(Type::Module(..)) = self.scope.find_type(&i.sym) {
+                                        self.info.errors.push(Error::NotVariable {
+                                            span: i.span,
+                                            left: lhs.span(),
+                                        });
+                                    }
 
-                    _ => unimplemented!("assignment with complex pattern"),
+                                    if self.allow_ref_declaring && self.declaring.contains(&i.sym) {
+                                        return;
+                                    } else {
+                                        // undefined symbol
+                                        self.info
+                                            .errors
+                                            .push(Error::UndefinedSymbol { span: i.span });
+                                        return;
+                                    }
+                                };
+                                // Variable is defined on parent scope.
+                                //
+                                // We copy varinfo with enhanced type.
+                                println!(
+                                    "({}) vars.inseart({}, {:?})",
+                                    self.scope.depth(),
+                                    i.sym,
+                                    var_info
+                                );
+                                self.scope.vars.insert(i.sym.clone(), var_info);
+                                return;
+                            }
+                        }
+
+                        _ => unimplemented!("assignment with complex pattern"),
+                    }
                 }
             }
+        };
+
+        match res {
+            Ok(()) => {}
+            Err(err) => self.info.errors.push(err),
         }
     }
 
