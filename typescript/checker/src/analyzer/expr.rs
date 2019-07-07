@@ -667,6 +667,23 @@ impl Analyzer<'_, '_> {
                 let prop_ty = self.type_of(prop)?.generalize_lit();
 
                 for el in $members.iter() {
+                    if let Some(key) = el.key() {
+                        if key.eq_ignore_span(prop) {
+                            match el {
+                                TypeElement::Property(ref p) => {
+                                    if let Some(ref type_ann) = p.type_ann {
+                                        return Ok(type_ann.to_static().owned());
+                                    }
+
+                                    // TODO: no implicit any?
+                                    return Ok(Type::any(span).owned());
+                                }
+
+                                _ => {}
+                            }
+                        }
+                    }
+
                     match el {
                         TypeElement::Index(IndexSignature {
                             ref params,
@@ -693,23 +710,6 @@ impl Analyzer<'_, '_> {
                             }
                         }
                         _ => {}
-                    }
-
-                    if let Some(key) = el.key() {
-                        if key.eq_ignore_span(prop) {
-                            match el {
-                                TypeElement::Property(ref p) => {
-                                    if let Some(ref type_ann) = p.type_ann {
-                                        return Ok(type_ann.to_static().owned());
-                                    }
-
-                                    // TODO: no implicit any?
-                                    return Ok(Type::any(span).owned());
-                                }
-
-                                _ => {}
-                            }
-                        }
                     }
                 }
             }};
