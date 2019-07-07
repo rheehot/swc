@@ -685,7 +685,7 @@ impl Analyzer<'_, '_> {
                     self.type_of(prop)?.generalize_lit()
                 } else {
                     match prop {
-                        Expr::Ident(ref i) => Type::Keyword(TsKeywordType {
+                        Expr::Ident(..) => Type::Keyword(TsKeywordType {
                             kind: TsKeywordTypeKind::TsStringKeyword,
                             span,
                         })
