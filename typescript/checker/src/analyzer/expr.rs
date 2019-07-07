@@ -818,6 +818,27 @@ impl Analyzer<'_, '_> {
                 }
             }
 
+            Type::Union(Union { ref types, .. }) => {
+                debug_assert!(types.len() >= 1);
+
+                let mut tys = vec![];
+                let mut errors = Vec::with_capacity(types.len());
+
+                for ty in types {
+                    match self.access_property(span, Cow::Borrowed(&ty), prop, computed) {
+                        Ok(ty) => tys.push(ty.into_owned()),
+                        Err(err) => errors.push(err),
+                    }
+                }
+
+                if !errors.is_empty() {
+                    return Err(Error::UnionError { span, errors });
+                }
+
+                // TODO: Validate that the ty has same type instead of returning union.
+                return Ok(Type::union(tys).owned());
+            }
+
             _ => {}
         }
 
