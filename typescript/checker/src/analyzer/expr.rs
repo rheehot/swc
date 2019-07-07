@@ -685,14 +685,10 @@ impl Analyzer<'_, '_> {
                     self.type_of(prop)?.generalize_lit()
                 } else {
                     match prop {
-                        Expr::Ident(ref i) => Type::Simple(
-                            TsTypeRef {
-                                span: i.span,
-                                type_name: i.clone().into(),
-                                type_params: Default::default(),
-                            }
-                            .into_cow(),
-                        )
+                        Expr::Ident(ref i) => Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsStringKeyword,
+                            span,
+                        })
                         .owned(),
 
                         _ => unreachable!(),
@@ -700,6 +696,34 @@ impl Analyzer<'_, '_> {
                 };
 
                 for el in $members.iter() {
+                    match el {
+                        TypeElement::Index(IndexSignature {
+                            ref params,
+                            ref type_ann,
+                            ..
+                        }) => {
+                            if params.len() != 1 {
+                                unimplemented!("Index signature with multiple parameters")
+                            }
+                            match params[0] {
+                                TsFnParam::Ident(ref i) => {
+                                    assert!(i.type_ann.is_some());
+
+                                    let index_ty = Type::from(i.type_ann.as_ref().unwrap().clone());
+                                    if index_ty.eq_ignore_name_and_span(&*prop_ty) {
+                                        if let Some(ref type_ann) = type_ann {
+                                            return Ok(type_ann.to_static().owned());
+                                        }
+                                        return Ok(Type::any(span).owned());
+                                    }
+                                }
+
+                                _ => unimplemented!("TsFnParam other than index in IndexSignature"),
+                            }
+                        }
+                        _ => {}
+                    }
+
                     if let Some(key) = el.key() {
                         let is_el_computed = match *el {
                             TypeElement::Property(ref p) => p.computed,
@@ -737,34 +761,6 @@ impl Analyzer<'_, '_> {
                                 _ => {}
                             }
                         }
-                    }
-
-                    match el {
-                        TypeElement::Index(IndexSignature {
-                            ref params,
-                            ref type_ann,
-                            ..
-                        }) => {
-                            if params.len() != 1 {
-                                unimplemented!("Index signature with multiple parameters")
-                            }
-                            match params[0] {
-                                TsFnParam::Ident(ref i) => {
-                                    assert!(i.type_ann.is_some());
-
-                                    let index_ty = Type::from(i.type_ann.as_ref().unwrap().clone());
-                                    if index_ty.eq_ignore_name_and_span(&*prop_ty) {
-                                        if let Some(ref type_ann) = type_ann {
-                                            return Ok(type_ann.to_static().owned());
-                                        }
-                                        return Ok(Type::any(span).owned());
-                                    }
-                                }
-
-                                _ => unimplemented!("TsFnParam other than index in IndexSignature"),
-                            }
-                        }
-                        _ => {}
                     }
                 }
             }};
