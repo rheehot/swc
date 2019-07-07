@@ -616,7 +616,7 @@ impl Visit<AssignExpr> for Analyzer<'_, '_> {
             }
         };
         if expr.op == op!("=") {
-            self.try_assign(&expr.left, &rhs_ty);
+            self.try_assign(span, &expr.left, &rhs_ty);
         }
     }
 }

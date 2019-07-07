@@ -2,11 +2,16 @@ use crate::ty::{Type, TypeElement};
 use std::{ops::RangeInclusive, path::PathBuf};
 use swc_atoms::JsWord;
 use swc_common::{errors::Handler, Span, Spanned};
+use swc_ecma_ast::Expr;
 
 #[derive(Debug, Clone, PartialEq, Spanned)]
 pub enum Error {
     ReturnRequired {
         /// Span of the return type.
+        span: Span,
+    },
+
+    ReadOnly {
         span: Span,
     },
 
@@ -49,6 +54,7 @@ pub enum Error {
 
     NoSuchProperty {
         span: Span,
+        prop: Option<Expr>,
     },
 
     TooManyTupleElements {

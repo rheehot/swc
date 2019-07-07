@@ -701,22 +701,31 @@ impl Analyzer<'_, '_> {
 
                 for el in $members.iter() {
                     if let Some(key) = el.key() {
-                        let is_eq = match prop {
-                            Expr::Ident(Ident { sym: ref value, .. })
-                            | Expr::Lit(Lit::Str(Str { ref value, .. })) => match key {
-                                Expr::Ident(Ident {
-                                    sym: ref r_value, ..
-                                })
-                                | Expr::Lit(Lit::Str(Str {
-                                    value: ref r_value, ..
-                                })) => value == r_value,
-                                _ => false,
-                            },
+                        let is_el_computed = match *el {
+                            TypeElement::Property(ref p) => p.computed,
                             _ => false,
                         };
+                        let is_eq = is_el_computed == computed
+                            && match prop {
+                                Expr::Ident(Ident { sym: ref value, .. })
+                                | Expr::Lit(Lit::Str(Str { ref value, .. })) => match key {
+                                    Expr::Ident(Ident {
+                                        sym: ref r_value, ..
+                                    })
+                                    | Expr::Lit(Lit::Str(Str {
+                                        value: ref r_value, ..
+                                    })) => value == r_value,
+                                    _ => false,
+                                },
+                                _ => false,
+                            };
                         if is_eq || key.eq_ignore_span(prop) {
                             match el {
                                 TypeElement::Property(ref p) => {
+                                    if self.type_mode == TypeOfMode::LValue && p.readonly {
+                                        return Err(Error::ReadOnly { span });
+                                    }
+
                                     if let Some(ref type_ann) = p.type_ann {
                                         return Ok(type_ann.to_static().owned());
                                     }
@@ -871,13 +880,19 @@ impl Analyzer<'_, '_> {
 
                 // TODO: Check parent interfaces
 
-                return Err(Error::NoSuchProperty { span });
+                return Err(Error::NoSuchProperty {
+                    span,
+                    prop: Some(prop.clone()),
+                });
             }
 
             Type::TypeLit(TypeLit { ref members, .. }) => {
                 handle_type_els!(members);
 
-                return Err(Error::NoSuchProperty { span });
+                return Err(Error::NoSuchProperty {
+                    span,
+                    prop: Some(prop.clone()),
+                });
             }
 
             Type::Union(Union { ref types, .. }) => {
@@ -899,7 +914,11 @@ impl Analyzer<'_, '_> {
                     }
                 } else {
                     // In l-value context, it's success if one of types matches it.
-                    if tys.is_empty() {
+                    let is_err = errors.iter().any(|err| match *err {
+                        Error::ReadOnly { .. } => true,
+                        _ => false,
+                    });
+                    if tys.is_empty() || is_err {
                         assert_ne!(errors.len(), 0);
                         return Err(Error::UnionError { span, errors });
                     }

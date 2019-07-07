@@ -289,7 +289,7 @@ impl<'a> Scope<'a> {
                             }
                         }
 
-                        return Err(Error::NoSuchProperty { span });
+                        return Err(Error::NoSuchProperty { span, prop: None });
                     }};
                 }
 
