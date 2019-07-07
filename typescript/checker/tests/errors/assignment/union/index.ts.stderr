@@ -1,10 +1,10 @@
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            125,
+            118,
         ),
         hi: BytePos(
-            126,
+            127,
         ),
         ctxt: #0,
     },
@@ -15,7 +15,7 @@ error: AssignFailed {
                     11,
                 ),
                 hi: BytePos(
-                    20,
+                    14,
                 ),
                 ctxt: #0,
             },
@@ -83,10 +83,10 @@ error: AssignFailed {
         Union {
             span: Span {
                 lo: BytePos(
-                    125,
+                    118,
                 ),
                 hi: BytePos(
-                    126,
+                    127,
                 ),
                 ctxt: #0,
             },
@@ -182,10 +182,10 @@ error: AssignFailed {
         UnionError {
             span: Span {
                 lo: BytePos(
-                    125,
+                    118,
                 ),
                 hi: BytePos(
-                    126,
+                    127,
                 ),
                 ctxt: #0,
             },
@@ -193,10 +193,10 @@ error: AssignFailed {
                 UnionError {
                     span: Span {
                         lo: BytePos(
-                            125,
+                            118,
                         ),
                         hi: BytePos(
-                            126,
+                            127,
                         ),
                         ctxt: #0,
                     },
@@ -204,10 +204,10 @@ error: AssignFailed {
                         AssignFailed {
                             span: Span {
                                 lo: BytePos(
-                                    125,
+                                    118,
                                 ),
                                 hi: BytePos(
-                                    126,
+                                    127,
                                 ),
                                 ctxt: #0,
                             },
@@ -272,10 +272,10 @@ error: AssignFailed {
                         AssignFailed {
                             span: Span {
                                 lo: BytePos(
-                                    125,
+                                    118,
                                 ),
                                 hi: BytePos(
-                                    126,
+                                    127,
                                 ),
                                 ctxt: #0,
                             },
@@ -343,8 +343,8 @@ error: AssignFailed {
         },
     ],
 }
- --> $DIR/tests/errors/assignment/union/index.ts:8:14
+ --> $DIR/tests/errors/assignment/union/index.ts:8:7
   |
 8 |       return a;
-  |              ^
+  |       ^^^^^^^^^
 
