@@ -52,8 +52,6 @@ struct Analyzer<'a, 'b> {
     /// var foo: () => [any] = function bar() {}
     /// ```
     span_allowed_implicit_any: Span,
-
-    type_mode: expr::TypeOfMode,
 }
 
 impl<T> Visit<Vec<T>> for Analyzer<'_, '_>
@@ -263,8 +261,6 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             pending_exports: Default::default(),
             loader,
             span_allowed_implicit_any: DUMMY_SP,
-
-            type_mode: expr::TypeOfMode::RValue,
         }
     }
 }

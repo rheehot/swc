@@ -241,12 +241,10 @@ impl Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     pub(super) fn try_assign(&mut self, span: Span, lhs: &PatOrExpr, ty: &Type) {
-        let old = self.type_mode;
         let res: Result<(), Error> = try {
             match *lhs {
                 PatOrExpr::Expr(ref expr) | PatOrExpr::Pat(box Pat::Expr(ref expr)) => {
-                    self.type_mode = TypeOfMode::LValue;
-                    let lhs_ty = self.type_of(expr)?;
+                    let lhs_ty = self.type_of_expr(expr, TypeOfMode::LValue)?;
 
                     self.assign(&lhs_ty, &ty, span)?;
 
@@ -355,8 +353,6 @@ impl Analyzer<'_, '_> {
                 }
             }
         };
-
-        self.type_mode = old;
 
         match res {
             Ok(()) => {}

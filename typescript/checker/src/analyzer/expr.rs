@@ -37,6 +37,14 @@ pub(super) enum TypeOfMode {
 
 impl Analyzer<'_, '_> {
     pub(super) fn type_of<'e>(&'e self, expr: &Expr) -> Result<TypeRef<'e>, Error> {
+        self.type_of_expr(expr, TypeOfMode::RValue)
+    }
+
+    pub(super) fn type_of_expr<'e>(
+        &'e self,
+        expr: &Expr,
+        type_mode: TypeOfMode,
+    ) -> Result<TypeRef<'e>, Error> {
         let span = expr.span();
 
         match *expr {
@@ -557,7 +565,7 @@ impl Analyzer<'_, '_> {
             }
 
             Expr::Member(ref expr) => {
-                return self.type_of_member_expr(expr);
+                return self.type_of_member_expr(expr, type_mode);
             }
 
             Expr::MetaProp(..) => unimplemented!("typeof(MetaProp)"),
@@ -601,7 +609,11 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    fn type_of_member_expr(&self, expr: &MemberExpr) -> Result<TypeRef, Error> {
+    fn type_of_member_expr(
+        &self,
+        expr: &MemberExpr,
+        type_mode: TypeOfMode,
+    ) -> Result<TypeRef, Error> {
         let MemberExpr {
             ref obj,
             computed,
@@ -614,7 +626,7 @@ impl Analyzer<'_, '_> {
             ExprOrSuper::Expr(ref obj) => {
                 let obj_ty = self.type_of(obj)?;
 
-                return self.access_property(span, obj_ty, prop, computed);
+                return self.access_property(span, obj_ty, prop, computed, type_mode);
             }
             _ => unimplemented!("type_of_member_expr(super.foo)"),
         }
@@ -678,6 +690,7 @@ impl Analyzer<'_, '_> {
         obj: TypeRef,
         prop: &Expr,
         computed: bool,
+        type_mode: TypeOfMode,
     ) -> Result<TypeRef<'a>, Error> {
         macro_rules! handle_type_els {
             ($members:expr) => {{
@@ -746,7 +759,7 @@ impl Analyzer<'_, '_> {
                         if is_eq || key.eq_ignore_span(prop) {
                             match el {
                                 TypeElement::Property(ref p) => {
-                                    if self.type_mode == TypeOfMode::LValue && p.readonly {
+                                    if type_mode == TypeOfMode::LValue && p.readonly {
                                         return Err(Error::ReadOnly { span });
                                     }
 
@@ -803,7 +816,8 @@ impl Analyzer<'_, '_> {
                                 }))
                             });
                             let new_obj_ty = self.type_of(&new_obj)?;
-                            return self.access_property(span, new_obj_ty, prop, computed);
+                            return self
+                                .access_property(span, new_obj_ty, prop, computed, type_mode);
                         }
                         unreachable!("Enum {} does not have a variant named {}", enum_name, name);
                     }
@@ -868,7 +882,7 @@ impl Analyzer<'_, '_> {
 
                 // TODO: Array<elem_type>
 
-                return self.access_property(span, array_ty, prop, computed);
+                return self.access_property(span, array_ty, prop, computed, type_mode);
             }
 
             Type::Interface(Interface { ref body, .. }) => {
@@ -898,13 +912,14 @@ impl Analyzer<'_, '_> {
                 let mut errors = Vec::with_capacity(types.len());
 
                 for ty in types {
-                    match self.access_property(span, Cow::Borrowed(&ty), prop, computed) {
+                    match self.access_property(span, Cow::Borrowed(&ty), prop, computed, type_mode)
+                    {
                         Ok(ty) => tys.push(ty.into_owned()),
                         Err(err) => errors.push(err),
                     }
                 }
 
-                if self.type_mode != TypeOfMode::LValue {
+                if type_mode != TypeOfMode::LValue {
                     if !errors.is_empty() {
                         return Err(Error::UnionError { span, errors });
                     }
