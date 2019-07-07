@@ -5,6 +5,7 @@
 #![feature(box_patterns)]
 #![feature(box_syntax)]
 #![feature(specialization)]
+#![feature(try_blocks)]
 #![feature(vec_remove_item)]
 #![recursion_limit = "1024"]
 
