@@ -1,4 +1,5 @@
 [workspace]
+members = ["typescript/stsc"]
 
 [package]
 name = "swc"
