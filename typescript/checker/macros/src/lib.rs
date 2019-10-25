@@ -1120,6 +1120,7 @@ fn quote_ty(ty: &TsType) -> syn::Expr {
                 Vars {
                     type_ann_v: quote_box_ty(&type_ann),
                     op_v: match op {
+                        TsTypeOperatorOp::ReadOnly => quote!(TsTypeOperatorOp::ReadOnly),
                         TsTypeOperatorOp::KeyOf => quote!(TsTypeOperatorOp::KeyOf),
                         TsTypeOperatorOp::Unique => quote!(TsTypeOperatorOp::Unique),
                     }
