@@ -15,6 +15,7 @@ extern crate chashmap;
 extern crate crossbeam;
 extern crate fxhash;
 extern crate lazy_static;
+extern crate log;
 extern crate node_resolve;
 extern crate rayon;
 extern crate smallvec;

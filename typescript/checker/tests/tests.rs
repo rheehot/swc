@@ -5,6 +5,7 @@
 #![feature(specialization)]
 #![feature(test)]
 
+extern crate env_logger;
 extern crate serde;
 extern crate serde_json;
 extern crate swc_common;
@@ -148,6 +149,8 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
 }
 
 fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(), StdErr> {
+    let _ = env_logger::try_init();
+
     let fname = file_name.display().to_string();
     let mut ref_errors = match mode {
         Mode::Conformance => {
@@ -212,7 +215,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                             module
                         };
 
-                        let mut libs = vec![Lib::Es5];
+                        let mut libs = vec![Lib::Es5, Lib::Dom];
                         let mut rule = Rule::default();
                         let ts_config = TsConfig::default();
 
