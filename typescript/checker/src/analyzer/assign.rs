@@ -148,15 +148,15 @@ impl Analyzer<'_, '_> {
                                     "assign: interface {{ () => ret; }} = class Foo {{}}"
                                 ),
                                 TypeElement::Constructor(l) => {
-                                    //
+                                    // TODO: Check # OF parameters
                                     for rm in body {
                                         match rm {
-                                            ClassMember::Constructor(Constructor {
-                                                ref params,
-                                                ..
-                                            }) => continue 'l,
-                                            _ => {}
-                                        }
+                                                        ClassMember::Constructor(Constructor {
+                                                            // ref params,
+                                                            ..
+                                                        }) => continue 'l,
+                                                        _ => {}
+                                                    }
                                     }
 
                                     unimplemented!(
