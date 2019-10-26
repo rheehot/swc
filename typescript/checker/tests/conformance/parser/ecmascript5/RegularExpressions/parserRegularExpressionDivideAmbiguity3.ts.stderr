@@ -1,0 +1,34 @@
+error: NoSuchProperty {
+    span: Span {
+        lo: BytePos(
+            41,
+        ),
+        hi: BytePos(
+            44,
+        ),
+        ctxt: #0,
+    },
+    prop: Some(
+        Ident(
+            Ident {
+                span: Span {
+                    lo: BytePos(
+                        41,
+                    ),
+                    hi: BytePos(
+                        44,
+                    ),
+                    ctxt: #0,
+                },
+                sym: Atom('foo' type=inline),
+                type_ann: None,
+                optional: false,
+            },
+        ),
+    ),
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/RegularExpressions/parserRegularExpressionDivideAmbiguity3.ts:1:18
+  |
+1 | if (1) /regexp/a.foo();
+  |                  ^^^
+
