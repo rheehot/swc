@@ -155,7 +155,7 @@ pub struct Class<'a> {
 pub struct ClassInstance<'a> {
     pub span: Span,
     pub cls: Class<'a>,
-    pub type_params: Option<TypeParamInstantiation<'a>>,
+    pub type_args: Option<TypeParamInstantiation<'a>>,
     // pub implements: Vec<TypeRef<'a>>,
 }
 
@@ -909,7 +909,7 @@ impl ClassInstance<'_> {
         ClassInstance {
             span: self.span,
             cls: self.cls.into_static(),
-            type_params: self.type_params.map(|v| v.into_static()),
+            type_args: self.type_args.map(|v| v.into_static()),
         }
     }
 }

@@ -7,9 +7,9 @@ use crate::{
     builtin_types,
     errors::Error,
     ty::{
-        self, Alias, Array, CallSignature, Class, ClassMember, ConstructorSignature, EnumVariant,
-        IndexSignature, Interface, Intersection, MethodSignature, PropertySignature, Tuple, Type,
-        TypeElement, TypeLit, TypeParamDecl, TypeRef, TypeRefExt, Union,
+        self, Alias, Array, CallSignature, Class, ClassInstance, ClassMember, ConstructorSignature,
+        EnumVariant, IndexSignature, Interface, Intersection, MethodSignature, PropertySignature,
+        Tuple, Type, TypeElement, TypeLit, TypeParamDecl, TypeRef, TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
@@ -1562,9 +1562,14 @@ impl Analyzer<'_, '_> {
                 ret_err!()
             }
 
-            Type::Class(..) if kind == ExtractKind::New => {
+            Type::Class(ref cls) if kind == ExtractKind::New => {
                 // TODO: Remove clone
-                return Ok(ty.clone());
+                return Ok(ClassInstance {
+                    span,
+                    cls: cls.clone(),
+                    type_args: type_args.cloned().map(From::from),
+                }
+                .into());
             }
 
             Type::Simple(ref sty) => match **sty {
