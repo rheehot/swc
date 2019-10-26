@@ -116,15 +116,16 @@ pub enum Type<'a> {
     Namespace(TsNamespaceDecl),
     Module(TsModuleDecl),
     /// Instance of the class.
-    /// 
-    /// This variant is required ([TypeLit] is insufficient) because of codes like
-    /// 
-    /// 
+    ///
+    /// This variant is required ([TypeLit] is insufficient) because of codes
+    /// like
+    ///
+    ///
     /// ```ts
     /// class A {
     ///     a: string;
     /// }
-    /// 
+    ///
     /// class B {
     ///     a: string;
     ///     b: string;
