@@ -121,7 +121,7 @@ impl From<TsType> for Type<'_> {
                 span,
                 params,
                 type_params: type_params.map(From::from),
-                ret_ty: box type_ann.type_ann.into_cow(),
+                ret_ty: Some(box type_ann.type_ann.into_cow()),
             }),
             TsType::TsTypeLit(lit) => Type::TypeLit(lit.into()),
             TsType::TsConditionalType(cond) => Type::Conditional(cond.into()),
@@ -281,6 +281,37 @@ impl From<TsTypeOperator> for Operator<'_> {
             span: ty.span,
             op: ty.op,
             ty: box ty.type_ann.into_cow(),
+        }
+    }
+}
+
+impl From<swc_ecma_ast::Constructor> for Constructor<'_> {
+    fn from(c: swc_ecma_ast::Constructor) -> Self {
+        Constructor {
+            span: c.span,
+            params: c
+                .params
+                .into_iter()
+                .map(|v| match v {
+                    PatOrTsParamProp::TsParamProp(TsParamProp {
+                        param: TsParamPropParam::Ident(i),
+                        ..
+                    }) => TsFnParam::Ident(i),
+                    PatOrTsParamProp::TsParamProp(TsParamProp {
+                        param: TsParamPropParam::Assign(AssignPat { left: box pat, .. }),
+                        ..
+                    })
+                    | PatOrTsParamProp::Pat(pat) => match pat {
+                        Pat::Ident(v) => v.into(),
+                        Pat::Array(v) => v.into(),
+                        Pat::Rest(v) => v.into(),
+                        Pat::Object(v) => v.into(),
+                        _ => unreachable!("constructor with parameter {:?}", pat),
+                    },
+                })
+                .collect(),
+            type_params: None,
+            ret_ty: None,
         }
     }
 }

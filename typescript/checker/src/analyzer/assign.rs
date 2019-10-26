@@ -67,6 +67,13 @@ impl Analyzer<'_, '_> {
         verify!(to);
         verify!(rhs);
 
+        // This macro is called when lhs of assignment is interface or type literal.
+        //
+        // ```js
+        // interface A {}
+        // let a: A = foo;
+        // let b: { key: string } = foo;
+        // ```
         macro_rules! handle_type_lit {
             ($members:expr) => {{
                 let members = $members;
@@ -75,7 +82,7 @@ impl Analyzer<'_, '_> {
                         members: ref rhs_members,
                         ..
                     }) => {
-                        // TODO: Assign property to proerty, instead of checking equality
+                        // Assign each property to coressponding proerty.
                         let mut missing_fields = vec![];
 
                         'members: for m in members.iter() {

@@ -7,9 +7,9 @@ use crate::{
     builtin_types,
     errors::Error,
     ty::{
-        self, Alias, Array, CallSignature, ConstructorSignature, EnumVariant, IndexSignature,
-        Interface, Intersection, MethodSignature, PropertySignature, Tuple, Type, TypeElement,
-        TypeLit, TypeParamDecl, TypeRef, TypeRefExt, Union,
+        self, Alias, Array, CallSignature, Class, ClassMember, ConstructorSignature, EnumVariant,
+        IndexSignature, Interface, Intersection, MethodSignature, PropertySignature, Tuple, Type,
+        TypeElement, TypeLit, TypeParamDecl, TypeRef, TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
@@ -954,12 +954,15 @@ impl Analyzer<'_, '_> {
     }
 
     /// In almost case, this method returns `Ok`.
-    pub(super) fn validate_type_of_class(&mut self, c: &Class) -> Result<Type<'static>, Error> {
+    pub(super) fn validate_type_of_class(
+        &mut self,
+        c: &swc_ecma_ast::Class,
+    ) -> Result<Type<'static>, Error> {
         for m in c.body.iter() {
             let span = m.span();
 
             match *m {
-                ClassMember::ClassProp(ref prop) => match prop.type_ann {
+                swc_ecma_ast::ClassMember::ClassProp(ref prop) => match prop.type_ann {
                     Some(ref ty) => {
                         let ty = Type::from(ty.clone());
                         if ty.is_any() || ty.is_unknown() {
@@ -980,7 +983,7 @@ impl Analyzer<'_, '_> {
         self.type_of_class(c)
     }
 
-    fn type_of_class(&self, c: &Class) -> Result<Type<'static>, Error> {
+    fn type_of_class(&self, c: &swc_ecma_ast::Class) -> Result<Type<'static>, Error> {
         // let mut type_props = vec![];
         // for member in &c.body {
         //     let span = member.span();
@@ -1062,12 +1065,39 @@ impl Analyzer<'_, '_> {
         //     }
         // }
 
-        // Ok(TsType::TsTypeLit(TsTypeLit {
-        //     span: c.span(),
-        //     members: type_props,
-        // })
-        // .into())
-        Ok(Type::Class(c.clone()))
+        let super_class = match c.super_class {
+            Some(ref expr) => Some(box self.type_of(&expr)?.to_static().into_cow()),
+            None => None,
+        };
+
+        // TODO: Check for implements
+
+        Ok(Type::Class(Class {
+            span: c.span,
+            is_abstract: c.is_abstract,
+            super_class,
+            type_params: c.clone().type_params.map(From::from),
+            body: c
+                .body
+                .clone()
+                .into_iter()
+                .filter_map(|v| {
+                    //
+                    Some(match v {
+                        swc_ecma_ast::ClassMember::Constructor(v) => {
+                            ClassMember::Constructor(v.into())
+                        }
+                        swc_ecma_ast::ClassMember::Method(v) => ClassMember::Method(v.into()),
+                        swc_ecma_ast::ClassMember::PrivateMethod(_) => return None,
+                        swc_ecma_ast::ClassMember::ClassProp(v) => ClassMember::ClassProp(v),
+                        swc_ecma_ast::ClassMember::PrivateProp(_) => return None,
+                        swc_ecma_ast::ClassMember::TsIndexSignature(v) => {
+                            ClassMember::TsIndexSignature(v)
+                        }
+                    })
+                })
+                .collect(),
+        }))
     }
 
     pub(super) fn infer_return_type(
@@ -1493,21 +1523,20 @@ impl Analyzer<'_, '_> {
                 self.try_instantiate(span, ty.span(), &*f, args, type_args)
             }
 
-            Type::Constructor(ty::Constructor {
-                ref params,
-                ref type_params,
-                ref ret_ty,
-                ..
-            }) if kind == ExtractKind::New => self.try_instantiate_simple(
-                span,
-                ty.span(),
-                &ret_ty,
-                params,
-                type_params.as_ref(),
-                args,
-                type_args,
-            ),
-
+            // Type::Constructor(ty::Constructor {
+            //     ref params,
+            //     ref type_params,
+            //     ref ret_ty,
+            //     ..
+            // }) if kind == ExtractKind::New => self.try_instantiate_simple(
+            //     span,
+            //     ty.span(),
+            //     &ret_ty,
+            //     params,
+            //     type_params.as_ref(),
+            //     args,
+            //     type_args,
+            // ),
             Type::Union(ref u) => {
                 let mut errors = vec![];
                 for ty in &u.types {

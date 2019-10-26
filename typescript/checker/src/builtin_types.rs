@@ -1,6 +1,6 @@
 use crate::{
     analyzer::export::pat_to_ts_fn_param,
-    ty::{self, Static},
+    ty::{self, Class, ClassMember, Static},
 };
 use chashmap::CHashMap;
 use fxhash::FxHashMap;
@@ -91,9 +91,48 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                 Stmt::Decl(Decl::Class(ref c)) => {
                                     debug_assert_eq!(merged.types.get(&c.ident.sym), None);
 
-                                    merged
-                                        .types
-                                        .insert(c.ident.sym.clone(), c.class.clone().into());
+                                    // builtin libraries does not contain a class which extends
+                                    // other class.
+                                    debug_assert_eq!(c.class.super_class, None);
+                                    debug_assert_eq!(c.class.implements, vec![]);
+                                    let ty = Type::Class(Class {
+                                        span: c.class.span,
+                                        is_abstract: c.class.is_abstract,
+                                        body: c
+                                            .class
+                                            .body
+                                            .clone()
+                                            .into_iter()
+                                            .map(|v| {
+                                                //
+                                                match v {
+                                                    swc_ecma_ast::ClassMember::Constructor(v) => {
+                                                        ClassMember::Constructor(v.into())
+                                                    }
+                                                    swc_ecma_ast::ClassMember::Method(v) => {
+                                                        ClassMember::Method(v.into())
+                                                    }
+                                                    swc_ecma_ast::ClassMember::PrivateMethod(_) => {
+                                                        unreachable!()
+                                                    }
+                                                    swc_ecma_ast::ClassMember::ClassProp(v) => {
+                                                        ClassMember::ClassProp(v)
+                                                    }
+                                                    swc_ecma_ast::ClassMember::PrivateProp(_) => {
+                                                        unreachable!()
+                                                    }
+                                                    swc_ecma_ast::ClassMember::TsIndexSignature(
+                                                        v,
+                                                    ) => ClassMember::TsIndexSignature(v),
+                                                }
+                                            })
+                                            .collect(),
+                                        super_class: None,
+                                        // implements: vec![],
+                                        type_params: c.class.type_params.clone().map(From::from),
+                                    });
+
+                                    merged.types.insert(c.ident.sym.clone(), ty);
                                 }
 
                                 Stmt::Decl(Decl::TsModule(ref m)) => {

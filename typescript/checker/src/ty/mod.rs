@@ -131,12 +131,30 @@ pub enum Type<'a> {
     ///     b: string;
     /// }
     /// ```
-    Class(Class),
+    Class(Class<'a>),
 
     /// Used for storing core types.
     ///
     /// Don't match on this directly. Instead, use `.normalize()`.
     Static(Static),
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct Class<'a> {
+    pub span: Span,
+    pub is_abstract: bool,
+    pub super_class: Option<Box<TypeRef<'a>>>,
+    pub body: Vec<ClassMember<'a>>,
+    pub type_params: Option<TypeParamDecl<'a>>,
+    // pub implements: Vec<TypeRef<'a>>,
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned, FromVariant)]
+pub enum ClassMember<'a> {
+    Constructor(Constructor<'a>),
+    Method(ClassMethod),
+    ClassProp(ClassProp),
+    TsIndexSignature(TsIndexSignature),
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
@@ -364,7 +382,7 @@ pub struct Constructor<'a> {
     pub span: Span,
     pub type_params: Option<TypeParamDecl<'a>>,
     pub params: Vec<TsFnParam>,
-    pub ret_ty: Box<TypeRef<'a>>,
+    pub ret_ty: Option<Box<TypeRef<'a>>>,
 }
 
 impl Type<'_> {
@@ -607,7 +625,7 @@ impl Type<'_> {
                 span,
                 type_params: type_params.map(|v| v.into_static()),
                 params,
-                ret_ty: box static_type(*ret_ty),
+                ret_ty: ret_ty.map(|ret_ty| box static_type(*ret_ty)),
             }),
 
             Type::Interface(i) => Type::Interface(i.into_static()),
@@ -616,7 +634,7 @@ impl Type<'_> {
 
             Type::Enum(e) => Type::Enum(e),
             Type::EnumVariant(e) => Type::EnumVariant(e),
-            Type::Class(c) => Type::Class(c),
+            Type::Class(c) => Type::Class(c.into_static()),
             Type::Alias(a) => Type::Alias(a.into_static()),
             Type::Namespace(n) => Type::Namespace(n),
             Type::Module(m) => Type::Module(m),
@@ -856,6 +874,41 @@ impl Operator<'_> {
             span: self.span,
             op: self.op,
             ty: box static_type(*self.ty),
+        }
+    }
+}
+
+impl Class<'_> {
+    pub fn into_static(self) -> Class<'static> {
+        Class {
+            span: self.span,
+            is_abstract: self.is_abstract,
+            body: self.body.into_iter().map(|v| v.into_static()).collect(),
+            type_params: self.type_params.map(|v| v.into_static()),
+            super_class: self.super_class.map(|v| box static_type(*v)),
+            // implements: map_types(self.implements, static_type),
+        }
+    }
+}
+
+impl ClassMember<'_> {
+    pub fn into_static(self) -> ClassMember<'static> {
+        match self {
+            ClassMember::Constructor(v) => ClassMember::Constructor(v.into_static()),
+            ClassMember::Method(v) => ClassMember::Method(v),
+            ClassMember::ClassProp(v) => ClassMember::ClassProp(v),
+            ClassMember::TsIndexSignature(v) => ClassMember::TsIndexSignature(v),
+        }
+    }
+}
+
+impl Constructor<'_> {
+    pub fn into_static(self) -> Constructor<'static> {
+        Constructor {
+            span: self.span,
+            params: self.params,
+            type_params: self.type_params.map(|v| v.into_static()),
+            ret_ty: self.ret_ty.map(|v| box Cow::Owned(v.to_static())),
         }
     }
 }
