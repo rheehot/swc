@@ -7,7 +7,7 @@ use crate::{
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
 };
-use swc_common::Span;
+use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
@@ -147,8 +147,8 @@ impl Analyzer<'_, '_> {
                                 TypeElement::Call(_) => unimplemented!(
                                     "assign: interface {{ () => ret; }} = class Foo {{}}"
                                 ),
-                                TypeElement::Constructor(l) => {
-                                    // TODO: Check # OF parameters
+                                TypeElement::Constructor(_) => {
+                                    // TODO: Check # of parameters
                                     for rm in body {
                                         match rm {
                                                         ClassMember::Constructor(Constructor {
@@ -159,9 +159,7 @@ impl Analyzer<'_, '_> {
                                                     }
                                     }
 
-                                    unimplemented!(
-                                        "assign: interface {{ new () => ret; }} = class Foo {{}}"
-                                    )
+                                    errors.push(Error::ConstructorRequired{span,lhs:to.span(),rhs:rhs.span()});
                                 }
                                 TypeElement::Property(_) => unimplemented!(
                                     "assign: interface {{ prop: string; }} = class Foo {{}}"

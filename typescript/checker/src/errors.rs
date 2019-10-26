@@ -11,6 +11,12 @@ pub enum Error {
         span: Span,
     },
 
+    ConstructorRequired {
+        span: Span,
+        lhs: Span,
+        rhs: Span,
+    },
+
     ReadOnly {
         span: Span,
     },
