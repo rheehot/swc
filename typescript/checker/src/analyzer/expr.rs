@@ -781,6 +781,9 @@ impl Analyzer<'_, '_> {
         }
 
         let obj = obj.generalize_lit();
+        
+        // TODO: Remove to_static()
+        let obj = self.expand_type(obj.span(), obj.to_static().owned())?;
         match *obj.normalize() {
             Type::Lit(..) => unreachable!(),
 
@@ -1266,8 +1269,11 @@ impl Analyzer<'_, '_> {
                 computed,
                 ..
             }) => {
-                // member expression
+                // Handle member expression
                 let obj_type = self.type_of(obj)?.generalize_lit();
+
+                // Example: `TypeRef(console)` -> `Interface(Console)`
+                let obj_type = self.expand_type(span, obj_type)?;
 
                 match *obj_type.normalize() {
                     Type::Function(ref f) if kind == ExtractKind::Call => {
@@ -1289,7 +1295,7 @@ impl Analyzer<'_, '_> {
                         return Ok(
                             builtin_types::get_type(self.libs, span, &js_word!("Number"))
                                 .map(Type::owned)
-                                .expect("Builtin type named 'Numnber' should exist"),
+                                .expect("Builtin type named 'Number' should exist"),
                         );
                     }
 
