@@ -959,8 +959,6 @@ impl Analyzer<'_, '_> {
         c: &swc_ecma_ast::Class,
     ) -> Result<Type<'static>, Error> {
         for m in c.body.iter() {
-            let span = m.span();
-
             match *m {
                 swc_ecma_ast::ClassMember::ClassProp(ref prop) => match prop.type_ann {
                     Some(ref ty) => {
