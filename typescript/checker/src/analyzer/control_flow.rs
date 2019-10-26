@@ -10,7 +10,6 @@ use crate::{
     util::{EqIgnoreNameAndSpan, IntoCow},
 };
 use fxhash::FxHashMap;
-use log::debug;
 use std::{
     borrow::Cow,
     collections::hash_map::Entry,
@@ -338,7 +337,7 @@ impl Analyzer<'_, '_> {
                                 // Variable is defined on parent scope.
                                 //
                                 // We copy varinfo with enhanced type.
-                                debug!(
+                                println!(
                                     "({}) vars.insert({}, {:?})",
                                     self.scope.depth(),
                                     i.sym,

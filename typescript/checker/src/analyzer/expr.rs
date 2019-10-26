@@ -13,7 +13,6 @@ use crate::{
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
-use log::debug;
 use std::{borrow::Cow, iter::once};
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned, Visit, VisitWith};
@@ -67,7 +66,7 @@ impl Analyzer<'_, '_> {
                 }
 
                 if let Some(ty) = self.resolved_imports.get(&i.sym) {
-                    debug!(
+                    println!(
                         "({}) type_of({}): resolved import",
                         self.scope.depth(),
                         i.sym
@@ -76,13 +75,13 @@ impl Analyzer<'_, '_> {
                 }
 
                 if let Some(ty) = self.find_type(&i.sym) {
-                    debug!("({}) type_of({}): find_type", self.scope.depth(), i.sym);
+                    println!("({}) type_of({}): find_type", self.scope.depth(), i.sym);
                     return Ok(ty.clone().respan(span).owned());
                 }
 
                 // Check `declaring` before checking variables.
                 if self.declaring.contains(&i.sym) {
-                    debug!(
+                    println!(
                         "({}) reference in initialization: {}",
                         self.scope.depth(),
                         i.sym
@@ -96,7 +95,7 @@ impl Analyzer<'_, '_> {
                 }
 
                 if let Some(ty) = self.find_var_type(&i.sym) {
-                    debug!("({}) type_of({}): find_var_type", self.scope.depth(), i.sym);
+                    println!("({}) type_of({}): find_var_type", self.scope.depth(), i.sym);
                     return Ok(ty.clone().respan(span).owned());
                 }
 
@@ -112,7 +111,7 @@ impl Analyzer<'_, '_> {
                     return Ok(ty.owned());
                 }
 
-                debug!(
+                println!(
                     "({}) type_of(): undefined symbol: {}\n{:#?}",
                     self.scope.depth(),
                     i.sym,
@@ -1387,7 +1386,7 @@ impl Analyzer<'_, '_> {
                 if computed {
                     unimplemented!("typeeof(CallExpr): {:?}[{:?}]()", callee, prop)
                 } else {
-                    debug!(
+                    println!(
                         "extract_call_or_new_expr: \nobj_type: {:?}\ntype_of(callee): {:?}",
                         obj_type,
                         self.type_of(callee)?
@@ -1435,7 +1434,7 @@ impl Analyzer<'_, '_> {
 
         macro_rules! ret_err {
             () => {{
-                debug!("ret_err!(): {:?}", ty);
+                println!("ret_err!(): {:?}", ty);
 
                 match kind {
                     ExtractKind::Call => {
@@ -1731,7 +1730,7 @@ impl Analyzer<'_, '_> {
         span: Span,
         ty: TypeRef<'t>,
     ) -> Result<TypeRef<'t>, Error> {
-        // debug!("({}) expand({:?})", self.scope.depth(), ty);
+        // println!("({}) expand({:?})", self.scope.depth(), ty);
 
         macro_rules! verify {
             ($ty:expr) => {{

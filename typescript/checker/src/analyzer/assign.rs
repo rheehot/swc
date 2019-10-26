@@ -2,8 +2,8 @@ use super::Analyzer;
 use crate::{
     errors::Error,
     ty::{
-        Array, Function, Interface, Intersection, Param, Tuple, Type, TypeElement, TypeLit,
-        TypeRefExt, Union,
+        Array, Class, ClassMember, Constructor, Function, Interface, Intersection, Param, Tuple,
+        Type, TypeElement, TypeLit, TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
 };
@@ -137,6 +137,51 @@ impl Analyzer<'_, '_> {
                             fields: missing_fields,
                         });
                     }
+
+                    // Check class members
+                    Type::Class(Class { ref body, .. }) => {
+                        let mut errors = vec![];
+
+                        'l: for m in members.iter() {
+                            match m {
+                                TypeElement::Call(_) => unimplemented!(
+                                    "assign: interface {{ () => ret; }} = class Foo {{}}"
+                                ),
+                                TypeElement::Constructor(l) => {
+                                    //
+                                    for rm in body {
+                                        match rm {
+                                            ClassMember::Constructor(Constructor {
+                                                ref params,
+                                                ..
+                                            }) => continue 'l,
+                                            _ => {}
+                                        }
+                                    }
+
+                                    unimplemented!(
+                                        "assign: interface {{ new () => ret; }} = class Foo {{}}"
+                                    )
+                                }
+                                TypeElement::Property(_) => unimplemented!(
+                                    "assign: interface {{ prop: string; }} = class Foo {{}}"
+                                ),
+                                TypeElement::Method(_) => unimplemented!(
+                                    "assign: interface {{ method() => ret; }} = class Foo {{}}"
+                                ),
+                                TypeElement::Index(_) => unimplemented!(
+                                    "assign: interface {{ [key: string]: Type; }} = class Foo {{}}"
+                                ),
+                            }
+                        }
+
+                        if errors.is_empty() {
+                            return Ok(());
+                        }
+
+                        return Err(Error::Errors { span, errors });
+                    }
+
                     Type::Tuple(..) | Type::Array(..) | Type::Lit(..) => fail!(),
 
                     _ => {}

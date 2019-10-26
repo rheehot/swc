@@ -306,27 +306,29 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
 
         self.scope.this = Some(ty.clone());
 
-        if let Some(ref i) = c.ident {
-            self.scope.register_type(i.sym.clone(), ty.clone());
+        self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
+            if let Some(ref i) = c.ident {
+                analyzer.scope.register_type(i.sym.clone(), ty.clone());
 
-            match self.scope.declare_var(
-                ty.span(),
-                VarDeclKind::Var,
-                i.sym.clone(),
-                Some(ty),
-                // initialized = true
-                true,
-                // declare Class does not allow multiple declarations.
-                false,
-            ) {
-                Ok(()) => {}
-                Err(err) => {
-                    self.info.errors.push(err);
+                match analyzer.scope.declare_var(
+                    ty.span(),
+                    VarDeclKind::Var,
+                    i.sym.clone(),
+                    Some(ty),
+                    // initialized = true
+                    true,
+                    // declare Class does not allow multiple declarations.
+                    false,
+                ) {
+                    Ok(()) => {}
+                    Err(err) => {
+                        analyzer.info.errors.push(err);
+                    }
                 }
             }
-        }
 
-        c.visit_children(self);
+            c.visit_children(analyzer);
+        });
 
         self.scope.this = None;
     }
