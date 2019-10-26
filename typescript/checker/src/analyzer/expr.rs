@@ -781,7 +781,7 @@ impl Analyzer<'_, '_> {
         }
 
         let obj = obj.generalize_lit();
-        
+
         // TODO: Remove to_static()
         let obj = self.expand_type(obj.span(), obj.to_static().owned())?;
         match *obj.normalize() {
@@ -1534,32 +1534,7 @@ impl Analyzer<'_, '_> {
             }
 
             Type::Class(..) if kind == ExtractKind::New => {
-                // The class does not have a constructor.
-                // We should check parent class' constructor.
-
-                let mut iter_ty = Some(Cow::Borrowed(ty));
-                while let Some(ref t) = iter_ty.as_ref().map(|ty| ty.normalize()) {
-                    match t {
-                        Type::Class(ref c) => {
-                            for member in c.body.iter() {
-                                match member {
-                                    ClassMember::Constructor(..) => unimplemented!("new Class()"),
-                                    _ => {}
-                                }
-                            }
-
-                            iter_ty = match c.super_class {
-                                Some(ref sc) => Some(self.type_of(&sc)?),
-                                None => None,
-                            };
-                        }
-
-                        _ => unimplemented!(
-                            "error reporting: Calss extends something other than class"
-                        ),
-                    }
-                }
-
+                // TODO: Remove clone
                 return Ok(ty.clone());
             }
 
@@ -1848,7 +1823,7 @@ impl Analyzer<'_, '_> {
                         }
 
                         unimplemented!(
-                            "expand_type(): error reporting for type not found: {:#?}",
+                            "expand_type(): error reporting for type not found: {:?}",
                             ty
                         );
                     }
