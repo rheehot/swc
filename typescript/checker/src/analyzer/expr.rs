@@ -968,9 +968,12 @@ impl Analyzer<'_, '_> {
                         if ty.is_any() || ty.is_unknown() {
                         } else {
                             if prop.value.is_none() {
-                                self.info
-                                    .errors
-                                    .push(Error::ClassPropertyInitRequired { span })
+                                // TODO: Uncomment this after implementing a
+                                // constructor checker.
+                                // self.info
+                                //     .errors
+                                //     .push(Error::ClassPropertyInitRequired {
+                                // span })
                             }
                         }
                     }
