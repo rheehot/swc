@@ -2,8 +2,8 @@ use super::Analyzer;
 use crate::{
     errors::Error,
     ty::{
-        Array, Class, ClassMember, Constructor, Function, Interface, Intersection, Param, Tuple,
-        Type, TypeElement, TypeLit, TypeRefExt, Union,
+        Array, Class, ClassInstance, ClassMember, Constructor, Function, Interface, Intersection,
+        Param, Tuple, Type, TypeElement, TypeLit, TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
 };
@@ -138,7 +138,7 @@ impl Analyzer<'_, '_> {
                         });
                     }
 
-                    // Check class members
+                    // Check class itself
                     Type::Class(Class { ref body, .. }) => {
                         let mut errors = vec![];
 
@@ -172,6 +172,40 @@ impl Analyzer<'_, '_> {
                                 ),
                                 TypeElement::Index(_) => unimplemented!(
                                     "assign: interface {{ [key: string]: Type; }} = class Foo {{}}"
+                                ),
+                            }
+                        }
+
+                        if errors.is_empty() {
+                            return Ok(());
+                        }
+
+                        return Err(Error::Errors { span, errors });
+                    }
+
+                    // Check class members
+                    Type::ClassInstance(ClassInstance {
+                        cls: Class { ref body, .. },
+                        ..
+                    }) => {
+                        let mut errors = vec![];
+
+                        'l: for m in members.iter() {
+                            match m {
+                                TypeElement::Call(_) => {
+                                    unimplemented!("assign: interface {{ () => ret; }} = new Foo()")
+                                }
+                                TypeElement::Constructor(_) => unimplemented!(
+                                    "assign: interface {{ new () => ret; }} = new Foo()"
+                                ),
+                                TypeElement::Property(_) => unimplemented!(
+                                    "assign: interface {{ prop: string; }} = new Foo()"
+                                ),
+                                TypeElement::Method(_) => unimplemented!(
+                                    "assign: interface {{ method() => ret; }} = new Foo()"
+                                ),
+                                TypeElement::Index(_) => unimplemented!(
+                                    "assign: interface {{ [key: string]: Type; }} = new Foo()"
                                 ),
                             }
                         }
