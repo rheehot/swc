@@ -185,7 +185,11 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
         CM.set(&cm.clone(), || {
             let (libs, rule, ts_config) = {
                 match mode {
-                    Mode::Pass | Mode::Error => Default::default(),
+                    Mode::Pass | Mode::Error => (
+                        vec![Lib::Es5, Lib::Dom],
+                        Default::default(),
+                        Default::default(),
+                    ),
                     Mode::Conformance => {
                         // We parse files twice. At first, we read comments and detect
                         // configurations for following parse.
@@ -215,7 +219,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                             module
                         };
 
-                        let mut libs = vec![Lib::Es5, Lib::Dom];
+                        let mut libs = vec![Lib::Es5];
                         let mut rule = Rule::default();
                         let ts_config = TsConfig::default();
 

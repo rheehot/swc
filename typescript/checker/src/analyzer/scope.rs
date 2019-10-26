@@ -8,6 +8,7 @@ use crate::{
     util::{EqIgnoreNameAndSpan, IntoCow},
 };
 use fxhash::FxHashMap;
+use log::debug;
 use std::{
     borrow::Cow,
     collections::hash_map::Entry,
@@ -153,7 +154,7 @@ impl<'a> Scope<'a> {
 
         match *pat {
             Pat::Ident(ref i) => {
-                println!("declare_complex_vars: declaring {}", i.sym);
+                debug!("declare_complex_vars: declaring {}", i.sym);
                 self.declare_var(
                     span,
                     kind,
@@ -364,7 +365,7 @@ impl<'a> Scope<'a> {
         initialized: bool,
         allow_multiple: bool,
     ) -> Result<(), Error> {
-        println!(
+        debug!(
             "({}) declare_var({}, initialized = {:?}): {:?}",
             self.depth(),
             name,
@@ -387,7 +388,7 @@ impl<'a> Scope<'a> {
                 if !allow_multiple {
                     return Err(Error::DuplicateName { span });
                 }
-                println!("\tdeclare_var: found entry ({:?})", e.get());
+                debug!("\tdeclare_var: found entry ({:?})", e.get());
                 let (k, mut v) = e.remove_entry();
 
                 macro_rules! restore {
@@ -400,7 +401,7 @@ impl<'a> Scope<'a> {
                     let ty = ty.generalize_lit().into_owned();
 
                     Some(if let Some(var_ty) = v.ty {
-                        println!("\tdeclare_var: ty = {:?}", ty);
+                        debug!("\tdeclare_var: ty = {:?}", ty);
                         let var_ty = var_ty.generalize_lit().into_owned();
 
                         // if k.as_ref() == "co1" {
@@ -435,7 +436,7 @@ impl<'a> Scope<'a> {
                 self.vars.insert(k, v);
             }
             Entry::Vacant(e) => {
-                println!("\tdeclare_var: no entry");
+                debug!("\tdeclare_var: no entry");
 
                 let info = VarInfo {
                     kind,
@@ -453,12 +454,12 @@ impl<'a> Scope<'a> {
     /// This method does cannot handle imported types.
     pub(super) fn find_type(&self, name: &JsWord) -> Option<&Type<'static>> {
         if let Some(ty) = self.facts.types.get(name) {
-            println!("({}) find_type({}): Found (cond facts)", self.depth(), name);
+            debug!("({}) find_type({}): Found (cond facts)", self.depth(), name);
             return Some(&ty);
         }
 
         if let Some(ty) = self.types.get(name) {
-            println!("({}) find_type({}): Found", self.depth(), name);
+            debug!("({}) find_type({}): Found", self.depth(), name);
 
             return Some(&ty);
         }
@@ -499,7 +500,7 @@ impl<'a> Scope<'a> {
 
         match self.types.entry(name) {
             Entry::Occupied(mut e) => {
-                println!("({}) register_type({}): duplicate", depth, e.key());
+                debug!("({}) register_type({}): duplicate", depth, e.key());
 
                 // TODO: Match -> .map
                 match (e.get_mut(), ty) {
@@ -513,7 +514,7 @@ impl<'a> Scope<'a> {
                 }
             }
             Entry::Vacant(e) => {
-                println!("({}) register_type({})", depth, e.key());
+                debug!("({}) register_type({})", depth, e.key());
                 e.insert(ty.into_static());
             }
         }
@@ -561,7 +562,7 @@ impl Analyzer<'_, '_> {
             }
             Pat::Assign(ref p) => {
                 let ty = self.type_of(&p.right)?;
-                println!(
+                debug!(
                     "({}) declare_vars({:?}), ty = {:?}",
                     self.scope.depth(),
                     p.left,
@@ -637,11 +638,11 @@ impl Analyzer<'_, '_> {
     }
 
     pub(super) fn find_var_type<'a>(&'a self, name: &JsWord) -> Option<&'a Type<'static>> {
-        // println!("({}) find_var_type({})", self.scope.depth(), name);
+        // debug!("({}) find_var_type({})", self.scope.depth(), name);
         let mut scope = Some(&self.scope);
         while let Some(s) = scope {
             if let Some(ref v) = s.facts.vars.get(&Name::from(name)) {
-                println!(
+                debug!(
                     "({}) find_var_type({}): Handled from facts",
                     self.scope.depth(),
                     name
@@ -653,7 +654,7 @@ impl Analyzer<'_, '_> {
         }
 
         if let Some(var) = self.find_var(name) {
-            println!(
+            debug!(
                 "({}) find_var_type({}): Handled from scope.find_var",
                 self.scope.depth(),
                 name

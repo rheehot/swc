@@ -13,6 +13,7 @@ use crate::{
     Rule,
 };
 use fxhash::{FxHashMap, FxHashSet};
+use log::debug;
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use std::{borrow::Cow, cell::RefCell, path::PathBuf, sync::Arc};
 use swc_atoms::{js_word, JsWord};
@@ -408,7 +409,7 @@ impl Analyzer<'_, '_> {
                             default: param.default.as_ref().map(|v| box v.clone().into_cow()),
                         });
 
-                        println!(
+                        debug!(
                             "({}) Registering type parameter {}",
                             child.scope.depth(),
                             param.name.sym
@@ -516,7 +517,6 @@ impl Analyzer<'_, '_> {
 impl Visit<FnDecl> for Analyzer<'_, '_> {
     /// NOTE: This method **should not call f.visit_children(self)**
     fn visit(&mut self, f: &FnDecl) {
-        println!("Visiting {}", f.ident.sym);
         let fn_ty = self.visit_fn(Some(&f.ident), &f.function);
 
         match self
