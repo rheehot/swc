@@ -151,15 +151,18 @@ impl Analyzer<'_, '_> {
                                     // TODO: Check # of parameters
                                     for rm in body {
                                         match rm {
-                                                        ClassMember::Constructor(Constructor {
-                                                            // ref params,
-                                                            ..
-                                                        }) => continue 'l,
-                                                        _ => {}
-                                                    }
+                                            ClassMember::Constructor(Constructor { .. }) => {
+                                                continue 'l
+                                            }
+                                            _ => {}
+                                        }
                                     }
 
-                                    errors.push(Error::ConstructorRequired{span,lhs:to.span(),rhs:rhs.span()});
+                                    errors.push(Error::ConstructorRequired {
+                                        span,
+                                        lhs: to.span(),
+                                        rhs: rhs.span(),
+                                    });
                                 }
                                 TypeElement::Property(_) => unimplemented!(
                                     "assign: interface {{ prop: string; }} = class Foo {{}}"
