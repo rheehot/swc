@@ -137,7 +137,6 @@ impl Analyzer<'_, '_> {
                             fields: missing_fields,
                         });
                     }
-
                     Type::Tuple(..) | Type::Array(..) | Type::Lit(..) => fail!(),
 
                     _ => {}

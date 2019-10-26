@@ -115,6 +115,8 @@ pub enum Type<'a> {
     Alias(Alias<'a>),
     Namespace(TsNamespaceDecl),
     Module(TsModuleDecl),
+
+    Class(Class<'a>),
     /// Instance of the class.
     ///
     /// This variant is required ([TypeLit] is insufficient) because of codes
@@ -131,7 +133,7 @@ pub enum Type<'a> {
     ///     b: string;
     /// }
     /// ```
-    Class(Class<'a>),
+    ClassInstance(ClassInstance<'a>),
 
     /// Used for storing core types.
     ///
@@ -146,6 +148,14 @@ pub struct Class<'a> {
     pub super_class: Option<Box<TypeRef<'a>>>,
     pub body: Vec<ClassMember<'a>>,
     pub type_params: Option<TypeParamDecl<'a>>,
+    // pub implements: Vec<TypeRef<'a>>,
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct ClassInstance<'a> {
+    pub span: Span,
+    pub cls: Class<'a>,
+    pub type_params: Option<TypeParamInstantiation<'a>>,
     // pub implements: Vec<TypeRef<'a>>,
 }
 
@@ -554,6 +564,8 @@ impl Type<'_> {
 
             Type::Class(c) => Type::Class(Class { span, ..c }),
 
+            Type::ClassInstance(c) => Type::ClassInstance(ClassInstance { span, ..c }),
+
             Type::Simple(ty) => Type::Simple(Cow::Owned(match *ty {
                 TsType::TsTypeRef(ref t) => TsType::TsTypeRef(TsTypeRef { span, ..t.clone() }),
                 ref ty => ty.clone(),
@@ -635,6 +647,7 @@ impl Type<'_> {
             Type::Enum(e) => Type::Enum(e),
             Type::EnumVariant(e) => Type::EnumVariant(e),
             Type::Class(c) => Type::Class(c.into_static()),
+            Type::ClassInstance(c) => Type::ClassInstance(c.into_static()),
             Type::Alias(a) => Type::Alias(a.into_static()),
             Type::Namespace(n) => Type::Namespace(n),
             Type::Module(m) => Type::Module(m),
@@ -887,6 +900,16 @@ impl Class<'_> {
             type_params: self.type_params.map(|v| v.into_static()),
             super_class: self.super_class.map(|v| box static_type(*v)),
             // implements: map_types(self.implements, static_type),
+        }
+    }
+}
+
+impl ClassInstance<'_> {
+    pub fn into_static(self) -> ClassInstance<'static> {
+        ClassInstance {
+            span: self.span,
+            cls: self.cls.into_static(),
+            type_params: self.type_params.map(|v| v.into_static()),
         }
     }
 }
