@@ -27,7 +27,7 @@ use swc_common::{comments::Comments, FileName, Fold, FoldWith, Span, Spanned, CM
 use swc_ecma_ast::{Module, *};
 use swc_ecma_parser::{Parser, Session, SourceFileInput, Syntax, TsConfig};
 use swc_ts_checker::{Lib, Rule};
-use test::{test_main, DynTestFn, Options, ShouldPanic::No, TestDesc, TestDescAndFn, TestName};
+use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestName, TestType};
 use testing::StdErr;
 use walkdir::WalkDir;
 
@@ -50,7 +50,7 @@ fn conformance() {
     let args: Vec<_> = env::args().collect();
     let mut tests = Vec::new();
     add_tests(&mut tests, Mode::Conformance).unwrap();
-    test_main(&args, tests, Options::new());
+    test_main(&args, tests, Default::default());
 }
 
 #[test]
@@ -58,7 +58,7 @@ fn passes() {
     let args: Vec<_> = env::args().collect();
     let mut tests = Vec::new();
     add_tests(&mut tests, Mode::Pass).unwrap();
-    test_main(&args, tests, Options::new());
+    test_main(&args, tests, Default::default());
 }
 
 #[test]
@@ -66,7 +66,7 @@ fn errors() {
     let args: Vec<_> = env::args().collect();
     let mut tests = Vec::new();
     add_tests(&mut tests, Mode::Error).unwrap();
-    test_main(&args, tests, Options::new());
+    test_main(&args, tests, Default::default());
 }
 
 fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error> {
@@ -437,6 +437,7 @@ fn add_test<F: FnOnce() + Send + 'static>(
 ) {
     tests.push(TestDescAndFn {
         desc: TestDesc {
+            test_type: TestType::UnitTest,
             name: TestName::DynTestName(name),
             ignore,
             should_panic: No,
