@@ -188,7 +188,7 @@ impl Checker<'_> {
                     e.emit();
                     ()
                 })
-                .expect("failed to parser module")
+                .expect("failed to parse module")
         });
         let info = self.analyze_module(self.rule, Arc::new(path.clone()), &module);
         let res = Arc::new((module, info));
