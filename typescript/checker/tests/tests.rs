@@ -181,133 +181,126 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
     let all_ref_errors = ref_errors.clone();
     let ref_err_cnt = ref_errors.as_ref().map(Vec::len).unwrap_or(0);
 
+    let (libs, rule, ts_config) = ::testing::run_test(treat_error_as_bug, |cm, handler| {
+        Ok(match mode {
+            Mode::Pass | Mode::Error => (
+                vec![Lib::Es5, Lib::Dom],
+                Default::default(),
+                Default::default(),
+            ),
+            Mode::Conformance => {
+                // We parse files twice. At first, we read comments and detect
+                // configurations for following parse.
+
+                let session = Session { handler: &handler };
+
+                let fm = cm.load_file(file_name).expect("failed to read file");
+                let comments = Comments::default();
+
+                let mut parser = Parser::new(
+                    session,
+                    Syntax::Typescript(TsConfig {
+                        tsx: fname.contains("tsx"),
+                        ..Default::default()
+                    }),
+                    SourceFileInput::from(&*fm),
+                    Some(&comments),
+                );
+
+                let module = parser.parse_module().map_err(|mut e| {
+                    e.emit();
+                    ()
+                })?;
+                let module = if mode == Mode::Conformance {
+                    make_test(&comments, module)
+                } else {
+                    module
+                };
+
+                let mut libs = vec![Lib::Es5];
+                let mut rule = Rule::default();
+                let ts_config = TsConfig::default();
+
+                let span = module.span;
+                let cmts = comments.leading_comments(span.lo());
+                match cmts {
+                    Some(ref cmts) => {
+                        for cmt in cmts.iter() {
+                            let s = cmt.text.trim();
+                            if !s.starts_with("@") {
+                                continue;
+                            }
+                            let s = &s[1..]; // '@'
+
+                            if s.starts_with("target:") || s.starts_with("Target:") {
+                                libs = Lib::load(&s["target:".len()..].trim());
+                            } else if s.starts_with("strict:") {
+                                let strict = s["strict:".len()..].trim().parse().unwrap();
+                                rule.no_implicit_any = strict;
+                                rule.no_implicit_this = strict;
+                                rule.always_strict = strict;
+                                rule.strict_null_checks = strict;
+                                rule.strict_function_types = strict;
+                            } else if s.starts_with("noLib:") {
+                                let v = s["noLib:".len()..].trim().parse().unwrap();
+                                if v {
+                                    libs = vec![];
+                                }
+                            } else if s.starts_with("noImplicitAny:") {
+                                let v = s["noImplicitAny:".len()..].trim().parse().unwrap();
+                                rule.no_implicit_any = v;
+                            } else if s.starts_with("noImplicitReturns:") {
+                                let v = s["noImplicitReturns:".len()..].trim().parse().unwrap();
+                                rule.no_implicit_returns = v;
+                            } else if s.starts_with("declaration") {
+                                // TODO: Create d.ts
+                            } else if s.starts_with("stripInternal:") {
+                                // TODO: Create d.ts
+                            } else if s.starts_with("traceResolution") {
+                                // no-op
+                            } else if s.starts_with("allowUnusedLabels:") {
+                                let v = s["allowUnusedLabels:".len()..].trim().parse().unwrap();
+                                rule.allow_unused_labels = v;
+                            } else if s.starts_with("noEmitHelpers") {
+                                // TODO
+                            } else if s.starts_with("downlevelIteration: ") {
+                                // TODO
+                            } else if s.starts_with("sourceMap:") || s.starts_with("sourcemap:") {
+                                // TODO
+                            } else if s.starts_with("isolatedModules:") {
+                                // TODO
+                            } else if s.starts_with("lib:") {
+                                let mut ls = HashSet::<_>::default();
+                                for v in s["lib:".len()..].trim().split(",") {
+                                    ls.extend(Lib::load(v))
+                                }
+                                libs = ls.into_iter().collect()
+                            } else if s.starts_with("allowUnreachableCode:") {
+                                let v = s["allowUnreachableCode:".len()..].trim().parse().unwrap();
+                                rule.allow_unreachable_code = v;
+                            } else if s.starts_with("strictNullChecks:") {
+                                let v = s["strictNullChecks:".len()..].trim().parse().unwrap();
+                                rule.strict_null_checks = v;
+                            } else if s.starts_with("noImplicitThis:") {
+                                let v = s["noImplicitThis:".len()..].trim().parse().unwrap();
+                                rule.no_implicit_this = v;
+                            } else {
+                                panic!("Comment is not handled: {}", s);
+                            }
+                        }
+                    }
+                    None => {}
+                }
+
+                (libs, rule, ts_config)
+            }
+        })
+    })
+    .ok()
+    .unwrap_or_default();
+
     let res = ::testing::run_test(treat_error_as_bug, |cm, handler| {
         CM.set(&cm.clone(), || {
-            let (libs, rule, ts_config) = {
-                match mode {
-                    Mode::Pass | Mode::Error => (
-                        vec![Lib::Es5, Lib::Dom],
-                        Default::default(),
-                        Default::default(),
-                    ),
-                    Mode::Conformance => {
-                        // We parse files twice. At first, we read comments and detect
-                        // configurations for following parse.
-
-                        let session = Session { handler: &handler };
-
-                        let fm = cm.load_file(file_name).expect("failed to read file");
-                        let comments = Comments::default();
-
-                        let mut parser = Parser::new(
-                            session,
-                            Syntax::Typescript(TsConfig {
-                                tsx: fname.contains("tsx"),
-                                ..Default::default()
-                            }),
-                            SourceFileInput::from(&*fm),
-                            Some(&comments),
-                        );
-
-                        let module = parser.parse_module().map_err(|mut e| {
-                            e.emit();
-                            ()
-                        })?;
-                        let module = if mode == Mode::Conformance {
-                            make_test(&comments, module)
-                        } else {
-                            module
-                        };
-
-                        let mut libs = vec![Lib::Es5];
-                        let mut rule = Rule::default();
-                        let ts_config = TsConfig::default();
-
-                        let span = module.span;
-                        let cmts = comments.leading_comments(span.lo());
-                        match cmts {
-                            Some(ref cmts) => {
-                                for cmt in cmts.iter() {
-                                    let s = cmt.text.trim();
-                                    if !s.starts_with("@") {
-                                        continue;
-                                    }
-                                    let s = &s[1..]; // '@'
-
-                                    if s.starts_with("target:") || s.starts_with("Target:") {
-                                        libs = Lib::load(&s["target:".len()..].trim());
-                                    } else if s.starts_with("strict:") {
-                                        let strict = s["strict:".len()..].trim().parse().unwrap();
-                                        rule.no_implicit_any = strict;
-                                        rule.no_implicit_this = strict;
-                                        rule.always_strict = strict;
-                                        rule.strict_null_checks = strict;
-                                        rule.strict_function_types = strict;
-                                    } else if s.starts_with("noLib:") {
-                                        let v = s["noLib:".len()..].trim().parse().unwrap();
-                                        if v {
-                                            libs = vec![];
-                                        }
-                                    } else if s.starts_with("noImplicitAny:") {
-                                        let v = s["noImplicitAny:".len()..].trim().parse().unwrap();
-                                        rule.no_implicit_any = v;
-                                    } else if s.starts_with("noImplicitReturns:") {
-                                        let v =
-                                            s["noImplicitReturns:".len()..].trim().parse().unwrap();
-                                        rule.no_implicit_returns = v;
-                                    } else if s.starts_with("declaration") {
-                                        // TODO: Create d.ts
-                                    } else if s.starts_with("stripInternal:") {
-                                        // TODO: Create d.ts
-                                    } else if s.starts_with("traceResolution") {
-                                        // no-op
-                                    } else if s.starts_with("allowUnusedLabels:") {
-                                        let v =
-                                            s["allowUnusedLabels:".len()..].trim().parse().unwrap();
-                                        rule.allow_unused_labels = v;
-                                    } else if s.starts_with("noEmitHelpers") {
-                                        // TODO
-                                    } else if s.starts_with("downlevelIteration: ") {
-                                        // TODO
-                                    } else if s.starts_with("sourceMap:")
-                                        || s.starts_with("sourcemap:")
-                                    {
-                                        // TODO
-                                    } else if s.starts_with("isolatedModules:") {
-                                        // TODO
-                                    } else if s.starts_with("lib:") {
-                                        let mut ls = HashSet::<_>::default();
-                                        for v in s["lib:".len()..].trim().split(",") {
-                                            ls.extend(Lib::load(v))
-                                        }
-                                        libs = ls.into_iter().collect()
-                                    } else if s.starts_with("allowUnreachableCode:") {
-                                        let v = s["allowUnreachableCode:".len()..]
-                                            .trim()
-                                            .parse()
-                                            .unwrap();
-                                        rule.allow_unreachable_code = v;
-                                    } else if s.starts_with("strictNullChecks:") {
-                                        let v =
-                                            s["strictNullChecks:".len()..].trim().parse().unwrap();
-                                        rule.strict_null_checks = v;
-                                    } else if s.starts_with("noImplicitThis:") {
-                                        let v =
-                                            s["noImplicitThis:".len()..].trim().parse().unwrap();
-                                        rule.no_implicit_this = v;
-                                    } else {
-                                        panic!("Comment is not handled: {}", s);
-                                    }
-                                }
-                            }
-                            None => {}
-                        }
-
-                        (libs, rule, ts_config)
-                    }
-                }
-            };
-
             let checker = swc_ts_checker::Checker::new(
                 cm.clone(),
                 handler,
@@ -412,8 +405,9 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
             if err_count != ref_errors.as_ref().unwrap().len() || !all {
                 panic!(
-                    "{:?}\n{} unmatched errors out of {} errors. Got {} extra errors.\nExpected: \
-                     {:?}\nActual: {:?}\nFull: {:?}",
+                    "\n============================================================\n{:?}
+============================================================\n{} unmatched errors out of {} \
+                     errors. Got {} extra errors.\nExpected: {:?}\nActual: {:?}\nAll errors: {:?}",
                     err,
                     ref_errors.as_ref().unwrap().len(),
                     ref_err_cnt,
