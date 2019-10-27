@@ -76,16 +76,16 @@ impl Analyzer<'_, '_> {
         // ```
         macro_rules! handle_type_lit {
             ($members:expr) => {{
-                let members = $members;
-                match *rhs.normalize() {
-                    Type::TypeLit(TypeLit {
-                        members: ref rhs_members,
-                        ..
-                    }) => {
-                        // Assign each property to coressponding proerty.
-                        let mut missing_fields = vec![];
+                let mut errors = vec![];
+                let mut missing_fields = vec![];
+                'l: for m in $members {
+                    match *rhs.normalize() {
+                        Type::TypeLit(TypeLit {
+                            members: ref rhs_members,
+                            ..
+                        }) => {
+                            // Assign each property to coressponding proerty.
 
-                        'members: for m in members.iter() {
                             if let Some(l_key) = m.key() {
                                 for rm in rhs_members {
                                     if let Some(r_key) = rm.key() {
@@ -102,7 +102,7 @@ impl Analyzer<'_, '_> {
                                                             ),
                                                             span,
                                                         )?;
-                                                        continue 'members;
+                                                        continue 'l;
                                                     }
                                                     _ => {}
                                                 },
@@ -129,20 +129,8 @@ impl Analyzer<'_, '_> {
                             }
                         }
 
-                        if missing_fields.is_empty() {
-                            return Ok(());
-                        }
-                        return Err(Error::MissingFields {
-                            span,
-                            fields: missing_fields,
-                        });
-                    }
-
-                    // Check class itself
-                    Type::Class(Class { ref body, .. }) => {
-                        let mut errors = vec![];
-
-                        'l: for m in members.iter() {
+                        // Check class itself
+                        Type::Class(Class { ref body, .. }) => {
                             match m {
                                 TypeElement::Call(_) => unimplemented!(
                                     "assign: interface {{ () => ret; }} = class Foo {{}}"
@@ -174,23 +162,15 @@ impl Analyzer<'_, '_> {
                                     "assign: interface {{ [key: string]: Type; }} = class Foo {{}}"
                                 ),
                             }
+
+                            // TODO: missing fields
                         }
 
-                        if errors.is_empty() {
-                            return Ok(());
-                        }
-
-                        return Err(Error::Errors { span, errors });
-                    }
-
-                    // Check class members
-                    Type::ClassInstance(ClassInstance {
-                        cls: Class { ref body, .. },
-                        ..
-                    }) => {
-                        let mut errors = vec![];
-
-                        'l: for m in members.iter() {
+                        // Check class members
+                        Type::ClassInstance(ClassInstance {
+                            cls: Class { ref body, .. },
+                            ..
+                        }) => {
                             match m {
                                 TypeElement::Call(_) => {
                                     unimplemented!("assign: interface {{ () => ret; }} = new Foo()")
@@ -198,9 +178,22 @@ impl Analyzer<'_, '_> {
                                 TypeElement::Constructor(_) => unimplemented!(
                                     "assign: interface {{ new () => ret; }} = new Foo()"
                                 ),
-                                TypeElement::Property(_) => unimplemented!(
-                                    "assign: interface {{ prop: string; }} = new Foo()"
-                                ),
+                                TypeElement::Property(ref lp) => {
+                                    for rm in body {
+                                        match rm {
+                                            ClassMember::ClassProp(ref rp) => {
+                                                if is_key_eq(&lp.key, &rp.key) {
+                                                    continue 'l;
+                                                }
+                                            }
+                                            _ => {}
+                                        }
+                                    }
+
+                                    unimplemented!(
+                                        "assign: interface {{ prop: string; }} = new Foo()"
+                                    )
+                                }
                                 TypeElement::Method(_) => unimplemented!(
                                     "assign: interface {{ method() => ret; }} = new Foo()"
                                 ),
@@ -208,19 +201,27 @@ impl Analyzer<'_, '_> {
                                     "assign: interface {{ [key: string]: Type; }} = new Foo()"
                                 ),
                             }
+                            // TOOD: missing fields
                         }
 
-                        if errors.is_empty() {
-                            return Ok(());
-                        }
+                        Type::Tuple(..) | Type::Array(..) | Type::Lit(..) => fail!(),
 
-                        return Err(Error::Errors { span, errors });
+                        _ => {}
                     }
-
-                    Type::Tuple(..) | Type::Array(..) | Type::Lit(..) => fail!(),
-
-                    _ => {}
                 }
+
+                if !missing_fields.is_empty() {
+                    errors.push(Error::MissingFields {
+                        span,
+                        fields: missing_fields,
+                    });
+                }
+
+                if errors.is_empty() {
+                    return Ok(());
+                }
+
+                return Err(Error::Errors { span, errors });
             }};
         }
 
@@ -595,5 +596,13 @@ impl Analyzer<'_, '_> {
         //     msg: format!("Not implemented yet"),
         // })
         unimplemented!("assign: \nLeft: {:?}\nRight: {:?}", to, rhs)
+    }
+}
+
+/// Returns true if l and r are lieteral and equal to each other.
+fn is_key_eq(l: &Expr, r: &Expr) -> bool {
+    match (l, r) {
+        (&Expr::Ident(..), &Expr::Ident(..)) => l.eq_ignore_span(r),
+        _ => false,
     }
 }
