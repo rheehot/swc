@@ -621,11 +621,12 @@ impl Analyzer<'_, '_> {
             span,
             ..
         } = *expr;
+        debug_assert_ne!(span, obj.span());
+        debug_assert_ne!(span, prop.span());
 
         match *obj {
             ExprOrSuper::Expr(ref obj) => {
                 let obj_ty = self.type_of(obj)?;
-
                 return self.access_property(span, obj_ty, prop, computed, type_mode);
             }
             _ => unimplemented!("type_of_member_expr(super.foo)"),
@@ -788,15 +789,60 @@ impl Analyzer<'_, '_> {
 
             Type::Enum(ref e) => {
                 // TODO: Check if variant exists.
-                match *prop {
-                    Expr::Ident(ref v) if !computed => {
+                macro_rules! ret {
+                    ($sym:expr) => {{
+                        // Computed values are not permitted in an enum with string valued members.
+                        if e.is_const && type_mode == TypeOfMode::RValue {
+                            for m in &e.members {
+                                match m.id {
+                                    TsEnumMemberId::Ident(Ident { ref sym, .. })
+                                    | TsEnumMemberId::Str(Str { value: ref sym, .. }) => {
+                                        if sym == $sym {
+                                            return Ok(Cow::Owned(compute_ty(
+                                                m.init.as_ref().map(|v| &*v).unwrap(),
+                                            )));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if e.is_const && computed {
+                            return Err(Error::ConstEnumNonIndexAccess { span: prop.span() });
+                        }
+
+                        if e.is_const && type_mode == TypeOfMode::LValue {
+                            return Err(Error::ConstEnumUsedAsLValue { span: prop.span() });
+                        }
+
+                        debug_assert_ne!(span, prop.span());
                         return Ok(Cow::Owned(Type::EnumVariant(EnumVariant {
-                            span,
+                            span: match type_mode {
+                                TypeOfMode::LValue => prop.span(),
+                                TypeOfMode::RValue => span,
+                            },
                             enum_name: e.id.sym.clone(),
-                            name: v.sym.clone(),
-                        })))
+                            name: $sym.clone(),
+                        })));
+                    }};
+                }
+                match *prop {
+                    Expr::Ident(Ident { ref sym, .. }) if !computed => {
+                        ret!(sym);
                     }
-                    _ => {}
+                    Expr::Lit(Lit::Str(Str { value: ref sym, .. })) => {
+                        ret!(sym);
+                    }
+
+                    _ => {
+                        if e.is_const {
+                            return Err(Error::ConstEnumNonIndexAccess { span: prop.span() });
+                        }
+                        return Err(Error::Unimplemented {
+                            span,
+                            msg: format!("access_property\nProp: {:?}", prop),
+                        });
+                    }
                 }
             }
 
@@ -2097,5 +2143,27 @@ impl Analyzer<'_, '_> {
         // }) {}
 
         Ok(())
+    }
+}
+
+/// Called only for const enums.
+///
+/// Returns only literal types or
+fn compute_ty<'a, 'any>(e: &'a Expr) -> Type<'any> {
+    match e {
+        Expr::Lit(ref lit) => TsLitType {
+            span: e.span(),
+            lit: match *lit {
+                Lit::Str(ref v) => v.clone().into(),
+                Lit::Bool(ref v) => v.clone().into(),
+                Lit::Num(ref v) => v.clone().into(),
+                _ => unreachable!("compute_ty({:?})", e),
+            },
+        }
+        .into(),
+
+        Expr::Bin(..) => unimplemented!("compute_ty(bin, {:?})", e),
+        Expr::Unary(..) => unimplemented!("compute_ty(unary, {:?})", e),
+        _ => unreachable!("compute_ty({:?})", e),
     }
 }

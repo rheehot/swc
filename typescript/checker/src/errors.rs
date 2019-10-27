@@ -105,6 +105,11 @@ pub enum Error {
         span: Span,
     },
 
+    // TS2540
+    ConstEnumUsedAsLValue {
+        span: Span,
+    },
+
     Unimplemented {
         span: Span,
         msg: String,
