@@ -1153,22 +1153,29 @@ impl Analyzer<'_, '_> {
         }))
     }
 
-    pub(super) fn infer_return_type(
-        &self,
-        _base_span: Span,
-    ) -> Result<Option<Type<'static>>, Error> {
-        let types = { ::std::mem::replace(&mut *self.inferred_return_types.borrow_mut(), vec![]) };
+    pub(super) fn infer_return_type(&self, key: Span) -> Result<Option<Type<'static>>, Error> {
+        debug_assert!(
+            self.inferred_return_types.borrow_mut().get(&key).is_some(),
+            "infer_return_type: key={:?}, entries={:?}",
+            key,
+            self.inferred_return_types
+        );
+
+        // TODO: remove entry (currently empty vertor is inserted)
+        let types = ::std::mem::replace(
+            &mut *self
+                .inferred_return_types
+                .borrow_mut()
+                .get_mut(&key)
+                .unwrap(),
+            Default::default(),
+        );
 
         // TODO: Handle recursive function.
 
-        let mut tys = Vec::with_capacity(types.len());
-        for ty in types {
-            tys.push(ty);
-        }
-
-        match tys.len() {
+        match types.len() {
             0 => Ok(None),
-            _ => Ok(Some(Type::union(tys))),
+            _ => Ok(Some(Type::union(types))),
         }
     }
 

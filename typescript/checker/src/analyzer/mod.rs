@@ -29,6 +29,8 @@ mod expr_bin;
 mod generic;
 mod name;
 mod scope;
+#[cfg(test)]
+mod tests;
 mod type_facts;
 mod util;
 
@@ -37,7 +39,12 @@ struct Analyzer<'a, 'b> {
     resolved_imports: FxHashMap<JsWord, Arc<Type<'static>>>,
     errored_imports: FxHashSet<JsWord>,
     pending_exports: Vec<((JsWord, Span), Box<Expr>)>,
-    inferred_return_types: RefCell<Vec<Type<'static>>>,
+
+    /// Span used while inserting return type.
+    return_type_span: Span,
+    /// Infered from arrow expressions and return statements.
+    inferred_return_types: RefCell<FxHashMap<Span, Vec<Type<'static>>>>,
+
     scope: Scope<'a>,
     /// This is false iff it should be treated as error when `1.contains()` is
     /// true
@@ -255,6 +262,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             rule,
             scope,
             info: Default::default(),
+            return_type_span: Default::default(),
             inferred_return_types: Default::default(),
             path,
             allow_ref_declaring: false,
@@ -368,6 +376,8 @@ impl Analyzer<'_, '_> {
     /// TODO: Handle recursive funciton
     fn visit_fn(&mut self, name: Option<&Ident>, f: &Function) -> Type<'static> {
         let fn_ty = self.with_child(ScopeKind::Fn, Default::default(), |child| {
+            child.return_type_span = f.span();
+
             let no_implicit_any_span = name.as_ref().map(|name| name.span);
 
             if let Some(name) = name {
