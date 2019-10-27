@@ -908,6 +908,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
         if (is_optional_chaining && is!('.') && peeked_is!('[') && eat!('.') && eat!('['))
             || eat!('[')
         {
+            let start = cur_pos!();
             let prop = self.include_in_expr(true).parse_expr()?;
             expect!(']');
             let span = Span::new(obj.span().lo(), self.input.last_pos(), Default::default());
