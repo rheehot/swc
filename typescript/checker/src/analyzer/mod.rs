@@ -601,7 +601,13 @@ impl Visit<AssignExpr> for Analyzer<'_, '_> {
             .type_of(&expr.right)
             .and_then(|ty| self.expand_type(span, ty))
         {
-            Ok(rhs_ty) => rhs_ty.to_static(),
+            Ok(rhs_ty) => {
+                let rhs_ty = rhs_ty.to_static();
+
+                self.check_rvalue(&rhs_ty);
+
+                rhs_ty
+            }
             Err(err) => {
                 self.info.errors.push(err);
                 return;
@@ -664,7 +670,11 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     // );
                     self.expand_type(span, ty)
                 }) {
-                    Ok(ty) => ty,
+                    Ok(ty) => {
+                        let ty = ty.to_static();
+                        self.check_rvalue(&ty);
+                        ty
+                    }
                     Err(err) => {
                         self.info.errors.push(err);
                         remove_declaring!();
@@ -947,4 +957,18 @@ fn _assert_types() {
     fn is_send<T: Send>() {}
     is_sync::<Info>();
     is_send::<Info>();
+}
+
+impl Analyzer<'_, '_> {
+    // Check for constant enum in rvalue.
+    fn check_rvalue(&mut self, rhs_ty: &Type) {
+        match *rhs_ty.normalize() {
+            Type::Enum(ref e) if e.is_const => {
+                self.info
+                    .errors
+                    .push(Error::ConstEnumUsedAsVar { span: e.span() });
+            }
+            _ => {}
+        }
+    }
 }

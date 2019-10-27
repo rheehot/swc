@@ -1,0 +1,364 @@
+error: ConstEnumUsedAsVar {
+    span: Span {
+        lo: BytePos(
+            421,
+        ),
+        hi: BytePos(
+            422,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/constEnums/constEnumPropertyAccess2.ts:15:9
+   |
+15 | var z = G;
+   |         ^
+
+error: ConstEnumNonIndexAccess {
+    span: Span {
+        lo: BytePos(
+            436,
+        ),
+        hi: BytePos(
+            439,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/constEnums/constEnumPropertyAccess2.ts:16:12
+   |
+16 | var z1 = G[G.A];
+   |            ^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            454,
+        ),
+        hi: BytePos(
+            455,
+        ),
+        ctxt: #0,
+    },
+    left: Enum(
+        TsEnumDecl {
+            span: Span {
+                lo: BytePos(
+                    254,
+                ),
+                hi: BytePos(
+                    326,
+                ),
+                ctxt: #0,
+            },
+            declare: false,
+            is_const: true,
+            id: Ident {
+                span: Span {
+                    lo: BytePos(
+                        265,
+                    ),
+                    hi: BytePos(
+                        266,
+                    ),
+                    ctxt: #0,
+                },
+                sym: Atom('G' type=inline),
+                type_ann: None,
+                optional: false,
+            },
+            members: [
+                TsEnumMember {
+                    span: Span {
+                        lo: BytePos(
+                            274,
+                        ),
+                        hi: BytePos(
+                            279,
+                        ),
+                        ctxt: #0,
+                    },
+                    id: Ident(
+                        Ident {
+                            span: Span {
+                                lo: BytePos(
+                                    274,
+                                ),
+                                hi: BytePos(
+                                    275,
+                                ),
+                                ctxt: #0,
+                            },
+                            sym: Atom('A' type=inline),
+                            type_ann: None,
+                            optional: false,
+                        },
+                    ),
+                    init: Some(
+                        Lit(
+                            Num(
+                                Number {
+                                    span: Span {
+                                        lo: BytePos(
+                                            278,
+                                        ),
+                                        hi: BytePos(
+                                            279,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: 1.0,
+                                },
+                            ),
+                        ),
+                    ),
+                },
+                TsEnumMember {
+                    span: Span {
+                        lo: BytePos(
+                            286,
+                        ),
+                        hi: BytePos(
+                            291,
+                        ),
+                        ctxt: #0,
+                    },
+                    id: Ident(
+                        Ident {
+                            span: Span {
+                                lo: BytePos(
+                                    286,
+                                ),
+                                hi: BytePos(
+                                    287,
+                                ),
+                                ctxt: #0,
+                            },
+                            sym: Atom('B' type=inline),
+                            type_ann: None,
+                            optional: false,
+                        },
+                    ),
+                    init: Some(
+                        Lit(
+                            Num(
+                                Number {
+                                    span: Span {
+                                        lo: BytePos(
+                                            290,
+                                        ),
+                                        hi: BytePos(
+                                            291,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: 2.0,
+                                },
+                            ),
+                        ),
+                    ),
+                },
+                TsEnumMember {
+                    span: Span {
+                        lo: BytePos(
+                            298,
+                        ),
+                        hi: BytePos(
+                            307,
+                        ),
+                        ctxt: #0,
+                    },
+                    id: Ident(
+                        Ident {
+                            span: Span {
+                                lo: BytePos(
+                                    298,
+                                ),
+                                hi: BytePos(
+                                    299,
+                                ),
+                                ctxt: #0,
+                            },
+                            sym: Atom('C' type=inline),
+                            type_ann: None,
+                            optional: false,
+                        },
+                    ),
+                    init: Some(
+                        Bin(
+                            BinExpr {
+                                span: Span {
+                                    lo: BytePos(
+                                        302,
+                                    ),
+                                    hi: BytePos(
+                                        307,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                op: "+",
+                                left: Ident(
+                                    Ident {
+                                        span: Span {
+                                            lo: BytePos(
+                                                302,
+                                            ),
+                                            hi: BytePos(
+                                                303,
+                                            ),
+                                            ctxt: #0,
+                                        },
+                                        sym: Atom('A' type=inline),
+                                        type_ann: None,
+                                        optional: false,
+                                    },
+                                ),
+                                right: Ident(
+                                    Ident {
+                                        span: Span {
+                                            lo: BytePos(
+                                                306,
+                                            ),
+                                            hi: BytePos(
+                                                307,
+                                            ),
+                                            ctxt: #0,
+                                        },
+                                        sym: Atom('B' type=inline),
+                                        type_ann: None,
+                                        optional: false,
+                                    },
+                                ),
+                            },
+                        ),
+                    ),
+                },
+                TsEnumMember {
+                    span: Span {
+                        lo: BytePos(
+                            314,
+                        ),
+                        hi: BytePos(
+                            323,
+                        ),
+                        ctxt: #0,
+                    },
+                    id: Ident(
+                        Ident {
+                            span: Span {
+                                lo: BytePos(
+                                    314,
+                                ),
+                                hi: BytePos(
+                                    315,
+                                ),
+                                ctxt: #0,
+                            },
+                            sym: Atom('D' type=inline),
+                            type_ann: None,
+                            optional: false,
+                        },
+                    ),
+                    init: Some(
+                        Bin(
+                            BinExpr {
+                                span: Span {
+                                    lo: BytePos(
+                                        318,
+                                    ),
+                                    hi: BytePos(
+                                        323,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                op: "*",
+                                left: Ident(
+                                    Ident {
+                                        span: Span {
+                                            lo: BytePos(
+                                                318,
+                                            ),
+                                            hi: BytePos(
+                                                319,
+                                            ),
+                                            ctxt: #0,
+                                        },
+                                        sym: Atom('A' type=inline),
+                                        type_ann: None,
+                                        optional: false,
+                                    },
+                                ),
+                                right: Lit(
+                                    Num(
+                                        Number {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    322,
+                                                ),
+                                                hi: BytePos(
+                                                    323,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            value: 2.0,
+                                        },
+                                    ),
+                                ),
+                            },
+                        ),
+                    ),
+                },
+            ],
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    458,
+                ),
+                hi: BytePos(
+                    466,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            458,
+                        ),
+                        hi: BytePos(
+                            466,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('string' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/constEnums/constEnumPropertyAccess2.ts:18:1
+   |
+18 | g = "string";
+   | ^
+
+error: ConstEnumVariantUsedAsLValue {
+    span: Span {
+        lo: BytePos(
+            495,
+        ),
+        hi: BytePos(
+            496,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/constEnums/constEnumPropertyAccess2.ts:20:3
+   |
+20 | G.B = 3;
+   |   ^
+
