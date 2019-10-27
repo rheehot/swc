@@ -100,6 +100,11 @@ pub enum Error {
         left: Span,
     },
 
+    /// TS2476
+    ConstEnumNonIndexAccess {
+        span: Span,
+    },
+
     Unimplemented {
         span: Span,
         msg: String,
