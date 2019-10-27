@@ -52,7 +52,7 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
                                             None
                                         }
                                     }
-                                    _ => return Some(()),
+                                    _ => Some(()),
                                 }
                             }
                             Type::Union(ref u) => {
