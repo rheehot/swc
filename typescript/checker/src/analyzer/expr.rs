@@ -661,9 +661,9 @@ impl Analyzer<'_, '_> {
             }
             .into(),
 
-            Prop::Assign(ref p) => unimplemented!("type_of_prop(AssignProperty): {:#?}", p),
-            Prop::Getter(ref p) => unimplemented!("type_of_prop(GetterProperty): {:#?}", p),
-            Prop::Setter(ref p) => unimplemented!("type_of_prop(SetterProperty): {:#?}", p),
+            Prop::Assign(ref p) => unimplemented!("type_of_prop(AssignProperty): {:?}", p),
+            Prop::Getter(ref p) => unimplemented!("type_of_prop(GetterProperty): {:?}", p),
+            Prop::Setter(ref p) => unimplemented!("type_of_prop(SetterProperty): {:?}", p),
 
             Prop::Method(ref p) => MethodSignature {
                 span,
