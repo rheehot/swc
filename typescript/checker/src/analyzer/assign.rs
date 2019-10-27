@@ -123,6 +123,14 @@ impl Analyzer<'_, '_> {
                                 // No property with `key` found.
                                 missing_fields.push(m.clone().into_static());
                             } else {
+                                match m {
+                                    // TODO: Check type of the index.
+                                    TypeElement::Index(..) => {
+                                        continue 'l;
+                                    }
+                                    _ => {}
+                                }
+
                                 if !rhs_members.iter().any(|rm| rm.eq_ignore_name_and_span(m)) {
                                     missing_fields.push(m.clone().into_static());
                                 }
