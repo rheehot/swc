@@ -28,6 +28,7 @@ mod expr;
 mod expr_bin;
 mod generic;
 mod name;
+mod props;
 mod scope;
 #[cfg(test)]
 mod tests;

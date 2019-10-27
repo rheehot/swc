@@ -662,7 +662,21 @@ impl Analyzer<'_, '_> {
             .into(),
 
             Prop::Assign(ref p) => unimplemented!("type_of_prop(AssignProperty): {:?}", p),
-            Prop::Getter(ref p) => unimplemented!("type_of_prop(GetterProperty): {:?}", p),
+            Prop::Getter(ref p) => PropertySignature {
+                span: prop.span(),
+                key: prop_key_to_expr(&prop),
+                params: Default::default(),
+                optional: false,
+                readonly: false,
+                computed: false,
+                type_ann: match self.infer_return_type(p.span()) {
+                    Some(ty) => Some(ty.owned()),
+                    // This is error, but it's handled by GetterProp visitor.
+                    None => None,
+                },
+                type_params: Default::default(),
+            }
+            .into(),
             Prop::Setter(ref p) => unimplemented!("type_of_prop(SetterProperty): {:?}", p),
 
             Prop::Method(ref p) => MethodSignature {
@@ -1153,7 +1167,7 @@ impl Analyzer<'_, '_> {
         }))
     }
 
-    pub(super) fn infer_return_type(&self, key: Span) -> Result<Option<Type<'static>>, Error> {
+    pub(super) fn infer_return_type(&self, key: Span) -> Option<Type<'static>> {
         debug_assert!(
             self.inferred_return_types.borrow_mut().get(&key).is_some(),
             "infer_return_type: key={:?}, entries={:?}",
@@ -1174,8 +1188,8 @@ impl Analyzer<'_, '_> {
         // TODO: Handle recursive function.
 
         match types.len() {
-            0 => Ok(None),
-            _ => Ok(Some(Type::union(types))),
+            0 => None,
+            _ => Some(Type::union(types)),
         }
     }
 
@@ -1190,11 +1204,11 @@ impl Analyzer<'_, '_> {
             None => None,
         };
 
-        let inferred_return_type = self.infer_return_type(f.span)?;
+        let inferred_return_type = self.infer_return_type(f.span);
         if let Some(ref declared) = declared_ret_ty {
             let span = inferred_return_type.span();
-            if let Some(ref inffered) = inferred_return_type {
-                self.assign(declared, inffered, span)?;
+            if let Some(ref inferred) = inferred_return_type {
+                self.assign(declared, inferred, span)?;
             }
         }
 
@@ -1229,7 +1243,7 @@ impl Analyzer<'_, '_> {
             .as_ref()
             .map(|body| self.infer_return_type(body.span));
         let inferred_return_type = match inferred_return_type {
-            Some(Ok(Some(inferred_return_type))) => {
+            Some(Some(inferred_return_type)) => {
                 if let Some(ref declared) = declared_ret_ty {
                     let span = inferred_return_type.span();
 
@@ -1238,7 +1252,7 @@ impl Analyzer<'_, '_> {
 
                 inferred_return_type
             }
-            Some(Ok(None)) => {
+            Some(None) => {
                 let mut span = f.span;
 
                 if let Some(ref declared) = declared_ret_ty {
@@ -1255,7 +1269,6 @@ impl Analyzer<'_, '_> {
 
                 Type::any(span)
             }
-            Some(Err(err)) => return Err(err),
             None => Type::any(f.span),
         };
 
