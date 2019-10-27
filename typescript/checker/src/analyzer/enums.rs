@@ -50,6 +50,7 @@ impl Visit<Expr> for LitValidator<'_> {
                     return;
                 }
             }
+            Expr::Unary(..) | Expr::Bin(..) | Expr::Paren(..) => {}
 
             _ => {
                 self.error = true;
