@@ -215,7 +215,7 @@ error: AssignFailed {
         },
     ),
     cause: [
-        MissingFields {
+        Errors {
             span: Span {
                 lo: BytePos(
                     184,
@@ -225,35 +225,35 @@ error: AssignFailed {
                 ),
                 ctxt: #0,
             },
-            fields: [
-                Index(
-                    IndexSignature {
-                        params: [
-                            Ident(
-                                Ident {
-                                    span: Span {
-                                        lo: BytePos(
-                                            153,
-                                        ),
-                                        hi: BytePos(
-                                            154,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    sym: Atom('s' type=inline),
-                                    type_ann: Some(
-                                        TsTypeAnn {
+            errors: [
+                MissingFields {
+                    span: Span {
+                        lo: BytePos(
+                            184,
+                        ),
+                        hi: BytePos(
+                            231,
+                        ),
+                        ctxt: #0,
+                    },
+                    fields: [
+                        Index(
+                            IndexSignature {
+                                params: [
+                                    Ident(
+                                        Ident {
                                             span: Span {
                                                 lo: BytePos(
-                                                    156,
+                                                    153,
                                                 ),
                                                 hi: BytePos(
-                                                    162,
+                                                    154,
                                                 ),
                                                 ctxt: #0,
                                             },
-                                            type_ann: TsKeywordType(
-                                                TsKeywordType {
+                                            sym: Atom('s' type=inline),
+                                            type_ann: Some(
+                                                TsTypeAnn {
                                                     span: Span {
                                                         lo: BytePos(
                                                             156,
@@ -263,43 +263,56 @@ error: AssignFailed {
                                                         ),
                                                         ctxt: #0,
                                                     },
-                                                    kind: TsNumberKeyword,
+                                                    type_ann: TsKeywordType(
+                                                        TsKeywordType {
+                                                            span: Span {
+                                                                lo: BytePos(
+                                                                    156,
+                                                                ),
+                                                                hi: BytePos(
+                                                                    162,
+                                                                ),
+                                                                ctxt: #0,
+                                                            },
+                                                            kind: TsNumberKeyword,
+                                                        },
+                                                    ),
                                                 },
                                             ),
+                                            optional: false,
                                         },
                                     ),
-                                    optional: false,
+                                ],
+                                type_ann: Some(
+                                    Keyword(
+                                        TsKeywordType {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    165,
+                                                ),
+                                                hi: BytePos(
+                                                    172,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            kind: TsBooleanKeyword,
+                                        },
+                                    ),
+                                ),
+                                readonly: false,
+                                span: Span {
+                                    lo: BytePos(
+                                        152,
+                                    ),
+                                    hi: BytePos(
+                                        173,
+                                    ),
+                                    ctxt: #0,
                                 },
-                            ),
-                        ],
-                        type_ann: Some(
-                            Keyword(
-                                TsKeywordType {
-                                    span: Span {
-                                        lo: BytePos(
-                                            165,
-                                        ),
-                                        hi: BytePos(
-                                            172,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    kind: TsBooleanKeyword,
-                                },
-                            ),
+                            },
                         ),
-                        readonly: false,
-                        span: Span {
-                            lo: BytePos(
-                                152,
-                            ),
-                            hi: BytePos(
-                                173,
-                            ),
-                            ctxt: #0,
-                        },
-                    },
-                ),
+                    ],
+                },
             ],
         },
     ],

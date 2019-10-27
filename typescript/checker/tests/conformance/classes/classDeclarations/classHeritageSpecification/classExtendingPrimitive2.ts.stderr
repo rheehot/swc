@@ -1,0 +1,16 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            150,
+        ),
+        hi: BytePos(
+            154,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/classes/classDeclarations/classHeritageSpecification/classExtendingPrimitive2.ts:3:19
+  |
+3 | class C4a extends void {}
+  |                   ^^^^
+
