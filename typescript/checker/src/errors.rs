@@ -100,6 +100,11 @@ pub enum Error {
         left: Span,
     },
 
+    /// TS2378
+    GetterPropWithoutReturn {
+        span: Span,
+    },
+
     /// TS2475
     ConstEnumUsedAsVar {
         span: Span,
