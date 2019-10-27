@@ -22,6 +22,7 @@ use swc_ecma_ast::*;
 
 mod assign;
 mod control_flow;
+mod enums;
 pub mod export;
 mod expr;
 mod expr_bin;
@@ -285,14 +286,6 @@ pub struct ImportInfo {
 pub struct Specifier {
     pub local: (JsWord, Span),
     pub export: (JsWord, Span),
-}
-
-impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, e: &TsEnumDecl) {
-        e.visit_children(self);
-
-        self.scope.register_type(e.id.sym.clone(), e.clone().into());
-    }
 }
 
 impl Visit<ClassExpr> for Analyzer<'_, '_> {

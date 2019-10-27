@@ -407,7 +407,8 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 panic!(
                     "\n============================================================\n{:?}
 ============================================================\n{} unmatched errors out of {} \
-                     errors. Got {} extra errors.\nExpected: {:?}\nActual: {:?}\nAll errors: {:?}",
+                     errors. Got {} extra errors.\nExpected: {:?}\nActual: {:?}\nRequired errors: \
+                     {:?}",
                     err,
                     ref_errors.as_ref().unwrap().len(),
                     ref_err_cnt,

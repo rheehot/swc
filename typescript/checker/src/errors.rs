@@ -17,6 +17,11 @@ pub enum Error {
         rhs: Span,
     },
 
+    /// TS2474
+    InvalidInitInConstEnum {
+        span: Span,
+    },
+
     /// TS2367
     NoOverlap {
         span: Span,

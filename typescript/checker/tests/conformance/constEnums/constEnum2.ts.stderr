@@ -1,0 +1,6 @@
+error: Expected Comma, got Some(Word(g))
+  --> $DIR/tests/conformance/constEnums/constEnum2.ts:14:5
+   |
+14 |     g = CONST,
+   |     ^
+
