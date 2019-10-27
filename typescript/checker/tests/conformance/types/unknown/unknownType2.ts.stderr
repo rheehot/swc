@@ -1,10 +1,10 @@
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            9285,
+            4549,
         ),
         hi: BytePos(
-            9294,
+            4558,
         ),
         ctxt: #0,
     },
@@ -12,10 +12,10 @@ error: AssignFailed {
         Union {
             span: Span {
                 lo: BytePos(
-                    4862,
+                    126,
                 ),
                 hi: BytePos(
-                    4867,
+                    131,
                 ),
                 ctxt: #0,
             },
@@ -24,10 +24,10 @@ error: AssignFailed {
                     TsLitType {
                         span: Span {
                             lo: BytePos(
-                                4862,
+                                126,
                             ),
                             hi: BytePos(
-                                4867,
+                                131,
                             ),
                             ctxt: #0,
                         },
@@ -35,10 +35,10 @@ error: AssignFailed {
                             Str {
                                 span: Span {
                                     lo: BytePos(
-                                        4862,
+                                        126,
                                     ),
                                     hi: BytePos(
-                                        4867,
+                                        131,
                                     ),
                                     ctxt: #0,
                                 },
@@ -52,10 +52,10 @@ error: AssignFailed {
                     TsLitType {
                         span: Span {
                             lo: BytePos(
-                                4870,
+                                134,
                             ),
                             hi: BytePos(
-                                4874,
+                                138,
                             ),
                             ctxt: #0,
                         },
@@ -63,10 +63,10 @@ error: AssignFailed {
                             Str {
                                 span: Span {
                                     lo: BytePos(
-                                        4870,
+                                        134,
                                     ),
                                     hi: BytePos(
-                                        4874,
+                                        138,
                                     ),
                                     ctxt: #0,
                                 },
@@ -80,10 +80,10 @@ error: AssignFailed {
                     TsLitType {
                         span: Span {
                             lo: BytePos(
-                                4877,
+                                141,
                             ),
                             hi: BytePos(
-                                4882,
+                                146,
                             ),
                             ctxt: #0,
                         },
@@ -91,10 +91,10 @@ error: AssignFailed {
                             Str {
                                 span: Span {
                                     lo: BytePos(
-                                        4877,
+                                        141,
                                     ),
                                     hi: BytePos(
-                                        4882,
+                                        146,
                                     ),
                                     ctxt: #0,
                                 },
@@ -111,10 +111,10 @@ error: AssignFailed {
         Union {
             span: Span {
                 lo: BytePos(
-                    9285,
+                    4549,
                 ),
                 hi: BytePos(
-                    9294,
+                    4558,
                 ),
                 ctxt: #0,
             },
@@ -123,10 +123,10 @@ error: AssignFailed {
                     TsLitType {
                         span: Span {
                             lo: BytePos(
-                                9225,
+                                4489,
                             ),
                             hi: BytePos(
-                                9230,
+                                4494,
                             ),
                             ctxt: #0,
                         },
@@ -134,10 +134,10 @@ error: AssignFailed {
                             Str {
                                 span: Span {
                                     lo: BytePos(
-                                        9225,
+                                        4489,
                                     ),
                                     hi: BytePos(
-                                        9230,
+                                        4494,
                                     ),
                                     ctxt: #0,
                                 },
@@ -151,10 +151,10 @@ error: AssignFailed {
                     TsLitType {
                         span: Span {
                             lo: BytePos(
-                                9245,
+                                4509,
                             ),
                             hi: BytePos(
-                                9249,
+                                4513,
                             ),
                             ctxt: #0,
                         },
@@ -162,10 +162,10 @@ error: AssignFailed {
                             Str {
                                 span: Span {
                                     lo: BytePos(
-                                        9245,
+                                        4509,
                                     ),
                                     hi: BytePos(
-                                        9249,
+                                        4513,
                                     ),
                                     ctxt: #0,
                                 },
@@ -179,10 +179,10 @@ error: AssignFailed {
                     TsLitType {
                         span: Span {
                             lo: BytePos(
-                                9264,
+                                4528,
                             ),
                             hi: BytePos(
-                                9271,
+                                4535,
                             ),
                             ctxt: #0,
                         },
@@ -190,10 +190,10 @@ error: AssignFailed {
                             Str {
                                 span: Span {
                                     lo: BytePos(
-                                        9264,
+                                        4528,
                                     ),
                                     hi: BytePos(
-                                        9271,
+                                        4535,
                                     ),
                                     ctxt: #0,
                                 },
@@ -210,10 +210,10 @@ error: AssignFailed {
         UnionError {
             span: Span {
                 lo: BytePos(
-                    9285,
+                    4549,
                 ),
                 hi: BytePos(
-                    9294,
+                    4558,
                 ),
                 ctxt: #0,
             },
@@ -221,10 +221,10 @@ error: AssignFailed {
                 UnionError {
                     span: Span {
                         lo: BytePos(
-                            9285,
+                            4549,
                         ),
                         hi: BytePos(
-                            9294,
+                            4558,
                         ),
                         ctxt: #0,
                     },
@@ -232,10 +232,10 @@ error: AssignFailed {
                         AssignFailed {
                             span: Span {
                                 lo: BytePos(
-                                    9285,
+                                    4549,
                                 ),
                                 hi: BytePos(
-                                    9294,
+                                    4558,
                                 ),
                                 ctxt: #0,
                             },
@@ -243,10 +243,10 @@ error: AssignFailed {
                                 TsLitType {
                                     span: Span {
                                         lo: BytePos(
-                                            4862,
+                                            126,
                                         ),
                                         hi: BytePos(
-                                            4867,
+                                            131,
                                         ),
                                         ctxt: #0,
                                     },
@@ -254,10 +254,10 @@ error: AssignFailed {
                                         Str {
                                             span: Span {
                                                 lo: BytePos(
-                                                    4862,
+                                                    126,
                                                 ),
                                                 hi: BytePos(
-                                                    4867,
+                                                    131,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -271,10 +271,10 @@ error: AssignFailed {
                                 TsLitType {
                                     span: Span {
                                         lo: BytePos(
-                                            9264,
+                                            4528,
                                         ),
                                         hi: BytePos(
-                                            9271,
+                                            4535,
                                         ),
                                         ctxt: #0,
                                     },
@@ -282,10 +282,10 @@ error: AssignFailed {
                                         Str {
                                             span: Span {
                                                 lo: BytePos(
-                                                    9264,
+                                                    4528,
                                                 ),
                                                 hi: BytePos(
-                                                    9271,
+                                                    4535,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -300,10 +300,10 @@ error: AssignFailed {
                         AssignFailed {
                             span: Span {
                                 lo: BytePos(
-                                    9285,
+                                    4549,
                                 ),
                                 hi: BytePos(
-                                    9294,
+                                    4558,
                                 ),
                                 ctxt: #0,
                             },
@@ -311,10 +311,10 @@ error: AssignFailed {
                                 TsLitType {
                                     span: Span {
                                         lo: BytePos(
-                                            4870,
+                                            134,
                                         ),
                                         hi: BytePos(
-                                            4874,
+                                            138,
                                         ),
                                         ctxt: #0,
                                     },
@@ -322,10 +322,10 @@ error: AssignFailed {
                                         Str {
                                             span: Span {
                                                 lo: BytePos(
-                                                    4870,
+                                                    134,
                                                 ),
                                                 hi: BytePos(
-                                                    4874,
+                                                    138,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -339,10 +339,10 @@ error: AssignFailed {
                                 TsLitType {
                                     span: Span {
                                         lo: BytePos(
-                                            9264,
+                                            4528,
                                         ),
                                         hi: BytePos(
-                                            9271,
+                                            4535,
                                         ),
                                         ctxt: #0,
                                     },
@@ -350,10 +350,10 @@ error: AssignFailed {
                                         Str {
                                             span: Span {
                                                 lo: BytePos(
-                                                    9264,
+                                                    4528,
                                                 ),
                                                 hi: BytePos(
-                                                    9271,
+                                                    4535,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -368,10 +368,10 @@ error: AssignFailed {
                         AssignFailed {
                             span: Span {
                                 lo: BytePos(
-                                    9285,
+                                    4549,
                                 ),
                                 hi: BytePos(
-                                    9294,
+                                    4558,
                                 ),
                                 ctxt: #0,
                             },
@@ -379,10 +379,10 @@ error: AssignFailed {
                                 TsLitType {
                                     span: Span {
                                         lo: BytePos(
-                                            4877,
+                                            141,
                                         ),
                                         hi: BytePos(
-                                            4882,
+                                            146,
                                         ),
                                         ctxt: #0,
                                     },
@@ -390,10 +390,10 @@ error: AssignFailed {
                                         Str {
                                             span: Span {
                                                 lo: BytePos(
-                                                    4877,
+                                                    141,
                                                 ),
                                                 hi: BytePos(
-                                                    4882,
+                                                    146,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -407,10 +407,10 @@ error: AssignFailed {
                                 TsLitType {
                                     span: Span {
                                         lo: BytePos(
-                                            9264,
+                                            4528,
                                         ),
                                         hi: BytePos(
-                                            9271,
+                                            4535,
                                         ),
                                         ctxt: #0,
                                     },
@@ -418,10 +418,10 @@ error: AssignFailed {
                                         Str {
                                             span: Span {
                                                 lo: BytePos(
-                                                    9264,
+                                                    4528,
                                                 ),
                                                 hi: BytePos(
-                                                    9271,
+                                                    4535,
                                                 ),
                                                 ctxt: #0,
                                             },

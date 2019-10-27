@@ -1,10 +1,10 @@
 error: RedclaredVarWithDifferentType {
     span: Span {
         lo: BytePos(
-            546,
+            227,
         ),
         hi: BytePos(
-            554,
+            235,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: RedclaredVarWithDifferentType {
 error: RedclaredVarWithDifferentType {
     span: Span {
         lo: BytePos(
-            578,
+            259,
         ),
         hi: BytePos(
-            586,
+            267,
         ),
         ctxt: #0,
     },
@@ -33,10 +33,10 @@ error: RedclaredVarWithDifferentType {
 error: RedclaredVarWithDifferentType {
     span: Span {
         lo: BytePos(
-            611,
+            292,
         ),
         hi: BytePos(
-            619,
+            300,
         ),
         ctxt: #0,
     },

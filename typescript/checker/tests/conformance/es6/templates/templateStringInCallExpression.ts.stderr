@@ -1,10 +1,10 @@
 error: NoCallSignature {
     span: Span {
         lo: BytePos(
-            51,
+            0,
         ),
         hi: BytePos(
-            63,
+            12,
         ),
         ctxt: #0,
     },
@@ -12,10 +12,10 @@ error: NoCallSignature {
         TsKeywordType {
             span: Span {
                 lo: BytePos(
-                    51,
+                    0,
                 ),
                 hi: BytePos(
-                    63,
+                    12,
                 ),
                 ctxt: #0,
             },

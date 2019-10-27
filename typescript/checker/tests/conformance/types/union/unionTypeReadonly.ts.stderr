@@ -1,10 +1,10 @@
 error: ReadOnly {
     span: Span {
         lo: BytePos(
-            1010,
+            273,
         ),
         hi: BytePos(
-            1015,
+            278,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: ReadOnly {
 error: ReadOnly {
     span: Span {
         lo: BytePos(
-            1107,
+            370,
         ),
         hi: BytePos(
-            1112,
+            375,
         ),
         ctxt: #0,
     },
@@ -33,10 +33,10 @@ error: ReadOnly {
 error: UnionError {
     span: Span {
         lo: BytePos(
-            1199,
+            462,
         ),
         hi: BytePos(
-            1204,
+            467,
         ),
         ctxt: #0,
     },
@@ -44,10 +44,10 @@ error: UnionError {
         ReadOnly {
             span: Span {
                 lo: BytePos(
-                    1199,
+                    462,
                 ),
                 hi: BytePos(
-                    1204,
+                    467,
                 ),
                 ctxt: #0,
             },
@@ -62,10 +62,10 @@ error: UnionError {
 error: UnionError {
     span: Span {
         lo: BytePos(
-            1309,
+            572,
         ),
         hi: BytePos(
-            1314,
+            577,
         ),
         ctxt: #0,
     },
@@ -73,10 +73,10 @@ error: UnionError {
         ReadOnly {
             span: Span {
                 lo: BytePos(
-                    1309,
+                    572,
                 ),
                 hi: BytePos(
-                    1314,
+                    577,
                 ),
                 ctxt: #0,
             },
@@ -84,10 +84,10 @@ error: UnionError {
         ReadOnly {
             span: Span {
                 lo: BytePos(
-                    1309,
+                    572,
                 ),
                 hi: BytePos(
-                    1314,
+                    577,
                 ),
                 ctxt: #0,
             },
@@ -102,10 +102,10 @@ error: UnionError {
 error: ReadOnly {
     span: Span {
         lo: BytePos(
-            1419,
+            682,
         ),
         hi: BytePos(
-            1424,
+            687,
         ),
         ctxt: #0,
     },

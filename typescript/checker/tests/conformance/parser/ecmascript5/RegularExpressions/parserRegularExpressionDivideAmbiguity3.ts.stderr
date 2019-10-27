@@ -1,10 +1,10 @@
 error: NoSuchProperty {
     span: Span {
         lo: BytePos(
-            41,
+            17,
         ),
         hi: BytePos(
-            44,
+            20,
         ),
         ctxt: #0,
     },
@@ -13,10 +13,10 @@ error: NoSuchProperty {
             Ident {
                 span: Span {
                     lo: BytePos(
-                        41,
+                        17,
                     ),
                     hi: BytePos(
-                        44,
+                        20,
                     ),
                     ctxt: #0,
                 },

@@ -1,10 +1,10 @@
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2291,
+            320,
         ),
         hi: BytePos(
-            2297,
+            326,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2342,
+            371,
         ),
         hi: BytePos(
-            2348,
+            377,
         ),
         ctxt: #0,
     },
@@ -33,10 +33,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2393,
+            422,
         ),
         hi: BytePos(
-            2399,
+            428,
         ),
         ctxt: #0,
     },
@@ -49,10 +49,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2444,
+            473,
         ),
         hi: BytePos(
-            2450,
+            479,
         ),
         ctxt: #0,
     },
@@ -65,10 +65,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2495,
+            524,
         ),
         hi: BytePos(
-            2501,
+            530,
         ),
         ctxt: #0,
     },
@@ -81,10 +81,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2546,
+            575,
         ),
         hi: BytePos(
-            2552,
+            581,
         ),
         ctxt: #0,
     },
@@ -97,10 +97,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2597,
+            626,
         ),
         hi: BytePos(
-            2603,
+            632,
         ),
         ctxt: #0,
     },
@@ -113,10 +113,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2648,
+            677,
         ),
         hi: BytePos(
-            2654,
+            683,
         ),
         ctxt: #0,
     },
@@ -129,10 +129,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2699,
+            728,
         ),
         hi: BytePos(
-            2705,
+            734,
         ),
         ctxt: #0,
     },
@@ -145,10 +145,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2750,
+            779,
         ),
         hi: BytePos(
-            2756,
+            785,
         ),
         ctxt: #0,
     },
@@ -161,10 +161,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2801,
+            830,
         ),
         hi: BytePos(
-            2807,
+            836,
         ),
         ctxt: #0,
     },
@@ -177,10 +177,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2852,
+            881,
         ),
         hi: BytePos(
-            2858,
+            887,
         ),
         ctxt: #0,
     },
@@ -193,10 +193,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2903,
+            932,
         ),
         hi: BytePos(
-            2909,
+            938,
         ),
         ctxt: #0,
     },
@@ -209,10 +209,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            2954,
+            983,
         ),
         hi: BytePos(
-            2960,
+            989,
         ),
         ctxt: #0,
     },
@@ -225,10 +225,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3005,
+            1034,
         ),
         hi: BytePos(
-            3011,
+            1040,
         ),
         ctxt: #0,
     },
@@ -241,10 +241,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3056,
+            1085,
         ),
         hi: BytePos(
-            3062,
+            1091,
         ),
         ctxt: #0,
     },
@@ -257,10 +257,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3107,
+            1136,
         ),
         hi: BytePos(
-            3113,
+            1142,
         ),
         ctxt: #0,
     },
@@ -273,10 +273,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3158,
+            1187,
         ),
         hi: BytePos(
-            3164,
+            1193,
         ),
         ctxt: #0,
     },
@@ -289,10 +289,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3209,
+            1238,
         ),
         hi: BytePos(
-            3215,
+            1244,
         ),
         ctxt: #0,
     },
@@ -305,10 +305,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3260,
+            1289,
         ),
         hi: BytePos(
-            3266,
+            1295,
         ),
         ctxt: #0,
     },
@@ -321,10 +321,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3311,
+            1340,
         ),
         hi: BytePos(
-            3317,
+            1346,
         ),
         ctxt: #0,
     },
@@ -337,10 +337,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3362,
+            1391,
         ),
         hi: BytePos(
-            3368,
+            1397,
         ),
         ctxt: #0,
     },
@@ -353,10 +353,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3413,
+            1442,
         ),
         hi: BytePos(
-            3419,
+            1448,
         ),
         ctxt: #0,
     },
@@ -369,10 +369,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3464,
+            1493,
         ),
         hi: BytePos(
-            3470,
+            1499,
         ),
         ctxt: #0,
     },
@@ -385,10 +385,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3515,
+            1544,
         ),
         hi: BytePos(
-            3521,
+            1550,
         ),
         ctxt: #0,
     },
@@ -401,10 +401,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3566,
+            1595,
         ),
         hi: BytePos(
-            3572,
+            1601,
         ),
         ctxt: #0,
     },
@@ -417,10 +417,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3617,
+            1646,
         ),
         hi: BytePos(
-            3623,
+            1652,
         ),
         ctxt: #0,
     },
@@ -433,10 +433,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3668,
+            1697,
         ),
         hi: BytePos(
-            3674,
+            1703,
         ),
         ctxt: #0,
     },
@@ -449,10 +449,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3719,
+            1748,
         ),
         hi: BytePos(
-            3725,
+            1754,
         ),
         ctxt: #0,
     },
@@ -465,10 +465,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3770,
+            1799,
         ),
         hi: BytePos(
-            3776,
+            1805,
         ),
         ctxt: #0,
     },
@@ -481,10 +481,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3821,
+            1850,
         ),
         hi: BytePos(
-            3827,
+            1856,
         ),
         ctxt: #0,
     },
@@ -497,10 +497,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3872,
+            1901,
         ),
         hi: BytePos(
-            3878,
+            1907,
         ),
         ctxt: #0,
     },
@@ -513,10 +513,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            3923,
+            1952,
         ),
         hi: BytePos(
-            3929,
+            1958,
         ),
         ctxt: #0,
     },
