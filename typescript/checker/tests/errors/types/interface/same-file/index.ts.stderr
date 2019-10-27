@@ -90,7 +90,7 @@ error: AssignFailed {
         },
     ),
     cause: [
-        MissingFields {
+        Errors {
             span: Span {
                 lo: BytePos(
                     39,
@@ -100,57 +100,70 @@ error: AssignFailed {
                 ),
                 ctxt: #0,
             },
-            fields: [
-                Property(
-                    PropertySignature {
-                        span: Span {
-                            lo: BytePos(
-                                18,
-                            ),
-                            hi: BytePos(
-                                31,
-                            ),
-                            ctxt: #0,
-                        },
-                        readonly: false,
-                        key: Ident(
-                            Ident {
+            errors: [
+                MissingFields {
+                    span: Span {
+                        lo: BytePos(
+                            39,
+                        ),
+                        hi: BytePos(
+                            50,
+                        ),
+                        ctxt: #0,
+                    },
+                    fields: [
+                        Property(
+                            PropertySignature {
                                 span: Span {
                                     lo: BytePos(
                                         18,
                                     ),
                                     hi: BytePos(
-                                        22,
+                                        31,
                                     ),
                                     ctxt: #0,
                                 },
-                                sym: Atom('name' type=inline),
-                                type_ann: None,
+                                readonly: false,
+                                key: Ident(
+                                    Ident {
+                                        span: Span {
+                                            lo: BytePos(
+                                                18,
+                                            ),
+                                            hi: BytePos(
+                                                22,
+                                            ),
+                                            ctxt: #0,
+                                        },
+                                        sym: Atom('name' type=inline),
+                                        type_ann: None,
+                                        optional: false,
+                                    },
+                                ),
+                                computed: false,
                                 optional: false,
+                                params: [],
+                                type_ann: Some(
+                                    Keyword(
+                                        TsKeywordType {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    24,
+                                                ),
+                                                hi: BytePos(
+                                                    30,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            kind: TsStringKeyword,
+                                        },
+                                    ),
+                                ),
+                                type_params: None,
                             },
                         ),
-                        computed: false,
-                        optional: false,
-                        params: [],
-                        type_ann: Some(
-                            Keyword(
-                                TsKeywordType {
-                                    span: Span {
-                                        lo: BytePos(
-                                            24,
-                                        ),
-                                        hi: BytePos(
-                                            30,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    kind: TsStringKeyword,
-                                },
-                            ),
-                        ),
-                        type_params: None,
-                    },
-                ),
+                    ],
+                },
             ],
         },
     ],
