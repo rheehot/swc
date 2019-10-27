@@ -874,6 +874,13 @@ impl Analyzer<'_, '_> {
             }
 
             Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsStringKeyword,
+                ..
+            }) => {
+                return Ok(builtin_types::get_type(self.libs, span, &js_word!("String"))?.owned())
+            }
+
+            Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsUnknownKeyword,
                 ..
             }) => return Err(Error::Unknown { span: obj.span() }),

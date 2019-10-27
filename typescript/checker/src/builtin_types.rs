@@ -1,5 +1,6 @@
 use crate::{
     analyzer::export::pat_to_ts_fn_param,
+    errors::Error,
     ty::{self, Class, ClassMember, Static},
 };
 use chashmap::CHashMap;
@@ -202,22 +203,28 @@ fn merge(ls: &[Lib]) -> &'static Merged {
     return &*CACHE.get(ls).unwrap();
 }
 
-pub fn get_var(libs: &[Lib], span: Span, name: &JsWord) -> Result<Type, ()> {
+pub fn get_var(libs: &[Lib], span: Span, name: &JsWord) -> Result<Type, Error> {
     let lib = merge(libs);
 
     if let Some(v) = lib.vars.get(&name) {
         return Ok(ty::Type::Static(Static { span, ty: v }));
     }
 
-    Err(())
+    Err(Error::NoSuchType {
+        span,
+        name: name.clone(),
+    })
 }
 
-pub fn get_type(libs: &[Lib], span: Span, name: &JsWord) -> Result<Type, ()> {
+pub fn get_type(libs: &[Lib], span: Span, name: &JsWord) -> Result<Type, Error> {
     let lib = merge(libs);
 
     if let Some(ty) = lib.types.get(name) {
         return Ok(ty::Type::Static(Static { span, ty }));
     }
 
-    Err(())
+    Err(Error::NoSuchVar {
+        span,
+        name: name.clone(),
+    })
 }

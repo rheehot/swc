@@ -34,6 +34,16 @@ pub enum Error {
         span: Span,
     },
 
+    NoSuchType {
+        span: Span,
+        name: JsWord,
+    },
+
+    NoSuchVar {
+        span: Span,
+        name: JsWord,
+    },
+
     DuplicateName {
         span: Span,
     },
