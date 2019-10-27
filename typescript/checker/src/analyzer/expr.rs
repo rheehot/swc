@@ -2054,14 +2054,48 @@ impl Visit<ClassProp> for Analyzer<'_, '_> {
 
 impl Visit<TsTypeAssertion> for Analyzer<'_, '_> {
     fn visit(&mut self, expr: &TsTypeAssertion) {
-        // TODO: Check type
         expr.visit_children(self);
+
+        match self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann) {
+            Ok(()) => {}
+            Err(err) => {
+                self.info.errors.push(err);
+            }
+        }
     }
 }
 
 impl Visit<TsAsExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, expr: &TsAsExpr) {
-        // TODO: Check type
         expr.visit_children(self);
+
+        match self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann) {
+            Ok(()) => {}
+            Err(err) => {
+                self.info.errors.push(err);
+            }
+        }
+    }
+}
+
+impl Analyzer<'_, '_> {
+    fn validate_type_cast(&self, _span: Span, _orig: &Expr, _to: &TsType) -> Result<(), Error> {
+        // let orig_ty = self.type_of(orig)?;
+        // let orig_ty = self.expand_type(span, orig_ty)?;
+
+        // let casted_ty = Type::from(to.clone());
+        // let casted_ty = self.expand_type(span, Cow::Owned(casted_ty))?;
+
+        // let c = Comparator {
+        //     left: &*orig_ty,
+        //     right: &*casted_ty,
+        // };
+        // match c.take(|l, r| match *l {
+        //     Type::Keyword(TsKeywordType{kind:TsKeywordTypeKind::TsStringKeyword,..})
+        // => match *r{         Type::Keyword(TsKeywordType{kind:
+        // TsKeywordTypeKind::TsNumberKeyword,..})     }
+        // }) {}
+
+        Ok(())
     }
 }
