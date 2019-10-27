@@ -812,7 +812,7 @@ impl Analyzer<'_, '_> {
                         }
 
                         if e.is_const && type_mode == TypeOfMode::LValue {
-                            return Err(Error::ConstEnumUsedAsLValue { span: prop.span() });
+                            return Err(Error::ConstEnumVariantUsedAsLValue { span: prop.span() });
                         }
 
                         debug_assert_ne!(span, prop.span());

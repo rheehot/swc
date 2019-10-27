@@ -100,13 +100,18 @@ pub enum Error {
         left: Span,
     },
 
+    /// TS2475
+    ConstEnumUsedAsVar {
+        span: Span,
+    },
+
     /// TS2476
     ConstEnumNonIndexAccess {
         span: Span,
     },
 
     // TS2540
-    ConstEnumUsedAsLValue {
+    ConstEnumVariantUsedAsLValue {
         span: Span,
     },
 
