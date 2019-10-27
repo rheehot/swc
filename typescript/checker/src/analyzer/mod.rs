@@ -24,6 +24,7 @@ mod assign;
 mod control_flow;
 pub mod export;
 mod expr;
+mod expr_bin;
 mod generic;
 mod name;
 mod scope;

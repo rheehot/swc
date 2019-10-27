@@ -98,6 +98,7 @@ impl_by_clone!(Type<'_>);
 impl_by_clone!(Expr);
 impl_by_clone!(TypeElement<'_>);
 impl_by_clone!(TsLit);
+impl_by_clone!(TsLitType);
 
 struct SpanRemover;
 impl Fold<Span> for SpanRemover {

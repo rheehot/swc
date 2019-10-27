@@ -17,6 +17,14 @@ pub enum Error {
         rhs: Span,
     },
 
+    /// TS2367
+    NoOverlap {
+        span: Span,
+        value: bool,
+        left: Span,
+        right: Span,
+    },
+
     ReadOnly {
         span: Span,
     },

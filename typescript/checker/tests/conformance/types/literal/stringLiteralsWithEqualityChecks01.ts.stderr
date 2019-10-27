@@ -1,0 +1,210 @@
+error: NoOverlap {
+    span: Span {
+        lo: BytePos(
+            458,
+        ),
+        hi: BytePos(
+            473,
+        ),
+        ctxt: #0,
+    },
+    value: false,
+    left: Span {
+        lo: BytePos(
+            458,
+        ),
+        hi: BytePos(
+            463,
+        ),
+        ctxt: #0,
+    },
+    right: Span {
+        lo: BytePos(
+            468,
+        ),
+        hi: BytePos(
+            473,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts:8:5
+  |
+8 | b = "foo" === "bar";
+  |     ^^^^^^^^^^^^^^^
+
+error: NoOverlap {
+    span: Span {
+        lo: BytePos(
+            480,
+        ),
+        hi: BytePos(
+            491,
+        ),
+        ctxt: #0,
+    },
+    value: false,
+    left: Span {
+        lo: BytePos(
+            480,
+        ),
+        hi: BytePos(
+            485,
+        ),
+        ctxt: #0,
+    },
+    right: Span {
+        lo: BytePos(
+            490,
+        ),
+        hi: BytePos(
+            491,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts:9:5
+  |
+9 | b = "bar" === x;
+  |     ^^^^^^^^^^^
+
+error: NoOverlap {
+    span: Span {
+        lo: BytePos(
+            498,
+        ),
+        hi: BytePos(
+            509,
+        ),
+        ctxt: #0,
+    },
+    value: false,
+    left: Span {
+        lo: BytePos(
+            498,
+        ),
+        hi: BytePos(
+            499,
+        ),
+        ctxt: #0,
+    },
+    right: Span {
+        lo: BytePos(
+            504,
+        ),
+        hi: BytePos(
+            509,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts:10:5
+   |
+10 | b = x === "bar";
+   |     ^^^^^^^^^^^
+
+error: NoOverlap {
+    span: Span {
+        lo: BytePos(
+            603,
+        ),
+        hi: BytePos(
+            618,
+        ),
+        ctxt: #0,
+    },
+    value: true,
+    left: Span {
+        lo: BytePos(
+            603,
+        ),
+        hi: BytePos(
+            608,
+        ),
+        ctxt: #0,
+    },
+    right: Span {
+        lo: BytePos(
+            613,
+        ),
+        hi: BytePos(
+            618,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts:17:5
+   |
+17 | b = "foo" !== "bar";
+   |     ^^^^^^^^^^^^^^^
+
+error: NoOverlap {
+    span: Span {
+        lo: BytePos(
+            625,
+        ),
+        hi: BytePos(
+            636,
+        ),
+        ctxt: #0,
+    },
+    value: true,
+    left: Span {
+        lo: BytePos(
+            625,
+        ),
+        hi: BytePos(
+            630,
+        ),
+        ctxt: #0,
+    },
+    right: Span {
+        lo: BytePos(
+            635,
+        ),
+        hi: BytePos(
+            636,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts:18:5
+   |
+18 | b = "bar" !== x;
+   |     ^^^^^^^^^^^
+
+error: NoOverlap {
+    span: Span {
+        lo: BytePos(
+            643,
+        ),
+        hi: BytePos(
+            654,
+        ),
+        ctxt: #0,
+    },
+    value: true,
+    left: Span {
+        lo: BytePos(
+            643,
+        ),
+        hi: BytePos(
+            644,
+        ),
+        ctxt: #0,
+    },
+    right: Span {
+        lo: BytePos(
+            649,
+        ),
+        hi: BytePos(
+            654,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/types/literal/stringLiteralsWithEqualityChecks01.ts:19:5
+   |
+19 | b = x !== "bar";
+   |     ^^^^^^^^^^^
+
