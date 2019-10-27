@@ -197,6 +197,13 @@ impl Analyzer<'_, '_> {
         );
         child.allow_ref_declaring = self.allow_ref_declaring;
         child.span_allowed_implicit_any = self.span_allowed_implicit_any;
+        if !self.return_type_span.is_dummy() {
+            child.return_type_span = self.return_type_span;
+            child
+                .inferred_return_types
+                .get_mut()
+                .insert(self.return_type_span, vec![]);
+        }
 
         child
     }
