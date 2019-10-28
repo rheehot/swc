@@ -599,6 +599,14 @@ impl Analyzer<'_, '_> {
                 _ => {}
             },
 
+            Type::Class(..) => {
+                // Assignment to class itself. (not an instance)
+                match *rhs.normalize() {
+                    Type::ClassInstance(..) => fail!(),
+                    _ => {}
+                }
+            }
+
             _ => {}
         }
 
