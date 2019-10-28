@@ -3,10 +3,11 @@ use crate::{
     errors::Error,
     ty::{
         Array, Class, ClassInstance, ClassMember, Constructor, Function, Interface, Intersection,
-        Param, Tuple, Type, TypeElement, TypeLit, TypeRefExt, Union,
+        Param, Tuple, Type, TypeElement, TypeLit, TypeRef, TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
 };
+use std::borrow::Cow;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
@@ -327,6 +328,60 @@ impl Analyzer<'_, '_> {
                 }
 
                 fail!()
+            }
+
+            Type::Enum(ref e) => {
+                let (mut has_str, mut has_num) = (false, false);
+
+                for m in &e.members {
+                    //
+                }
+
+                if !has_str && !has_num {
+                    return self.assign_inner(
+                        to,
+                        &Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                        }),
+                        span,
+                    );
+                }
+
+                if !has_num {
+                    return self.assign_inner(
+                        to,
+                        &Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsStringKeyword,
+                        }),
+                        span,
+                    );
+                }
+
+                if !has_str {
+                    return self.assign_inner(
+                        to,
+                        &Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                        }),
+                        span,
+                    );
+                }
+
+                unimplemented!("assigning enum with string / number variant to {:?}", to)
+                // return Ok(Type::union(vec![
+                //     Type::Keyword(TsKeywordType {
+                //         span,
+                //         kind: TsKeywordTypeKind::TsNumberKeyword,
+                //     }),
+                //     Type::Keyword(TsKeywordType {
+                //         span,
+                //         kind: TsKeywordTypeKind::TsStringKeyword,
+                //     }),
+                // ])
+                // .owned());
             }
 
             _ => {}
