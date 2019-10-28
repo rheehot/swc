@@ -1990,6 +1990,19 @@ impl Analyzer<'_, '_> {
                 return Ok(Array { span, elem_type }.into_cow());
             }
 
+            // type Baz = "baz"
+            // let a: ["foo", "bar", Baz] = ["foo", "bar", "baz"];
+            Type::Tuple(Tuple { span, types }) => {
+                return Ok(Tuple {
+                    span,
+                    types: types
+                        .into_iter()
+                        .map(|v| self.expand_type(v.span(), v))
+                        .collect::<Result<_, _>>()?,
+                }
+                .into_cow())
+            }
+
             ty => ty,
         };
 
