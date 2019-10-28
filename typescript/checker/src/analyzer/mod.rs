@@ -689,7 +689,6 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                         return;
                     }
                 };
-                println!("VALUE_TYPE: {:?}", value_ty);
 
                 match declared_ty {
                     Some(ty) => {
