@@ -100,6 +100,11 @@ pub enum Error {
         left: Span,
     },
 
+    /// TS2304
+    NameNotFound {
+        span: Span,
+    },
+
     /// TS2378
     GetterPropWithoutReturn {
         span: Span,
