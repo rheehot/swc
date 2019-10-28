@@ -1022,6 +1022,22 @@ impl Analyzer<'_, '_> {
                 return Ok(Type::union(tys).owned());
             }
 
+            Type::Tuple(Tuple { ref types, .. }) => match *prop {
+                Expr::Lit(Lit::Num(n)) => {
+                    let v = n.value.round() as i64;
+                    if v < 0 || types.len() <= v as usize {
+                        return Err(Error::TupleIndexError {
+                            span,
+                            index: v,
+                            len: types.len() as u64,
+                        });
+                    }
+
+                    return Ok(types[v as usize].to_static().owned());
+                }
+                _ => {}
+            },
+
             _ => {}
         }
 

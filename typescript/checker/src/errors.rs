@@ -120,6 +120,13 @@ pub enum Error {
         span: Span,
     },
 
+    // TS2493
+    TupleIndexError {
+        span: Span,
+        len: u64,
+        index: i64,
+    },
+
     // TS2540
     ConstEnumVariantUsedAsLValue {
         span: Span,
