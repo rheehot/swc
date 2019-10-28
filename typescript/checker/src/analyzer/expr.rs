@@ -112,10 +112,9 @@ impl Analyzer<'_, '_> {
                 }
 
                 println!(
-                    "({}) type_of(): undefined symbol: {}\n{:#?}",
+                    "({}) type_of(): undefined symbol: {}",
                     self.scope.depth(),
                     i.sym,
-                    self.scope
                 );
 
                 return Err(Error::UndefinedSymbol { span: i.span });
