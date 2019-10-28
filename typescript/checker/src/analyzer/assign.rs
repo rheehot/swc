@@ -599,10 +599,16 @@ impl Analyzer<'_, '_> {
                 _ => {}
             },
 
-            Type::Class(..) => {
+            Type::Class(ref l_cls) => {
                 // Assignment to class itself. (not an instance)
                 match *rhs.normalize() {
-                    Type::ClassInstance(..) => fail!(),
+                    Type::ClassInstance(ClassInstance { ref cls, .. }) => {
+                        if l_cls.eq_ignore_span(cls) {
+                            return Ok(());
+                        } else {
+                            fail!()
+                        }
+                    }
                     _ => {}
                 }
             }

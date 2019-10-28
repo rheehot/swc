@@ -1,4 +1,4 @@
-use crate::ty::{Type, TypeElement};
+use crate::ty::{Class, Type, TypeElement};
 use std::{borrow::Cow, mem::transmute};
 use swc_atoms::js_word;
 use swc_common::{Fold, FoldWith, Span, DUMMY_SP};
@@ -99,6 +99,7 @@ impl_by_clone!(Expr);
 impl_by_clone!(TypeElement<'_>);
 impl_by_clone!(TsLit);
 impl_by_clone!(TsLitType);
+impl_by_clone!(Class<'_>);
 
 struct SpanRemover;
 impl Fold<Span> for SpanRemover {
