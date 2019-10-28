@@ -509,6 +509,14 @@ impl Analyzer<'_, '_> {
                         return Ok(());
                     }
 
+                    // Extra check to handle "has_escape"
+                    match (lit, r_lit) {
+                        (&TsLit::Str(ref l), &TsLit::Str(ref r)) if l.value == r.value => {
+                            return Ok(())
+                        }
+                        _ => {}
+                    }
+
                     fail!()
                 }
                 // TODO: allow
