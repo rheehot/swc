@@ -22,6 +22,13 @@ pub enum Error {
         span: Span,
     },
 
+    /// TS2352
+    InvalidTupleCast {
+        span: Span,
+        left: Span,
+        right: Span,
+    },
+
     /// TS2367
     NoOverlap {
         span: Span,

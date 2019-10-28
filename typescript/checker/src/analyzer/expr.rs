@@ -2191,7 +2191,23 @@ impl Analyzer<'_, '_> {
         let casted_ty = Type::from(to.clone());
         let casted_ty = self.expand_type(span, Cow::Owned(casted_ty))?;
 
-        self.assign(&casted_ty, &orig_ty, span)
+        self.assign(&casted_ty, &orig_ty, span)?;
+
+        match (&*orig_ty, &*casted_ty) {
+            (&Type::Tuple(ref lt), &Type::Tuple(ref rt)) => {
+                //
+                if lt.types.len() != rt.types.len() {
+                    return Err(Error::InvalidTupleCast {
+                        span,
+                        left: lt.span(),
+                        right: rt.span(),
+                    });
+                }
+            }
+            _ => {}
+        }
+
+        Ok(())
     }
 }
 
