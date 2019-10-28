@@ -1027,7 +1027,7 @@ impl Analyzer<'_, '_> {
                     let v = n.value.round() as i64;
                     if v < 0 || types.len() <= v as usize {
                         return Err(Error::TupleIndexError {
-                            span,
+                            span: n.span(),
                             index: v,
                             len: types.len() as u64,
                         });
