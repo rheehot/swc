@@ -190,12 +190,21 @@ impl Analyzer<'_, '_> {
 
             Expr::Paren(ParenExpr { ref expr, .. }) => return self.type_of(expr),
 
-            Expr::Tpl(..) => {
+            Expr::Tpl(ref t) => {
+                // Check if tpl is constant. If it is, it's type is string literal.
+                if t.exprs.is_empty() {
+                    return Ok(Type::Lit(TsLitType {
+                        span: t.span(),
+                        lit: TsLit::Str(t.quasis[0].raw.clone()),
+                    })
+                    .into_cow());
+                }
+
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsStringKeyword,
                 })
-                .into_cow())
+                .into_cow());
             }
 
             Expr::Bin(BinExpr {
