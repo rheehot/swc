@@ -347,6 +347,10 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 }
             });
 
+            if handler.has_errors() {
+                return Err(());
+            }
+
             res
         })
     });
