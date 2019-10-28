@@ -1929,10 +1929,7 @@ impl Analyzer<'_, '_> {
                             _ => {}
                         }
 
-                        unimplemented!(
-                            "expand_type(): error reporting for type not found: {:?}",
-                            ty
-                        );
+                        return Err(Error::NameNotFound { span });
                     }
 
                     TsType::TsTypeQuery(TsTypeQuery { ref expr_name, .. }) => match *expr_name {
@@ -2163,6 +2160,22 @@ impl Analyzer<'_, '_> {
         // }) {}
 
         Ok(())
+    }
+}
+
+impl Visit<ThrowStmt> for Analyzer<'_, '_> {
+    fn visit(&mut self, s: &ThrowStmt) {
+        s.visit_children(self);
+
+        match self
+            .type_of(&s.arg)
+            .and_then(|ty| self.expand_type(s.span, ty))
+        {
+            Ok(..) => {}
+            Err(err) => {
+                self.info.errors.push(err);
+            }
+        }
     }
 }
 
