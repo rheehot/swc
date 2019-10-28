@@ -3,36 +3,51 @@ use crate::errors::Error;
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
-impl Visit<GetterProp> for Analyzer<'_, '_> {
-    fn visit(&mut self, prop: &GetterProp) {
-        let entry = self.with_child(ScopeKind::Fn, Default::default(), |child| {
-            child.return_type_span = prop.span();
+macro_rules! visit_method_like {
+    ($a:expr, $node:expr) => {{
+        let entry = $a.with_child(ScopeKind::Fn, Default::default(), |child| {
+            child.return_type_span = $node.span();
 
             child
                 .inferred_return_types
                 .get_mut()
-                .insert(prop.span(), Default::default());
+                .insert($node.span(), Default::default());
 
-            prop.visit_children(child);
+            $node.visit_children(child);
 
             child
                 .inferred_return_types
                 .get_mut()
-                .remove_entry(&prop.span())
+                .remove_entry(&$node.span())
                 .unwrap_or_default()
         });
 
         if entry.1.is_empty() {
             // getter property must have return statements.
-            self.info.errors.push(Error::GetterPropWithoutReturn {
-                span: prop.key.span(),
+            $a.info.errors.push(Error::GetterPropWithoutReturn {
+                span: $node.key.span(),
             });
         }
 
-        *self
-            .inferred_return_types
+        *$a.inferred_return_types
             .get_mut()
-            .entry(prop.span())
+            .entry($node.span())
             .or_default() = entry.1;
+    }};
+}
+
+impl Visit<GetterProp> for Analyzer<'_, '_> {
+    fn visit(&mut self, prop: &GetterProp) {
+        visit_method_like!(self, prop);
     }
 }
+
+// impl Visit<ClassMethod> for Analyzer<'_, '_> {
+//     fn visit(&mut self, m: &ClassMethod) {
+//         if m.kind == MethodKind::Getter {
+//             visit_method_like!(self, m);
+//         } else {
+//             m.visit_children(self)
+//         }
+//     }
+// }
