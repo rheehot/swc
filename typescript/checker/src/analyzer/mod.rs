@@ -675,10 +675,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
 
                 //  Check if v_ty is assignable to ty
                 let value_ty = match self.type_of(&init).and_then(|ty| {
-                    // println!(
-                    //     "Visit<VarDecl>: [{:?}] type_of(initializer): {:#?}",
-                    //     self.declaring, ty
-                    // );
+                    // println!("Visit<VarDecl>: init={:?}, type={:?}", &init, ty);
                     self.expand_type(span, ty)
                 }) {
                     Ok(ty) => {
@@ -692,6 +689,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                         return;
                     }
                 };
+                println!("VALUE_TYPE: {:?}", value_ty);
 
                 match declared_ty {
                     Some(ty) => {
