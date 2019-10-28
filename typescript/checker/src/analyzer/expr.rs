@@ -195,7 +195,12 @@ impl Analyzer<'_, '_> {
                 if t.exprs.is_empty() {
                     return Ok(Type::Lit(TsLitType {
                         span: t.span(),
-                        lit: TsLit::Str(t.quasis[0].raw.clone()),
+                        lit: TsLit::Str(
+                            t.quasis[0]
+                                .cooked
+                                .clone()
+                                .unwrap_or_else(|| t.quasis[0].raw.clone()),
+                        ),
                     })
                     .into_cow());
                 }

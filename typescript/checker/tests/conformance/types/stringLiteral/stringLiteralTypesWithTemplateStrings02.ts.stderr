@@ -37,8 +37,8 @@ error: AssignFailed {
             ),
         },
     ),
-    right: Keyword(
-        TsKeywordType {
+    right: Lit(
+        TsLitType {
             span: Span {
                 lo: BytePos(
                     46,
@@ -48,7 +48,22 @@ error: AssignFailed {
                 ),
                 ctxt: #0,
             },
-            kind: TsStringKeyword,
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            47,
+                        ),
+                        hi: BytePos(
+                            52,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('AB
+                    C' type=inline),
+                    has_escape: false,
+                },
+            ),
         },
     ),
     cause: [],
