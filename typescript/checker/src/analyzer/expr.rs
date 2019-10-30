@@ -1407,6 +1407,33 @@ impl Analyzer<'_, '_> {
                 computed,
                 ..
             }) => {
+                {
+                    // Handle toString()
+                    macro_rules! handle {
+                        () => {{
+                            return Ok(Cow::Owned(
+                                TsKeywordType {
+                                    span,
+                                    kind: TsKeywordTypeKind::TsStringKeyword,
+                                }
+                                .into(),
+                            ));
+                        }};
+                    }
+                    match **prop {
+                        Expr::Ident(Ident {
+                            sym: js_word!("toString"),
+                            ..
+                        }) if !computed => handle!(),
+                        Expr::Lit(Lit::Str(Str {
+                            value: js_word!("toString"),
+                            ..
+                        })) => handle!(),
+
+                        _ => {}
+                    }
+                }
+
                 // Handle member expression
                 let obj_type = self.type_of(obj)?.generalize_lit();
 

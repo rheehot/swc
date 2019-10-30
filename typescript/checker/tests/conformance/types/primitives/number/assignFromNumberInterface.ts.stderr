@@ -74,7 +74,7 @@ error: AssignFailed {
                                         ),
                                         ctxt: #0,
                                     },
-                                    value: Atom('toString' type=dynamic),
+                                    value: Atom('toString' type=static),
                                     has_escape: false,
                                 },
                             ),
