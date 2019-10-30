@@ -2184,6 +2184,19 @@ impl Visit<TsAsExpr> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
+    /// ```ts
+    /// var unionTuple3: [number, string | number] = [10, "foo"];
+    /// var unionTuple4 = <[number, number]>unionTuple3;
+    /// ```
+    ///
+    /// is valid, while
+    ///
+    /// ```ts
+    /// var unionTuple3: [number, string | number] = [10, "foo"];
+    /// var unionTuple4: [number, number] = unionTuple3;
+    /// ```
+    ///
+    /// results in error.
     fn validate_type_cast(&self, span: Span, orig: &Expr, to: &TsType) -> Result<(), Error> {
         let orig_ty = self.type_of(orig)?;
         let orig_ty = self.expand_type(span, orig_ty)?;
@@ -2191,21 +2204,70 @@ impl Analyzer<'_, '_> {
         let casted_ty = Type::from(to.clone());
         let casted_ty = self.expand_type(span, Cow::Owned(casted_ty))?;
 
-        self.assign(&casted_ty, &orig_ty, span)?;
-
-        match (&*orig_ty, &*casted_ty) {
-            (&Type::Tuple(ref lt), &Type::Tuple(ref rt)) => {
+        match *casted_ty {
+            Type::Tuple(ref rt) => {
                 //
-                if lt.types.len() != rt.types.len() {
-                    return Err(Error::InvalidTupleCast {
-                        span,
-                        left: lt.span(),
-                        right: rt.span(),
-                    });
+                match *orig_ty {
+                    Type::Tuple(ref lt) => {
+                        //
+                        if lt.types.len() != rt.types.len() {
+                            return Err(Error::InvalidTupleCast {
+                                span,
+                                left: lt.span(),
+                                right: rt.span(),
+                            });
+                        }
+
+                        let mut all_castable = true;
+                        //
+                        for (i, lty) in lt.types.iter().enumerate() {
+                            let rty = &rt.types[i];
+
+                            match *rty.normalize() {
+                                Type::Union(ref u) => {
+                                    let castable =
+                                        u.types.iter().any(|v| lty.eq_ignore_name_and_span(v));
+                                    //
+                                    if !castable {
+                                        all_castable = false;
+                                        break;
+                                    }
+                                }
+
+                                _ => {
+                                    all_castable = false;
+                                }
+                            }
+                        }
+
+                        if all_castable {
+                            return Ok(());
+                        }
+                    }
+
+                    _ => {}
                 }
             }
+
+            Type::Array(ref rt) => {
+                //
+                match *orig_ty {
+                    Type::Tuple(ref lt) => {
+                        if lt.types[0].eq_ignore_name_and_span(&rt.elem_type) {
+                            return Ok(());
+                        }
+                    }
+
+                    // fallback to .assign
+                    _ => {}
+                }
+            }
+
+            // fallback to .assign
             _ => {}
         }
+
+        self.assign(&casted_ty, &orig_ty, span)?;
 
         Ok(())
     }
