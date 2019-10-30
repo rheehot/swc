@@ -644,6 +644,21 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
             };
             let mut names = vec![];
 
+            macro_rules! inject_any {
+                () => {
+                    // Declare variable with type any
+                    match self
+                        .scope
+                        .declare_complex_vars(kind, &v.name, Type::any(v.span()))
+                    {
+                        Ok(()) => {}
+                        Err(err) => {
+                            self.info.errors.push(err);
+                        }
+                    }
+                };
+            }
+
             macro_rules! remove_declaring {
                 () => {{
                     for n in names {
@@ -685,6 +700,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     }
                     Err(err) => {
                         self.info.errors.push(err);
+                        inject_any!();
                         remove_declaring!();
                         return;
                     }
@@ -697,6 +713,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                             Ok(ty) => ty,
                             Err(err) => {
                                 self.info.errors.push(err);
+                                inject_any!();
                                 remove_declaring!();
                                 return;
                             }
@@ -798,6 +815,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 Ok(ty) => Some(ty.to_static()),
                                 Err(err) => {
                                     self.info.errors.push(err);
+                                    inject_any!();
                                     remove_declaring!();
                                     return;
                                 }
