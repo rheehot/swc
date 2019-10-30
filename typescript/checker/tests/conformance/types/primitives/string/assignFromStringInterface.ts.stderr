@@ -1,0 +1,2915 @@
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            29,
+        ),
+        hi: BytePos(
+            30,
+        ),
+        ctxt: #0,
+    },
+    left: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    8,
+                ),
+                hi: BytePos(
+                    10,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            8,
+                        ),
+                        hi: BytePos(
+                            10,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    right: Interface(
+        Interface {
+            span: Span {
+                lo: BytePos(
+                    0,
+                ),
+                hi: BytePos(
+                    0,
+                ),
+                ctxt: #0,
+            },
+            name: Atom('String' type=static),
+            type_params: None,
+            extends: [],
+            body: [
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('toString' type=dynamic),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('charAt' type=inline),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('pos' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsNumberKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('charCodeAt' type=dynamic),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('index' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsNumberKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsNumberKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('concat' type=static),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Rest(
+                                RestPat {
+                                    dot3_token: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    arg: Ident(
+                                        Ident {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            sym: Atom('strings' type=inline),
+                                            type_ann: None,
+                                            optional: false,
+                                        },
+                                    ),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsArrayType(
+                                                TsArrayType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    elem_type: TsKeywordType(
+                                                        TsKeywordType {
+                                                            span: Span {
+                                                                lo: BytePos(
+                                                                    0,
+                                                                ),
+                                                                hi: BytePos(
+                                                                    0,
+                                                                ),
+                                                                ctxt: #0,
+                                                            },
+                                                            kind: TsStringKeyword,
+                                                        },
+                                                    ),
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('indexOf' type=inline),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('searchString' type=dynamic),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsStringKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('position' type=dynamic),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsNumberKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: true,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsNumberKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('lastIndexOf' type=dynamic),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('searchString' type=dynamic),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsStringKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('position' type=dynamic),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsNumberKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: true,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsNumberKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('localeCompare' type=dynamic),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('that' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsStringKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsNumberKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('match' type=inline),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('regexp' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsUnionOrIntersectionType(
+                                                TsUnionType(
+                                                    TsUnionType {
+                                                        span: Span {
+                                                            lo: BytePos(
+                                                                0,
+                                                            ),
+                                                            hi: BytePos(
+                                                                0,
+                                                            ),
+                                                            ctxt: #0,
+                                                        },
+                                                        types: [
+                                                            TsKeywordType(
+                                                                TsKeywordType {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    kind: TsStringKeyword,
+                                                                },
+                                                            ),
+                                                            TsTypeRef(
+                                                                TsTypeRef {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    type_name: Ident(
+                                                                        Ident {
+                                                                            span: Span {
+                                                                                lo: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                hi: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                ctxt: #0,
+                                                                            },
+                                                                            sym: Atom('RegExp' type=static),
+                                                                            type_ann: None,
+                                                                            optional: false,
+                                                                        },
+                                                                    ),
+                                                                    type_params: None,
+                                                                },
+                                                            ),
+                                                        ],
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Union(
+                                Union {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    types: [
+                                        Simple(
+                                            TsTypeRef(
+                                                TsTypeRef {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    type_name: Ident(
+                                                        Ident {
+                                                            span: Span {
+                                                                lo: BytePos(
+                                                                    0,
+                                                                ),
+                                                                hi: BytePos(
+                                                                    0,
+                                                                ),
+                                                                ctxt: #0,
+                                                            },
+                                                            sym: Atom('RegExpMatchArray' type=dynamic),
+                                                            type_ann: None,
+                                                            optional: false,
+                                                        },
+                                                    ),
+                                                    type_params: None,
+                                                },
+                                            ),
+                                        ),
+                                        Keyword(
+                                            TsKeywordType {
+                                                span: Span {
+                                                    lo: BytePos(
+                                                        0,
+                                                    ),
+                                                    hi: BytePos(
+                                                        0,
+                                                    ),
+                                                    ctxt: #0,
+                                                },
+                                                kind: TsNullKeyword,
+                                            },
+                                        ),
+                                    ],
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('replace' type=inline),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('searchValue' type=dynamic),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsUnionOrIntersectionType(
+                                                TsUnionType(
+                                                    TsUnionType {
+                                                        span: Span {
+                                                            lo: BytePos(
+                                                                0,
+                                                            ),
+                                                            hi: BytePos(
+                                                                0,
+                                                            ),
+                                                            ctxt: #0,
+                                                        },
+                                                        types: [
+                                                            TsKeywordType(
+                                                                TsKeywordType {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    kind: TsStringKeyword,
+                                                                },
+                                                            ),
+                                                            TsTypeRef(
+                                                                TsTypeRef {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    type_name: Ident(
+                                                                        Ident {
+                                                                            span: Span {
+                                                                                lo: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                hi: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                ctxt: #0,
+                                                                            },
+                                                                            sym: Atom('RegExp' type=static),
+                                                                            type_ann: None,
+                                                                            optional: false,
+                                                                        },
+                                                                    ),
+                                                                    type_params: None,
+                                                                },
+                                                            ),
+                                                        ],
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('replaceValue' type=dynamic),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsStringKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('replace' type=inline),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('searchValue' type=dynamic),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsUnionOrIntersectionType(
+                                                TsUnionType(
+                                                    TsUnionType {
+                                                        span: Span {
+                                                            lo: BytePos(
+                                                                0,
+                                                            ),
+                                                            hi: BytePos(
+                                                                0,
+                                                            ),
+                                                            ctxt: #0,
+                                                        },
+                                                        types: [
+                                                            TsKeywordType(
+                                                                TsKeywordType {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    kind: TsStringKeyword,
+                                                                },
+                                                            ),
+                                                            TsTypeRef(
+                                                                TsTypeRef {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    type_name: Ident(
+                                                                        Ident {
+                                                                            span: Span {
+                                                                                lo: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                hi: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                ctxt: #0,
+                                                                            },
+                                                                            sym: Atom('RegExp' type=static),
+                                                                            type_ann: None,
+                                                                            optional: false,
+                                                                        },
+                                                                    ),
+                                                                    type_params: None,
+                                                                },
+                                                            ),
+                                                        ],
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('replacer' type=dynamic),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsFnOrConstructorType(
+                                                TsFnType(
+                                                    TsFnType {
+                                                        span: Span {
+                                                            lo: BytePos(
+                                                                0,
+                                                            ),
+                                                            hi: BytePos(
+                                                                0,
+                                                            ),
+                                                            ctxt: #0,
+                                                        },
+                                                        params: [
+                                                            Ident(
+                                                                Ident {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    sym: Atom('substring' type=dynamic),
+                                                                    type_ann: Some(
+                                                                        TsTypeAnn {
+                                                                            span: Span {
+                                                                                lo: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                hi: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                ctxt: #0,
+                                                                            },
+                                                                            type_ann: TsKeywordType(
+                                                                                TsKeywordType {
+                                                                                    span: Span {
+                                                                                        lo: BytePos(
+                                                                                            0,
+                                                                                        ),
+                                                                                        hi: BytePos(
+                                                                                            0,
+                                                                                        ),
+                                                                                        ctxt: #0,
+                                                                                    },
+                                                                                    kind: TsStringKeyword,
+                                                                                },
+                                                                            ),
+                                                                        },
+                                                                    ),
+                                                                    optional: false,
+                                                                },
+                                                            ),
+                                                            Rest(
+                                                                RestPat {
+                                                                    dot3_token: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    arg: Ident(
+                                                                        Ident {
+                                                                            span: Span {
+                                                                                lo: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                hi: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                ctxt: #0,
+                                                                            },
+                                                                            sym: Atom('args' type=inline),
+                                                                            type_ann: None,
+                                                                            optional: false,
+                                                                        },
+                                                                    ),
+                                                                    type_ann: Some(
+                                                                        TsTypeAnn {
+                                                                            span: Span {
+                                                                                lo: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                hi: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                ctxt: #0,
+                                                                            },
+                                                                            type_ann: TsArrayType(
+                                                                                TsArrayType {
+                                                                                    span: Span {
+                                                                                        lo: BytePos(
+                                                                                            0,
+                                                                                        ),
+                                                                                        hi: BytePos(
+                                                                                            0,
+                                                                                        ),
+                                                                                        ctxt: #0,
+                                                                                    },
+                                                                                    elem_type: TsKeywordType(
+                                                                                        TsKeywordType {
+                                                                                            span: Span {
+                                                                                                lo: BytePos(
+                                                                                                    0,
+                                                                                                ),
+                                                                                                hi: BytePos(
+                                                                                                    0,
+                                                                                                ),
+                                                                                                ctxt: #0,
+                                                                                            },
+                                                                                            kind: TsAnyKeyword,
+                                                                                        },
+                                                                                    ),
+                                                                                },
+                                                                            ),
+                                                                        },
+                                                                    ),
+                                                                },
+                                                            ),
+                                                        ],
+                                                        type_params: None,
+                                                        type_ann: TsTypeAnn {
+                                                            span: Span {
+                                                                lo: BytePos(
+                                                                    0,
+                                                                ),
+                                                                hi: BytePos(
+                                                                    0,
+                                                                ),
+                                                                ctxt: #0,
+                                                            },
+                                                            type_ann: TsKeywordType(
+                                                                TsKeywordType {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    kind: TsStringKeyword,
+                                                                },
+                                                            ),
+                                                        },
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('search' type=inline),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('regexp' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsUnionOrIntersectionType(
+                                                TsUnionType(
+                                                    TsUnionType {
+                                                        span: Span {
+                                                            lo: BytePos(
+                                                                0,
+                                                            ),
+                                                            hi: BytePos(
+                                                                0,
+                                                            ),
+                                                            ctxt: #0,
+                                                        },
+                                                        types: [
+                                                            TsKeywordType(
+                                                                TsKeywordType {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    kind: TsStringKeyword,
+                                                                },
+                                                            ),
+                                                            TsTypeRef(
+                                                                TsTypeRef {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    type_name: Ident(
+                                                                        Ident {
+                                                                            span: Span {
+                                                                                lo: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                hi: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                ctxt: #0,
+                                                                            },
+                                                                            sym: Atom('RegExp' type=static),
+                                                                            type_ann: None,
+                                                                            optional: false,
+                                                                        },
+                                                                    ),
+                                                                    type_params: None,
+                                                                },
+                                                            ),
+                                                        ],
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsNumberKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('slice' type=inline),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('start' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsNumberKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: true,
+                                },
+                            ),
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('end' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsNumberKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: true,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('split' type=inline),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('separator' type=dynamic),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsUnionOrIntersectionType(
+                                                TsUnionType(
+                                                    TsUnionType {
+                                                        span: Span {
+                                                            lo: BytePos(
+                                                                0,
+                                                            ),
+                                                            hi: BytePos(
+                                                                0,
+                                                            ),
+                                                            ctxt: #0,
+                                                        },
+                                                        types: [
+                                                            TsKeywordType(
+                                                                TsKeywordType {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    kind: TsStringKeyword,
+                                                                },
+                                                            ),
+                                                            TsTypeRef(
+                                                                TsTypeRef {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    type_name: Ident(
+                                                                        Ident {
+                                                                            span: Span {
+                                                                                lo: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                hi: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                ctxt: #0,
+                                                                            },
+                                                                            sym: Atom('RegExp' type=static),
+                                                                            type_ann: None,
+                                                                            optional: false,
+                                                                        },
+                                                                    ),
+                                                                    type_params: None,
+                                                                },
+                                                            ),
+                                                        ],
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('limit' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsNumberKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: true,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Array(
+                                Array {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    elem_type: Keyword(
+                                        TsKeywordType {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            kind: TsStringKeyword,
+                                        },
+                                    ),
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('substring' type=dynamic),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('start' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsNumberKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('end' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsNumberKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: true,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('toLowerCase' type=dynamic),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('toLocaleLowerCase' type=dynamic),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('toUpperCase' type=dynamic),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('toLocaleUpperCase' type=dynamic),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('trim' type=inline),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Property(
+                    PropertySignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: true,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('length' type=static),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        type_ann: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsNumberKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('substr' type=inline),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('from' type=static),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsNumberKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('length' type=static),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsNumberKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: true,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('valueOf' type=inline),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+                Index(
+                    IndexSignature {
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('index' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsNumberKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                        ],
+                        type_ann: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsStringKeyword,
+                                },
+                            ),
+                        ),
+                        readonly: true,
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                    },
+                ),
+                Method(
+                    MethodSignature {
+                        span: Span {
+                            lo: BytePos(
+                                0,
+                            ),
+                            hi: BytePos(
+                                0,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Lit(
+                            Str(
+                                Str {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    value: Atom('localeCompare' type=dynamic),
+                                    has_escape: false,
+                                },
+                            ),
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('that' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsKeywordType(
+                                                TsKeywordType {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    kind: TsStringKeyword,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: false,
+                                },
+                            ),
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('locales' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsUnionOrIntersectionType(
+                                                TsUnionType(
+                                                    TsUnionType {
+                                                        span: Span {
+                                                            lo: BytePos(
+                                                                0,
+                                                            ),
+                                                            hi: BytePos(
+                                                                0,
+                                                            ),
+                                                            ctxt: #0,
+                                                        },
+                                                        types: [
+                                                            TsKeywordType(
+                                                                TsKeywordType {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    kind: TsStringKeyword,
+                                                                },
+                                                            ),
+                                                            TsArrayType(
+                                                                TsArrayType {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    elem_type: TsKeywordType(
+                                                                        TsKeywordType {
+                                                                            span: Span {
+                                                                                lo: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                hi: BytePos(
+                                                                                    0,
+                                                                                ),
+                                                                                ctxt: #0,
+                                                                            },
+                                                                            kind: TsStringKeyword,
+                                                                        },
+                                                                    ),
+                                                                },
+                                                            ),
+                                                        ],
+                                                    },
+                                                ),
+                                            ),
+                                        },
+                                    ),
+                                    optional: true,
+                                },
+                            ),
+                            Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('options' type=inline),
+                                    type_ann: Some(
+                                        TsTypeAnn {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            type_ann: TsTypeRef(
+                                                TsTypeRef {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    type_name: TsQualifiedName(
+                                                        TsQualifiedName {
+                                                            left: Ident(
+                                                                Ident {
+                                                                    span: Span {
+                                                                        lo: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        hi: BytePos(
+                                                                            0,
+                                                                        ),
+                                                                        ctxt: #0,
+                                                                    },
+                                                                    sym: Atom('Intl' type=static),
+                                                                    type_ann: None,
+                                                                    optional: false,
+                                                                },
+                                                            ),
+                                                            right: Ident {
+                                                                span: Span {
+                                                                    lo: BytePos(
+                                                                        0,
+                                                                    ),
+                                                                    hi: BytePos(
+                                                                        0,
+                                                                    ),
+                                                                    ctxt: #0,
+                                                                },
+                                                                sym: Atom('CollatorOptions' type=dynamic),
+                                                                type_ann: None,
+                                                                optional: false,
+                                                            },
+                                                        },
+                                                    ),
+                                                    type_params: None,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                    optional: true,
+                                },
+                            ),
+                        ],
+                        ret_ty: Some(
+                            Keyword(
+                                TsKeywordType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            0,
+                                        ),
+                                        hi: BytePos(
+                                            0,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    kind: TsNumberKeyword,
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+            ],
+        },
+    ),
+    cause: [],
+}
+ --> $DIR/tests/conformance/types/primitives/string/assignFromStringInterface.ts:3:1
+  |
+3 | x = a;
+  | ^
+

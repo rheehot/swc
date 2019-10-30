@@ -33,6 +33,7 @@ error: AssignFailed {
                 ),
                 ctxt: #0,
             },
+            name: Atom('I1' type=inline),
             type_params: None,
             extends: [],
             body: [

@@ -37,6 +37,36 @@ impl Analyzer<'_, '_> {
             }};
         }
 
+        // Handle special cases.
+        //  Assigning boolean to Boolean is ok, but assigning Boolean to boolean is an
+        // error.
+        {
+            let special_cases = &[
+                (TsKeywordTypeKind::TsBooleanKeyword, "Boolean"),
+                (TsKeywordTypeKind::TsStringKeyword, "String"),
+                (TsKeywordTypeKind::TsNumberKeyword, "Number"),
+            ];
+
+            for (kwd, interface) in special_cases {
+                let rhs = rhs.clone().generalize_lit();
+                match to.normalize() {
+                    Type::Keyword(k) if k.kind == *kwd => match *rhs.normalize() {
+                        Type::Interface(ref i) => {
+                            if &*i.name == *interface {
+                                return Err(Error::AssignedWrapperToPrimitive { span });
+                            }
+                        }
+                        _ => {}
+                    },
+                    Type::Interface(ref i) if &*i.name == *interface => match *rhs.normalize() {
+                        Type::Keyword(ref k) if k.kind == *kwd => return Ok(()),
+                        _ => {}
+                    },
+                    _ => {}
+                }
+            }
+        }
+
         /// Ensure that $ty is valid.
         /// Type::Array / Type::FnOrConstructor / Type::UnionOrIntersection is
         /// considered invalid
