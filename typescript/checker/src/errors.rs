@@ -165,6 +165,7 @@ pub enum Error {
         fields: Vec<TypeElement<'static>>,
     },
 
+    /// TS2322
     AssignFailed {
         span: Span,
         left: Type<'static>,

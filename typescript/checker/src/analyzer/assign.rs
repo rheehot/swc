@@ -17,7 +17,7 @@ impl Analyzer<'_, '_> {
             .map_err(|err| match err {
                 Error::AssignFailed { .. } => err,
                 _ => Error::AssignFailed {
-                    span,
+                    span: err.span(),
                     left: left.to_static(),
                     right: right.to_static(),
                     cause: vec![err],
@@ -521,8 +521,12 @@ impl Analyzer<'_, '_> {
             // Handle same keyword type.
             Type::Keyword(TsKeywordType { kind, .. }) => {
                 match *rhs {
-                    Type::Keyword(TsKeywordType { kind: rhs_kind, .. }) if rhs_kind == kind => {
-                        return Ok(())
+                    Type::Keyword(TsKeywordType { kind: rhs_kind, .. }) => {
+                        if rhs_kind == kind {
+                            return Ok(());
+                        }
+
+                        fail!()
                     }
                     _ => {}
                 }
@@ -542,7 +546,7 @@ impl Analyzer<'_, '_> {
                             lit: TsLit::Number(..),
                             ..
                         }) => return Ok(()),
-
+                        Type::Lit(..) => fail!(),
                         _ => {}
                     },
 
@@ -555,10 +559,30 @@ impl Analyzer<'_, '_> {
                         _ => {}
                     },
 
+                    TsKeywordTypeKind::TsVoidKeyword | TsKeywordTypeKind::TsUndefinedKeyword => {
+                        //
+
+                        match *rhs.normalize() {
+                            Type::Keyword(TsKeywordType {
+                                kind: TsKeywordTypeKind::TsVoidKeyword,
+                                ..
+                            }) => return Ok(()),
+                            Type::Lit(..)
+                            | Type::Keyword(..)
+                            | Type::TypeLit(..)
+                            | Type::Class(..)
+                            | Type::ClassInstance(..)
+                            | Type::Interface(..)
+                            | Type::Module(..) => fail!(),
+                            Type::Function(..) => {
+                                return Err(Error::CannotAssignToNonVariable { span: rhs.span() })
+                            }
+                            _ => {}
+                        }
+                    }
+
                     _ => {}
                 }
-
-                fail!()
             }
 
             Type::Enum(ref e) => {
