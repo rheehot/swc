@@ -606,6 +606,26 @@ impl Analyzer<'_, '_> {
                 return Ok(());
             }
 
+            Pat::Rest(RestPat {
+                ref arg,
+                type_ann: ref ty,
+                ..
+            }) => {
+                let ty = ty.clone();
+                let mut arg = arg.clone();
+                match *arg {
+                    Pat::Ident(ref mut v) => v.type_ann = ty,
+                    Pat::Array(ref mut v) => v.type_ann = ty,
+                    Pat::Object(ref mut v) => v.type_ann = ty,
+                    Pat::Assign(ref mut v) => v.type_ann = ty,
+
+                    // TODO: check if Pat(Expr) is really unreachable
+                    // `foo.bar = 1`
+                    Pat::Rest(_) | Pat::Expr(_) => unreachable!(),
+                }
+                return self.declare_vars(kind, &arg);
+            }
+
             _ => unimplemented!("declare_vars for patterns other than ident: {:#?}", pat),
         }
     }
