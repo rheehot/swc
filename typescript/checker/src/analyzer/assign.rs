@@ -619,11 +619,7 @@ impl Analyzer<'_, '_> {
                 _ => fail!(),
             },
 
-            Type::Function(Function {
-                type_params: None,
-                ref ret_ty,
-                ..
-            }) => {
+            Type::Function(Function { ref ret_ty, .. }) => {
                 // var fnr2: () => any = fnReturn2();
                 match *rhs {
                     Type::Function(Function {
@@ -637,6 +633,8 @@ impl Analyzer<'_, '_> {
 
                         return Ok(());
                     }
+
+                    Type::Lit(..) => return Err(Error::CannotAssignToNonVariable { span }),
                     _ => {}
                 }
             }

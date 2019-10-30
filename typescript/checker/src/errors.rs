@@ -17,6 +17,11 @@ pub enum Error {
         rhs: Span,
     },
 
+    /// TS2539
+    CannotAssignToNonVariable {
+        span: Span,
+    },
+
     /// TS2322
     AssignedWrapperToPrimitive {
         span: Span,
