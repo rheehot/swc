@@ -331,10 +331,18 @@ impl Analyzer<'_, '_> {
             }
 
             Type::Enum(ref e) => {
+                fn check_init(has_str: &mut bool, has_num: &mut bool, expr: &Expr) {
+                    if *has_str && *has_num {
+                        return;
+                    }
+                }
+
                 let (mut has_str, mut has_num) = (false, false);
 
                 for m in &e.members {
-                    //
+                    if let Some(ref init) = m.init {
+                        check_init(&mut has_str, &mut has_num, &*init);
+                    }
                 }
 
                 if !has_str && !has_num {
