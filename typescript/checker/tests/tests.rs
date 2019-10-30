@@ -122,6 +122,9 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
         let postponed_tests = &[
             // Using such requires modifying global Boolean object.
             "extendBooleanInterface.ts",
+            // Temporarily ignored - inference of generic arguments is not implemented
+            "invalidAssignmentsToVoid.ts",
+            "invalidVoidValues.ts",
         ];
 
         let ignore = file_name.contains("circular")

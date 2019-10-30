@@ -13,6 +13,7 @@ cargo check
 TEST="constEnums" cargo test --test tests -- conformance
 TEST="tuple/castingTuple" cargo test --test tests -- conformance
 TEST="boolean/assignFromBooleanInterface1" cargo test --test tests -- conformance
+TEST="types/primitives/void/" cargo test --test tests -- conformance
 
 # We are developing
 TEST="$1" cargo test --test tests -- conformance
