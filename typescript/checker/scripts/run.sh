@@ -12,6 +12,7 @@ cargo check
 # We are done and I don't want regression.
 TEST="constEnums" cargo test --test tests -- conformance
 TEST="tuple/castingTuple" cargo test --test tests -- conformance
+TEST="boolean/assignFromBooleanInterface1" cargo test --test tests -- conformance
 
 # We are developing
 TEST="$1" cargo test --test tests -- conformance
