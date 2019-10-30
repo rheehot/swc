@@ -704,7 +704,7 @@ impl Analyzer<'_, '_> {
                             fail!()
                         }
                     }
-
+                    Type::Keyword(..) | Type::TypeLit(..) => fail!(),
                     _ => {}
                 }
             }
