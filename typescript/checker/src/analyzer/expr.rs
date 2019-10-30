@@ -2204,6 +2204,30 @@ impl Analyzer<'_, '_> {
         let casted_ty = Type::from(to.clone());
         let casted_ty = self.expand_type(span, Cow::Owned(casted_ty))?;
 
+        self.validate_type_cast_inner(span, &orig_ty, &casted_ty)
+    }
+
+    fn validate_type_cast_inner(
+        &self,
+        span: Span,
+        orig_ty: &Type,
+        casted_ty: &Type,
+    ) -> Result<(), Error> {
+        match *orig_ty.normalize() {
+            Type::Union(ref rt) => {
+                let castable = rt
+                    .types
+                    .iter()
+                    .any(|v| casted_ty.eq_ignore_name_and_span(v));
+
+                if castable {
+                    return Ok(());
+                }
+            }
+
+            _ => {}
+        }
+
         match *casted_ty.normalize() {
             Type::Tuple(ref lt) => {
                 //
@@ -2227,23 +2251,11 @@ impl Analyzer<'_, '_> {
                             // }
                             let rty = &rt.types[i];
 
-                            match *rty.normalize() {
-                                Type::Union(ref u) => {
-                                    let castable =
-                                        u.types.iter().any(|v| lty.eq_ignore_name_and_span(v));
+                            let res = self.validate_type_cast_inner(span, &rty, &lty);
 
-                                    //
-                                    if !castable {
-                                        all_castable = false;
-                                        break;
-                                    }
-                                }
-
-                                _ => {
-                                    if !lty.eq_ignore_name_and_span(&rty) {
-                                        all_castable = false;
-                                    }
-                                }
+                            if res.is_err() {
+                                all_castable = false;
+                                break;
                             }
                         }
 
