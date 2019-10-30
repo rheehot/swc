@@ -219,6 +219,9 @@ error: AssignFailed {
                 ctxt: #0,
             },
             is_abstract: false,
+            name: Some(
+                Atom('A' type=inline),
+            ),
             super_class: None,
             body: [
                 ClassProp(
@@ -293,6 +296,9 @@ error: AssignFailed {
                 ctxt: #0,
             },
             is_abstract: false,
+            name: Some(
+                Atom('C' type=inline),
+            ),
             super_class: None,
             body: [
                 ClassProp(

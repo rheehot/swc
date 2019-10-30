@@ -14,7 +14,7 @@ use crate::{
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
 use std::{borrow::Cow, iter::once};
-use swc_atoms::js_word;
+use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -568,7 +568,7 @@ impl Analyzer<'_, '_> {
             Expr::Await(AwaitExpr { .. }) => unimplemented!("typeof(AwaitExpr)"),
 
             Expr::Class(ClassExpr { ref class, .. }) => {
-                return Ok(self.type_of_class(class)?.owned())
+                return Ok(self.type_of_class(None, class)?.owned())
             }
 
             Expr::Arrow(ref e) => return Ok(self.type_of_arrow_fn(e)?.owned()),
@@ -1051,6 +1051,7 @@ impl Analyzer<'_, '_> {
     /// In almost case, this method returns `Ok`.
     pub(super) fn validate_type_of_class(
         &mut self,
+        name: Option<JsWord>,
         c: &swc_ecma_ast::Class,
     ) -> Result<Type<'static>, Error> {
         for m in c.body.iter() {
@@ -1076,10 +1077,14 @@ impl Analyzer<'_, '_> {
             }
         }
 
-        self.type_of_class(c)
+        self.type_of_class(name, c)
     }
 
-    fn type_of_class(&self, c: &swc_ecma_ast::Class) -> Result<Type<'static>, Error> {
+    fn type_of_class(
+        &self,
+        name: Option<JsWord>,
+        c: &swc_ecma_ast::Class,
+    ) -> Result<Type<'static>, Error> {
         // let mut type_props = vec![];
         // for member in &c.body {
         //     let span = member.span();
@@ -1170,6 +1175,7 @@ impl Analyzer<'_, '_> {
 
         Ok(Type::Class(Class {
             span: c.span,
+            name,
             is_abstract: c.is_abstract,
             super_class,
             type_params: c.clone().type_params.map(From::from),

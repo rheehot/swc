@@ -145,6 +145,7 @@ pub enum Type<'a> {
 pub struct Class<'a> {
     pub span: Span,
     pub is_abstract: bool,
+    pub name: Option<JsWord>,
     pub super_class: Option<Box<TypeRef<'a>>>,
     pub body: Vec<ClassMember<'a>>,
     pub type_params: Option<TypeParamDecl<'a>>,
@@ -215,6 +216,7 @@ pub struct Alias<'a> {
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct Interface<'a> {
     pub span: Span,
+    pub name: JsWord,
     pub type_params: Option<TypeParamDecl<'a>>,
     pub extends: Vec<TsExpr<'a>>,
     pub body: Vec<TypeElement<'a>>,
@@ -696,7 +698,7 @@ impl Interface<'_> {
     pub fn into_static(self) -> Interface<'static> {
         Interface {
             span: self.span,
-
+            name: self.name,
             type_params: self.type_params.map(|v| v.into_static()),
             extends: self.extends.into_iter().map(|v| v.into_static()).collect(),
             body: self.body.into_iter().map(|v| v.into_static()).collect(),
@@ -896,6 +898,7 @@ impl Class<'_> {
         Class {
             span: self.span,
             is_abstract: self.is_abstract,
+            name: self.name,
             body: self.body.into_iter().map(|v| v.into_static()).collect(),
             type_params: self.type_params.map(|v| v.into_static()),
             super_class: self.super_class.map(|v| box static_type(*v)),

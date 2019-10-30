@@ -58,6 +58,7 @@ impl From<TsInterfaceDecl> for Interface<'_> {
     fn from(d: TsInterfaceDecl) -> Self {
         Interface {
             span: d.span,
+            name: d.id.sym,
             type_params: d.type_params.map(From::from),
             extends: d.extends.into_iter().map(From::from).collect(),
             body: d.body.body.into_iter().map(From::from).collect(),

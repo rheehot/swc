@@ -299,7 +299,7 @@ pub struct Specifier {
 
 impl Visit<ClassExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassExpr) {
-        let ty = match self.validate_type_of_class(&c.class) {
+        let ty = match self.validate_type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {
             Ok(ty) => ty,
             Err(err) => {
                 self.info.errors.push(err);
@@ -339,7 +339,7 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
 
 impl Visit<ClassDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassDecl) {
-        let ty = match self.validate_type_of_class(&c.class) {
+        let ty = match self.validate_type_of_class(Some(c.ident.sym.clone()), &c.class) {
             Ok(ty) => ty,
             Err(err) => {
                 self.info.errors.push(err);

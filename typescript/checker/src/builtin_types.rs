@@ -98,6 +98,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                     debug_assert_eq!(c.class.implements, vec![]);
                                     let ty = Type::Class(Class {
                                         span: c.class.span,
+                                        name: Some(c.ident.sym.clone()),
                                         is_abstract: c.class.is_abstract,
                                         body: c
                                             .class
