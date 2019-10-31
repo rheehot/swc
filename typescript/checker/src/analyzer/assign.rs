@@ -573,7 +573,8 @@ impl Analyzer<'_, '_> {
                             | Type::Class(..)
                             | Type::ClassInstance(..)
                             | Type::Interface(..)
-                            | Type::Module(..) => fail!(),
+                            | Type::Module(..)
+                            | Type::EnumVariant(..) => fail!(),
                             Type::Function(..) => {
                                 return Err(Error::CannotAssignToNonVariable { span: rhs.span() })
                             }
@@ -645,7 +646,7 @@ impl Analyzer<'_, '_> {
 
             Type::Function(Function { ref ret_ty, .. }) => {
                 // var fnr2: () => any = fnReturn2();
-                match *rhs {
+                match *rhs.normalize() {
                     Type::Function(Function {
                         type_params: None,
                         params: _,
@@ -661,6 +662,8 @@ impl Analyzer<'_, '_> {
                     Type::Lit(..) => return Err(Error::CannotAssignToNonVariable { span }),
                     _ => {}
                 }
+
+                fail!()
             }
 
             Type::Tuple(Tuple { ref types, .. }) => {
