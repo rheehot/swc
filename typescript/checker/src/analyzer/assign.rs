@@ -243,7 +243,17 @@ impl Analyzer<'_, '_> {
                             // TOOD: missing fields
                         }
 
-                        Type::Tuple(..) | Type::Array(..) | Type::Lit(..) => fail!(),
+                        Type::Tuple(..)
+                        | Type::Array(..)
+                        | Type::Lit(..)
+                        | Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                            ..
+                        })
+                        | Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsVoidKeyword,
+                            ..
+                        }) => fail!(),
 
                         _ => {}
                     }
