@@ -308,7 +308,7 @@ impl Analyzer<'_, '_> {
                 // Deny assigning null to class. (not instance)
 
                 match *to.normalize() {
-                    Type::Class(..) => fail!(),
+                    Type::Class(..) | Type::Function(..) => fail!(),
                     _ => {}
                 }
 
