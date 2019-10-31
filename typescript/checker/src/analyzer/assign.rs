@@ -392,21 +392,7 @@ impl Analyzer<'_, '_> {
             }
 
             Type::Enum(ref e) => {
-                fn check_init(has_str: &mut bool, has_num: &mut bool, expr: &Expr) {
-                    if *has_str && *has_num {
-                        return;
-                    }
-                }
-
-                let (mut has_str, mut has_num) = (false, false);
-
-                for m in &e.members {
-                    if let Some(ref init) = m.init {
-                        check_init(&mut has_str, &mut has_num, &*init);
-                    }
-                }
-
-                if !has_str && !has_num {
+                if !e.has_str && !e.has_num {
                     return self.assign_inner(
                         to,
                         &Type::Keyword(TsKeywordType {
@@ -417,7 +403,7 @@ impl Analyzer<'_, '_> {
                     );
                 }
 
-                if !has_num {
+                if !e.has_num {
                     return self.assign_inner(
                         to,
                         &Type::Keyword(TsKeywordType {
@@ -428,7 +414,7 @@ impl Analyzer<'_, '_> {
                     );
                 }
 
-                if !has_str {
+                if !e.has_str {
                     return self.assign_inner(
                         to,
                         &Type::Keyword(TsKeywordType {
@@ -588,6 +574,25 @@ impl Analyzer<'_, '_> {
                             ..
                         }) => return Ok(()),
                         Type::Lit(..) => fail!(),
+
+                        Type::EnumVariant(ref v) => {
+                            // Allow assigning enum with numeric values to
+                            // number.
+                            if let Some(ty) = self.scope.find_type(&v.name) {
+                                match *ty.normalize() {
+                                    Type::Enum(ref e) => {
+                                        let is_num = !e.has_str;
+                                        if is_num {
+                                            return Ok(());
+                                        }
+
+                                        fail!();
+                                    }
+                                    // TODO: Make this error more specific
+                                    _ => fail!(),
+                                }
+                            }
+                        }
                         _ => {}
                     },
 
@@ -655,8 +660,6 @@ impl Analyzer<'_, '_> {
                     fail!()
                 }
                 _ => {
-                    dbg!("InvalidLValue");
-
                     return Err(Error::InvalidLValue { span });
                 }
             },

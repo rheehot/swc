@@ -4,7 +4,10 @@ use super::{
     TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation,
     Union,
 };
-use crate::util::IntoCow;
+use crate::{
+    ty::{Enum, EnumMember},
+    util::IntoCow,
+};
 use swc_ecma_ast::*;
 
 impl From<TsTypeParamDecl> for TypeParamDecl<'_> {
@@ -314,5 +317,68 @@ impl From<swc_ecma_ast::Constructor> for Constructor<'_> {
             type_params: None,
             ret_ty: None,
         }
+    }
+}
+
+impl From<TsEnumDecl> for Type<'_> {
+    fn from(e: TsEnumDecl) -> Self {
+        Enum::from(e).into()
+    }
+}
+
+impl From<TsEnumDecl> for Enum {
+    fn from(e: TsEnumDecl) -> Self {
+        let members: Vec<_> = e
+            .members
+            .iter()
+            .enumerate()
+            .map(|(i, m)| EnumMember {
+                id: m.id.clone(),
+                val: m
+                    .init
+                    .as_ref()
+                    .map(|expr| compute(&e, &expr))
+                    .unwrap_or(TsLit::Number(Number {
+                        span: m.span,
+                        value: i as f64,
+                    })),
+                span: m.span,
+            })
+            .collect();
+
+        Enum {
+            span: e.span,
+            has_num: members.iter().any(|m| match m.val {
+                TsLit::Number(..) => true,
+                _ => false,
+            }),
+            has_str: members.iter().any(|m| match m.val {
+                TsLit::Str(..) => true,
+                _ => false,
+            }),
+            declare: e.declare,
+            is_const: e.is_const,
+            id: e.id,
+            members,
+        }
+    }
+}
+
+/// Called only for enums.
+///
+/// Returns only literal types or
+fn compute(_enum: &TsEnumDecl, expr: &Expr) -> TsLit {
+    match *expr {
+        Expr::Lit(ref lit) => match *lit {
+            Lit::Str(ref v) => v.clone().into(),
+            Lit::Bool(ref v) => v.clone().into(),
+            Lit::Num(ref v) => v.clone().into(),
+            _ => unreachable!("compute({:?})", lit),
+        },
+
+        Expr::Ident(..) => unimplemented!("compute(ident, {:?})", expr),
+        Expr::Bin(..) => unimplemented!("compute(bin, {:?})", expr),
+        Expr::Unary(..) => unimplemented!("compute(unary, {:?})", expr),
+        _ => unreachable!("compute({:?})", expr),
     }
 }

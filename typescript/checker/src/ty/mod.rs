@@ -107,7 +107,7 @@ pub enum Type<'a> {
     EnumVariant(EnumVariant),
 
     Interface(Interface<'a>),
-    Enum(TsEnumDecl),
+    Enum(Enum),
 
     Mapped(Mapped<'a>),
 
@@ -139,6 +139,24 @@ pub enum Type<'a> {
     ///
     /// Don't match on this directly. Instead, use `.normalize()`.
     Static(Static),
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct Enum {
+    pub span: Span,
+    pub declare: bool,
+    pub is_const: bool,
+    pub id: Ident,
+    pub members: Vec<EnumMember>,
+    pub has_num: bool,
+    pub has_str: bool,
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct EnumMember {
+    pub span: Span,
+    pub id: TsEnumMemberId,
+    pub val: TsLit,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
@@ -552,7 +570,7 @@ impl Type<'_> {
 
             Type::Constructor(c) => Type::Constructor(Constructor { span, ..c }),
 
-            Type::Enum(e) => Type::Enum(TsEnumDecl { span, ..e }),
+            Type::Enum(e) => Type::Enum(Enum { span, ..e }),
 
             Type::EnumVariant(e) => Type::EnumVariant(EnumVariant { span, ..e }),
 

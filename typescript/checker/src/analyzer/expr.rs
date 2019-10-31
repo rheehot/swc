@@ -825,9 +825,10 @@ impl Analyzer<'_, '_> {
                                     TsEnumMemberId::Ident(Ident { ref sym, .. })
                                     | TsEnumMemberId::Str(Str { value: ref sym, .. }) => {
                                         if sym == $sym {
-                                            return Ok(Cow::Owned(compute_ty(
-                                                m.init.as_ref().map(|v| &*v).unwrap(),
-                                            )));
+                                            return Ok(Cow::Owned(Type::Lit(TsLitType {
+                                                span: m.span(),
+                                                lit: m.val.clone().into(),
+                                            })));
                                         }
                                     }
                                 }
@@ -885,13 +886,10 @@ impl Analyzer<'_, '_> {
                 Some(ref v) => match **v {
                     Type::Enum(ref e) => {
                         for (i, v) in e.members.iter().enumerate() {
-                            let new_obj = v.init.clone().unwrap_or_else(|| {
-                                box Expr::Lit(Lit::Num(Number {
-                                    span,
-                                    value: i as f64,
-                                }))
-                            });
-                            let new_obj_ty = self.type_of(&new_obj)?;
+                            let new_obj_ty = Cow::Owned(Type::Lit(TsLitType {
+                                span,
+                                lit: v.val.clone(),
+                            }));
                             return self
                                 .access_property(span, new_obj_ty, prop, computed, type_mode);
                         }
@@ -2351,27 +2349,5 @@ impl Visit<ThrowStmt> for Analyzer<'_, '_> {
                 self.info.errors.push(err);
             }
         }
-    }
-}
-
-/// Called only for const enums.
-///
-/// Returns only literal types or
-fn compute_ty<'a, 'any>(e: &'a Expr) -> Type<'any> {
-    match e {
-        Expr::Lit(ref lit) => TsLitType {
-            span: e.span(),
-            lit: match *lit {
-                Lit::Str(ref v) => v.clone().into(),
-                Lit::Bool(ref v) => v.clone().into(),
-                Lit::Num(ref v) => v.clone().into(),
-                _ => unreachable!("compute_ty({:?})", e),
-            },
-        }
-        .into(),
-
-        Expr::Bin(..) => unimplemented!("compute_ty(bin, {:?})", e),
-        Expr::Unary(..) => unimplemented!("compute_ty(unary, {:?})", e),
-        _ => unreachable!("compute_ty({:?})", e),
     }
 }
