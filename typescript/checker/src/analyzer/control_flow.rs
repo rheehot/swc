@@ -329,6 +329,7 @@ impl Analyzer<'_, '_> {
                                             span: i.span,
                                             left: lhs.span(),
                                         });
+                                        return;
                                     }
 
                                     if self.allow_ref_declaring && self.declaring.contains(&i.sym) {
