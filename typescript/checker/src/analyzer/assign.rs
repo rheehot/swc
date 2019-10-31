@@ -536,6 +536,18 @@ impl Analyzer<'_, '_> {
                             return Ok(());
                         }
 
+                        if rhs_kind == TsKeywordTypeKind::TsUndefinedKeyword
+                            && kind == TsKeywordTypeKind::TsVoidKeyword
+                        {
+                            return Ok(());
+                        }
+
+                        if kind == TsKeywordTypeKind::TsUndefinedKeyword
+                            && rhs_kind == TsKeywordTypeKind::TsVoidKeyword
+                        {
+                            return Ok(());
+                        }
+
                         fail!()
                     }
                     _ => {}
