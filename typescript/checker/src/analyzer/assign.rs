@@ -289,11 +289,14 @@ impl Analyzer<'_, '_> {
 
             // Everything is assignable to Object
             Type::Interface(ref i) if &*i.name == "Object" => return Ok(()),
+
+            Type::Module(..) => return Err(Error::InvalidLValue { span: to.span() }),
+            Type::EnumVariant(ref e) => return Err(Error::InvalidLValue { span: e.span }),
             _ => {}
         }
 
         match *rhs.normalize() {
-            // When strict null check is disabled, we can assign null / undefined to anything.
+            // When strict null check is disabled, we can assign null / undefined to many things.
             Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsUndefinedKeyword,
                 ..
@@ -301,7 +304,18 @@ impl Analyzer<'_, '_> {
             | Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsNullKeyword,
                 ..
-            }) if !self.rule.strict_null_checks => return Ok(()),
+            }) => {
+                // Deny assigning null to class. (not instance)
+
+                match *to.normalize() {
+                    Type::Class(..) => fail!(),
+                    _ => {}
+                }
+
+                if !self.rule.strict_null_checks {
+                    return Ok(());
+                }
+            }
             Type::Union(Union {
                 ref types, span, ..
             }) => {
@@ -635,7 +649,7 @@ impl Analyzer<'_, '_> {
 
                     fail!()
                 }
-                _ => fail!(),
+                _ => return Err(Error::InvalidLValue { span }),
             },
 
             Type::This(TsThisType { span }) => return Err(Error::CannotAssingToThis { span }),

@@ -145,7 +145,7 @@ pub enum Error {
     },
 
     // TS2540
-    ConstEnumVariantUsedAsLValue {
+    InvalidLValue {
         span: Span,
     },
 
