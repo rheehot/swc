@@ -8,7 +8,7 @@ use crate::{
     builtin_types::Lib,
     errors::Error,
     loader::Load,
-    ty::{self, Alias, Param, Tuple, Type, TypeRefExt},
+    ty::{self, Alias, ClassInstance, Param, Tuple, Type, TypeRef, TypeRefExt},
     util::IntoCow,
     Rule,
 };
@@ -709,7 +709,10 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                 match declared_ty {
                     Some(ty) => {
                         let ty = Type::from(ty.clone());
-                        let ty = match self.expand_type(span, Cow::Owned(ty)) {
+                        let ty = match self
+                            .expand_type(span, Cow::Owned(ty))
+                            .map(instantiate_class)
+                        {
                             Ok(ty) => ty,
                             Err(err) => {
                                 self.info.errors.push(err);
@@ -811,15 +814,17 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                         //
                         let sym = sym.clone();
                         let ty = match type_ann.as_ref().map(|t| Type::from(t.type_ann.clone())) {
-                            Some(ty) => match self.expand_type(span, ty.owned()) {
-                                Ok(ty) => Some(ty.to_static()),
-                                Err(err) => {
-                                    self.info.errors.push(err);
-                                    inject_any!();
-                                    remove_declaring!();
-                                    return;
+                            Some(ty) => {
+                                match self.expand_type(span, ty.owned()).map(instantiate_class) {
+                                    Ok(ty) => Some(ty.to_static()),
+                                    Err(err) => {
+                                        self.info.errors.push(err);
+                                        inject_any!();
+                                        remove_declaring!();
+                                        return;
+                                    }
                                 }
-                            },
+                            }
                             None => None,
                         };
 
@@ -996,5 +1001,25 @@ impl Analyzer<'_, '_> {
             }
             _ => {}
         }
+    }
+}
+
+fn instantiate_class(ty: TypeRef) -> TypeRef {
+    println!("!!!!! {:?}", ty);
+
+    let span = ty.span();
+
+    match *ty.normalize() {
+        Type::Class(ref cls) => Cow::Owned(Type::ClassInstance(ClassInstance {
+            // TODO
+            span,
+
+            // TODO; Remove clone
+            cls: cls.clone(),
+
+            // TODO
+            type_args: None,
+        })),
+        _ => ty,
     }
 }
