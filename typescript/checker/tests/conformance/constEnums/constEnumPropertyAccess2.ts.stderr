@@ -346,7 +346,7 @@ error: AssignFailed {
 18 | g = "string";
    | ^
 
-error: ConstEnumVariantUsedAsLValue {
+error: InvalidLValue {
     span: Span {
         lo: BytePos(
             495,
