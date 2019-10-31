@@ -290,8 +290,13 @@ impl Analyzer<'_, '_> {
             // Everything is assignable to Object
             Type::Interface(ref i) if &*i.name == "Object" => return Ok(()),
 
-            Type::Module(..) => return Err(Error::InvalidLValue { span: to.span() }),
-            Type::EnumVariant(ref e) => return Err(Error::InvalidLValue { span: e.span }),
+            Type::Module(..) => {
+                dbg!("InvalidLValue");
+                return Err(Error::InvalidLValue { span: to.span() });
+            }
+            Type::EnumVariant(ref e) => {
+                return Err(Error::InvalidLValue { span: e.span });
+            }
             _ => {}
         }
 
@@ -649,7 +654,11 @@ impl Analyzer<'_, '_> {
 
                     fail!()
                 }
-                _ => return Err(Error::InvalidLValue { span }),
+                _ => {
+                    dbg!("InvalidLValue");
+
+                    return Err(Error::InvalidLValue { span });
+                }
             },
 
             Type::This(TsThisType { span }) => return Err(Error::CannotAssingToThis { span }),
