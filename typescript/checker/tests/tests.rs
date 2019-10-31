@@ -118,23 +118,38 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             buf
         };
 
+        // We are done and I don't want regression.
+        let done = &[
+            "constEnums",
+            "tuple/castingTuple",
+            "boolean/assignFromBooleanInterface1",
+            "types/primitives/void/",
+        ];
+
         // These tests are postponed because they are useless in real world.
         let postponed_tests = &[
             // Using such requires modifying global Boolean object.
             "extendBooleanInterface.ts",
             // Temporarily ignored - inference of generic arguments is not implemented
+            "types/primitives/enum/invalidEnumAssignments.ts",
             "invalidAssignmentsToVoid.ts",
             "invalidVoidValues.ts",
             "invalidVoidAssignments.ts",
         ];
 
-        let ignore = file_name.contains("circular")
+        let mut ignore = file_name.contains("circular")
             || input.contains("@filename")
             || input.contains("@Filename")
             || input.contains("@module")
             || (mode == Mode::Conformance
                 && !file_name.contains(&env::var("TEST").ok().unwrap_or(String::from(""))))
             || postponed_tests.iter().any(|p| file_name.contains(p));
+
+        if done.iter().any(|p| file_name.contains(p))
+            && !postponed_tests.iter().any(|p| file_name.contains(p))
+        {
+            ignore = false;
+        }
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);
