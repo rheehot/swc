@@ -127,6 +127,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "types/primitives/boolean",
             "types/primitives/void",
             "types/primitives/enum",
+            "types/primitives/undefined",
         ];
 
         // These tests are postponed because they are useless in real world.

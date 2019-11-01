@@ -366,6 +366,11 @@ impl Analyzer<'_, '_> {
                 ..
             }) => return Ok(()),
 
+            Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                ..
+            }) => return Ok(()),
+
             // Anything is assignable to unknown
             Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsUnknownKeyword,
