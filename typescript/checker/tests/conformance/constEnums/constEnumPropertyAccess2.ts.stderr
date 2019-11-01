@@ -41,7 +41,7 @@ error: AssignFailed {
         ctxt: #0,
     },
     left: Enum(
-        TsEnumDecl {
+        Enum {
             span: Span {
                 lo: BytePos(
                     254,
@@ -68,7 +68,7 @@ error: AssignFailed {
                 optional: false,
             },
             members: [
-                TsEnumMember {
+                EnumMember {
                     span: Span {
                         lo: BytePos(
                             274,
@@ -94,26 +94,22 @@ error: AssignFailed {
                             optional: false,
                         },
                     ),
-                    init: Some(
-                        Lit(
-                            Num(
-                                Number {
-                                    span: Span {
-                                        lo: BytePos(
-                                            278,
-                                        ),
-                                        hi: BytePos(
-                                            279,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    value: 1.0,
-                                },
-                            ),
-                        ),
+                    val: Number(
+                        Number {
+                            span: Span {
+                                lo: BytePos(
+                                    278,
+                                ),
+                                hi: BytePos(
+                                    279,
+                                ),
+                                ctxt: #0,
+                            },
+                            value: 1.0,
+                        },
                     ),
                 },
-                TsEnumMember {
+                EnumMember {
                     span: Span {
                         lo: BytePos(
                             286,
@@ -139,26 +135,22 @@ error: AssignFailed {
                             optional: false,
                         },
                     ),
-                    init: Some(
-                        Lit(
-                            Num(
-                                Number {
-                                    span: Span {
-                                        lo: BytePos(
-                                            290,
-                                        ),
-                                        hi: BytePos(
-                                            291,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    value: 2.0,
-                                },
-                            ),
-                        ),
+                    val: Number(
+                        Number {
+                            span: Span {
+                                lo: BytePos(
+                                    290,
+                                ),
+                                hi: BytePos(
+                                    291,
+                                ),
+                                ctxt: #0,
+                            },
+                            value: 2.0,
+                        },
                     ),
                 },
-                TsEnumMember {
+                EnumMember {
                     span: Span {
                         lo: BytePos(
                             298,
@@ -184,56 +176,22 @@ error: AssignFailed {
                             optional: false,
                         },
                     ),
-                    init: Some(
-                        Bin(
-                            BinExpr {
-                                span: Span {
-                                    lo: BytePos(
-                                        302,
-                                    ),
-                                    hi: BytePos(
-                                        307,
-                                    ),
-                                    ctxt: #0,
-                                },
-                                op: "+",
-                                left: Ident(
-                                    Ident {
-                                        span: Span {
-                                            lo: BytePos(
-                                                302,
-                                            ),
-                                            hi: BytePos(
-                                                303,
-                                            ),
-                                            ctxt: #0,
-                                        },
-                                        sym: Atom('A' type=inline),
-                                        type_ann: None,
-                                        optional: false,
-                                    },
+                    val: Number(
+                        Number {
+                            span: Span {
+                                lo: BytePos(
+                                    302,
                                 ),
-                                right: Ident(
-                                    Ident {
-                                        span: Span {
-                                            lo: BytePos(
-                                                306,
-                                            ),
-                                            hi: BytePos(
-                                                307,
-                                            ),
-                                            ctxt: #0,
-                                        },
-                                        sym: Atom('B' type=inline),
-                                        type_ann: None,
-                                        optional: false,
-                                    },
+                                hi: BytePos(
+                                    307,
                                 ),
+                                ctxt: #0,
                             },
-                        ),
+                            value: 3.0,
+                        },
                     ),
                 },
-                TsEnumMember {
+                EnumMember {
                     span: Span {
                         lo: BytePos(
                             314,
@@ -259,56 +217,24 @@ error: AssignFailed {
                             optional: false,
                         },
                     ),
-                    init: Some(
-                        Bin(
-                            BinExpr {
-                                span: Span {
-                                    lo: BytePos(
-                                        318,
-                                    ),
-                                    hi: BytePos(
-                                        323,
-                                    ),
-                                    ctxt: #0,
-                                },
-                                op: "*",
-                                left: Ident(
-                                    Ident {
-                                        span: Span {
-                                            lo: BytePos(
-                                                318,
-                                            ),
-                                            hi: BytePos(
-                                                319,
-                                            ),
-                                            ctxt: #0,
-                                        },
-                                        sym: Atom('A' type=inline),
-                                        type_ann: None,
-                                        optional: false,
-                                    },
+                    val: Number(
+                        Number {
+                            span: Span {
+                                lo: BytePos(
+                                    318,
                                 ),
-                                right: Lit(
-                                    Num(
-                                        Number {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    322,
-                                                ),
-                                                hi: BytePos(
-                                                    323,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            value: 2.0,
-                                        },
-                                    ),
+                                hi: BytePos(
+                                    323,
                                 ),
+                                ctxt: #0,
                             },
-                        ),
+                            value: 2.0,
+                        },
                     ),
                 },
             ],
+            has_num: true,
+            has_str: false,
         },
     ),
     right: Lit(

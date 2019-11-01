@@ -342,16 +342,7 @@ impl TryFrom<TsEnumDecl> for Enum {
             .map(|(i, m)| {
                 Ok(EnumMember {
                     id: m.id.clone(),
-                    val: m
-                        .init
-                        .as_ref()
-                        .map(|expr| compute(&e, &expr))
-                        .unwrap_or_else(|| {
-                            Ok(TsLit::Number(Number {
-                                span: m.span,
-                                value: i as f64,
-                            }))
-                        })?,
+                    val: compute(&e, i, m.init.as_ref().map(|v| &**v))?,
                     span: m.span,
                 })
             })
@@ -376,9 +367,15 @@ impl TryFrom<TsEnumDecl> for Enum {
 }
 
 /// Called only for enums.
-///
-/// Returns only literal types or
-fn compute(e: &TsEnumDecl, expr: &Expr) -> Result<TsLit, Error> {
+fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error> {
+    fn arithmetic_opt(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<f64, Error> {
+        if let Some(ref expr) = expr {
+            return arithmetic(e, expr);
+        }
+
+        return Ok(i as f64);
+    }
+
     fn arithmetic(e: &TsEnumDecl, expr: &Expr) -> Result<f64, Error> {
         Ok(match *expr {
             Expr::Lit(ref lit) => match *lit {
@@ -386,9 +383,27 @@ fn compute(e: &TsEnumDecl, expr: &Expr) -> Result<TsLit, Error> {
                 _ => unreachable!("arithmetic({:?})", lit),
             },
             Expr::Bin(ref bin) => arithmetic_bin(e, &bin)?,
-            _ => unimplemented!("arithmetic(expr, {:?})", expr),
+
+            Expr::Ident(ref id) => {
+                //
+                for (i, m) in e.members.iter().enumerate() {
+                    match m.id {
+                        TsEnumMemberId::Str((Str { value: ref sym, .. }))
+                        | TsEnumMemberId::Ident(Ident { ref sym, .. }) => {
+                            if *sym == id.sym {
+                                return arithmetic_opt(e, i, m.init.as_ref().map(|v| &**v));
+                            }
+                        }
+                    }
+                }
+
+                return Err(Error::InvalidEnumInit { span: expr.span() });
+            }
+            Expr::Unary(..) => unimplemented!("compute(unary, {:?})", expr),
+            _ => return Err(Error::InvalidEnumInit { span: expr.span() }),
         })
     }
+
     fn arithmetic_bin(e: &TsEnumDecl, expr: &BinExpr) -> Result<f64, Error> {
         let l = arithmetic(e, &expr.left)?;
         let r = arithmetic(e, &expr.right)?;
@@ -407,29 +422,22 @@ fn compute(e: &TsEnumDecl, expr: &Expr) -> Result<TsLit, Error> {
         })
     }
 
-    Ok(match *expr {
-        Expr::Lit(ref lit) => match *lit {
-            Lit::Str(ref v) => v.clone().into(),
-            Lit::Bool(ref v) => v.clone().into(),
-            Lit::Num(ref v) => v.clone().into(),
-            _ => unreachable!("compute({:?})", lit),
-        },
-
-        Expr::Bin(ref bin) => {
-            // Do arithmetic operations.
-
-            match bin.op {
-                op!(bin, "+") => unimplemented!("compute(bin, {:?}, {:?})", bin.op, expr),
-                _ => Number {
-                    span: expr.span(),
-                    value: arithmetic_bin(e, &bin)?,
-                }
-                .into(),
-            }
+    fn try_str(e: &Expr) -> Result<Str, ()> {
+        match *e {
+            Expr::Lit(Lit::Str(ref s)) => return Ok(s.clone()),
+            _ => Err(()),
         }
+    }
 
-        Expr::Ident(..) => unimplemented!("compute(ident, {:?})", expr),
-        Expr::Unary(..) => unimplemented!("compute(unary, {:?})", expr),
-        _ => unreachable!("compute({:?})", expr),
-    })
+    if let Some(ref expr) = expr {
+        if let Ok(s) = try_str(&expr) {
+            return Ok(s.into());
+        }
+    }
+
+    Ok(Number {
+        span: expr.span(),
+        value: arithmetic_opt(e, i, expr)?,
+    }
+    .into())
 }

@@ -235,6 +235,10 @@ pub enum Error {
         expected: RangeInclusive<usize>,
         actual: usize,
     },
+
+    InvalidEnumInit {
+        span: Span,
+    },
 }
 
 impl Error {
