@@ -122,22 +122,25 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
         let done = &[
             "constEnums",
             "tuple/castingTuple",
-            "boolean/assignFromBooleanInterface1",
             "types/primitives/void/",
+            "boolean/assignFromBooleanInterface1",
+            "types/primitives/boolean",
+            "types/primitives/void",
             "types/primitives/enum",
         ];
 
         // These tests are postponed because they are useless in real world.
         let postponed_tests = &[
             // Using such requires modifying global object.
-            "types/primitives/boolean/extendBooleanInterface.ts",
-            "types/primitives/boolean/assignFromBooleanInterface2.ts",
-            "types/primitives/number/assignFromNumberInterface2.ts",
+            "extendBooleanInterface.ts",
+            "assignFromBooleanInterface2.ts",
+            "assignFromNumberInterface2.ts",
             // Temporarily ignored - inference of generic arguments is not implemented
-            "types/primitives/enum/invalidEnumAssignments.ts",
+            "invalidEnumAssignments.ts",
             "invalidAssignmentsToVoid.ts",
             "invalidVoidValues.ts",
             "invalidVoidAssignments.ts",
+            "invalidBooleanAssignments.ts",
         ];
 
         let mut ignore = file_name.contains("circular")
