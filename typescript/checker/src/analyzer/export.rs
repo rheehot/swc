@@ -1,6 +1,9 @@
 use super::Analyzer;
-use crate::{errors::Error, ty::TypeRefExt};
-use std::{mem, sync::Arc};
+use crate::{
+    errors::Error,
+    ty::{Type, TypeRefExt},
+};
+use std::{convert::TryInto, mem, sync::Arc};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
@@ -103,9 +106,17 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
             Decl::TsEnum(ref e) => {
                 // TODO: Allow multiple exports with same name.
                 debug_assert_eq!(self.info.exports.get(&e.id.sym), None);
-                self.info
-                    .exports
-                    .insert(e.id.sym.clone(), Arc::new(e.clone().into()));
+
+                self.info.exports.insert(
+                    e.id.sym.clone(),
+                    Arc::new({
+                        let span = e.span();
+                        match e.clone().try_into() {
+                            Ok(ty) => ty,
+                            Err(e) => Type::any(span),
+                        }
+                    }),
+                );
             }
             Decl::TsModule(..) => unimplemented!("export module "),
             Decl::TsTypeAlias(ref decl) => {

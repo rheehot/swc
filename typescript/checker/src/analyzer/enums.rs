@@ -1,13 +1,22 @@
 use super::Analyzer;
-use crate::errors::Error;
+use crate::{errors::Error, ty::Type};
+use std::convert::TryInto;
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, e: &TsEnumDecl) {
+        let span = e.span();
+
         e.visit_children(self);
 
-        self.scope.register_type(e.id.sym.clone(), e.clone().into());
+        self.scope.register_type(
+            e.id.sym.clone(),
+            match e.clone().try_into() {
+                Ok(ty) => ty,
+                Err(e) => Type::any(span),
+            },
+        );
 
         // Validate const enums
         if e.is_const {

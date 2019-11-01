@@ -5,9 +5,12 @@ use super::{
     Union,
 };
 use crate::{
+    errors::Error,
     ty::{Enum, EnumMember},
     util::IntoCow,
 };
+use std::convert::TryFrom;
+use swc_common::Spanned;
 use swc_ecma_ast::*;
 
 impl From<TsTypeParamDecl> for TypeParamDecl<'_> {
@@ -320,33 +323,41 @@ impl From<swc_ecma_ast::Constructor> for Constructor<'_> {
     }
 }
 
-impl From<TsEnumDecl> for Type<'_> {
-    fn from(e: TsEnumDecl) -> Self {
-        Enum::from(e).into()
+impl TryFrom<TsEnumDecl> for Type<'_> {
+    type Error = Error;
+
+    fn try_from(e: TsEnumDecl) -> Result<Self, Error> {
+        Enum::try_from(e).map(From::from)
     }
 }
 
-impl From<TsEnumDecl> for Enum {
-    fn from(e: TsEnumDecl) -> Self {
-        let members: Vec<_> = e
+impl TryFrom<TsEnumDecl> for Enum {
+    type Error = Error;
+
+    fn try_from(e: TsEnumDecl) -> Result<Self, Error> {
+        let members = e
             .members
             .iter()
             .enumerate()
-            .map(|(i, m)| EnumMember {
-                id: m.id.clone(),
-                val: m
-                    .init
-                    .as_ref()
-                    .map(|expr| compute(&e, &expr))
-                    .unwrap_or(TsLit::Number(Number {
-                        span: m.span,
-                        value: i as f64,
-                    })),
-                span: m.span,
+            .map(|(i, m)| {
+                Ok(EnumMember {
+                    id: m.id.clone(),
+                    val: m
+                        .init
+                        .as_ref()
+                        .map(|expr| compute(&e, &expr))
+                        .unwrap_or_else(|| {
+                            Ok(TsLit::Number(Number {
+                                span: m.span,
+                                value: i as f64,
+                            }))
+                        })?,
+                    span: m.span,
+                })
             })
-            .collect();
+            .collect::<Result<Vec<_>, _>>()?;
 
-        Enum {
+        Ok(Enum {
             span: e.span,
             has_num: members.iter().any(|m| match m.val {
                 TsLit::Number(..) => true,
@@ -360,15 +371,43 @@ impl From<TsEnumDecl> for Enum {
             is_const: e.is_const,
             id: e.id,
             members,
-        }
+        })
     }
 }
 
 /// Called only for enums.
 ///
 /// Returns only literal types or
-fn compute(_enum: &TsEnumDecl, expr: &Expr) -> TsLit {
-    match *expr {
+fn compute(e: &TsEnumDecl, expr: &Expr) -> Result<TsLit, Error> {
+    fn arithmetic(e: &TsEnumDecl, expr: &Expr) -> Result<f64, Error> {
+        Ok(match *expr {
+            Expr::Lit(ref lit) => match *lit {
+                Lit::Num(ref v) => v.value,
+                _ => unreachable!("arithmetic({:?})", lit),
+            },
+            Expr::Bin(ref bin) => arithmetic_bin(e, &bin)?,
+            _ => unimplemented!("arithmetic(expr, {:?})", expr),
+        })
+    }
+    fn arithmetic_bin(e: &TsEnumDecl, expr: &BinExpr) -> Result<f64, Error> {
+        let l = arithmetic(e, &expr.left)?;
+        let r = arithmetic(e, &expr.right)?;
+
+        Ok(match expr.op {
+            op!(bin, "+") => l + r,
+            op!(bin, "-") => l - r,
+            op!("*") => l * r,
+            op!("/") => l / r,
+
+            // TODO
+            op!("&") => ((l.round() as i64) & (r.round() as i64)) as _,
+            op!("|") => ((l.round() as i64) | (r.round() as i64)) as _,
+            op!("^") => ((l.round() as i64) ^ (r.round() as i64)) as _,
+            _ => unimplemented!("arithmetic_bin({:?})", expr.op),
+        })
+    }
+
+    Ok(match *expr {
         Expr::Lit(ref lit) => match *lit {
             Lit::Str(ref v) => v.clone().into(),
             Lit::Bool(ref v) => v.clone().into(),
@@ -376,9 +415,21 @@ fn compute(_enum: &TsEnumDecl, expr: &Expr) -> TsLit {
             _ => unreachable!("compute({:?})", lit),
         },
 
+        Expr::Bin(ref bin) => {
+            // Do arithmetic operations.
+
+            match bin.op {
+                op!(bin, "+") => unimplemented!("compute(bin, {:?}, {:?})", bin.op, expr),
+                _ => Number {
+                    span: expr.span(),
+                    value: arithmetic_bin(e, &bin)?,
+                }
+                .into(),
+            }
+        }
+
         Expr::Ident(..) => unimplemented!("compute(ident, {:?})", expr),
-        Expr::Bin(..) => unimplemented!("compute(bin, {:?})", expr),
         Expr::Unary(..) => unimplemented!("compute(unary, {:?})", expr),
         _ => unreachable!("compute({:?})", expr),
-    }
+    })
 }
