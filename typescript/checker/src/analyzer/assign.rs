@@ -616,7 +616,7 @@ impl Analyzer<'_, '_> {
                             lit: TsLit::Str(..),
                             ..
                         }) => return Ok(()),
-
+                        Type::Lit(..) => fail!(),
                         _ => {}
                     },
 
@@ -829,6 +829,14 @@ impl Analyzer<'_, '_> {
                             fail!()
                         }
                     }
+                    Type::Keyword(..) | Type::TypeLit(..) | Type::Lit(..) => fail!(),
+                    _ => {}
+                }
+            }
+
+            Type::ClassInstance(..) => {
+                // TODO: Verify more things
+                match *rhs.normalize() {
                     Type::Keyword(..) | Type::TypeLit(..) | Type::Lit(..) => fail!(),
                     _ => {}
                 }
