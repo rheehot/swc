@@ -366,6 +366,22 @@ impl Analyzer<'_, '_> {
                 dbg!("InvalidLValue");
                 return Err(Error::InvalidLValue { span: to.span() });
             }
+            Type::Enum(ref e) => {
+                match *rhs.normalize() {
+                    Type::Lit(TsLitType {
+                        lit: TsLit::Number(..),
+                        ..
+                    })
+                    | Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsNumberKeyword,
+                        ..
+                    }) => {
+                        // validEnumAssignments.ts insists that this is valid.
+                        return Ok(());
+                    }
+                    _ => {}
+                }
+            }
             Type::EnumVariant(ref e) => {
                 return Err(Error::InvalidLValue { span: e.span });
             }

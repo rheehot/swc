@@ -124,6 +124,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "tuple/castingTuple",
             "boolean/assignFromBooleanInterface1",
             "types/primitives/void/",
+            "types/primitives/enum",
         ];
 
         // These tests are postponed because they are useless in real world.
