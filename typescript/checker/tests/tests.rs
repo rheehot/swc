@@ -129,8 +129,9 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
 
         // These tests are postponed because they are useless in real world.
         let postponed_tests = &[
-            // Using such requires modifying global Boolean object.
-            "extendBooleanInterface.ts",
+            // Using such requires modifying global object.
+            "types/primitives/boolean/extendBooleanInterface.ts",
+            "types/primitives/number/assignFromNumberInterface2.ts",
             // Temporarily ignored - inference of generic arguments is not implemented
             "types/primitives/enum/invalidEnumAssignments.ts",
             "invalidAssignmentsToVoid.ts",
