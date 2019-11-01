@@ -1329,7 +1329,10 @@ impl Analyzer<'_, '_> {
                 | TsFnParam::Array(ArrayPat { type_ann, .. })
                 | TsFnParam::Rest(RestPat { type_ann, .. })
                 | TsFnParam::Object(ObjectPat { type_ann, .. }) => {
-                    let lhs = type_ann.map(Type::from);
+                    let lhs = match type_ann.map(Type::from) {
+                        Some(lhs) => Some(self.expand_type(span, Cow::Owned(lhs))?),
+                        None => None,
+                    };
                     if let Some(lhs) = lhs {
                         // TODO: Handle spread
                         // TODO: Validate optional parameters
@@ -1410,8 +1413,6 @@ impl Analyzer<'_, '_> {
                     v == p
                 };
 
-                let check_members = |members: &[TypeElement]| {};
-
                 macro_rules! search_members_for_prop {
                     ($members:expr) => {{
                         // Candidates of the method call.
@@ -1420,17 +1421,23 @@ impl Analyzer<'_, '_> {
                         // TODO: Use smallvec
                         let mut candidates = Vec::with_capacity(4);
 
-                        for m in $members {
-                            match m {
-                                TypeElement::Method(ref m) if kind == ExtractKind::Call => {
-                                    // We are interested only on methods named `prop`
-                                    if is_key_eq_prop(&m.key) {
-                                        candidates.push(m.clone());
+                        macro_rules! check {
+                            ($m:expr) => {{
+                                match $m {
+                                    TypeElement::Method(ref m) if kind == ExtractKind::Call => {
+                                        // We are interested only on methods named `prop`
+                                        if is_key_eq_prop(&m.key) {
+                                            candidates.push(m.clone());
+                                        }
                                     }
-                                }
 
-                                _ => {}
-                            }
+                                    _ => {}
+                                }
+                            }};
+                        }
+
+                        for m in $members {
+                            check!(m);
                         }
 
                         {
@@ -1448,16 +1455,7 @@ impl Analyzer<'_, '_> {
 
                             // TODO: Remove clone
                             for m in methods.into_iter().map(|v| v.clone().static_cast()) {
-                                match m {
-                                    TypeElement::Method(ref m) if kind == ExtractKind::Call => {
-                                        // We are interested only on methods named `prop`
-                                        if is_key_eq_prop(&m.key) {
-                                            candidates.push(m.clone());
-                                        }
-                                    }
-
-                                    _ => {}
-                                }
+                                check!(m);
                             }
                         }
 
@@ -1940,23 +1938,23 @@ impl Analyzer<'_, '_> {
     ) -> Result<TypeRef<'t>, Error> {
         // println!("({}) expand({:?})", self.scope.depth(), ty);
 
-        macro_rules! verify {
-            ($ty:expr) => {{
-                if cfg!(debug_assertions) {
-                    match $ty.normalize() {
-                        Type::Simple(ref s) => match **s {
-                            TsType::TsTypeRef(..) => unreachable!(),
-                            _ => {}
-                        },
-                        _ => {}
-                    }
-                }
-            }};
-        }
-
         match *ty {
             Type::Static(s) => return self.expand_type(span, s.ty.static_cast()),
             Type::Simple(ref s_ty) => {
+                macro_rules! verify {
+                    ($ty:expr) => {{
+                        if cfg!(debug_assertions) {
+                            match $ty.normalize() {
+                                Type::Simple(ref s) => match **s {
+                                    TsType::TsTypeRef(..) => unreachable!(),
+                                    _ => {}
+                                },
+                                _ => {}
+                            }
+                        }
+                    }};
+                }
+
                 match **s_ty {
                     TsType::TsTypeRef(TsTypeRef {
                         ref type_name,
@@ -1968,7 +1966,7 @@ impl Analyzer<'_, '_> {
                                 // Check for builtin types
                                 if let Ok(ty) = builtin_types::get_type(self.libs, span, &i.sym) {
                                     verify!(ty);
-                                    return Ok(ty.owned());
+                                    return self.expand_type(span, ty.owned());
                                 }
 
                                 // Handle enum
@@ -2120,6 +2118,14 @@ impl Analyzer<'_, '_> {
                         .collect::<Result<_, _>>()?,
                 }
                 .into_cow())
+            }
+
+            Type::Alias(Alias {
+                type_params: None,
+                ty,
+                ..
+            }) => {
+                return Ok(*ty);
             }
 
             ty => ty,
