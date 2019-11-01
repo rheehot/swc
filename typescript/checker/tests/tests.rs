@@ -131,6 +131,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
         let postponed_tests = &[
             // Using such requires modifying global object.
             "types/primitives/boolean/extendBooleanInterface.ts",
+            "types/primitives/boolean/assignFromBooleanInterface2.ts",
             "types/primitives/number/assignFromNumberInterface2.ts",
             // Temporarily ignored - inference of generic arguments is not implemented
             "types/primitives/enum/invalidEnumAssignments.ts",
