@@ -2,8 +2,8 @@ use super::Analyzer;
 use crate::{
     errors::Error,
     ty::{
-        Array, Class, ClassInstance, ClassMember, Constructor, Function, Interface, Intersection,
-        Param, Tuple, Type, TypeElement, TypeLit, TypeRef, TypeRefExt, Union,
+        Array, Class, ClassInstance, ClassMember, Constructor, EnumVariant, Function, Interface,
+        Intersection, Param, Tuple, Type, TypeElement, TypeLit, TypeRef, TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
 };
@@ -67,6 +67,60 @@ impl Analyzer<'_, '_> {
         }
         verify!(to);
         verify!(rhs);
+
+        macro_rules! handle_enum_in_rhs {
+            ($e:expr) => {{
+                let e = $e;
+                if !e.has_str && !e.has_num {
+                    return self.assign_inner(
+                        to,
+                        &Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                        }),
+                        span,
+                    );
+                }
+
+                if !e.has_num {
+                    return self.assign_inner(
+                        to,
+                        &Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsStringKeyword,
+                        }),
+                        span,
+                    );
+                }
+
+                if !e.has_str {
+                    return self.assign_inner(
+                        to,
+                        &Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                        }),
+                        span,
+                    );
+                }
+
+                return self.assign_inner(
+                    to,
+                    &Type::union(vec![
+                        Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                        }),
+                        Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsStringKeyword,
+                        }),
+                    ])
+                    .owned(),
+                    span,
+                );
+            }};
+        }
 
         {
             // Handle special cases.
@@ -391,52 +445,28 @@ impl Analyzer<'_, '_> {
                 fail!()
             }
 
-            Type::Enum(ref e) => {
-                if !e.has_str && !e.has_num {
-                    return self.assign_inner(
-                        to,
-                        &Type::Keyword(TsKeywordType {
-                            span,
-                            kind: TsKeywordTypeKind::TsNumberKeyword,
-                        }),
-                        span,
-                    );
+            Type::Enum(ref e) => handle_enum_in_rhs!(e),
+
+            Type::EnumVariant(EnumVariant { ref enum_name, .. }) => {
+                let e = if let Some(&Type::Enum(ref e)) = self.find_type(enum_name) {
+                    e
+                } else {
+                    fail!()
+                };
+
+                // Allow
+                //      let e: E = E.a
+                match *to.normalize() {
+                    Type::Enum(ref left_enum) => {
+                        if left_enum.id.sym == *enum_name {
+                            return Ok(());
+                        }
+                        fail!()
+                    }
+                    _ => {}
                 }
 
-                if !e.has_num {
-                    return self.assign_inner(
-                        to,
-                        &Type::Keyword(TsKeywordType {
-                            span,
-                            kind: TsKeywordTypeKind::TsStringKeyword,
-                        }),
-                        span,
-                    );
-                }
-
-                if !e.has_str {
-                    return self.assign_inner(
-                        to,
-                        &Type::Keyword(TsKeywordType {
-                            span,
-                            kind: TsKeywordTypeKind::TsNumberKeyword,
-                        }),
-                        span,
-                    );
-                }
-
-                unimplemented!("assigning enum with string / number variant to {:?}", to)
-                // return Ok(Type::union(vec![
-                //     Type::Keyword(TsKeywordType {
-                //         span,
-                //         kind: TsKeywordTypeKind::TsNumberKeyword,
-                //     }),
-                //     Type::Keyword(TsKeywordType {
-                //         span,
-                //         kind: TsKeywordTypeKind::TsStringKeyword,
-                //     }),
-                // ])
-                // .owned());
+                handle_enum_in_rhs!(e)
             }
 
             _ => {}
