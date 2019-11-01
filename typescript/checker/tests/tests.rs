@@ -136,6 +136,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             // Using such requires modifying global object.
             "extendBooleanInterface.ts",
             "extendNumberInterface.ts",
+            "extendStringInterface.ts",
             "assignFromBooleanInterface2.ts",
             "assignFromNumberInterface2.ts",
             // Temporarily ignored - inference of generic arguments is not implemented
