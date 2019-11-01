@@ -129,6 +129,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "types/primitives/enum",
             "types/primitives/undefined",
             "types/primitives/number",
+            "types/primitives/",
         ];
 
         // These tests are postponed because they are useless in real world.

@@ -1338,7 +1338,7 @@ impl Analyzer<'_, '_> {
                         // TODO: Validate optional parameters
                         if args.len() > i {
                             let args_ty = self.type_of(&args[i].expr)?;
-                            self.assign(&lhs, &*args_ty, span)?;
+                            self.assign(&lhs, &*args_ty, args[i].span())?;
                         }
                     }
                 }
