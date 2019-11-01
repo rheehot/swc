@@ -40,10 +40,10 @@ error: AssignFailed {
         Interface {
             span: Span {
                 lo: BytePos(
-                    0,
+                    33,
                 ),
                 hi: BytePos(
-                    0,
+                    34,
                 ),
                 ctxt: #0,
             },
