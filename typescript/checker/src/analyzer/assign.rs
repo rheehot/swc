@@ -71,6 +71,24 @@ impl Analyzer<'_, '_> {
         macro_rules! handle_enum_in_rhs {
             ($e:expr) => {{
                 let e = $e;
+
+                // Allow
+                //      let e: E = E.a
+                //
+                // and
+                //
+                //      let e1: E = E.a
+                //      let e2: E = e1
+                match *to.normalize() {
+                    Type::Enum(ref left_enum) => {
+                        if left_enum.id.sym == *e.id.sym {
+                            return Ok(());
+                        }
+                        fail!()
+                    }
+                    _ => {}
+                }
+
                 if !e.has_str && !e.has_num {
                     return self.assign_inner(
                         to,
@@ -453,18 +471,6 @@ impl Analyzer<'_, '_> {
                 } else {
                     fail!()
                 };
-
-                // Allow
-                //      let e: E = E.a
-                match *to.normalize() {
-                    Type::Enum(ref left_enum) => {
-                        if left_enum.id.sym == *enum_name {
-                            return Ok(());
-                        }
-                        fail!()
-                    }
-                    _ => {}
-                }
 
                 handle_enum_in_rhs!(e)
             }
