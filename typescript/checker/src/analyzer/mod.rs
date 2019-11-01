@@ -741,7 +741,16 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     }
                     None => {
                         // infer type from value.
-                        let mut ty = value_ty.to_static();
+                        let mut ty = match value_ty {
+                            Type::EnumVariant(ref v) => {
+                                if let Some(Type::Enum(ref e)) = self.find_type(&v.enum_name) {
+                                    Type::Enum(e.clone())
+                                } else {
+                                    unreachable!()
+                                }
+                            }
+                            ty => ty.to_static(),
+                        };
 
                         let mut type_errors = vec![];
 
