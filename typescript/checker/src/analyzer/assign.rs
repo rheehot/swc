@@ -698,6 +698,18 @@ impl Analyzer<'_, '_> {
                         }
                     }
 
+                    TsKeywordTypeKind::TsSymbolKeyword => {
+                        //
+
+                        match *rhs.normalize() {
+                            Type::Keyword(TsKeywordType {
+                                kind: TsKeywordTypeKind::TsSymbolKeyword,
+                                ..
+                            }) => return Ok(()),
+                            _ => fail!(),
+                        }
+                    }
+
                     _ => {}
                 }
             }
