@@ -9,13 +9,13 @@ use crate::{
     ty::{
         self, Alias, Array, CallSignature, Class, ClassInstance, ClassMember, ConstructorSignature,
         EnumVariant, IndexSignature, Interface, Intersection, MethodSignature, PropertySignature,
-        Tuple, Type, TypeElement, TypeLit, TypeParamDecl, TypeRef, TypeRefExt, Union,
+        Static, Tuple, Type, TypeElement, TypeLit, TypeParamDecl, TypeRef, TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
 use std::{borrow::Cow, iter::once};
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_common::{util::iter::IteratorExt as _, Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -1316,6 +1316,38 @@ impl Analyzer<'_, '_> {
         .into())
     }
 
+    fn check_method_call<'a>(
+        &self,
+        span: Span,
+        c: MethodSignature<'a>,
+        args: &[ExprOrSpread],
+    ) -> Result<TypeRef<'a>, Error> {
+        // Validate arguments
+        for (i, p) in c.params.into_iter().enumerate() {
+            match p {
+                TsFnParam::Ident(Ident { type_ann, .. })
+                | TsFnParam::Array(ArrayPat { type_ann, .. })
+                | TsFnParam::Rest(RestPat { type_ann, .. })
+                | TsFnParam::Object(ObjectPat { type_ann, .. }) => {
+                    let lhs = type_ann.map(Type::from);
+                    if let Some(lhs) = lhs {
+                        // TODO: Handle spread
+                        // TODO: Validate optional parameters
+                        if args.len() > i {
+                            let args_ty = self.type_of(&args[i].expr)?;
+                            self.assign(&lhs, &*args_ty, span)?;
+                        }
+                    }
+                }
+            }
+        }
+
+        return Ok(c.ret_ty.unwrap_or_else(|| Type::any(span).owned()));
+    }
+
+    /// Calculates the return type of a new /call expression.
+    ///
+    /// Called only from [type_of_expr]
     fn extract_call_new_expr_member<'e>(
         &'e self,
         callee: &Expr,
@@ -1324,49 +1356,6 @@ impl Analyzer<'_, '_> {
         type_args: Option<&TsTypeParamInstantiation>,
     ) -> Result<TypeRef<'e>, Error> {
         let span = callee.span();
-
-        macro_rules! search_members_for_prop {
-            ($members:expr, $prop:expr) => {{
-                // Candidates of the method call.
-                //
-                // 4 is just an unsientific guess
-                let mut candidates = Vec::with_capacity(4);
-
-                for m in $members {
-                    match m {
-                        TypeElement::Method(ref m) if kind == ExtractKind::Call => {
-                            // We are only interested on methods named `prop`
-                            if $prop.eq_ignore_span(&m.key) {
-                                candidates.push(m.clone());
-                            }
-                        }
-
-                        _ => {}
-                    }
-                }
-
-                match candidates.len() {
-                    0 => {}
-                    1 => {
-                        let MethodSignature { ret_ty, .. } = candidates.into_iter().next().unwrap();
-
-                        return Ok(ret_ty.unwrap_or_else(|| Type::any(span).owned()));
-                    }
-                    _ => {
-                        //
-                        for c in candidates {
-                            if c.params.len() == args.len() {
-                                return Ok(c.ret_ty.unwrap_or_else(|| Type::any(span).owned()));
-                            }
-                        }
-
-                        unimplemented!(
-                            "multiple methods with same name and same number of arguments"
-                        )
-                    }
-                }
-            }};
-        }
 
         match *callee {
             Expr::Ident(ref i) if i.sym == js_word!("require") => {
@@ -1405,6 +1394,99 @@ impl Analyzer<'_, '_> {
                 computed,
                 ..
             }) => {
+                let is_key_eq_prop = |e: &Expr| {
+                    let v = match *e {
+                        Expr::Ident(ref i) => &i.sym,
+                        Expr::Lit(Lit::Str(ref s)) => &s.value,
+                        _ => return false,
+                    };
+
+                    let p = match **prop {
+                        Expr::Ident(ref i) => &i.sym,
+                        Expr::Lit(Lit::Str(ref s)) if computed => &s.value,
+                        _ => return false,
+                    };
+
+                    v == p
+                };
+
+                let check_members = |members: &[TypeElement]| {};
+
+                macro_rules! search_members_for_prop {
+                    ($members:expr) => {{
+                        // Candidates of the method call.
+                        //
+                        // 4 is just an unscientific guess
+                        // TODO: Use smallvec
+                        let mut candidates = Vec::with_capacity(4);
+
+                        for m in $members {
+                            match m {
+                                TypeElement::Method(ref m) if kind == ExtractKind::Call => {
+                                    // We are interested only on methods named `prop`
+                                    if is_key_eq_prop(&m.key) {
+                                        candidates.push(m.clone());
+                                    }
+                                }
+
+                                _ => {}
+                            }
+                        }
+
+                        {
+                            // Handle methods from `interface Object`
+                            let i = builtin_types::get_type(self.libs, span, &js_word!("Object"))
+                                .expect("`interface Object` is must");
+                            let methods = match i {
+                                Type::Static(Static {
+                                    ty: Type::Interface(i),
+                                    ..
+                                }) => &*i.body,
+
+                                _ => &[],
+                            };
+
+                            // TODO: Remove clone
+                            for m in methods.into_iter().map(|v| v.clone().static_cast()) {
+                                match m {
+                                    TypeElement::Method(ref m) if kind == ExtractKind::Call => {
+                                        // We are interested only on methods named `prop`
+                                        if is_key_eq_prop(&m.key) {
+                                            candidates.push(m.clone());
+                                        }
+                                    }
+
+                                    _ => {}
+                                }
+                            }
+                        }
+
+                        match candidates.len() {
+                            0 => unimplemented!("no method with same name"),
+                            1 => {
+                                // TODO:
+                                return self.check_method_call(
+                                    span,
+                                    candidates.into_iter().next().unwrap(),
+                                    args,
+                                );
+                            }
+                            _ => {
+                                //
+                                for c in candidates {
+                                    if c.params.len() == args.len() {
+                                        return self.check_method_call(span, c, args);
+                                    }
+                                }
+
+                                unimplemented!(
+                                    "multiple methods with same name and same number of arguments"
+                                )
+                            }
+                        }
+                    }};
+                }
+
                 {
                     // Handle toString()
                     macro_rules! handle {
@@ -1438,6 +1520,22 @@ impl Analyzer<'_, '_> {
                 // Example: `TypeRef(console)` -> `Interface(Console)`
                 let obj_type = self.expand_type(span, obj_type)?;
 
+                let obj_type = match *obj_type.normalize() {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsNumberKeyword,
+                        ..
+                    }) => builtin_types::get_type(self.libs, span, &js_word!("Number"))
+                        .expect("Builtin type named 'Number' should exist")
+                        .owned(),
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsStringKeyword,
+                        ..
+                    }) => builtin_types::get_type(self.libs, span, &js_word!("String"))
+                        .expect("Builtin type named 'String' should exist")
+                        .owned(),
+                    _ => obj_type,
+                };
+
                 match *obj_type.normalize() {
                     Type::Function(ref f) if kind == ExtractKind::Call => {
                         //
@@ -1451,45 +1549,13 @@ impl Analyzer<'_, '_> {
                         return Ok(Type::any(span).into_cow());
                     }
 
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsNumberKeyword,
-                        ..
-                    }) => {
-                        return Ok(
-                            builtin_types::get_type(self.libs, span, &js_word!("Number"))
-                                .map(Type::owned)
-                                .expect("Builtin type named 'Number' should exist"),
-                        );
-                    }
-
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsStringKeyword,
-                        ..
-                    }) => {
-                        return Ok(
-                            builtin_types::get_type(self.libs, span, &js_word!("String"))
-                                .map(Type::owned)
-                                .expect("Builtin type named 'String' should exist"),
-                        );
-                    }
-
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsSymbolKeyword,
-                        ..
-                    }) => {
-                        if let Ok(ty) =
-                            builtin_types::get_type(self.libs, span, &js_word!("Symbol"))
-                        {
-                            return Ok(ty.owned());
-                        }
-                    }
-
                     Type::Interface(ref i) => {
-                        search_members_for_prop!(&i.body, prop);
+                        // TODO: Check parent interface
+                        search_members_for_prop!(i.body.iter());
                     }
 
                     Type::TypeLit(ref t) => {
-                        search_members_for_prop!(&t.members, prop);
+                        search_members_for_prop!(t.members.iter());
                     }
 
                     Type::Class(Class { ref body, .. }) => {
@@ -1512,18 +1578,24 @@ impl Analyzer<'_, '_> {
                             }
                         }
                     }
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsSymbolKeyword,
+                        ..
+                    }) => {
+                        if let Ok(ty) =
+                            builtin_types::get_type(self.libs, span, &js_word!("Symbol"))
+                        {
+                            return Ok(ty.owned());
+                        }
+                    }
 
                     _ => {}
                 }
 
                 if computed {
-                    unimplemented!("typeeof(CallExpr): {:?}[{:?}]()", callee, prop)
+                    unimplemented!("typeof(CallExpr): {:?}[{:?}]()", callee, prop)
                 } else {
-                    println!(
-                        "extract_call_or_new_expr: \nobj_type: {:?}\ntype_of(callee): {:?}",
-                        obj_type,
-                        self.type_of(callee)?
-                    );
+                    println!("extract_call_or_new_expr: \nobj_type: {:?}", obj_type,);
 
                     Err(if kind == ExtractKind::Call {
                         Error::NoCallSignature {
@@ -1567,8 +1639,6 @@ impl Analyzer<'_, '_> {
 
         macro_rules! ret_err {
             () => {{
-                println!("ret_err!(): {:?}", ty);
-
                 match kind {
                     ExtractKind::Call => {
                         return Err(Error::NoCallSignature {

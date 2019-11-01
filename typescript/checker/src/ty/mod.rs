@@ -734,6 +734,14 @@ impl TsExpr<'_> {
     }
 }
 
+impl TypeElement<'static> {
+    /// Converts `TypeTypeElement<'static>` into `TypeTypeElement<'a>`.
+    #[inline]
+    pub fn static_cast<'a>(self) -> TypeElement<'a> {
+        unsafe { transmute::<TypeElement<'static>, TypeElement<'_>>(self) }
+    }
+}
+
 impl TypeElement<'_> {
     pub fn into_static(self) -> TypeElement<'static> {
         match self {
