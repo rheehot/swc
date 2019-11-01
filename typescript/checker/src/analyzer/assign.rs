@@ -671,8 +671,8 @@ impl Analyzer<'_, '_> {
                             lit: TsLit::Bool(..),
                             ..
                         }) => return Ok(()),
-
-                        _ => {}
+                        Type::Lit(..) => fail!(),
+                        _ => return Ok(()),
                     },
 
                     TsKeywordTypeKind::TsVoidKeyword | TsKeywordTypeKind::TsUndefinedKeyword => {
