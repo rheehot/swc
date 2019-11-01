@@ -8,6 +8,7 @@ use crate::{
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
 };
 use std::borrow::Cow;
+use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
@@ -182,12 +183,24 @@ impl Analyzer<'_, '_> {
                 let mut errors = vec![];
                 let mut missing_fields = vec![];
                 'l: for m in $members {
+                    // Handle `toString()`
+                    match m {
+                        TypeElement::Method(ref m) => {
+                            //
+                            match *m.key {
+                                Expr::Ident(ref i) if i.sym == js_word!("toString") => continue,
+                                _ => {}
+                            }
+                        }
+                        _ => {}
+                    }
+
                     match *rhs.normalize() {
                         Type::TypeLit(TypeLit {
                             members: ref rhs_members,
                             ..
                         }) => {
-                            // Assign each property to coressponding proerty.
+                            // Assign each property to corresponding property.
 
                             if let Some(l_key) = m.key() {
                                 for rm in rhs_members {
