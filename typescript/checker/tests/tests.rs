@@ -160,6 +160,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
 
         if done.iter().any(|p| file_name.contains(p))
             && !postponed_tests.iter().any(|p| file_name.contains(p))
+            && env::var("RUST_BACKTRACE").unwrap_or("".into()) != "full"
         {
             ignore = false;
         }
