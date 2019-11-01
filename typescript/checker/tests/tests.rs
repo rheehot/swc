@@ -147,6 +147,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "invalidVoidAssignments.ts",
             "invalidBooleanAssignments.ts",
             "invalidNumberAssignments.ts",
+            "invalidStringAssignments.ts",
         ];
 
         let mut ignore = file_name.contains("circular")
