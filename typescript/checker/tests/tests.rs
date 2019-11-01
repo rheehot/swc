@@ -139,6 +139,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "extendStringInterface.ts",
             "assignFromBooleanInterface2.ts",
             "assignFromNumberInterface2.ts",
+            "assignFromStringInterface2.ts",
             // Temporarily ignored - inference of generic arguments is not implemented
             "invalidEnumAssignments.ts",
             "invalidAssignmentsToVoid.ts",
