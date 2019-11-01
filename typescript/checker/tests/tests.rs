@@ -128,6 +128,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "types/primitives/void",
             "types/primitives/enum",
             "types/primitives/undefined",
+            "types/primitives/number",
         ];
 
         // These tests are postponed because they are useless in real world.
@@ -143,6 +144,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "invalidVoidValues.ts",
             "invalidVoidAssignments.ts",
             "invalidBooleanAssignments.ts",
+            "invalidNumberAssignments.ts",
         ];
 
         let mut ignore = file_name.contains("circular")
