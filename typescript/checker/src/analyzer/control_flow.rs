@@ -1,15 +1,3 @@
-use super::{
-    expr::TypeOfMode,
-    scope::{Scope, ScopeKind, VarInfo},
-    type_facts::TypeFacts,
-    Analyzer, Name,
-};
-use crate::{
-    errors::Error,
-    ty::{Intersection, Type, TypeRef, TypeRefExt, Union},
-    util::{EqIgnoreNameAndSpan, IntoCow},
-};
-use fxhash::FxHashMap;
 use std::{
     borrow::Cow,
     collections::hash_map::Entry,
@@ -19,9 +7,25 @@ use std::{
     mem,
     ops::{AddAssign, BitOr, Not},
 };
+
+use fxhash::FxHashMap;
+
 use swc_atoms::JsWord;
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
+
+use crate::{
+    errors::Error,
+    ty::{Intersection, Type, TypeRef, TypeRefExt, Union},
+    util::{EqIgnoreNameAndSpan, IntoCow},
+};
+
+use super::{
+    expr::TypeOfMode,
+    scope::{Scope, ScopeKind, VarInfo},
+    type_facts::TypeFacts,
+    Analyzer, Name,
+};
 
 #[derive(Debug, Default)]
 struct Facts {
@@ -268,116 +272,7 @@ impl Analyzer<'_, '_> {
                 }
 
                 PatOrExpr::Pat(ref pat) => {
-                    // Update variable's type
-                    match **pat {
-                        Pat::Ident(ref i) => {
-                            let mut typed = false;
-                            let mut err = None;
-                            if let Some(ref var_info) = self.scope.vars.get(&i.sym) {
-                                if let Some(ref var_ty) = var_info.ty {
-                                    typed = true;
-                                    // let foo: string;
-                                    // let foo = 'value';
-
-                                    err = Some(self.assign(&var_ty, ty, i.span));
-                                }
-                            }
-
-                            if typed {
-                                match err {
-                                    Some(Err(err)) => {
-                                        self.info.errors.push(err);
-                                    }
-                                    _ => {}
-                                }
-                            } else {
-                                if let Some(var_info) = self.scope.vars.get_mut(&i.sym) {
-                                    // let var_ty = match err {
-                                    //     // let foo: string;
-                                    //     // let foo = 'value';
-                                    //     Some(Ok(())) => Some(ty.to_static()),
-                                    //     Some(Err(err)) => {
-                                    //         self.info.errors.push(err);
-                                    //         None
-                                    //     }
-
-                                    //     // let v = foo;
-                                    //     // v = bar;
-                                    //     None => None,
-                                    // };
-
-                                    // if let Some(var_ty) = var_ty {
-                                    //     if var_info.ty.is_none()
-                                    //         ||
-                                    // (!var_info.ty.as_ref().unwrap().is_any()
-                                    //             &&
-                                    // !var_info.ty.as_ref().unwrap().
-                                    // is_unknown())
-                                    //     {
-                                    //         var_info.ty = Some(var_ty);
-                                    //     }
-                                    // }
-                                } else {
-                                    let var_info = if let Some(var_info) =
-                                        self.scope.search_parent(&i.sym)
-                                    {
-                                        let ty = if var_info.ty.is_some()
-                                            && var_info.ty.as_ref().unwrap().is_any()
-                                        {
-                                            Some(Type::any(var_info.ty.as_ref().unwrap().span()))
-                                        } else if var_info.ty.is_some()
-                                            && var_info.ty.as_ref().unwrap().is_unknown()
-                                        {
-                                            Some(Type::unknown(
-                                                var_info.ty.as_ref().unwrap().span(),
-                                            ))
-                                        } else {
-                                            Some(ty.to_static())
-                                        };
-                                        VarInfo {
-                                            ty,
-                                            copied: true,
-                                            ..var_info.clone()
-                                        }
-                                    } else {
-                                        if let Some(Type::Module(..)) = self.scope.find_type(&i.sym)
-                                        {
-                                            self.info.errors.push(Error::NotVariable {
-                                                span: i.span,
-                                                left: lhs.span(),
-                                            });
-                                            return;
-                                        }
-
-                                        if self.allow_ref_declaring
-                                            && self.declaring.contains(&i.sym)
-                                        {
-                                            return;
-                                        } else {
-                                            // undefined symbol
-                                            self.info
-                                                .errors
-                                                .push(Error::UndefinedSymbol { span: i.span });
-                                            return;
-                                        }
-                                    };
-                                    // Variable is defined on parent scope.
-                                    //
-                                    // We copy varinfo with enhanced type.
-                                    println!(
-                                        "({}) vars.insert({}, {:?})",
-                                        self.scope.depth(),
-                                        i.sym,
-                                        var_info
-                                    );
-                                    self.scope.vars.insert(i.sym.clone(), var_info);
-                                    return;
-                                }
-                            }
-                        }
-
-                        _ => unimplemented!("assignment with complex pattern"),
-                    }
+                    self.try_assign_pat(span, pat, ty)?;
                 }
             }
         };
@@ -385,6 +280,117 @@ impl Analyzer<'_, '_> {
         match res {
             Ok(()) => {}
             Err(err) => self.info.errors.push(err),
+        }
+    }
+
+    fn try_assign_pat(&mut self, span: Span, lhs: &Pat, ty: &Type) -> Result<(), Error> {
+        // Update variable's type
+        match *lhs {
+            Pat::Ident(ref i) => {
+                let mut typed = false;
+                let mut err = None;
+                if let Some(ref var_info) = self.scope.vars.get(&i.sym) {
+                    if let Some(ref var_ty) = var_info.ty {
+                        typed = true;
+                        // let foo: string;
+                        // let foo = 'value';
+
+                        err = Some(self.assign(&var_ty, ty, i.span));
+                    }
+                }
+
+                if typed {
+                    match err {
+                        Some(Err(err)) => return Err(err),
+                        _ => Ok(()),
+                    }
+                } else {
+                    if let Some(var_info) = self.scope.vars.get_mut(&i.sym) {
+                        // let var_ty = match err {
+                        //     // let foo: string;
+                        //     // let foo = 'value';
+                        //     Some(Ok(())) => Some(ty.to_static()),
+                        //     Some(Err(err)) => {
+                        //         self.info.errors.push(err);
+                        //         None
+                        //     }
+
+                        //     // let v = foo;
+                        //     // v = bar;
+                        //     None => None,
+                        // };
+
+                        // if let Some(var_ty) = var_ty {
+                        //     if var_info.ty.is_none()
+                        //         ||
+                        // (!var_info.ty.as_ref().unwrap().is_any()
+                        //             &&
+                        // !var_info.ty.as_ref().unwrap().
+                        // is_unknown())
+                        //     {
+                        //         var_info.ty = Some(var_ty);
+                        //     }
+                        // }
+                        return Ok(());
+                    } else {
+                        let var_info = if let Some(var_info) = self.scope.search_parent(&i.sym) {
+                            let ty = if var_info.ty.is_some()
+                                && var_info.ty.as_ref().unwrap().is_any()
+                            {
+                                Some(Type::any(var_info.ty.as_ref().unwrap().span()))
+                            } else if var_info.ty.is_some()
+                                && var_info.ty.as_ref().unwrap().is_unknown()
+                            {
+                                Some(Type::unknown(var_info.ty.as_ref().unwrap().span()))
+                            } else {
+                                Some(ty.to_static())
+                            };
+                            VarInfo {
+                                ty,
+                                copied: true,
+                                ..var_info.clone()
+                            }
+                        } else {
+                            if let Some(Type::Module(..)) = self.scope.find_type(&i.sym) {
+                                return Err(Error::NotVariable {
+                                    span: i.span,
+                                    left: lhs.span(),
+                                });
+                            }
+
+                            if self.allow_ref_declaring && self.declaring.contains(&i.sym) {
+                                return Ok(());
+                            } else {
+                                // undefined symbol
+                                return Err(Error::UndefinedSymbol { span: i.span });
+                            }
+                        };
+                        // Variable is defined on parent scope.
+                        //
+                        // We copy varinfo with enhanced type.
+                        println!(
+                            "({}) vars.insert({}, {:?})",
+                            self.scope.depth(),
+                            i.sym,
+                            var_info
+                        );
+                        self.scope.vars.insert(i.sym.clone(), var_info);
+                        return Ok(());
+                    }
+                }
+            }
+
+            Pat::Array(ref arr) => {
+                //
+
+                unimplemented!(
+                    "assignment with array pattern\nPat: {:?}\nType: {:?}",
+                    arr,
+                    ty
+                )
+            }
+
+            _ => unimplemented!("assignment with complex pattern"),
         }
     }
 
@@ -796,7 +802,7 @@ impl<'a> RemoveTypes<'a> for Type<'a> {
         match self {
             Type::Keyword(TsKeywordType { kind, span }) => match kind {
                 TsKeywordTypeKind::TsUndefinedKeyword | TsKeywordTypeKind::TsNullKeyword => {
-                    return Type::never(span).into_cow()
+                    return Type::never(span).into_cow();
                 }
                 _ => {}
             },
