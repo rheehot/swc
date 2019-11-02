@@ -9,25 +9,8 @@
 #![feature(vec_remove_item)]
 #![recursion_limit = "1024"]
 
-extern crate backtrace;
-extern crate bitflags;
-extern crate chashmap;
-extern crate crossbeam;
-extern crate fxhash;
-extern crate lazy_static;
-extern crate log;
-extern crate node_resolve;
-extern crate rayon;
-extern crate smallvec;
-extern crate swc_atoms;
-extern crate swc_ts_builtin_types;
-extern crate swc_ts_checker_macros;
 #[macro_use]
 extern crate swc_common;
-extern crate swc_ecma_ast;
-extern crate swc_ecma_parser;
-#[cfg(test)]
-extern crate testing;
 
 pub use self::builtin_types::Lib;
 use self::{analyzer::Info, errors::Error, resolver::Resolver};
