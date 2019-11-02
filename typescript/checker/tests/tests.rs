@@ -224,11 +224,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
     let (libs, rule, ts_config) = ::testing::run_test(treat_error_as_bug, |cm, handler| {
         Ok(match mode {
-            Mode::Pass | Mode::Error => (
-                vec![Lib::Es5, Lib::Dom],
-                Default::default(),
-                Default::default(),
-            ),
+            Mode::Pass | Mode::Error => (vec![Lib::Es5], Default::default(), Default::default()),
             Mode::Conformance => {
                 // We parse files twice. At first, we read comments and detect
                 // configurations for following parse.
