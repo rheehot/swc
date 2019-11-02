@@ -6,7 +6,7 @@ set -eu
 #
 
 cargo fmt
-cargo check
+#cargo check
 
 
 # We are developing
