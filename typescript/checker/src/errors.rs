@@ -239,6 +239,10 @@ pub enum Error {
     InvalidEnumInit {
         span: Span,
     },
+
+    TS2347 {
+        span: Span,
+    },
 }
 
 impl Error {
