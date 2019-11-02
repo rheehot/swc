@@ -19,6 +19,7 @@ use swc_common::{util::iter::IteratorExt as _, Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 mod bin;
+mod call_new;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(super) enum TypeOfMode {
