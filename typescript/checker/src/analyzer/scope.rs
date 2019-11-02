@@ -373,11 +373,10 @@ impl<'a> Scope<'a> {
         allow_multiple: bool,
     ) -> Result<(), Error> {
         println!(
-            "({}) declare_var({}, initialized = {:?}): {:?}",
+            "({}) declare_var({}, initialized = {:?})",
             self.depth(),
             name,
             initialized,
-            ty,
         );
 
         if cfg!(debug_assertions) {

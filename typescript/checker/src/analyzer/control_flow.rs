@@ -283,14 +283,10 @@ impl Analyzer<'_, '_> {
         // Update variable's type
         match *lhs {
             Pat::Ident(ref i) => {
-                println!("try_assign_pat_ident\nLHS: {:?}\nTy: {:?}", i, ty);
-
                 if let Some(ref var_info) = self.scope.get_var(&i.sym) {
-                    println!("VarType: {:?}", var_info.ty);
                     if let Some(ref var_ty) = var_info.ty {
                         // let foo: string;
                         // let foo = 'value';
-                        println!("LHS: {:?}\nTy: {:?}", var_ty, ty);
                         self.assign(&var_ty, ty, i.span)?;
                         return Ok(());
                     }
