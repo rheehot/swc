@@ -195,6 +195,6 @@ pub fn pat_to_ts_fn_param(p: Pat) -> TsFnParam {
         Pat::Object(obj) => TsFnParam::Object(obj),
         // TODO: Pat::Assign()
         Pat::Assign(assign) => pat_to_ts_fn_param(*assign.left),
-        Pat::Expr(..) => unreachable!("pat_to_ts_fn_param: Pat(Expr): {:#?}", p),
+        _ => unreachable!("pat_to_ts_fn_param: Pat: {:?}", p),
     }
 }

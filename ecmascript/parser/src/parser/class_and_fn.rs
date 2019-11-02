@@ -574,6 +574,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
 
         let is_next_line_generator = self.input.had_line_break_before_cur() && is!('*');
         let key_span = key.span();
+
         match key {
             // `get\n*` is an uninitialized property named 'get' followed by a generator.
             Either::Right(PropName::Ident(ref i))

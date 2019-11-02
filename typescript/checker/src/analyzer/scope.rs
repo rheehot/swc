@@ -628,7 +628,7 @@ impl Analyzer<'_, '_> {
 
                     // TODO: check if Pat(Expr) is really unreachable
                     // `foo.bar = 1`
-                    Pat::Rest(_) | Pat::Expr(_) => unreachable!(),
+                    Pat::Rest(_) | Pat::Expr(_) | Pat::Invalid(..) => unreachable!(),
                 }
                 return self.declare_vars(kind, &arg);
             }

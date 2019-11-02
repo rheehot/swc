@@ -197,7 +197,6 @@ impl<'a, I: Tokens> Parser<'a, I> {
                     }
                     *type_ann = new_type_ann;
                 }
-                Pat::Invalid(..) => {}
                 _ => unreachable!("invalid syntax: Pat: {:?}", pat),
             }
         }

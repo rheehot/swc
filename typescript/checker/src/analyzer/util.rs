@@ -17,7 +17,7 @@ impl PatExt for Pat {
             | Pat::Object(ObjectPat { ref type_ann, .. })
             | Pat::Rest(RestPat { ref type_ann, .. }) => type_ann.as_ref().map(|ty| &*ty.type_ann),
 
-            Pat::Expr(ref pat) => unreachable!("Cannot get type from Pat::Expr\n{:?}", pat),
+            _ => unreachable!("Cannot get type from {:?}", self),
         }
     }
 
@@ -44,9 +44,7 @@ impl PatExt for Pat {
                 })
             }
 
-            Pat::Expr(ref pat) => {
-                unreachable!("Cannot set type annottation for expression\n{:?}", pat)
-            }
+            _ => unreachable!("Cannot set type annotations for {:?}", self),
         }
     }
 }
