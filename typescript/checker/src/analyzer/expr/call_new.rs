@@ -1,6 +1,7 @@
-use crate::{analyzer::Analyzer, errors::Error, ty::Type};
 use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
+
+use crate::{analyzer::Analyzer, errors::Error, ty::Type};
 
 impl Visit<NewExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, e: &NewExpr) {
@@ -29,7 +30,11 @@ impl Visit<CallExpr> for Analyzer<'_, '_> {
 
         let res: Result<(), Error> = try {
             if let ExprOrSuper::Expr(ref callee) = e.callee {
-                let callee_ty = self.type_of(&callee)?;
+                let callee_ty = self.type_of(&callee);
+                let callee_ty = match callee_ty {
+                    Ok(v) => v,
+                    Err(_) => return,
+                };
                 match *callee_ty.normalize() {
                     Type::Keyword(TsKeywordType {
                         kind: TsKeywordTypeKind::TsAnyKeyword,
