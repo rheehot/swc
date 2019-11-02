@@ -171,7 +171,7 @@ impl<'a> Scope<'a> {
             Pat::Array(ArrayPat { ref elems, .. }) => {
                 // Handle tuple
                 //
-                // const [a , setA] = useState();
+                //      const [a , setA] = useState();
                 //
 
                 // TODO: Normalize static
@@ -237,7 +237,7 @@ impl<'a> Scope<'a> {
                         return Ok(());
                     }
 
-                    _ => unimplemented!("declare_complex_vars({:#?}, {:#?})", pat, ty),
+                    _ => unimplemented!("declare_complex_vars(pat={:?}\nty={:?}\n)", pat, ty),
                 }
             }
 
