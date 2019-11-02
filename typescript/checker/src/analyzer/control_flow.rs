@@ -1,3 +1,15 @@
+use super::{
+    expr::TypeOfMode,
+    scope::{Scope, ScopeKind, VarInfo},
+    type_facts::TypeFacts,
+    Analyzer, Name,
+};
+use crate::{
+    errors::Error,
+    ty::{Intersection, Tuple, Type, TypeRef, TypeRefExt, Union},
+    util::{EqIgnoreNameAndSpan, IntoCow},
+};
+use fxhash::FxHashMap;
 use std::{
     borrow::Cow,
     collections::hash_map::Entry,
@@ -7,25 +19,9 @@ use std::{
     mem,
     ops::{AddAssign, BitOr, Not},
 };
-
-use fxhash::FxHashMap;
-
 use swc_atoms::JsWord;
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
-
-use crate::{
-    errors::Error,
-    ty::{Intersection, Type, TypeRef, TypeRefExt, Union},
-    util::{EqIgnoreNameAndSpan, IntoCow},
-};
-
-use super::{
-    expr::TypeOfMode,
-    scope::{Scope, ScopeKind, VarInfo},
-    type_facts::TypeFacts,
-    Analyzer, Name,
-};
 
 #[derive(Debug, Default)]
 struct Facts {
@@ -302,7 +298,7 @@ impl Analyzer<'_, '_> {
                 if typed {
                     match err {
                         Some(Err(err)) => return Err(err),
-                        _ => Ok(()),
+                        _ => return Ok(()),
                     }
                 } else {
                     if let Some(var_info) = self.scope.vars.get_mut(&i.sym) {
@@ -382,16 +378,34 @@ impl Analyzer<'_, '_> {
 
             Pat::Array(ref arr) => {
                 //
+                for (i, elem) in arr.elems.iter().enumerate() {
+                    if let Some(elem) = elem.as_ref() {
+                        match *ty {
+                            Type::Tuple(Tuple { ref types, .. }) => {
+                                if types.len() > i {
+                                    self.try_assign_pat(span, elem, &types[i])?;
+                                }
+                            }
 
-                unimplemented!(
-                    "assignment with array pattern\nPat: {:?}\nType: {:?}",
-                    arr,
-                    ty
-                )
+                            _ => unimplemented!(
+                                "assignment with array pattern\nPat: {:?}\nType: {:?}",
+                                lhs,
+                                ty
+                            ),
+                        }
+                    }
+                }
+                return Ok(());
             }
 
-            _ => unimplemented!("assignment with complex pattern"),
+            _ => {}
         }
+
+        unimplemented!(
+            "assignment with complex pattern\nPat: {:?}\nType: {:?}",
+            lhs,
+            ty
+        )
     }
 
     fn add_true_false(&self, facts: &mut Facts, sym: &JsWord, ty: &Type<'static>) {
