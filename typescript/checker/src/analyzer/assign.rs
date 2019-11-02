@@ -381,7 +381,6 @@ impl Analyzer<'_, '_> {
             Type::Interface(ref i) if &*i.name == "Object" => return Ok(()),
 
             Type::Module(..) => {
-                dbg!("InvalidLValue");
                 return Err(Error::InvalidLValue { span: to.span() });
             }
             Type::Enum(ref e) => {
