@@ -948,16 +948,22 @@ impl Analyzer<'_, '_> {
             }
 
             Type::Keyword(TsKeywordType {
-                kind: TsKeywordTypeKind::TsStringKeyword,
-                ..
-            }) => {
-                return Ok(builtin_types::get_type(self.libs, span, &js_word!("String"))?.owned())
-            }
-
-            Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsUnknownKeyword,
                 ..
             }) => return Err(Error::Unknown { span: obj.span() }),
+
+            Type::Keyword(TsKeywordType { kind, .. }) => {
+                let word = match kind {
+                    TsKeywordTypeKind::TsStringKeyword => js_word!("String"),
+                    TsKeywordTypeKind::TsNumberKeyword => js_word!("Number"),
+                    TsKeywordTypeKind::TsBooleanKeyword => js_word!("Boolean"),
+                    TsKeywordTypeKind::TsObjectKeyword => js_word!("Object"),
+                    TsKeywordTypeKind::TsSymbolKeyword => js_word!("Symbol"),
+                    _ => unimplemented!("access_property: obj: TSKeywordType {:?}", kind),
+                };
+                let interface = builtin_types::get_type(self.libs, span, &word)?;
+                return self.access_property(span, interface.into_cow(), prop, computed, type_mode);
+            }
 
             Type::Array(Array { .. }) => {
                 let array_ty = builtin_types::get_type(self.libs, span, &js_word!("Array"))
