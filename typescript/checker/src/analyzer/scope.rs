@@ -117,6 +117,14 @@ impl<'a> Scope<'a> {
         }
     }
 
+    pub(super) fn get_var(&self, sym: &JsWord) -> Option<&VarInfo> {
+        if let Some(ref v) = self.vars.get(sym) {
+            return Some(v);
+        }
+
+        self.search_parent(sym)
+    }
+
     pub(super) fn search_parent(&self, sym: &JsWord) -> Option<&VarInfo> {
         let mut parent = self.parent;
 
@@ -369,7 +377,7 @@ impl<'a> Scope<'a> {
             self.depth(),
             name,
             initialized,
-            span,
+            ty,
         );
 
         if cfg!(debug_assertions) {

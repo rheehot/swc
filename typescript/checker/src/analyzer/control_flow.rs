@@ -283,50 +283,30 @@ impl Analyzer<'_, '_> {
         // Update variable's type
         match *lhs {
             Pat::Ident(ref i) => {
-                let mut typed = false;
-                let mut err = None;
-                if let Some(ref var_info) = self.scope.vars.get(&i.sym) {
+                println!("try_assign_pat_ident\nLHS: {:?}\nTy: {:?}", i, ty);
+
+                if let Some(ref var_info) = self.scope.get_var(&i.sym) {
+                    println!("VarType: {:?}", var_info.ty);
                     if let Some(ref var_ty) = var_info.ty {
-                        typed = true;
                         // let foo: string;
                         // let foo = 'value';
-
-                        err = Some(self.assign(&var_ty, ty, i.span));
+                        println!("LHS: {:?}\nTy: {:?}", var_ty, ty);
+                        self.assign(&var_ty, ty, i.span)?;
+                        return Ok(());
                     }
                 }
 
-                if typed {
-                    match err {
-                        Some(Err(err)) => return Err(err),
-                        _ => return Ok(()),
-                    }
-                } else {
+                {
                     if let Some(var_info) = self.scope.vars.get_mut(&i.sym) {
-                        // let var_ty = match err {
-                        //     // let foo: string;
-                        //     // let foo = 'value';
-                        //     Some(Ok(())) => Some(ty.to_static()),
-                        //     Some(Err(err)) => {
-                        //         self.info.errors.push(err);
-                        //         None
-                        //     }
+                        let var_ty = ty;
 
-                        //     // let v = foo;
-                        //     // v = bar;
-                        //     None => None,
-                        // };
-
-                        // if let Some(var_ty) = var_ty {
-                        //     if var_info.ty.is_none()
-                        //         ||
-                        // (!var_info.ty.as_ref().unwrap().is_any()
-                        //             &&
-                        // !var_info.ty.as_ref().unwrap().
-                        // is_unknown())
-                        //     {
-                        //         var_info.ty = Some(var_ty);
-                        //     }
-                        // }
+                        if var_info.ty.is_none()
+                            || (!var_info.ty.as_ref().unwrap().is_any()
+                                && !var_info.ty.as_ref().unwrap().is_unknown())
+                        {
+                            //                            var_info.ty =
+                            // Some(var_ty);
+                        }
                         return Ok(());
                     } else {
                         let var_info = if let Some(var_info) = self.scope.search_parent(&i.sym) {
@@ -337,10 +317,12 @@ impl Analyzer<'_, '_> {
                             } else if var_info.ty.is_some()
                                 && var_info.ty.as_ref().unwrap().is_unknown()
                             {
-                                Some(Type::unknown(var_info.ty.as_ref().unwrap().span()))
-                            } else {
+                                // Type narrowing
                                 Some(ty.to_static())
+                            } else {
+                                return Ok(());
                             };
+
                             VarInfo {
                                 ty,
                                 copied: true,
@@ -361,6 +343,7 @@ impl Analyzer<'_, '_> {
                                 return Err(Error::UndefinedSymbol { span: i.span });
                             }
                         };
+
                         // Variable is defined on parent scope.
                         //
                         // We copy varinfo with enhanced type.
@@ -371,6 +354,7 @@ impl Analyzer<'_, '_> {
                             var_info
                         );
                         self.scope.vars.insert(i.sym.clone(), var_info);
+
                         return Ok(());
                     }
                 }
