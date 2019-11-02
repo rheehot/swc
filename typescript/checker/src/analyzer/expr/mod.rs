@@ -18,6 +18,8 @@ use swc_atoms::{js_word, JsWord};
 use swc_common::{util::iter::IteratorExt as _, Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
+mod bin;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(super) enum TypeOfMode {
     /// Used for l-values.

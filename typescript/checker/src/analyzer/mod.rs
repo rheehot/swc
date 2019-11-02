@@ -25,7 +25,6 @@ mod control_flow;
 mod enums;
 pub mod export;
 mod expr;
-mod expr_bin;
 mod generic;
 mod name;
 mod props;
