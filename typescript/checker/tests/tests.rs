@@ -153,6 +153,8 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "invalidStringAssignments.ts",
             // Temporarily ignored - module system does not work while testing,
             "RealSource",
+            // Temporarily ignored - .d.ts tests are postponed.
+            ".d.ts",
         ];
 
         let mut ignore = file_name.contains("circular")
