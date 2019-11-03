@@ -1,3 +1,8 @@
+use std::{borrow::Cow, iter::once};
+use swc_atoms::{js_word, JsWord};
+use swc_common::{util::iter::IteratorExt as _, Span, Spanned, Visit, VisitWith};
+use swc_ecma_ast::*;
+
 use super::{
     control_flow::{Comparator, RemoveTypes},
     export::pat_to_ts_fn_param,
@@ -13,10 +18,6 @@ use crate::{
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
-use std::{borrow::Cow, iter::once};
-use swc_atoms::{js_word, JsWord};
-use swc_common::{util::iter::IteratorExt as _, Span, Spanned, Visit, VisitWith};
-use swc_ecma_ast::*;
 
 mod bin;
 mod call_new;
@@ -154,28 +155,28 @@ impl Analyzer<'_, '_> {
                     span: v.span,
                     lit: TsLit::Bool(v),
                 })
-                .into_cow())
+                .into_cow());
             }
             Expr::Lit(Lit::Str(ref v)) => {
                 return Ok(Type::Lit(TsLitType {
                     span: v.span,
                     lit: TsLit::Str(v.clone()),
                 })
-                .into_cow())
+                .into_cow());
             }
             Expr::Lit(Lit::Num(v)) => {
                 return Ok(Type::Lit(TsLitType {
                     span: v.span,
                     lit: TsLit::Number(v),
                 })
-                .into_cow())
+                .into_cow());
             }
             Expr::Lit(Lit::Null(Null { span })) => {
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsNullKeyword,
                 })
-                .into_cow())
+                .into_cow());
             }
             Expr::Lit(Lit::Regex(..)) => {
                 return Ok(TsType::TsTypeRef(TsTypeRef {
@@ -188,7 +189,7 @@ impl Analyzer<'_, '_> {
                     }),
                     type_params: None,
                 })
-                .into_cow())
+                .into_cow());
             }
 
             Expr::Paren(ParenExpr { ref expr, .. }) => return self.type_of(expr),
@@ -282,7 +283,7 @@ impl Analyzer<'_, '_> {
                                         span,
                                         kind: TsKeywordTypeKind::TsStringKeyword,
                                     })
-                                    .owned())
+                                    .owned());
                                 }
                                 _ => {}
                             },
@@ -343,7 +344,7 @@ impl Analyzer<'_, '_> {
                             span,
                             kind: TsKeywordTypeKind::TsBooleanKeyword,
                         })
-                        .owned())
+                        .owned());
                     }
 
                     op!("<=") | op!("<") | op!(">=") | op!(">") | op!("in") | op!("instanceof") => {
@@ -380,7 +381,7 @@ impl Analyzer<'_, '_> {
                             span,
                             kind: TsKeywordTypeKind::TsStringKeyword,
                         })
-                        .into_cow())
+                        .into_cow());
                     }
                     _ => {}
                 }
@@ -403,7 +404,7 @@ impl Analyzer<'_, '_> {
                             span,
                             kind: TsKeywordTypeKind::TsNumberKeyword,
                         })
-                        .owned())
+                        .owned());
                     }
 
                     op => unimplemented!("type_of(Unary(op: {:?}))", op),
@@ -412,7 +413,7 @@ impl Analyzer<'_, '_> {
 
             Expr::TsAs(TsAsExpr { ref type_ann, .. }) => return Ok(type_ann.clone().into_cow()),
             Expr::TsTypeCast(TsTypeCastExpr { ref type_ann, .. }) => {
-                return Ok(type_ann.type_ann.clone().into_cow())
+                return Ok(type_ann.type_ann.clone().into_cow());
             }
 
             Expr::TsNonNull(TsNonNullExpr { ref expr, .. }) => {
@@ -472,7 +473,7 @@ impl Analyzer<'_, '_> {
                     kind: TsKeywordTypeKind::TsNumberKeyword,
                     span,
                 })
-                .into_cow())
+                .into_cow());
             }
 
             Expr::Cond(CondExpr {
@@ -571,13 +572,13 @@ impl Analyzer<'_, '_> {
             Expr::Await(AwaitExpr { .. }) => unimplemented!("typeof(AwaitExpr)"),
 
             Expr::Class(ClassExpr { ref class, .. }) => {
-                return Ok(self.type_of_class(None, class)?.owned())
+                return Ok(self.type_of_class(None, class)?.owned());
             }
 
             Expr::Arrow(ref e) => return Ok(self.type_of_arrow_fn(e)?.owned()),
 
             Expr::Fn(FnExpr { ref function, .. }) => {
-                return Ok(self.type_of_fn(&function)?.owned())
+                return Ok(self.type_of_fn(&function)?.owned());
             }
 
             Expr::Member(ref expr) => {
@@ -618,7 +619,7 @@ impl Analyzer<'_, '_> {
             Expr::Assign(AssignExpr { ref right, .. }) => return self.type_of(right),
 
             Expr::TsTypeAssertion(TsTypeAssertion { ref type_ann, .. }) => {
-                return Ok(Type::from(type_ann.clone()).owned())
+                return Ok(Type::from(type_ann.clone()).owned());
             }
 
             _ => unimplemented!("typeof ({:#?})", expr),
@@ -944,7 +945,7 @@ impl Analyzer<'_, '_> {
                     span,
                     kind: TsKeywordTypeKind::TsAnyKeyword,
                 })
-                .owned())
+                .owned());
             }
 
             Type::Keyword(TsKeywordType {
@@ -1246,7 +1247,7 @@ impl Analyzer<'_, '_> {
             None => None,
         };
 
-        let inferred_return_type = self.infer_return_type(f.span);
+        let inferred_return_type = self.infer_return_type(f.body.span());
         if let Some(ref declared) = declared_ret_ty {
             let span = inferred_return_type.span();
             if let Some(ref inferred) = inferred_return_type {
@@ -2057,7 +2058,7 @@ impl Analyzer<'_, '_> {
                                                 enum_name: left.sym.clone(),
                                                 name: right.sym.clone(),
                                             }
-                                            .into_cow())
+                                            .into_cow());
                                         }
                                         _ => {}
                                     }
@@ -2105,7 +2106,7 @@ impl Analyzer<'_, '_> {
                         .map(|ty| Ok(self.expand_type(span, ty)?))
                         .collect::<Result<_, _>>()?,
                 }
-                .into_cow())
+                .into_cow());
             }
 
             Type::Array(Array {
@@ -2126,7 +2127,7 @@ impl Analyzer<'_, '_> {
                         .map(|v| self.expand_type(v.span(), v))
                         .collect::<Result<_, _>>()?,
                 }
-                .into_cow())
+                .into_cow());
             }
 
             Type::Alias(Alias {
@@ -2174,7 +2175,7 @@ fn negate(ty: Type) -> Type {
                         ..v
                     }),
                     span,
-                })
+                });
             }
             TsLit::Number(v) => {
                 return Type::Lit(TsLitType {
@@ -2183,7 +2184,7 @@ fn negate(ty: Type) -> Type {
                         span: v.span,
                     }),
                     span,
-                })
+                });
             }
             TsLit::Str(ref v) => {
                 return Type::Lit(TsLitType {
@@ -2192,7 +2193,7 @@ fn negate(ty: Type) -> Type {
                         span: v.span,
                     }),
                     span,
-                })
+                });
             }
         },
 
@@ -2248,6 +2249,10 @@ impl Visit<SeqExpr> for Analyzer<'_, '_> {
 
                 _ => {}
             }
+        }
+
+        if expr.exprs.len() != 0 {
+            expr.exprs[expr.exprs.len() - 1].visit_with(self);
         }
     }
 }
