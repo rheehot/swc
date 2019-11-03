@@ -1,0 +1,22 @@
+error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'public', 'static', or 'yield' cannot be used as an identifier in strict mode
+  --> $DIR/tests/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts:17:5
+   |
+17 | var public = 1;
+   |     ^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            635,
+        ),
+        hi: BytePos(
+            648,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/scanner/ecmascript5/scanner10.1.1-8gs.ts:16:7
+   |
+16 | throw NotEarlyError;
+   |       ^^^^^^^^^^^^^
+

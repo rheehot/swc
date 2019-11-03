@@ -1,0 +1,16 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            48,
+        ),
+        hi: BytePos(
+            65,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/es2017/useSharedArrayBuffer2.ts:4:16
+  |
+4 | var foge = new SharedArrayBuffer(1024);
+  |                ^^^^^^^^^^^^^^^^^
+

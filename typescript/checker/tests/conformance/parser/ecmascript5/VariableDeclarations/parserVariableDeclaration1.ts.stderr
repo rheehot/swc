@@ -1,0 +1,64 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            20,
+        ),
+        hi: BytePos(
+            21,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts:2:19
+  |
+2 |         var selection = a, 
+  |                         ^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            39,
+        ),
+        hi: BytePos(
+            40,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts:3:15
+  |
+3 |             position = b,
+  |                        ^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            54,
+        ),
+        hi: BytePos(
+            55,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts:4:12
+  |
+4 |             model = c,
+  |                     ^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            71,
+        ),
+        hi: BytePos(
+            72,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration1.ts:5:14
+  |
+5 |             support = d;
+  |                       ^
+

@@ -1,0 +1,32 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            368,
+        ),
+        hi: BytePos(
+            369,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignatures3.ts:21:25
+   |
+21 | function foo4(x: typeof b);
+   |                         ^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            397,
+        ),
+        hi: BytePos(
+            398,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithCallSignatures3.ts:22:25
+   |
+22 | function foo4(x: typeof b); // error
+   |                         ^
+

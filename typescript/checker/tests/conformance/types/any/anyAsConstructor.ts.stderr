@@ -1,0 +1,16 @@
+error: TS2347 {
+    span: Span {
+        lo: BytePos(
+            238,
+        ),
+        hi: BytePos(
+            251,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/types/any/anyAsConstructor.ts:10:9
+   |
+10 | var d = new x<any>(x); // no error
+   |         ^^^^^^^^^^^^^
+

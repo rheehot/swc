@@ -1,0 +1,16 @@
+error: GetterPropWithoutReturn {
+    span: Span {
+        lo: BytePos(
+            34,
+        ),
+        hi: BytePos(
+            35,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration1.ts:3:7
+  |
+3 |   get a() { }
+  |       ^
+
