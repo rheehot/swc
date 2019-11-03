@@ -453,17 +453,13 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 })
                 .expect_err("");
 
-            println!("Err count: {:?}", diagnostics.len());
-
             let mut actual_error_lines = diagnostics
                 .iter()
                 .map(|d| {
                     let span = d.span.primary_span().unwrap();
                     let cp = tester.cm.lookup_char_pos(span.lo());
 
-                    let lc = (cp.line, cp.col.0 + 1);
-                    println!("\tLC: {:?}", lc);
-                    lc
+                    (cp.line, cp.col.0 + 1)
                 })
                 .collect::<Vec<_>>();
 
@@ -473,10 +469,8 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 // We only emit errors which has wrong line.
                 for (d, line_col) in diagnostics.into_iter().zip(full_actual_error_lc.clone()) {
                     if let None = ref_errors.remove_item(&line_col) {
-                        println!("\tEmitting {:?}", line_col);
                         DiagnosticBuilder::new_diagnostic(&handler, d).emit();
                     } else {
-                        println!("\tRemoving {:?}", line_col);
                         actual_error_lines.remove_item(&line_col);
                     }
                 }
