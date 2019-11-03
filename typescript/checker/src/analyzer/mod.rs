@@ -145,6 +145,30 @@ impl Visit<TsInterfaceDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, decl: &TsInterfaceDecl) {
         self.scope
             .register_type(decl.id.sym.clone(), decl.clone().into());
+
+        self.validate_parent_interfaces(&decl.extends);
+    }
+}
+
+impl Analyzer<'_, '_> {
+    fn validate_parent_interfaces(&mut self, parents: &[TsExprWithTypeArgs]) {
+        for parent in parents {
+            // Verify parent interface
+            let res: Result<(), _> = try {
+                let parent_ty = self.type_of_ts_entity_name(
+                    parent.span,
+                    &parent.expr,
+                    parent.type_params.as_ref(),
+                )?;
+            };
+
+            match res {
+                Err(err) => {
+                    self.info.errors.push(err);
+                }
+                _ => {}
+            }
+        }
     }
 }
 
@@ -333,6 +357,12 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
         });
 
         self.scope.this = None;
+    }
+}
+
+impl Visit<Class> for Analyzer<'_, '_> {
+    fn visit(&mut self, c: &Class) {
+        self.validate_parent_interfaces(&c.implements);
     }
 }
 

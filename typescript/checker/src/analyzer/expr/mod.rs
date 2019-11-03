@@ -2312,6 +2312,28 @@ impl Visit<TsAsExpr> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
+    pub(super) fn type_of_ts_entity_name(
+        &self,
+        span: Span,
+        n: &TsEntityName,
+        type_params: Option<&TsTypeParamInstantiation>,
+    ) -> Result<TypeRef, Error> {
+        match *n {
+            TsEntityName::Ident(ref i) => self.type_of(&Expr::Ident(i.clone())),
+            TsEntityName::TsQualifiedName(ref qname) => {
+                let obj_ty = self.type_of_ts_entity_name(span, &qname.left, None)?;
+
+                self.access_property(
+                    span,
+                    obj_ty,
+                    &Expr::Ident(qname.right.clone()),
+                    false,
+                    TypeOfMode::RValue,
+                )
+            }
+        }
+    }
+
     /// ```ts
     /// var unionTuple3: [number, string | number] = [10, "foo"];
     /// var unionTuple4 = <[number, number]>unionTuple3;
