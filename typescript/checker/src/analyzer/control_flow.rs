@@ -212,8 +212,8 @@ impl Analyzer<'_, '_> {
     where
         F: for<'a, 'b> FnOnce(&mut Analyzer<'a, 'b>) -> Ret,
     {
-        let is_fn = match kind {
-            ScopeKind::Fn => true,
+        let should_propagate_returns = match kind {
+            ScopeKind::Block | ScopeKind::ArrowFn => true,
             _ => false,
         };
 
@@ -238,8 +238,8 @@ impl Analyzer<'_, '_> {
 
         // If we are not in function scope, we should propagate return types to the
         // parent scope.
-        if !is_fn {
-            self.inferred_return_types.get_mut().extend(ret_types)
+        if should_propagate_returns {
+            self.inferred_return_types.get_mut().extend(ret_types);
         }
 
         ret
@@ -628,6 +628,11 @@ impl Analyzer<'_, '_> {
     ///
     /// - `span`: Span of the return statement.
     pub(super) fn visit_return_arg(&mut self, span: Span, arg: Option<&Expr>) {
+        println!(
+            "RET! visit_return_arg: {:?}; key={:?}",
+            span, self.return_type_span
+        );
+
         let ty = match arg {
             Some(ref expr) => {
                 // let span = expr.span();

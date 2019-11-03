@@ -553,7 +553,9 @@ impl Visit<Function> for Analyzer<'_, '_> {
 
 impl Visit<ArrowExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, f: &ArrowExpr) {
-        self.with_child(ScopeKind::Fn, Default::default(), |child| {
+        self.with_child(ScopeKind::ArrowFn, Default::default(), |child| {
+            child.return_type_span = f.span;
+
             match f.type_params {
                 Some(TsTypeParamDecl { ref params, .. }) => {
                     params.iter().for_each(|param| {

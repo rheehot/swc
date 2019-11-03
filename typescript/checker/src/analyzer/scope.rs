@@ -31,6 +31,7 @@ pub(super) struct VarInfo {
 pub(super) enum ScopeKind {
     Block,
     Fn,
+    ArrowFn,
     /// If statement, conditional expression, switch case
     Flow,
 }
