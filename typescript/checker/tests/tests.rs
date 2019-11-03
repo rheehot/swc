@@ -24,7 +24,9 @@ use std::{
     io::{self, Read},
     path::Path,
 };
-use swc_common::{comments::Comments, FileName, Fold, FoldWith, Span, Spanned, CM};
+use swc_common::{
+    comments::Comments, errors::TRACK_DIAGNOSTICS, FileName, Fold, FoldWith, Span, Spanned, CM,
+};
 use swc_ecma_ast::{Module, *};
 use swc_ecma_parser::{Parser, Session, SourceFileInput, Syntax, TsConfig};
 use swc_ts_checker::{Lib, Rule};
@@ -337,58 +339,64 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
     .unwrap_or_default();
 
     let res = ::testing::run_test(treat_error_as_bug, |cm, handler| {
-        CM.set(&cm.clone(), || {
-            let checker = swc_ts_checker::Checker::new(
-                cm.clone(),
-                handler,
-                libs,
-                rule,
-                TsConfig {
-                    tsx: fname.contains("tsx"),
-                    ..ts_config
-                },
-            );
+        TRACK_DIAGNOSTICS.with(|d| {
+            *d.borrow_mut() = box |d| {};
 
-            let errors = ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
-            if let Some(ref mut ref_errors) = ref_errors {
-                assert_eq!(mode, Mode::Conformance);
-                // Line of errors (actual result)
-                let actual_errors = errors
-                    .iter()
-                    .map(|e| {
-                        let span = e.span();
-                        let cp = cm.lookup_char_pos(span.lo());
+            CM.set(&cm.clone(), || {
+                let checker = swc_ts_checker::Checker::new(
+                    cm.clone(),
+                    handler,
+                    libs,
+                    rule,
+                    TsConfig {
+                        tsx: fname.contains("tsx"),
+                        ..ts_config
+                    },
+                );
 
-                        return (cp.line, cp.col.0 + 1);
-                    })
-                    .collect::<Vec<_>>();
+                let errors =
+                    ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
 
-                // We only emit errors which has wrong line.
-                if *ref_errors != actual_errors {
-                    checker.run(|| {
-                        for (e, line_col) in errors.into_iter().zip(actual_errors) {
-                            if let None = ref_errors.remove_item(&line_col) {
-                                e.emit(&handler);
+                if let Some(ref mut ref_errors) = ref_errors {
+                    assert_eq!(mode, Mode::Conformance);
+                    // Line of errors (actual result)
+                    let actual_errors = errors
+                        .iter()
+                        .map(|e| {
+                            let span = e.span();
+                            let cp = cm.lookup_char_pos(span.lo());
+
+                            return (cp.line, cp.col.0 + 1);
+                        })
+                        .collect::<Vec<_>>();
+
+                    // We only emit errors which has wrong line.
+                    if *ref_errors != actual_errors {
+                        checker.run(|| {
+                            for (e, line_col) in errors.into_iter().zip(actual_errors) {
+                                if let None = ref_errors.remove_item(&line_col) {
+                                    e.emit(&handler);
+                                }
                             }
-                        }
-                    });
+                        });
+                        return Err(());
+                    }
+                }
+
+                let res = if errors.is_empty() { Ok(()) } else { Err(()) };
+
+                checker.run(|| {
+                    for e in errors {
+                        e.emit(&handler);
+                    }
+                });
+
+                if handler.has_errors() {
                     return Err(());
                 }
-            }
 
-            let res = if errors.is_empty() { Ok(()) } else { Err(()) };
-
-            checker.run(|| {
-                for e in errors {
-                    e.emit(&handler);
-                }
-            });
-
-            if handler.has_errors() {
-                return Err(());
-            }
-
-            res
+                res
+            })
         })
     });
 

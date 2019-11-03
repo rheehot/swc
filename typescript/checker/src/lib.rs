@@ -172,10 +172,13 @@ impl Checker<'_> {
                     ()
                 })
                 .ok()
-                .unwrap_or_else(|| Module {
-                    span: Default::default(),
-                    body: Default::default(),
-                    shebang: None,
+                .unwrap_or_else(|| {
+                    println!("Parser.parse_module return Err()");
+                    Module {
+                        span: Default::default(),
+                        body: Default::default(),
+                        shebang: None,
+                    }
                 })
         });
         let info = self.analyze_module(self.rule, Arc::new(path.clone()), &module);
