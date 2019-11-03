@@ -25,13 +25,13 @@ use std::{
     path::Path,
 };
 use swc_common::{
-    comments::Comments, errors::TRACK_DIAGNOSTICS, FileName, Fold, FoldWith, Span, Spanned, CM,
+    comments::Comments, errors::DiagnosticBuilder, FileName, Fold, FoldWith, Span, Spanned, CM,
 };
 use swc_ecma_ast::{Module, *};
 use swc_ecma_parser::{Parser, Session, SourceFileInput, Syntax, TsConfig};
 use swc_ts_checker::{Lib, Rule};
 use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestName, TestType};
-use testing::StdErr;
+use testing::{StdErr, Tester};
 use walkdir::WalkDir;
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -195,7 +195,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
     let _ = env_logger::try_init();
 
     let fname = file_name.display().to_string();
-    let mut ref_errors = match mode {
+    let ref_errors = match mode {
         Mode::Conformance => {
             let fname = file_name.file_name().unwrap();
             let errors_file =
@@ -338,70 +338,38 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
     .ok()
     .unwrap_or_default();
 
-    let res = ::testing::run_test(treat_error_as_bug, |cm, handler| {
-        TRACK_DIAGNOSTICS.with(|d| {
-            *d.borrow_mut() = box |d| {};
-
-            CM.set(&cm.clone(), || {
-                let checker = swc_ts_checker::Checker::new(
-                    cm.clone(),
-                    handler,
-                    libs,
-                    rule,
-                    TsConfig {
-                        tsx: fname.contains("tsx"),
-                        ..ts_config
-                    },
-                );
-
-                let errors =
-                    ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
-
-                if let Some(ref mut ref_errors) = ref_errors {
-                    assert_eq!(mode, Mode::Conformance);
-                    // Line of errors (actual result)
-                    let actual_errors = errors
-                        .iter()
-                        .map(|e| {
-                            let span = e.span();
-                            let cp = cm.lookup_char_pos(span.lo());
-
-                            return (cp.line, cp.col.0 + 1);
-                        })
-                        .collect::<Vec<_>>();
-
-                    // We only emit errors which has wrong line.
-                    if *ref_errors != actual_errors {
-                        checker.run(|| {
-                            for (e, line_col) in errors.into_iter().zip(actual_errors) {
-                                if let None = ref_errors.remove_item(&line_col) {
-                                    e.emit(&handler);
-                                }
-                            }
-                        });
-                        return Err(());
-                    }
-                }
-
-                let res = if errors.is_empty() { Ok(()) } else { Err(()) };
-
-                checker.run(|| {
-                    for e in errors {
-                        e.emit(&handler);
-                    }
-                });
-
-                if handler.has_errors() {
-                    return Err(());
-                }
-
-                res
-            })
-        })
-    });
-
     match mode {
         Mode::Error => {
+            let res = ::testing::run_test(false, |cm, handler| {
+                CM.set(&cm.clone(), || {
+                    let checker = swc_ts_checker::Checker::new(
+                        cm.clone(),
+                        handler,
+                        libs,
+                        rule,
+                        TsConfig {
+                            tsx: fname.contains("tsx"),
+                            ..ts_config
+                        },
+                    );
+
+                    let errors =
+                        ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
+
+                    checker.run(|| {
+                        for e in errors {
+                            e.emit(&handler);
+                        }
+                    });
+
+                    if handler.has_errors() {
+                        return Err(());
+                    }
+
+                    Ok(())
+                })
+            });
+
             let err = res.expect_err("should fail, but parsed as");
             if err
                 .compare_to_file(format!("{}.stderr", file_name.display()))
@@ -411,9 +379,105 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
             }
         }
         Mode::Pass => {
+            let res = ::testing::run_test(false, |cm, handler| {
+                CM.set(&cm.clone(), || {
+                    let checker = swc_ts_checker::Checker::new(
+                        cm.clone(),
+                        handler,
+                        libs,
+                        rule,
+                        TsConfig {
+                            tsx: fname.contains("tsx"),
+                            ..ts_config
+                        },
+                    );
+
+                    let errors =
+                        ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
+
+                    checker.run(|| {
+                        for e in errors {
+                            e.emit(&handler);
+                        }
+                    });
+
+                    if handler.has_errors() {
+                        return Err(());
+                    }
+
+                    Ok(())
+                })
+            });
+
             res.expect("should be parsed and validated");
         }
+
         Mode::Conformance => {
+            let tester = Tester::new();
+            let diagnostics = tester
+                .errors(|cm, handler| {
+                    CM.set(&cm.clone(), || {
+                        let checker = swc_ts_checker::Checker::new(
+                            cm.clone(),
+                            &handler,
+                            libs,
+                            rule,
+                            TsConfig {
+                                tsx: fname.contains("tsx"),
+                                ..ts_config
+                            },
+                        );
+
+                        let errors = ::swc_ts_checker::errors::Error::flatten(
+                            checker.check(file_name.into()),
+                        );
+
+                        checker.run(|| {
+                            for e in errors {
+                                e.emit(&handler);
+                            }
+                        });
+
+                        if false {
+                            return Ok(());
+                        }
+
+                        return Err(());
+                    })
+                })
+                .expect_err("");
+
+            println!("Err count: {:?}", diagnostics.len());
+
+            let res: Result<(), _> = tester.print_errors(|cm, handler| {
+                // Reference errors.
+                let mut ref_errors = ref_errors.clone().unwrap();
+
+                // Line of errors (actual result)
+                let actual_errors = diagnostics
+                    .iter()
+                    .map(|d| {
+                        let span = d.span.primary_span().unwrap();
+                        let cp = cm.lookup_char_pos(span.lo());
+
+                        let lc = (cp.line, cp.col.0 + 1);
+                        println!("\tLC: {:?}", lc);
+                        lc
+                    })
+                    .collect::<Vec<_>>();
+
+                // We only emit errors which has wrong line.
+                if ref_errors != actual_errors {
+                    for (d, line_col) in diagnostics.into_iter().zip(actual_errors) {
+                        if let None = ref_errors.remove_item(&line_col) {
+                            DiagnosticBuilder::new_diagnostic(&handler, d).emit();
+                        }
+                    }
+                }
+
+                Err(())
+            });
+
             let err = match res {
                 Ok(_) => StdErr::from(String::from("")),
                 Err(err) => err,
