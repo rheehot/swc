@@ -1,6 +1,0 @@
-error: Unexpected eof
- --> $DIR/tests/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration6.ts:1:4
-  |
-1 | var
-  |    ^
-

@@ -469,15 +469,15 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
             let full_actual_error_lc = actual_error_lines.clone();
 
-            let res: Result<(), _> = tester.print_errors(|cm, handler| {
+            let res: Result<(), _> = tester.print_errors(|_, handler| {
                 // We only emit errors which has wrong line.
-                if *ref_errors != actual_error_lines {
-                    for (d, line_col) in diagnostics.into_iter().zip(full_actual_error_lc.clone()) {
-                        if let None = ref_errors.remove_item(&line_col) {
-                            DiagnosticBuilder::new_diagnostic(&handler, d).emit();
-                        } else {
-                            actual_error_lines.remove_item(&line_col);
-                        }
+                for (d, line_col) in diagnostics.into_iter().zip(full_actual_error_lc.clone()) {
+                    if let None = ref_errors.remove_item(&line_col) {
+                        println!("\tEmitting {:?}", line_col);
+                        DiagnosticBuilder::new_diagnostic(&handler, d).emit();
+                    } else {
+                        println!("\tRemoving {:?}", line_col);
+                        actual_error_lines.remove_item(&line_col);
                     }
                 }
 
@@ -498,15 +498,16 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 panic!(
                     "\n============================================================\n{:?}
 ============================================================\n{} unmatched errors out of {} \
-                     errors. Got {} extra errors.\nWanted: {:?}\nUnwanted: {:?}\nRequired errors: \
-                     {:?}",
+                     errors. Got {} extra errors.\nWanted: {:?}\nUnwanted: {:?}\n\nAll required \
+                     errors: {:?}\nAll actual errors: {:?}",
                     err,
                     ref_errors.len(),
                     full_ref_err_cnt,
                     err_count,
                     ref_errors,
                     actual_error_lines,
-                    full_ref_errors.as_ref().unwrap()
+                    full_ref_errors.as_ref().unwrap(),
+                    full_actual_error_lc,
                 );
             }
 
