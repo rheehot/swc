@@ -614,6 +614,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
             }
             _ => self.parse_ident_name().map(TsEnumMemberId::from)?,
         };
+
         let init = if eat!('=') {
             Some(self.parse_assignment_expr()?)
         } else if is!(',') || is!('}') {
