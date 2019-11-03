@@ -65,6 +65,10 @@ impl Analyzer<'_, '_> {
             }) => return Ok(Type::undefined(span).into_cow()),
 
             Expr::Ident(ref i) => {
+                if i.sym == js_word!("void") {
+                    return Ok(Type::any(span).into_cow());
+                }
+
                 if i.sym == js_word!("require") {
                     unreachable!("typeof(require('...'))");
                 }
@@ -2047,6 +2051,10 @@ impl Analyzer<'_, '_> {
                                 left: TsEntityName::Ident(ref left),
                                 ref right,
                             }) => {
+                                if left.sym == js_word!("void") {
+                                    return Ok(Type::any(span).into_cow());
+                                }
+
                                 if let Some(ref ty) = self.scope.find_type(&left.sym) {
                                     match *ty {
                                         Type::Enum(..) => {
