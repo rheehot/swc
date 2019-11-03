@@ -376,7 +376,7 @@ impl Analyzer<'_, '_> {
     /// TODO: Handle recursive funciton
     fn visit_fn(&mut self, name: Option<&Ident>, f: &Function) -> Type<'static> {
         let fn_ty = self.with_child(ScopeKind::Fn, Default::default(), |child| {
-            child.return_type_span = f.body.span();
+            child.return_type_span = f.span();
 
             let no_implicit_any_span = name.as_ref().map(|name| name.span);
 
@@ -459,6 +459,7 @@ impl Analyzer<'_, '_> {
                 child.scope.declaring_fn = Some(name.sym.clone());
             }
 
+            child.inferred_return_types.get_mut().insert(f.span, vec![]);
             f.visit_children(child);
 
             let mut fn_ty = child.type_of_fn(f)?;

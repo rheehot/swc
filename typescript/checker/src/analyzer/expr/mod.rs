@@ -1247,7 +1247,7 @@ impl Analyzer<'_, '_> {
             None => None,
         };
 
-        let inferred_return_type = self.infer_return_type(f.body.span());
+        let inferred_return_type = self.infer_return_type(f.span());
         if let Some(ref declared) = declared_ret_ty {
             let span = inferred_return_type.span();
             if let Some(ref inferred) = inferred_return_type {
@@ -1281,10 +1281,7 @@ impl Analyzer<'_, '_> {
             None => None,
         };
 
-        let inferred_return_type = f
-            .body
-            .as_ref()
-            .map(|body| self.infer_return_type(body.span));
+        let inferred_return_type = f.body.as_ref().map(|body| self.infer_return_type(f.span));
         let inferred_return_type = match inferred_return_type {
             Some(Some(inferred_return_type)) => {
                 if let Some(ref declared) = declared_ret_ty {
