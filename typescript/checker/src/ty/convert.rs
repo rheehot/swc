@@ -418,6 +418,9 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
             op!("&") => ((l.round() as i64) & (r.round() as i64)) as _,
             op!("|") => ((l.round() as i64) | (r.round() as i64)) as _,
             op!("^") => ((l.round() as i64) ^ (r.round() as i64)) as _,
+
+            op!("<<") => ((l.round() as i64) << (r.round() as i64)) as _,
+            op!(">>") => ((l.round() as i64) >> (r.round() as i64)) as _,
             _ => unimplemented!("arithmetic_bin({:?})", expr.op),
         })
     }

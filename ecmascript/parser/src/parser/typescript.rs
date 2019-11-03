@@ -579,7 +579,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
     }
 
     /// `tsParseEnumMember`
-    fn parse_ts_enum_member(&mut self) -> PResult<'a, (TsEnumMember)> {
+    fn parse_ts_enum_member(&mut self) -> PResult<'a, TsEnumMember> {
         debug_assert!(self.input.syntax().typescript());
 
         let start = cur_pos!();
