@@ -101,7 +101,7 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
         match export.decl {
             Decl::Fn(ref f) => self.export(f.span(), f.ident.sym.clone(), None),
             Decl::TsInterface(ref i) => self.export(i.span(), i.id.sym.clone(), None),
-            Decl::Class(..) => unimplemented!("export class Foo"),
+            Decl::Class(ref c) => self.export(c.span(), c.ident.sym.clone(), None),
             Decl::Var(..) => unimplemented!("export var Foo = a;"),
             Decl::TsEnum(ref e) => {
                 // TODO: Allow multiple exports with same name.
