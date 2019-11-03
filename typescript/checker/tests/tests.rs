@@ -471,6 +471,9 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                     if let None = ref_errors.remove_item(&line_col) {
                         DiagnosticBuilder::new_diagnostic(&handler, d).emit();
                     } else {
+                        if env::var("PRINT_ALL").unwrap_or("".into()) == "1" {
+                            DiagnosticBuilder::new_diagnostic(&handler, d).emit();
+                        }
                         actual_error_lines.remove_item(&line_col);
                     }
                 }
