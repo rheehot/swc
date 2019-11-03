@@ -212,11 +212,6 @@ impl Analyzer<'_, '_> {
     where
         F: for<'a, 'b> FnOnce(&mut Analyzer<'a, 'b>) -> Ret,
     {
-        let should_propagate_returns = match kind {
-            ScopeKind::Block | ScopeKind::ArrowFn => true,
-            _ => false,
-        };
-
         let ret;
         let (errors, ret_types) = {
             let mut child = self.child(kind, facts);
@@ -236,11 +231,7 @@ impl Analyzer<'_, '_> {
 
         self.info.errors.extend(errors);
 
-        // If we are not in function scope, we should propagate return types to the
-        // parent scope.
-        if should_propagate_returns {
-            self.inferred_return_types.get_mut().extend(ret_types);
-        }
+        self.inferred_return_types.get_mut().extend(ret_types);
 
         ret
     }
