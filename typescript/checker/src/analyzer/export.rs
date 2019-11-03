@@ -96,9 +96,7 @@ impl Analyzer<'_, '_> {
 
 impl Visit<ExportDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, export: &ExportDecl) {
-        println!("FOO!");
         export.visit_children(self);
-        println!("BAR!");
 
         match export.decl {
             Decl::Fn(ref f) => self.export(f.span(), f.ident.sym.clone(), None),
