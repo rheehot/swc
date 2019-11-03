@@ -21,6 +21,19 @@ impl Visit<NewExpr> for Analyzer<'_, '_> {
         if let Err(err) = res {
             self.info.errors.push(err);
         }
+
+        // Check arguments
+        if let Some(ref args) = e.args {
+            for arg in args {
+                let res: Result<(), Error> = try {
+                    self.type_of(&arg.expr)?;
+                };
+
+                if let Err(err) = res {
+                    self.info.errors.push(err);
+                }
+            }
+        }
     }
 }
 
@@ -28,6 +41,18 @@ impl Visit<CallExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, e: &CallExpr) {
         e.visit_children(self);
 
+        // Check arguments
+        for arg in &e.args {
+            let res: Result<(), Error> = try {
+                self.type_of(&arg.expr)?;
+            };
+
+            if let Err(err) = res {
+                self.info.errors.push(err);
+            }
+        }
+
+        // Check callee
         let res: Result<(), Error> = try {
             if let ExprOrSuper::Expr(ref callee) = e.callee {
                 let callee_ty = self.type_of(&callee);
