@@ -164,7 +164,6 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
         if done.iter().any(|p| file_name.contains(p))
             && !postponed_tests.iter().any(|p| file_name.contains(p))
             && env::var("RUST_BACKTRACE").unwrap_or("".into()) != "full"
-            && env::var("PRINT_ALL").unwrap_or("".into()) != "1"
         {
             ignore = false;
         }
@@ -466,16 +465,26 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
             let full_actual_error_lc = actual_error_lines.clone();
 
+            for line_col in full_actual_error_lc.clone() {
+                if let Some(..) = ref_errors.remove_item(&line_col) {
+                    actual_error_lines.remove_item(&line_col);
+                }
+            }
+
+            //
+            //      - All reference errors are matched
+            //      - Actual errors does not remain
+            let success = ref_errors.is_empty() && actual_error_lines.is_empty();
+
             let res: Result<(), _> = tester.print_errors(|_, handler| {
-                // We only emit errors which has wrong line.
+                // If we failed, we only emit errors which has wrong line.
+
                 for (d, line_col) in diagnostics.into_iter().zip(full_actual_error_lc.clone()) {
-                    if let None = ref_errors.remove_item(&line_col) {
+                    if success
+                        || env::var("PRINT_ALL").unwrap_or(String::from("")) == "1"
+                        || actual_error_lines.contains(&line_col)
+                    {
                         DiagnosticBuilder::new_diagnostic(&handler, d).emit();
-                    } else {
-                        if env::var("PRINT_ALL").unwrap_or("".into()) == "1" {
-                            DiagnosticBuilder::new_diagnostic(&handler, d).emit();
-                        }
-                        actual_error_lines.remove_item(&line_col);
                     }
                 }
 
@@ -489,10 +498,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
             let err_count = actual_error_lines.len();
 
-            // If
-            //      - Reference error is unmatched
-            //      - Actual error remains after removing
-            if !ref_errors.is_empty() || !actual_error_lines.is_empty() {
+            if !success {
                 panic!(
                     "\n============================================================\n{:?}
 ============================================================\n{} unmatched errors out of {} \
