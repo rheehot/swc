@@ -647,8 +647,6 @@ impl Analyzer<'_, '_> {
         expr: &MemberExpr,
         type_mode: TypeOfMode,
     ) -> Result<TypeRef, Error> {
-        println!("type_of_member_expr({:?})", expr);
-
         let MemberExpr {
             ref obj,
             computed,
