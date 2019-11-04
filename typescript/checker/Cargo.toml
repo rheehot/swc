@@ -23,7 +23,7 @@ smallvec = "0.6"
 log = "0.4"
 
 [dev-dependencies]
-testing = { version = "0.3", path ="../../testing" }
+testing = { path ="../../testing" }
 swc_ecma_codegen = { path ="../../ecmascript/codegen" }
 tempfile = "3"
 pretty_assertions = "0.5"

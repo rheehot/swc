@@ -3,6 +3,7 @@ name = "swc_ts_checker_macros"
 version = "0.1.0"
 authors = ["강동윤 <kdy1@outlook.kr>"]
 edition = "2015"
+publish = false
 
 [lib]
 proc-macro = true
@@ -11,7 +12,7 @@ proc-macro = true
 swc_common = { path = "../../../common" }
 swc_ecma_ast = { path = "../../../ecmascript/ast" }
 swc_ecma_parser = { path = "../../../ecmascript/parser" }
-swc_macros_common = { version = "0.2", path ="../../../macros/common" }
+swc_macros_common = { path ="../../../macros/common" }
 proc-macro2 = "0.4"
 pmutil = "0.3"
 Inflector = "0.11"

@@ -130,6 +130,11 @@ impl<'a, I: Tokens> Parser<'a, I> {
                 }
             }
 
+            println!("LABEL: {:?}\nLABELS: {:?}", label, self.state.labels);
+            if label.is_some() && !self.state.labels.contains(&label.as_ref().unwrap().sym) {
+                emit_error!(span, SyntaxError::TS1116);
+            }
+
             return Ok(if is_break {
                 Stmt::Break(BreakStmt { span, label })
             } else {
