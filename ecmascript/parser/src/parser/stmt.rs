@@ -136,9 +136,9 @@ impl<'a, I: Tokens> Parser<'a, I> {
             } else {
                 if !self.ctx().is_continue_allowed {
                     emit_error!(span, SyntaxError::TS1115);
-                }
-
-                if label.is_some() && !self.state.labels.contains(&label.as_ref().unwrap().sym) {
+                } else if label.is_some()
+                    && !self.state.labels.contains(&label.as_ref().unwrap().sym)
+                {
                     emit_error!(span, SyntaxError::TS1107);
                 }
             }

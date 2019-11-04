@@ -137,6 +137,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "parser/ecmascript5/Types",
             "parser/ecmascript5/VariableDeclarations",
             "parser/ecmascript5/Statements/BreakStatements",
+            "parser/ecmascript5/Statements/ContinueStatements",
         ];
 
         // These tests are postponed because they are useless in real world.
