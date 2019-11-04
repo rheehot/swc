@@ -580,14 +580,13 @@ impl Visit<AssignExpr> for Analyzer<'_, '_> {
 
         self.info.errors.extend(errors);
 
-        match rhs_ty {
-            Ok(rhs_ty) => {
-                // Assign
-                if expr.op == op!("=") {
-                    self.try_assign(span, &expr.left, &rhs_ty);
-                }
-            }
-            Err(()) => {}
+        let rhs_ty = match rhs_ty {
+            Ok(v) => v.owned(),
+            Err(()) => Type::any(span).owned(),
+        };
+
+        if expr.op == op!("=") {
+            self.try_assign(span, &expr.left, &rhs_ty);
         }
     }
 }
