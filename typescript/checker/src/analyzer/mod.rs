@@ -30,6 +30,7 @@ mod generic;
 mod name;
 mod props;
 mod scope;
+mod stmt;
 #[cfg(test)]
 mod tests;
 mod type_facts;
