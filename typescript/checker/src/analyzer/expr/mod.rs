@@ -647,6 +647,8 @@ impl Analyzer<'_, '_> {
         expr: &MemberExpr,
         type_mode: TypeOfMode,
     ) -> Result<TypeRef, Error> {
+        println!("type_of_member_expr({:?})", expr);
+
         let MemberExpr {
             ref obj,
             computed,
@@ -664,7 +666,7 @@ impl Analyzer<'_, '_> {
                     Ok(ty) => ty,
                     Err(err) => {
                         // Recover error if possible.
-                        if computed && type_mode == TypeOfMode::RValue {
+                        if computed {
                             errors.push(err);
                             Type::any(span).owned()
                         } else {
@@ -673,10 +675,39 @@ impl Analyzer<'_, '_> {
                     }
                 };
 
-                match self.access_property(span, obj_ty, prop, computed, type_mode) {
-                    Ok(v) => return Ok(v),
-                    Err(err) => {
-                        errors.push(err);
+                if computed {
+                    let ty = match self.access_property(span, obj_ty, prop, computed, type_mode) {
+                        Ok(v) => Ok(v),
+                        Err(err) => {
+                            errors.push(err);
+
+                            Err(())
+                        }
+                    };
+                    if errors.is_empty() {
+                        return Ok(ty.unwrap());
+                    } else {
+                        match self.type_of(&prop) {
+                            Ok(..) => match ty {
+                                Ok(ty) => {
+                                    if errors.is_empty() {
+                                        return Ok(ty);
+                                    } else {
+                                        return Err(Error::Errors { span, errors });
+                                    }
+                                }
+                                Err(()) => return Err(Error::Errors { span, errors }),
+                            },
+                            Err(err) => errors.push(err),
+                        }
+                    }
+                } else {
+                    match self.access_property(span, obj_ty, prop, computed, type_mode) {
+                        Ok(v) => return Ok(v),
+                        Err(err) => {
+                            errors.push(err);
+                            return Err(Error::Errors { span, errors });
+                        }
                     }
                 }
             }
