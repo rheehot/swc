@@ -1,4 +1,4 @@
-error: TS1105
+error: TS1115
  --> $DIR/tests/conformance/parser/ecmascript5/Statements/ContinueStatements/parser_continueNotInIterationStatement2.ts:3:5
   |
 3 |     continue;
