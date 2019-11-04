@@ -1,0 +1,6 @@
+error: TS1056
+ --> $DIR/tests/conformance/parser/ecmascript3/Accessors/parserES3Accessors2.ts:2:9
+  |
+2 |     set Foo(a) { }
+  |         ^^^
+

@@ -1,0 +1,22 @@
+error: TS1056
+ --> $DIR/tests/conformance/parser/ecmascript3/Accessors/parserES3Accessors3.ts:1:15
+  |
+1 | var v = { get Foo() { } };
+  |               ^^^
+
+error: GetterPropWithoutReturn {
+    span: Span {
+        lo: BytePos(
+            14,
+        ),
+        hi: BytePos(
+            17,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript3/Accessors/parserES3Accessors3.ts:1:15
+  |
+1 | var v = { get Foo() { } };
+  |               ^^^
+

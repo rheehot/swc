@@ -1,0 +1,6 @@
+error: TS1056
+ --> $DIR/tests/conformance/parser/ecmascript5/Statements/ReturnStatements/parserReturnStatement4.ts:1:15
+  |
+1 | var v = { get foo() { return } };
+  |               ^^^
+
