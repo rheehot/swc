@@ -2089,14 +2089,11 @@ impl Analyzer<'_, '_> {
                         });
                     }
 
-                    TsType::TsTypeQuery(TsTypeQuery { ref expr_name, .. }) => match *expr_name {
-                        TsEntityName::Ident(ref i) => {
-                            let ty = self.type_of(&Expr::Ident(i.clone()))?;
-
-                            return Ok(ty);
-                        }
-                        _ => unimplemented!("expand(TsTypeQuery): typeof member.expr"),
-                    },
+                    TsType::TsTypeQuery(TsTypeQuery {
+                        span,
+                        ref expr_name,
+                        ..
+                    }) => return self.type_of_ts_entity_name(span, expr_name, None),
 
                     _ => {
                         return Ok(Cow::Owned((*s_ty).clone().into()));
