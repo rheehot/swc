@@ -226,8 +226,20 @@ impl Analyzer<'_, '_> {
                 ref left,
                 ref right,
             }) => {
-                let l_ty = self.type_of(&left)?;
-                let r_ty = self.type_of(&right)?;
+                let l_ty = self.type_of(&left);
+                let r_ty = self.type_of(&right);
+
+                let (l_ty, r_ty) = match (l_ty, r_ty) {
+                    (Ok(l), Ok(r)) => (l, r),
+                    (Err(e), Ok(_)) | (Ok(_), Err(e)) => return Err(e),
+                    (Err(l), Err(r)) => {
+                        return Err(Error::Errors {
+                            span,
+                            errors: vec![l, r],
+                        })
+                    }
+                };
+
                 macro_rules! no_unknown {
                     () => {{
                         no_unknown!(l_ty);
