@@ -806,18 +806,22 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                         };
                     }
                     _ => {
-                        assert!(
-                            var.declare,
-                            "complex pattern without initializer is invalid syntax and parser \
-                             should handle it"
-                        );
-                        //
-                        match self.declare_vars(kind, &v.name) {
-                            Ok(()) => {}
-                            Err(err) => {
-                                self.info.errors.push(err);
-                            }
-                        };
+                        // assert!(
+                        //     var.declare,
+                        //     "complex pattern without initializer is invalid syntax and parser \
+                        //      should handle it"
+                        //  );
+
+                        if var.declare {
+                            match self.declare_vars(kind, &v.name) {
+                                Ok(()) => {}
+                                Err(err) => {
+                                    self.info.errors.push(err);
+                                }
+                            };
+                        } else {
+                            // This is a parsing error
+                        }
                     }
                 };
                 remove_declaring!();
