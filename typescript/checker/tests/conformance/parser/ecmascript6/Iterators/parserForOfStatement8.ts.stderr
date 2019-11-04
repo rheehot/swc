@@ -1,0 +1,16 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            30,
+        ),
+        hi: BytePos(
+            31,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript6/Iterators/parserForOfStatement8.ts:2:15
+  |
+2 | for (var v of X) {
+  |               ^
+

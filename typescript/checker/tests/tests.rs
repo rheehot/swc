@@ -28,7 +28,7 @@ use swc_common::{
     comments::Comments, errors::DiagnosticBuilder, FileName, Fold, FoldWith, Span, Spanned, CM,
 };
 use swc_ecma_ast::{Module, *};
-use swc_ecma_parser::{Parser, Session, SourceFileInput, Syntax, TsConfig};
+use swc_ecma_parser::{JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig};
 use swc_ts_checker::{Lib, Rule};
 use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestName, TestType};
 use testing::{StdErr, Tester};
@@ -236,9 +236,14 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
     let full_ref_errors = ref_errors.clone();
     let full_ref_err_cnt = full_ref_errors.as_ref().map(Vec::len).unwrap_or(0);
 
-    let (libs, rule, ts_config) = ::testing::run_test(treat_error_as_bug, |cm, handler| {
+    let (libs, rule, ts_config, target) = ::testing::run_test(treat_error_as_bug, |cm, handler| {
         Ok(match mode {
-            Mode::Pass | Mode::Error => (vec![Lib::Es5], Default::default(), Default::default()),
+            Mode::Pass | Mode::Error => (
+                vec![Lib::Es5],
+                Default::default(),
+                Default::default(),
+                JscTarget::Es5,
+            ),
             Mode::Conformance => {
                 // We parse files twice. At first, we read comments and detect
                 // configurations for following parse.
@@ -257,6 +262,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                     SourceFileInput::from(&*fm),
                     Some(&comments),
                 );
+                let mut target = JscTarget::default();
 
                 let module = parser.parse_module().map_err(|mut e| {
                     e.emit();
@@ -284,7 +290,20 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                             let s = &s[1..]; // '@'
 
                             if s.starts_with("target:") || s.starts_with("Target:") {
-                                libs = Lib::load(&s["target:".len()..].trim());
+                                let s = s["target:".len()..].trim().to_lowercase();
+                                libs = Lib::load(&s);
+                                target = match &*s {
+                                    "es3" => JscTarget::Es3,
+                                    "es5" => JscTarget::Es5,
+                                    "es2015" => JscTarget::Es2015,
+                                    "es6" => JscTarget::Es2015,
+                                    "es2016" => JscTarget::Es2016,
+                                    "es2017" => JscTarget::Es2017,
+                                    "es2018" => JscTarget::Es2018,
+                                    "es2019" => JscTarget::Es2019,
+                                    "esnext" => JscTarget::Es2019,
+                                    _ => unimplemented!("target: {:?}", s),
+                                };
                             } else if s.starts_with("strict:") {
                                 let strict = s["strict:".len()..].trim().parse().unwrap();
                                 rule.no_implicit_any = strict;
@@ -343,7 +362,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                     None => {}
                 }
 
-                (libs, rule, ts_config)
+                (libs, rule, ts_config, target)
             }
         })
     })
@@ -363,6 +382,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                             tsx: fname.contains("tsx"),
                             ..ts_config
                         },
+                        target,
                     );
 
                     let errors =
@@ -402,6 +422,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                             tsx: fname.contains("tsx"),
                             ..ts_config
                         },
+                        target,
                     );
 
                     let errors =
@@ -444,6 +465,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                                 tsx: fname.contains("tsx"),
                                 ..ts_config
                             },
+                            target,
                         );
 
                         let errors = ::swc_ts_checker::errors::Error::flatten(

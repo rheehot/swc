@@ -18,7 +18,7 @@ use chashmap::CHashMap;
 use std::{path::PathBuf, sync::Arc};
 use swc_common::{errors::Handler, Globals, SourceMap};
 use swc_ecma_ast::Module;
-use swc_ecma_parser::{Parser, Session, SourceFileInput, Syntax, TsConfig};
+use swc_ecma_parser::{JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig};
 
 pub mod analyzer;
 mod builtin_types;
@@ -66,6 +66,7 @@ pub struct Checker<'a> {
     cm: Arc<SourceMap>,
     handler: &'a Handler,
     ts_config: TsConfig,
+    target: JscTarget,
     /// Cache
     modules: Arc<CHashMap<PathBuf, ModuleInfo>>,
     resolver: Resolver,
@@ -81,6 +82,7 @@ impl<'a> Checker<'a> {
         libs: Vec<Lib>,
         rule: Rule,
         parser_config: TsConfig,
+        target: JscTarget,
     ) -> Self {
         Checker {
             globals: Globals::new(),
@@ -88,6 +90,7 @@ impl<'a> Checker<'a> {
             handler,
             modules: Default::default(),
             ts_config: parser_config,
+            target,
             resolver: Resolver::new(),
             current: Default::default(),
             libs,
@@ -158,11 +161,12 @@ impl Checker<'_> {
 
             let fm = self.cm.load_file(&path).expect("failed to read file");
 
-            let mut parser = Parser::new(
+            let mut parser = Parser::new2(
                 session,
                 Syntax::Typescript(self.ts_config),
                 SourceFileInput::from(&*fm),
                 None, // Disable comments
+                self.target,
             );
 
             parser
