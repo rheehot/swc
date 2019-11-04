@@ -557,6 +557,7 @@ impl Visit<BlockStmt> for Analyzer<'_, '_> {
 
 impl Visit<AssignExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, expr: &AssignExpr) {
+        let mut errors = vec![];
         let span = expr.span();
         expr.visit_children(self);
 
@@ -569,15 +570,24 @@ impl Visit<AssignExpr> for Analyzer<'_, '_> {
 
                 self.check_rvalue(&rhs_ty);
 
-                rhs_ty
+                Ok(rhs_ty)
             }
             Err(err) => {
-                self.info.errors.push(err);
-                return;
+                errors.push(err);
+                Err(())
             }
         };
-        if expr.op == op!("=") {
-            self.try_assign(span, &expr.left, &rhs_ty);
+
+        self.info.errors.extend(errors);
+
+        match rhs_ty {
+            Ok(rhs_ty) => {
+                // Assign
+                if expr.op == op!("=") {
+                    self.try_assign(span, &expr.left, &rhs_ty);
+                }
+            }
+            Err(()) => {}
         }
     }
 }

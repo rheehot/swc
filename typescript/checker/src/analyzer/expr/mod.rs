@@ -2313,12 +2313,16 @@ impl Visit<SeqExpr> for Analyzer<'_, '_> {
                     });
                 }
 
-                _ => {}
+                _ => match self.type_of(&expr) {
+                    Ok(..) => {}
+                    Err(err) => self.info.errors.push(err),
+                },
             }
         }
 
         if expr.exprs.len() != 0 {
-            expr.exprs[expr.exprs.len() - 1].visit_with(self);
+            let expr = &expr.exprs[expr.exprs.len() - 1];
+            expr.visit_with(self);
         }
     }
 }
