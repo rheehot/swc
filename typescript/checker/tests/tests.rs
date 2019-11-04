@@ -133,6 +133,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "types/primitives/number",
             "types/primitives/",
             "parser/ecmascript5/EnumDeclarations",
+            "parser/ecmascript5/parserNotRegex1",
         ];
 
         // These tests are postponed because they are useless in real world.
