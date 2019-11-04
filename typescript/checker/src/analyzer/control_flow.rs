@@ -642,20 +642,22 @@ impl Analyzer<'_, '_> {
         };
 
         let key = self.return_type_span;
-        assert!(!key.is_dummy());
-        let dup = self
-            .inferred_return_types
-            .borrow()
-            .get(&key)
-            .expect("return type cannot be inferred if `return_type_span` is invalid")
-            .iter()
-            .any(|t| t.eq_ignore_name_and_span(&ty));
-        if !dup {
-            self.inferred_return_types
-                .get_mut()
-                .entry(key)
-                .or_default()
-                .push(ty);
+        // key is dummy for top-level returns.
+        if !key.is_dummy() {
+            let dup = self
+                .inferred_return_types
+                .borrow()
+                .get(&key)
+                .expect("return type cannot be inferred if `return_type_span` is invalid")
+                .iter()
+                .any(|t| t.eq_ignore_name_and_span(&ty));
+            if !dup {
+                self.inferred_return_types
+                    .get_mut()
+                    .entry(key)
+                    .or_default()
+                    .push(ty);
+            }
         }
     }
 }
