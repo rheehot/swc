@@ -1,7 +1,7 @@
 error: TS1003
- --> $DIR/tests/conformance/parser/ecmascript5/Types/parserTypeQuery3.ts:1:17
+ --> $DIR/tests/conformance/parser/ecmascript5/Types/parserTypeQuery4.ts:1:17
   |
-1 | var v: typeof A.
+1 | var v: typeof A.;
   |                 ^
 
 error: UndefinedSymbol {
@@ -15,8 +15,8 @@ error: UndefinedSymbol {
         ctxt: #0,
     },
 }
- --> $DIR/tests/conformance/parser/ecmascript5/Types/parserTypeQuery3.ts:1:15
+ --> $DIR/tests/conformance/parser/ecmascript5/Types/parserTypeQuery4.ts:1:15
   |
-1 | var v: typeof A.
+1 | var v: typeof A.;
   |               ^
 
