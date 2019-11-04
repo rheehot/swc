@@ -131,15 +131,15 @@ impl<'a, I: Tokens> Parser<'a, I> {
             }
 
                 if label.is_some() && !self.state.labels.contains(&label.as_ref().unwrap().sym) {
-                    emit_error!(span, SyntaxError::TS1116);
+                    self.emit_err(span, SyntaxError::TS1116);
                 }
             } else {
                 if !self.ctx().is_continue_allowed {
-                    emit_error!(span, SyntaxError::TS1115);
+                    self.emit_err(span, SyntaxError::TS1115);
                 } else if label.is_some()
                     && !self.state.labels.contains(&label.as_ref().unwrap().sym)
                 {
-                    emit_error!(span, SyntaxError::TS1107);
+                    self.emit_err(span, SyntaxError::TS1107);
                 }
             }
 
@@ -799,7 +799,8 @@ impl<'a, I: Tokens> Parser<'a, I> {
         }
 
         if self.syntax().typescript() {
-            emit_error!(SyntaxError::TS2410);
+            let span = self.input.cur_span();
+            self.emit_err(span, SyntaxError::TS2410);
         }
 
         let start = cur_pos!();

@@ -315,21 +315,6 @@ macro_rules! make_error {
     }};
 }
 
-macro_rules! emit_error {
-    ($p:expr, $err:expr) => {
-        emit_error!($p, $p.input.cur_span(), $err)
-    };
-
-    ($p:expr, $span:expr, $err:expr) => {{
-        ::swc_common::errors::DiagnosticBuilder::from($crate::error::ErrorToDiag {
-            handler: $p.session.handler,
-            span: $span,
-            error: $err,
-        })
-        .emit();
-    }};
-}
-
 macro_rules! syntax_error {
     ($p:expr, $err:expr) => {
         syntax_error!($p, $p.input.cur_span(), $err)
