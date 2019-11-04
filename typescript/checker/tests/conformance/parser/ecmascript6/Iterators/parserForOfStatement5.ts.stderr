@@ -1,0 +1,22 @@
+error: TS2483
+ --> $DIR/tests/conformance/parser/ecmascript6/Iterators/parserForOfStatement5.ts:2:10
+  |
+2 | for (var a: number of X) {
+  |          ^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            38,
+        ),
+        hi: BytePos(
+            39,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript6/Iterators/parserForOfStatement5.ts:2:23
+  |
+2 | for (var a: number of X) {
+  |                       ^
+
