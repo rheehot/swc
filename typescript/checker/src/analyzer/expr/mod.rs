@@ -657,13 +657,36 @@ impl Analyzer<'_, '_> {
         debug_assert_ne!(span, obj.span());
         debug_assert_ne!(span, prop.span());
 
+        let mut errors = vec![];
         match *obj {
             ExprOrSuper::Expr(ref obj) => {
-                let obj_ty = self.type_of(obj)?;
-                return self.access_property(span, obj_ty, prop, computed, type_mode);
+                let obj_ty = match self.type_of(obj) {
+                    Ok(ty) => ty,
+                    Err(err) => {
+                        // Recover error if possible.
+                        if computed && type_mode == TypeOfMode::RValue {
+                            errors.push(err);
+                            Type::any(span).owned()
+                        } else {
+                            return Err(err);
+                        }
+                    }
+                };
+
+                match self.access_property(span, obj_ty, prop, computed, type_mode) {
+                    Ok(v) => return Ok(v),
+                    Err(err) => {
+                        errors.push(err);
+                    }
+                }
             }
             _ => unimplemented!("type_of_member_expr(super.foo)"),
         }
+
+        if errors.len() == 1 {
+            return Err(errors.remove(0));
+        }
+        return Err(Error::Errors { span, errors });
     }
 
     fn type_of_prop(&self, prop: &Prop) -> TypeElement {

@@ -820,7 +820,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 }
                             };
                         } else {
-                            // This is a parsing error
+                            // This is parsing error
                         }
                     }
                 };
