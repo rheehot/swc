@@ -8,17 +8,24 @@ macro_rules! impl_for {
             fn visit(&mut self, n: &$T) {
                 n.visit_children(self);
 
-                let res: Result<(), _> = try {
-                    self.type_of(&n.right)?;
-                };
-
-                match res {
-                    Ok(..) => {}
-                    Err(err) => self.info.errors.push(err),
-                }
+                self.check_rhs_of_for_loop(&n.right);
             }
         }
     };
+}
+
+impl Analyzer<'_, '_> {
+    fn check_rhs_of_for_loop(&mut self, e: &Expr) {
+        // Check iterable
+        let res: Result<(), _> = try {
+            self.type_of(e)?;
+        };
+
+        match res {
+            Ok(..) => {}
+            Err(err) => self.info.errors.push(err),
+        }
+    }
 }
 
 impl_for!(ForOfStmt);
