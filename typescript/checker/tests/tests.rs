@@ -135,6 +135,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "parser/ecmascript5/EnumDeclarations",
             "parser/ecmascript5/parserNotRegex1",
             "parser/ecmascript5/Types",
+            "parser/ecmascript5/VariableDeclarations",
         ];
 
         // These tests are postponed because they are useless in real world.
