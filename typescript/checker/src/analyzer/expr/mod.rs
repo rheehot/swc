@@ -40,15 +40,15 @@ pub(super) enum TypeOfMode {
 }
 
 impl Analyzer<'_, '_> {
-    pub(super) fn type_of<'e>(&'e self, expr: &Expr) -> Result<TypeRef<'e>, Error> {
+    pub(super) fn type_of(&self, expr: &Expr) -> Result<TypeRef, Error> {
         self.type_of_expr(expr, TypeOfMode::RValue)
     }
 
-    pub(super) fn type_of_expr<'e>(
-        &'e self,
+    pub(super) fn type_of_expr(
+        &self,
         expr: &Expr,
         type_mode: TypeOfMode,
-    ) -> Result<TypeRef<'e>, Error> {
+    ) -> Result<TypeRef, Error> {
         let span = expr.span();
 
         match *expr {
