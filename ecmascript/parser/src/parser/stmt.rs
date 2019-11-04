@@ -977,6 +977,9 @@ impl<'a, I: Tokens> Parser<'a, I> {
                         }
                     }
                 }
+                //                if decl.decls[0].init.is_some() {
+                //                    self.emit_err(decl.span,
+                // SyntaxError::VarInitializerInForInHead);                }
 
                 return self.parse_for_each_head(VarDeclOrPat::VarDecl(decl));
             }

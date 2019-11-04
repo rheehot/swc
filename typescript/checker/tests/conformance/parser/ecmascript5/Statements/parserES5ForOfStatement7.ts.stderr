@@ -1,0 +1,22 @@
+error: Expected one variable binding
+ --> $DIR/tests/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement7.ts:2:25
+  |
+2 | for (var a: number = 1, b: string = "" of X) {
+  |                         ^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            58,
+        ),
+        hi: BytePos(
+            59,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/Statements/parserES5ForOfStatement7.ts:2:43
+  |
+2 | for (var a: number = 1, b: string = "" of X) {
+  |                                           ^
+
