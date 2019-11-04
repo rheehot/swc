@@ -184,7 +184,8 @@ macro_rules! store {
 /// cur!($parser, required:bool)
 macro_rules! cur {
     ($p:expr, $required:expr) => {{
-        let last = $p.input.prev_span();
+        let pos = $p.input.last_pos();
+        let last = Span::new(pos, pos, Default::default());
         let is_err_token = match $p.input.cur() {
             Some(&$crate::token::Token::Error(..)) => true,
             _ => false,
