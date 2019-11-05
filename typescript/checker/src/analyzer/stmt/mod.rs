@@ -9,14 +9,7 @@ macro_rules! impl_for {
                 n.visit_children(self);
 
                 self.check_lhs_of_for_loop(&n.left);
-
-                // Handle for(var of X)
-                if match n.left {
-                    VarDeclOrPat::VarDecl(VarDecl { ref decls, .. }) => !decls.is_empty(),
-                    _ => true,
-                } {
-                    self.check_rhs_of_for_loop(&n.right);
-                }
+                self.check_rhs_of_for_loop(&n.right);
             }
         }
     };
