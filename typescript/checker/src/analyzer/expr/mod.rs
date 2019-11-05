@@ -1114,7 +1114,24 @@ impl Analyzer<'_, '_> {
 
                     return Ok(types[v as usize].to_static().owned());
                 }
-                _ => {}
+                _ => {
+                    if types.is_empty() {
+                        return Ok(Type::any(span).owned());
+                    }
+
+                    //                    if types.len() == 1 {
+                    //                        return Ok(Cow::Borrowed(&types[0]));
+                    //                    }
+
+                    return Ok(Type::Union(Union {
+                        span,
+                        types: types
+                            .into_iter()
+                            .map(|v| Cow::Owned(v.to_static()))
+                            .collect(),
+                    })
+                    .owned());
+                }
             },
 
             _ => {}
