@@ -142,6 +142,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "parser/ecmascript5/Statements/parserForStatement",
             "parser/ecmascript5/Statements",
             "parser/ecmascript5/StrictMode",
+            "parser/ecmascript5/AutomaticSemicolonInsertion",
         ];
 
         // These tests are postponed because they are useless in real world.

@@ -195,11 +195,9 @@ impl Analyzer<'_, '_> {
                         _ => {}
                     }
 
-                    match *rhs.normalize() {
-                        Type::TypeLit(TypeLit {
-                            members: ref rhs_members,
-                            ..
-                        }) => {
+                    macro_rules! check_members {
+                        ($rhs_members:expr) => {{
+                            let rhs_members = $rhs_members;
                             // Assign each property to corresponding property.
 
                             if let Some(l_key) = m.key() {
@@ -244,13 +242,35 @@ impl Analyzer<'_, '_> {
                                     TypeElement::Index(..) => {
                                         continue 'l;
                                     }
+                                    TypeElement::Call(..) => {
+                                        //
+                                        for rm in rhs_members {
+                                            match rm {
+                                                // TODO: Check type of parameters
+                                                // TODO: Check return type
+                                                TypeElement::Call(..) => continue 'l,
+                                                _ => {}
+                                            }
+                                        }
+
+                                        missing_fields.push(m.clone().into_static());
+                                    }
                                     _ => {}
                                 }
-
-                                if !rhs_members.iter().any(|rm| rm.eq_ignore_name_and_span(m)) {
-                                    missing_fields.push(m.clone().into_static());
-                                }
                             }
+                        }};
+                    }
+
+                    match *rhs.normalize() {
+                        Type::TypeLit(TypeLit {
+                            members: ref rhs_members,
+                            ..
+                        }) => check_members!(rhs_members),
+
+                        Type::Interface(Interface { ref body, .. }) => {
+                            // TODO: Type params
+                            check_members!(body)
+                            // TODO: Check parent interface
                         }
 
                         // Check class itself
