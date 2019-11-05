@@ -1,8 +1,3 @@
-use std::{borrow::Cow, iter::once};
-use swc_atoms::{js_word, JsWord};
-use swc_common::{util::iter::IteratorExt as _, Span, Spanned, Visit, VisitWith};
-use swc_ecma_ast::*;
-
 use super::{
     control_flow::{Comparator, RemoveTypes},
     export::pat_to_ts_fn_param,
@@ -18,6 +13,10 @@ use crate::{
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
+use std::{borrow::Cow, iter::once};
+use swc_atoms::{js_word, JsWord};
+use swc_common::{util::iter::IteratorExt as _, Span, Spanned, Visit, VisitWith};
+use swc_ecma_ast::*;
 
 mod bin;
 mod call_new;
@@ -602,6 +601,16 @@ impl Analyzer<'_, '_> {
 
         if i.sym == js_word!("void") {
             return Ok(Type::any(span).into_cow());
+        }
+
+        if i.sym == js_word!("eval") {
+            return Ok(Type::Function(ty::Function {
+                span,
+                params: vec![],
+                ret_ty: box Type::any(span).owned(),
+                type_params: None,
+            })
+            .owned());
         }
 
         if i.sym == js_word!("require") {
