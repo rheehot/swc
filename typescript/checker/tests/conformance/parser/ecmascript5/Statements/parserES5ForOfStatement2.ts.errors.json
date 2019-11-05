@@ -1,7 +1,7 @@
 [
-    {
-        "line": 2,
-        "column": 9,
-        "msg": "Variable declaration list cannot be empty."
-    }
+  {
+    "line": 2,
+    "column": 6,
+    "msg": "Variable declaration list cannot be empty."
+  }
 ]
