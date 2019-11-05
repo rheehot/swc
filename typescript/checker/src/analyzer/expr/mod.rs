@@ -604,13 +604,18 @@ impl Analyzer<'_, '_> {
         }
 
         if i.sym == js_word!("eval") {
-            return Ok(Type::Function(ty::Function {
-                span,
-                params: vec![],
-                ret_ty: box Type::any(span).owned(),
-                type_params: None,
-            })
-            .owned());
+            match type_mode {
+                TypeOfMode::LValue => return Err(Error::CannotAssignToNonVariable { span }),
+                TypeOfMode::RValue => {
+                    return Ok(Type::Function(ty::Function {
+                        span,
+                        params: vec![],
+                        ret_ty: box Type::any(span).owned(),
+                        type_params: None,
+                    })
+                    .owned());
+                }
+            }
         }
 
         if i.sym == js_word!("require") {

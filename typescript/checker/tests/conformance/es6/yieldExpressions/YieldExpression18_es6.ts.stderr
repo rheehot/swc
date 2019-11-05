@@ -1,0 +1,38 @@
+error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'public', 'static', or 'yield' cannot be used as an identifier in strict mode
+ --> $DIR/tests/conformance/es6/yieldExpressions/YieldExpression18_es6.ts:3:1
+  |
+3 | yield(foo);
+  | ^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            38,
+        ),
+        hi: BytePos(
+            41,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/es6/yieldExpressions/YieldExpression18_es6.ts:3:7
+  |
+3 | yield(foo);
+  |       ^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            32,
+        ),
+        hi: BytePos(
+            37,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/es6/yieldExpressions/YieldExpression18_es6.ts:3:1
+  |
+3 | yield(foo);
+  | ^^^^^
+
