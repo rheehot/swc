@@ -14,19 +14,32 @@ error: UndefinedSymbol {
 1 | m.index+1+m[0].length;
   | ^
 
-error: UndefinedSymbol {
+error: Errors {
     span: Span {
         lo: BytePos(
             10,
         ),
         hi: BytePos(
-            11,
+            14,
         ),
         ctxt: #0,
     },
+    errors: [
+        UndefinedSymbol {
+            span: Span {
+                lo: BytePos(
+                    10,
+                ),
+                hi: BytePos(
+                    11,
+                ),
+                ctxt: #0,
+            },
+        },
+    ],
 }
  --> $DIR/tests/conformance/scanner/ecmascript5/scannerAdditiveExpression1.ts:1:11
   |
 1 | m.index+1+m[0].length;
-  |           ^
+  |           ^^^^
 

@@ -1,0 +1,32 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            22,
+        ),
+        hi: BytePos(
+            23,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/StrictMode/parserStrictMode15-negative.ts:2:8
+  |
+2 | delete a[b];
+  |        ^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            24,
+        ),
+        hi: BytePos(
+            25,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/StrictMode/parserStrictMode15-negative.ts:2:10
+  |
+2 | delete a[b];
+  |          ^
+

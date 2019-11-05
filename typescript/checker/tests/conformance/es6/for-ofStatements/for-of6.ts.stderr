@@ -1,0 +1,16 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            21,
+        ),
+        hi: BytePos(
+            22,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/es6/for-ofStatements/for-of6.ts:2:6
+  |
+2 | for (v of [0]) {
+  |      ^
+
