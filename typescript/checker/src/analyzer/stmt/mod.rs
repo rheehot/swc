@@ -22,7 +22,10 @@ impl Analyzer<'_, '_> {
             match *e {
                 VarDeclOrPat::VarDecl(..) => {}
                 VarDeclOrPat::Pat(ref pat) => match *pat {
-                    Pat::Ident(ref i) | Pat::Expr(box Expr::Ident(ref i)) => {
+                    Pat::Expr(ref e) => {
+                        self.type_of_expr(&e, TypeOfMode::LValue)?;
+                    }
+                    Pat::Ident(ref i) => {
                         // TODO: verify
                         self.type_of_ident(i, TypeOfMode::LValue)?;
                     }
