@@ -365,6 +365,14 @@ impl Analyzer<'_, '_> {
                         .owned())
                     }
 
+                    op!(unary, "+") | op!(unary, "-") => {
+                        return Ok(Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                        })
+                        .owned())
+                    }
+
                     op => unimplemented!("type_of(Unary(op: {:?}))", op),
                 }
             }
