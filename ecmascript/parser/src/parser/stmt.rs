@@ -350,6 +350,24 @@ impl<'a, I: Tokens> Parser<'a, I> {
             }
         }
 
+        if self.syntax().typescript() {
+            match *expr {
+                Expr::Ident(ref i) => match i.sym {
+                    js_word!("public") | js_word!("static") => {
+                        if eat!("interface") {
+                            self.emit_err(i.span, SyntaxError::TS2427);
+                            return self
+                                .parse_ts_interface_decl()
+                                .map(Decl::from)
+                                .map(Stmt::from);
+                        }
+                    }
+                    _ => {}
+                },
+                _ => {}
+            }
+        }
+
         if eat!(';') {
             Ok(Stmt::Expr(ExprStmt {
                 span: span!(start),
