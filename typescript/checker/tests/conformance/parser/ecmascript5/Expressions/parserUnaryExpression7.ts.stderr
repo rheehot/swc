@@ -1,4 +1,4 @@
-error: Cannot assign to this
+error: TS2406
  --> $DIR/tests/conformance/parser/ecmascript5/Expressions/parserUnaryExpression7.ts:1:4
   |
 1 | ++ new Foo();

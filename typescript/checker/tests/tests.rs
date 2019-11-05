@@ -141,6 +141,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "parser/ecmascript5/Statements/ReturnStatements",
             "parser/ecmascript5/Statements/parserForStatement",
             "parser/ecmascript5/Statements",
+            "parser/ecmascript5/StrictMode",
         ];
 
         // These tests are postponed because they are useless in real world.
@@ -171,6 +172,8 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "parserES5ForOfStatement21.ts",
             // Ignored - vscode does not match errors.json
             "parserStrictMode8.ts",
+            // Temporarily ignored - Setter property is not implemented yet
+            "parserStrictMode12.ts",
         ];
 
         let mut ignore = file_name.contains("circular")

@@ -4,7 +4,17 @@ error: 'eval' and 'arguments' cannot be used as a binding identifier in strict m
 2 | ++eval;
   |   ^^^^
 
-error: Cannot assign to this
+error: CannotAssignToNonVariable {
+    span: Span {
+        lo: BytePos(
+            17,
+        ),
+        hi: BytePos(
+            21,
+        ),
+        ctxt: #0,
+    },
+}
  --> $DIR/tests/conformance/parser/ecmascript5/StrictMode/parserStrictMode7.ts:2:3
   |
 2 | ++eval;
