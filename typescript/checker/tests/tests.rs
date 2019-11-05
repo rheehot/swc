@@ -360,6 +360,8 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                             } else if s.starts_with("noImplicitThis:") {
                                 let v = s["noImplicitThis:".len()..].trim().parse().unwrap();
                                 rule.no_implicit_this = v;
+                            } else if s.starts_with("skipDefaultLibCheck") {
+                                // TODO
                             } else {
                                 panic!("Comment is not handled: {}", s);
                             }
