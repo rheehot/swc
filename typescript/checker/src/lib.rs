@@ -170,7 +170,7 @@ impl Checker<'_> {
             );
 
             parser
-                .parse_module()
+                .parse_typescript_module()
                 .map_err(|mut e| {
                     e.emit();
                     ()
