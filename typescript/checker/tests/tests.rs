@@ -163,8 +163,11 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "RealSource",
             // Temporarily ignored - .d.ts tests are postponed.
             ".d.ts",
-            // Temporarily ignored - just because it requires lots of work
+            // Temporarily ignored just because it requires lots of work while being not important
             "parserTypeQuery8",
+            "parserForInStatement2",
+            "parserES5ForOfStatement2.ts",
+            "parserES5ForOfStatement21.ts",
         ];
 
         let mut ignore = file_name.contains("circular")
