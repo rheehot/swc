@@ -1,0 +1,28 @@
+error: TS1102
+ --> $DIR/tests/conformance/parser/ecmascript5/StrictMode/parserStrictMode15.ts:2:8
+  |
+2 | delete a;
+  |        ^
+
+error: TS2703
+ --> $DIR/tests/conformance/parser/ecmascript5/StrictMode/parserStrictMode15.ts:2:8
+  |
+2 | delete a;
+  |        ^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            22,
+        ),
+        hi: BytePos(
+            23,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/StrictMode/parserStrictMode15.ts:2:8
+  |
+2 | delete a;
+  |        ^
+
