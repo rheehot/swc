@@ -8,6 +8,7 @@ macro_rules! impl_for {
             fn visit(&mut self, n: &$T) {
                 n.visit_children(self);
 
+                self.check_lhs_of_for_loop(&n.left);
                 self.check_rhs_of_for_loop(&n.right);
             }
         }
@@ -15,6 +16,27 @@ macro_rules! impl_for {
 }
 
 impl Analyzer<'_, '_> {
+    fn check_lhs_of_for_loop(&mut self, e: &VarDeclOrPat) {
+        // Check iterable
+        let res: Result<(), _> = try {
+            match *e {
+                VarDeclOrPat::VarDecl(..) => {}
+                VarDeclOrPat::Pat(ref pat) => match *pat {
+                    Pat::Ident(ref i) | Pat::Expr(box Expr::Ident(ref i)) => {
+                        // TODO: verify
+                        self.type_of(&Expr::Ident(i.clone()))?;
+                    }
+                    _ => {}
+                },
+            }
+        };
+
+        match res {
+            Ok(..) => {}
+            Err(err) => self.info.errors.push(err),
+        }
+    }
+
     fn check_rhs_of_for_loop(&mut self, e: &Expr) {
         // Check iterable
         let res: Result<(), _> = try {
