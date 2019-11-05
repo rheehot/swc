@@ -45,6 +45,13 @@ macro_rules! is {
 }
 
 macro_rules! peeked_is {
+    ($p:expr,';') => {{
+        $p.input.peeked_is(&Token::Semi)
+                // || eof!($p)
+                            || peeked_is!($p, '}')
+                                || $p.input.has_linebreak_between_cur_and_peeked()
+    }};
+
     ($p:expr, BindingIdent) => {{
         let ctx = $p.ctx();
         match peek!($p) {
