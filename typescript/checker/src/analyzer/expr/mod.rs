@@ -356,6 +356,15 @@ impl Analyzer<'_, '_> {
                         .owned());
                     }
 
+                    // `delete foo` returns bool
+                    op!("delete") => {
+                        return Ok(Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsBooleanKeyword,
+                        })
+                        .owned())
+                    }
+
                     op => unimplemented!("type_of(Unary(op: {:?}))", op),
                 }
             }
