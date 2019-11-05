@@ -1,0 +1,22 @@
+error: TS2406
+ --> $DIR/tests/conformance/parser/ecmascript5/StrictMode/parserStrictMode3.ts:2:1
+  |
+2 | eval = 1;
+  | ^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            15,
+        ),
+        hi: BytePos(
+            19,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/StrictMode/parserStrictMode3.ts:2:1
+  |
+2 | eval = 1;
+  | ^^^^
+
