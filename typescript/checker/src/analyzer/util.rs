@@ -1,7 +1,31 @@
-use crate::ty::Type;
+use crate::{
+    errors::Error,
+    ty::{Type, TypeRef},
+};
 use std::borrow::Cow;
 use swc_common::Spanned;
 use swc_ecma_ast::*;
+
+pub(super) trait TypeOf<T> {
+    fn type_of(&self, n: &T, mode: TypeOfMode) -> Result<TypeRef, Error>;
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(super) enum TypeOfMode {
+    /// Used for l-values.
+    ///
+    /// This is used to allow
+    ///
+    /// ```ts
+    /// type Num = { '0': string } | { [n: number]: number }
+    /// declare var num: Num
+    /// num[0] = 1
+    /// num['0'] = 'ok'
+    /// ```
+    LValue,
+    /// Use for r-values.
+    RValue,
+}
 
 pub(super) trait PatExt {
     fn get_ty(&self) -> Option<&TsType>;

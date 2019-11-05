@@ -9,6 +9,7 @@ use super::{
     Analyzer,
 };
 use crate::{
+    analyzer::util::TypeOfMode,
     builtin_types,
     errors::Error,
     ty::{
@@ -21,23 +22,6 @@ use crate::{
 
 mod bin;
 mod call_new;
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(super) enum TypeOfMode {
-    /// Used for l-values.
-    ///
-    /// This is used to allow
-    ///
-    /// ```ts
-    /// type Num = { '0': string } | { [n: number]: number }
-    /// declare var num: Num
-    /// num[0] = 1
-    /// num['0'] = 'ok'
-    /// ```
-    LValue,
-    /// Use for r-values.
-    RValue,
-}
 
 impl Analyzer<'_, '_> {
     pub(super) fn type_of(&self, expr: &Expr) -> Result<TypeRef, Error> {
