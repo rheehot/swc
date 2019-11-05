@@ -1,4 +1,4 @@
-error: TS2406
+error: 'eval' and 'arguments' cannot be used as a binding identifier in strict mode
  --> $DIR/tests/conformance/parser/ecmascript5/StrictMode/parserStrictMode4.ts:2:1
   |
 2 | arguments = 1;
