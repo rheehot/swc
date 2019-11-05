@@ -801,6 +801,9 @@ impl<'a, I: Tokens> Parser<'a, I> {
         if self.syntax().typescript() {
             let span = self.input.cur_span();
             self.emit_err(span, SyntaxError::TS2410);
+        } else if self.ctx().strict {
+            let span = self.input.cur_span();
+            self.emit_err(span, SyntaxError::WithInStrict);
         }
 
         let start = cur_pos!();
