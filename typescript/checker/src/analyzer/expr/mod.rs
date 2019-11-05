@@ -59,74 +59,7 @@ impl Analyzer<'_, '_> {
                 return Ok(Cow::Owned(Type::from(TsThisType { span })));
             }
 
-            Expr::Ident(Ident {
-                sym: js_word!("undefined"),
-                ..
-            }) => return Ok(Type::undefined(span).into_cow()),
-
-            Expr::Ident(ref i) => {
-                if i.sym == js_word!("void") {
-                    return Ok(Type::any(span).into_cow());
-                }
-
-                if i.sym == js_word!("require") {
-                    unreachable!("typeof(require('...'))");
-                }
-
-                if let Some(ty) = self.resolved_imports.get(&i.sym) {
-                    println!(
-                        "({}) type_of({}): resolved import",
-                        self.scope.depth(),
-                        i.sym
-                    );
-                    return Ok(ty.static_cast());
-                }
-
-                if let Some(ty) = self.find_type(&i.sym) {
-                    println!("({}) type_of({}): find_type", self.scope.depth(), i.sym);
-                    return Ok(ty.clone().respan(span).owned());
-                }
-
-                // Check `declaring` before checking variables.
-                if self.declaring.contains(&i.sym) {
-                    println!(
-                        "({}) reference in initialization: {}",
-                        self.scope.depth(),
-                        i.sym
-                    );
-
-                    if self.allow_ref_declaring {
-                        return Ok(Type::any(span).owned());
-                    } else {
-                        return Err(Error::ReferencedInInit { span });
-                    }
-                }
-
-                if let Some(ty) = self.find_var_type(&i.sym) {
-                    println!("({}) type_of({}): find_var_type", self.scope.depth(), i.sym);
-                    return Ok(ty.clone().respan(span).owned());
-                }
-
-                if let Some(_var) = self.find_var(&i.sym) {
-                    // TODO: Infer type or use type hint to handle
-                    //
-                    // let id: (x: Foo) => Foo = x => x;
-                    //
-                    return Ok(Type::any(span).into_cow());
-                }
-
-                if let Ok(ty) = builtin_types::get_var(self.libs, span, &i.sym) {
-                    return Ok(ty.owned());
-                }
-
-                println!(
-                    "({}) type_of(): undefined symbol: {}",
-                    self.scope.depth(),
-                    i.sym,
-                );
-
-                return Err(Error::UndefinedSymbol { span: i.span });
-            }
+            Expr::Ident(ref i) => self.type_of_ident(i, type_mode),
 
             Expr::Array(ArrayLit { ref elems, .. }) => {
                 let mut types: Vec<TypeRef> = Vec::with_capacity(elems.len());
@@ -640,6 +573,76 @@ impl Analyzer<'_, '_> {
 
             _ => unimplemented!("typeof ({:#?})", expr),
         }
+    }
+
+    pub(super) fn type_of_ident(&self, i: &Ident, type_mode: TypeOfMode) -> Result<TypeRef, Error> {
+        let span = i.span();
+
+        if i.sym == js_word!("undefined") {
+            return Ok(Type::undefined(span).into_cow());
+        }
+
+        if i.sym == js_word!("void") {
+            return Ok(Type::any(span).into_cow());
+        }
+
+        if i.sym == js_word!("require") {
+            unreachable!("typeof(require('...'))");
+        }
+
+        if let Some(ty) = self.resolved_imports.get(&i.sym) {
+            println!(
+                "({}) type_of({}): resolved import",
+                self.scope.depth(),
+                i.sym
+            );
+            return Ok(ty.static_cast());
+        }
+
+        if let Some(ty) = self.find_type(&i.sym) {
+            println!("({}) type_of({}): find_type", self.scope.depth(), i.sym);
+            return Ok(ty.clone().respan(span).owned());
+        }
+
+        // Check `declaring` before checking variables.
+        if self.declaring.contains(&i.sym) {
+            println!(
+                "({}) reference in initialization: {}",
+                self.scope.depth(),
+                i.sym
+            );
+
+            if self.allow_ref_declaring {
+                return Ok(Type::any(span).owned());
+            } else {
+                return Err(Error::ReferencedInInit { span });
+            }
+        }
+
+        if let Some(ty) = self.find_var_type(&i.sym) {
+            println!("({}) type_of({}): find_var_type", self.scope.depth(), i.sym);
+            return Ok(ty.clone().respan(span).owned());
+        }
+
+        if let Some(_var) = self.find_var(&i.sym) {
+            // TODO: Infer type or use type hint to handle
+            //
+            // let id: (x: Foo) => Foo = x => x;
+            //
+            return Ok(Type::any(span).into_cow());
+        }
+
+        if let Ok(ty) = builtin_types::get_var(self.libs, span, &i.sym) {
+            return Ok(ty.owned());
+        }
+
+        println!(
+            "({}) type_of(): undefined symbol: {}",
+            self.scope.depth(),
+            i.sym,
+        );
+
+        return Err(Error::UndefinedSymbol { span: i.span });
     }
 
     fn type_of_member_expr(
@@ -2384,7 +2387,7 @@ impl Analyzer<'_, '_> {
         type_params: Option<&TsTypeParamInstantiation>,
     ) -> Result<TypeRef, Error> {
         match *n {
-            TsEntityName::Ident(ref i) => self.type_of(&Expr::Ident(i.clone())),
+            TsEntityName::Ident(ref i) => self.type_of_ident(i, TypeOfMode::RValue),
             TsEntityName::TsQualifiedName(ref qname) => {
                 let obj_ty = self.type_of_ts_entity_name(span, &qname.left, None)?;
 

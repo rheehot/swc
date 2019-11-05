@@ -1,4 +1,4 @@
-use crate::analyzer::Analyzer;
+use crate::analyzer::{expr::TypeOfMode, Analyzer};
 use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -24,7 +24,7 @@ impl Analyzer<'_, '_> {
                 VarDeclOrPat::Pat(ref pat) => match *pat {
                     Pat::Ident(ref i) | Pat::Expr(box Expr::Ident(ref i)) => {
                         // TODO: verify
-                        self.type_of(&Expr::Ident(i.clone()))?;
+                        self.type_of_ident(i, TypeOfMode::LValue)?;
                     }
                     _ => {}
                 },
