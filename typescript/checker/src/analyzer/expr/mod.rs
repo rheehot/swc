@@ -588,6 +588,8 @@ impl Analyzer<'_, '_> {
                 return Ok(Type::from(type_ann.clone()).owned());
             }
 
+            Expr::Invalid(ref i) => return Ok(Type::any(i.span()).owned()),
+
             _ => unimplemented!("typeof ({:#?})", expr),
         }
     }
