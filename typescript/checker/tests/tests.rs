@@ -169,6 +169,8 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "parserForInStatement2",
             "parserES5ForOfStatement2.ts",
             "parserES5ForOfStatement21.ts",
+            // Ignored - vscode does not match errors.json
+            "parserStrictMode8.ts",
         ];
 
         let mut ignore = file_name.contains("circular")

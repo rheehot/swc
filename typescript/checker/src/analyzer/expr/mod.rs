@@ -21,6 +21,7 @@ use crate::{
 
 mod bin;
 mod call_new;
+mod update;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(super) enum TypeOfMode {
