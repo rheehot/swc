@@ -165,6 +165,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "invalidStringAssignments.ts",
             // Temporarily ignored - module system does not work while testing,
             "RealSource",
+            "RealWorld",
             // Temporarily ignored - .d.ts tests are postponed.
             ".d.ts",
             // Temporarily ignored just because it requires lots of work while being not important
