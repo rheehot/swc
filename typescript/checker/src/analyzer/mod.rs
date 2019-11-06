@@ -20,6 +20,8 @@ use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
+#[macro_use]
+mod macros;
 mod assign;
 mod class;
 mod control_flow;
@@ -65,23 +67,6 @@ struct Analyzer<'a, 'b> {
     /// var foo: () => [any] = function bar() {}
     /// ```
     span_allowed_implicit_any: Span,
-}
-
-impl Analyzer<'_, '_> {
-    fn analyze<F, Ret>(&mut self, op: F) -> Option<Ret>
-    where
-        F: FnOnce(&mut Self) -> Result<Ret, Error>,
-    {
-        let res = op(self);
-
-        match res {
-            Ok(ret) => Some(ret),
-            Err(err) => {
-                self.info.errors.push(err);
-                None
-            }
-        }
-    }
 }
 
 impl<T> Visit<Vec<T>> for Analyzer<'_, '_>

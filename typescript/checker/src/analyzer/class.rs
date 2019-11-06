@@ -11,6 +11,30 @@ impl Visit<Class> for Analyzer<'_, '_> {
     }
 }
 
+impl Visit<ClassProp> for Analyzer<'_, '_> {
+    fn visit(&mut self, p: &ClassProp) {
+        match *prop.key {
+            Expr::Ident(Ident { ref sym, .. }) => self.scope.declaring_prop = Some(sym.clone()),
+            _ => {}
+        }
+
+        p.visit_children(self);
+
+        // Verify key if key is computed
+        if p.computed {
+            analyze!(self, {
+                self.type_of(&p.key)?;
+            });
+        }
+
+        analyze!(self, {
+            self.type_of(value)?;
+        });
+
+        self.scope.declaring_prop = None;
+    }
+}
+
 impl Visit<ClassExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassExpr) {
         let ty = match self.validate_type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {

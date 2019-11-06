@@ -7,8 +7,9 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
         p.visit_children(self);
 
         if let Some(ref type_ann) = p.type_ann {
-            self.analyze(|a| {
-                let ty = a.expand_type(p.span(), Type::from(type_ann.clone().type_ann).owned())?;
+            analyze!(self, {
+                let ty =
+                    self.expand_type(p.span(), Type::from(type_ann.clone().type_ann).owned())?;
 
                 match *ty.normalize() {
                     Type::Array(..)
@@ -18,8 +19,6 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
                     }) => Err(Error::TS2370 { span: p.dot3_token })?,
                     _ => {}
                 }
-
-                Ok(())
             });
         }
     }

@@ -2381,29 +2381,6 @@ impl Visit<SeqExpr> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<ClassProp> for Analyzer<'_, '_> {
-    fn visit(&mut self, prop: &ClassProp) {
-        match *prop.key {
-            Expr::Ident(Ident { ref sym, .. }) => self.scope.declaring_prop = Some(sym.clone()),
-            _ => {}
-        }
-
-        prop.visit_children(self);
-
-        match prop.value {
-            Some(ref value) => match self.type_of(value) {
-                Ok(..) => {}
-                Err(err) => {
-                    self.info.errors.push(err);
-                }
-            },
-            _ => {}
-        }
-
-        self.scope.declaring_prop = None;
-    }
-}
-
 impl Visit<TsTypeAssertion> for Analyzer<'_, '_> {
     fn visit(&mut self, expr: &TsTypeAssertion) {
         expr.visit_children(self);
