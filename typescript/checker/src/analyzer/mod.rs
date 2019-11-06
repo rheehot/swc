@@ -67,6 +67,15 @@ struct Analyzer<'a, 'b> {
     /// var foo: () => [any] = function bar() {}
     /// ```
     span_allowed_implicit_any: Span,
+
+    computed_prop_mode: ComputedPropMode,
+}
+
+#[derive(Debug, Clone, Copy)]
+enum ComputedPropMode {
+    Class,
+    /// Object literal
+    Object,
 }
 
 impl<T> Visit<Vec<T>> for Analyzer<'_, '_>
@@ -303,6 +312,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             pending_exports: Default::default(),
             loader,
             span_allowed_implicit_any: DUMMY_SP,
+            computed_prop_mode: ComputedPropMode::Object,
         }
     }
 }

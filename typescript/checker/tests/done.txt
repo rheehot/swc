@@ -16,6 +16,7 @@ parser/ecmascript5/Accessors/parserAccessors6.ts
 parser/ecmascript5/Accessors/parserAccessors7.ts
 parser/ecmascript5/ArrayLiteralExpressions
 parser/ecmascript5/AutomaticSemicolonInsertion
+parser/ecmascript5/ComputedPropertyNames/
 parser/ecmascript5/EnumDeclarations
 parser/ecmascript5/Expressions/parserUnaryExpression
 parser/ecmascript5/InterfaceDeclarations

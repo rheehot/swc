@@ -1,35 +1,54 @@
 use super::{expr::TypeOfMode, ty::Type, Analyzer, ScopeKind};
-use crate::{errors::Error, ty::TypeRefExt};
+use crate::{analyzer::ComputedPropMode, errors::Error, ty::TypeRefExt};
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 impl Visit<ComputedPropName> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &ComputedPropName) {
+        // TODO: check if it's class or object literal
         node.visit_children(self);
 
         let span = node.span;
 
         analyze!(self, {
-            let ty = self.type_of(&node.expr)?;
-            let ty = ty.generalize_lit();
-            match *ty.normalize() {
-                Type::Keyword(TsKeywordType {
-                    kind: TsKeywordTypeKind::TsAnyKeyword,
-                    ..
-                })
-                | Type::Keyword(TsKeywordType {
-                    kind: TsKeywordTypeKind::TsStringKeyword,
-                    ..
-                })
-                | Type::Keyword(TsKeywordType {
-                    kind: TsKeywordTypeKind::TsNumberKeyword,
-                    ..
-                })
-                | Type::Keyword(TsKeywordType {
-                    kind: TsKeywordTypeKind::TsSymbolKeyword,
-                    ..
-                }) => {}
-                _ => Err(Error::TS2464 { span })?,
+            let mut errors = vec![];
+            let ty = match self.type_of(&node.expr) {
+                Ok(ty) => ty,
+                Err(err) => {
+                    errors.push(err);
+                    // TODO: Change this to something else (maybe any)
+                    Type::unknown(span).owned()
+                }
+            };
+            match self.computed_prop_mode {
+                ComputedPropMode::Class => {
+                    let ty = ty.generalize_lit();
+                    match *ty.normalize() {
+                        Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsAnyKeyword,
+                            ..
+                        })
+                        | Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsStringKeyword,
+                            ..
+                        })
+                        | Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                            ..
+                        })
+                        | Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsSymbolKeyword,
+                            ..
+                        }) => {}
+                        _ => {
+                            errors.push(Error::TS2464 { span });
+                        }
+                    }
+                }
+                _ => {}
+            }
+            if !errors.is_empty() {
+                Err(Error::Errors { span, errors })?
             }
         });
     }
@@ -37,6 +56,8 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
 
 impl Visit<Prop> for Analyzer<'_, '_> {
     fn visit(&mut self, n: &Prop) {
+        self.computed_prop_mode = ComputedPropMode::Object;
+
         n.visit_children(self);
 
         match n {

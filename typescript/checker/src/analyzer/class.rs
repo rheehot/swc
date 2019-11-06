@@ -1,5 +1,5 @@
 use super::{scope::ScopeKind, Analyzer};
-use crate::{errors::Error, ty::Type};
+use crate::{analyzer::ComputedPropMode, errors::Error, ty::Type};
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -32,6 +32,14 @@ impl Analyzer<'_, '_> {
                 Err(Error::Errors { span, errors })?
             }
         });
+    }
+}
+
+impl Visit<ClassMember> for Analyzer<'_, '_> {
+    fn visit(&mut self, node: &ClassMember) {
+        self.computed_prop_mode = ComputedPropMode::Class;
+
+        node.visit_children(self);
     }
 }
 
@@ -154,6 +162,7 @@ impl Visit<ClassMethod> for Analyzer<'_, '_> {
                     .get_mut()
                     .insert(n.span(), Default::default());
 
+                n.key.visit_with(child);
                 n.function.visit_children(child);
 
                 child
