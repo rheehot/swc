@@ -3,36 +3,33 @@ use crate::{errors::Error, ty::TypeRefExt};
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
-impl Analyzer<'_, '_> {
-    pub(super) fn validate_prop_name(&mut self, p: &PropName) {
-        let span = p.span();
+impl Visit<ComputedPropName> for Analyzer<'_, '_> {
+    fn visit(&mut self, node: &ComputedPropName) {
+        node.visit_children(self);
+
+        let span = node.span;
 
         analyze!(self, {
-            match p {
-                PropName::Computed(ref expr) => {
-                    let ty = self.type_of(&expr)?;
-                    let ty = ty.generalize_lit();
-                    match *ty.normalize() {
-                        Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsAnyKeyword,
-                            ..
-                        })
-                        | Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsStringKeyword,
-                            ..
-                        })
-                        | Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsNumberKeyword,
-                            ..
-                        })
-                        | Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsSymbolKeyword,
-                            ..
-                        }) => {}
-                        _ => Err(Error::TS2464 { span })?,
-                    }
-                }
-                _ => {}
+            let ty = self.type_of(&node.expr)?;
+            let ty = ty.generalize_lit();
+            match *ty.normalize() {
+                Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsAnyKeyword,
+                    ..
+                })
+                | Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsStringKeyword,
+                    ..
+                })
+                | Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsNumberKeyword,
+                    ..
+                })
+                | Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsSymbolKeyword,
+                    ..
+                }) => {}
+                _ => Err(Error::TS2464 { span })?,
             }
         });
     }
@@ -54,26 +51,8 @@ impl Visit<Prop> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<KeyValueProp> for Analyzer<'_, '_> {
-    fn visit(&mut self, n: &KeyValueProp) {
-        n.visit_children(self);
-
-        self.validate_prop_name(&n.key);
-    }
-}
-
-impl Visit<MethodProp> for Analyzer<'_, '_> {
-    fn visit(&mut self, n: &MethodProp) {
-        n.visit_children(self);
-
-        self.validate_prop_name(&n.key);
-    }
-}
-
 impl Visit<GetterProp> for Analyzer<'_, '_> {
     fn visit(&mut self, n: &GetterProp) {
-        self.validate_prop_name(&n.key);
-
         let entry = self.with_child(ScopeKind::Fn, Default::default(), |child| {
             child.return_type_span = n.span();
 

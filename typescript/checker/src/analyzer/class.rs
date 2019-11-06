@@ -145,8 +145,6 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
 
 impl Visit<ClassMethod> for Analyzer<'_, '_> {
     fn visit(&mut self, n: &ClassMethod) {
-        self.validate_prop_name(&n.key);
-
         if n.kind == MethodKind::Getter {
             let entry = self.with_child(ScopeKind::Fn, Default::default(), |child| {
                 child.return_type_span = n.span();

@@ -2278,7 +2278,7 @@ fn prop_key_to_expr(p: &Prop) -> Box<Expr> {
 
 fn prop_name_to_expr(key: &PropName) -> Box<Expr> {
     match *key {
-        PropName::Computed(ref expr) => expr.clone(),
+        PropName::Computed(ref p) => p.expr.clone(),
         PropName::Ident(ref ident) => box Expr::Ident(ident.clone()),
         PropName::Str(ref s) => box Expr::Lit(Lit::Str(Str { ..s.clone() })),
         PropName::Num(ref s) => box Expr::Lit(Lit::Num(Number { ..s.clone() })),
