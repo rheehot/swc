@@ -1,5 +1,6 @@
 boolean/assignFromBooleanInterface1
 constEnums
+es7/trailingCommasInGetter.ts
 parser/ecmascript3/Accessors/parserES3Accessors1.ts
 parser/ecmascript3/Accessors/parserES3Accessors2.ts
 parser/ecmascript3/Accessors/parserES3Accessors3.ts
