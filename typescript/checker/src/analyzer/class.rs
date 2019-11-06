@@ -1,6 +1,6 @@
 use super::{scope::ScopeKind, Analyzer};
 use crate::{errors::Error, ty::Type};
-use swc_common::{Spanned, Visit, VisitWith};
+use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 impl Visit<Class> for Analyzer<'_, '_> {
@@ -8,6 +8,30 @@ impl Visit<Class> for Analyzer<'_, '_> {
         self.validate_parent_interfaces(&c.implements);
 
         c.visit_children(self);
+    }
+}
+
+impl Analyzer<'_, '_> {
+    pub(super) fn validate_computed_prop_key(&mut self, span: Span, key: &Expr) {
+        analyze!(self, {
+            let mut errors = vec![];
+            let ty = match self.type_of(&key) {
+                Ok(ty) => ty,
+                Err(err) => {
+                    errors.push(err);
+                    Type::any(span).owned()
+                }
+            };
+
+            match *ty.normalize() {
+                Type::Lit(..) => {}
+                _ => errors.push(Error::TS1166 { span }),
+            }
+
+            if !errors.is_empty() {
+                Err(Error::Errors { span, errors })?
+            }
+        });
     }
 }
 
@@ -22,28 +46,7 @@ impl Visit<ClassProp> for Analyzer<'_, '_> {
 
         // Verify key if key is computed
         if p.computed {
-            analyze!(self, {
-                let mut errors = vec![];
-                let ty = match self.type_of(&p.key) {
-                    Ok(ty) => ty,
-                    Err(err) => {
-                        errors.push(err);
-                        Type::any(p.span).owned()
-                    }
-                };
-
-                match *ty.normalize() {
-                    Type::Lit(..) => {}
-                    _ => errors.push(Error::TS1166 { span: p.span }),
-                }
-
-                if !errors.is_empty() {
-                    Err(Error::Errors {
-                        span: p.span,
-                        errors,
-                    })?
-                }
-            });
+            self.validate_computed_prop_key(p.span, &p.key);
         }
 
         if let Some(ref ty) = p.type_ann {

@@ -1,10 +1,50 @@
-use super::{Analyzer, ScopeKind};
+use super::{expr::TypeOfMode, Analyzer, ScopeKind};
 use crate::errors::Error;
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
+impl Visit<Prop> for Analyzer<'_, '_> {
+    fn visit(&mut self, n: &Prop) {
+        match n {
+            Prop::Shorthand(ref i) => {
+                analyze!(self, {
+                    // TODO: Check if RValue is correct
+                    self.type_of_ident(&i, TypeOfMode::RValue)?;
+                });
+            }
+            _ => {}
+        }
+
+        n.visit_children(self);
+    }
+}
+
+impl Visit<KeyValueProp> for Analyzer<'_, '_> {
+    fn visit(&mut self, n: &KeyValueProp) {
+        analyze!(self, {
+            match n.key {
+                PropName::Computed(ref expr) => {
+                    self.type_of(&expr)?;
+                }
+                _ => {}
+            }
+        });
+
+        n.visit_children(self);
+    }
+}
+
 impl Visit<GetterProp> for Analyzer<'_, '_> {
     fn visit(&mut self, n: &GetterProp) {
+        analyze!(self, {
+            match n.key {
+                PropName::Computed(ref expr) => {
+                    self.type_of(&expr)?;
+                }
+                _ => {}
+            }
+        });
+
         let entry = self.with_child(ScopeKind::Fn, Default::default(), |child| {
             child.return_type_span = n.span();
 
