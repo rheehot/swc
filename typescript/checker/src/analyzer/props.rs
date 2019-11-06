@@ -1,17 +1,17 @@
 use super::{expr::TypeOfMode, ty::Type, Analyzer, ScopeKind};
-use crate::errors::Error;
+use crate::{errors::Error, ty::TypeRefExt};
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
-    fn validate_prop_name(&mut self, p: &PropName) {
+    pub(super) fn validate_prop_name(&mut self, p: &PropName) {
         let span = p.span();
 
         analyze!(self, {
             match p {
                 PropName::Computed(ref expr) => {
                     let ty = self.type_of(&expr)?;
-
+                    let ty = ty.generalize_lit();
                     match *ty.normalize() {
                         Type::Keyword(TsKeywordType {
                             kind: TsKeywordTypeKind::TsAnyKeyword,
