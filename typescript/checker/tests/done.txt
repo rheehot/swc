@@ -1,5 +1,8 @@
 boolean/assignFromBooleanInterface1
+classes/classDeclarations/classExtendingBuiltinType.ts
+classes/classDeclarations/classExtendingNull.ts
 constEnums
+es6/destructuring/emptyArray
 es7/trailingCommasInGetter.ts
 parser/ecmascript3/Accessors/parserES3Accessors1.ts
 parser/ecmascript3/Accessors/parserES3Accessors2.ts
