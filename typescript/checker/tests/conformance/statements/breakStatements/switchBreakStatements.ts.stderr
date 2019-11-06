@@ -1,0 +1,803 @@
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            87,
+        ),
+        hi: BytePos(
+            90,
+        ),
+        ctxt: #0,
+    },
+    left: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    87,
+                ),
+                hi: BytePos(
+                    90,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            87,
+                        ),
+                        hi: BytePos(
+                            90,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('a' type=inline),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    71,
+                ),
+                hi: BytePos(
+                    73,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            71,
+                        ),
+                        hi: BytePos(
+                            73,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+ --> $DIR/tests/conformance/statements/breakStatements/switchBreakStatements.ts:5:10
+  |
+5 |     case 'a':
+  |          ^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            144,
+        ),
+        hi: BytePos(
+            147,
+        ),
+        ctxt: #0,
+    },
+    left: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    144,
+                ),
+                hi: BytePos(
+                    147,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            144,
+                        ),
+                        hi: BytePos(
+                            147,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('a' type=inline),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    128,
+                ),
+                hi: BytePos(
+                    130,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            128,
+                        ),
+                        hi: BytePos(
+                            130,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/statements/breakStatements/switchBreakStatements.ts:11:10
+   |
+11 |     case 'a':
+   |          ^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            213,
+        ),
+        hi: BytePos(
+            216,
+        ),
+        ctxt: #0,
+    },
+    left: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    213,
+                ),
+                hi: BytePos(
+                    216,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            213,
+                        ),
+                        hi: BytePos(
+                            216,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('a' type=inline),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    197,
+                ),
+                hi: BytePos(
+                    199,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            197,
+                        ),
+                        hi: BytePos(
+                            199,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/statements/breakStatements/switchBreakStatements.ts:18:10
+   |
+18 |     case 'a':
+   |          ^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            338,
+        ),
+        hi: BytePos(
+            341,
+        ),
+        ctxt: #0,
+    },
+    left: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    338,
+                ),
+                hi: BytePos(
+                    341,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            338,
+                        ),
+                        hi: BytePos(
+                            341,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('a' type=inline),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    314,
+                ),
+                hi: BytePos(
+                    316,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            314,
+                        ),
+                        hi: BytePos(
+                            316,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/statements/breakStatements/switchBreakStatements.ts:27:18
+   |
+27 |             case 'a':
+   |                  ^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            277,
+        ),
+        hi: BytePos(
+            280,
+        ),
+        ctxt: #0,
+    },
+    left: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    277,
+                ),
+                hi: BytePos(
+                    280,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            277,
+                        ),
+                        hi: BytePos(
+                            280,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('a' type=inline),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    261,
+                ),
+                hi: BytePos(
+                    263,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            261,
+                        ),
+                        hi: BytePos(
+                            263,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/statements/breakStatements/switchBreakStatements.ts:24:10
+   |
+24 |     case 'a':
+   |          ^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            473,
+        ),
+        hi: BytePos(
+            476,
+        ),
+        ctxt: #0,
+    },
+    left: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    473,
+                ),
+                hi: BytePos(
+                    476,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            473,
+                        ),
+                        hi: BytePos(
+                            476,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('a' type=inline),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    449,
+                ),
+                hi: BytePos(
+                    451,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            449,
+                        ),
+                        hi: BytePos(
+                            451,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/statements/breakStatements/switchBreakStatements.ts:36:18
+   |
+36 |             case 'a':
+   |                  ^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            413,
+        ),
+        hi: BytePos(
+            416,
+        ),
+        ctxt: #0,
+    },
+    left: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    413,
+                ),
+                hi: BytePos(
+                    416,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            413,
+                        ),
+                        hi: BytePos(
+                            416,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('a' type=inline),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    397,
+                ),
+                hi: BytePos(
+                    399,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            397,
+                        ),
+                        hi: BytePos(
+                            399,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/statements/breakStatements/switchBreakStatements.ts:33:10
+   |
+33 |     case 'a':
+   |          ^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            811,
+        ),
+        hi: BytePos(
+            814,
+        ),
+        ctxt: #0,
+    },
+    left: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    811,
+                ),
+                hi: BytePos(
+                    814,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            811,
+                        ),
+                        hi: BytePos(
+                            814,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('a' type=inline),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    771,
+                ),
+                hi: BytePos(
+                    773,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            771,
+                        ),
+                        hi: BytePos(
+                            773,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/statements/breakStatements/switchBreakStatements.ts:51:34
+   |
+51 |                             case 'a':
+   |                                  ^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            663,
+        ),
+        hi: BytePos(
+            666,
+        ),
+        ctxt: #0,
+    },
+    left: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    663,
+                ),
+                hi: BytePos(
+                    666,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            663,
+                        ),
+                        hi: BytePos(
+                            666,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('a' type=inline),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    631,
+                ),
+                hi: BytePos(
+                    633,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            631,
+                        ),
+                        hi: BytePos(
+                            633,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/statements/breakStatements/switchBreakStatements.ts:47:26
+   |
+47 |                     case 'a':
+   |                          ^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            601,
+        ),
+        hi: BytePos(
+            604,
+        ),
+        ctxt: #0,
+    },
+    left: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    601,
+                ),
+                hi: BytePos(
+                    604,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            601,
+                        ),
+                        hi: BytePos(
+                            604,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('a' type=inline),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    577,
+                ),
+                hi: BytePos(
+                    579,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            577,
+                        ),
+                        hi: BytePos(
+                            579,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/statements/breakStatements/switchBreakStatements.ts:45:18
+   |
+45 |             case 'a':
+   |                  ^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            555,
+        ),
+        hi: BytePos(
+            558,
+        ),
+        ctxt: #0,
+    },
+    left: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    555,
+                ),
+                hi: BytePos(
+                    558,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            555,
+                        ),
+                        hi: BytePos(
+                            558,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('a' type=inline),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    539,
+                ),
+                hi: BytePos(
+                    541,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            539,
+                        ),
+                        hi: BytePos(
+                            541,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('' type=static),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+  --> $DIR/tests/conformance/statements/breakStatements/switchBreakStatements.ts:43:10
+   |
+43 |     case 'a':
+   |          ^^^
+
