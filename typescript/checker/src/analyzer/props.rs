@@ -85,6 +85,16 @@ impl Visit<GetterProp> for Analyzer<'_, '_> {
     }
 }
 
+impl Visit<TsMethodSignature> for Analyzer<'_, '_> {
+    fn visit(&mut self, node: &TsMethodSignature) {
+        node.visit_children(self);
+
+        if node.computed {
+            self.validate_computed_prop_key(node.span(), &node.key);
+        }
+    }
+}
+
 impl Visit<TsPropertySignature> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &TsPropertySignature) {
         node.visit_children(self);
