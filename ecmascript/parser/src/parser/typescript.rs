@@ -129,6 +129,22 @@ impl<'a, I: Tokens> Parser<'a, I> {
                 continue;
             }
 
+            match kind {
+                ParsingContext::HeritageClauseElement => {
+                    // Recover
+                    //
+                    //     interface I extends A extends B {}
+                    if is!("extends") {
+                        self.emit_err(self.input.cur_span(), SyntaxError::TS1172);
+
+                        while !eof!() && !is!('{') {
+                            bump!();
+                        }
+                    }
+                }
+                _ => {}
+            }
+
             if self.is_ts_list_terminator(kind)? {
                 break;
             }
