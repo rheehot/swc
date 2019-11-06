@@ -79,16 +79,10 @@ impl<'a, I: Tokens> Parser<'a, I> {
         }
     }
 
-    pub fn new2(
-        session: Session<'a>,
-        syntax: Syntax,
-        input: I,
-        comments: Option<&'a Comments>,
-        target: JscTarget,
-    ) -> Self {
+    pub fn new_with(session: Session<'a>, input: I, syntax: Syntax, target: JscTarget) -> Self {
         Parser {
             session,
-            input: ParserInput::new(Lexer::new(session, syntax, input, comments)),
+            input: Buffer::new(input),
             state: Default::default(),
             target,
         }
