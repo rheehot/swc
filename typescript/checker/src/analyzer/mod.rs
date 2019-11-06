@@ -779,6 +779,8 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     }
                 }
             } else {
+                v.visit_children(self);
+
                 match v.name {
                     Pat::Ident(Ident {
                         span,
