@@ -5,6 +5,8 @@
 #![feature(specialization)]
 #![feature(test)]
 
+#[macro_use]
+extern crate lazy_static;
 extern crate env_logger;
 extern crate serde;
 extern crate serde_json;
@@ -46,6 +48,16 @@ enum Mode {
     Error,
     Pass,
     Conformance,
+}
+
+// We are done and I don't want regression.
+lazy_static! {
+    static ref DONE: Vec<&'static str> = {
+        include_str!("done.txt")
+            .lines()
+            .filter(|s| *s != "")
+            .collect::<Vec<_>>()
+    };
 }
 
 #[test]
@@ -120,32 +132,6 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             buf
         };
 
-        // We are done and I don't want regression.
-        let done = &[
-            "constEnums",
-            "tuple/castingTuple",
-            "types/primitives/void/",
-            "boolean/assignFromBooleanInterface1",
-            "types/primitives/boolean",
-            "types/primitives/void",
-            "types/primitives/enum",
-            "types/primitives/undefined",
-            "types/primitives/number",
-            "types/primitives/",
-            "parser/ecmascript5/EnumDeclarations",
-            "parser/ecmascript5/parserNotRegex1",
-            "parser/ecmascript5/Types",
-            "parser/ecmascript5/VariableDeclarations",
-            "parser/ecmascript5/Statements/BreakStatements",
-            "parser/ecmascript5/Statements/ContinueStatements",
-            "parser/ecmascript5/Statements/ReturnStatements",
-            "parser/ecmascript5/Statements/parserForStatement",
-            "parser/ecmascript5/Statements",
-            "parser/ecmascript5/StrictMode",
-            "parser/ecmascript5/AutomaticSemicolonInsertion",
-            "parser/ecmascript5/InterfaceDeclarations",
-        ];
-
         // These tests are postponed because they are useless in real world.
         let postponed_tests = &[
             // Using such requires modifying global object.
@@ -187,7 +173,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
                 && !file_name.contains(&env::var("TEST").ok().unwrap_or(String::from(""))))
             || postponed_tests.iter().any(|p| file_name.contains(p));
 
-        if done.iter().any(|p| file_name.contains(p))
+        if DONE.iter().any(|p| file_name.contains(p))
             && !postponed_tests.iter().any(|p| file_name.contains(p))
             && env::var("RUST_BACKTRACE").unwrap_or("".into()) != "full"
         {
