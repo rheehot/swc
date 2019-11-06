@@ -148,6 +148,8 @@ impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
 
 impl Visit<TsInterfaceDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, decl: &TsInterfaceDecl) {
+        decl.visit_children(self);
+
         self.scope
             .register_type(decl.id.sym.clone(), decl.clone().into());
 

@@ -62,6 +62,14 @@ impl Visit<KeyValueProp> for Analyzer<'_, '_> {
     }
 }
 
+impl Visit<MethodProp> for Analyzer<'_, '_> {
+    fn visit(&mut self, n: &MethodProp) {
+        n.visit_children(self);
+
+        self.validate_prop_name(&n.key);
+    }
+}
+
 impl Visit<GetterProp> for Analyzer<'_, '_> {
     fn visit(&mut self, n: &GetterProp) {
         self.validate_prop_name(&n.key);
@@ -95,5 +103,15 @@ impl Visit<GetterProp> for Analyzer<'_, '_> {
             .get_mut()
             .entry(n.span())
             .or_default() = entry.1;
+    }
+}
+
+impl Visit<TsPropertySignature> for Analyzer<'_, '_> {
+    fn visit(&mut self, node: &TsPropertySignature) {
+        node.visit_children(self);
+
+        if node.computed {
+            self.validate_computed_prop_key(node.span(), &node.key);
+        }
     }
 }
