@@ -55,5 +55,9 @@ types/primitives/number
 types/primitives/undefined
 types/primitives/void
 types/primitives/void/
+types/stringLiteral/stringLiteralTypesAsTags
 types/stringLiteral/stringLiteralTypesInUnion
 types/stringLiteral/stringLiteralTypesWithTemplate
+types/thisType/thisTypeInInterfaces
+types/tuple/emptyTuples
+types/tuple/tupleElementTypes
