@@ -13,6 +13,7 @@ parser/ecmascript5/ArrayLiteralExpressions
 parser/ecmascript5/AutomaticSemicolonInsertion
 parser/ecmascript5/EnumDeclarations
 parser/ecmascript5/InterfaceDeclarations
+parser/ecmascript5/MethodSignatures/
 parser/ecmascript5/PropertySignatures
 parser/ecmascript5/Statements
 parser/ecmascript5/Statements/BreakStatements
