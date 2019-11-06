@@ -18,7 +18,9 @@ use chashmap::CHashMap;
 use std::{path::PathBuf, sync::Arc};
 use swc_common::{errors::Handler, Globals, SourceMap};
 use swc_ecma_ast::Module;
-use swc_ecma_parser::{JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig};
+use swc_ecma_parser::{
+    lexer::Lexer, JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig,
+};
 
 pub mod analyzer;
 mod builtin_types;
@@ -161,11 +163,16 @@ impl Checker<'_> {
 
             let fm = self.cm.load_file(&path).expect("failed to read file");
 
-            let mut parser = Parser::new2(
+            let lexer = Lexer::new(
                 session,
                 Syntax::Typescript(self.ts_config),
                 SourceFileInput::from(&*fm),
-                None, // Disable comments
+                None,
+            );
+            let mut parser = Parser::new_with(
+                session,
+                lexer,
+                Syntax::Typescript(self.ts_config),
                 self.target,
             );
 
