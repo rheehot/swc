@@ -1,0 +1,32 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            31,
+        ),
+        hi: BytePos(
+            32,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName10.ts:3:5
+  |
+3 |    [e] = 1
+  |     ^
+
+error: TS1166 {
+    span: Span {
+        lo: BytePos(
+            30,
+        ),
+        hi: BytePos(
+            37,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName10.ts:3:4
+  |
+3 |    [e] = 1
+  |    ^^^^^^^
+

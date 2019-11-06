@@ -251,6 +251,10 @@ pub enum Error {
     TS1166 {
         span: Span,
     },
+
+    TS2464 {
+        span: Span,
+    },
 }
 
 impl Error {
