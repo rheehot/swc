@@ -693,6 +693,19 @@ impl Visit<IfStmt> for Analyzer<'_, '_> {
 
 impl Visit<SwitchStmt> for Analyzer<'_, '_> {
     fn visit(&mut self, stmt: &SwitchStmt) {
+        stmt.visit_children(self);
+
+        analyze!(self, {
+            let discriminant_ty = self.type_of(&stmt.discriminant)?;
+            for case in &stmt.cases {
+                if let Some(ref test) = case.test {
+                    let case_ty = self.type_of(&test)?;
+                    let case_ty = self.expand_type(case.span(), case_ty)?;
+                    self.assign(&case_ty, &discriminant_ty, test.span())?
+                }
+            }
+        });
+
         let mut false_facts = CondFacts::default();
         let mut true_facts = CondFacts::default();
         // Declared at here as it's important to know if last one ends with return.

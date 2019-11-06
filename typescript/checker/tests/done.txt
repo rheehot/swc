@@ -39,6 +39,7 @@ scanner/ecmascript5/scannerS7.6_A4.2_T1.ts
 scanner/ecmascript5/scannerS7.8.3_A6.1_T1.ts
 scanner/ecmascript5/scannerStringLiteralWithContainingNullCharacter1.ts
 scanner/ecmascript5/scannerUnicodeEscapeInKeyword1.ts
+statements/continueStatements
 tuple/castingTuple
 types/any/anyAsConstructor.ts
 types/any/anyAsFunctionCall.ts
@@ -53,3 +54,5 @@ types/primitives/number
 types/primitives/undefined
 types/primitives/void
 types/primitives/void/
+types/stringLiteral/stringLiteralTypesInUnion
+types/stringLiteral/stringLiteralTypesWithTemplate
