@@ -40,6 +40,8 @@ impl Analyzer<'_, '_> {
 
 impl Visit<Prop> for Analyzer<'_, '_> {
     fn visit(&mut self, n: &Prop) {
+        n.visit_children(self);
+
         match n {
             Prop::Shorthand(ref i) => {
                 analyze!(self, {
@@ -49,16 +51,14 @@ impl Visit<Prop> for Analyzer<'_, '_> {
             }
             _ => {}
         }
-
-        n.visit_children(self);
     }
 }
 
 impl Visit<KeyValueProp> for Analyzer<'_, '_> {
     fn visit(&mut self, n: &KeyValueProp) {
-        self.validate_prop_name(&n.key);
-
         n.visit_children(self);
+
+        self.validate_prop_name(&n.key);
     }
 }
 
