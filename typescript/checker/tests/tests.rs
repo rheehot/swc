@@ -52,10 +52,14 @@ enum Mode {
 
 // We are done and I don't want regression.
 lazy_static! {
-    static ref DONE: Vec<&'static str> = {
-        include_str!("done.txt")
-            .lines()
+    static ref DONE: Vec<String> = {
+        let mut f = File::open(&format!("{}/tests/done.txt", env!("CARGO_MANIFEST_DIR")))
+            .expect("failed to open file");
+        let mut s = String::new();
+        f.read_to_string(&mut s).expect("failed to read file");
+        s.lines()
             .filter(|s| *s != "")
+            .map(String::from)
             .collect::<Vec<_>>()
     };
 }
