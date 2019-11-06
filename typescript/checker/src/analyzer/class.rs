@@ -1,5 +1,5 @@
 use super::{scope::ScopeKind, Analyzer};
-use crate::ty::Type;
+use crate::{errors::Error, ty::Type};
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -13,7 +13,7 @@ impl Visit<Class> for Analyzer<'_, '_> {
 
 impl Visit<ClassProp> for Analyzer<'_, '_> {
     fn visit(&mut self, p: &ClassProp) {
-        match *prop.key {
+        match *p.key {
             Expr::Ident(Ident { ref sym, .. }) => self.scope.declaring_prop = Some(sym.clone()),
             _ => {}
         }
@@ -23,13 +23,42 @@ impl Visit<ClassProp> for Analyzer<'_, '_> {
         // Verify key if key is computed
         if p.computed {
             analyze!(self, {
-                self.type_of(&p.key)?;
+                let mut errors = vec![];
+                let ty = match self.type_of(&p.key) {
+                    Ok(ty) => ty,
+                    Err(err) => {
+                        errors.push(err);
+                        Type::any(p.span).owned()
+                    }
+                };
+
+                match *ty.normalize() {
+                    Type::Lit(..) => {}
+                    _ => errors.push(Error::TS1166 { span: p.span }),
+                }
+
+                if !errors.is_empty() {
+                    Err(Error::Errors {
+                        span: p.span,
+                        errors,
+                    })?
+                }
             });
         }
 
-        analyze!(self, {
-            self.type_of(value)?;
-        });
+        if let Some(ref ty) = p.type_ann {
+            let span = ty.span();
+            analyze!(self, {
+                let ty: Type = ty.type_ann.clone().into();
+                self.expand_type(span, ty.owned())?;
+            });
+        }
+
+        if let Some(ref value) = p.value {
+            analyze!(self, {
+                self.type_of(&value)?;
+            });
+        }
 
         self.scope.declaring_prop = None;
     }
