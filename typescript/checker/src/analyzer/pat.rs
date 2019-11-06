@@ -1,4 +1,4 @@
-use crate::{analyzer::Analyzer, errors::Error, ty::Type};
+use crate::{analyzer::Analyzer, errors::Error, ty::Type, util::EqIgnoreNameAndSpan};
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -20,6 +20,59 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
                     _ => {}
                 }
             });
+        }
+    }
+}
+
+impl Visit<AssignPat> for Analyzer<'_, '_> {
+    fn visit(&mut self, p: &AssignPat) {
+        p.visit_children(self);
+
+        //
+        match *p.left {
+            Pat::Object(ref left) => {
+                //
+                match *p.right {
+                    Expr::Object(ref right) => {
+                        'l: for e in &right.props {
+                            match e {
+                                PropOrSpread::Prop(ref prop) => {
+                                    //
+                                    for lp in &left.props {
+                                        match lp {
+                                            ObjectPatProp::KeyValue(KeyValuePatProp {
+                                                key: ref pk,
+                                                ..
+                                            }) => {
+                                                //
+                                                match **prop {
+                                                    Prop::KeyValue(KeyValueProp {
+                                                        ref key,
+                                                        ..
+                                                    }) => {
+                                                        if pk.eq_ignore_name_and_span(key) {
+                                                            continue 'l;
+                                                        }
+                                                    }
+                                                    _ => {}
+                                                }
+                                            }
+                                            _ => {}
+                                        }
+                                    }
+
+                                    self.info.errors.push(Error::TS2353 { span: prop.span() })
+                                }
+                                _ => {}
+                            }
+                        }
+                    }
+                    _ => {
+                        // TODO: Report an error
+                    }
+                }
+            }
+            _ => {}
         }
     }
 }

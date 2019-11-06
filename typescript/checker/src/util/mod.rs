@@ -99,6 +99,7 @@ impl_by_clone!(Expr);
 impl_by_clone!(TypeElement<'_>);
 impl_by_clone!(TsLit);
 impl_by_clone!(TsLitType);
+impl_by_clone!(PropName);
 impl_by_clone!(Class<'_>);
 
 struct SpanRemover;
