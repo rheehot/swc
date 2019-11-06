@@ -132,6 +132,8 @@ impl<'a, I: Tokens> Parser<'a, I> {
 
                 if label.is_some() && !self.state.labels.contains(&label.as_ref().unwrap().sym) {
                     self.emit_err(span, SyntaxError::TS1116);
+                } else if !self.ctx().is_break_allowed {
+                    self.emit_err(span, SyntaxError::TS1105);
                 }
             } else {
                 if !self.ctx().is_continue_allowed {
