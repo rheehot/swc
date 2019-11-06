@@ -68,16 +68,17 @@ struct Analyzer<'a, 'b> {
 }
 
 impl Analyzer<'_, '_> {
-    fn analyze<F>(&mut self, op: F)
+    fn analyze<F, Ret>(&mut self, op: F) -> Option<Ret>
     where
-        F: FnOnce(&mut Self) -> Result<(), Error>,
+        F: FnOnce(&mut Self) -> Result<Ret, Error>,
     {
         let res = op(self);
 
         match res {
-            Ok(()) => {}
+            Ok(ret) => Some(ret),
             Err(err) => {
                 self.info.errors.push(err);
+                None
             }
         }
     }
