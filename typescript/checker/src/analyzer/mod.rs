@@ -28,6 +28,7 @@ pub mod export;
 mod expr;
 mod generic;
 mod name;
+mod pat;
 mod props;
 mod scope;
 mod stmt;
@@ -64,6 +65,22 @@ struct Analyzer<'a, 'b> {
     /// var foo: () => [any] = function bar() {}
     /// ```
     span_allowed_implicit_any: Span,
+}
+
+impl Analyzer<'_, '_> {
+    fn analyze<F>(&mut self, op: F)
+    where
+        F: FnOnce(&mut Self) -> Result<(), Error>,
+    {
+        let res = op(self);
+
+        match res {
+            Ok(()) => {}
+            Err(err) => {
+                self.info.errors.push(err);
+            }
+        }
+    }
 }
 
 impl<T> Visit<Vec<T>> for Analyzer<'_, '_>
