@@ -193,7 +193,5 @@ impl Visit<ClassMethod> for Analyzer<'_, '_> {
 impl Visit<TsIndexSignature> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &TsIndexSignature) {
         node.visit_children(self);
-
-        println!("{:?}", node.params);
     }
 }
