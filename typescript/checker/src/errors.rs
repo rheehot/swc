@@ -281,7 +281,7 @@ impl Error {
 
         for e in vec {
             match e {
-                Error::Errors { errors, .. } => buf.extend(errors),
+                Error::Errors { errors, .. } => buf.extend(Self::flatten(errors)),
                 _ => buf.push(e),
             }
         }
