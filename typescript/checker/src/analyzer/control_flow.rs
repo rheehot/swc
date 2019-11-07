@@ -644,11 +644,12 @@ impl Analyzer<'_, '_> {
         let key = self.return_type_span;
         // key is dummy for top-level returns.
         if !key.is_dummy() {
+            let v = vec![];
             let dup = self
                 .inferred_return_types
                 .borrow()
                 .get(&key)
-                .expect("return type cannot be inferred if `return_type_span` is invalid")
+                .unwrap_or_else(|| &v)
                 .iter()
                 .any(|t| t.eq_ignore_name_and_span(&ty));
             if !dup {
