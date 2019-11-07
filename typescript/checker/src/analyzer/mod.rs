@@ -400,6 +400,26 @@ impl Analyzer<'_, '_> {
             let old = child.allow_ref_declaring;
             child.allow_ref_declaring = false;
 
+            {
+                // Validate params
+                // TODO: Move this to parser
+                let mut has_optional = false;
+                for p in &f.params {
+                    if has_optional {
+                        child.info.errors.push(Error::TS1016 { span: p.span() });
+                    }
+
+                    match *p {
+                        Pat::Ident(Ident { optional, .. }) => {
+                            if optional {
+                                has_optional = true;
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+            }
+
             f.params.iter().for_each(|pat| {
                 let mut names = vec![];
 
