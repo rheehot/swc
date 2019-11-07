@@ -461,7 +461,14 @@ impl Analyzer<'_, '_> {
                                 *t = Type::any(span).owned();
                             }
                         }
+
                         _ => {}
+                    }
+
+                    // Validate return type
+                    match child.expand_type(ret_ty.span(), ret_ty.to_static().owned()) {
+                        Ok(..) => {}
+                        Err(err) => child.info.errors.push(err),
                     }
                 }
 

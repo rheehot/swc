@@ -2258,6 +2258,21 @@ impl Analyzer<'_, '_> {
                 return Ok(*ty);
             }
 
+            Type::Function(ty::Function {
+                span,
+                type_params,
+                params,
+                ret_ty,
+            }) => {
+                return Ok(ty::Function {
+                    span,
+                    type_params,
+                    params,
+                    ret_ty: box self.expand_type(span, *ret_ty)?,
+                }
+                .into_cow())
+            }
+
             ty => ty,
         };
 
