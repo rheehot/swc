@@ -294,6 +294,17 @@ impl From<TsTypeOperator> for Operator<'_> {
 
 impl From<swc_ecma_ast::Constructor> for Constructor<'_> {
     fn from(c: swc_ecma_ast::Constructor) -> Self {
+        fn from_pat(pat: Pat) -> TsFnParam {
+            match pat {
+                Pat::Ident(v) => v.into(),
+                Pat::Array(v) => v.into(),
+                Pat::Rest(v) => v.into(),
+                Pat::Object(v) => v.into(),
+                Pat::Assign(v) => from_pat(*v.left),
+                _ => unreachable!("constructor with parameter {:?}", pat),
+            }
+        }
+
         Constructor {
             span: c.span,
             params: c
@@ -308,13 +319,7 @@ impl From<swc_ecma_ast::Constructor> for Constructor<'_> {
                         param: TsParamPropParam::Assign(AssignPat { left: box pat, .. }),
                         ..
                     })
-                    | PatOrTsParamProp::Pat(pat) => match pat {
-                        Pat::Ident(v) => v.into(),
-                        Pat::Array(v) => v.into(),
-                        Pat::Rest(v) => v.into(),
-                        Pat::Object(v) => v.into(),
-                        _ => unreachable!("constructor with parameter {:?}", pat),
-                    },
+                    | PatOrTsParamProp::Pat(pat) => from_pat(pat),
                 })
                 .collect(),
             type_params: None,
