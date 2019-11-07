@@ -1,0 +1,38 @@
+error: TS1014
+ --> $DIR/tests/conformance/functions/functionOverloadErrorsSyntax.ts:9:25
+  |
+9 | function fn5(x: string, ...y: any[], z: string);
+  |                         ^^^
+
+error: TS1016 {
+    span: Span {
+        lo: BytePos(
+            116,
+        ),
+        hi: BytePos(
+            117,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/functions/functionOverloadErrorsSyntax.ts:2:27
+  |
+2 | function fn4a(x?: number, y: string);
+  |                           ^
+
+error: TS1016 {
+    span: Span {
+        lo: BytePos(
+            189,
+        ),
+        hi: BytePos(
+            190,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/functions/functionOverloadErrorsSyntax.ts:5:38
+  |
+5 | function fn4b(n: string, x?: number, y: string);
+  |                                      ^
+
