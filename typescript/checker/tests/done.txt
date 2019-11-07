@@ -35,6 +35,7 @@ parser/ecmascript5/parserEmptyStatement1.ts
 parser/ecmascript5/parserNotRegex1
 scanner/ecmascript3/scanner
 scanner/ecmascript3/scannerES3NumericLiteral7.ts
+scanner/ecmascript5/ParameterLists
 scanner/ecmascript5/scanner10.1.1-8gs.ts
 scanner/ecmascript5/scannerAdditiveExpression1.ts
 scanner/ecmascript5/scannerEnum1.ts
@@ -51,6 +52,7 @@ scanner/ecmascript5/scannerStringLiteralWithContainingNullCharacter1.ts
 scanner/ecmascript5/scannerUnicodeEscapeInKeyword1.ts
 statements/breakStatements/
 statements/continueStatements
+statements/tryStatements
 tuple/castingTuple
 types/any/anyAsConstructor.ts
 types/any/anyAsFunctionCall.ts
