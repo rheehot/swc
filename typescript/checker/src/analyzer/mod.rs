@@ -429,7 +429,8 @@ impl Analyzer<'_, '_> {
             child.inferred_return_types.get_mut().insert(f.span, vec![]);
             f.visit_children(child);
 
-            let mut fn_ty = child.type_of_fn(f)?;
+            let (mut fn_ty, err) = child.type_of_fn_detail(f)?;
+            child.info.errors.push(err);
             match fn_ty {
                 // Handle tuple widening of the return type.
                 Type::Function(ty::Function { ref mut ret_ty, .. }) => {
@@ -467,7 +468,7 @@ impl Analyzer<'_, '_> {
 
                     // Validate return type
                     match child.expand_type(ret_ty.span(), ret_ty.to_static().owned()) {
-                        Ok(..) => {}
+                        Ok(ret_ty) => {}
                         Err(err) => child.info.errors.push(err),
                     }
                 }

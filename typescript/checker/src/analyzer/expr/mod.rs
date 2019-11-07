@@ -1393,19 +1393,48 @@ impl Analyzer<'_, '_> {
     }
 
     pub(super) fn type_of_fn(&self, f: &Function) -> Result<Type<'static>, Error> {
-        let declared_ret_ty = f.return_type.as_ref().map(|ret_ty| {
-            self.expand_type(f.span, Cow::Owned(Type::from(ret_ty.type_ann.clone())))
-                .map(|v| v.to_static())
-        });
-        let declared_ret_ty = match declared_ret_ty {
+        let (ty, err) = self.type_of_fn_detail(f)?;
+        match err {
+            Error::Errors { ref errors, .. } => {
+                if errors.is_empty() {
+                    return Ok(ty);
+                } else {
+                    return Err(err);
+                }
+            }
+            _ => unreachable!(),
+        }
+    }
+
+    /// Returned [Ok] contains type information with recoverable errors.
+    pub(super) fn type_of_fn_detail(&self, f: &Function) -> Result<(Type<'static>, Error), Error> {
+        let mut errors = vec![];
+
+        dbg!();
+        let declared_ret_ty = f
+            .return_type
+            .as_ref()
+            .map(|ret_ty| Cow::Owned(Type::from(ret_ty.type_ann.clone())));
+
+        dbg!();
+        let declared_ret_ty = match declared_ret_ty
+            .clone()
+            .map(|ret_ty| self.expand_type(f.span, ret_ty).map(|v| v.to_static()))
+        {
             Some(Ok(ty)) => Some(ty),
-            Some(Err(err)) => return Err(err),
+            Some(Err(err)) => {
+                errors.push(err);
+                Some(declared_ret_ty.unwrap().to_static())
+            }
             None => None,
         };
+        dbg!();
 
-        let inferred_return_type = f.body.as_ref().map(|body| self.infer_return_type(f.span));
+        let inferred_return_type = f.body.as_ref().map(|_| self.infer_return_type(f.span));
         let inferred_return_type = match inferred_return_type {
             Some(Some(inferred_return_type)) => {
+                println!("FOO - 1");
+
                 if let Some(ref declared) = declared_ret_ty {
                     let span = inferred_return_type.span();
 
@@ -1415,6 +1444,8 @@ impl Analyzer<'_, '_> {
                 inferred_return_type
             }
             Some(None) => {
+                println!("FOO - 2");
+
                 let mut span = f.span;
 
                 if let Some(ref declared) = declared_ret_ty {
@@ -1422,27 +1453,41 @@ impl Analyzer<'_, '_> {
 
                     match *declared.normalize() {
                         Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsUnknownKeyword,
+                            kind: TsKeywordTypeKind::TsAnyKeyword,
                             ..
-                        }) => return Err(Error::ReturnRequired { span }),
-                        _ => {}
+                        })
+                        | Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsVoidKeyword,
+                            ..
+                        }) => {}
+                        _ => errors.push(Error::ReturnRequired { span }),
                     }
                 }
 
                 Type::any(span)
             }
-            None => Type::any(f.span),
+            None => {
+                println!("FOO - 3");
+
+                Type::any(f.span)
+            }
         };
 
-        Ok(ty::Function {
-            span: f.span,
-            params: f.params.iter().cloned().map(pat_to_ts_fn_param).collect(),
-            type_params: f.type_params.clone().map(From::from),
-            ret_ty: box declared_ret_ty
-                .map(|ty| ty.to_static().owned())
-                .unwrap_or(inferred_return_type.to_static().owned()),
-        }
-        .into())
+        Ok((
+            ty::Function {
+                span: f.span,
+                params: f.params.iter().cloned().map(pat_to_ts_fn_param).collect(),
+                type_params: f.type_params.clone().map(From::from),
+                ret_ty: box declared_ret_ty
+                    .map(|ty| ty.to_static().owned())
+                    .unwrap_or(inferred_return_type.to_static().owned()),
+            }
+            .into(),
+            Error::Errors {
+                span: f.span,
+                errors,
+            },
+        ))
     }
 
     fn check_method_call<'a>(
