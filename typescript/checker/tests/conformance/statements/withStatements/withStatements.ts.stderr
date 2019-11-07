@@ -1,4 +1,4 @@
-error: With statement are not allowed in strict mode
+error: TS2410
  --> $DIR/tests/conformance/statements/withStatements/withStatements.ts:2:1
   |
 2 | with (x) {

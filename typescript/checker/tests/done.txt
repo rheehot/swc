@@ -53,6 +53,7 @@ scanner/ecmascript5/scannerUnicodeEscapeInKeyword1.ts
 statements/breakStatements/
 statements/continueStatements
 statements/tryStatements
+statements/withStatements
 tuple/castingTuple
 types/any/anyAsConstructor.ts
 types/any/anyAsFunctionCall.ts

@@ -56,10 +56,9 @@ impl Analyzer<'_, '_> {
 impl_for!(ForOfStmt);
 impl_for!(ForInStmt);
 
+/// NOTE: We does **not** dig into with statements.
 impl Visit<WithStmt> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &WithStmt) {
-        node.visit_children(self);
-
         match self.type_of(&node.obj) {
             Ok(..) => {}
             Err(err) => self.info.errors.push(err),
