@@ -1,5 +1,6 @@
 use super::{expr::TypeOfMode, ty::Type, Analyzer, ScopeKind};
 use crate::{analyzer::ComputedPropMode, errors::Error, ty::TypeRefExt};
+use swc_atoms::js_word;
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -40,9 +41,16 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
                             kind: TsKeywordTypeKind::TsSymbolKeyword,
                             ..
                         }) => {}
-                        _ => {
-                            errors.push(Error::TS2464 { span });
-                        }
+                        _ => match *node.expr {
+                            Expr::Ident(ref i)
+                                if i.sym == js_word!("public")
+                                    || i.sym == js_word!("protected")
+                                    || i.sym == js_word!("private")
+                                    || i.sym == js_word!("readonly") => {}
+                            _ => {
+                                errors.push(Error::TS2464 { span });
+                            }
+                        },
                     }
                 }
                 _ => {}
