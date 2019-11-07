@@ -39,6 +39,7 @@ parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration5.ts
 parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration8.ts
 parser/ecmascript5/InterfaceDeclarations
 parser/ecmascript5/MethodSignatures/
+parser/ecmascript5/ParameterLists/
 parser/ecmascript5/PropertySignatures
 parser/ecmascript5/Statements
 parser/ecmascript5/Statements/BreakStatements

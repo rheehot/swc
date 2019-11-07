@@ -167,6 +167,10 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "parserStrictMode8.ts",
             // Temporarily ignored - Setter property is not implemented yet
             "parserStrictMode12.ts",
+            // Temporarily ignored - overloading is not implemented yet
+            "parserParameterList15",
+            "parserParameterList16",
+            "parserParameterList17",
         ];
 
         let mut ignore = file_name.contains("circular")
