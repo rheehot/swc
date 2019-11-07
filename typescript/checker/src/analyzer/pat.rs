@@ -1,4 +1,9 @@
-use crate::{analyzer::Analyzer, errors::Error, ty::Type, util::EqIgnoreNameAndSpan};
+use crate::{
+    analyzer::Analyzer,
+    errors::Error,
+    ty::{Array, Type},
+    util::EqIgnoreNameAndSpan,
+};
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -6,7 +11,21 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
     fn visit(&mut self, p: &RestPat) {
         p.visit_children(self);
 
-        if let Some(ref type_ann) = p.type_ann {
+        if let Pat::Assign(AssignPat { ref right, .. }) = *p.arg {
+            analyze!(self, {
+                let value_ty = self.type_of(right)?;
+                let value_ty = self.expand_type(p.span(), value_ty)?;
+
+                match value_ty.normalize() {
+                    Type::Array(..)
+                    | Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsAnyKeyword,
+                        ..
+                    }) => {}
+                    _ => Err(Error::TS2370 { span: p.dot3_token })?,
+                }
+            });
+        } else if let Some(ref type_ann) = p.type_ann {
             analyze!(self, {
                 let ty =
                     self.expand_type(p.span(), Type::from(type_ann.clone().type_ann).owned())?;
@@ -16,8 +35,8 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
                     | Type::Keyword(TsKeywordType {
                         kind: TsKeywordTypeKind::TsAnyKeyword,
                         ..
-                    }) => Err(Error::TS2370 { span: p.dot3_token })?,
-                    _ => {}
+                    }) => {}
+                    _ => Err(Error::TS2370 { span: p.dot3_token })?,
                 }
             });
         }
