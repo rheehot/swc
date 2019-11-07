@@ -21,31 +21,30 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
                     Type::unknown(span).owned()
                 }
             };
-            match self.computed_prop_mode {
-                ComputedPropMode::Class { has_body } => {
-                    let ty = ty.generalize_lit();
-                    match *ty.normalize() {
-                        Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsAnyKeyword,
-                            ..
-                        })
-                        | Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsStringKeyword,
-                            ..
-                        })
-                        | Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsNumberKeyword,
-                            ..
-                        })
-                        | Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsSymbolKeyword,
-                            ..
-                        }) => {}
-                        _ if !has_body => errors.push(Error::TS2464 { span }),
-                        _ => {}
-                    }
+            if match self.computed_prop_mode {
+                ComputedPropMode::Class { has_body } => !has_body,
+                ComputedPropMode::Object => errors.is_empty(),
+            } {
+                let ty = ty.generalize_lit();
+                match *ty.normalize() {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsAnyKeyword,
+                        ..
+                    })
+                    | Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsStringKeyword,
+                        ..
+                    })
+                    | Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsNumberKeyword,
+                        ..
+                    })
+                    | Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsSymbolKeyword,
+                        ..
+                    }) => {}
+                    _ => errors.push(Error::TS2464 { span }),
                 }
-                _ => {}
             }
             if !errors.is_empty() {
                 Err(Error::Errors { span, errors })?
