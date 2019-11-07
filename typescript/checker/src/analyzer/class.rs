@@ -5,9 +5,31 @@ use swc_ecma_ast::*;
 
 impl Visit<Class> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &Class) {
+        c.visit_children(self);
+
         self.validate_parent_interfaces(&c.implements);
 
-        c.visit_children(self);
+        for m in &c.body {
+            match *m {
+                ClassMember::Constructor(ref cons) => {
+                    //
+                    if cons.body.is_none() {
+                        for p in &cons.params {
+                            match *p {
+                                PatOrTsParamProp::TsParamProp(..) => {
+                                    self.info.errors.push(Error::TS2369 { span: p.span() })
+                                }
+                                _ => {}
+                            }
+                        }
+                    } else {
+                        println!("cons.body: {:?}", cons.body);
+                    }
+                }
+
+                _ => {}
+            }
+        }
     }
 }
 
