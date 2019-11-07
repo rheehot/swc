@@ -1,0 +1,16 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            33,
+        ),
+        hi: BytePos(
+            36,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration3_es6.ts:3:6
+  |
+3 |    *[foo]() { }
+  |      ^^^
+
