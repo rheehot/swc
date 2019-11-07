@@ -1410,13 +1410,11 @@ impl Analyzer<'_, '_> {
     pub(super) fn type_of_fn_detail(&self, f: &Function) -> Result<(Type<'static>, Error), Error> {
         let mut errors = vec![];
 
-        dbg!();
         let declared_ret_ty = f
             .return_type
             .as_ref()
             .map(|ret_ty| Cow::Owned(Type::from(ret_ty.type_ann.clone())));
 
-        dbg!();
         let declared_ret_ty = match declared_ret_ty
             .clone()
             .map(|ret_ty| self.expand_type(f.span, ret_ty).map(|v| v.to_static()))
@@ -1428,7 +1426,6 @@ impl Analyzer<'_, '_> {
             }
             None => None,
         };
-        dbg!();
 
         let inferred_return_type = f.body.as_ref().map(|_| self.infer_return_type(f.span));
         let inferred_return_type = match inferred_return_type {
