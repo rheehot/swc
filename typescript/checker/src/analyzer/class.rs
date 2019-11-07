@@ -37,7 +37,12 @@ impl Analyzer<'_, '_> {
 
 impl Visit<ClassMember> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &ClassMember) {
-        self.computed_prop_mode = ComputedPropMode::Class;
+        self.computed_prop_mode = ComputedPropMode::Class {
+            has_body: match *node {
+                ClassMember::Method(ClassMethod { ref function, .. }) => function.body.is_some(),
+                _ => false,
+            },
+        };
 
         node.visit_children(self);
     }

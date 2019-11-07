@@ -73,7 +73,9 @@ struct Analyzer<'a, 'b> {
 
 #[derive(Debug, Clone, Copy)]
 enum ComputedPropMode {
-    Class,
+    Class {
+        has_body: bool,
+    },
     /// Object literal
     Object,
 }

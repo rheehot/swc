@@ -22,7 +22,7 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
                 }
             };
             match self.computed_prop_mode {
-                ComputedPropMode::Class => {
+                ComputedPropMode::Class { has_body } => {
                     let ty = ty.generalize_lit();
                     match *ty.normalize() {
                         Type::Keyword(TsKeywordType {
@@ -41,16 +41,8 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
                             kind: TsKeywordTypeKind::TsSymbolKeyword,
                             ..
                         }) => {}
-                        _ => match *node.expr {
-                            Expr::Ident(ref i)
-                                if i.sym == js_word!("public")
-                                    || i.sym == js_word!("protected")
-                                    || i.sym == js_word!("private")
-                                    || i.sym == js_word!("readonly") => {}
-                            _ => {
-                                errors.push(Error::TS2464 { span });
-                            }
-                        },
+                        _ if !has_body => errors.push(Error::TS2464 { span }),
+                        _ => {}
                     }
                 }
                 _ => {}
