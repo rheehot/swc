@@ -145,6 +145,14 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "assignFromBooleanInterface2.ts",
             "assignFromNumberInterface2.ts",
             "assignFromStringInterface2.ts",
+            // Ignored just because it requires lots of work while being not important
+            "parserTypeQuery8",
+            "parserForInStatement2",
+            "parserES5ForOfStatement2.ts",
+            "parserES5ForOfStatement21.ts",
+            "parserShorthandPropertyAssignment2.ts",
+            //
+            //
             // Temporarily ignored - inference of generic arguments is not implemented
             "invalidEnumAssignments.ts",
             "invalidAssignmentsToVoid.ts",
@@ -158,11 +166,6 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "RealWorld",
             // Temporarily ignored - .d.ts tests are postponed.
             ".d.ts",
-            // Temporarily ignored just because it requires lots of work while being not important
-            "parserTypeQuery8",
-            "parserForInStatement2",
-            "parserES5ForOfStatement2.ts",
-            "parserES5ForOfStatement21.ts",
             // Ignored - vscode does not match errors.json
             "parserStrictMode8.ts",
             // Temporarily ignored - Setter property is not implemented yet
