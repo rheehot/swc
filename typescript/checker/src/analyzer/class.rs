@@ -1,5 +1,6 @@
 use super::{scope::ScopeKind, Analyzer};
-use crate::{analyzer::ComputedPropMode, errors::Error, ty::Type};
+use crate::{analyzer::ComputedPropMode, errors::Error, ty::Type, util::EqIgnoreNameAndSpan};
+use std::mem;
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -34,6 +35,62 @@ impl Visit<Class> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
+    fn validate_class_members(&mut self, c: &Class, declare: bool) {
+        // Report errors for code like
+        //
+        //      class C {
+        //           foo();
+        //      }
+
+        let mut errors = vec![];
+        // Span of name
+        let mut spans = vec![];
+        let mut name: Option<&PropName> = None;
+
+        for m in &c.body {
+            match *m {
+                ClassMember::Method(ref m) => {
+                    match m.key {
+                        PropName::Computed(..) => continue,
+                        _ => {}
+                    }
+
+                    if m.function.body.is_none() {
+                        if name.is_some() && !name.unwrap().eq_ignore_name_and_span(&m.key) {
+                            for span in mem::replace(&mut spans, vec![]) {
+                                errors.push(Error::TS2391 { span });
+                            }
+                        } else {
+                            spans.push(m.key.span());
+                            name = Some(&m.key)
+                        }
+                    } else {
+                        if name.is_none() || name.unwrap().eq_ignore_name_and_span(&m.key) {
+                            // TODO: Verify parameters
+
+                            spans = vec![];
+                            name = None;
+                        } else {
+                            for span in mem::replace(&mut spans, vec![]) {
+                                errors.push(Error::TS2391 { span });
+                            }
+                        }
+                    }
+                }
+                _ => {}
+            }
+        }
+
+        if !declare {
+            // Class definition ended with `foo();`
+            for span in mem::replace(&mut spans, vec![]) {
+                errors.push(Error::TS2391 { span });
+            }
+        }
+
+        self.info.errors.extend(errors);
+    }
+
     pub(super) fn validate_computed_prop_key(&mut self, span: Span, key: &Expr) {
         analyze!(self, {
             let mut errors = vec![];
@@ -124,6 +181,8 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
             if let Some(ref i) = c.ident {
                 analyzer.scope.register_type(i.sym.clone(), ty.clone());
 
+                analyzer.validate_class_members(&c.class, false);
+
                 match analyzer.scope.declare_var(
                     ty.span(),
                     VarDeclKind::Var,
@@ -150,6 +209,10 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
 
 impl Visit<ClassDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassDecl) {
+        c.visit_children(self);
+
+        self.validate_class_members(&c.class, c.declare);
+
         let ty = match self.validate_type_of_class(Some(c.ident.sym.clone()), &c.class) {
             Ok(ty) => ty,
             Err(err) => {
@@ -177,8 +240,6 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
                 self.info.errors.push(err);
             }
         }
-
-        c.visit_children(self);
 
         self.scope.this = None;
     }
