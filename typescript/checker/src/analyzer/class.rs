@@ -40,7 +40,13 @@ impl Analyzer<'_, '_> {
             let ty = match self.type_of(&key) {
                 Ok(ty) => ty,
                 Err(err) => {
+                    match err {
+                        Error::TS2585 { span } => Err(Error::TS2585 { span })?,
+                        _ => {}
+                    }
+
                     errors.push(err);
+
                     Type::any(span).owned()
                 }
             };

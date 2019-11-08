@@ -1,0 +1,16 @@
+error: TS2585 {
+    span: Span {
+        lo: BytePos(
+            36,
+        ),
+        hi: BytePos(
+            42,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty2.ts:3:6
+  |
+3 |     [Symbol.unscopables](): string;
+  |      ^^^^^^
+

@@ -597,6 +597,10 @@ impl Analyzer<'_, '_> {
     pub(super) fn type_of_ident(&self, i: &Ident, type_mode: TypeOfMode) -> Result<TypeRef, Error> {
         let span = i.span();
 
+        if i.sym == js_word!("Symbol") {
+            return Err(Error::TS2585 { span });
+        }
+
         if i.sym == js_word!("undefined") {
             return Ok(Type::undefined(span).into_cow());
         }
