@@ -55,24 +55,56 @@ impl Analyzer<'_, '_> {
                         _ => {}
                     }
 
+                    fn is_prop_name_eq(l: &PropName, r: &PropName) -> bool {
+                        macro_rules! check {
+                            ($l:expr, $r:expr) => {{
+                                let l = $l;
+                                let r = $r;
+
+                                match l {
+                                    PropName::Ident(Ident { ref sym, .. })
+                                    | PropName::Str(Str { value: ref sym, .. }) => match *r {
+                                        PropName::Ident(Ident { sym: ref r_sym, .. })
+                                        | PropName::Str(Str {
+                                            value: ref r_sym, ..
+                                        }) => return sym == r_sym,
+                                        PropName::Num(n) => return sym == &*n.value.to_string(),
+                                        _ => return false,
+                                    },
+                                    PropName::Computed(..) => return false,
+                                    _ => {}
+                                }
+                            }};
+                        }
+
+                        check!(l, r);
+                        check!(r, l);
+
+                        false
+                    }
+
                     if m.function.body.is_none() {
-                        if name.is_some() && !name.unwrap().eq_ignore_name_and_span(&m.key) {
-                            for span in mem::replace(&mut spans, vec![]) {
-                                errors.push(Error::TS2391 { span });
+                        if name.is_some() && !is_prop_name_eq(&name.unwrap(), &m.key) {
+                            if !declare {
+                                for span in mem::replace(&mut spans, vec![]) {
+                                    errors.push(Error::TS2391 { span });
+                                }
                             }
                         } else {
                             spans.push(m.key.span());
                             name = Some(&m.key)
                         }
                     } else {
-                        if name.is_none() || name.unwrap().eq_ignore_name_and_span(&m.key) {
+                        if name.is_none() || is_prop_name_eq(&name.unwrap(), &m.key) {
                             // TODO: Verify parameters
 
                             spans = vec![];
                             name = None;
                         } else {
-                            for span in mem::replace(&mut spans, vec![]) {
-                                errors.push(Error::TS2391 { span });
+                            if !declare {
+                                for span in mem::replace(&mut spans, vec![]) {
+                                    errors.push(Error::TS2391 { span });
+                                }
                             }
                         }
                     }
