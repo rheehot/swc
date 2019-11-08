@@ -36,6 +36,34 @@ impl Visit<Class> for Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     fn validate_class_members(&mut self, c: &Class, declare: bool) {
+        fn is_prop_name_eq(l: &PropName, r: &PropName) -> bool {
+            macro_rules! check {
+                ($l:expr, $r:expr) => {{
+                    let l = $l;
+                    let r = $r;
+
+                    match l {
+                        PropName::Ident(Ident { ref sym, .. })
+                        | PropName::Str(Str { value: ref sym, .. }) => match *r {
+                            PropName::Ident(Ident { sym: ref r_sym, .. })
+                            | PropName::Str(Str {
+                                value: ref r_sym, ..
+                            }) => return sym == r_sym,
+                            PropName::Num(n) => return sym == &*n.value.to_string(),
+                            _ => return false,
+                        },
+                        PropName::Computed(..) => return false,
+                        _ => {}
+                    }
+                }};
+            }
+
+            check!(l, r);
+            check!(r, l);
+
+            false
+        }
+
         // Report errors for code like
         //
         //      class C {
@@ -53,34 +81,6 @@ impl Analyzer<'_, '_> {
                     match m.key {
                         PropName::Computed(..) => continue,
                         _ => {}
-                    }
-
-                    fn is_prop_name_eq(l: &PropName, r: &PropName) -> bool {
-                        macro_rules! check {
-                            ($l:expr, $r:expr) => {{
-                                let l = $l;
-                                let r = $r;
-
-                                match l {
-                                    PropName::Ident(Ident { ref sym, .. })
-                                    | PropName::Str(Str { value: ref sym, .. }) => match *r {
-                                        PropName::Ident(Ident { sym: ref r_sym, .. })
-                                        | PropName::Str(Str {
-                                            value: ref r_sym, ..
-                                        }) => return sym == r_sym,
-                                        PropName::Num(n) => return sym == &*n.value.to_string(),
-                                        _ => return false,
-                                    },
-                                    PropName::Computed(..) => return false,
-                                    _ => {}
-                                }
-                            }};
-                        }
-
-                        check!(l, r);
-                        check!(r, l);
-
-                        false
                     }
 
                     if m.function.body.is_none() {
