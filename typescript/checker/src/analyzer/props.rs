@@ -16,6 +16,11 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
             let ty = match self.type_of(&node.expr) {
                 Ok(ty) => ty,
                 Err(err) => {
+                    match err {
+                        Error::TS2585 { span } => Err(Error::TS2585 { span })?,
+                        _ => {}
+                    }
+
                     errors.push(err);
                     // TODO: Change this to something else (maybe any)
                     Type::unknown(span).owned()
