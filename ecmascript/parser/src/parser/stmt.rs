@@ -687,7 +687,6 @@ impl<'a, I: Tokens> Parser<'a, I> {
 
                 let _ = self.parse_expr().map_err(|mut e| {
                     e.emit();
-                    ()
                 });
 
                 while !eat!(';') {
