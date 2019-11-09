@@ -293,7 +293,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
                     }
                 }
                 match *arg {
-                    Expr::Invalid(..) | Expr::Member(..) => {}
+                    Expr::Member(..) => {}
                     _ => self.emit_err(unwrap_paren(&arg).span(), SyntaxError::TS2703),
                 }
             }
