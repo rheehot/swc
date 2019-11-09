@@ -1,5 +1,8 @@
 use super::Analyzer;
-use crate::{errors::Error, ty::Type};
+use crate::{
+    errors::Error,
+    ty::{Enum, EnumVariant, Type, TypeRef},
+};
 use std::convert::TryInto;
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
@@ -35,6 +38,32 @@ impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
                 }
             }
         }
+    }
+}
+
+impl Analyzer<'_, '_> {
+    pub(super) fn expand_enum_variant<'a>(&'a self, ty: TypeRef<'a>) -> Result<TypeRef<'a>, Error> {
+        match ty.normalize() {
+            Type::EnumVariant(ref v) => {
+                if let Some(Type::Enum(Enum { ref members, .. })) =
+                    self.scope.types.get(&v.enum_name)
+                {
+                    if let Some(v) = members.iter().find(|m| match m.id {
+                        TsEnumMemberId::Ident(Ident { ref sym, .. })
+                        | TsEnumMemberId::Str(Str { value: ref sym, .. }) => *sym == v.name,
+                    }) {
+                        return Ok(Type::Lit(TsLitType {
+                            span: v.span,
+                            lit: v.val.clone(),
+                        })
+                        .owned());
+                    }
+                }
+            }
+            _ => {}
+        }
+
+        return Ok(ty);
     }
 }
 

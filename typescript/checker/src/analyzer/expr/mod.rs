@@ -161,8 +161,12 @@ impl Analyzer<'_, '_> {
                 ref left,
                 ref right,
             }) => {
-                let l_ty = self.type_of(&left);
-                let r_ty = self.type_of(&right);
+                let l_ty = self
+                    .type_of(&left)
+                    .and_then(|ty| self.expand_enum_variant(ty));
+                let r_ty = self
+                    .type_of(&right)
+                    .and_then(|ty| self.expand_enum_variant(ty));
 
                 let (l_ty, r_ty) = match (l_ty, r_ty) {
                     (Ok(l), Ok(r)) => (l, r),
@@ -390,7 +394,7 @@ impl Analyzer<'_, '_> {
                         .owned());
                     }
 
-                    op!(unary, "+") | op!(unary, "-") => {
+                    op!("~") => {
                         return Ok(Type::Keyword(TsKeywordType {
                             span,
                             kind: TsKeywordTypeKind::TsNumberKeyword,
@@ -398,7 +402,7 @@ impl Analyzer<'_, '_> {
                         .owned())
                     }
 
-                    op => unimplemented!("type_of(Unary(op: {:?}))", op),
+                    op!("typeof") | op!("delete") | op!("void") => unreachable!(),
                 }
             }
 
