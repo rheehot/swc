@@ -11,7 +11,20 @@ impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, e: &TsEnumDecl) {
         let span = e.span();
 
-        e.visit_children(self);
+        // We don't visit enum variants to allow
+        //
+        //        const enum E {
+        //            a = 10,
+        //            b = a,
+        //            c = (a+1),
+        //            e,
+        //            d = ~e,
+        //            f = a << 2 >> 1,
+        //            g = a << 2 >>> 1,
+        //            h = a | b
+        //        }
+
+        //        e.visit_children(self);
 
         self.scope.register_type(
             e.id.sym.clone(),
