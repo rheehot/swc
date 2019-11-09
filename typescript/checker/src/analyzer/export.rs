@@ -102,7 +102,16 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
             Decl::Fn(ref f) => self.export(f.span(), f.ident.sym.clone(), None),
             Decl::TsInterface(ref i) => self.export(i.span(), i.id.sym.clone(), None),
             Decl::Class(ref c) => self.export(c.span(), c.ident.sym.clone(), None),
-            Decl::Var(..) => unimplemented!("export var Foo = a;"),
+            Decl::Var(ref var) => {
+                // unimplemented!("export var Foo = a;")
+                for decl in &var.decls {
+                    let res = self.declare_vars_inner(var.kind, &decl.name, true);
+                    match res {
+                        Ok(..) => {}
+                        Err(err) => self.info.errors.push(err),
+                    }
+                }
+            }
             Decl::TsEnum(ref e) => {
                 // TODO: Allow multiple exports with same name.
                 debug_assert_eq!(self.info.exports.get(&e.id.sym), None);

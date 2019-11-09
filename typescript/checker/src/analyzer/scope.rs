@@ -12,6 +12,7 @@ use std::{
     borrow::Cow,
     collections::hash_map::Entry,
     iter::{once, repeat_with},
+    sync::Arc,
 };
 use swc_atoms::JsWord;
 use swc_common::{Span, Spanned, DUMMY_SP};
@@ -529,11 +530,20 @@ impl<'a> Scope<'a> {
 }
 
 impl Analyzer<'_, '_> {
+    pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) -> Result<(), Error> {
+        self.declare_vars_inner(kind, pat, false)
+    }
+
     /// Updates variable list.
     ///
     /// This method should be called for function parameters including error
     /// variable from a catch clause.
-    pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) -> Result<(), Error> {
+    pub fn declare_vars_inner(
+        &mut self,
+        kind: VarDeclKind,
+        pat: &Pat,
+        export: bool,
+    ) -> Result<(), Error> {
         match *pat {
             Pat::Ident(ref i) => {
                 let ty = i
@@ -558,13 +568,22 @@ impl Analyzer<'_, '_> {
                 self.scope.declare_var(
                     ty.span(),
                     kind,
-                    name,
-                    ty,
+                    name.clone(),
+                    ty.clone(),
                     // initialized
                     true,
                     // allow_multiple
                     kind == VarDeclKind::Var,
                 )?;
+                if export {
+                    if let Some(..) = self
+                        .info
+                        .exports
+                        .insert(name, Arc::new(ty.unwrap_or(Type::any(i.span))))
+                    {
+                        unimplemented!("multiple exported variables with same name")
+                    }
+                }
                 return Ok(());
             }
             Pat::Assign(ref p) => {
@@ -575,7 +594,7 @@ impl Analyzer<'_, '_> {
                     p.left,
                     ty
                 );
-                self.declare_vars(kind, &p.left)?;
+                self.declare_vars_inner(kind, &p.left, export)?;
 
                 return Ok(());
             }
@@ -586,7 +605,7 @@ impl Analyzer<'_, '_> {
                 for elem in elems {
                     match *elem {
                         Some(ref elem) => {
-                            self.declare_vars(kind, elem)?;
+                            self.declare_vars_inner(kind, elem, export)?;
                         }
                         // Skip
                         None => {}
@@ -631,7 +650,7 @@ impl Analyzer<'_, '_> {
                     // `foo.bar = 1`
                     Pat::Rest(_) | Pat::Expr(_) | Pat::Invalid(..) => unreachable!(),
                 }
-                return self.declare_vars(kind, &arg);
+                return self.declare_vars_inner(kind, &arg, export);
             }
 
             _ => unimplemented!("declare_vars for patterns other than ident: {:#?}", pat),
