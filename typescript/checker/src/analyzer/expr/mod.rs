@@ -2495,7 +2495,13 @@ impl Visit<SeqExpr> for Analyzer<'_, '_> {
             expr.visit_with(self);
 
             match **expr {
-                Expr::Ident(..) | Expr::Lit(..) | Expr::Arrow(..) => {
+                Expr::Ident(..)
+                | Expr::Lit(..)
+                | Expr::Arrow(..)
+                | Expr::Unary(UnaryExpr {
+                    op: op!(unary, "-"),
+                    ..
+                }) => {
                     self.info.errors.push(Error::UselessSeqExpr {
                         span: span.with_lo(first_span.lo()),
                     });

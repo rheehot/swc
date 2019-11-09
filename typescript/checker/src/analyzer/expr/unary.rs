@@ -51,6 +51,32 @@ impl Visit<UnaryExpr> for Analyzer<'_, '_> {
 
                 Err(err) => errors.push(err),
             },
+
+            op!(unary, "-") => match self.type_of(&node.arg) {
+                Ok(ref ty) => match ty.normalize() {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsNumberKeyword,
+                        ..
+                    }) => {}
+
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsNullKeyword,
+                        ..
+                    }) => errors.push(Error::TS2531 { span: ty.span() }),
+
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                        ..
+                    }) => errors.push(Error::TS2532 { span: ty.span() }),
+
+                    _ => {
+                        //
+                    }
+                },
+
+                Err(err) => errors.push(err),
+            },
+
             _ => {}
         }
 

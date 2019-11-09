@@ -7,6 +7,7 @@ es6/destructuring/emptyObject
 es7/trailingCommasInGetter.ts
 expressions/unaryOperators/bitwiseNotOperator
 expressions/unaryOperators/deleteOperator/
+expressions/unaryOperators/negateOperator/
 expressions/unaryOperators/voidOperator/
 parser/ecmascript3/Accessors/parserES3Accessors1.ts
 parser/ecmascript3/Accessors/parserES3Accessors2.ts
