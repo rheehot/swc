@@ -1,5 +1,9 @@
-use crate::util::{EqIgnoreNameAndSpan, IntoCow};
-use std::{borrow::Cow, mem::transmute};
+use crate::{
+    analyzer::Info,
+    util::{EqIgnoreNameAndSpan, IntoCow},
+};
+use fxhash::FxHashMap;
+use std::{borrow::Cow, mem::transmute, sync::Arc};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -114,7 +118,7 @@ pub enum Type<'a> {
     /// export type A<B> = Foo<B>;
     Alias(Alias<'a>),
     Namespace(TsNamespaceDecl),
-    Module(TsModuleDecl),
+    Module(Module),
 
     Class(Class<'a>),
     /// Instance of the class.
@@ -139,6 +143,15 @@ pub enum Type<'a> {
     ///
     /// Don't match on this directly. Instead, use `.normalize()`.
     Static(Static),
+
+    Arc(#[fold(ignore)] Arc<Type<'static>>),
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct Module {
+    pub span: Span,
+    #[fold(ignore)]
+    pub exports: FxHashMap<JsWord, Arc<Type<'static>>>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
@@ -580,7 +593,7 @@ impl Type<'_> {
 
             Type::Namespace(n) => Type::Namespace(TsNamespaceDecl { span, ..n }),
 
-            Type::Module(m) => Type::Module(TsModuleDecl { span, ..m }),
+            Type::Module(m) => Type::Module(Module { span, ..m }),
 
             Type::Class(c) => Type::Class(Class { span, ..c }),
 
@@ -596,6 +609,8 @@ impl Type<'_> {
             Type::Static(s) => Type::Static(Static { span, ..s }),
 
             Type::Tuple(ty) => Type::Tuple(Tuple { span, ..ty }),
+
+            Type::Arc(arc) => Type::Arc(arc),
         }
     }
 }
@@ -672,6 +687,8 @@ impl Type<'_> {
             Type::Namespace(n) => Type::Namespace(n),
             Type::Module(m) => Type::Module(m),
 
+            Type::Arc(ty) => Type::Arc(ty),
+
             Type::Static(s) => Type::Static(s),
 
             Type::Tuple(t) => Type::Tuple(t.into_static()),
@@ -691,6 +708,10 @@ impl<'a> Type<'a> {
                 // 'static lives longer than anything
                 transmute::<&'static Type<'static>, &'c Type<'d>>(ty)
             },
+            Type::Arc(ref s) => {
+                //
+                unsafe { transmute::<&'s Type<'static>, &'c Type<'d>>(s) }
+            }
             _ => unsafe {
                 // Shorten lifetimes
                 transmute::<&'s Self, &'c Type<'d>>(self)

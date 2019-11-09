@@ -28,7 +28,7 @@ pub(super) struct VarInfo {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(super) enum ScopeKind {
+pub(crate) enum ScopeKind {
     Block,
     Fn,
     ArrowFn,
@@ -37,7 +37,7 @@ pub(super) enum ScopeKind {
 }
 
 #[derive(Debug)]
-pub(super) struct Scope<'a> {
+pub(crate) struct Scope<'a> {
     /// Expanded type.
     ///
     /// e.g. `interface Foo { name: string; }` is saved as `{ 'Foo': { name:

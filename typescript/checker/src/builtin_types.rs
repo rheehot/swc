@@ -1,14 +1,19 @@
 use crate::{
-    analyzer::export::pat_to_ts_fn_param,
+    analyzer::{export::pat_to_ts_fn_param, Analyzer, ImportInfo},
     errors::Error,
-    ty::{self, Class, ClassMember, Static},
+    loader::Load,
+    ty::{self, Class, ClassMember, Module, Static},
 };
 use chashmap::CHashMap;
 use fxhash::FxHashMap;
 use lazy_static::lazy_static;
-use std::collections::hash_map::Entry;
+use std::{
+    collections::hash_map::Entry,
+    path::{Path, PathBuf},
+    sync::Arc,
+};
 use swc_atoms::JsWord;
-use swc_common::{Span, DUMMY_SP};
+use swc_common::{Span, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_builtin_types::load;
 pub use swc_ts_builtin_types::Lib;
@@ -143,23 +148,27 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                         _ => unreachable!(),
                                     };
 
+                                    let mut analyzer = Analyzer::for_builtin(&ls, &Noop);
+
+                                    m.body.visit_with(&mut analyzer);
+
                                     match merged.types.entry(id) {
                                         Entry::Occupied(mut e) => match e.get_mut() {
-                                            ty::Type::Module(TsModuleDecl {
-                                                body:
-                                                    Some(TsNamespaceBody::TsModuleBlock(ref mut b)),
-                                                ..
-                                            }) => b.body.extend(match m.body.as_ref().unwrap() {
-                                                TsNamespaceBody::TsModuleBlock(ref b) => {
-                                                    b.body.clone()
-                                                }
-                                                _ => unimplemented!(),
-                                            }),
+                                            ty::Type::Module(module) => {
+                                                //
+                                                module.exports.extend(analyzer.info.exports)
+                                            }
 
                                             ref e => unimplemented!("Merging module with {:?}", e),
                                         },
                                         Entry::Vacant(e) => {
-                                            e.insert(m.clone().into());
+                                            e.insert(
+                                                Module {
+                                                    span: DUMMY_SP,
+                                                    exports: analyzer.info.exports,
+                                                }
+                                                .into(),
+                                            );
                                         }
                                     }
                                 }
@@ -228,4 +237,12 @@ pub fn get_type(libs: &[Lib], span: Span, name: &JsWord) -> Result<Type, Error> 
         span,
         name: name.clone(),
     })
+}
+
+struct Noop;
+
+impl Load for Noop {
+    fn load(&self, _: Arc<PathBuf>, _: &ImportInfo) -> Result<FxHashMap<JsWord, Arc<Type>>, Error> {
+        unimplemented!()
+    }
 }

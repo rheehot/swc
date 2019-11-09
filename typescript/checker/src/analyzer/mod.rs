@@ -39,8 +39,8 @@ mod tests;
 mod type_facts;
 mod util;
 
-struct Analyzer<'a, 'b> {
-    info: Info,
+pub(crate) struct Analyzer<'a, 'b> {
+    pub info: Info,
     resolved_imports: FxHashMap<JsWord, Arc<Type<'static>>>,
     errored_imports: FxHashSet<JsWord>,
     pending_exports: Vec<((JsWord, Span), Box<Expr>)>,
@@ -141,18 +141,28 @@ where
 
 impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, decl: &TsModuleDecl) {
-        // TODO: Uncomment the line below.
-        // Uncommenting the line somehow returns without excuting subsequent codes.
-        // decl.visit_children(self);
+        let span = decl.span;
 
-        // println!("after: visit<TsModuleDecl>: {:?}", decl.id);
+        let mut new = Analyzer::new(
+            self.libs,
+            self.rule,
+            Scope::root(),
+            self.path.clone(),
+            self.loader,
+        );
+
+        decl.visit_children(&mut new);
+        self.info.errors.append(&mut new.info.errors);
 
         self.scope.register_type(
             match decl.id {
                 TsModuleName::Ident(ref i) => i.sym.clone(),
                 TsModuleName::Str(ref s) => s.value.clone(),
             },
-            decl.clone().into(),
+            Type::Module(ty::Module {
+                span,
+                exports: new.info.exports,
+            }),
         );
     }
 }
@@ -220,7 +230,7 @@ impl Visit<TsTypeAliasDecl> for Analyzer<'_, '_> {
 }
 
 #[derive(Debug)]
-struct ImportFinder<'a> {
+pub(crate) struct ImportFinder<'a> {
     to: &'a mut Vec<ImportInfo>,
 }
 
@@ -316,6 +326,16 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             span_allowed_implicit_any: DUMMY_SP,
             computed_prop_mode: ComputedPropMode::Object,
         }
+    }
+
+    pub fn for_builtin(libs: &'b [Lib], loader: &'b dyn Load) -> Self {
+        Self::new(
+            libs,
+            Default::default(),
+            Scope::root(),
+            Arc::new(PathBuf::from("<builtin>")),
+            loader,
+        )
     }
 }
 

@@ -71,7 +71,7 @@ impl BitOr for Facts {
 
 /// Conditional facts
 #[derive(Debug, Clone, Default)]
-pub(super) struct CondFacts {
+pub(crate) struct CondFacts {
     pub facts: FxHashMap<Name, TypeFacts>,
     pub vars: FxHashMap<Name, Type<'static>>,
     pub excludes: FxHashMap<Name, Vec<Type<'static>>>,

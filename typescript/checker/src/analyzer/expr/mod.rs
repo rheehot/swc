@@ -8,8 +8,9 @@ use crate::{
     errors::Error,
     ty::{
         self, Alias, Array, CallSignature, Class, ClassInstance, ClassMember, ConstructorSignature,
-        EnumVariant, IndexSignature, Interface, Intersection, MethodSignature, PropertySignature,
-        Static, Tuple, Type, TypeElement, TypeLit, TypeParamDecl, TypeRef, TypeRefExt, Union,
+        EnumVariant, IndexSignature, Interface, Intersection, MethodSignature, Module,
+        PropertySignature, Static, Tuple, Type, TypeElement, TypeLit, TypeParamDecl, TypeRef,
+        TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
@@ -1191,6 +1192,15 @@ impl Analyzer<'_, '_> {
                     }
                 }
             }
+
+            Type::Module(Module { ref exports, .. }) => match prop {
+                Expr::Ident(Ident { ref sym, .. }) => {
+                    if let Some(item) = exports.get(sym) {
+                        return Ok(Type::Arc((*item).clone()).owned());
+                    }
+                }
+                _ => {}
+            },
 
             _ => {}
         }
