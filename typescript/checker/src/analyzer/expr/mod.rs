@@ -21,6 +21,7 @@ use swc_ecma_ast::*;
 
 mod bin;
 mod call_new;
+mod unary;
 mod update;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -343,7 +344,9 @@ impl Analyzer<'_, '_> {
                 }
             }
 
-            Expr::Unary(UnaryExpr { op, ref arg, .. }) => {
+            Expr::Unary(UnaryExpr {
+                span, op, ref arg, ..
+            }) => {
                 match op {
                     op!("typeof") => {
                         return Ok(Type::Keyword(TsKeywordType {
@@ -352,8 +355,21 @@ impl Analyzer<'_, '_> {
                         })
                         .into_cow());
                     }
+
+                    // `delete foo` returns bool
+                    op!("delete") => {
+                        return Ok(Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsBooleanKeyword,
+                        })
+                        .owned());
+                    }
+
+                    op!("void") => return Ok(Type::undefined(span).owned()),
+
                     _ => {}
                 }
+
                 let arg_ty = self.type_of(arg)?;
                 match *arg_ty {
                     Type::Keyword(TsKeywordType {
@@ -366,23 +382,12 @@ impl Analyzer<'_, '_> {
                 match op {
                     op!("!") => return Ok(negate(self.type_of(arg)?.into_owned()).into_cow()),
 
-                    op!("void") => return Ok(Type::undefined(span).owned()),
-
                     op!(unary, "-") | op!(unary, "+") => {
                         return Ok(Type::Keyword(TsKeywordType {
                             span,
                             kind: TsKeywordTypeKind::TsNumberKeyword,
                         })
                         .owned());
-                    }
-
-                    // `delete foo` returns bool
-                    op!("delete") => {
-                        return Ok(Type::Keyword(TsKeywordType {
-                            span,
-                            kind: TsKeywordTypeKind::TsBooleanKeyword,
-                        })
-                        .owned())
                     }
 
                     op!(unary, "+") | op!(unary, "-") => {
@@ -2687,5 +2692,12 @@ impl Visit<ThrowStmt> for Analyzer<'_, '_> {
                 self.info.errors.push(err);
             }
         }
+    }
+}
+
+fn unwrap_paren(e: &Expr) -> &Expr {
+    match e {
+        Expr::Paren(ref e) => &e.expr,
+        _ => e,
     }
 }
