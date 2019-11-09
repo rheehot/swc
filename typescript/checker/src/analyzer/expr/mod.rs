@@ -1412,10 +1412,13 @@ impl Analyzer<'_, '_> {
                         }
                         swc_ecma_ast::ClassMember::Method(v) => {
                             //
-                            let ret_ty = box self
-                                .infer_return_type(v.function.span)
-                                .unwrap_or_else(|| Type::any(v.function.span))
-                                .owned();
+                            let ret_ty = match v.function.return_type {
+                                Some(v) => box Type::from(v.type_ann).owned(),
+                                None => box self
+                                    .infer_return_type(v.function.span)
+                                    .unwrap_or_else(|| Type::any(v.function.span))
+                                    .owned(),
+                            };
 
                             ClassMember::Method(Method {
                                 span: v.span,
