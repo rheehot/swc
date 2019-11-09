@@ -53,22 +53,22 @@ error: TS2703
    |                                ^^^^^^^^^^^^^^^^
 
 error: TS2703
-  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts:36:39
-   |
-36 | var ResultIsBoolean13 = delete delete STRING;
-   |                                       ^^^^^^
-
-error: TS2703
   --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts:36:32
    |
 36 | var ResultIsBoolean13 = delete delete STRING;
    |                                ^^^^^^^^^^^^^
 
 error: TS2703
-  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts:37:47
+  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts:36:39
+   |
+36 | var ResultIsBoolean13 = delete delete STRING;
+   |                                       ^^^^^^
+
+error: TS2703
+  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts:37:32
    |
 37 | var ResultIsBoolean14 = delete delete delete (STRING + STRING);
-   |                                               ^^^^^^^^^^^^^^^
+   |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 error: TS2703
   --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts:37:39
@@ -77,10 +77,10 @@ error: TS2703
    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^
 
 error: TS2703
-  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts:37:32
+  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts:37:47
    |
 37 | var ResultIsBoolean14 = delete delete delete (STRING + STRING);
-   |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |                                               ^^^^^^^^^^^^^^^
 
 error: TS2703
   --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithStringType.ts:40:8

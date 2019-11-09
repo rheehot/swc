@@ -1,9 +1,3 @@
-error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'public', 'static', or 'yield' cannot be used as an identifier in strict mode
- --> $DIR/tests/conformance/parser/ecmascript5/StrictMode/parserStrictMode2.ts:5:1
-  |
-5 | static();
-  | ^^^^^^
-
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
@@ -51,6 +45,12 @@ error: UndefinedSymbol {
   |
 4 | foo1();
   | ^^^^
+
+error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'public', 'static', or 'yield' cannot be used as an identifier in strict mode
+ --> $DIR/tests/conformance/parser/ecmascript5/StrictMode/parserStrictMode2.ts:5:1
+  |
+5 | static();
+  | ^^^^^^
 
 error: UndefinedSymbol {
     span: Span {

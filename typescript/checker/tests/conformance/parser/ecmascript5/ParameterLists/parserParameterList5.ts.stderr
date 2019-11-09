@@ -1,3 +1,19 @@
+error: ReturnRequired {
+    span: Span {
+        lo: BytePos(
+            14,
+        ),
+        hi: BytePos(
+            29,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/ParameterLists/parserParameterList5.ts:1:15
+  |
+1 | function A(): (public B) => C {
+  |               ^^^^^^^^^^^^^^^
+
 error: TS2369
  --> $DIR/tests/conformance/parser/ecmascript5/ParameterLists/parserParameterList5.ts:1:16
   |
@@ -19,20 +35,4 @@ error: NameNotFound {
   |
 1 | function A(): (public B) => C {
   |                             ^
-
-error: ReturnRequired {
-    span: Span {
-        lo: BytePos(
-            14,
-        ),
-        hi: BytePos(
-            29,
-        ),
-        ctxt: #0,
-    },
-}
- --> $DIR/tests/conformance/parser/ecmascript5/ParameterLists/parserParameterList5.ts:1:15
-  |
-1 | function A(): (public B) => C {
-  |               ^^^^^^^^^^^^^^^
 

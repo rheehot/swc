@@ -1,34 +1,18 @@
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            17,
+            4,
         ),
         hi: BytePos(
-            18,
+            5,
         ),
         ctxt: #0,
     },
 }
- --> $DIR/tests/conformance/parser/ecmascript5/Statements/parserForStatement3.ts:1:18
+ --> $DIR/tests/conformance/parser/ecmascript5/Statements/parserForStatement3.ts:1:5
   |
 1 | for(d in _.jh[a]=_.jh[a]||[],b);
-  |                  ^
-
-error: UndefinedSymbol {
-    span: Span {
-        lo: BytePos(
-            22,
-        ),
-        hi: BytePos(
-            23,
-        ),
-        ctxt: #0,
-    },
-}
- --> $DIR/tests/conformance/parser/ecmascript5/Statements/parserForStatement3.ts:1:23
-  |
-1 | for(d in _.jh[a]=_.jh[a]||[],b);
-  |                       ^
+  |     ^
 
 error: UndefinedSymbol {
     span: Span {
@@ -65,18 +49,34 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            4,
+            17,
         ),
         hi: BytePos(
-            5,
+            18,
         ),
         ctxt: #0,
     },
 }
- --> $DIR/tests/conformance/parser/ecmascript5/Statements/parserForStatement3.ts:1:5
+ --> $DIR/tests/conformance/parser/ecmascript5/Statements/parserForStatement3.ts:1:18
   |
 1 | for(d in _.jh[a]=_.jh[a]||[],b);
-  |     ^
+  |                  ^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            22,
+        ),
+        hi: BytePos(
+            23,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/Statements/parserForStatement3.ts:1:23
+  |
+1 | for(d in _.jh[a]=_.jh[a]||[],b);
+  |                       ^
 
 error: UndefinedSymbol {
     span: Span {

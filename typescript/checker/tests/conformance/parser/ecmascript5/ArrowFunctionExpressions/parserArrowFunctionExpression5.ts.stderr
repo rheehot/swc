@@ -1,22 +1,6 @@
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            5,
-        ),
-        hi: BytePos(
-            6,
-        ),
-        ctxt: #0,
-    },
-}
- --> $DIR/tests/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression5.ts:1:6
-  |
-1 | (bar(x,
-  |      ^
-
-error: UndefinedSymbol {
-    span: Span {
-        lo: BytePos(
             1,
         ),
         hi: BytePos(
@@ -29,4 +13,20 @@ error: UndefinedSymbol {
   |
 1 | (bar(x,
   |  ^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            5,
+        ),
+        hi: BytePos(
+            6,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression5.ts:1:6
+  |
+1 | (bar(x,
+  |      ^
 

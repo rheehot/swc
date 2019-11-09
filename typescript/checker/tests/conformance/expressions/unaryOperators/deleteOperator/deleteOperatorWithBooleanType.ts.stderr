@@ -29,16 +29,16 @@ error: TS2703
    |                               ^^^^^^^
 
 error: TS2703
-  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithBooleanType.ts:30:38
-   |
-30 | var ResultIsBoolean8 = delete delete BOOLEAN;
-   |                                      ^^^^^^^
-
-error: TS2703
   --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithBooleanType.ts:30:31
    |
 30 | var ResultIsBoolean8 = delete delete BOOLEAN;
    |                               ^^^^^^^^^^^^^^
+
+error: TS2703
+  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithBooleanType.ts:30:38
+   |
+30 | var ResultIsBoolean8 = delete delete BOOLEAN;
+   |                                      ^^^^^^^
 
 error: TS2703
   --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithBooleanType.ts:33:8

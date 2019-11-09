@@ -47,22 +47,22 @@ error: TS2703
    |                                 ^^^^^^^^^^^^^^^
 
 error: TS2703
-  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts:35:39
-   |
-35 | var ResultIsBoolean12 = delete delete NUMBER;
-   |                                       ^^^^^^
-
-error: TS2703
   --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts:35:32
    |
 35 | var ResultIsBoolean12 = delete delete NUMBER;
    |                                ^^^^^^^^^^^^^
 
 error: TS2703
-  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts:36:47
+  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts:35:39
+   |
+35 | var ResultIsBoolean12 = delete delete NUMBER;
+   |                                       ^^^^^^
+
+error: TS2703
+  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts:36:32
    |
 36 | var ResultIsBoolean13 = delete delete delete (NUMBER + NUMBER);
-   |                                               ^^^^^^^^^^^^^^^
+   |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 error: TS2703
   --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts:36:39
@@ -71,10 +71,10 @@ error: TS2703
    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^
 
 error: TS2703
-  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts:36:32
+  --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts:36:47
    |
 36 | var ResultIsBoolean13 = delete delete delete (NUMBER + NUMBER);
-   |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |                                               ^^^^^^^^^^^^^^^
 
 error: TS2703
   --> $DIR/tests/conformance/expressions/unaryOperators/deleteOperator/deleteOperatorWithNumberType.ts:39:8

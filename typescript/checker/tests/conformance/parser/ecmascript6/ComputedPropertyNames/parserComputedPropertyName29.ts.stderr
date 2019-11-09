@@ -1,35 +1,3 @@
-error: UndefinedSymbol {
-    span: Span {
-        lo: BytePos(
-            53,
-        ),
-        hi: BytePos(
-            55,
-        ),
-        ctxt: #0,
-    },
-}
- --> $DIR/tests/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName29.ts:4:11
-  |
-4 |     [e] = id++
-  |           ^^
-
-error: UndefinedSymbol {
-    span: Span {
-        lo: BytePos(
-            48,
-        ),
-        hi: BytePos(
-            49,
-        ),
-        ctxt: #0,
-    },
-}
- --> $DIR/tests/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName29.ts:4:6
-  |
-4 |     [e] = id++
-  |      ^
-
 error: TS1166 {
     span: Span {
         lo: BytePos(
@@ -49,18 +17,34 @@ error: TS1166 {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            64,
+            48,
         ),
         hi: BytePos(
-            66,
+            49,
         ),
         ctxt: #0,
     },
 }
- --> $DIR/tests/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName29.ts:5:6
+ --> $DIR/tests/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName29.ts:4:6
   |
-5 |     [e2]: number
-  |      ^^
+4 |     [e] = id++
+  |      ^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            53,
+        ),
+        hi: BytePos(
+            55,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName29.ts:4:11
+  |
+4 |     [e] = id++
+  |           ^^
 
 error: TS1166 {
     span: Span {
@@ -77,4 +61,20 @@ error: TS1166 {
   |
 5 |     [e2]: number
   |     ^^^^^^^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            64,
+        ),
+        hi: BytePos(
+            66,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName29.ts:5:6
+  |
+5 |     [e2]: number
+  |      ^^
 

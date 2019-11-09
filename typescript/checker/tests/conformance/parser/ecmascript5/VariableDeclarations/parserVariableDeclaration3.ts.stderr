@@ -30,22 +30,6 @@ error: UndefinedSymbol {
 3 |       , outerr = new Harness.Compiler.WriterAggregator()
   |                      ^^^^^^^
 
-error: UndefinedSymbol {
-    span: Span {
-        lo: BytePos(
-            194,
-        ),
-        hi: BytePos(
-            204,
-        ),
-        ctxt: #0,
-    },
-}
- --> $DIR/tests/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts:4:55
-  |
-4 |       , compiler = <TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr)
-  |                                                       ^^^^^^^^^^
-
 error: NameNotFound {
     span: Span {
         lo: BytePos(
@@ -61,4 +45,20 @@ error: NameNotFound {
   |
 4 |       , compiler = <TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr)
   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            194,
+        ),
+        hi: BytePos(
+            204,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/VariableDeclarations/parserVariableDeclaration3.ts:4:55
+  |
+4 |       , compiler = <TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr)
+  |                                                       ^^^^^^^^^^
 
