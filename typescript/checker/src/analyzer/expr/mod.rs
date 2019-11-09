@@ -994,6 +994,21 @@ impl Analyzer<'_, '_> {
                     Expr::Lit(Lit::Str(Str { value: ref sym, .. })) => {
                         ret!(sym);
                     }
+                    Expr::Lit(Lit::Num(Number { value, .. })) => {
+                        let idx = value.round() as usize;
+                        if e.members.len() > idx {
+                            return Ok(Type::Lit(TsLitType {
+                                span,
+                                lit: e.members[idx].val.clone(),
+                            })
+                            .owned());
+                        }
+                        return Ok(Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsStringKeyword,
+                        })
+                        .owned());
+                    }
 
                     _ => {
                         if e.is_const {

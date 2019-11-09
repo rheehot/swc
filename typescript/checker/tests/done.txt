@@ -5,6 +5,7 @@ constEnums
 es6/destructuring/emptyArray
 es6/destructuring/emptyObject
 es7/trailingCommasInGetter.ts
+expressions/unaryOperators/voidOperator/
 parser/ecmascript3/Accessors/parserES3Accessors1.ts
 parser/ecmascript3/Accessors/parserES3Accessors2.ts
 parser/ecmascript3/Accessors/parserES3Accessors3.ts
