@@ -518,7 +518,7 @@ impl Analyzer<'_, '_> {
                 ref type_args,
                 ..
             }) => {
-                let callee_type = self
+                let ret_ty = self
                     .extract_call_new_expr_member(
                         callee,
                         ExtractKind::Call,
@@ -527,7 +527,7 @@ impl Analyzer<'_, '_> {
                     )
                     .map(|v| v)?;
 
-                return Ok(callee_type);
+                return Ok(ret_ty);
             }
 
             // super() returns any
@@ -1830,6 +1830,8 @@ impl Analyzer<'_, '_> {
                                         if let Some(ref ret_ty) = function.return_type {
                                             return Ok(Type::from(ret_ty.clone()).owned());
                                         } else {
+                                            // TODO: Infer return type
+
                                             return Ok(Type::any(span).owned());
                                         }
                                     }
