@@ -1119,12 +1119,26 @@ impl Analyzer<'_, '_> {
                 return self.access_property(span, interface.into_cow(), prop, computed, type_mode);
             }
 
-            Type::Array(Array { .. }) => {
+            Type::Array(Array { ref elem_type, .. }) => {
                 let array_ty = builtin_types::get_type(self.libs, span, &js_word!("Array"))
                     .expect("Array should be loaded")
                     .owned();
 
-                // TODO: Array<elem_type>
+                match self.type_of(prop) {
+                    Ok(ty) => match ty.normalize() {
+                        Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                            ..
+                        })
+                        | Type::Lit(TsLitType {
+                            lit: TsLit::Number(..),
+                            ..
+                        }) => return Ok(elem_type.to_static().owned()),
+
+                        _ => {}
+                    },
+                    _ => {}
+                }
 
                 return self.access_property(span, array_ty, prop, computed, type_mode);
             }
@@ -2278,6 +2292,8 @@ impl Analyzer<'_, '_> {
                                             ty
                                         ),
                                     }
+                                } else {
+                                    println!("Failed to find type: {}", i.sym)
                                 }
                             }
 
@@ -2306,7 +2322,9 @@ impl Analyzer<'_, '_> {
                                     }
                                 }
                             }
-                            _ => {}
+                            _ => {
+                                unimplemented!("TsEntityName: {:?}", type_name);
+                            }
                         }
 
                         return Err(Error::NameNotFound {
