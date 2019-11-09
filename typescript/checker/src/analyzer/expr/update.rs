@@ -1,14 +1,37 @@
-use crate::analyzer::{expr::TypeOfMode, Analyzer};
-use swc_common::{Visit, VisitWith};
+use crate::{
+    analyzer::{expr::TypeOfMode, Analyzer},
+    errors::Error,
+    ty::Type,
+};
+use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 impl Visit<UpdateExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, e: &UpdateExpr) {
         e.visit_children(self);
 
-        match self.type_of_expr(&e.arg, TypeOfMode::LValue) {
-            Ok(..) => {}
-            Err(err) => self.info.errors.push(err),
+        let mut errors = vec![];
+
+        match self
+            .type_of_expr(&e.arg, TypeOfMode::LValue)
+            .and_then(|ty| self.expand_type(ty.span(), ty))
+        {
+            Ok(ty) => match *ty.normalize() {
+                Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsStringKeyword,
+                    ..
+                })
+                | Type::Lit(TsLitType {
+                    lit: TsLit::Str(..),
+                    ..
+                })
+                | Type::Array(..) => errors.push(Error::TS2356 { span: e.arg.span() }),
+
+                _ => {}
+            },
+            Err(err) => errors.push(err),
         }
+
+        self.info.errors.extend(errors);
     }
 }
