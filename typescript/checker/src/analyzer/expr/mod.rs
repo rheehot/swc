@@ -259,6 +259,25 @@ impl Analyzer<'_, '_> {
                             .owned());
                         }
 
+                        if c.both(|(_, ty)| match **ty {
+                            Type::Keyword(TsKeywordType {
+                                kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                                ..
+                            })
+                            | Type::Keyword(TsKeywordType {
+                                kind: TsKeywordTypeKind::TsNullKeyword,
+                                ..
+                            }) => true,
+
+                            _ => false,
+                        }) {
+                            return Err(Error::TS2365 { span });
+                        }
+
+                        if l_ty.is_any() && r_ty.is_any() {
+                            return Ok(Type::any(span).owned());
+                        }
+
                         unimplemented!("type_of_bin(+)\nLeft: {:#?}\nRight: {:#?}", l_ty, r_ty)
                     }
                     op!("*") | op!("/") => {

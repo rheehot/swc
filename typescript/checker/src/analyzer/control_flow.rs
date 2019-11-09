@@ -613,6 +613,13 @@ where
     {
         op(self.left, self.right).or_else(|| op(self.right, self.left))
     }
+
+    pub fn both<F>(&self, mut op: F) -> bool
+    where
+        F: FnMut(T) -> bool,
+    {
+        op(self.left) || op(self.right)
+    }
 }
 
 impl Analyzer<'_, '_> {
