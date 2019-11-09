@@ -1,5 +1,10 @@
 use super::{scope::ScopeKind, Analyzer};
-use crate::{analyzer::ComputedPropMode, errors::Error, ty::Type, util::EqIgnoreNameAndSpan};
+use crate::{
+    analyzer::{ComputedPropMode, VarVisitor},
+    errors::Error,
+    ty::Type,
+    util::EqIgnoreNameAndSpan,
+};
 use std::mem;
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
@@ -319,5 +324,91 @@ impl Visit<ClassMethod> for Analyzer<'_, '_> {
 impl Visit<TsIndexSignature> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &TsIndexSignature) {
         node.visit_children(self);
+    }
+}
+
+impl Visit<Constructor> for Analyzer<'_, '_> {
+    fn visit(&mut self, c: &Constructor) {
+        self.with_child(ScopeKind::Fn, Default::default(), |child| {
+            child.return_type_span = c.span();
+
+            let old = child.allow_ref_declaring;
+            child.allow_ref_declaring = false;
+
+            {
+                // Validate params
+                // TODO: Move this to parser
+                let mut has_optional = false;
+                for p in &c.params {
+                    if has_optional {
+                        child.info.errors.push(Error::TS1016 { span: p.span() });
+                    }
+
+                    match *p {
+                        PatOrTsParamProp::Pat(Pat::Ident(Ident { optional, .. })) => {
+                            if optional {
+                                has_optional = true;
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+            }
+
+            c.params.iter().for_each(|param| {
+                let mut names = vec![];
+
+                let mut visitor = VarVisitor { names: &mut names };
+
+                param.visit_with(&mut visitor);
+
+                child.declaring.extend_from_slice(&names);
+
+                debug_assert_eq!(child.allow_ref_declaring, false);
+
+                match param {
+                    PatOrTsParamProp::Pat(ref pat) => {
+                        match child.declare_vars(VarDeclKind::Let, pat) {
+                            Ok(()) => {}
+                            Err(err) => {
+                                child.info.errors.push(err);
+                            }
+                        }
+                    }
+                    PatOrTsParamProp::TsParamProp(ref param) => match param.param {
+                        TsParamPropParam::Ident(ref i)
+                        | TsParamPropParam::Assign(AssignPat {
+                            left: box Pat::Ident(ref i),
+                            ..
+                        }) => {
+                            match child.scope.declare_var(
+                                i.span,
+                                VarDeclKind::Let,
+                                i.sym.clone(),
+                                i.type_ann.clone().map(Type::from),
+                                true,
+                                false,
+                            ) {
+                                Ok(()) => {}
+                                Err(err) => {
+                                    child.info.errors.push(err);
+                                }
+                            }
+                        }
+                        _ => unreachable!(),
+                    },
+                }
+
+                for n in names {
+                    child.declaring.remove_item(&n).unwrap();
+                }
+            });
+
+            child.inferred_return_types.get_mut().insert(c.span, vec![]);
+            c.visit_children(child);
+
+            debug_assert_eq!(child.allow_ref_declaring, false);
+            child.allow_ref_declaring = old;
+        });
     }
 }
