@@ -1172,6 +1172,26 @@ impl Analyzer<'_, '_> {
                 }
             },
 
+            Type::ClassInstance(ClassInstance { ref cls, .. }) => {
+                //
+                for m in &cls.body {
+                    //
+                    match *m {
+                        ClassMember::ClassProp(ref p) => {
+                            // TODO: normalized string / ident
+                            if (&*p.key).eq_ignore_name_and_span(&prop) {
+                                if let Some(ref ty) = p.type_ann {
+                                    return Ok(Type::from(ty.clone()).owned());
+                                }
+
+                                return Ok(Type::any(p.key.span()).owned());
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+            }
+
             _ => {}
         }
 
