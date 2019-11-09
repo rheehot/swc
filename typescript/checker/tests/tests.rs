@@ -152,6 +152,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "parserES5ForOfStatement21.ts",
             "parserShorthandPropertyAssignment2.ts",
             "bitwiseNotOperatorInvalidOperations.ts",
+            "negateOperatorInvalidOperations.ts",
             //
             //
             // Temporarily ignored - inference of generic arguments is not implemented
