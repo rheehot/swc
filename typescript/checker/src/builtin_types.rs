@@ -2,7 +2,7 @@ use crate::{
     analyzer::{export::pat_to_ts_fn_param, Analyzer, ImportInfo},
     errors::Error,
     loader::Load,
-    ty::{self, Class, ClassMember, Module, Static},
+    ty::{self, Class, ClassMember, Method, Module, Static},
 };
 use chashmap::CHashMap;
 use fxhash::FxHashMap;
@@ -52,7 +52,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                             ModuleItem::ModuleDecl(ref md) => unreachable!("ModuleDecl: {:#?}", md),
                             ModuleItem::Stmt(ref stmt) => match *stmt {
                                 Stmt::Decl(Decl::Var(VarDecl { ref decls, .. })) => {
-                                    assert!(decls.len() == 1);
+                                    assert_eq!(decls.len(), 1);
                                     let decl = decls.iter().next().unwrap();
                                     let name = match decl.name {
                                         Pat::Ident(ref i) => i,
@@ -117,7 +117,20 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                                         ClassMember::Constructor(v.into())
                                                     }
                                                     swc_ecma_ast::ClassMember::Method(v) => {
-                                                        ClassMember::Method(v.into())
+                                                        ClassMember::Method(Method {
+                                                            span: Default::default(),
+                                                            key: v.key,
+                                                            is_static: v.is_static,
+                                                            type_params: v
+                                                                .function
+                                                                .type_params
+                                                                .map(From::from),
+                                                            params: v.function.params,
+                                                            ret_ty: box Type::from(
+                                                                v.function.return_type.unwrap(),
+                                                            )
+                                                            .owned(),
+                                                        })
                                                     }
                                                     swc_ecma_ast::ClassMember::PrivateMethod(_) => {
                                                         unreachable!()

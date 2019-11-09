@@ -1,14 +1,10 @@
 use super::{
-    Alias, Array, CallSignature, Conditional, Constructor, ConstructorSignature, Function,
-    IndexSignature, Interface, Intersection, Mapped, MethodSignature, Operator, PropertySignature,
-    TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation,
-    Union,
+    Alias, Array, CallSignature, Conditional, Constructor, ConstructorSignature, Enum, EnumMember,
+    Function, IndexSignature, Interface, Intersection, Mapped, Method, MethodSignature, Operator,
+    PropertySignature, TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl,
+    TypeParamInstantiation, Union,
 };
-use crate::{
-    errors::Error,
-    ty::{Enum, EnumMember},
-    util::IntoCow,
-};
+use crate::{errors::Error, util::IntoCow};
 use std::convert::TryFrom;
 use swc_common::Spanned;
 use swc_ecma_ast::*;
@@ -448,4 +444,17 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
         value: arithmetic_opt(e, i, expr)?,
     }
     .into())
+}
+
+impl Method<'_> {
+    pub fn into_static(self) -> Method<'static> {
+        Method {
+            span: self.span,
+            key: self.key,
+            is_static: self.is_static,
+            type_params: self.type_params.map(|v| v.into_static()),
+            params: self.params,
+            ret_ty: box self.ret_ty.into_owned().into_static().owned(),
+        }
+    }
 }

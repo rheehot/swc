@@ -104,6 +104,7 @@ pub enum Type<'a> {
     Intersection(Intersection<'a>),
     Function(Function<'a>),
     Constructor(Constructor<'a>),
+    Method(Method<'a>),
 
     Operator(Operator<'a>),
 
@@ -194,9 +195,19 @@ pub struct ClassInstance<'a> {
 #[derive(Debug, Fold, Clone, PartialEq, Spanned, FromVariant)]
 pub enum ClassMember<'a> {
     Constructor(Constructor<'a>),
-    Method(ClassMethod),
+    Method(Method<'a>),
     ClassProp(ClassProp),
     TsIndexSignature(TsIndexSignature),
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct Method<'a> {
+    pub span: Span,
+    pub key: PropName,
+    pub is_static: bool,
+    pub type_params: Option<TypeParamDecl<'a>>,
+    pub params: Vec<Pat>,
+    pub ret_ty: Box<TypeRef<'a>>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
@@ -583,6 +594,8 @@ impl Type<'_> {
 
             Type::Constructor(c) => Type::Constructor(Constructor { span, ..c }),
 
+            Type::Method(m) => Type::Method(Method { span, ..m }),
+
             Type::Enum(e) => Type::Enum(Enum { span, ..e }),
 
             Type::EnumVariant(e) => Type::EnumVariant(EnumVariant { span, ..e }),
@@ -674,6 +687,8 @@ impl Type<'_> {
                 params,
                 ret_ty: ret_ty.map(|ret_ty| box static_type(*ret_ty)),
             }),
+
+            Type::Method(m) => Type::Method(m.into_static()),
 
             Type::Interface(i) => Type::Interface(i.into_static()),
 
@@ -968,7 +983,7 @@ impl ClassMember<'_> {
     pub fn into_static(self) -> ClassMember<'static> {
         match self {
             ClassMember::Constructor(v) => ClassMember::Constructor(v.into_static()),
-            ClassMember::Method(v) => ClassMember::Method(v),
+            ClassMember::Method(v) => ClassMember::Method(v.into_static()),
             ClassMember::ClassProp(v) => ClassMember::ClassProp(v),
             ClassMember::TsIndexSignature(v) => ClassMember::TsIndexSignature(v),
         }

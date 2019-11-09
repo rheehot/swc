@@ -8,7 +8,7 @@ use crate::{
     errors::Error,
     ty::{
         self, Alias, Array, CallSignature, Class, ClassInstance, ClassMember, ConstructorSignature,
-        EnumVariant, IndexSignature, Interface, Intersection, MethodSignature, Module,
+        EnumVariant, IndexSignature, Interface, Intersection, Method, MethodSignature, Module,
         PropertySignature, Static, Tuple, Type, TypeElement, TypeLit, TypeParamDecl, TypeRef,
         TypeRefExt, Union,
     },
@@ -1082,7 +1082,7 @@ impl Analyzer<'_, '_> {
                         ClassMember::Method(ref mtd) => {
                             let mtd_key = prop_name_to_expr(&mtd.key);
                             if (*mtd_key).eq_ignore_span(&mtd_key) {
-                                return Ok(self.type_of_fn(&mtd.function)?.owned());
+                                return Ok(Type::Method(mtd.clone().into_static()).owned());
                             }
                         }
                         _ => unimplemented!("Non-property class member"),
@@ -1410,7 +1410,22 @@ impl Analyzer<'_, '_> {
                         swc_ecma_ast::ClassMember::Constructor(v) => {
                             ClassMember::Constructor(v.into())
                         }
-                        swc_ecma_ast::ClassMember::Method(v) => ClassMember::Method(v.into()),
+                        swc_ecma_ast::ClassMember::Method(v) => {
+                            //
+                            let ret_ty = box self
+                                .infer_return_type(v.function.span)
+                                .unwrap_or_else(|| Type::any(v.function.span))
+                                .owned();
+
+                            ClassMember::Method(Method {
+                                span: v.span,
+                                key: v.key,
+                                is_static: v.is_static,
+                                type_params: v.function.type_params.map(From::from),
+                                params: v.function.params,
+                                ret_ty,
+                            })
+                        }
                         swc_ecma_ast::ClassMember::PrivateMethod(_) => return None,
                         swc_ecma_ast::ClassMember::ClassProp(v) => ClassMember::ClassProp(v),
                         swc_ecma_ast::ClassMember::PrivateProp(_) => return None,
@@ -1821,19 +1836,13 @@ impl Analyzer<'_, '_> {
                     Type::Class(Class { ref body, .. }) => {
                         for member in body.iter() {
                             match *member {
-                                ClassMember::Method(ClassMethod {
+                                ClassMember::Method(Method {
                                     ref key,
-                                    ref function,
+                                    ref ret_ty,
                                     ..
                                 }) => {
                                     if prop_name_to_expr(key).eq_ignore_span(&*prop) {
-                                        if let Some(ref ret_ty) = function.return_type {
-                                            return Ok(Type::from(ret_ty.clone()).owned());
-                                        } else {
-                                            // TODO: Infer return type
-
-                                            return Ok(Type::any(span).owned());
-                                        }
+                                        return Ok(ret_ty.clone().to_static().owned());
                                     }
                                 }
                                 _ => {}
