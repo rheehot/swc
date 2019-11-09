@@ -1,4 +1,4 @@
-error: GetterPropWithoutReturn {
+error: TS2464 {
     span: Span {
         lo: BytePos(
             43,

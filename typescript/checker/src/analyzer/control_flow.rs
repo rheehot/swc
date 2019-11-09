@@ -212,9 +212,11 @@ impl Analyzer<'_, '_> {
     where
         F: for<'a, 'b> FnOnce(&mut Analyzer<'a, 'b>) -> Ret,
     {
+        let mode = self.computed_prop_mode;
         let ret;
         let (errors, ret_types) = {
             let mut child = self.child(kind, facts);
+            child.computed_prop_mode = mode;
 
             ret = op(&mut child);
 

@@ -172,11 +172,6 @@ impl Visit<ClassMember> for Analyzer<'_, '_> {
 
 impl Visit<ClassProp> for Analyzer<'_, '_> {
     fn visit(&mut self, p: &ClassProp) {
-        match *p.key {
-            Expr::Ident(Ident { ref sym, .. }) => self.scope.declaring_prop = Some(sym.clone()),
-            _ => {}
-        }
-
         p.visit_children(self);
 
         // Verify key if key is computed
@@ -283,41 +278,84 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
 }
 
 impl Visit<ClassMethod> for Analyzer<'_, '_> {
-    fn visit(&mut self, n: &ClassMethod) {
-        if n.kind == MethodKind::Getter {
-            let entry = self.with_child(ScopeKind::Fn, Default::default(), |child| {
-                child.return_type_span = n.span();
+    fn visit(&mut self, c: &ClassMethod) {
+        let entry = self.with_child(ScopeKind::Fn, Default::default(), |child| {
+            child.return_type_span = c.span();
 
-                child
-                    .inferred_return_types
-                    .get_mut()
-                    .insert(n.span(), Default::default());
+            let old = child.allow_ref_declaring;
+            child.allow_ref_declaring = false;
 
-                n.key.visit_with(child);
-                n.function.visit_children(child);
+            {
+                // Validate params
+                // TODO: Move this to parser
+                let mut has_optional = false;
+                for p in &c.function.params {
+                    if has_optional {
+                        child.info.errors.push(Error::TS1016 { span: p.span() });
+                    }
 
-                child
-                    .inferred_return_types
-                    .get_mut()
-                    .remove_entry(&n.span())
-                    .unwrap_or_default()
-            });
-
-            if entry.1.is_empty() {
-                // getter property must have return statements.
-                self.info
-                    .errors
-                    .push(Error::GetterPropWithoutReturn { span: n.key.span() });
+                    match *p {
+                        Pat::Ident(Ident { optional, .. }) => {
+                            if optional {
+                                has_optional = true;
+                            }
+                        }
+                        _ => {}
+                    }
+                }
             }
 
-            *self
+            c.function.params.iter().for_each(|pat| {
+                let mut names = vec![];
+
+                let mut visitor = VarVisitor { names: &mut names };
+
+                pat.visit_with(&mut visitor);
+
+                child.declaring.extend_from_slice(&names);
+
+                debug_assert_eq!(child.allow_ref_declaring, false);
+
+                match child.declare_vars(VarDeclKind::Let, pat) {
+                    Ok(()) => {}
+                    Err(err) => {
+                        child.info.errors.push(err);
+                    }
+                }
+
+                for n in names {
+                    child.declaring.remove_item(&n).unwrap();
+                }
+            });
+
+            child.inferred_return_types.get_mut().insert(c.span, vec![]);
+            c.key.visit_with(child);
+            c.function.visit_children(child);
+
+            debug_assert_eq!(child.allow_ref_declaring, false);
+            child.allow_ref_declaring = old;
+
+            child
                 .inferred_return_types
                 .get_mut()
-                .entry(n.span())
-                .or_default() = entry.1;
-        } else {
-            n.visit_children(self)
+                .remove_entry(&c.span())
+                .unwrap_or_default()
+        });
+
+        if c.kind == MethodKind::Getter && c.function.body.is_some() {
+            // getter property must have return statements.
+            if entry.1.is_empty() {
+                self.info
+                    .errors
+                    .push(Error::GetterPropWithoutReturn { span: c.key.span() });
+            }
         }
+
+        *self
+            .inferred_return_types
+            .get_mut()
+            .entry(c.span())
+            .or_default() = entry.1;
     }
 }
 
