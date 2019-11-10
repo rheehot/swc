@@ -184,7 +184,7 @@ impl Checker<'_> {
                 })
                 .ok()
                 .unwrap_or_else(|| {
-                    println!("Parser.parse_module return Err()");
+                    println!("Parser.parse_module returned Err()");
                     Module {
                         span: Default::default(),
                         body: Default::default(),
