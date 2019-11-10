@@ -8,7 +8,7 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
         expr.visit_children(self);
 
         let mut errors = vec![];
-        let errs = if expr.op == op!("===") || expr.op == op!("!==") {
+        if expr.op == op!("===") || expr.op == op!("!==") {
             let lt = match self.type_of(&expr.left) {
                 Ok(lt) => Some(lt),
                 Err(err) => {
@@ -78,21 +78,8 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
                 }
             }
         } else if expr.op == op!(bin, "+") {
-            let lt = match self.type_of(&expr.left) {
-                Ok(lt) => Some(lt),
-                Err(err) => {
-                    errors.push(err);
-                    None
-                }
-            };
-
-            let rt = match self.type_of(&expr.right) {
-                Ok(rt) => Some(rt),
-                Err(err) => {
-                    errors.push(err);
-                    None
-                }
-            };
+            let lt = self.type_of(&expr.left).ok();
+            let rt = self.type_of(&expr.right).ok();
 
             if lt.is_some() && rt.is_some() {
                 let c = Comparator {
@@ -102,21 +89,27 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
 
                 if let Some(()) = c.take(|l_ty, r_ty| match l_ty.normalize() {
                     Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsBooleanKeyword,
+                        kind: TsKeywordTypeKind::TsVoidKeyword,
                         ..
-                    }) => match r_ty.normalize() {
-                        Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsNumberKeyword,
-                            ..
-                        }) => Some(()),
-                        _ => None,
-                    },
+                    }) => Some(()),
                     _ => None,
                 }) {
-                    errors.push(Error::TS2365 { span: expr.span() })
+                    errors.push(Error::TS1345 { span: expr.span() })
                 }
             }
-        };
+        } else if expr.op == op!("||") {
+            let lt = self.type_of(&expr.left).ok();
+
+            if lt.is_some() {
+                match *lt.as_ref().unwrap().normalize() {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsVoidKeyword,
+                        ..
+                    }) => errors.push(Error::TS1345 { span: expr.span() }),
+                    _ => {}
+                }
+            }
+        }
 
         self.info.errors.extend(errors);
     }
