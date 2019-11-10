@@ -620,6 +620,13 @@ where
     where
         F: FnMut(T) -> bool,
     {
+        op(self.left) && op(self.right)
+    }
+
+    pub fn any<F>(&self, mut op: F) -> bool
+    where
+        F: FnMut(T) -> bool,
+    {
         op(self.left) || op(self.right)
     }
 }
