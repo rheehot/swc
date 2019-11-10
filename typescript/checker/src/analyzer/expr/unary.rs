@@ -1,8 +1,4 @@
-use crate::{
-    analyzer::{expr::unwrap_paren, Analyzer},
-    errors::Error,
-    ty::Type,
-};
+use crate::{analyzer::Analyzer, errors::Error, ty::Type};
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -15,7 +11,7 @@ impl Visit<UnaryExpr> for Analyzer<'_, '_> {
         match node.op {
             op!("typeof") | op!("delete") | op!("void") => match self.type_of(&node.arg) {
                 Ok(ref ty) => match ty.normalize() {
-                    Type::EnumVariant(ref v) if node.op == op!("delete") => {
+                    Type::EnumVariant(..) if node.op == op!("delete") => {
                         errors.push(Error::TS2704 {
                             span: node.arg.span(),
                         })

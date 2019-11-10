@@ -30,7 +30,7 @@ impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
             e.id.sym.clone(),
             match e.clone().try_into() {
                 Ok(ty) => ty,
-                Err(e) => Type::any(span),
+                Err(..) => Type::any(span),
             },
         );
 

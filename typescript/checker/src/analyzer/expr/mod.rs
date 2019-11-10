@@ -1062,7 +1062,7 @@ impl Analyzer<'_, '_> {
             }) => match self.find_type(enum_name) {
                 Some(ref v) => match **v {
                     Type::Enum(ref e) => {
-                        for (i, v) in e.members.iter().enumerate() {
+                        for v in e.members.iter() {
                             let new_obj_ty = Cow::Owned(Type::Lit(TsLitType {
                                 span,
                                 lit: v.val.clone(),
@@ -2759,12 +2759,5 @@ impl Visit<ThrowStmt> for Analyzer<'_, '_> {
                 self.info.errors.push(err);
             }
         }
-    }
-}
-
-fn unwrap_paren(e: &Expr) -> &Expr {
-    match e {
-        Expr::Paren(ref e) => &e.expr,
-        _ => e,
     }
 }
