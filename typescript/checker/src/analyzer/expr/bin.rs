@@ -86,27 +86,9 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
                 }
             }
             op!(bin, "+") => {
-                let lt = self.type_of(&expr.left).ok();
-                let rt = self.type_of(&expr.right).ok();
-
-                if lt.is_some() && rt.is_some() {
-                    let c = Comparator {
-                        left: &*lt.unwrap(),
-                        right: &*rt.unwrap(),
-                    };
-
-                    //                    if let Some(()) = c.take(|l_ty, _|
-                    // match l_ty.normalize() {
-                    // Type::Keyword(TsKeywordType {
-                    //                            kind:
-                    // TsKeywordTypeKind::TsVoidKeyword,
-                    //                            ..
-                    //                        }) => Some(()),
-                    //                        _ => None,
-                    //                    }) {
-                    //                        errors.push(Error::TS1345 { span:
-                    // expr.span() })                    }
-                }
+                // Validation is performed in type_of_bin_expr because
+                // validation of types is required to compute type of the
+                // expression.
             }
             op!("||") | op!("&&") => {
                 let lt = self.type_of(&expr.left).ok();
