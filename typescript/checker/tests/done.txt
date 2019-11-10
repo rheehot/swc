@@ -14,6 +14,7 @@ expressions/binaryOperators/inOperator/inOperatorWithValidOperands.ts
 expressions/binaryOperators/logicalAndOperator/
 expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts
 expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts
+expressions/commaOperator/
 expressions/commaOperator/commaOperatorOtherInvalidOperation.ts
 expressions/unaryOperators/bitwiseNotOperator
 expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherType.ts
