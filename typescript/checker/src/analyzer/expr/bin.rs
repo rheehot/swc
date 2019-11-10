@@ -196,6 +196,47 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
                 }
             }
 
+            op!("in") => {
+                let lt = self.type_of(&expr.left).ok();
+                let rt = self.type_of(&expr.right).ok();
+
+                if lt.is_some() {
+                    match lt.unwrap().normalize() {
+                        Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsAnyKeyword,
+                            ..
+                        })
+                        | Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                            ..
+                        })
+                        | Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsBigIntKeyword,
+                            ..
+                        })
+                        | Type::Lit(TsLitType {
+                            lit: TsLit::Number(..),
+                            ..
+                        })
+                        | Type::Enum(..)
+                        | Type::EnumVariant(..) => {}
+
+                        _ => errors.push(Error::TS2360 {
+                            span: expr.left.span(),
+                        }),
+                    }
+                }
+
+                if rt.is_some() {
+                    match rt.unwrap().normalize() {
+                        Type::Array(..) => {}
+                        _ => errors.push(Error::TS2361 {
+                            span: expr.right.span(),
+                        }),
+                    }
+                }
+            }
+
             _ => {}
         }
 
