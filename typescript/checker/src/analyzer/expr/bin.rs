@@ -3,7 +3,7 @@ use crate::{
     analyzer::control_flow::Comparator,
     errors::Error,
     ty::{Type, TypeRef},
-    util::EqIgnoreSpan,
+    util::{EqIgnoreSpan, IntoCow},
 };
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
@@ -267,5 +267,222 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
         }
 
         self.info.errors.extend(errors);
+    }
+}
+
+impl Analyzer<'_, '_> {
+    pub(super) fn type_of_bin_expr(&self, expr: &BinExpr) -> Result<TypeRef, Error> {
+        let BinExpr {
+            span,
+            op,
+            ref left,
+            ref right,
+        } = *expr;
+
+        let l_ty = self
+            .type_of(&left)
+            .and_then(|ty| self.expand_enum_variant(ty));
+        let r_ty = self
+            .type_of(&right)
+            .and_then(|ty| self.expand_enum_variant(ty));
+
+        let (l_ty, r_ty) = match (l_ty, r_ty) {
+            (Ok(l), Ok(r)) => (l, r),
+            (Err(e), Ok(_)) | (Ok(_), Err(e)) => return Err(e),
+            (Err(l), Err(r)) => {
+                return Err(Error::Errors {
+                    span,
+                    errors: vec![l, r],
+                })
+            }
+        };
+
+        macro_rules! no_unknown {
+            () => {{
+                no_unknown!(l_ty);
+                no_unknown!(r_ty);
+            }};
+            ($ty:expr) => {{
+                match *$ty {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsUnknownKeyword,
+                        ..
+                    }) => {
+                        return Err(Error::Unknown { span });
+                    }
+                    _ => {}
+                }
+            }};
+        }
+
+        match op {
+            op!(bin, "+") => {
+                no_unknown!();
+
+                let c = Comparator {
+                    left: (&**left, &l_ty),
+                    right: (&**right, &r_ty),
+                };
+
+                if let Some(()) = c.take(|(_, l_ty), (_, _)| match **l_ty {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsUnknownKeyword,
+                        ..
+                    }) => Some(()),
+
+                    _ => None,
+                }) {
+                    return Err(Error::Unknown { span });
+                }
+
+                match *l_ty {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsNumberKeyword,
+                        ..
+                    })
+                    | Type::Lit(TsLitType {
+                        lit: TsLit::Number(..),
+                        ..
+                    }) => match *r_ty {
+                        Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                            ..
+                        })
+                        | Type::Lit(TsLitType {
+                            lit: TsLit::Number(..),
+                            ..
+                        }) => {
+                            return Ok(Type::Keyword(TsKeywordType {
+                                span,
+                                kind: TsKeywordTypeKind::TsStringKeyword,
+                            })
+                            .owned());
+                        }
+                        _ => {}
+                    },
+                    _ => {}
+                }
+
+                if let Some(()) = c.take(|(_, l_ty), (_, _)| match **l_ty {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsStringKeyword,
+                        ..
+                    })
+                    | Type::Lit(TsLitType {
+                        lit: TsLit::Str(..),
+                        ..
+                    }) => Some(()),
+
+                    _ => None,
+                }) {
+                    return Ok(Type::Keyword(TsKeywordType {
+                        span,
+                        kind: TsKeywordTypeKind::TsStringKeyword,
+                    })
+                    .owned());
+                }
+
+                if c.both(|(_, ty)| match **ty {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                        ..
+                    })
+                    | Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsNullKeyword,
+                        ..
+                    }) => true,
+
+                    _ => false,
+                }) {
+                    return Err(Error::TS2365 { span });
+                }
+
+                if l_ty.is_any() && r_ty.is_any() {
+                    return Ok(Type::any(span).owned());
+                }
+
+                if let Some(()) = c.take(|(_, l_ty), (_, r_ty)| match l_ty.normalize() {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsBooleanKeyword,
+                        ..
+                    }) => match r_ty.normalize() {
+                        Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                            ..
+                        }) => Some(()),
+                        _ => None,
+                    },
+                    _ => None,
+                }) {
+                    return Ok(Type::Keyword(TsKeywordType {
+                        span,
+                        kind: TsKeywordTypeKind::TsBooleanKeyword,
+                    })
+                    .owned());
+                }
+
+                unimplemented!("type_of_bin(+)\nLeft: {:#?}\nRight: {:#?}", l_ty, r_ty)
+            }
+            op!("*") | op!("/") => {
+                no_unknown!();
+
+                return Ok(Type::Keyword(TsKeywordType {
+                    span,
+                    kind: TsKeywordTypeKind::TsNumberKeyword,
+                })
+                .owned());
+            }
+
+            op!(bin, "-")
+            | op!("<<")
+            | op!(">>")
+            | op!(">>>")
+            | op!("%")
+            | op!("|")
+            | op!("&")
+            | op!("^")
+            | op!("**") => {
+                no_unknown!();
+
+                return Ok(Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsNumberKeyword,
+                    span,
+                })
+                .into_cow());
+            }
+
+            op!("===") | op!("!==") | op!("!=") | op!("==") => {
+                return Ok(Type::Keyword(TsKeywordType {
+                    span,
+                    kind: TsKeywordTypeKind::TsBooleanKeyword,
+                })
+                .owned());
+            }
+
+            op!("<=") | op!("<") | op!(">=") | op!(">") | op!("in") | op!("instanceof") => {
+                no_unknown!();
+
+                return Ok(Type::Keyword(TsKeywordType {
+                    span,
+                    kind: TsKeywordTypeKind::TsBooleanKeyword,
+                })
+                .owned());
+            }
+
+            op!("||") | op!("&&") => {
+                no_unknown!();
+
+                match l_ty.normalize() {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsAnyKeyword,
+                        ..
+                    }) => return Ok(Type::any(span).owned()),
+
+                    _ => {}
+                }
+
+                return Ok(r_ty);
+            }
+        }
     }
 }
