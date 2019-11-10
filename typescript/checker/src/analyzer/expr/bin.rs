@@ -382,21 +382,6 @@ impl Analyzer<'_, '_> {
                     .owned());
                 }
 
-                if c.both(|(_, ty)| match **ty {
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsUndefinedKeyword,
-                        ..
-                    })
-                    | Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsNullKeyword,
-                        ..
-                    }) => true,
-
-                    _ => false,
-                }) {
-                    return Err(Error::TS2365 { span });
-                }
-
                 // Rule:
                 //  - any + string is string
                 //  - any + other is any
@@ -411,6 +396,24 @@ impl Analyzer<'_, '_> {
                     None
                 }) {
                     return Ok(Type::Keyword(TsKeywordType { span, kind }).owned());
+                }
+
+                // Rule:
+                //  - null is invalid operand
+                //  - undefined is invalid operand
+                if c.both(|(_, ty)| match **ty {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                        ..
+                    })
+                    | Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsNullKeyword,
+                        ..
+                    }) => true,
+
+                    _ => false,
+                }) {
+                    return Err(Error::TS2365 { span });
                 }
 
                 if let Some(()) = c.take(|(_, l_ty), (_, r_ty)| match l_ty.normalize() {
