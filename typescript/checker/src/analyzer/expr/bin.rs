@@ -229,6 +229,7 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
                             Type::TypeLit(..)
                             | Type::Param(..)
                             | Type::Array(..)
+                            | Type::Tuple(..)
                             | Type::Interface(..)
                             | Type::Keyword(TsKeywordType {
                                 kind: TsKeywordTypeKind::TsObjectKeyword,

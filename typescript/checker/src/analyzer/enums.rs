@@ -50,6 +50,11 @@ impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
                     }
                 }
             }
+        } else {
+            println!("FOO! {:?} ", e.members);
+            for m in &e.members {
+                m.init.visit_with(self);
+            }
         }
     }
 }
