@@ -735,6 +735,22 @@ impl<'a> Type<'a> {
     }
 }
 
+impl Type<'_> {
+    pub fn is_str(&self) -> bool {
+        match self.normalize() {
+            Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsStringKeyword,
+                ..
+            })
+            | Type::Lit(TsLitType {
+                lit: TsLit::Str(..),
+                ..
+            }) => true,
+            _ => false,
+        }
+    }
+}
+
 impl Type<'static> {
     /// Converts `Type<'static>` into `TypeRef<'a>`.
     pub fn owned<'a>(self) -> TypeRef<'a> {

@@ -397,8 +397,20 @@ impl Analyzer<'_, '_> {
                     return Err(Error::TS2365 { span });
                 }
 
-                if l_ty.is_any() && r_ty.is_any() {
-                    return Ok(Type::any(span).owned());
+                // Rule:
+                //  - any + string is string
+                //  - any + other is any
+                if let Some(kind) = c.take(|(_, l_ty), (_, r_ty)| {
+                    if l_ty.is_any() {
+                        if r_ty.is_str() {
+                            return Some(TsKeywordTypeKind::TsStringKeyword);
+                        }
+                        return Some(TsKeywordTypeKind::TsAnyKeyword);
+                    }
+
+                    None
+                }) {
+                    return Ok(Type::Keyword(TsKeywordType { span, kind }).owned());
                 }
 
                 if let Some(()) = c.take(|(_, l_ty), (_, r_ty)| match l_ty.normalize() {
