@@ -12,14 +12,6 @@ impl Visit<UpdateExpr> for Analyzer<'_, '_> {
 
         let mut errors = vec![];
 
-        let print = match *e.arg {
-            Expr::Call(CallExpr {
-                callee: ExprOrSuper::Expr(box Expr::Member(..)),
-                ..
-            }) => true,
-            _ => false,
-        };
-
         match self
             .type_of_expr(&e.arg, TypeOfMode::LValue)
             .and_then(|ty| self.expand_type(ty.span(), ty))
