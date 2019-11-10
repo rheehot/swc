@@ -7,22 +7,6 @@ error: TS2406
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            10,
-        ),
-        hi: BytePos(
-            13,
-        ),
-        ctxt: #0,
-    },
-}
- --> $DIR/tests/conformance/parser/ecmascript5/Expressions/parserAssignmentExpression1.ts:1:11
-  |
-1 | (foo()) = bar;
-  |           ^^^
-
-error: UndefinedSymbol {
-    span: Span {
-        lo: BytePos(
             1,
         ),
         hi: BytePos(
@@ -35,4 +19,20 @@ error: UndefinedSymbol {
   |
 1 | (foo()) = bar;
   |  ^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            10,
+        ),
+        hi: BytePos(
+            13,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/Expressions/parserAssignmentExpression1.ts:1:11
+  |
+1 | (foo()) = bar;
+  |           ^^^
 

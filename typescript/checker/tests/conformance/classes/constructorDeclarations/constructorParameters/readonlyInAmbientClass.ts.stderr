@@ -1,9 +1,3 @@
-error: TS2369
- --> $DIR/tests/conformance/classes/constructorDeclarations/constructorParameters/readonlyInAmbientClass.ts:3:9
-  |
-3 |     method(readonly x: number);
-  |            ^^^^^^^^^^^^^^^^^^
-
 error: TS2369 {
     span: Span {
         lo: BytePos(
@@ -19,4 +13,10 @@ error: TS2369 {
   |
 2 |     constructor(readonly x: number);
   |                 ^^^^^^^^
+
+error: TS2369
+ --> $DIR/tests/conformance/classes/constructorDeclarations/constructorParameters/readonlyInAmbientClass.ts:3:9
+  |
+3 |     method(readonly x: number);
+  |            ^^^^^^^^^^^^^^^^^^
 

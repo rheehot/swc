@@ -1,3 +1,19 @@
+error: ImplicitAny {
+    span: Span {
+        lo: BytePos(
+            45,
+        ),
+        hi: BytePos(
+            46,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/types/tuple/wideningTuples3.ts:4:5
+  |
+4 | var b = a = [undefined, null];
+  |     ^
+
 error: AssignFailed {
     span: Span {
         lo: BytePos(
@@ -86,20 +102,4 @@ error: AssignFailed {
   |
 4 | var b = a = [undefined, null];
   |         ^
-
-error: ImplicitAny {
-    span: Span {
-        lo: BytePos(
-            45,
-        ),
-        hi: BytePos(
-            46,
-        ),
-        ctxt: #0,
-    },
-}
- --> $DIR/tests/conformance/types/tuple/wideningTuples3.ts:4:5
-  |
-4 | var b = a = [undefined, null];
-  |     ^
 

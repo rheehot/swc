@@ -1,9 +1,3 @@
-error: TS1014
- --> $DIR/tests/conformance/functions/functionOverloadErrorsSyntax.ts:9:25
-  |
-9 | function fn5(x: string, ...y: any[], z: string);
-  |                         ^^^
-
 error: TS1016 {
     span: Span {
         lo: BytePos(
@@ -35,4 +29,10 @@ error: TS1016 {
   |
 5 | function fn4b(n: string, x?: number, y: string);
   |                                      ^
+
+error: TS1014
+ --> $DIR/tests/conformance/functions/functionOverloadErrorsSyntax.ts:9:25
+  |
+9 | function fn5(x: string, ...y: any[], z: string);
+  |                         ^^^
 

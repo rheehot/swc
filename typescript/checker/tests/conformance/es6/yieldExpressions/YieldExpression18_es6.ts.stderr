@@ -7,22 +7,6 @@ error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'pu
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            38,
-        ),
-        hi: BytePos(
-            41,
-        ),
-        ctxt: #0,
-    },
-}
- --> $DIR/tests/conformance/es6/yieldExpressions/YieldExpression18_es6.ts:3:7
-  |
-3 | yield(foo);
-  |       ^^^
-
-error: UndefinedSymbol {
-    span: Span {
-        lo: BytePos(
             32,
         ),
         hi: BytePos(
@@ -35,4 +19,20 @@ error: UndefinedSymbol {
   |
 3 | yield(foo);
   | ^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            38,
+        ),
+        hi: BytePos(
+            41,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/es6/yieldExpressions/YieldExpression18_es6.ts:3:7
+  |
+3 | yield(foo);
+  |       ^^^
 

@@ -1,6 +1,22 @@
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
+            0,
+        ),
+        hi: BytePos(
+            1,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/Generics/parserAmbiguity3.ts:1:1
+  |
+1 | f(g < A, B > +(7));
+  | ^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
             2,
         ),
         hi: BytePos(
@@ -45,20 +61,4 @@ error: UndefinedSymbol {
   |
 1 | f(g < A, B > +(7));
   |          ^
-
-error: UndefinedSymbol {
-    span: Span {
-        lo: BytePos(
-            0,
-        ),
-        hi: BytePos(
-            1,
-        ),
-        ctxt: #0,
-    },
-}
- --> $DIR/tests/conformance/parser/ecmascript5/Generics/parserAmbiguity3.ts:1:1
-  |
-1 | f(g < A, B > +(7));
-  | ^
 
