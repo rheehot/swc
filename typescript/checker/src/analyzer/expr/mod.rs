@@ -2347,7 +2347,9 @@ impl Visit<SeqExpr> for Analyzer<'_, '_> {
                     op: op!(unary, "+"),
                     ..
                 })
-                | Expr::Unary(UnaryExpr { op: op!("!"), .. }) => {
+                | Expr::Unary(UnaryExpr { op: op!("!"), .. })
+                    if !self.rule.allow_unreachable_code =>
+                {
                     self.info.errors.push(Error::UselessSeqExpr {
                         span: span.with_lo(first_span.lo()),
                     });
