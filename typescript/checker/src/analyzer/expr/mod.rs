@@ -283,6 +283,26 @@ impl Analyzer<'_, '_> {
                             return Ok(Type::any(span).owned());
                         }
 
+                        if let Some(()) = c.take(|(_, l_ty), (_, r_ty)| match l_ty.normalize() {
+                            Type::Keyword(TsKeywordType {
+                                kind: TsKeywordTypeKind::TsBooleanKeyword,
+                                ..
+                            }) => match r_ty.normalize() {
+                                Type::Keyword(TsKeywordType {
+                                    kind: TsKeywordTypeKind::TsNumberKeyword,
+                                    ..
+                                }) => Some(()),
+                                _ => None,
+                            },
+                            _ => None,
+                        }) {
+                            return Ok(Type::Keyword(TsKeywordType {
+                                span,
+                                kind: TsKeywordTypeKind::TsBooleanKeyword,
+                            })
+                            .owned());
+                        }
+
                         unimplemented!("type_of_bin(+)\nLeft: {:#?}\nRight: {:#?}", l_ty, r_ty)
                     }
                     op!("*") | op!("/") => {

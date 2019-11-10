@@ -7,8 +7,8 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, expr: &BinExpr) {
         expr.visit_children(self);
 
+        let mut errors = vec![];
         let errs = if expr.op == op!("===") || expr.op == op!("!==") {
-            let mut errors = vec![];
             let lt = match self.type_of(&expr.left) {
                 Ok(lt) => Some(lt),
                 Err(err) => {
@@ -77,12 +77,47 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
                     })
                 }
             }
+        } else if expr.op == op!(bin, "+") {
+            let lt = match self.type_of(&expr.left) {
+                Ok(lt) => Some(lt),
+                Err(err) => {
+                    errors.push(err);
+                    None
+                }
+            };
 
-            errors
-        } else {
-            vec![]
+            let rt = match self.type_of(&expr.right) {
+                Ok(rt) => Some(rt),
+                Err(err) => {
+                    errors.push(err);
+                    None
+                }
+            };
+
+            if lt.is_some() && rt.is_some() {
+                let c = Comparator {
+                    left: &*lt.unwrap(),
+                    right: &*rt.unwrap(),
+                };
+
+                if let Some(()) = c.take(|l_ty, r_ty| match l_ty.normalize() {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsBooleanKeyword,
+                        ..
+                    }) => match r_ty.normalize() {
+                        Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                            ..
+                        }) => Some(()),
+                        _ => None,
+                    },
+                    _ => None,
+                }) {
+                    errors.push(Error::TS2365 { span: expr.span() })
+                }
+            }
         };
 
-        self.info.errors.extend(errs);
+        self.info.errors.extend(errors);
     }
 }

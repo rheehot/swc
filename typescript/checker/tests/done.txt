@@ -8,6 +8,7 @@ es7/trailingCommasInGetter.ts
 expressions/unaryOperators/bitwiseNotOperator
 expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherType.ts
 expressions/unaryOperators/deleteOperator/
+expressions/unaryOperators/logicalNotOperator/
 expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithStringType.ts
 expressions/unaryOperators/negateOperator/
 expressions/unaryOperators/voidOperator/
