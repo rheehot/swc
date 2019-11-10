@@ -52,7 +52,7 @@ impl Visit<UnaryExpr> for Analyzer<'_, '_> {
                 Err(err) => errors.push(err),
             },
 
-            op!(unary, "-") => match self.type_of(&node.arg) {
+            op!(unary, "-") | op!(unary, "+") => match self.type_of(&node.arg) {
                 Ok(ref ty) => match ty.normalize() {
                     Type::Keyword(TsKeywordType {
                         kind: TsKeywordTypeKind::TsNumberKeyword,
