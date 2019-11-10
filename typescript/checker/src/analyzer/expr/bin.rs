@@ -95,15 +95,17 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
                         right: &*rt.unwrap(),
                     };
 
-                    if let Some(()) = c.take(|l_ty, r_ty| match l_ty.normalize() {
-                        Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsVoidKeyword,
-                            ..
-                        }) => Some(()),
-                        _ => None,
-                    }) {
-                        errors.push(Error::TS1345 { span: expr.span() })
-                    }
+                    //                    if let Some(()) = c.take(|l_ty, _|
+                    // match l_ty.normalize() {
+                    // Type::Keyword(TsKeywordType {
+                    //                            kind:
+                    // TsKeywordTypeKind::TsVoidKeyword,
+                    //                            ..
+                    //                        }) => Some(()),
+                    //                        _ => None,
+                    //                    }) {
+                    //                        errors.push(Error::TS1345 { span:
+                    // expr.span() })                    }
                 }
             }
             op!("||") | op!("&&") => {
@@ -396,6 +398,13 @@ impl Analyzer<'_, '_> {
                     None
                 }) {
                     return Ok(Type::Keyword(TsKeywordType { span, kind }).owned());
+                }
+
+                if c.any(|(_, ty)| {
+                    ty.is_keyword(TsKeywordTypeKind::TsUndefinedKeyword)
+                        || ty.is_keyword(TsKeywordTypeKind::TsNullKeyword)
+                }) {
+                    return Err(Error::TS2365 { span });
                 }
 
                 // Rule:
