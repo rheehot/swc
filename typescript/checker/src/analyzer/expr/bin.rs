@@ -207,6 +207,10 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
                             ..
                         })
                         | Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsStringKeyword,
+                            ..
+                        })
+                        | Type::Keyword(TsKeywordType {
                             kind: TsKeywordTypeKind::TsNumberKeyword,
                             ..
                         })
@@ -216,6 +220,10 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
                         })
                         | Type::Lit(TsLitType {
                             lit: TsLit::Number(..),
+                            ..
+                        })
+                        | Type::Lit(TsLitType {
+                            lit: TsLit::Str(..),
                             ..
                         })
                         | Type::Enum(..)
@@ -228,11 +236,29 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
                 }
 
                 if rt.is_some() {
-                    match rt.unwrap().normalize() {
-                        Type::Array(..) => {}
-                        _ => errors.push(Error::TS2361 {
+                    fn is_ok(ty: &Type) -> bool {
+                        if ty.is_any() {
+                            return true;
+                        }
+
+                        match ty.normalize() {
+                            Type::TypeLit(..)
+                            | Type::Param(..)
+                            | Type::Array(..)
+                            | Type::Interface(..)
+                            | Type::Keyword(TsKeywordType {
+                                kind: TsKeywordTypeKind::TsObjectKeyword,
+                                ..
+                            }) => true,
+                            Type::Union(ref u) => u.types.iter().all(|ty| is_ok(&ty)),
+                            _ => false,
+                        }
+                    }
+
+                    if !is_ok(&rt.unwrap()) {
+                        errors.push(Error::TS2361 {
                             span: expr.right.span(),
-                        }),
+                        })
                     }
                 }
             }
