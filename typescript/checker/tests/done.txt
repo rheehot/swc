@@ -48,6 +48,7 @@ parser/ecmascript5/ClassDeclarations/parserClassDeclaration1.ts
 parser/ecmascript5/ClassDeclarations/parserClassDeclaration16.ts
 parser/ecmascript5/ClassDeclarations/parserClassDeclaration17.ts
 parser/ecmascript5/ClassDeclarations/parserClassDeclaration19.ts
+parser/ecmascript5/ClassDeclarations/parserClassDeclaration2.ts
 parser/ecmascript5/ClassDeclarations/parserClassDeclaration20.ts
 parser/ecmascript5/ClassDeclarations/parserClassDeclaration23.ts
 parser/ecmascript5/ClassDeclarations/parserClassDeclaration26.ts
