@@ -106,7 +106,7 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
                     }
                 }
             }
-            op!("||") => {
+            op!("||") | op!("&&") => {
                 let lt = self.type_of(&expr.left).ok();
 
                 if lt.is_some() {

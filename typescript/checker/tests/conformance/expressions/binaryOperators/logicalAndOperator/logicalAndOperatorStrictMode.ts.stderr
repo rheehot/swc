@@ -1,0 +1,128 @@
+error: TS1345 {
+    span: Span {
+        lo: BytePos(
+            845,
+        ),
+        hi: BytePos(
+            851,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts:48:12
+   |
+48 | const v1 = v && a;
+   |            ^^^^^^
+
+error: TS1345 {
+    span: Span {
+        lo: BytePos(
+            865,
+        ),
+        hi: BytePos(
+            871,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts:49:12
+   |
+49 | const v2 = v && s;
+   |            ^^^^^^
+
+error: TS1345 {
+    span: Span {
+        lo: BytePos(
+            885,
+        ),
+        hi: BytePos(
+            891,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts:50:12
+   |
+50 | const v3 = v && x;
+   |            ^^^^^^
+
+error: TS1345 {
+    span: Span {
+        lo: BytePos(
+            905,
+        ),
+        hi: BytePos(
+            911,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts:51:12
+   |
+51 | const v4 = v && b;
+   |            ^^^^^^
+
+error: TS1345 {
+    span: Span {
+        lo: BytePos(
+            925,
+        ),
+        hi: BytePos(
+            931,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts:52:12
+   |
+52 | const v5 = v && v;
+   |            ^^^^^^
+
+error: TS1345 {
+    span: Span {
+        lo: BytePos(
+            945,
+        ),
+        hi: BytePos(
+            951,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts:53:12
+   |
+53 | const v6 = v && u;
+   |            ^^^^^^
+
+error: TS1345 {
+    span: Span {
+        lo: BytePos(
+            965,
+        ),
+        hi: BytePos(
+            971,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts:54:12
+   |
+54 | const v7 = v && n;
+   |            ^^^^^^
+
+error: TS1345 {
+    span: Span {
+        lo: BytePos(
+            985,
+        ),
+        hi: BytePos(
+            991,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts:55:12
+   |
+55 | const v8 = v && z;
+   |            ^^^^^^
+

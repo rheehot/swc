@@ -6,6 +6,7 @@ es6/destructuring/emptyArray
 es6/destructuring/emptyObject
 es7/trailingCommasInGetter.ts
 expr`essions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts
+expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts
 expressions/binaryOperators/logicalOrOperator/logicalOrOperatorWithEveryType.ts
 expressions/unaryOperators/bitwiseNotOperator
 expressions/unaryOperators/decrementOperator/decrementOperatorWithAnyOtherType.ts
