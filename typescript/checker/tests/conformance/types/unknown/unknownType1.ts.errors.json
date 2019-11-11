@@ -100,27 +100,37 @@
         "msg": "Type '123' is not assignable to type '{ [x"
     },
     {
-        "line": 151,
+        "line": 145,
+        "column": 29,
+        "msg": "Spread types may only be created from object types."
+    },
+    {
+        "line": 146,
+        "column": 29,
+        "msg": "Spread types may only be created from object types."
+    },
+    {
+        "line": 152,
         "column": 17,
         "msg": "A function whose declared type is neither 'void' nor 'any' must return a value."
     },
     {
-        "line": 157,
+        "line": 158,
         "column": 14,
         "msg": "Rest types may only be created from object types."
     },
     {
-        "line": 163,
+        "line": 164,
         "column": 5,
         "msg": "Property 'a' has no initializer and is not definitely assigned in the constructor."
     },
     {
-        "line": 172,
+        "line": 173,
         "column": 9,
         "msg": "Type 'U' is not assignable to type '{}'."
     },
     {
-        "line": 182,
+        "line": 183,
         "column": 5,
         "msg": "Type 'T' is not assignable to type '{}'."
     }

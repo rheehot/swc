@@ -25,11 +25,6 @@
         "msg": "Type 'AList2' is not assignable to type 'BList2'."
     },
     {
-        "line": null,
-        "column": null,
-        "msg": "A) => boolean) => void' is not assignable to type '(cb"
-    },
-    {
         "line": 59,
         "column": 5,
         "msg": "Type 'AList3' is not assignable to type 'BList3'."

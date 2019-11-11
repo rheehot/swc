@@ -37,7 +37,7 @@
     {
         "line": 20,
         "column": 10,
-        "msg": "Operator '+' cannot be applied to types 'undefined' and 'true'."
+        "msg": "Operator '+' cannot be applied to types 'undefined' and 'boolean'."
     },
     {
         "line": 21,

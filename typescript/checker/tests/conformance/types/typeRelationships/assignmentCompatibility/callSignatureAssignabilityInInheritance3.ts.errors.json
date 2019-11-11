@@ -45,18 +45,8 @@
         "msg": "Interface 'I6' incorrectly extends interface 'B'."
     },
     {
-        "line": null,
-        "column": null,
-        "msg": "T) => T[]'."
-    },
-    {
         "line": 109,
         "column": 19,
         "msg": "Interface 'I7' incorrectly extends interface 'C'."
-    },
-    {
-        "line": null,
-        "column": null,
-        "msg": "T) => string[]'."
     }
 ]

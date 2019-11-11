@@ -1,7 +1,17 @@
 [
     {
         "line": 4,
-        "column": 52,
-        "msg": "Type 'true' is not assignable to type 'number'."
+        "column": 24,
+        "msg": "No overload matches this call."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "Map<string, number>', gave the following error."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "Map<string, number>', gave the following error."
     }
 ]

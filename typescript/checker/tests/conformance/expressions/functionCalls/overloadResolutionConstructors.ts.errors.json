@@ -2,7 +2,17 @@
     {
         "line": 27,
         "column": 9,
-        "msg": "Argument of type '{}' is not assignable to parameter of type 'number'."
+        "msg": "No overload matches this call."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "string', gave the following error."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "number', gave the following error."
     },
     {
         "line": 43,
@@ -32,12 +42,32 @@
     {
         "line": 91,
         "column": 9,
-        "msg": "Argument of type 'true' is not assignable to parameter of type 'number'."
+        "msg": "No overload matches this call."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "any)"
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "any)"
     },
     {
         "line": 92,
         "column": 15,
-        "msg": "Argument of type 'true' is not assignable to parameter of type 'string'."
+        "msg": "No overload matches this call."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "number)"
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "string)"
     },
     {
         "line": 100,

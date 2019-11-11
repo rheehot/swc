@@ -2,16 +2,16 @@
     {
         "line": 43,
         "column": 6,
-        "msg": "Initializer provides no value for this binding element and the binding element has no default value."
+        "msg": "Tuple type '[]' of length '0' has no element at index '0'."
     },
     {
         "line": 44,
         "column": 8,
-        "msg": "Initializer provides no value for this binding element and the binding element has no default value."
+        "msg": "Tuple type '[]' of length '0' has no element at index '0'."
     },
     {
         "line": 44,
         "column": 18,
-        "msg": "Initializer provides no value for this binding element and the binding element has no default value."
+        "msg": "Tuple type '[]' of length '0' has no element at index '0'."
     }
 ]

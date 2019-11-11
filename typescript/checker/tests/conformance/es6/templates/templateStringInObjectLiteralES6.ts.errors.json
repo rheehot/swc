@@ -2,7 +2,7 @@
     {
         "line": 2,
         "column": 9,
-        "msg": "Cannot invoke an expression whose type lacks a call signature. Type '{ a"
+        "msg": "This expression is not callable."
     },
     {
         "line": 4,

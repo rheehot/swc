@@ -67,7 +67,7 @@
     {
         "line": 38,
         "column": 5,
-        "msg": "Property ''1.0'' is missing in type '{ '1'"
+        "msg": "Property ''1.0'' is missing in type '{ 1"
     },
     {
         "line": 39,
@@ -92,7 +92,7 @@
     {
         "line": 73,
         "column": 5,
-        "msg": "Property ''1.'' is missing in type '{ 1.0"
+        "msg": "Property ''1.'' is missing in type '{ 1"
     },
     {
         "line": 74,
@@ -117,12 +117,12 @@
     {
         "line": 78,
         "column": 5,
-        "msg": "Property ''1.'' is missing in type '{ 1."
+        "msg": "Property ''1.'' is missing in type '{ 1"
     },
     {
         "line": 80,
         "column": 5,
-        "msg": "Property ''1.0'' is missing in type '{ 1."
+        "msg": "Property ''1.0'' is missing in type '{ 1"
     },
     {
         "line": 81,
@@ -132,7 +132,7 @@
     {
         "line": 82,
         "column": 5,
-        "msg": "Property ''1.0'' is missing in type '{ 1.0"
+        "msg": "Property ''1.0'' is missing in type '{ 1"
     },
     {
         "line": 83,

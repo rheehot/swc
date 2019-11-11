@@ -1,8 +1,23 @@
 [
     {
         "line": 13,
-        "column": 35,
-        "msg": "Argument of type '20' is not assignable to parameter of type 'string'."
+        "column": 11,
+        "msg": "No overload matches this call."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "undefined, arg0"
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "undefined, ...args"
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "string) => string' is not assignable to method's 'this' of type '(this"
     },
     {
         "line": 19,
@@ -36,13 +51,43 @@
     },
     {
         "line": 43,
-        "column": 29,
-        "msg": "Argument of type '20' is not assignable to parameter of type 'string'."
+        "column": 11,
+        "msg": "No overload matches this call."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "C, arg0"
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "C, ...args"
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "number, b"
     },
     {
         "line": 44,
-        "column": 22,
-        "msg": "Argument of type 'undefined' is not assignable to parameter of type 'C'."
+        "column": 11,
+        "msg": "No overload matches this call."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "C, a"
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "C, ...args"
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "number, b"
     },
     {
         "line": 50,
@@ -86,8 +131,18 @@
     },
     {
         "line": 64,
-        "column": 33,
-        "msg": "Argument of type '20' is not assignable to parameter of type 'string'."
+        "column": 11,
+        "msg": "No overload matches this call."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "10, arg1"
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "(10 | 20)[]) => C, thisArg"
     },
     {
         "line": 67,

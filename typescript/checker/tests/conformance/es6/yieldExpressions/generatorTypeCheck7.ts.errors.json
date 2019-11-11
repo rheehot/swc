@@ -2,6 +2,6 @@
     {
         "line": 5,
         "column": 17,
-        "msg": "Property 'hello' is missing in type 'IterableIterator<number>' but required in type 'WeirdIter'."
+        "msg": "Property 'hello' is missing in type 'Generator<number, any, undefined>' but required in type 'WeirdIter'."
     }
 ]

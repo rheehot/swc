@@ -57,7 +57,7 @@
     {
         "line": 44,
         "column": 1,
-        "msg": "Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures."
+        "msg": "This expression is not callable."
     },
     {
         "line": 48,

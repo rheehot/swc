@@ -232,7 +232,7 @@
     {
         "line": 170,
         "column": 26,
-        "msg": "Identifier expected."
+        "msg": "Identifier expected. 'this' is a reserved word that cannot be used here."
     },
     {
         "line": 170,
@@ -242,7 +242,7 @@
     {
         "line": 171,
         "column": 23,
-        "msg": "Identifier expected."
+        "msg": "Identifier expected. 'this' is a reserved word that cannot be used here."
     },
     {
         "line": 171,
@@ -257,7 +257,7 @@
     {
         "line": 173,
         "column": 28,
-        "msg": "Identifier expected."
+        "msg": "Identifier expected. 'this' is a reserved word that cannot be used here."
     },
     {
         "line": 173,
@@ -272,7 +272,7 @@
     {
         "line": 174,
         "column": 32,
-        "msg": "Identifier expected."
+        "msg": "Identifier expected. 'new' is a reserved word that cannot be used here."
     },
     {
         "line": 174,

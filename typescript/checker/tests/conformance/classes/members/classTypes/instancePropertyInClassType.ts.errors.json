@@ -11,8 +11,8 @@
     },
     {
         "line": 17,
-        "column": 14,
-        "msg": "Cannot invoke an expression whose type lacks a call signature. Type 'Number' has no compatible call signatures."
+        "column": 16,
+        "msg": "This expression is not callable."
     },
     {
         "line": 24,
@@ -26,7 +26,7 @@
     },
     {
         "line": 37,
-        "column": 14,
-        "msg": "Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures."
+        "column": 16,
+        "msg": "This expression is not callable."
     }
 ]

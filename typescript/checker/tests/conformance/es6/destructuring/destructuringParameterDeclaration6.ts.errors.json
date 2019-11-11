@@ -52,7 +52,7 @@
     {
         "line": 10,
         "column": 16,
-        "msg": "Identifier expected."
+        "msg": "Identifier expected. 'while' is a reserved word that cannot be used here."
     },
     {
         "line": 10,

@@ -2,27 +2,27 @@
     {
         "line": 8,
         "column": 9,
-        "msg": "Operator '+' cannot be applied to types 'number | \"ABC\" | \"XYZ\"' and '100'."
+        "msg": "Operator '+' cannot be applied to types 'string | number' and 'number'."
     },
     {
         "line": 9,
         "column": 9,
-        "msg": "Operator '+' cannot be applied to types '100' and 'number | \"ABC\" | \"XYZ\"'."
+        "msg": "Operator '+' cannot be applied to types 'number' and 'string | number'."
     },
     {
         "line": 10,
         "column": 9,
-        "msg": "Operator '+' cannot be applied to types 'number | \"ABC\" | \"XYZ\"' and 'number | \"ABC\" | \"XYZ\"'."
+        "msg": "Operator '+' cannot be applied to types 'string | number' and 'string | number'."
     },
     {
         "line": 11,
         "column": 9,
-        "msg": "Operator '+' cannot be applied to types 'number | \"ABC\" | \"XYZ\"' and 'true'."
+        "msg": "Operator '+' cannot be applied to types 'string | number' and 'boolean'."
     },
     {
         "line": 12,
         "column": 9,
-        "msg": "Operator '+' cannot be applied to types 'false' and 'number | \"ABC\" | \"XYZ\"'."
+        "msg": "Operator '+' cannot be applied to types 'boolean' and 'string | number'."
     },
     {
         "line": 13,

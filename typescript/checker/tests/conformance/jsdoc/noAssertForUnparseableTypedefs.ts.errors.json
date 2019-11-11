@@ -1,15 +1,5 @@
 [
     {
-        "line": 6,
-        "column": 15,
-        "msg": "Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`."
-    },
-    {
-        "line": 6,
-        "column": 21,
-        "msg": "'}' expected."
-    },
-    {
         "line": 7,
         "column": 22,
         "msg": "Cannot find module 'nope'."

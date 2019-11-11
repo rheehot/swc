@@ -2,7 +2,7 @@
     {
         "line": 3,
         "column": 11,
-        "msg": "Type 'IterableIterator<(x"
+        "msg": "Type 'Generator<(x"
     },
     {
         "line": null,

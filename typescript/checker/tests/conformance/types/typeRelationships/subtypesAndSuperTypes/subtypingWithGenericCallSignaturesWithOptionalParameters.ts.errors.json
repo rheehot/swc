@@ -95,11 +95,6 @@
         "msg": "Interface 'I11<T>' incorrectly extends interface 'Base2'."
     },
     {
-        "line": null,
-        "column": null,
-        "msg": "T) => T'."
-    },
-    {
         "line": 147,
         "column": 15,
         "msg": "Interface 'I12<T>' incorrectly extends interface 'Base2'."
@@ -133,11 +128,6 @@
         "line": 160,
         "column": 15,
         "msg": "Interface 'I15<T>' incorrectly extends interface 'Base2'."
-    },
-    {
-        "line": null,
-        "column": null,
-        "msg": "T) => T'."
     },
     {
         "line": 164,

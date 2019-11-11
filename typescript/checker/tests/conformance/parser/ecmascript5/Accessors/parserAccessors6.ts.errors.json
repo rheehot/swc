@@ -1,7 +1,7 @@
 [
     {
         "line": 3,
-        "column": 7,
-        "msg": "An accessor cannot be declared in an ambient context."
+        "column": 14,
+        "msg": "An implementation cannot be declared in ambient contexts."
     }
 ]

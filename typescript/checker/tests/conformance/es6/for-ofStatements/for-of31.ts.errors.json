@@ -1,12 +1,1 @@
-[
-    {
-        "line": 15,
-        "column": 15,
-        "msg": "Type 'StringIterator' is not assignable to type 'Iterable<string>'."
-    },
-    {
-        "line": null,
-        "column": null,
-        "msg": "any) => IteratorResult<string>'."
-    }
-]
+[]

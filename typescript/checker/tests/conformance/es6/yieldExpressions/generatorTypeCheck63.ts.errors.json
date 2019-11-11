@@ -3,20 +3,5 @@
         "line": 28,
         "column": 61,
         "msg": "Argument of type '(state"
-    },
-    {
-        "line": 33,
-        "column": 70,
-        "msg": "Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type."
-    },
-    {
-        "line": 36,
-        "column": 62,
-        "msg": "Argument of type '(state"
-    },
-    {
-        "line": 40,
-        "column": 62,
-        "msg": "Argument of type '(state"
     }
 ]

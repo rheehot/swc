@@ -22,7 +22,7 @@
     {
         "line": 12,
         "column": 11,
-        "msg": "An index signature parameter type must be 'string' or 'number'."
+        "msg": "An index signature parameter type must be either 'string' or 'number'."
     },
     {
         "line": 12,

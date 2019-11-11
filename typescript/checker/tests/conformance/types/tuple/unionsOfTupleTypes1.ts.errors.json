@@ -2,7 +2,7 @@
     {
         "line": 10,
         "column": 15,
-        "msg": "Tuple type '[string, number]' of length '2' has no element at index '2'."
+        "msg": "Tuple type 'T1' of length '2' has no element at index '2'."
     },
     {
         "line": 15,
@@ -12,7 +12,7 @@
     {
         "line": 29,
         "column": 20,
-        "msg": "Tuple type '[string, number]' of length '2' has no element at index '2'."
+        "msg": "Tuple type 'T1' of length '2' has no element at index '2'."
     },
     {
         "line": 30,
@@ -22,7 +22,7 @@
     {
         "line": 33,
         "column": 16,
-        "msg": "Tuple type '[string, number]' of length '2' has no element at index '2'."
+        "msg": "Tuple type 'T1' of length '2' has no element at index '2'."
     },
     {
         "line": 34,
@@ -32,7 +32,7 @@
     {
         "line": 39,
         "column": 18,
-        "msg": "Tuple type '[string, number]' of length '2' has no element at index '2'."
+        "msg": "Tuple type 'T1' of length '2' has no element at index '2'."
     },
     {
         "line": 43,

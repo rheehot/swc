@@ -52,7 +52,7 @@
     {
         "line": 11,
         "column": 1,
-        "msg": "Operator '+=' cannot be applied to types 'symbol' and '0'."
+        "msg": "Operator '+=' cannot be applied to types 'symbol' and 'number'."
     },
     {
         "line": 12,

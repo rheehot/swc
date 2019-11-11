@@ -12,7 +12,7 @@
     {
         "line": 8,
         "column": 9,
-        "msg": "This condition will always return 'false' since the types 'string' and '1' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'string' and 'number' have no overlap."
     },
     {
         "line": 10,

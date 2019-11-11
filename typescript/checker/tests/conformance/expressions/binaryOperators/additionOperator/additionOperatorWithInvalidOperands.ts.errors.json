@@ -42,17 +42,17 @@
     {
         "line": 30,
         "column": 11,
-        "msg": "Operator '+' cannot be applied to types 'boolean' and 'true'."
+        "msg": "Operator '+' cannot be applied to types 'boolean' and 'boolean'."
     },
     {
         "line": 31,
         "column": 11,
-        "msg": "Operator '+' cannot be applied to types 'true' and 'false'."
+        "msg": "Operator '+' cannot be applied to types 'boolean' and 'boolean'."
     },
     {
         "line": 32,
         "column": 11,
-        "msg": "Operator '+' cannot be applied to types 'true' and '123'."
+        "msg": "Operator '+' cannot be applied to types 'boolean' and 'number'."
     },
     {
         "line": 33,
@@ -82,16 +82,16 @@
     {
         "line": 38,
         "column": 11,
-        "msg": "Operator '+' cannot be applied to types 'E.a' and 'C'."
+        "msg": "Operator '+' cannot be applied to types 'E' and 'C'."
     },
     {
         "line": 39,
         "column": 11,
-        "msg": "Operator '+' cannot be applied to types 'E.a' and 'void'."
+        "msg": "Operator '+' cannot be applied to types 'E' and 'void'."
     },
     {
         "line": 40,
         "column": 11,
-        "msg": "Operator '+' cannot be applied to types 'E.a' and 'typeof M'."
+        "msg": "Operator '+' cannot be applied to types 'E' and 'typeof M'."
     }
 ]

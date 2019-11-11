@@ -2,7 +2,7 @@
     {
         "line": 2,
         "column": 12,
-        "msg": "',' expected."
+        "msg": "An enum member name must be followed by a ',', '=', or '}'."
     },
     {
         "line": 2,
@@ -12,7 +12,7 @@
     {
         "line": 3,
         "column": 15,
-        "msg": "',' expected."
+        "msg": "An enum member name must be followed by a ',', '=', or '}'."
     },
     {
         "line": 3,
@@ -22,7 +22,7 @@
     {
         "line": 3,
         "column": 24,
-        "msg": "',' expected."
+        "msg": "An enum member name must be followed by a ',', '=', or '}'."
     },
     {
         "line": 3,

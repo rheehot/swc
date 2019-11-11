@@ -7,12 +7,32 @@
     {
         "line": 10,
         "column": 33,
-        "msg": "Argument of type 'true' is not assignable to parameter of type 'string'."
+        "msg": "No overload matches this call."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "number | Date', gave the following error."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "string | boolean', gave the following error."
     },
     {
         "line": 15,
         "column": 33,
-        "msg": "Argument of type 'true' is not assignable to parameter of type 'string'."
+        "msg": "No overload matches this call."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "number | Date', gave the following error."
+    },
+    {
+        "line": null,
+        "column": null,
+        "msg": "string | boolean', gave the following error."
     },
     {
         "line": 16,

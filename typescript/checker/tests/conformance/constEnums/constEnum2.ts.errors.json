@@ -12,7 +12,7 @@
     {
         "line": 14,
         "column": 5,
-        "msg": "',' expected."
+        "msg": "An enum member name must be followed by a ',', '=', or '}'."
     },
     {
         "line": 14,

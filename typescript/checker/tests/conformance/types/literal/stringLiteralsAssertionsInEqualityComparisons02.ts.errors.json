@@ -7,7 +7,7 @@
     {
         "line": 5,
         "column": 9,
-        "msg": "This condition will always return 'false' since the types '\"foo\"' and 'number' have no overlap."
+        "msg": "This condition will always return 'false' since the types 'string' and 'number' have no overlap."
     },
     {
         "line": 5,

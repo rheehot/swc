@@ -28,15 +28,5 @@
         "line": 38,
         "column": 22,
         "msg": "All declarations of 'A' must have identical type parameters."
-    },
-    {
-        "line": 53,
-        "column": 11,
-        "msg": "All declarations of 'C' must have identical type parameters."
-    },
-    {
-        "line": 57,
-        "column": 11,
-        "msg": "All declarations of 'C' must have identical type parameters."
     }
 ]

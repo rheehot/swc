@@ -1,25 +1,5 @@
 [
     {
-        "line": 15,
-        "column": 6,
-        "msg": "Property 'a' does not exist on type 'Window'."
-    },
-    {
-        "line": 16,
-        "column": 6,
-        "msg": "Property 'b' does not exist on type 'Window'."
-    },
-    {
-        "line": 17,
-        "column": 8,
-        "msg": "Property 'a' does not exist on type 'Window'."
-    },
-    {
-        "line": 18,
-        "column": 8,
-        "msg": "Property 'b' does not exist on type 'Window'."
-    },
-    {
         "line": 19,
         "column": 5,
         "msg": "Property 'a' does not exist on type 'Window'."
@@ -27,26 +7,6 @@
     {
         "line": 20,
         "column": 5,
-        "msg": "Property 'b' does not exist on type 'Window'."
-    },
-    {
-        "line": 15,
-        "column": 6,
-        "msg": "Property 'a' does not exist on type 'Window'."
-    },
-    {
-        "line": 16,
-        "column": 6,
-        "msg": "Property 'b' does not exist on type 'Window'."
-    },
-    {
-        "line": 17,
-        "column": 8,
-        "msg": "Property 'a' does not exist on type 'Window'."
-    },
-    {
-        "line": 18,
-        "column": 8,
         "msg": "Property 'b' does not exist on type 'Window'."
     },
     {

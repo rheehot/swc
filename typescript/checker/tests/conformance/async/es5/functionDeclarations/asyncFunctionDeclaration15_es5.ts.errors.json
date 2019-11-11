@@ -35,11 +35,6 @@
         "msg": "Type 'typeof Thenable' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value."
     },
     {
-        "line": null,
-        "column": null,
-        "msg": "T) => TResult1 | PromiseLike<TResult1>, onrejected?"
-    },
-    {
         "line": 20,
         "column": 16,
         "msg": "The return type of an async function must either be a valid promise or must not contain a callable 'then' member."
