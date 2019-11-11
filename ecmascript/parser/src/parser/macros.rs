@@ -321,7 +321,7 @@ macro_rules! syntax_error {
     };
 
     ($p:expr, $span:expr, $err:expr) => {{
-        let err = make_error!($p, $span, $err);
+        let err = dbg!(make_error!($p, $span, $err));
         return Err(err.into());
     }};
 }
