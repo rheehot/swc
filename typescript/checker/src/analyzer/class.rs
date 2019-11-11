@@ -111,18 +111,24 @@ impl Analyzer<'_, '_> {
                             spans = vec![];
                             name = None;
                         } else {
-                            if is_prop_name_eq(
-                                &name.unwrap(),
-                                &PropName::Ident(Ident::new(js_word!("constructor"), DUMMY_SP)),
-                            ) {
+                            let constructor_name =
+                                PropName::Ident(Ident::new(js_word!("constructor"), DUMMY_SP));
+
+                            if is_prop_name_eq(&name.unwrap(), &constructor_name) {
                                 for span in mem::replace(&mut spans, vec![]) {
                                     errors.push(Error::TS2391 { span });
+                                }
+                            } else if is_prop_name_eq(&m.key, &constructor_name) {
+                                for span in mem::replace(&mut spans, vec![]) {
+                                    errors.push(Error::TS2389 { span });
                                 }
                             } else {
                                 spans = vec![];
 
                                 errors.push(Error::TS2389 { span: m.key.span() });
                             }
+
+                            name = None;
                         }
                     }
                 }};
