@@ -81,24 +81,28 @@ impl Analyzer<'_, '_> {
         let mut name: Option<&PropName> = None;
 
         for m in &c.body {
-            match *m {
-                ClassMember::Method(ref m) => {
+            macro_rules! check {
+                ($m:expr, $body:expr) => {{
+                    if declare {
+                        continue;
+                    }
+
+                    let m = $m;
+
                     match m.key {
                         PropName::Computed(..) => continue,
                         _ => {}
                     }
 
-                    if m.function.body.is_none() {
+                    if $body.is_none() {
                         if name.is_some() && !is_prop_name_eq(&name.unwrap(), &m.key) {
-                            if !declare {
-                                for span in mem::replace(&mut spans, vec![]) {
-                                    errors.push(Error::TS2391 { span });
-                                }
+                            for span in mem::replace(&mut spans, vec![]) {
+                                errors.push(Error::TS2391 { span });
                             }
-                        } else {
-                            spans.push(m.key.span());
-                            name = Some(&m.key)
                         }
+
+                        name = Some(&m.key);
+                        spans.push(m.key.span());
                     } else {
                         if name.is_none() || is_prop_name_eq(&name.unwrap(), &m.key) {
                             // TODO: Verify parameters
@@ -106,14 +110,17 @@ impl Analyzer<'_, '_> {
                             spans = vec![];
                             name = None;
                         } else {
-                            if !declare {
-                                for span in mem::replace(&mut spans, vec![]) {
-                                    errors.push(Error::TS2391 { span });
-                                }
+                            for span in mem::replace(&mut spans, vec![]) {
+                                errors.push(Error::TS2391 { span });
                             }
                         }
                     }
-                }
+                }};
+            }
+
+            match *m {
+                ClassMember::Constructor(ref m) => check!(m, m.body),
+                ClassMember::Method(ref m) => check!(m, m.function.body),
                 _ => {}
             }
         }
