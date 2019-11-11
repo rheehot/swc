@@ -1,0 +1,32 @@
+error: TS2391 {
+    span: Span {
+        lo: BytePos(
+            103,
+        ),
+        hi: BytePos(
+            107,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration25.ts:6:5
+  |
+6 |     data(): U;
+  |     ^^^^
+
+error: TS2391 {
+    span: Span {
+        lo: BytePos(
+            119,
+        ),
+        hi: BytePos(
+            123,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration25.ts:7:5
+  |
+7 |     next(): string;
+  |     ^^^^
+
