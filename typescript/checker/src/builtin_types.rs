@@ -233,7 +233,7 @@ pub fn get_var(libs: &[Lib], span: Span, name: &JsWord) -> Result<Type, Error> {
         return Ok(ty::Type::Static(Static { span, ty: v }));
     }
 
-    Err(Error::NoSuchType {
+    Err(Error::NoSuchVar {
         span,
         name: name.clone(),
     })
@@ -246,7 +246,7 @@ pub fn get_type(libs: &[Lib], span: Span, name: &JsWord) -> Result<Type, Error> 
         return Ok(ty::Type::Static(Static { span, ty }));
     }
 
-    Err(Error::NoSuchVar {
+    Err(Error::NoSuchType {
         span,
         name: name.clone(),
     })
