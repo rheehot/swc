@@ -31,7 +31,11 @@ fn merge(ls: &[Lib]) -> &'static Merged {
         static ref CACHE: CHashMap<Vec<Lib>, &'static Merged> = Default::default();
     }
 
-    let libs = ls.to_vec();
+    let mut libs = ls.to_vec();
+    if libs.is_empty() {
+        libs.push(Lib::Es5);
+    }
+    let libs = libs;
     if let Some(cached) = CACHE.get(&libs) {
         return &*cached;
     }
