@@ -91,7 +91,7 @@ where
         let mut imports: Vec<ImportInfo> = vec![];
 
         items.iter().for_each(|item| {
-            // EXtract imports
+            // Extract imports
             item.visit_with(&mut ImportFinder { to: &mut imports });
             // item.visit_with(self);
         });
