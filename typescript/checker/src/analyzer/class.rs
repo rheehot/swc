@@ -6,7 +6,8 @@ use crate::{
     util::EqIgnoreNameAndSpan,
 };
 use std::mem;
-use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_atoms::js_word;
+use swc_common::{Span, Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 impl Visit<Class> for Analyzer<'_, '_> {
@@ -110,8 +111,17 @@ impl Analyzer<'_, '_> {
                             spans = vec![];
                             name = None;
                         } else {
-                            for span in mem::replace(&mut spans, vec![]) {
-                                errors.push(Error::TS2391 { span });
+                            if is_prop_name_eq(
+                                &name.unwrap(),
+                                &PropName::Ident(Ident::new(js_word!("constructor"), DUMMY_SP)),
+                            ) {
+                                for span in mem::replace(&mut spans, vec![]) {
+                                    errors.push(Error::TS2391 { span });
+                                }
+                            } else {
+                                spans = vec![];
+
+                                errors.push(Error::TS2389 { span: m.key.span() });
                             }
                         }
                     }
