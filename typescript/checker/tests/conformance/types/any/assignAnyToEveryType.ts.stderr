@@ -20,6 +20,6 @@ error: NotVariable {
 }
   --> $DIR/tests/conformance/types/any/assignAnyToEveryType.ts:41:1
    |
-41 | M = x; // error
+41 | M = x;
    | ^
 
