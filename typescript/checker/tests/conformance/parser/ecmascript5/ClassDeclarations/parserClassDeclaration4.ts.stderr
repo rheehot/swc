@@ -30,7 +30,7 @@ error: UndefinedSymbol {
 1 | class C extends A implements B extends C {
   |                              ^
 
-error: TS1172
+error: TS1175
  --> $DIR/tests/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration4.ts:1:32
   |
 1 | class C extends A implements B extends C {

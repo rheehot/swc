@@ -55,6 +55,7 @@ parser/ecmascript5/ClassDeclarations/parserClassDeclaration2.ts
 parser/ecmascript5/ClassDeclarations/parserClassDeclaration20.ts
 parser/ecmascript5/ClassDeclarations/parserClassDeclaration23.ts
 parser/ecmascript5/ClassDeclarations/parserClassDeclaration26.ts
+parser/ecmascript5/ClassDeclarations/parserClassDeclaration3.ts
 parser/ecmascript5/ClassDeclarations/parserClassDeclaration4.ts
 parser/ecmascript5/ClassDeclarations/parserClassDeclaration7.ts
 parser/ecmascript5/ClassDeclarations/parserClassDeclarationIndexSignature1.ts
