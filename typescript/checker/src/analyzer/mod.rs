@@ -83,7 +83,7 @@ enum ComputedPropMode {
 impl<T> Visit<Vec<T>> for Analyzer<'_, '_>
 where
     T: VisitWith<Self> + for<'any> VisitWith<ImportFinder<'any>> + Send + Sync,
-    Vec<T>: VisitWith<Self>,
+    Vec<T>: VisitWith<Self> + for<'any> VisitWith<AmbientFunctionHandler<'any>>,
 {
     fn visit(&mut self, items: &Vec<T>) {
         // We first load imports.
@@ -133,6 +133,15 @@ where
                     }
                 }
             }
+        }
+
+        {
+            let mut visitor = AmbientFunctionHandler {
+                last_ambient_name: None,
+                errors: &mut self.info.errors,
+            };
+
+            items.visit_with(&mut visitor);
         }
 
         items.visit_children(self);
@@ -1062,5 +1071,71 @@ fn instantiate_class(ty: TypeRef) -> TypeRef {
             type_args: None,
         })),
         _ => ty,
+    }
+}
+
+/// Handles
+///
+/// ```ts
+/// 
+/// foo();
+/// bar();
+/// bar() {}
+/// ```
+pub(crate) struct AmbientFunctionHandler<'a> {
+    last_ambient_name: Option<Ident>,
+    errors: &'a mut Vec<Error>,
+}
+
+impl Visit<Stmt> for AmbientFunctionHandler<'_> {
+    fn visit(&mut self, node: &Stmt) {
+        node.visit_children(self);
+
+        match node {
+            Stmt::Decl(Decl::Fn(..)) => {}
+            _ => {
+                // .take() is same as self.last_ambient_name = None
+                if let Some(ref i) = self.last_ambient_name.take() {
+                    self.errors.push(Error::TS2391 { span: i.span });
+                }
+            }
+        }
+    }
+}
+
+impl Visit<FnDecl> for AmbientFunctionHandler<'_> {
+    fn visit(&mut self, node: &FnDecl) {
+        if node.declare {
+            return;
+        }
+
+        if node.function.body.is_none() {
+            self.last_ambient_name = Some(node.ident.clone());
+        } else {
+            if let Some(ref name) = self.last_ambient_name {
+                if node.ident.sym == name.sym {
+                    self.last_ambient_name = None;
+                } else {
+                    self.errors.push(Error::TS2391 { span: name.span });
+                }
+            }
+
+            let mut child = AmbientFunctionHandler {
+                last_ambient_name: None,
+                errors: self.errors,
+            };
+
+            node.function.body.visit_with(&mut child);
+        }
+    }
+}
+
+impl Visit<TsModuleDecl> for AmbientFunctionHandler<'_> {
+    fn visit(&mut self, node: &TsModuleDecl) {
+        if node.declare {
+            return;
+        }
+
+        node.visit_children(self)
     }
 }
