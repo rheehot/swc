@@ -70,6 +70,7 @@ parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration2.ts
 parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration4.ts
 parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration5.ts
 parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration8.ts
+parser/ecmascript5/IndexSignatures/parserIndexSignature1.ts
 parser/ecmascript5/InterfaceDeclarations
 parser/ecmascript5/MethodSignatures/
 parser/ecmascript5/ParameterLists/
