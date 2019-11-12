@@ -41,6 +41,7 @@ mod util;
 
 pub(crate) struct Analyzer<'a, 'b> {
     pub info: Info,
+    in_declare: bool,
     resolved_imports: FxHashMap<JsWord, Arc<Type<'static>>>,
     errored_imports: FxHashSet<JsWord>,
     pending_exports: Vec<((JsWord, Span), Box<Expr>)>,
@@ -135,13 +136,19 @@ where
             }
         }
 
-        {
+        if !self.in_declare {
             let mut visitor = AmbientFunctionHandler {
                 last_ambient_name: None,
                 errors: &mut self.info.errors,
             };
 
             items.visit_with(&mut visitor);
+
+            if visitor.last_ambient_name.is_some() {
+                visitor.errors.push(Error::TS2391 {
+                    span: visitor.last_ambient_name.unwrap().span,
+                })
+            }
         }
 
         items.visit_children(self);
@@ -161,6 +168,7 @@ impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
             self.path.clone(),
             self.loader,
         );
+        new.in_declare = decl.declare;
 
         decl.visit_children(&mut new);
         self.info.errors.append(&mut new.info.errors);
@@ -324,6 +332,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             libs,
             rule,
             scope,
+            in_declare: false,
             info: Default::default(),
             return_type_span: Default::default(),
             inferred_return_types: Default::default(),
@@ -1119,23 +1128,10 @@ impl Visit<FnDecl> for AmbientFunctionHandler<'_> {
                     self.errors.push(Error::TS2391 { span: name.span });
                 }
             }
-
-            let mut child = AmbientFunctionHandler {
-                last_ambient_name: None,
-                errors: self.errors,
-            };
-
-            node.function.body.visit_with(&mut child);
         }
     }
 }
 
 impl Visit<TsModuleDecl> for AmbientFunctionHandler<'_> {
-    fn visit(&mut self, node: &TsModuleDecl) {
-        if node.declare {
-            return;
-        }
-
-        node.visit_children(self)
-    }
+    fn visit(&mut self, node: &TsModuleDecl) {}
 }
