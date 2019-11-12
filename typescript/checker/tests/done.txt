@@ -64,6 +64,7 @@ parser/ecmascript5/ClassDeclarations/parserClassDeclarationIndexSignature1.ts
 parser/ecmascript5/ComputedPropertyNames/
 parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration1.ts
 parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration5.ts
+parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration9.ts
 parser/ecmascript5/EnumDeclarations
 parser/ecmascript5/Expressions/parserUnaryExpression
 parser/ecmascript5/FunctionDeclarations/
