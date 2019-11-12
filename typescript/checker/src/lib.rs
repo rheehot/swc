@@ -169,12 +169,7 @@ impl Checker<'_> {
                 SourceFileInput::from(&*fm),
                 None,
             );
-            let mut parser = Parser::new_with(
-                session,
-                lexer,
-                Syntax::Typescript(self.ts_config),
-                self.target,
-            );
+            let mut parser = Parser::new_with(session, lexer, self.target);
 
             parser
                 .parse_typescript_module()

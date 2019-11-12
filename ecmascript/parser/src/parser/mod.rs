@@ -79,7 +79,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
         }
     }
 
-    pub fn new_with(session: Session<'a>, input: I, syntax: Syntax, target: JscTarget) -> Self {
+    pub fn new_with(session: Session<'a>, input: I, target: JscTarget) -> Self {
         Parser {
             session,
             input: Buffer::new(input),
