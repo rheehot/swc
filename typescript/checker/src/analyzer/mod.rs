@@ -88,47 +88,49 @@ where
     fn visit(&mut self, items: &Vec<T>) {
         // We first load imports.
 
-        let mut imports: Vec<ImportInfo> = vec![];
+        {
+            let mut imports: Vec<ImportInfo> = vec![];
 
-        items.iter().for_each(|item| {
-            // Extract imports
-            item.visit_with(&mut ImportFinder { to: &mut imports });
-            // item.visit_with(self);
-        });
+            items.iter().for_each(|item| {
+                // Extract imports
+                item.visit_with(&mut ImportFinder { to: &mut imports });
+                // item.visit_with(self);
+            });
 
-        let loader = self.loader;
-        let path = self.path.clone();
-        let import_results = imports
-            .par_iter()
-            .map(|import| {
-                loader.load(path.clone(), &*import).map_err(|err| {
-                    //
-                    (import, err)
+            let loader = self.loader;
+            let path = self.path.clone();
+            let import_results = imports
+                .par_iter()
+                .map(|import| {
+                    loader.load(path.clone(), &*import).map_err(|err| {
+                        //
+                        (import, err)
+                    })
                 })
-            })
-            .collect::<Vec<_>>();
+                .collect::<Vec<_>>();
 
-        for res in import_results {
-            match res {
-                Ok(import) => {
-                    self.resolved_imports.extend(import);
-                }
-                Err((import, mut err)) => {
-                    match err {
-                        Error::ModuleLoadFailed { ref mut errors, .. } => {
-                            self.info.errors.append(errors);
-                        }
-                        _ => {}
+            for res in import_results {
+                match res {
+                    Ok(import) => {
+                        self.resolved_imports.extend(import);
                     }
-                    // Mark errored imported types as any to prevent useless errors
-                    self.errored_imports.extend(
-                        import
-                            .items
-                            .iter()
-                            .map(|&Specifier { ref local, .. }| local.0.clone()),
-                    );
+                    Err((import, mut err)) => {
+                        match err {
+                            Error::ModuleLoadFailed { ref mut errors, .. } => {
+                                self.info.errors.append(errors);
+                            }
+                            _ => {}
+                        }
+                        // Mark errored imported types as any to prevent useless errors
+                        self.errored_imports.extend(
+                            import
+                                .items
+                                .iter()
+                                .map(|&Specifier { ref local, .. }| local.0.clone()),
+                        );
 
-                    self.info.errors.push(err);
+                        self.info.errors.push(err);
+                    }
                 }
             }
         }
