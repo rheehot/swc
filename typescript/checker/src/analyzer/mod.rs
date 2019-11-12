@@ -1119,13 +1119,21 @@ impl Visit<FnDecl> for AmbientFunctionHandler<'_> {
         }
 
         if node.function.body.is_none() {
+            if let Some(ref name) = self.last_ambient_name {
+                if node.ident.sym != name.sym {
+                    self.errors.push(Error::TS2389 { span: name.span });
+                }
+            }
             self.last_ambient_name = Some(node.ident.clone());
         } else {
             if let Some(ref name) = self.last_ambient_name {
                 if node.ident.sym == name.sym {
                     self.last_ambient_name = None;
                 } else {
-                    self.errors.push(Error::TS2391 { span: name.span });
+                    self.errors.push(Error::TS2389 {
+                        span: node.ident.span,
+                    });
+                    self.last_ambient_name = None;
                 }
             }
         }
