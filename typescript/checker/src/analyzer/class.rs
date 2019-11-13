@@ -2,7 +2,7 @@ use super::{scope::ScopeKind, Analyzer};
 use crate::{
     analyzer::{ComputedPropMode, VarVisitor},
     errors::Error,
-    ty::Type,
+    ty::{Type, TypeRefExt},
     util::EqIgnoreNameAndSpan,
 };
 use std::mem;
@@ -442,11 +442,23 @@ impl Visit<Constructor> for Analyzer<'_, '_> {
                             left: box Pat::Ident(ref i),
                             ..
                         }) => {
+                            let ty = i.type_ann.clone().map(Type::from);
+                            let ty = match ty {
+                                Some(ty) => match child.expand_type(i.span, ty.owned()) {
+                                    Ok(ty) => Some(ty.into_owned().into_static()),
+                                    Err(err) => {
+                                        child.info.errors.push(err);
+                                        Some(Type::any(i.span))
+                                    }
+                                },
+                                None => None,
+                            };
+
                             match child.scope.declare_var(
                                 i.span,
                                 VarDeclKind::Let,
                                 i.sym.clone(),
-                                i.type_ann.clone().map(Type::from),
+                                ty,
                                 true,
                                 false,
                             ) {
