@@ -195,6 +195,13 @@ impl Analyzer<'_, '_> {
                         _ => {}
                     }
 
+                    // Handle optional
+                    match m {
+                        TypeElement::Method(ref m) if m.optional => continue,
+                        TypeElement::Property(ref m) if m.optional => continue,
+                        _ => {}
+                    }
+
                     macro_rules! check_members {
                         ($rhs_members:expr) => {{
                             let rhs_members = $rhs_members;

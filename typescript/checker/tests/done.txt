@@ -95,6 +95,7 @@ parser/ecmascript5/VariableDeclarations
 parser/ecmascript5/parserEmptyFile1.ts
 parser/ecmascript5/parserEmptyStatement1.ts
 parser/ecmascript5/parserNotRegex1
+parser/ecmascript5/parserUsingConstructorAsIdentifier.ts
 parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName1.ts
 parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName10.ts
 parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName11.ts
@@ -186,6 +187,7 @@ types/any/assignAnyToEveryType.ts
 types/any/assignEveryTypeToAny.ts
 types/primitives/
 types/primitives/boolean
+types/primitives/boolean/invalidBooleanAssignments.ts
 types/primitives/enum
 types/primitives/number
 types/primitives/undefined

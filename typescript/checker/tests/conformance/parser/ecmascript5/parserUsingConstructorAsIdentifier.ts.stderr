@@ -1,0 +1,112 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            143,
+        ),
+        hi: BytePos(
+            158,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts:3:13
+  |
+3 |             PluginUtilities.Utilities.markSupportedForProcessing(constructor);
+  |             ^^^^^^^^^^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            263,
+        ),
+        hi: BytePos(
+            283,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts:5:17
+  |
+5 |                 initializeProperties(constructor.prototype, instanceMembers);
+  |                 ^^^^^^^^^^^^^^^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            391,
+        ),
+        hi: BytePos(
+            411,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts:8:17
+  |
+8 |                 initializeProperties(constructor, staticMembers);
+  |                 ^^^^^^^^^^^^^^^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            824,
+        ),
+        hi: BytePos(
+            839,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts:18:17
+   |
+18 |                 PluginUtilities.Utilities.markSupportedForProcessing(constructor);
+   |                 ^^^^^^^^^^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            1108,
+        ),
+        hi: BytePos(
+            1128,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts:21:21
+   |
+21 |                     initializeProperties(constructor.prototype, instanceMembers);
+   |                     ^^^^^^^^^^^^^^^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            1248,
+        ),
+        hi: BytePos(
+            1268,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts:24:21
+   |
+24 |                     initializeProperties(constructor, staticMembers);
+   |                     ^^^^^^^^^^^^^^^^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            1684,
+        ),
+        hi: BytePos(
+            1704,
+        ),
+        ctxt: #0,
+    },
+}
+  --> $DIR/tests/conformance/parser/ecmascript5/parserUsingConstructorAsIdentifier.ts:36:17
+   |
+36 |                 initializeProperties(constructor.prototype, arguments[i]);
+   |                 ^^^^^^^^^^^^^^^^^^^^
+
