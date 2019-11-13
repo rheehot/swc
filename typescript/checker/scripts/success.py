@@ -5,7 +5,7 @@
 
 def read_successes():
     with open('./tests/success.txt', 'r') as f:
-        return f.readlines()
+        return list(set(f.readlines()))
 
 
 def main():
