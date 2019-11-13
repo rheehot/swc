@@ -604,3 +604,12 @@ types/tuple/wideningTuples6.ts
 types/tuple/wideningTuples7.ts
 types/typeAliases/asiPreventsParsingAsTypeAlias01.ts
 types/typeAliases/asiPreventsParsingAsTypeAlias02.ts
+parser/ecmascript5/ClassDeclarations/parserClassDeclaration13.ts
+parser/ecmascript5/ClassDeclarations/parserClassDeclaration14.ts
+parser/ecmascript5/ClassDeclarations/parserClassDeclaration18.ts
+parser/ecmascript5/ClassDeclarations/parserClassDeclaration21.ts
+parser/ecmascript5/ClassDeclarations/parserClassDeclaration22.ts
+parser/ecmascript5/ClassDeclarations/parserClassDeclaration25.ts
+parser/ecmascript5/ClassDeclarations/parserClassDeclaration5.ts
+parser/ecmascript5/ClassDeclarations/parserClassDeclaration8.ts
+parser/ecmascript5/ClassDeclarations/parserClassDeclaration9.ts
