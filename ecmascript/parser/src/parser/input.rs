@@ -7,6 +7,7 @@ use crate::{
 use lexer::TokenContexts;
 use std::{cell::RefCell, mem, rc::Rc};
 use swc_common::{BytePos, Span, DUMMY_SP};
+use JscTarget;
 
 pub trait Tokens: Clone + Iterator<Item = TokenAndSpan> {
     fn set_ctx(&mut self, ctx: Context);

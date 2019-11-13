@@ -42,7 +42,6 @@ pub struct Parser<'a, I: Tokens> {
     session: Session<'a>,
     state: State,
     input: Buffer<I>,
-    target: JscTarget,
 }
 
 #[derive(Clone, Default)]
@@ -79,12 +78,11 @@ impl<'a, I: Tokens> Parser<'a, I> {
         }
     }
 
-    pub fn new_with(session: Session<'a>, input: I, target: JscTarget) -> Self {
+    pub fn new_with(session: Session<'a>, input: I) -> Self {
         Parser {
             session,
             input: Buffer::new(input),
             state: Default::default(),
-            target,
         }
     }
 
