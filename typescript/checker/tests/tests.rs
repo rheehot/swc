@@ -156,6 +156,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             "plusOperatorInvalidOperations.ts",
             "logicalNotOperatorInvalidOperations.ts",
             "commaOperatorWithoutOperand.ts",
+            "scannerNumericLiteral8.ts",
             //
             //
             // Temporarily ignored - inference of generic arguments is not implemented
