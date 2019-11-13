@@ -60,8 +60,6 @@ fn should_ignore(name: &str, content: &str) -> bool {
         "logicalNotOperatorInvalidOperations.ts",
         "commaOperatorWithoutOperand.ts",
         "scannerNumericLiteral8.ts",
-        "scannerNumericLiteral9.ts",
-        "scannerUnexpectedNullCharacter1.ts",
         "scannerS7.4_A2_T2.ts",
         //
         //
