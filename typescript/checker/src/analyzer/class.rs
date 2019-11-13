@@ -30,7 +30,7 @@ impl Visit<Class> for Analyzer<'_, '_> {
                             }
                         }
                     } else {
-                        println!("cons.body: {:?}", cons.body);
+                        // TODO: Check parameter count
                     }
                 }
 
