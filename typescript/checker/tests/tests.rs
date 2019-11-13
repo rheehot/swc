@@ -36,6 +36,75 @@ use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestN
 use testing::{StdErr, Tester};
 use walkdir::WalkDir;
 
+fn should_ignore(name: &str, content: &str) -> bool {
+    // These tests are postponed because they are useless in real world.
+    let postponed_tests = &[
+        // Using such requires modifying global object.
+        "extendBooleanInterface.ts",
+        "extendNumberInterface.ts",
+        "extendStringInterface.ts",
+        "assignFromBooleanInterface2.ts",
+        "assignFromNumberInterface2.ts",
+        "assignFromStringInterface2.ts",
+        // Ignored as this requires **using** eval.
+        "scannerS7.2_A1.5_T2.ts",
+        // Ignored just because it requires lots of work while being not important
+        "parserTypeQuery8",
+        "parserForInStatement2",
+        "parserES5ForOfStatement2.ts",
+        "parserES5ForOfStatement21.ts",
+        "parserShorthandPropertyAssignment2.ts",
+        "bitwiseNotOperatorInvalidOperations.ts",
+        "negateOperatorInvalidOperations.ts",
+        "plusOperatorInvalidOperations.ts",
+        "logicalNotOperatorInvalidOperations.ts",
+        "commaOperatorWithoutOperand.ts",
+        "scannerNumericLiteral8.ts",
+        "scannerNumericLiteral9.ts",
+        //
+        //
+        // Temporarily ignored - inference of generic arguments is not implemented
+        "invalidEnumAssignments.ts",
+        "invalidAssignmentsToVoid.ts",
+        "invalidVoidValues.ts",
+        "invalidVoidAssignments.ts",
+        "invalidBooleanAssignments.ts",
+        "invalidNumberAssignments.ts",
+        "invalidStringAssignments.ts",
+        // Temporarily ignored - module system does not work while testing,
+        "RealSource",
+        "RealWorld",
+        // Temporarily ignored - .d.ts tests are postponed.
+        ".d.ts",
+        // Ignored - vscode does not match errors.json
+        "parserStrictMode8.ts",
+        // Temporarily ignored - Setter property is not implemented yet
+        "parserStrictMode12.ts",
+        // Temporarily ignored - overloading is not implemented yet
+        "parserParameterList15",
+        "parserParameterList16",
+        "parserParameterList17",
+    ];
+
+    if postponed_tests.iter().any(|p| name.contains(p)) {
+        return true;
+    }
+
+    if DONE.iter().any(|p| name.contains(p))
+        && env::var("RUST_BACKTRACE").unwrap_or("".into()) != "full"
+    {
+        return false;
+    }
+
+    name.contains("circular")
+        || name.contains(".d.ts")
+        || content.contains("<reference path")
+        || content.contains("@filename")
+        || content.contains("@Filename")
+        || content.contains("@module")
+        || !name.contains(&env::var("TEST").ok().unwrap_or(String::from("")))
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 struct Error {
     pub line: usize,
@@ -136,67 +205,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             buf
         };
 
-        // These tests are postponed because they are useless in real world.
-        let postponed_tests = &[
-            // Using such requires modifying global object.
-            "extendBooleanInterface.ts",
-            "extendNumberInterface.ts",
-            "extendStringInterface.ts",
-            "assignFromBooleanInterface2.ts",
-            "assignFromNumberInterface2.ts",
-            "assignFromStringInterface2.ts",
-            // Ignored just because it requires lots of work while being not important
-            "parserTypeQuery8",
-            "parserForInStatement2",
-            "parserES5ForOfStatement2.ts",
-            "parserES5ForOfStatement21.ts",
-            "parserShorthandPropertyAssignment2.ts",
-            "bitwiseNotOperatorInvalidOperations.ts",
-            "negateOperatorInvalidOperations.ts",
-            "plusOperatorInvalidOperations.ts",
-            "logicalNotOperatorInvalidOperations.ts",
-            "commaOperatorWithoutOperand.ts",
-            "scannerNumericLiteral8.ts",
-            "scannerNumericLiteral9.ts",
-            //
-            //
-            // Temporarily ignored - inference of generic arguments is not implemented
-            "invalidEnumAssignments.ts",
-            "invalidAssignmentsToVoid.ts",
-            "invalidVoidValues.ts",
-            "invalidVoidAssignments.ts",
-            "invalidBooleanAssignments.ts",
-            "invalidNumberAssignments.ts",
-            "invalidStringAssignments.ts",
-            // Temporarily ignored - module system does not work while testing,
-            "RealSource",
-            "RealWorld",
-            // Temporarily ignored - .d.ts tests are postponed.
-            ".d.ts",
-            // Ignored - vscode does not match errors.json
-            "parserStrictMode8.ts",
-            // Temporarily ignored - Setter property is not implemented yet
-            "parserStrictMode12.ts",
-            // Temporarily ignored - overloading is not implemented yet
-            "parserParameterList15",
-            "parserParameterList16",
-            "parserParameterList17",
-        ];
-
-        let mut ignore = file_name.contains("circular")
-            || input.contains("@filename")
-            || input.contains("@Filename")
-            || input.contains("@module")
-            || (mode == Mode::Conformance
-                && !file_name.contains(&env::var("TEST").ok().unwrap_or(String::from(""))))
-            || postponed_tests.iter().any(|p| file_name.contains(p));
-
-        if DONE.iter().any(|p| file_name.contains(p))
-            && !postponed_tests.iter().any(|p| file_name.contains(p))
-            && env::var("RUST_BACKTRACE").unwrap_or("".into()) != "full"
-        {
-            ignore = false;
-        }
+        let ignore = should_ignore(&file_name, &input);
 
         let dir = dir.clone();
         let name = format!("tsc::{}::{}", test_kind, file_name);
