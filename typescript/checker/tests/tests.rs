@@ -62,6 +62,7 @@ fn should_ignore(name: &str, content: &str) -> bool {
         "scannerNumericLiteral8.ts",
         "scannerNumericLiteral9.ts",
         "scannerUnexpectedNullCharacter1.ts",
+        "scannerS7.4_A2_T2.ts",
         //
         //
         // Temporarily ignored - inference of generic arguments is not implemented
