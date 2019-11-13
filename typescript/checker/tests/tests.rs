@@ -61,6 +61,7 @@ fn should_ignore(name: &str, content: &str) -> bool {
         "commaOperatorWithoutOperand.ts",
         "scannerNumericLiteral8.ts",
         "scannerNumericLiteral9.ts",
+        "scannerUnexpectedNullCharacter1.ts",
         //
         //
         // Temporarily ignored - inference of generic arguments is not implemented
