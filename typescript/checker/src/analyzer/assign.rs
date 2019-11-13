@@ -422,6 +422,23 @@ impl Analyzer<'_, '_> {
             Type::EnumVariant(ref e) => {
                 return Err(Error::InvalidLValue { span: e.span });
             }
+
+            Type::Intersection(ref i) => {
+                let mut errors = vec![];
+
+                for ty in &i.types {
+                    match self.assign_inner(&ty, rhs, span) {
+                        Ok(..) => {}
+                        Err(err) => errors.push(err),
+                    }
+                }
+
+                if errors.is_empty() {
+                    return Ok(());
+                }
+
+                return Err(Error::Errors { span, errors });
+            }
             _ => {}
         }
 
