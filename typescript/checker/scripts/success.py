@@ -7,6 +7,7 @@ def read_successes():
     with open('./tests/success.txt', 'r') as f:
         return sorted(list(set(f.readlines())))
 
+
 def read_done():
     with open('./tests/done.txt', 'r') as f:
         return sorted(list(set(f.readlines())))
@@ -27,6 +28,7 @@ def main():
             new_successes.append(s)
     with open('tests/success.txt', 'w') as f:
         f.write(''.join(new_successes))
+
 
 if __name__ == '__main__':
     main()
