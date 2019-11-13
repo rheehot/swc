@@ -1,5 +1,9 @@
-use crate::analyzer::{expr::TypeOfMode, Analyzer};
-use swc_common::{Visit, VisitWith};
+use crate::{
+    analyzer::{expr::TypeOfMode, Analyzer},
+    swc_common::Spanned,
+    ty::{Array, Type},
+};
+use swc_common::{Span, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 macro_rules! impl_for {
@@ -15,6 +19,8 @@ macro_rules! impl_for {
                 } {
                     self.check_rhs_of_for_loop(&n.right);
                 }
+
+                self.validate_for_loop(n.span, &n.left, &n.right);
             }
         }
     };
@@ -54,6 +60,39 @@ impl Analyzer<'_, '_> {
         match res {
             Ok(..) => {}
             Err(err) => self.info.errors.push(err),
+        }
+    }
+
+    fn validate_for_loop(&mut self, span: Span, lhs: &VarDeclOrPat, rhs: &Expr) {
+        let rty = match self.type_of(rhs).and_then(|ty| self.expand_type(span, ty)) {
+            Ok(ty) => ty,
+            Err(..) => return,
+        };
+
+        match lhs {
+            VarDeclOrPat::Pat(Pat::Expr(ref l)) => {
+                let lty = match self
+                    .type_of_expr(&**l, TypeOfMode::LValue)
+                    .and_then(|ty| self.expand_type(span, ty))
+                {
+                    Ok(ty) => ty,
+                    Err(..) => return,
+                };
+
+                println!("FOO\nL: {:?}", lty);
+                match self.assign(
+                    &Type::Array(Array {
+                        span,
+                        elem_type: box lty,
+                    }),
+                    &rty,
+                    lhs.span(),
+                ) {
+                    Ok(..) => {}
+                    Err(err) => self.info.errors.push(err),
+                }
+            }
+            _ => {}
         }
     }
 }

@@ -235,7 +235,7 @@ impl Analyzer<'_, '_> {
                 for prop in props.iter() {
                     match *prop {
                         PropOrSpread::Prop(ref prop) => {
-                            members.push(self.type_of_prop(&prop));
+                            members.push(self.type_of_prop(&prop)?);
                         }
                         PropOrSpread::Spread(SpreadElement { ref expr, .. }) => {
                             match self.type_of(&expr)?.into_owned() {
@@ -590,10 +590,10 @@ impl Analyzer<'_, '_> {
         return Err(Error::Errors { span, errors });
     }
 
-    fn type_of_prop(&self, prop: &Prop) -> TypeElement {
+    fn type_of_prop(&self, prop: &Prop) -> Result<TypeElement, Error> {
         let span = prop.span();
 
-        match *prop {
+        Ok(match *prop {
             Prop::Shorthand(..) => PropertySignature {
                 span: prop.span(),
                 key: prop_key_to_expr(&prop),
@@ -606,17 +606,22 @@ impl Analyzer<'_, '_> {
             }
             .into(),
 
-            Prop::KeyValue(..) => PropertySignature {
-                span: prop.span(),
-                key: prop_key_to_expr(&prop),
-                params: Default::default(),
-                optional: false,
-                readonly: false,
-                computed: false,
-                type_ann: Default::default(),
-                type_params: Default::default(),
+            Prop::KeyValue(ref kv) => {
+                let ty = self.type_of(&kv.value)?;
+                let ty = self.expand_type(prop.span(), ty)?;
+
+                PropertySignature {
+                    span: prop.span(),
+                    key: prop_key_to_expr(&prop),
+                    params: Default::default(),
+                    optional: false,
+                    readonly: false,
+                    computed: false,
+                    type_ann: Some(ty),
+                    type_params: Default::default(),
+                }
+                .into()
             }
-            .into(),
 
             Prop::Assign(ref p) => unimplemented!("type_of_prop(AssignProperty): {:?}", p),
             Prop::Getter(ref p) => PropertySignature {
@@ -653,7 +658,7 @@ impl Analyzer<'_, '_> {
                 type_params: p.function.type_params.clone().map(|v| v.into()),
             }
             .into(),
-        }
+        })
     }
 
     fn access_property<'a>(
@@ -1688,6 +1693,7 @@ impl Analyzer<'_, '_> {
             }
             _ => {
                 let ty = self.type_of(callee)?;
+                println!("before extract: {:?}", ty);
                 let ty = self.expand_type(span, ty)?;
 
                 Ok(self.extract(span, &ty, kind, args, type_args)?.into_cow())

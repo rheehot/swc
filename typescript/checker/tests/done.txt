@@ -405,7 +405,6 @@ parser/ecmascript5/ErrorRecovery/VariableLists/parserVariableStatement2.ts
 parser/ecmascript5/ErrorRecovery/VariableLists/parserVariableStatement3.ts
 parser/ecmascript5/ErrorRecovery/VariableLists/parserVariableStatement4.ts
 parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList1.ts
-parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts
 parser/ecmascript5/ErrorRecovery/parserEqualsGreaterThanAfterFunction1.ts
 parser/ecmascript5/ErrorRecovery/parserErrantEqualsGreaterThanAfterFunction1.ts
 parser/ecmascript5/ErrorRecovery/parserModifierOnPropertySignature2.ts
@@ -575,6 +574,7 @@ statements/for-ofStatements/ES5For-of3.ts
 statements/for-ofStatements/ES5For-of4.ts
 statements/for-ofStatements/ES5For-of5.ts
 statements/for-ofStatements/ES5For-of6.ts
+statements/for-ofStatements/ES5For-of8.ts
 statements/for-ofStatements/ES5For-of9.ts
 statements/for-ofStatements/ES5For-ofTypeCheck1.ts
 statements/for-ofStatements/ES5For-ofTypeCheck2.ts
