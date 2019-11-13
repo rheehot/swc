@@ -435,20 +435,12 @@ impl Analyzer<'_, '_> {
     pub(super) fn type_of_ident(&self, i: &Ident, type_mode: TypeOfMode) -> Result<TypeRef, Error> {
         let span = i.span();
 
-        if i.sym == js_word!("Symbol") {
-            return Err(Error::TS2585 { span });
-        }
-
-        if i.sym == js_word!("undefined") {
-            return Ok(Type::undefined(span).into_cow());
-        }
-
-        if i.sym == js_word!("void") {
-            return Ok(Type::any(span).into_cow());
-        }
-
-        if i.sym == js_word!("eval") {
-            match type_mode {
+        match i.sym {
+            js_word!("arguments") => return Ok(Type::any(span).owned()),
+            js_word!("Symbol") => return Err(Error::TS2585 { span }),
+            js_word!("undefined") => return Ok(Type::undefined(span).into_cow()),
+            js_word!("void") => return Ok(Type::any(span).into_cow()),
+            js_word!("eval") => match type_mode {
                 TypeOfMode::LValue => return Err(Error::CannotAssignToNonVariable { span }),
                 TypeOfMode::RValue => {
                     return Ok(Type::Function(ty::Function {
@@ -459,7 +451,8 @@ impl Analyzer<'_, '_> {
                     })
                     .owned());
                 }
-            }
+            },
+            _ => {}
         }
 
         if i.sym == js_word!("require") {
