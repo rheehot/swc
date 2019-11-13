@@ -70,3 +70,17 @@ impl Visit<WithStmt> for Analyzer<'_, '_> {
         }
     }
 }
+
+impl Visit<TsImportEqualsDecl> for Analyzer<'_, '_> {
+    fn visit(&mut self, node: &TsImportEqualsDecl) {
+        match node.module_ref {
+            TsModuleRef::TsEntityName(ref e) => {
+                match self.type_of_ts_entity_name(node.span, e, None) {
+                    Ok(..) => {}
+                    Err(err) => self.info.errors.push(err),
+                }
+            }
+            _ => {}
+        }
+    }
+}
