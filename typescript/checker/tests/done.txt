@@ -69,6 +69,7 @@ parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts
 parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration5.ts
 parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration9.ts
 parser/ecmascript5/EnumDeclarations
+parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral1.ts
 parser/ecmascript5/Expressions/parserUnaryExpression
 parser/ecmascript5/FunctionDeclarations/
 parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration1.ts
@@ -77,6 +78,7 @@ parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration4.ts
 parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration5.ts
 parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration8.ts
 parser/ecmascript5/IndexSignatures/parserIndexSignature1.ts
+parser/ecmascript5/IndexSignatures/parserIndexSignature10.ts
 parser/ecmascript5/InterfaceDeclarations
 parser/ecmascript5/MethodSignatures/
 parser/ecmascript5/ParameterLists/
