@@ -526,8 +526,8 @@ impl Analyzer<'_, '_> {
             span,
             ..
         } = *expr;
-        debug_assert_ne!(span, obj.span());
-        debug_assert_ne!(span, prop.span());
+        //        debug_assert_ne!(span, obj.span());
+        //        debug_assert_ne!(span, prop.span());
 
         let mut errors = vec![];
         match *obj {

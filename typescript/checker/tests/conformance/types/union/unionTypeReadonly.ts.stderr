@@ -14,7 +14,7 @@ error: ReadOnly {
 17 | base.value = 12 // error, lhs can't be a readonly property
    |      ^^^^^
 
-error: ReadOnly {
+error: UnionError {
     span: Span {
         lo: BytePos(
             370,
@@ -24,6 +24,30 @@ error: ReadOnly {
         ),
         ctxt: #0,
     },
+    errors: [
+        ReadOnly {
+            span: Span {
+                lo: BytePos(
+                    370,
+                ),
+                hi: BytePos(
+                    375,
+                ),
+                ctxt: #0,
+            },
+        },
+        ReadOnly {
+            span: Span {
+                lo: BytePos(
+                    370,
+                ),
+                hi: BytePos(
+                    375,
+                ),
+                ctxt: #0,
+            },
+        },
+    ],
 }
   --> $DIR/tests/conformance/types/union/unionTypeReadonly.ts:19:11
    |
@@ -99,7 +123,7 @@ error: UnionError {
 23 | differentType.value = 12; // error, lhs can't be a readonly property
    |               ^^^^^
 
-error: ReadOnly {
+error: UnionError {
     span: Span {
         lo: BytePos(
             682,
@@ -109,6 +133,48 @@ error: ReadOnly {
         ),
         ctxt: #0,
     },
+    errors: [
+        ReadOnly {
+            span: Span {
+                lo: BytePos(
+                    682,
+                ),
+                hi: BytePos(
+                    687,
+                ),
+                ctxt: #0,
+            },
+        },
+        NoSuchProperty {
+            span: Span {
+                lo: BytePos(
+                    682,
+                ),
+                hi: BytePos(
+                    687,
+                ),
+                ctxt: #0,
+            },
+            prop: Some(
+                Ident(
+                    Ident {
+                        span: Span {
+                            lo: BytePos(
+                                682,
+                            ),
+                            hi: BytePos(
+                                687,
+                            ),
+                            ctxt: #0,
+                        },
+                        sym: Atom('value' type=inline),
+                        type_ann: None,
+                        optional: false,
+                    },
+                ),
+            ),
+        },
+    ],
 }
   --> $DIR/tests/conformance/types/union/unionTypeReadonly.ts:25:15
    |

@@ -1,0 +1,32 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            51,
+        ),
+        hi: BytePos(
+            56,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration8_es6.ts:3:12
+  |
+3 | var v = { [await]: foo }
+  |            ^^^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            59,
+        ),
+        hi: BytePos(
+            62,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/async/es6/functionDeclarations/asyncFunctionDeclaration8_es6.ts:3:20
+  |
+3 | var v = { [await]: foo }
+  |                    ^^^
+
