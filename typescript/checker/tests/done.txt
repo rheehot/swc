@@ -615,3 +615,5 @@ types/tuple/wideningTuples6.ts
 types/tuple/wideningTuples7.ts
 types/typeAliases/asiPreventsParsingAsTypeAlias01.ts
 types/typeAliases/asiPreventsParsingAsTypeAlias02.ts
+types/union/unionTypeEquivalence.ts
+types/union/unionTypeReduction.ts
