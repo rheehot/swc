@@ -1280,7 +1280,17 @@ impl Analyzer<'_, '_> {
                 .map(|v| v.to_static())
         });
         let declared_ret_ty = match declared_ret_ty {
-            Some(Ok(ty)) => Some(ty),
+            Some(Ok(ty)) => {
+                let span = ty.span();
+                Some(match ty {
+                    Type::Class(cls) => Type::ClassInstance(ClassInstance {
+                        span,
+                        cls,
+                        type_args: None,
+                    }),
+                    _ => ty,
+                })
+            }
             Some(Err(err)) => return Err(err),
             None => None,
         };
@@ -1329,12 +1339,22 @@ impl Analyzer<'_, '_> {
         let declared_ret_ty = f
             .return_type
             .as_ref()
-            .map(|ret_ty| Cow::Owned(Type::from(ret_ty.type_ann.clone())));
+            .map(|ret_ty| Type::from(ret_ty.type_ann.clone()))
+            .map(Cow::Owned);
 
-        let declared_ret_ty = match declared_ret_ty
-            .clone()
-            .map(|ret_ty| self.expand_type(f.span, ret_ty).map(|v| v.to_static()))
-        {
+        let declared_ret_ty = match declared_ret_ty.clone().map(|ret_ty| {
+            self.expand_type(f.span, ret_ty).map(|ty| {
+                let span = ty.span();
+                match ty.to_static() {
+                    Type::Class(cls) => Type::ClassInstance(ClassInstance {
+                        span,
+                        cls,
+                        type_args: None,
+                    }),
+                    ty => ty,
+                }
+            })
+        }) {
             Some(Ok(ty)) => Some(ty),
             Some(Err(err)) => {
                 errors.push(err);

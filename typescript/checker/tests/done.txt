@@ -596,6 +596,7 @@ types/primitives/
 types/primitives/boolean
 types/primitives/boolean/invalidBooleanAssignments.ts
 types/primitives/enum
+types/primitives/null/validNullAssignments.ts
 types/primitives/number
 types/primitives/undefined
 types/primitives/void
