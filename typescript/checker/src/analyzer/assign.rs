@@ -492,9 +492,7 @@ impl Analyzer<'_, '_> {
                 // Deny assigning null to class. (not instance)
 
                 match *to.normalize() {
-                    Type::Class(..) if self.rule.strict_null_checks => fail!(),
-                    Type::Class(..) => return Ok(()),
-                    Type::Function(..) => fail!(),
+                    Type::Class(..) | Type::Function(..) => fail!(),
                     _ => {}
                 }
 
