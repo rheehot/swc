@@ -228,11 +228,41 @@ impl Analyzer<'_, '_> {
                                                     _ => {}
                                                 },
 
-                                                TypeElement::Method(..) => match rm {
-                                                    TypeElement::Method(..) => unimplemented!(
-                                                        "assignment: method property in type \
-                                                         literal"
-                                                    ),
+                                                // `foo(a: string) is assignable to foo(a: any)`
+                                                TypeElement::Method(ref lm) => match rm {
+                                                    TypeElement::Method(ref rm) => {
+                                                        //
+                                                        if count_required_params(&lm.params)
+                                                            > count_required_params(&rm.params)
+                                                        {
+                                                            unimplemented!(
+                                                                "assignment: method property in \
+                                                                 type literal"
+                                                            )
+                                                        }
+
+                                                        for (i, r) in rm.params.iter().enumerate() {
+                                                            if let Some(ref l) = lm.params.get(i) {
+                                                                let l_ty = Cow::Owned(
+                                                                    type_of_ts_fn_param(l),
+                                                                );
+                                                                let l_ty =
+                                                                    self.expand_type(span, l_ty)?;
+                                                                let r_ty = Cow::Owned(
+                                                                    type_of_ts_fn_param(r),
+                                                                );
+                                                                let r_ty =
+                                                                    self.expand_type(span, r_ty)?;
+
+                                                                match self
+                                                                    .assign(&l_ty, &r_ty, span)
+                                                                {
+                                                                    Ok(()) => {}
+                                                                    Err(err) => errors.push(err),
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                     _ => {}
                                                 },
                                                 _ => {}
@@ -462,7 +492,9 @@ impl Analyzer<'_, '_> {
                 // Deny assigning null to class. (not instance)
 
                 match *to.normalize() {
-                    Type::Class(..) | Type::Function(..) => fail!(),
+                    Type::Class(..) if self.rule.strict_null_checks => fail!(),
+                    Type::Class(..) => return Ok(()),
+                    Type::Function(..) => fail!(),
                     _ => {}
                 }
 
@@ -668,6 +700,9 @@ impl Analyzer<'_, '_> {
 
                         fail!()
                     }
+
+                    Type::Array(..) => fail!(),
+
                     _ => {}
                 }
 
@@ -895,14 +930,34 @@ impl Analyzer<'_, '_> {
             Type::Class(ref l_cls) => {
                 // Assignment to class itself. (not an instance)
                 match *rhs.normalize() {
+                    Type::Keyword(..) | Type::TypeLit(..) | Type::Lit(..) => fail!(),
+
                     Type::Class(ref cls) | Type::ClassInstance(ClassInstance { ref cls, .. }) => {
                         if l_cls.eq_ignore_span(cls) {
                             return Ok(());
-                        } else {
-                            fail!()
                         }
+
+                        let mut parent = &cls.super_class;
+
+                        // class Child extends Parent
+                        // let c: Child;
+                        // let p: Parent;
+                        // `p = c` is valid
+                        while let Some(ref p) = parent {
+                            match p.normalize() {
+                                Type::Class(ref p_cls) => {
+                                    if l_cls.eq_ignore_span(p_cls) {
+                                        return Ok(());
+                                    }
+
+                                    parent = &p_cls.super_class;
+                                }
+                                _ => fail!(),
+                            }
+                        }
+
+                        fail!()
                     }
-                    Type::Keyword(..) | Type::TypeLit(..) | Type::Lit(..) => fail!(),
                     _ => {}
                 }
             }
@@ -936,5 +991,26 @@ fn is_key_eq(l: &Expr, r: &Expr) -> bool {
     match (l, r) {
         (&Expr::Ident(..), &Expr::Ident(..)) => l.eq_ignore_span(r),
         _ => false,
+    }
+}
+
+fn count_required_params(v: &[TsFnParam]) -> usize {
+    v.iter()
+        .filter(|v| match v {
+            TsFnParam::Ident(Ident { optional: true, .. }) => false,
+            _ => true,
+        })
+        .count()
+}
+
+fn type_of_ts_fn_param<'a>(p: &TsFnParam) -> Type<'a> {
+    match p {
+        TsFnParam::Ident(Ident { type_ann, .. })
+        | TsFnParam::Array(ArrayPat { type_ann, .. })
+        | TsFnParam::Object(ObjectPat { type_ann, .. })
+        | TsFnParam::Rest(RestPat { type_ann, .. }) => type_ann
+            .clone()
+            .map(|ty| Type::from(ty))
+            .unwrap_or(Type::any(p.span())),
     }
 }
