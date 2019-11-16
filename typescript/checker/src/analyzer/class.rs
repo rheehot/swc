@@ -1,6 +1,6 @@
 use super::{scope::ScopeKind, Analyzer};
 use crate::{
-    analyzer::{ComputedPropMode, VarVisitor},
+    analyzer::{ComputedPropMode, VarVisitor, LOG_VISIT},
     errors::Error,
     ty::{Type, TypeRefExt},
     util::EqIgnoreNameAndSpan,
@@ -12,6 +12,10 @@ use swc_ecma_ast::*;
 
 impl Visit<Class> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &Class) {
+        if LOG_VISIT {
+            println!("Visit<Class>");
+        }
+
         c.visit_children(self);
 
         self.validate_parent_interfaces(&c.implements);
@@ -182,6 +186,10 @@ impl Analyzer<'_, '_> {
 
 impl Visit<ClassMember> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &ClassMember) {
+        if LOG_VISIT {
+            println!("Visit<ClassMember>");
+        }
+
         self.computed_prop_mode = ComputedPropMode::Class {
             has_body: match *node {
                 ClassMember::Method(ClassMethod { ref function, .. }) => function.body.is_some(),
@@ -195,6 +203,10 @@ impl Visit<ClassMember> for Analyzer<'_, '_> {
 
 impl Visit<ClassProp> for Analyzer<'_, '_> {
     fn visit(&mut self, p: &ClassProp) {
+        if LOG_VISIT {
+            println!("Visit<ClassProp>");
+        }
+
         p.visit_children(self);
 
         // Verify key if key is computed
@@ -222,6 +234,10 @@ impl Visit<ClassProp> for Analyzer<'_, '_> {
 
 impl Visit<ClassExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassExpr) {
+        if LOG_VISIT {
+            println!("Visit<ClassExpr>");
+        }
+
         let ty = match self.validate_type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {
             Ok(ty) => ty,
             Err(err) => {
@@ -302,6 +318,8 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
 
 impl Visit<ClassMethod> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassMethod) {
+        println!("Visit<ClassMethod>");
+
         let entry = self.with_child(ScopeKind::Fn, Default::default(), |child| {
             child.return_type_span = c.span();
 

@@ -3,6 +3,7 @@ async/es6/asyncDeclare_es6.ts
 boolean/assignFromBooleanInterface1
 classes/classDeclarations/classExtendingBuiltinType.ts
 classes/classDeclarations/classExtendingNull.ts
+classes/classExpression.ts
 constEnums
 es6/classDeclaration/classWithSemicolonClassElementES61.ts
 es6/classDeclaration/classWithSemicolonClassElementES62.ts

@@ -20,6 +20,9 @@ use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
+/// If true, Visit<T> prints `Visit<T>` to stdout.
+const LOG_VISIT: bool = true;
+
 #[macro_use]
 mod macros;
 mod assign;
