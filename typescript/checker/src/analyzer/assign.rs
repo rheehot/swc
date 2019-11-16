@@ -925,12 +925,13 @@ impl Analyzer<'_, '_> {
                 _ => {}
             },
 
-            Type::Class(ref l_cls) => {
+            // TODO: Check type arguments
+            Type::ClassInstance(ClassInstance { cls: ref l_cls, .. }) => {
                 // Assignment to class itself. (not an instance)
                 match *rhs.normalize() {
                     Type::Keyword(..) | Type::TypeLit(..) | Type::Lit(..) => fail!(),
 
-                    Type::Class(ref cls) | Type::ClassInstance(ClassInstance { ref cls, .. }) => {
+                    Type::ClassInstance(ClassInstance { ref cls, .. }) => {
                         if l_cls.eq_ignore_span(cls) {
                             return Ok(());
                         }
@@ -956,14 +957,6 @@ impl Analyzer<'_, '_> {
 
                         fail!()
                     }
-                    _ => {}
-                }
-            }
-
-            Type::ClassInstance(..) => {
-                // TODO: Verify more things
-                match *rhs.normalize() {
-                    Type::Keyword(..) | Type::TypeLit(..) | Type::Lit(..) => fail!(),
                     _ => {}
                 }
             }
