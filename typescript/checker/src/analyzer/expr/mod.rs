@@ -1346,8 +1346,6 @@ impl Analyzer<'_, '_> {
         let inferred_return_type = f.body.as_ref().map(|_| self.infer_return_type(f.span));
         let inferred_return_type = match inferred_return_type {
             Some(Some(inferred_return_type)) => {
-                println!("FOO - 1");
-
                 if let Some(ref declared) = declared_ret_ty {
                     let span = inferred_return_type.span();
 
@@ -1357,8 +1355,6 @@ impl Analyzer<'_, '_> {
                 inferred_return_type
             }
             Some(None) => {
-                println!("FOO - 2");
-
                 let mut span = f.span;
 
                 if let Some(ref declared) = declared_ret_ty {
@@ -1379,11 +1375,7 @@ impl Analyzer<'_, '_> {
 
                 Type::any(span)
             }
-            None => {
-                println!("FOO - 3");
-
-                Type::any(f.span)
-            }
+            None => Type::any(f.span),
         };
 
         Ok((
