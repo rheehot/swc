@@ -1157,6 +1157,9 @@ impl<'a, I: Tokens> Parser<'a, I> {
                     if peeked_is!(',') || peeked_is!(':') || peeked_is!(')') || peeked_is!('=') {
                         assert_and_bump!('?');
                         let _ = cur!(false);
+                        if arg.spread.is_some() {
+                            self.emit_err(self.input.prev_span(), SyntaxError::TS1047);
+                        }
                         match *arg.expr {
                             Expr::Ident(..) => {}
                             _ => {

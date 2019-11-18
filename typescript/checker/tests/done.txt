@@ -441,6 +441,7 @@ parser/ecmascript5/IndexSignatures/parserIndexSignature10.ts
 parser/ecmascript5/InterfaceDeclarations
 parser/ecmascript5/MethodSignatures/
 parser/ecmascript5/ParameterLists/
+parser/ecmascript5/ParameterLists/parserParameterList11.ts
 parser/ecmascript5/PropertySignatures
 parser/ecmascript5/RegressionTests/parser509546.ts
 parser/ecmascript5/RegressionTests/parser509546_1.ts
