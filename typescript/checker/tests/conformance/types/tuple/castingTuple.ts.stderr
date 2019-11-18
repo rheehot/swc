@@ -207,8 +207,8 @@ error: AssignFailed {
         ),
         ctxt: #0,
     },
-    left: Class(
-        Class {
+    left: ClassInstance(
+        ClassInstance {
             span: Span {
                 lo: BytePos(
                     16,
@@ -218,74 +218,86 @@ error: AssignFailed {
                 ),
                 ctxt: #0,
             },
-            is_abstract: false,
-            name: Some(
-                Atom('A' type=inline),
-            ),
-            super_class: None,
-            body: [
-                ClassProp(
-                    ClassProp {
-                        span: Span {
-                            lo: BytePos(
-                                26,
-                            ),
-                            hi: BytePos(
-                                33,
-                            ),
-                            ctxt: #0,
-                        },
-                        key: Ident(
-                            Ident {
-                                span: Span {
-                                    lo: BytePos(
-                                        26,
-                                    ),
-                                    hi: BytePos(
-                                        27,
-                                    ),
-                                    ctxt: #0,
-                                },
-                                sym: Atom('a' type=inline),
-                                type_ann: None,
-                                optional: false,
+            cls: Class {
+                span: Span {
+                    lo: BytePos(
+                        16,
+                    ),
+                    hi: BytePos(
+                        35,
+                    ),
+                    ctxt: #0,
+                },
+                is_abstract: false,
+                name: Some(
+                    Atom('A' type=inline),
+                ),
+                super_class: None,
+                body: [
+                    ClassProp(
+                        ClassProp {
+                            span: Span {
+                                lo: BytePos(
+                                    26,
+                                ),
+                                hi: BytePos(
+                                    33,
+                                ),
+                                ctxt: #0,
                             },
-                        ),
-                        value: Some(
-                            Lit(
-                                Num(
-                                    Number {
-                                        span: Span {
-                                            lo: BytePos(
-                                                30,
-                                            ),
-                                            hi: BytePos(
-                                                32,
-                                            ),
-                                            ctxt: #0,
-                                        },
-                                        value: 10.0,
+                            key: Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            26,
+                                        ),
+                                        hi: BytePos(
+                                            27,
+                                        ),
+                                        ctxt: #0,
                                     },
+                                    sym: Atom('a' type=inline),
+                                    type_ann: None,
+                                    optional: false,
+                                },
+                            ),
+                            value: Some(
+                                Lit(
+                                    Num(
+                                        Number {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    30,
+                                                ),
+                                                hi: BytePos(
+                                                    32,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            value: 10.0,
+                                        },
+                                    ),
                                 ),
                             ),
-                        ),
-                        type_ann: None,
-                        is_static: false,
-                        decorators: [],
-                        computed: false,
-                        accessibility: None,
-                        is_abstract: false,
-                        is_optional: false,
-                        readonly: false,
-                        definite: false,
-                    },
-                ),
-            ],
-            type_params: None,
+                            type_ann: None,
+                            is_static: false,
+                            decorators: [],
+                            computed: false,
+                            accessibility: None,
+                            is_abstract: false,
+                            is_optional: false,
+                            readonly: false,
+                            definite: false,
+                        },
+                    ),
+                ],
+                type_params: None,
+            },
+            type_args: None,
         },
     ),
-    right: Class(
-        Class {
+    right: ClassInstance(
+        ClassInstance {
             span: Span {
                 lo: BytePos(
                     36,
@@ -295,53 +307,65 @@ error: AssignFailed {
                 ),
                 ctxt: #0,
             },
-            is_abstract: false,
-            name: Some(
-                Atom('C' type=inline),
-            ),
-            super_class: None,
-            body: [
-                ClassProp(
-                    ClassProp {
-                        span: Span {
-                            lo: BytePos(
-                                59,
-                            ),
-                            hi: BytePos(
-                                60,
-                            ),
-                            ctxt: #0,
-                        },
-                        key: Ident(
-                            Ident {
-                                span: Span {
-                                    lo: BytePos(
-                                        59,
-                                    ),
-                                    hi: BytePos(
-                                        60,
-                                    ),
-                                    ctxt: #0,
-                                },
-                                sym: Atom('c' type=inline),
-                                type_ann: None,
-                                optional: false,
-                            },
-                        ),
-                        value: None,
-                        type_ann: None,
-                        is_static: false,
-                        decorators: [],
-                        computed: false,
-                        accessibility: None,
-                        is_abstract: false,
-                        is_optional: false,
-                        readonly: false,
-                        definite: false,
-                    },
+            cls: Class {
+                span: Span {
+                    lo: BytePos(
+                        36,
+                    ),
+                    hi: BytePos(
+                        62,
+                    ),
+                    ctxt: #0,
+                },
+                is_abstract: false,
+                name: Some(
+                    Atom('C' type=inline),
                 ),
-            ],
-            type_params: None,
+                super_class: None,
+                body: [
+                    ClassProp(
+                        ClassProp {
+                            span: Span {
+                                lo: BytePos(
+                                    59,
+                                ),
+                                hi: BytePos(
+                                    60,
+                                ),
+                                ctxt: #0,
+                            },
+                            key: Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            59,
+                                        ),
+                                        hi: BytePos(
+                                            60,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('c' type=inline),
+                                    type_ann: None,
+                                    optional: false,
+                                },
+                            ),
+                            value: None,
+                            type_ann: None,
+                            is_static: false,
+                            decorators: [],
+                            computed: false,
+                            accessibility: None,
+                            is_abstract: false,
+                            is_optional: false,
+                            readonly: false,
+                            definite: false,
+                        },
+                    ),
+                ],
+                type_params: None,
+            },
+            type_args: None,
         },
     ),
     cause: [],

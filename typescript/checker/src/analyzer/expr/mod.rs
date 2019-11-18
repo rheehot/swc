@@ -4,6 +4,7 @@ use super::{
     Analyzer,
 };
 use crate::{
+    analyzer::instantiate_class,
     builtin_types,
     errors::Error,
     ty::{
@@ -215,9 +216,11 @@ impl Analyzer<'_, '_> {
                 }
             }
 
-            Expr::TsAs(TsAsExpr { ref type_ann, .. }) => return Ok(type_ann.clone().into_cow()),
+            Expr::TsAs(TsAsExpr { ref type_ann, .. }) => {
+                return Ok(instantiate_class(type_ann.clone().into_cow()))
+            }
             Expr::TsTypeCast(TsTypeCastExpr { ref type_ann, .. }) => {
-                return Ok(type_ann.type_ann.clone().into_cow());
+                return Ok(instantiate_class(type_ann.type_ann.clone().into_cow()));
             }
 
             Expr::TsNonNull(TsNonNullExpr { ref expr, .. }) => {
@@ -2448,6 +2451,7 @@ impl Analyzer<'_, '_> {
 
         let casted_ty = Type::from(to.clone());
         let casted_ty = self.expand_type(span, Cow::Owned(casted_ty))?;
+        let casted_ty = instantiate_class(casted_ty);
 
         self.validate_type_cast_inner(span, &orig_ty, &casted_ty)
     }
