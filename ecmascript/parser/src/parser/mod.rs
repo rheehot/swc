@@ -74,15 +74,6 @@ impl<'a, I: Tokens> Parser<'a, I> {
             session,
             input: Buffer::new(input),
             state: Default::default(),
-            target: Default::default(),
-        }
-    }
-
-    pub fn new_with(session: Session<'a>, input: I) -> Self {
-        Parser {
-            session,
-            input: Buffer::new(input),
-            state: Default::default(),
         }
     }
 

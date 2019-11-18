@@ -203,10 +203,10 @@ impl<'a, I: Tokens> Parser<'a, I> {
         }
 
         let pat = if eat!('=') {
-            // `=` cannot follow optional parameter.
-            if opt {
-                self.emit_err(pat.span(), SyntaxError::TS1015);
-            }
+            // // `=` cannot follow optional parameter.
+            // if opt {
+            //     self.emit_err(pat.span(), SyntaxError::TS1015);
+            // }
 
             let right = self.parse_assignment_expr()?;
             if self.ctx().in_declare {
@@ -336,6 +336,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
 
             if eat!("...") {
                 dot3_token = span!(start);
+
                 let mut pat = self.parse_binding_pat_or_ident()?;
 
                 if eat!('=') {
@@ -350,6 +351,8 @@ impl<'a, I: Tokens> Parser<'a, I> {
                     .into();
                 }
 
+                let type_ann = if self.input.syntax().typescript() && is!(':') {
+                    let cur_pos = cur_pos!();
                     let ty = self.parse_ts_type_ann(/* eat_colon */ true, cur_pos)?;
                     Some(ty)
                 } else {
@@ -386,7 +389,6 @@ impl<'a, I: Tokens> Parser<'a, I> {
         self.parse_formal_params()
     }
 }
-
 ///
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum PatType {

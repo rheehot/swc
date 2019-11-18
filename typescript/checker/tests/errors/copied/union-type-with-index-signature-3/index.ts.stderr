@@ -1,7 +1,7 @@
 error: UnionError {
     span: Span {
         lo: BytePos(
-            125,
+            123,
         ),
         hi: BytePos(
             128,
@@ -12,7 +12,7 @@ error: UnionError {
         NoSuchProperty {
             span: Span {
                 lo: BytePos(
-                    125,
+                    123,
                 ),
                 hi: BytePos(
                     128,
@@ -40,8 +40,8 @@ error: UnionError {
         },
     ],
 }
- --> $DIR/tests/errors/copied/union-type-with-index-signature-3/index.ts:4:3
+ --> $DIR/tests/errors/copied/union-type-with-index-signature-3/index.ts:4:1
   |
 4 | m.bar
-  |   ^^^
+  | ^^^^^
 

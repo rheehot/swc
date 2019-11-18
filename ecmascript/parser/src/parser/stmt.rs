@@ -130,21 +130,6 @@ impl<'a, I: Tokens> Parser<'a, I> {
                 }
             }
 
-                if label.is_some() && !self.state.labels.contains(&label.as_ref().unwrap().sym) {
-                    self.emit_err(span, SyntaxError::TS1116);
-                } else if !self.ctx().is_break_allowed {
-                    self.emit_err(span, SyntaxError::TS1105);
-                }
-            } else {
-                if !self.ctx().is_continue_allowed {
-                    self.emit_err(span, SyntaxError::TS1115);
-                } else if label.is_some()
-                    && !self.state.labels.contains(&label.as_ref().unwrap().sym)
-                {
-                    self.emit_err(span, SyntaxError::TS1107);
-                }
-            }
-
             return Ok(if is_break {
                 Stmt::Break(BreakStmt { span, label })
             } else {
@@ -330,36 +315,6 @@ impl<'a, I: Tokens> Parser<'a, I> {
                             self.emit_err(i.span, SyntaxError::TS2427);
                             return self
                                 .parse_ts_interface_decl(start)
-                                .map(Decl::from)
-                                .map(Stmt::from);
-                        }
-                    }
-                    _ => {}
-                },
-                _ => {}
-            }
-        }
-
-        if self.ctx().strict {
-            match *expr {
-                Expr::Ident(Ident { ref sym, span, .. }) => match sym {
-                    js_word!("enum") | js_word!("interface") => {
-                        self.emit_err(span, SyntaxError::InvalidIdentInStrict);
-                    }
-                    _ => {}
-                },
-                _ => {}
-            }
-        }
-
-        if self.syntax().typescript() {
-            match *expr {
-                Expr::Ident(ref i) => match i.sym {
-                    js_word!("public") | js_word!("static") => {
-                        if eat!("interface") {
-                            self.emit_err(i.span, SyntaxError::TS2427);
-                            return self
-                                .parse_ts_interface_decl()
                                 .map(Decl::from)
                                 .map(Stmt::from);
                         }
@@ -687,6 +642,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
 
                 let _ = self.parse_expr().map_err(|mut e| {
                     e.emit();
+                    ()
                 });
 
                 while !eat!(';') {
@@ -825,14 +781,6 @@ impl<'a, I: Tokens> Parser<'a, I> {
         }
 
         if self.ctx().strict {
-            let span = self.input.cur_span();
-            self.emit_err(span, SyntaxError::WithInStrict);
-        }
-
-        if self.syntax().typescript() {
-            let span = self.input.cur_span();
-            self.emit_err(span, SyntaxError::TS2410);
-        } else if self.ctx().strict {
             let span = self.input.cur_span();
             self.emit_err(span, SyntaxError::WithInStrict);
         }
@@ -994,29 +942,6 @@ impl<'a, I: Tokens> Parser<'a, I> {
                             SyntaxError::VarInitializerInForInHead,
                         );
                     }
-
-                    {
-                        let type_ann = match decl.decls[0].name {
-                            Pat::Ident(ref v) => Some(&v.type_ann),
-                            Pat::Array(ref v) => Some(&v.type_ann),
-                            Pat::Assign(ref v) => Some(&v.type_ann),
-                            Pat::Rest(ref v) => Some(&v.type_ann),
-                            Pat::Object(ref v) => Some(&v.type_ann),
-                            _ => None,
-                        };
-                        if let Some(type_ann) = type_ann {
-                            if type_ann.is_some() {
-                                self.emit_err(decl.decls[0].name.span(), SyntaxError::TS2483);
-                            }
-                        }
-                    }
-                }
-                if decl.decls[0].init.is_some() {
-                    self.emit_err(
-                        decl.decls[0].name.span(),
-                        SyntaxError::VarInitializerInForInHead,
-                    );
-                }
 
                     {
                         let type_ann = match decl.decls[0].name {

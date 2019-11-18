@@ -19,6 +19,7 @@ error: AssignFailed {
                 ),
                 ctxt: #0,
             },
+            name: Atom('Foo' type=inline),
             type_params: None,
             extends: [],
             body: [

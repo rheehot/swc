@@ -150,6 +150,7 @@ pub struct WithState<'w, 'a: 'w, I: 'w + Tokens> {
 }
 impl<'w, 'a, I: Tokens> Deref for WithState<'w, 'a, I> {
     type Target = Parser<'a, I>;
+
     fn deref(&self) -> &Parser<'a, I> {
         &self.inner
     }

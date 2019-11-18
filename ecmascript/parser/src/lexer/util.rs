@@ -119,22 +119,6 @@ impl<'a, I: Input> Lexer<'a, I> {
         DiagnosticBuilder::from(err).emit();
     }
 
-    #[cold]
-    pub(super) fn emit_error(&mut self, start: BytePos, kind: SyntaxError) {
-        let span = self.span(start);
-        self.emit_error_span(span, kind)
-    }
-
-    #[cold]
-    pub(super) fn emit_error_span(&mut self, span: Span, kind: SyntaxError) {
-        let err = ErrorToDiag {
-            handler: self.session.handler,
-            span,
-            error: kind,
-        };
-        DiagnosticBuilder::from(err).emit();
-    }
-
     /// Skip comments or whitespaces.
     ///
     /// See https://tc39.github.io/ecma262/#sec-white-space
