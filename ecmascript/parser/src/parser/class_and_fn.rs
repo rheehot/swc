@@ -494,6 +494,10 @@ impl<'a, I: Tokens> Parser<'a, I> {
                     }
                 }
 
+                if let Some(static_token) = static_token {
+                    self.emit_err(static_token, SyntaxError::TS1089)
+                }
+
                 // TODO: check for duplicate constructors
                 return Ok(ClassMember::Constructor(Constructor {
                     span: span!(start),
