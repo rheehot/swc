@@ -137,6 +137,16 @@ impl<'a, I: Tokens> Parser<'a, I> {
                     if !cond.is_valid_simple_assignment_target(self.ctx().strict) {
                         self.emit_err(cond.span(), SyntaxError::NotSimpleAssign)
                     }
+                    let is_eval_or_arguments = match *cond {
+                        Expr::Ident(ref i) => {
+                            i.sym == js_word!("eval") || i.sym == js_word!("arguments")
+                        }
+                        _ => false,
+                    };
+                    if self.input.syntax().typescript() && self.ctx().strict && is_eval_or_arguments
+                    {
+                        self.emit_err(cond.span(), SyntaxError::TS1100);
+                    }
 
                     // TODO
                     PatOrExpr::Expr(cond)
