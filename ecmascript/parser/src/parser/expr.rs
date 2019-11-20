@@ -1474,6 +1474,10 @@ impl<'a, I: Tokens> Parser<'a, I> {
                 _ => false,
             };
 
+            if self.ctx().strict && is_eval_or_arguments {
+                self.emit_err(expr.span(), SyntaxError::TS1100);
+            }
+
             fn should_deny(e: &Expr, deny_call: bool) -> bool {
                 match e {
                     Expr::Lit(..) => false,

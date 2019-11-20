@@ -383,6 +383,7 @@ parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration11.ts
 parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts
 parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration5.ts
 parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration9.ts
+parser/ecmascript5/ConstructorDeclarations/parserStrictMode3.ts
 parser/ecmascript5/EnumDeclarations
 parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic11.ts
 parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic14.ts
@@ -472,7 +473,6 @@ parser/ecmascript5/Statements/BreakStatements
 parser/ecmascript5/Statements/ContinueStatements
 parser/ecmascript5/Statements/ReturnStatements
 parser/ecmascript5/Statements/parserForStatement
-parser/ecmascript5/StrictMode
 parser/ecmascript5/Symbols/parserES5SymbolProperty
 parser/ecmascript5/TupleTypes/TupleType1.ts
 parser/ecmascript5/TupleTypes/TupleType2.ts
