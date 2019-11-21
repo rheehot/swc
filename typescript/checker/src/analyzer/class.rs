@@ -259,6 +259,7 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
             }
         };
 
+        let old_this = self.scope.this.take();
         self.scope.this = Some(ty.clone());
 
         self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
@@ -287,7 +288,7 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
             c.visit_children(analyzer);
         });
 
-        self.scope.this = None;
+        self.scope.this = old_this;
     }
 }
 
@@ -309,6 +310,7 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
             }
         };
 
+        let old_this = self.scope.this.take();
         self.scope.this = Some(ty.clone());
 
         self.scope.register_type(c.ident.sym.clone(), ty.clone());
@@ -329,7 +331,7 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
             }
         }
 
-        self.scope.this = None;
+        self.scope.this = old_this;
     }
 }
 
