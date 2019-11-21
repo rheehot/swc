@@ -293,6 +293,10 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
 
 impl Visit<ClassDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassDecl) {
+        if LOG_VISIT {
+            println!("Visit<ClassDecl>");
+        }
+
         c.visit_children(self);
 
         self.validate_class_members(&c.class, c.declare);
@@ -331,7 +335,9 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
 
 impl Visit<ClassMethod> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassMethod) {
-        println!("Visit<ClassMethod>");
+        if LOG_VISIT {
+            println!("Visit<ClassMethod>");
+        }
 
         let entry = self.with_child(ScopeKind::Fn, Default::default(), |child| {
             child.return_type_span = c.span();
@@ -415,12 +421,20 @@ impl Visit<ClassMethod> for Analyzer<'_, '_> {
 
 impl Visit<TsIndexSignature> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &TsIndexSignature) {
+        if LOG_VISIT {
+            println!("Visit<TsIndexSignature>");
+        }
+
         node.visit_children(self);
     }
 }
 
 impl Visit<Constructor> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &Constructor) {
+        if LOG_VISIT {
+            println!("Visit<Constructor>");
+        }
+
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
             child.return_type_span = c.span();
 
