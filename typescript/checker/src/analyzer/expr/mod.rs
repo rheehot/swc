@@ -1564,7 +1564,9 @@ impl Analyzer<'_, '_> {
                         }
 
                         match candidates.len() {
-                            0 => unimplemented!("no method with same name"),
+                            0 => {
+                                unimplemented!("no method with same name\nMembers: {:?}", $members)
+                            }
                             1 => {
                                 // TODO:
                                 return self.check_method_call(
