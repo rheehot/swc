@@ -1,8 +1,9 @@
-use super::{
-    control_flow::{Comparator, RemoveTypes},
-    export::pat_to_ts_fn_param,
-    Analyzer,
-};
+use std::{borrow::Cow, iter::once};
+
+use swc_atoms::{js_word, JsWord};
+use swc_common::{util::iter::IteratorExt as _, Span, Spanned, Visit, VisitWith};
+use swc_ecma_ast::*;
+
 use crate::{
     analyzer::instantiate_class,
     builtin_types,
@@ -15,10 +16,12 @@ use crate::{
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
-use std::{borrow::Cow, iter::once};
-use swc_atoms::{js_word, JsWord};
-use swc_common::{util::iter::IteratorExt as _, Span, Spanned, Visit, VisitWith};
-use swc_ecma_ast::*;
+
+use super::{
+    control_flow::{Comparator, RemoveTypes},
+    export::pat_to_ts_fn_param,
+    Analyzer,
+};
 
 mod bin;
 mod call_new;
@@ -209,7 +212,7 @@ impl Analyzer<'_, '_> {
                             span,
                             kind: TsKeywordTypeKind::TsNumberKeyword,
                         })
-                        .owned())
+                        .owned());
                     }
 
                     op!("typeof") | op!("delete") | op!("void") => unreachable!(),
@@ -217,7 +220,7 @@ impl Analyzer<'_, '_> {
             }
 
             Expr::TsAs(TsAsExpr { ref type_ann, .. }) => {
-                return Ok(instantiate_class(type_ann.clone().into_cow()))
+                return Ok(instantiate_class(type_ann.clone().into_cow()));
             }
             Expr::TsTypeCast(TsTypeCastExpr { ref type_ann, .. }) => {
                 return Ok(instantiate_class(type_ann.type_ann.clone().into_cow()));
@@ -441,7 +444,7 @@ impl Analyzer<'_, '_> {
         match i.sym {
             js_word!("arguments") => return Ok(Type::any(span).owned()),
             js_word!("Symbol") => {
-                return Ok(builtin_types::get_var(self.libs, i.span, &js_word!("Symbol"))?.owned())
+                return Ok(builtin_types::get_var(self.libs, i.span, &js_word!("Symbol"))?.owned());
             }
             js_word!("undefined") => return Ok(Type::undefined(span).into_cow()),
             js_word!("void") => return Ok(Type::any(span).into_cow()),
@@ -1070,6 +1073,18 @@ impl Analyzer<'_, '_> {
                 }
                 _ => {}
             },
+
+            Type::This(..) => {
+                if let Some(ref this) = self.scope.this {
+                    return self.access_property(
+                        span,
+                        this.clone().owned(),
+                        prop,
+                        computed,
+                        type_mode,
+                    );
+                }
+            }
 
             _ => {}
         }
@@ -2248,7 +2263,7 @@ impl Analyzer<'_, '_> {
                     params,
                     ret_ty: box self.expand_type(span, *ret_ty)?,
                 }
-                .into_cow())
+                .into_cow());
             }
 
             ty => ty,
