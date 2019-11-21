@@ -1,4 +1,4 @@
-error: TS2585 {
+error: NoSuchVar {
     span: Span {
         lo: BytePos(
             31,
@@ -8,6 +8,7 @@ error: TS2585 {
         ),
         ctxt: #0,
     },
+    name: Atom('Symbol' type=static),
 }
  --> $DIR/tests/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty8.ts:3:6
   |

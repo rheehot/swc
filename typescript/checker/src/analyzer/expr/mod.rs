@@ -440,7 +440,9 @@ impl Analyzer<'_, '_> {
 
         match i.sym {
             js_word!("arguments") => return Ok(Type::any(span).owned()),
-            js_word!("Symbol") => return Err(Error::TS2585 { span }),
+            js_word!("Symbol") => {
+                return Ok(builtin_types::get_var(self.libs, i.span, &js_word!("Symbol"))?.owned())
+            }
             js_word!("undefined") => return Ok(Type::undefined(span).into_cow()),
             js_word!("void") => return Ok(Type::any(span).into_cow()),
             js_word!("eval") => match type_mode {

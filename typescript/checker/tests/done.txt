@@ -476,6 +476,7 @@ parser/ecmascript5/Statements/ReturnStatements
 parser/ecmascript5/Statements/parserForStatement
 parser/ecmascript5/StrictMode
 parser/ecmascript5/Symbols/parserES5SymbolProperty
+parser/ecmascript5/Symbols/parserES5SymbolProperty1.ts
 parser/ecmascript5/TupleTypes/TupleType1.ts
 parser/ecmascript5/TupleTypes/TupleType2.ts
 parser/ecmascript5/TupleTypes/TupleType3.ts

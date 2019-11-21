@@ -156,8 +156,20 @@ impl Analyzer<'_, '_> {
     }
 
     pub(super) fn validate_computed_prop_key(&mut self, span: Span, key: &Expr) {
+        let mut errors = vec![];
+        let is_symbol_access = match *key {
+            Expr::Member(MemberExpr {
+                obj:
+                    ExprOrSuper::Expr(box Expr::Ident(Ident {
+                        sym: js_word!("Symbol"),
+                        ..
+                    })),
+                ..
+            }) => true,
+            _ => false,
+        };
+
         analyze!(self, {
-            let mut errors = vec![];
             let ty = match self.type_of(&key) {
                 Ok(ty) => ty,
                 Err(err) => {
@@ -174,6 +186,7 @@ impl Analyzer<'_, '_> {
 
             match *ty.normalize() {
                 Type::Lit(..) => {}
+                _ if is_symbol_access => {}
                 _ => errors.push(Error::TS1166 { span }),
             }
 

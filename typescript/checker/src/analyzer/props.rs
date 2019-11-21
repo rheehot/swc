@@ -11,6 +11,18 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
 
         let span = node.span;
 
+        let is_symbol_access = match *node.expr {
+            Expr::Member(MemberExpr {
+                obj:
+                    ExprOrSuper::Expr(box Expr::Ident(Ident {
+                        sym: js_word!("Symbol"),
+                        ..
+                    })),
+                ..
+            }) => true,
+            _ => false,
+        };
+
         analyze!(self, {
             let mut errors = vec![];
             let ty = match self.type_of(&node.expr) {
@@ -48,6 +60,7 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
                         kind: TsKeywordTypeKind::TsSymbolKeyword,
                         ..
                     }) => {}
+                    _ if is_symbol_access => {}
                     _ => errors.push(Error::TS2464 { span }),
                 }
             }
