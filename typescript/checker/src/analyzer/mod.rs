@@ -216,7 +216,7 @@ impl Analyzer<'_, '_> {
         for parent in parents {
             // Verify parent interface
             let res: Result<(), _> = try {
-                let parent_ty = self.type_of_ts_entity_name(
+                let _ = self.type_of_ts_entity_name(
                     parent.span,
                     &parent.expr,
                     parent.type_params.as_ref(),
