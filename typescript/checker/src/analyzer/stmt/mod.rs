@@ -36,7 +36,7 @@ impl Analyzer<'_, '_> {
                 VarDeclOrPat::VarDecl(..) => {}
                 VarDeclOrPat::Pat(ref pat) => match *pat {
                     Pat::Expr(ref e) => {
-                        self.type_of_expr(&e, TypeOfMode::LValue)?;
+                        self.type_of_expr(&e, TypeOfMode::LValue, None)?;
                     }
                     Pat::Ident(ref i) => {
                         // TODO: verify
@@ -74,7 +74,7 @@ impl Analyzer<'_, '_> {
         match lhs {
             VarDeclOrPat::Pat(Pat::Expr(ref l)) => {
                 let lty = match self
-                    .type_of_expr(&**l, TypeOfMode::LValue)
+                    .type_of_expr(&**l, TypeOfMode::LValue, None)
                     .and_then(|ty| self.expand_type(span, ty))
                 {
                     Ok(ty) => ty,

@@ -47,13 +47,14 @@ pub(super) enum TypeOfMode {
 
 impl Analyzer<'_, '_> {
     pub(super) fn type_of(&self, expr: &Expr) -> Result<TypeRef, Error> {
-        self.type_of_expr(expr, TypeOfMode::RValue)
+        self.type_of_expr(expr, TypeOfMode::RValue, None)
     }
 
     pub(super) fn type_of_expr(
         &self,
         expr: &Expr,
         type_mode: TypeOfMode,
+        type_params: Option<&TsTypeParamInstantiation>,
     ) -> Result<TypeRef, Error> {
         let span = expr.span();
 

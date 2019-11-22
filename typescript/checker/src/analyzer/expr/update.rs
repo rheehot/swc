@@ -15,7 +15,7 @@ impl Fold<UpdateExpr> for Analyzer<'_, '_> {
         let mut errors = vec![];
 
         match self
-            .type_of_expr(&e.arg, TypeOfMode::LValue)
+            .type_of_expr(&e.arg, TypeOfMode::LValue, None)
             .and_then(|ty| self.expand_type(ty.span(), ty))
         {
             Ok(ty) => match *ty.normalize() {
