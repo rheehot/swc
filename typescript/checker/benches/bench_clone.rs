@@ -6,7 +6,7 @@ use std::{fs::File, path::PathBuf, sync::Arc};
 use swc_common::input::SourceFileInput;
 use swc_ecma_parser::{lexer::Lexer, Parser, Session, Syntax};
 use swc_ts_checker::Checker;
-use test::Bencher;
+use test::{black_box, Bencher};
 use testing::Tester;
 
 fn bench(b: &mut Bencher, s: &str) {
@@ -49,7 +49,7 @@ fn bench(b: &mut Bencher, s: &str) {
             Default::default(),
         );
         b.iter(|| {
-            c.analyze_module(path.clone(), &module);
+            black_box(c.analyze_module(path.clone(), &module));
         });
 
         Ok(())

@@ -2,6 +2,7 @@
 
 extern crate test;
 
+use bitflags::_core::hint::black_box;
 use std::{fs::File, path::PathBuf};
 use swc_ts_checker::Checker;
 use test::Bencher;
@@ -24,7 +25,7 @@ fn bench(b: &mut Bencher, s: &str) {
             Default::default(),
         );
         b.iter(|| {
-            c.check(PathBuf::from(s));
+            black_box(c.check(PathBuf::from(s)));
         });
 
         Ok(())
