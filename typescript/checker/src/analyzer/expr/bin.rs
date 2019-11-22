@@ -10,6 +10,8 @@ use swc_ecma_ast::*;
 
 impl Fold<BinExpr> for Analyzer<'_, '_> {
     fn fold(&mut self, expr: BinExpr) -> BinExpr {
+        log_fold!(expr);
+
         let expr = expr.fold_children(self);
 
         let mut errors = vec![];

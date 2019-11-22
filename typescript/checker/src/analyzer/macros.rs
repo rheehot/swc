@@ -8,3 +8,16 @@ macro_rules! analyze {
         }
     }};
 }
+
+pub fn type_name<T>(_: &T) -> &'static str {
+    ::std::any::type_name::<T>()
+}
+
+macro_rules! log_fold {
+    ($e:expr) => {{
+        let ty_name = crate::analyzer::macros::type_name(&$e);
+        if crate::analyzer::LOG_VISIT {
+            println!("Fold<{}>", ty_name);
+        }
+    }};
+}

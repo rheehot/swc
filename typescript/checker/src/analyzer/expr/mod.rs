@@ -2343,6 +2343,7 @@ enum ExtractKind {
 
 impl Fold<Stmt> for Analyzer<'_, '_> {
     fn fold(&mut self, stmt: Stmt) -> Stmt {
+        log_fold!(stmt);
         let stmt = stmt.fold_children(self);
 
         match stmt {
@@ -2364,6 +2365,8 @@ impl Fold<Stmt> for Analyzer<'_, '_> {
 
 impl Fold<SeqExpr> for Analyzer<'_, '_> {
     fn fold(&mut self, mut expr: SeqExpr) -> SeqExpr {
+        log_fold!(expr);
+
         let first_span = expr.exprs[0].span();
 
         for expr in expr.exprs.drain(..expr.exprs.len() - 1) {
@@ -2408,6 +2411,8 @@ impl Fold<SeqExpr> for Analyzer<'_, '_> {
 
 impl Fold<TsTypeAssertion> for Analyzer<'_, '_> {
     fn fold(&mut self, expr: TsTypeAssertion) -> TsTypeAssertion {
+        log_fold!(expr);
+
         let expr = expr.fold_children(self);
 
         match self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann) {
@@ -2423,6 +2428,8 @@ impl Fold<TsTypeAssertion> for Analyzer<'_, '_> {
 
 impl Fold<TsAsExpr> for Analyzer<'_, '_> {
     fn fold(&mut self, expr: TsAsExpr) -> TsAsExpr {
+        log_fold!(expr);
+
         let expr = expr.fold_children(self);
 
         match self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann) {
@@ -2581,6 +2588,8 @@ impl Analyzer<'_, '_> {
 
 impl Fold<ThrowStmt> for Analyzer<'_, '_> {
     fn fold(&mut self, s: ThrowStmt) -> ThrowStmt {
+        log_fold!(s);
+
         let s = s.fold_children(self);
 
         match self

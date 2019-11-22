@@ -5,6 +5,8 @@ use crate::{analyzer::Analyzer, errors::Error, ty::Type};
 
 impl Fold<NewExpr> for Analyzer<'_, '_> {
     fn fold(&mut self, e: NewExpr) -> NewExpr {
+        log_fold!(e);
+
         let e = e.fold_children(self);
 
         let res: Result<(), Error> = try {
@@ -41,6 +43,8 @@ impl Fold<NewExpr> for Analyzer<'_, '_> {
 
 impl Fold<CallExpr> for Analyzer<'_, '_> {
     fn fold(&mut self, e: CallExpr) -> CallExpr {
+        log_fold!(e);
+
         let e = e.fold_children(self);
 
         // Check arguments

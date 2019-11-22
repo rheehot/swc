@@ -4,6 +4,8 @@ use swc_ecma_ast::*;
 
 impl Fold<UnaryExpr> for Analyzer<'_, '_> {
     fn fold(&mut self, node: UnaryExpr) -> UnaryExpr {
+        log_fold!(node);
+
         let node = node.fold_children(self);
 
         let mut errors = vec![];

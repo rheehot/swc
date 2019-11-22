@@ -12,13 +12,14 @@ use swc_ecma_ast::*;
 
 impl Fold<Class> for Analyzer<'_, '_> {
     fn fold(&mut self, c: Class) -> Class {
-        if LOG_VISIT {
-            println!("Fold<Class>");
-        }
+        log_fold!(c);
 
         let c = c.fold_children(self);
 
         self.validate_parent_interfaces(&c.implements);
+
+        let mut constructor_spans = vec![];
+        let mut constructor_required_param_count = None;
 
         for m in &c.body {
             match *m {
@@ -33,9 +34,34 @@ impl Fold<Class> for Analyzer<'_, '_> {
                                 _ => {}
                             }
                         }
-                    } else {
-                        // TODO: Check parameter count
                     }
+
+                    {
+                        // Check parameter count
+                        let required_param_count = cons
+                            .params
+                            .iter()
+                            .filter(|p| match p {
+                                PatOrTsParamProp::Pat(Pat::Ident(Ident {
+                                    optional: true, ..
+                                })) => false,
+                                _ => true,
+                            })
+                            .count();
+
+                        match constructor_required_param_count {
+                            Some(v) if required_param_count != v => {
+                                for span in constructor_spans.drain(..) {
+                                    self.info.errors.push(Error::TS2394 { span })
+                                }
+                            }
+
+                            None => constructor_required_param_count = Some(required_param_count),
+                            _ => {}
+                        }
+                    }
+
+                    constructor_spans.push(cons.span);
                 }
 
                 _ => {}
@@ -439,9 +465,7 @@ impl Fold<ClassMethod> for Analyzer<'_, '_> {
 
 impl Fold<TsIndexSignature> for Analyzer<'_, '_> {
     fn fold(&mut self, node: TsIndexSignature) -> TsIndexSignature {
-        if LOG_VISIT {
-            println!("Fold<TsIndexSignature>");
-        }
+        log_fold!(node);
 
         node.fold_children(self)
     }
@@ -449,9 +473,7 @@ impl Fold<TsIndexSignature> for Analyzer<'_, '_> {
 
 impl Fold<Constructor> for Analyzer<'_, '_> {
     fn fold(&mut self, c: Constructor) -> Constructor {
-        if LOG_VISIT {
-            println!("Fold<Constructor>");
-        }
+        log_fold!(c);
 
         let c_span = c.span();
 

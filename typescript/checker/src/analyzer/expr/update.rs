@@ -8,6 +8,8 @@ use swc_ecma_ast::*;
 
 impl Fold<UpdateExpr> for Analyzer<'_, '_> {
     fn fold(&mut self, e: UpdateExpr) -> UpdateExpr {
+        log_fold!(e);
+
         let e = e.fold_children(self);
 
         let mut errors = vec![];
