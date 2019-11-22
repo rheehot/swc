@@ -88,71 +88,67 @@ impl Analyzer<'_, '_> {
         let mut spans = vec![];
         let mut name: Option<&PropName> = None;
 
-        for m in &c.body {
-            macro_rules! check {
-                ($m:expr, $body:expr) => {{
-                    if declare {
-                        continue;
-                    }
+        if !declare {
+            for m in &c.body {
+                macro_rules! check {
+                    ($m:expr, $body:expr) => {{
+                        let m = $m;
 
-                    let m = $m;
-
-                    match m.key {
-                        PropName::Computed(..) => continue,
-                        _ => {}
-                    }
-
-                    if $body.is_none() {
-                        if name.is_some() && !is_prop_name_eq(&name.unwrap(), &m.key) {
-                            for span in mem::replace(&mut spans, vec![]) {
-                                errors.push(Error::TS2391 { span });
-                            }
+                        match m.key {
+                            PropName::Computed(..) => continue,
+                            _ => {}
                         }
 
-                        name = Some(&m.key);
-                        spans.push(m.key.span());
-                    } else {
-                        if name.is_none() || is_prop_name_eq(&name.unwrap(), &m.key) {
-                            // TODO: Verify parameters
-
-                            spans = vec![];
-                            name = None;
-                        } else {
-                            let constructor_name =
-                                PropName::Ident(Ident::new(js_word!("constructor"), DUMMY_SP));
-
-                            if is_prop_name_eq(&name.unwrap(), &constructor_name) {
+                        if $body.is_none() {
+                            if name.is_some() && !is_prop_name_eq(&name.unwrap(), &m.key) {
                                 for span in mem::replace(&mut spans, vec![]) {
                                     errors.push(Error::TS2391 { span });
                                 }
-                            } else if is_prop_name_eq(&m.key, &constructor_name) {
-                                for span in mem::replace(&mut spans, vec![]) {
-                                    errors.push(Error::TS2389 { span });
-                                }
-                            } else {
-                                spans = vec![];
-
-                                errors.push(Error::TS2389 { span: m.key.span() });
                             }
 
-                            name = None;
+                            name = Some(&m.key);
+                            spans.push(m.key.span());
+                        } else {
+                            if name.is_none() || is_prop_name_eq(&name.unwrap(), &m.key) {
+                                // TODO: Verify parameters
+
+                                spans = vec![];
+                                name = None;
+                            } else {
+                                let constructor_name =
+                                    PropName::Ident(Ident::new(js_word!("constructor"), DUMMY_SP));
+
+                                if is_prop_name_eq(&name.unwrap(), &constructor_name) {
+                                    for span in mem::replace(&mut spans, vec![]) {
+                                        errors.push(Error::TS2391 { span });
+                                    }
+                                } else if is_prop_name_eq(&m.key, &constructor_name) {
+                                    for span in mem::replace(&mut spans, vec![]) {
+                                        errors.push(Error::TS2389 { span });
+                                    }
+                                } else {
+                                    spans = vec![];
+
+                                    errors.push(Error::TS2389 { span: m.key.span() });
+                                }
+
+                                name = None;
+                            }
                         }
-                    }
-                }};
+                    }};
+                }
+
+                match *m {
+                    ClassMember::Constructor(ref m) => check!(m, m.body),
+                    ClassMember::Method(
+                        ref m @ ClassMethod {
+                            is_abstract: false, ..
+                        },
+                    ) => check!(m, m.function.body),
+                    _ => {}
+                }
             }
 
-            match *m {
-                ClassMember::Constructor(ref m) => check!(m, m.body),
-                ClassMember::Method(
-                    ref m @ ClassMethod {
-                        is_abstract: false, ..
-                    },
-                ) => check!(m, m.function.body),
-                _ => {}
-            }
-        }
-
-        if !declare {
             // Class definition ended with `foo();`
             for span in mem::replace(&mut spans, vec![]) {
                 errors.push(Error::TS2391 { span });
