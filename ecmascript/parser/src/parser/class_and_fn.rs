@@ -376,6 +376,12 @@ impl<'a, I: Tokens> Parser<'a, I> {
     ) -> PResult<'a, ClassMember> {
         let is_static = static_token.is_some();
         let modifier = self.parse_ts_modifier(&["abstract", "readonly"])?;
+        let modifier_span = if let Some(..) = modifier {
+            Some(self.input.prev_span())
+        } else {
+            None
+        };
+
         let (is_abstract, readonly) = match modifier {
             Some("abstract") => (true, self.parse_ts_modifier(&["readonly"])?.is_some()),
             Some("readonly") => (self.parse_ts_modifier(&["abstract"])?.is_some(), true),
@@ -498,7 +504,10 @@ impl<'a, I: Tokens> Parser<'a, I> {
                     self.emit_err(static_token, SyntaxError::TS1089)
                 }
 
-                // TODO: check for duplicate constructors
+                if let Some(span) = modifier_span {
+                    self.emit_err(span, SyntaxError::TS1242);
+                }
+
                 return Ok(ClassMember::Constructor(Constructor {
                     span: span!(start),
                     accessibility,
