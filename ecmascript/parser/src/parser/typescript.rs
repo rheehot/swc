@@ -2164,6 +2164,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
             let expr = true; // May be set again by parseFunctionBody.
             let is_async = true;
             let body = p.parse_fn_body(true, false)?;
+            dbg!();
             Ok(Some(ArrowExpr {
                 span: span!(start),
                 body,

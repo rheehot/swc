@@ -173,7 +173,7 @@ impl Fold for InjectSelf {
             }
 
             //TODO: Collect expect and give that list to unexpected
-            "assert_and_bump" | "bump" | "cur" | "cur_pos" | "eat" | "eof" | "eat_exact"
+            "trace_cur" |"assert_and_bump" | "bump" | "cur" | "cur_pos" | "eat" | "eof" | "eat_exact"
             | "expect" | "expect_exact" | "into_spanned" | "is" | "is_exact" | "is_one_of"
             | "peeked_is" | "peek" | "peek_ahead" | "last_pos" | "return_if_arrow" | "span"
             | "syntax_error" | "make_error" | "emit_error" | "unexpected" | "store" => {

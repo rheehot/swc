@@ -341,6 +341,7 @@ parser/ecmascript5/Accessors/parserAccessors5.ts
 parser/ecmascript5/Accessors/parserAccessors6.ts
 parser/ecmascript5/Accessors/parserAccessors7.ts
 parser/ecmascript5/ArrayLiteralExpressions
+parser/ecmascript5/ArrowFunctionExpressions/
 parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression1.ts
 parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression2.ts
 parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression4.ts
