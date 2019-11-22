@@ -614,7 +614,6 @@ types/tuple/castingTuple.ts
 types/tuple/emptyTuples
 types/tuple/indexerWithTuple.ts
 types/tuple/tupleElementTypes
-types/tuple/wideningTuples2.ts
 types/tuple/wideningTuples3.ts
 types/tuple/wideningTuples4.ts
 types/tuple/wideningTuples5.ts
