@@ -120,7 +120,7 @@ impl Checker<'_> {
 
             let module = self.load_module(entry.clone());
 
-            errors.extend(module.1.errors.clone());
+            errors.extend_from_slice(&module.1.errors);
 
             // let (tasks, receiver) = channel::unbounded();
             // let (result_sender, result_receiver) = channel::unbounded();
