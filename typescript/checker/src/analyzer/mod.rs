@@ -204,14 +204,15 @@ impl Fold<TsInterfaceDecl> for Analyzer<'_, '_> {
         self.scope
             .register_type(decl.id.sym.clone(), decl.clone().into());
 
-        self.validate_parent_interfaces(&decl.extends);
+        self.resolve_parent_interfaces(&decl.extends);
 
         decl
     }
 }
 
 impl Analyzer<'_, '_> {
-    fn validate_parent_interfaces(&mut self, parents: &[TsExprWithTypeArgs]) {
+    /// Validate that parent interfaces are all resolved.
+    fn resolve_parent_interfaces(&mut self, parents: &[TsExprWithTypeArgs]) {
         for parent in parents {
             // Verify parent interface
             let res: Result<(), _> = try {

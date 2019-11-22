@@ -16,7 +16,7 @@ impl Fold<Class> for Analyzer<'_, '_> {
 
         let c = c.fold_children(self);
 
-        self.validate_parent_interfaces(&c.implements);
+        self.resolve_parent_interfaces(&c.implements);
 
         let mut constructor_spans = vec![];
         let mut constructor_required_param_count = None;
