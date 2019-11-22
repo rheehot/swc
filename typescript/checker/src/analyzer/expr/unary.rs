@@ -1,10 +1,10 @@
 use crate::{analyzer::Analyzer, errors::Error, ty::Type};
-use swc_common::{Spanned, Visit, VisitWith};
+use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
-impl Visit<UnaryExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, node: &UnaryExpr) {
-        node.visit_children(self);
+impl Fold<UnaryExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, node: UnaryExpr) -> UnaryExpr {
+        let node = node.fold_children(self);
 
         let mut errors = vec![];
 
@@ -77,5 +77,7 @@ impl Visit<UnaryExpr> for Analyzer<'_, '_> {
         }
 
         self.info.errors.extend(errors);
+
+        node
     }
 }

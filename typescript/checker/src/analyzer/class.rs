@@ -7,16 +7,16 @@ use crate::{
 };
 use std::mem;
 use swc_atoms::js_word;
-use swc_common::{Span, Spanned, Visit, VisitWith, DUMMY_SP};
+use swc_common::{util::move_map::MoveMap, Fold, FoldWith, Span, Spanned, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
-impl Visit<Class> for Analyzer<'_, '_> {
-    fn visit(&mut self, c: &Class) {
+impl Fold<Class> for Analyzer<'_, '_> {
+    fn fold(&mut self, c: Class) -> Class {
         if LOG_VISIT {
-            println!("Visit<Class>");
+            println!("Fold<Class>");
         }
 
-        c.visit_children(self);
+        let c = c.fold_children(self);
 
         self.validate_parent_interfaces(&c.implements);
 
@@ -41,6 +41,8 @@ impl Visit<Class> for Analyzer<'_, '_> {
                 _ => {}
             }
         }
+
+        c
     }
 }
 
@@ -197,30 +199,30 @@ impl Analyzer<'_, '_> {
     }
 }
 
-impl Visit<ClassMember> for Analyzer<'_, '_> {
-    fn visit(&mut self, node: &ClassMember) {
+impl Fold<ClassMember> for Analyzer<'_, '_> {
+    fn fold(&mut self, node: ClassMember) -> ClassMember {
         if LOG_VISIT {
-            println!("Visit<ClassMember>");
+            println!("Fold<ClassMember>");
         }
 
         self.computed_prop_mode = ComputedPropMode::Class {
-            has_body: match *node {
+            has_body: match node {
                 ClassMember::Method(ClassMethod { ref function, .. }) => function.body.is_some(),
                 _ => false,
             },
         };
 
-        node.visit_children(self);
+        node.fold_children(self)
     }
 }
 
-impl Visit<ClassProp> for Analyzer<'_, '_> {
-    fn visit(&mut self, p: &ClassProp) {
+impl Fold<ClassProp> for Analyzer<'_, '_> {
+    fn fold(&mut self, p: ClassProp) -> ClassProp {
         if LOG_VISIT {
-            println!("Visit<ClassProp>");
+            println!("Fold<ClassProp>");
         }
 
-        p.visit_children(self);
+        let p = p.fold_children(self);
 
         // Verify key if key is computed
         if p.computed {
@@ -242,13 +244,15 @@ impl Visit<ClassProp> for Analyzer<'_, '_> {
         }
 
         self.scope.declaring_prop = None;
+
+        p
     }
 }
 
-impl Visit<ClassExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, c: &ClassExpr) {
+impl Fold<ClassExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, c: ClassExpr) -> ClassExpr {
         if LOG_VISIT {
-            println!("Visit<ClassExpr>");
+            println!("Fold<ClassExpr>");
         }
 
         let ty = match self.validate_type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {
@@ -262,7 +266,7 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
         let old_this = self.scope.this.take();
         self.scope.this = Some(ty.clone());
 
-        self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
+        let c = self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
             if let Some(ref i) = c.ident {
                 analyzer.scope.register_type(i.sym.clone(), ty.clone());
 
@@ -285,20 +289,22 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
                 }
             }
 
-            c.visit_children(analyzer);
+            c.fold_children(analyzer)
         });
 
         self.scope.this = old_this;
+
+        c
     }
 }
 
-impl Visit<ClassDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, c: &ClassDecl) {
+impl Fold<ClassDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, c: ClassDecl) -> ClassDecl {
         if LOG_VISIT {
-            println!("Visit<ClassDecl>");
+            println!("Fold<ClassDecl>");
         }
 
-        c.visit_children(self);
+        let c = c.fold_children(self);
 
         self.validate_class_members(&c.class, c.declare);
 
@@ -332,17 +338,22 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
         }
 
         self.scope.this = old_this;
+
+        c
     }
 }
 
-impl Visit<ClassMethod> for Analyzer<'_, '_> {
-    fn visit(&mut self, c: &ClassMethod) {
+impl Fold<ClassMethod> for Analyzer<'_, '_> {
+    fn fold(&mut self, mut c: ClassMethod) -> ClassMethod {
         if LOG_VISIT {
-            println!("Visit<ClassMethod>");
+            println!("Fold<ClassMethod>");
         }
 
-        let entry = self.with_child(ScopeKind::Fn, Default::default(), |child| {
-            child.return_type_span = c.span();
+        let c_span = c.span();
+        let key_span = c.key.span();
+
+        let (entry, c) = self.with_child(ScopeKind::Fn, Default::default(), |child| {
+            child.return_type_span = c_span;
 
             let old = child.allow_ref_declaring;
             child.allow_ref_declaring = false;
@@ -391,17 +402,20 @@ impl Visit<ClassMethod> for Analyzer<'_, '_> {
             });
 
             child.inferred_return_types.get_mut().insert(c.span, vec![]);
-            c.key.visit_with(child);
-            c.function.visit_children(child);
+            c.key = c.key.fold_with(child);
+            c.function = c.function.fold_children(child);
 
             debug_assert_eq!(child.allow_ref_declaring, false);
             child.allow_ref_declaring = old;
 
-            child
-                .inferred_return_types
-                .get_mut()
-                .remove_entry(&c.span())
-                .unwrap_or_default()
+            (
+                child
+                    .inferred_return_types
+                    .get_mut()
+                    .remove_entry(&c_span)
+                    .unwrap_or_default(),
+                c,
+            )
         });
 
         if c.kind == MethodKind::Getter && c.function.body.is_some() {
@@ -409,7 +423,7 @@ impl Visit<ClassMethod> for Analyzer<'_, '_> {
             if entry.1.is_empty() {
                 self.info
                     .errors
-                    .push(Error::GetterPropWithoutReturn { span: c.key.span() });
+                    .push(Error::GetterPropWithoutReturn { span: key_span });
             }
         }
 
@@ -418,27 +432,33 @@ impl Visit<ClassMethod> for Analyzer<'_, '_> {
             .get_mut()
             .entry(c.span())
             .or_default() = entry.1;
+
+        c
     }
 }
 
-impl Visit<TsIndexSignature> for Analyzer<'_, '_> {
-    fn visit(&mut self, node: &TsIndexSignature) {
+impl Fold<TsIndexSignature> for Analyzer<'_, '_> {
+    fn fold(&mut self, node: TsIndexSignature) -> TsIndexSignature {
         if LOG_VISIT {
-            println!("Visit<TsIndexSignature>");
+            println!("Fold<TsIndexSignature>");
         }
 
-        node.visit_children(self);
+        node.fold_children(self)
     }
 }
 
-impl Visit<Constructor> for Analyzer<'_, '_> {
-    fn visit(&mut self, c: &Constructor) {
+impl Fold<Constructor> for Analyzer<'_, '_> {
+    fn fold(&mut self, c: Constructor) -> Constructor {
         if LOG_VISIT {
-            println!("Visit<Constructor>");
+            println!("Fold<Constructor>");
         }
+
+        let c_span = c.span();
 
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
-            child.return_type_span = c.span();
+            let Constructor { params, .. } = c;
+
+            child.return_type_span = c_span;
 
             let old = child.allow_ref_declaring;
             child.allow_ref_declaring = false;
@@ -447,7 +467,7 @@ impl Visit<Constructor> for Analyzer<'_, '_> {
                 // Validate params
                 // TODO: Move this to parser
                 let mut has_optional = false;
-                for p in &c.params {
+                for p in &params {
                     if has_optional {
                         child.info.errors.push(Error::TS1016 { span: p.span() });
                     }
@@ -463,7 +483,7 @@ impl Visit<Constructor> for Analyzer<'_, '_> {
                 }
             }
 
-            c.params.iter().for_each(|param| {
+            let params = params.move_map(|param| {
                 let mut names = vec![];
 
                 let mut visitor = VarVisitor { names: &mut names };
@@ -522,13 +542,17 @@ impl Visit<Constructor> for Analyzer<'_, '_> {
                 for n in names {
                     child.declaring.remove_item(&n).unwrap();
                 }
+
+                param
             });
 
-            child.inferred_return_types.get_mut().insert(c.span, vec![]);
-            c.visit_children(child);
+            child.inferred_return_types.get_mut().insert(c_span, vec![]);
+            let c = Constructor { params, ..c }.fold_children(child);
 
             debug_assert_eq!(child.allow_ref_declaring, false);
             child.allow_ref_declaring = old;
-        });
+
+            c
+        })
     }
 }

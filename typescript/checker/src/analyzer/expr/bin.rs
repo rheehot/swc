@@ -5,12 +5,12 @@ use crate::{
     ty::{Type, TypeRef},
     util::{EqIgnoreSpan, IntoCow},
 };
-use swc_common::{Spanned, Visit, VisitWith};
+use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
-impl Visit<BinExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, expr: &BinExpr) {
-        expr.visit_children(self);
+impl Fold<BinExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, expr: BinExpr) -> BinExpr {
+        let expr = expr.fold_children(self);
 
         let mut errors = vec![];
 
@@ -252,6 +252,8 @@ impl Visit<BinExpr> for Analyzer<'_, '_> {
         }
 
         self.info.errors.extend(errors);
+
+        expr
     }
 }
 

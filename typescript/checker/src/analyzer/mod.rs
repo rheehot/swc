@@ -17,10 +17,10 @@ use log::debug;
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use std::{borrow::Cow, cell::RefCell, path::PathBuf, sync::Arc};
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Span, Spanned, Visit, VisitWith, DUMMY_SP};
+use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
-/// If true, Visit<T> prints `Visit<T>` to stdout.
+/// If true, Fold<T> prints `Fold<T>` to stdout.
 const LOG_VISIT: bool = true;
 
 #[macro_use]
@@ -84,12 +84,12 @@ enum ComputedPropMode {
     Object,
 }
 
-impl<T> Visit<Vec<T>> for Analyzer<'_, '_>
+impl<T> Fold<Vec<T>> for Analyzer<'_, '_>
 where
-    T: VisitWith<Self> + for<'any> VisitWith<ImportFinder<'any>> + Send + Sync,
-    Vec<T>: VisitWith<Self> + for<'any> VisitWith<AmbientFunctionHandler<'any>>,
+    T: FoldWith<Self> + for<'any> VisitWith<ImportFinder<'any>> + Send + Sync,
+    Vec<T>: FoldWith<Self> + for<'any> VisitWith<AmbientFunctionHandler<'any>>,
 {
-    fn visit(&mut self, items: &Vec<T>) {
+    fn fold(&mut self, items: Vec<T>) -> Vec<T> {
         // We first load imports.
 
         {
@@ -98,7 +98,7 @@ where
             items.iter().for_each(|item| {
                 // Extract imports
                 item.visit_with(&mut ImportFinder { to: &mut imports });
-                // item.visit_with(self);
+                // item.fold_with(self);
             });
 
             let loader = self.loader;
@@ -154,14 +154,16 @@ where
             }
         }
 
-        items.visit_children(self);
+        let items = items.fold_children(self);
 
         self.handle_pending_exports();
+
+        items
     }
 }
 
-impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, decl: &TsModuleDecl) {
+impl Fold<TsModuleDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, decl: TsModuleDecl) -> TsModuleDecl {
         let span = decl.span;
 
         let mut new = Analyzer::new(
@@ -173,7 +175,7 @@ impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
         );
         new.in_declare = decl.declare;
 
-        decl.visit_children(&mut new);
+        let decl = decl.fold_children(&mut new);
         self.info.errors.append(&mut new.info.errors);
 
         self.scope.register_type(
@@ -186,17 +188,21 @@ impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
                 exports: new.info.exports,
             }),
         );
+
+        decl
     }
 }
 
-impl Visit<TsInterfaceDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, decl: &TsInterfaceDecl) {
-        decl.visit_children(self);
+impl Fold<TsInterfaceDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, decl: TsInterfaceDecl) -> TsInterfaceDecl {
+        let decl = decl.fold_children(self);
 
         self.scope
             .register_type(decl.id.sym.clone(), decl.clone().into());
 
         self.validate_parent_interfaces(&decl.extends);
+
+        decl
     }
 }
 
@@ -222,8 +228,8 @@ impl Analyzer<'_, '_> {
     }
 }
 
-impl Visit<TsTypeAliasDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, decl: &TsTypeAliasDecl) {
+impl Fold<TsTypeAliasDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, decl: TsTypeAliasDecl) -> TsTypeAliasDecl {
         let ty: Type<'_> = decl.type_ann.clone().into();
 
         let ty = if decl.type_params.is_none() {
@@ -248,6 +254,7 @@ impl Visit<TsTypeAliasDecl> for Analyzer<'_, '_> {
         );
 
         // TODO: Validate type
+        decl
     }
 }
 
@@ -490,7 +497,8 @@ impl Analyzer<'_, '_> {
             }
 
             child.inferred_return_types.get_mut().insert(f.span, vec![]);
-            f.visit_children(child);
+            // TODO: Remove clone
+            f.clone().fold_children(child);
 
             let (mut fn_ty, err) = child.type_of_fn_detail(f)?;
             child.info.errors.push(err);
@@ -559,9 +567,9 @@ impl Analyzer<'_, '_> {
     }
 }
 
-impl Visit<FnDecl> for Analyzer<'_, '_> {
-    /// NOTE: This method **should not call f.visit_children(self)**
-    fn visit(&mut self, f: &FnDecl) {
+impl Fold<FnDecl> for Analyzer<'_, '_> {
+    /// NOTE: This method **should not call f.fold_children(self)**
+    fn fold(&mut self, f: FnDecl) -> FnDecl {
         let fn_ty = self.visit_fn(Some(&f.ident), &f.function);
 
         match self
@@ -573,24 +581,30 @@ impl Visit<FnDecl> for Analyzer<'_, '_> {
                 self.info.errors.push(err);
             }
         }
+
+        f
     }
 }
 
-impl Visit<FnExpr> for Analyzer<'_, '_> {
-    /// NOTE: This method **should not call f.visit_children(self)**
-    fn visit(&mut self, f: &FnExpr) {
+impl Fold<FnExpr> for Analyzer<'_, '_> {
+    /// NOTE: This method **should not call f.fold_children(self)**
+    fn fold(&mut self, f: FnExpr) -> FnExpr {
         self.visit_fn(f.ident.as_ref(), &f.function);
+
+        f
     }
 }
 
-impl Visit<Function> for Analyzer<'_, '_> {
-    fn visit(&mut self, f: &Function) {
-        self.visit_fn(None, f);
+impl Fold<Function> for Analyzer<'_, '_> {
+    fn fold(&mut self, f: Function) -> Function {
+        self.visit_fn(None, &f);
+
+        f
     }
 }
 
-impl Visit<ArrowExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, f: &ArrowExpr) {
+impl Fold<ArrowExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, f: ArrowExpr) -> ArrowExpr {
         self.with_child(ScopeKind::ArrowFn, Default::default(), |child| {
             child.return_type_span = f.span;
 
@@ -623,7 +637,7 @@ impl Visit<ArrowExpr> for Analyzer<'_, '_> {
                 }
             }
 
-            f.visit_children(child);
+            let f = f.fold_children(child);
 
             match f.body {
                 BlockStmtOrExpr::Expr(ref expr) => {
@@ -631,23 +645,25 @@ impl Visit<ArrowExpr> for Analyzer<'_, '_> {
                 }
                 _ => {}
             }
-        });
-    }
-}
 
-impl Visit<BlockStmt> for Analyzer<'_, '_> {
-    fn visit(&mut self, stmt: &BlockStmt) {
-        self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
-            stmt.visit_children(analyzer);
+            f
         })
     }
 }
 
-impl Visit<AssignExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, expr: &AssignExpr) {
+impl Fold<BlockStmt> for Analyzer<'_, '_> {
+    fn fold(&mut self, stmt: BlockStmt) -> BlockStmt {
+        self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
+            stmt.fold_children(analyzer)
+        })
+    }
+}
+
+impl Fold<AssignExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, expr: AssignExpr) -> AssignExpr {
         let mut errors = vec![];
         let span = expr.span();
-        expr.visit_children(self);
+        let expr = expr.fold_children(self);
 
         let rhs_ty = match self
             .type_of(&expr.right)
@@ -676,268 +692,299 @@ impl Visit<AssignExpr> for Analyzer<'_, '_> {
         if expr.op == op!("=") {
             self.try_assign(span, &expr.left, &rhs_ty);
         }
+
+        expr
     }
 }
 
-impl Visit<VarDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, var: &VarDecl) {
+impl Fold<VarDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, var: VarDecl) -> VarDecl {
+        let declare = var.declare;
         let kind = var.kind;
 
-        var.decls.iter().for_each(|v| {
-            let old = self.allow_ref_declaring;
+        let decls = var
+            .decls
+            .into_iter()
+            .map(|mut v| {
+                let v_span = v.span();
+                let old = self.allow_ref_declaring;
 
-            let debug_declaring = if cfg!(debug_assertions) {
-                Some(self.declaring.clone())
-            } else {
-                None
-            };
-            let mut names = vec![];
+                let debug_declaring = if cfg!(debug_assertions) {
+                    Some(self.declaring.clone())
+                } else {
+                    None
+                };
+                let mut names = vec![];
 
-            macro_rules! inject_any {
-                () => {
-                    // Declare variable with type any
-                    match self
-                        .scope
-                        .declare_complex_vars(kind, &v.name, Type::any(v.span()))
+                macro_rules! inject_any {
+                    () => {
+                        // Declare variable with type any
+                        match self
+                            .scope
+                            .declare_complex_vars(kind, &v.name, Type::any(v_span))
+                        {
+                            Ok(()) => {}
+                            Err(err) => {
+                                self.info.errors.push(err);
+                            }
+                        }
+                    };
+                }
+
+                macro_rules! remove_declaring {
+                    () => {{
+                        for n in names {
+                            self.declaring.remove_item(&n).unwrap();
+                        }
+                        debug_assert_eq!(Some(self.declaring.clone()), debug_declaring);
+                    }};
+                }
+
+                if v.init.is_some() {
+                    self.allow_ref_declaring = true;
+
                     {
-                        Ok(()) => {}
+                        let mut visitor = VarVisitor { names: &mut names };
+
+                        v.name.visit_with(&mut visitor);
+
+                        self.declaring.extend_from_slice(&names);
+                    }
+                }
+                v = v.fold_children(self);
+
+                v.init = if let Some(init) = v.init {
+                    let span = init.span();
+
+                    let declared_ty = v.name.get_ty();
+                    if declared_ty.is_some() {
+                        self.span_allowed_implicit_any = span;
+                    }
+
+                    debug_assert_eq!(self.allow_ref_declaring, true);
+
+                    //  Check if v_ty is assignable to ty
+                    let value_ty = match self
+                        .type_of(&init)
+                        .and_then(|ty| self.expand_type(span, ty))
+                    {
+                        Ok(ty) => {
+                            let ty = ty.to_static();
+                            self.check_rvalue(&ty);
+                            ty
+                        }
                         Err(err) => {
                             self.info.errors.push(err);
-                        }
-                    }
-                };
-            }
-
-            macro_rules! remove_declaring {
-                () => {{
-                    for n in names {
-                        self.declaring.remove_item(&n).unwrap();
-                    }
-                    debug_assert_eq!(Some(self.declaring.clone()), debug_declaring);
-                }};
-            }
-
-            if let Some(ref init) = v.init {
-                let span = init.span();
-                let declared_ty = v.name.get_ty();
-                if declared_ty.is_some() {
-                    self.span_allowed_implicit_any = span;
-                }
-
-                self.allow_ref_declaring = true;
-
-                {
-                    let mut visitor = VarVisitor { names: &mut names };
-
-                    v.name.visit_with(&mut visitor);
-
-                    self.declaring.extend_from_slice(&names);
-
-                    v.visit_children(self);
-                }
-                debug_assert_eq!(self.allow_ref_declaring, true);
-
-                //  Check if v_ty is assignable to ty
-                let value_ty = match self.type_of(&init).and_then(|ty| {
-                    // println!("Visit<VarDecl>: init={:?}, type={:?}", &init, ty);
-                    self.expand_type(span, ty)
-                }) {
-                    Ok(ty) => {
-                        let ty = ty.to_static();
-                        self.check_rvalue(&ty);
-                        ty
-                    }
-                    Err(err) => {
-                        self.info.errors.push(err);
-                        inject_any!();
-                        remove_declaring!();
-                        return;
-                    }
-                };
-
-                match declared_ty {
-                    Some(ty) => {
-                        let ty = Type::from(ty.clone());
-                        let ty = match self
-                            .expand_type(span, Cow::Owned(ty))
-                            .map(instantiate_class)
-                        {
-                            Ok(ty) => ty,
-                            Err(err) => {
-                                self.info.errors.push(err);
-                                inject_any!();
-                                remove_declaring!();
-                                return;
-                            }
-                        };
-                        let error = self.assign(&ty, &value_ty, v.span());
-                        let ty = ty.to_static();
-                        match error {
-                            Ok(()) => {
-                                match self.scope.declare_complex_vars(kind, &v.name, ty) {
-                                    Ok(()) => {}
-                                    Err(err) => {
-                                        self.info.errors.push(err);
-                                    }
-                                }
-                                remove_declaring!();
-                                return;
-                            }
-                            Err(err) => {
-                                self.info.errors.push(err);
-                            }
-                        }
-                    }
-                    None => {
-                        // infer type from value.
-                        let mut ty = match value_ty {
-                            Type::EnumVariant(ref v) => {
-                                if let Some(Type::Enum(ref e)) = self.find_type(&v.enum_name) {
-                                    Type::Enum(e.clone())
-                                } else {
-                                    unreachable!()
-                                }
-                            }
-                            ty => ty.to_static(),
-                        };
-
-                        let mut type_errors = vec![];
-
-                        // Handle implicit any
-
-                        match ty {
-                            Type::Tuple(Tuple { ref mut types, .. }) => {
-                                for (i, t) in types.iter_mut().enumerate() {
-                                    let span = t.span();
-
-                                    match *t.normalize() {
-                                        Type::Keyword(TsKeywordType {
-                                            kind: TsKeywordTypeKind::TsUndefinedKeyword,
-                                            ..
-                                        })
-                                        | Type::Keyword(TsKeywordType {
-                                            kind: TsKeywordTypeKind::TsNullKeyword,
-                                            ..
-                                        }) => {}
-                                        _ => {
-                                            continue;
-                                        }
-                                    }
-                                    // Widen tuple types
-                                    *t = Type::any(span).owned();
-
-                                    if self.rule.no_implicit_any {
-                                        match v.name {
-                                            Pat::Ident(ref i) => {
-                                                let span = i.span;
-                                                type_errors.push(Error::ImplicitAny { span });
-                                                break;
-                                            }
-                                            Pat::Array(ArrayPat { ref elems, .. }) => {
-                                                let span = elems[i].span();
-                                                type_errors.push(Error::ImplicitAny { span });
-                                            }
-                                            _ => {}
-                                        }
-                                    }
-                                }
-                            }
-                            _ => {}
-                        }
-
-                        if !type_errors.is_empty() {
-                            self.info.errors.extend(type_errors);
+                            inject_any!();
                             remove_declaring!();
-                            return;
+                            return VarDeclarator {
+                                init: Some(init),
+                                ..v
+                            };
                         }
+                    };
 
-                        match self.scope.declare_complex_vars(kind, &v.name, ty) {
-                            Ok(()) => {}
-                            Err(err) => {
-                                self.info.errors.push(err);
-                            }
-                        }
-                        remove_declaring!();
-                        return;
-                    }
-                }
-            } else {
-                v.visit_children(self);
-
-                match v.name {
-                    Pat::Ident(Ident {
-                        span,
-                        ref sym,
-                        ref type_ann,
-                        ..
-                    }) => {
-                        //
-                        let sym = sym.clone();
-                        let ty = match type_ann.as_ref().map(|t| Type::from(t.type_ann.clone())) {
-                            Some(ty) => {
-                                match self.expand_type(span, ty.owned()).map(instantiate_class) {
-                                    Ok(ty) => Some(ty.to_static()),
-                                    Err(err) => {
-                                        self.info.errors.push(err);
-                                        inject_any!();
-                                        remove_declaring!();
-                                        return;
+                    match declared_ty {
+                        Some(ty) => {
+                            let ty = Type::from(ty.clone());
+                            let ty = match self
+                                .expand_type(span, Cow::Owned(ty))
+                                .map(instantiate_class)
+                            {
+                                Ok(ty) => ty,
+                                Err(err) => {
+                                    self.info.errors.push(err);
+                                    inject_any!();
+                                    remove_declaring!();
+                                    return VarDeclarator {
+                                        init: Some(init),
+                                        ..v
+                                    };
+                                }
+                            };
+                            let error = self.assign(&ty, &value_ty, v_span);
+                            let ty = ty.to_static();
+                            match error {
+                                Ok(()) => {
+                                    match self.scope.declare_complex_vars(kind, &v.name, ty) {
+                                        Ok(()) => {}
+                                        Err(err) => {
+                                            self.info.errors.push(err);
+                                        }
                                     }
+                                    remove_declaring!();
+                                    return VarDeclarator {
+                                        init: Some(init),
+                                        ..v
+                                    };
+                                }
+                                Err(err) => {
+                                    self.info.errors.push(err);
+                                    Some(init)
                                 }
                             }
-                            None => None,
-                        };
+                        }
+                        None => {
+                            // infer type from value.
+                            let mut ty = match value_ty {
+                                Type::EnumVariant(ref v) => {
+                                    if let Some(Type::Enum(ref e)) = self.find_type(&v.enum_name) {
+                                        Type::Enum(e.clone())
+                                    } else {
+                                        unreachable!()
+                                    }
+                                }
+                                ty => ty.to_static(),
+                            };
 
-                        match self.scope.declare_var(
-                            span,
-                            kind,
-                            sym,
-                            ty,
-                            // initialized
-                            false,
-                            // allow_multiple
-                            kind == VarDeclKind::Var,
-                        ) {
-                            Ok(()) => {}
-                            Err(err) => {
-                                self.info.errors.push(err);
+                            let mut type_errors = vec![];
+
+                            // Handle implicit any
+
+                            match ty {
+                                Type::Tuple(Tuple { ref mut types, .. }) => {
+                                    for (i, t) in types.iter_mut().enumerate() {
+                                        let span = t.span();
+
+                                        match *t.normalize() {
+                                            Type::Keyword(TsKeywordType {
+                                                kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                                                ..
+                                            })
+                                            | Type::Keyword(TsKeywordType {
+                                                kind: TsKeywordTypeKind::TsNullKeyword,
+                                                ..
+                                            }) => {}
+                                            _ => {
+                                                continue;
+                                            }
+                                        }
+                                        // Widen tuple types
+                                        *t = Type::any(span).owned();
+
+                                        if self.rule.no_implicit_any {
+                                            match v.name {
+                                                Pat::Ident(ref i) => {
+                                                    let span = i.span;
+                                                    type_errors.push(Error::ImplicitAny { span });
+                                                    break;
+                                                }
+                                                Pat::Array(ArrayPat { ref elems, .. }) => {
+                                                    let span = elems[i].span();
+                                                    type_errors.push(Error::ImplicitAny { span });
+                                                }
+                                                _ => {}
+                                            }
+                                        }
+                                    }
+                                }
+                                _ => {}
                             }
-                        };
-                    }
-                    _ => {
-                        // assert!(
-                        //     var.declare,
-                        //     "complex pattern without initializer is invalid syntax and parser \
-                        //      should handle it"
-                        //  );
 
-                        if var.declare {
-                            match self.declare_vars(kind, &v.name) {
+                            if !type_errors.is_empty() {
+                                self.info.errors.extend(type_errors);
+                                remove_declaring!();
+                                return VarDeclarator {
+                                    init: Some(init),
+                                    ..v
+                                };
+                            }
+
+                            match self.scope.declare_complex_vars(kind, &v.name, ty) {
+                                Ok(()) => {}
+                                Err(err) => {
+                                    self.info.errors.push(err);
+                                }
+                            }
+                            remove_declaring!();
+                            return VarDeclarator {
+                                init: Some(init),
+                                ..v
+                            };
+                        }
+                    }
+                } else {
+                    match v.name {
+                        Pat::Ident(Ident {
+                            span,
+                            ref sym,
+                            ref type_ann,
+                            ..
+                        }) => {
+                            //
+                            let sym = sym.clone();
+                            let ty = match type_ann.as_ref().map(|t| Type::from(t.type_ann.clone()))
+                            {
+                                Some(ty) => {
+                                    match self.expand_type(span, ty.owned()).map(instantiate_class)
+                                    {
+                                        Ok(ty) => Some(ty.to_static()),
+                                        Err(err) => {
+                                            self.info.errors.push(err);
+                                            inject_any!();
+                                            remove_declaring!();
+                                            return v;
+                                        }
+                                    }
+                                }
+                                None => None,
+                            };
+
+                            match self.scope.declare_var(
+                                span,
+                                kind,
+                                sym,
+                                ty,
+                                // initialized
+                                false,
+                                // allow_multiple
+                                kind == VarDeclKind::Var,
+                            ) {
                                 Ok(()) => {}
                                 Err(err) => {
                                     self.info.errors.push(err);
                                 }
                             };
-                        } else {
-                            // This is parsing error
                         }
-                    }
+                        _ => {
+                            // assert!(
+                            //     var.declare,
+                            //     "complex pattern without initializer is invalid syntax and parser
+                            // \      should handle it"
+                            //  );
+
+                            if declare {
+                                match self.declare_vars(kind, &v.name) {
+                                    Ok(()) => {}
+                                    Err(err) => {
+                                        self.info.errors.push(err);
+                                    }
+                                };
+                            } else {
+                                // This is parsing error
+                            }
+                        }
+                    };
+                    remove_declaring!();
+                    return v;
                 };
-                remove_declaring!();
-                return;
-            }
 
-            debug_assert_eq!(self.allow_ref_declaring, true);
-            self.allow_ref_declaring = old;
-            match self.declare_vars(kind, &v.name) {
-                Ok(()) => {}
-                Err(err) => {
-                    self.info.errors.push(err);
+                debug_assert_eq!(self.allow_ref_declaring, true);
+                self.allow_ref_declaring = old;
+                match self.declare_vars(kind, &v.name) {
+                    Ok(()) => {}
+                    Err(err) => {
+                        self.info.errors.push(err);
+                    }
                 }
-            }
 
-            remove_declaring!();
-        });
+                remove_declaring!();
+
+                v
+            })
+            .collect();
+
+        VarDecl { decls, ..var }
     }
 }
 
@@ -1026,7 +1073,7 @@ impl Checker<'_> {
     pub fn analyze_module(&self, rule: Rule, path: Arc<PathBuf>, m: &Module) -> Info {
         ::swc_common::GLOBALS.set(&self.globals, || {
             let mut a = Analyzer::new(&self.libs, rule, Scope::root(), path, &self);
-            m.visit_with(&mut a);
+            m.clone().fold_with(&mut a);
 
             a.info
         })

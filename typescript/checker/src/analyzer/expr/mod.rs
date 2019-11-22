@@ -1,7 +1,7 @@
 use std::{borrow::Cow, iter::once};
 
 use swc_atoms::{js_word, JsWord};
-use swc_common::{util::iter::IteratorExt as _, Span, Spanned, Visit, VisitWith};
+use swc_common::{util::iter::IteratorExt as _, Fold, FoldWith, Span, Spanned};
 use swc_ecma_ast::*;
 
 use crate::{
@@ -2341,34 +2341,36 @@ enum ExtractKind {
     New,
 }
 
-impl Visit<Stmt> for Analyzer<'_, '_> {
-    fn visit(&mut self, stmt: &Stmt) {
-        stmt.visit_children(self);
+impl Fold<Stmt> for Analyzer<'_, '_> {
+    fn fold(&mut self, stmt: Stmt) -> Stmt {
+        let stmt = stmt.fold_children(self);
 
-        match *stmt {
+        match stmt {
             // Validate expression statements
             Stmt::Expr(ref expr) => match self.type_of(&expr) {
                 Ok(..) => {}
                 Err(err) => {
                     self.info.errors.push(err);
-                    return;
+                    return stmt;
                 }
             },
 
             _ => {}
         }
+
+        stmt
     }
 }
 
-impl Visit<SeqExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, expr: &SeqExpr) {
+impl Fold<SeqExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, mut expr: SeqExpr) -> SeqExpr {
         let first_span = expr.exprs[0].span();
 
-        for expr in expr.exprs[..expr.exprs.len() - 1].iter() {
+        for expr in expr.exprs.drain(..expr.exprs.len() - 1) {
             let span = expr.span();
-            expr.visit_with(self);
+            let expr = expr.fold_with(self);
 
-            match **expr {
+            match *expr {
                 Expr::Ident(..)
                 | Expr::Lit(..)
                 | Expr::Arrow(..)
@@ -2396,15 +2398,17 @@ impl Visit<SeqExpr> for Analyzer<'_, '_> {
         }
 
         if expr.exprs.len() != 0 {
-            let expr = &expr.exprs[expr.exprs.len() - 1];
-            expr.visit_with(self);
+            let last = expr.exprs.pop().unwrap();
+            expr.exprs.push(last.fold_with(self));
         }
+
+        expr
     }
 }
 
-impl Visit<TsTypeAssertion> for Analyzer<'_, '_> {
-    fn visit(&mut self, expr: &TsTypeAssertion) {
-        expr.visit_children(self);
+impl Fold<TsTypeAssertion> for Analyzer<'_, '_> {
+    fn fold(&mut self, expr: TsTypeAssertion) -> TsTypeAssertion {
+        let expr = expr.fold_children(self);
 
         match self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann) {
             Ok(()) => {}
@@ -2412,12 +2416,14 @@ impl Visit<TsTypeAssertion> for Analyzer<'_, '_> {
                 self.info.errors.push(err);
             }
         }
+
+        expr
     }
 }
 
-impl Visit<TsAsExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, expr: &TsAsExpr) {
-        expr.visit_children(self);
+impl Fold<TsAsExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, expr: TsAsExpr) -> TsAsExpr {
+        let expr = expr.fold_children(self);
 
         match self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann) {
             Ok(()) => {}
@@ -2425,6 +2431,8 @@ impl Visit<TsAsExpr> for Analyzer<'_, '_> {
                 self.info.errors.push(err);
             }
         }
+
+        expr
     }
 }
 
@@ -2571,9 +2579,9 @@ impl Analyzer<'_, '_> {
     }
 }
 
-impl Visit<ThrowStmt> for Analyzer<'_, '_> {
-    fn visit(&mut self, s: &ThrowStmt) {
-        s.visit_children(self);
+impl Fold<ThrowStmt> for Analyzer<'_, '_> {
+    fn fold(&mut self, s: ThrowStmt) -> ThrowStmt {
+        let s = s.fold_children(self);
 
         match self
             .type_of(&s.arg)
@@ -2584,5 +2592,7 @@ impl Visit<ThrowStmt> for Analyzer<'_, '_> {
                 self.info.errors.push(err);
             }
         }
+
+        s
     }
 }

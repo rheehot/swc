@@ -4,12 +4,12 @@ use crate::{
     ty::{Array, Type},
     util::EqIgnoreNameAndSpan,
 };
-use swc_common::{Spanned, Visit, VisitWith};
+use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
-impl Visit<RestPat> for Analyzer<'_, '_> {
-    fn visit(&mut self, p: &RestPat) {
-        p.visit_children(self);
+impl Fold<RestPat> for Analyzer<'_, '_> {
+    fn fold(&mut self, p: RestPat) -> RestPat {
+        let p = p.fold_children(self);
 
         if let Pat::Assign(AssignPat { ref right, .. }) = *p.arg {
             analyze!(self, {
@@ -40,12 +40,14 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
                 }
             });
         }
+
+        p
     }
 }
 
-impl Visit<AssignPat> for Analyzer<'_, '_> {
-    fn visit(&mut self, p: &AssignPat) {
-        p.visit_children(self);
+impl Fold<AssignPat> for Analyzer<'_, '_> {
+    fn fold(&mut self, p: AssignPat) -> AssignPat {
+        let p = p.fold_children(self);
 
         //
         match *p.left {
@@ -93,5 +95,7 @@ impl Visit<AssignPat> for Analyzer<'_, '_> {
             }
             _ => {}
         }
+
+        p
     }
 }

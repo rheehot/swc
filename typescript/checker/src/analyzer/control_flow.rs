@@ -20,7 +20,7 @@ use std::{
     ops::{AddAssign, BitOr, Not},
 };
 use swc_atoms::JsWord;
-use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_common::{Fold, FoldWith, Span, Spanned};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Default)]
@@ -680,37 +680,41 @@ impl Analyzer<'_, '_> {
 }
 
 /// Modifies `self.inferred_return_types`
-impl Visit<ReturnStmt> for Analyzer<'_, '_> {
-    fn visit(&mut self, stmt: &ReturnStmt) {
-        stmt.visit_children(self);
+impl Fold<ReturnStmt> for Analyzer<'_, '_> {
+    fn fold(&mut self, stmt: ReturnStmt) -> ReturnStmt {
+        let stmt = stmt.fold_children(self);
 
         self.visit_return_arg(stmt.span, stmt.arg.as_ref().map(|v| &**v));
+
+        stmt
     }
 }
 
-impl Visit<IfStmt> for Analyzer<'_, '_> {
-    fn visit(&mut self, stmt: &IfStmt) {
+impl Fold<IfStmt> for Analyzer<'_, '_> {
+    fn fold(&mut self, stmt: IfStmt) -> IfStmt {
         let mut facts = Default::default();
         match self.detect_facts(&stmt.test, &mut facts) {
             Ok(()) => (),
             Err(err) => {
                 self.info.errors.push(err);
-                return;
+                return stmt;
             }
         };
         let ends_with_ret = stmt.cons.ends_with_ret();
-        self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
-            stmt.visit_children(child)
+        let stmt = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
+            stmt.fold_children(child)
         });
         if ends_with_ret {
             self.scope.facts.extend(facts.false_facts);
         }
+
+        stmt
     }
 }
 
-impl Visit<SwitchStmt> for Analyzer<'_, '_> {
-    fn visit(&mut self, stmt: &SwitchStmt) {
-        stmt.visit_children(self);
+impl Fold<SwitchStmt> for Analyzer<'_, '_> {
+    fn fold(&mut self, stmt: SwitchStmt) -> SwitchStmt {
+        let stmt = stmt.fold_children(self);
 
         analyze!(self, {
             let discriminant_ty = self.type_of(&stmt.discriminant)?;
@@ -728,18 +732,28 @@ impl Visit<SwitchStmt> for Analyzer<'_, '_> {
         // Declared at here as it's important to know if last one ends with return.
         let mut ends_with_ret = false;
         let len = stmt.cases.len();
+        let stmt_span = stmt.span();
 
+        let mut cases = Vec::with_capacity(len);
+        let mut errored = false;
         // Check cases *in order*
-        for (i, case) in stmt.cases.iter().enumerate() {
-            let last = i == len - 1;
-            let mut facts = Default::default();
+        for (i, mut case) in stmt.cases.into_iter().enumerate() {
+            if errored {
+                cases.push(case);
+                continue;
+            }
 
-            ends_with_ret = case.cons.ends_with_ret();
             let span = case
                 .test
                 .as_ref()
                 .map(|v| v.span())
-                .unwrap_or_else(|| stmt.span());
+                .unwrap_or_else(|| stmt_span);
+
+            let SwitchCase { cons, .. } = case;
+            let last = i == len - 1;
+            let mut facts = Default::default();
+
+            ends_with_ret = cons.ends_with_ret();
 
             match case.test {
                 Some(ref test) => {
@@ -755,7 +769,9 @@ impl Visit<SwitchStmt> for Analyzer<'_, '_> {
                         Ok(()) => {}
                         Err(err) => {
                             self.info.errors.push(err);
-                            return;
+                            errored = true;
+                            cases.push(SwitchCase { cons, ..case });
+                            continue;
                         }
                     }
                 }
@@ -763,8 +779,8 @@ impl Visit<SwitchStmt> for Analyzer<'_, '_> {
             }
 
             true_facts = true_facts | facts.true_facts;
-            self.with_child(ScopeKind::Flow, true_facts.clone(), |child| {
-                case.cons.visit_with(child);
+            case.cons = self.with_child(ScopeKind::Flow, true_facts.clone(), |child| {
+                cons.fold_with(child)
             });
             false_facts += facts.false_facts;
 
@@ -772,31 +788,44 @@ impl Visit<SwitchStmt> for Analyzer<'_, '_> {
                 true_facts = CondFacts::default();
                 true_facts += false_facts.clone();
             }
+
+            cases.push(case);
         }
 
         if ends_with_ret {
             self.scope.facts.extend(false_facts);
         }
+
+        SwitchStmt { cases, ..stmt }
     }
 }
 
-impl Visit<CondExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, e: &CondExpr) {
+impl Fold<CondExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, e: CondExpr) -> CondExpr {
+        let CondExpr { alt, cons, .. } = e;
+
         let mut facts = Default::default();
         match self.detect_facts(&e.test, &mut facts) {
             Ok(()) => (),
             Err(err) => {
                 self.info.errors.push(err);
-                return;
+                return CondExpr { cons, alt, ..e };
             }
         };
-        e.test.visit_with(self);
-        self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
-            e.cons.visit_with(child)
+        let test = e.test.fold_with(self);
+        let cons = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
+            cons.fold_with(child)
         });
-        self.with_child(ScopeKind::Flow, facts.false_facts, |child| {
-            e.alt.visit_with(child)
+        let alt = self.with_child(ScopeKind::Flow, facts.false_facts, |child| {
+            alt.fold_with(child)
         });
+
+        CondExpr {
+            test,
+            cons,
+            alt,
+            ..e
+        }
     }
 }
 

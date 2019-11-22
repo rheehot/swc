@@ -10,7 +10,7 @@ error: 'eval' and 'arguments' cannot be used as a binding identifier in strict m
 6 |     private bar(eval:any) {
   |                 ^^^^
 
-error: 'eval' and 'arguments' cannot be used as a binding identifier in strict mode
+error: TS1100
  --> $DIR/tests/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeByDefaultInES6.ts:7:9
   |
 7 |         arguments = "hello";

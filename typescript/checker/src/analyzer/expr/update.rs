@@ -3,12 +3,12 @@ use crate::{
     errors::Error,
     ty::Type,
 };
-use swc_common::{Spanned, Visit, VisitWith};
+use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
-impl Visit<UpdateExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, e: &UpdateExpr) {
-        e.visit_children(self);
+impl Fold<UpdateExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, e: UpdateExpr) -> UpdateExpr {
+        let e = e.fold_children(self);
 
         let mut errors = vec![];
 
@@ -33,5 +33,7 @@ impl Visit<UpdateExpr> for Analyzer<'_, '_> {
         }
 
         self.info.errors.extend(errors);
+
+        e
     }
 }

@@ -3,14 +3,14 @@ use crate::{
     swc_common::Spanned,
     ty::{Array, Type},
 };
-use swc_common::{Span, Visit, VisitWith};
+use swc_common::{Fold, FoldWith, Span};
 use swc_ecma_ast::*;
 
 macro_rules! impl_for {
     ($T:ty) => {
-        impl Visit<$T> for Analyzer<'_, '_> {
-            fn visit(&mut self, n: &$T) {
-                n.visit_children(self);
+        impl Fold<$T> for Analyzer<'_, '_> {
+            fn fold(&mut self, n: $T) -> $T {
+                let n = n.fold_children(self);
 
                 self.check_lhs_of_for_loop(&n.left);
                 if match n.left {
@@ -21,6 +21,8 @@ macro_rules! impl_for {
                 }
 
                 self.validate_for_loop(n.span, &n.left, &n.right);
+
+                n
             }
         }
     };
@@ -101,17 +103,19 @@ impl_for!(ForOfStmt);
 impl_for!(ForInStmt);
 
 /// NOTE: We does **not** dig into with statements.
-impl Visit<WithStmt> for Analyzer<'_, '_> {
-    fn visit(&mut self, node: &WithStmt) {
+impl Fold<WithStmt> for Analyzer<'_, '_> {
+    fn fold(&mut self, node: WithStmt) -> WithStmt {
         match self.type_of(&node.obj) {
             Ok(..) => {}
             Err(err) => self.info.errors.push(err),
         }
+
+        node
     }
 }
 
-impl Visit<TsImportEqualsDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, node: &TsImportEqualsDecl) {
+impl Fold<TsImportEqualsDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, node: TsImportEqualsDecl) -> TsImportEqualsDecl {
         match node.module_ref {
             TsModuleRef::TsEntityName(ref e) => {
                 match self.type_of_ts_entity_name(node.span, e, None) {
@@ -121,5 +125,7 @@ impl Visit<TsImportEqualsDecl> for Analyzer<'_, '_> {
             }
             _ => {}
         }
+
+        node
     }
 }

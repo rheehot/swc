@@ -1,11 +1,11 @@
-use swc_common::{Visit, VisitWith};
+use swc_common::{Fold, FoldWith};
 use swc_ecma_ast::*;
 
 use crate::{analyzer::Analyzer, errors::Error, ty::Type};
 
-impl Visit<NewExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, e: &NewExpr) {
-        e.visit_children(self);
+impl Fold<NewExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, e: NewExpr) -> NewExpr {
+        let e = e.fold_children(self);
 
         let res: Result<(), Error> = try {
             let callee_ty = self.type_of(&e.callee)?;
@@ -34,12 +34,14 @@ impl Visit<NewExpr> for Analyzer<'_, '_> {
                 }
             }
         }
+
+        e
     }
 }
 
-impl Visit<CallExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, e: &CallExpr) {
-        e.visit_children(self);
+impl Fold<CallExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, e: CallExpr) -> CallExpr {
+        let e = e.fold_children(self);
 
         // Check arguments
         for arg in &e.args {
@@ -58,7 +60,7 @@ impl Visit<CallExpr> for Analyzer<'_, '_> {
                 let callee_ty = self.type_of(&callee);
                 let callee_ty = match callee_ty {
                     Ok(v) => v,
-                    Err(_) => return,
+                    Err(_) => return e,
                 };
                 match *callee_ty.normalize() {
                     Type::Keyword(TsKeywordType {
@@ -73,5 +75,7 @@ impl Visit<CallExpr> for Analyzer<'_, '_> {
         if let Err(err) = res {
             self.info.errors.push(err);
         }
+
+        e
     }
 }

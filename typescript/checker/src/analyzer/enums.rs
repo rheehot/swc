@@ -4,11 +4,11 @@ use crate::{
     ty::{Enum, EnumVariant, Type, TypeRef},
 };
 use std::convert::TryInto;
-use swc_common::{Spanned, Visit, VisitWith};
+use swc_common::{Fold, FoldWith, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
-impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, e: &TsEnumDecl) {
+impl Fold<TsEnumDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, mut e: TsEnumDecl) -> TsEnumDecl {
         let span = e.span();
 
         // We don't visit enum variants to allow
@@ -24,7 +24,7 @@ impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
         //            h = a | b
         //        }
 
-        //        e.visit_children(self);
+        //        e.fold_children(self);
 
         self.scope.register_type(
             e.id.sym.clone(),
@@ -52,10 +52,10 @@ impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
             }
         } else {
             println!("FOO! {:?} ", e.members);
-            for m in &e.members {
-                m.init.visit_with(self);
-            }
+            e.members = e.members.fold_children(self);
         }
+
+        e
     }
 }
 

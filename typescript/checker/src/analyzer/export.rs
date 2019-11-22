@@ -5,7 +5,7 @@ use crate::{
 };
 use std::{convert::TryInto, mem, sync::Arc};
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_common::{Fold, FoldWith, Span, Spanned};
 use swc_ecma_ast::*;
 
 // ModuleDecl::ExportNamed(export) => {}
@@ -16,11 +16,13 @@ use swc_ecma_ast::*;
 // ModuleDecl::TsNamespaceExport(ns) =>
 // unimplemented!("export namespace"),
 
-impl Visit<TsExportAssignment> for Analyzer<'_, '_> {
-    fn visit(&mut self, export: &TsExportAssignment) {
-        export.visit_children(self);
+impl Fold<TsExportAssignment> for Analyzer<'_, '_> {
+    fn fold(&mut self, export: TsExportAssignment) -> TsExportAssignment {
+        let export = export.fold_children(self);
 
         self.export_default_expr(&export.expr);
+
+        export
     }
 }
 
@@ -94,9 +96,9 @@ impl Analyzer<'_, '_> {
     }
 }
 
-impl Visit<ExportDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, export: &ExportDecl) {
-        export.visit_children(self);
+impl Fold<ExportDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, export: ExportDecl) -> ExportDecl {
+        let export = export.fold_children(self);
 
         match export.decl {
             Decl::Fn(ref f) => self.export(f.span(), f.ident.sym.clone(), None),
@@ -137,12 +139,14 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
                 self.export(decl.span, decl.id.sym.clone(), None)
             }
         }
+
+        export
     }
 }
 
-impl Visit<ExportDefaultDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, export: &ExportDefaultDecl) {
-        export.visit_children(self);
+impl Fold<ExportDefaultDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, export: ExportDefaultDecl) -> ExportDefaultDecl {
+        let export = export.fold_children(self);
 
         match export.decl {
             DefaultDecl::Fn(ref f) => {
@@ -155,7 +159,7 @@ impl Visit<ExportDefaultDecl> for Analyzer<'_, '_> {
                     Ok(ty) => ty,
                     Err(err) => {
                         self.info.errors.push(err);
-                        return;
+                        return export;
                     }
                 };
                 self.scope.register_type(i.clone(), fn_ty);
@@ -166,14 +170,18 @@ impl Visit<ExportDefaultDecl> for Analyzer<'_, '_> {
                 self.export(i.span(), js_word!("default"), Some(i.id.sym.clone()))
             }
         };
+
+        export
     }
 }
 
-impl Visit<ExportDefaultExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, export: &ExportDefaultExpr) {
-        export.visit_children(self);
+impl Fold<ExportDefaultExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, export: ExportDefaultExpr) -> ExportDefaultExpr {
+        let export = export.fold_children(self);
 
         self.export_default_expr(&export.expr);
+
+        export
     }
 }
 
