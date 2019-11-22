@@ -1077,9 +1077,9 @@ impl Analyzer<'_, '_> {
 ///
 /// Constants are propagated, and
 impl Checker<'_> {
-    pub fn analyze_module(&self, rule: Rule, path: Arc<PathBuf>, m: &Module) -> Info {
-        ::swc_common::GLOBALS.set(&self.globals, || {
-            let mut a = Analyzer::new(&self.libs, rule, Scope::root(), path, &self);
+    pub fn analyze_module(&self,  path: Arc<PathBuf>, m: &Module) -> Info {
+        self.run(||{
+            let mut a = Analyzer::new(&self.libs, self.rule, Scope::root(), path, &self);
             m.clone().fold_with(&mut a);
 
             a.info
