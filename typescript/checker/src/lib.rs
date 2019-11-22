@@ -115,7 +115,7 @@ impl<'a> Checker<'a> {
 impl Checker<'_> {
     /// Returns empty vector if no error is found.
     pub fn check(&self, entry: PathBuf) -> Vec<Error> {
-        ::swc_common::GLOBALS.set(&self.globals, || {
+        self.run(|| {
             let mut errors = vec![];
 
             let module = self.load_module(entry.clone());
