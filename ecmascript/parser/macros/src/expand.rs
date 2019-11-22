@@ -133,6 +133,10 @@ impl Fold for InjectSelf {
             "println" | "print" | "format" | "assert" | "assert_eq" | "assert_ne"
             | "debug_assert" | "debug_assert_eq" | "debug_assert_ne" | "dbg" => {
                 let mut args: Punctuated<Expr, token::Comma> = parse_args(i.tokens);
+                if &*name == "dbg" && i.tts.is_empty() {
+                    return Macro { ..i };
+                }
+
                 args = args
                     .into_pairs()
                     .map(|el| el.map_item(|expr| self.fold_expr(expr)))
