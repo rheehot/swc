@@ -3,6 +3,34 @@ use std::borrow::Cow;
 use swc_common::Spanned;
 use swc_ecma_ast::*;
 
+pub(super) fn is_prop_name_eq(l: &PropName, r: &PropName) -> bool {
+    macro_rules! check {
+        ($l:expr, $r:expr) => {{
+            let l = $l;
+            let r = $r;
+
+            match l {
+                PropName::Ident(Ident { ref sym, .. })
+                | PropName::Str(Str { value: ref sym, .. }) => match *r {
+                    PropName::Ident(Ident { sym: ref r_sym, .. })
+                    | PropName::Str(Str {
+                        value: ref r_sym, ..
+                    }) => return sym == r_sym,
+                    PropName::Num(n) => return sym == &*n.value.to_string(),
+                    _ => return false,
+                },
+                PropName::Computed(..) => return false,
+                _ => {}
+            }
+        }};
+    }
+
+    check!(l, r);
+    check!(r, l);
+
+    false
+}
+
 pub(super) trait PatExt {
     fn get_ty(&self) -> Option<&TsType>;
     fn set_ty(&mut self, ty: Option<Box<TsType>>);

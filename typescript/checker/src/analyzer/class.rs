@@ -1,6 +1,6 @@
 use super::{scope::ScopeKind, Analyzer};
 use crate::{
-    analyzer::{ComputedPropMode, VarVisitor, LOG_VISIT},
+    analyzer::{expr::TypeOfMode, util::is_prop_name_eq, ComputedPropMode, VarVisitor, LOG_VISIT},
     errors::Error,
     ty::{Type, TypeRefExt},
     util::EqIgnoreNameAndSpan,
@@ -10,6 +10,9 @@ use swc_atoms::js_word;
 use swc_common::{util::move_map::MoveMap, Fold, FoldWith, Span, Spanned, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
+/// # Validations
+///
+///  - TS2515: Validate that class implements all methods.
 impl Fold<Class> for Analyzer<'_, '_> {
     fn fold(&mut self, c: Class) -> Class {
         log_fold!(c);
@@ -74,34 +77,6 @@ impl Fold<Class> for Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     fn validate_class_members(&mut self, c: &Class, declare: bool) {
-        fn is_prop_name_eq(l: &PropName, r: &PropName) -> bool {
-            macro_rules! check {
-                ($l:expr, $r:expr) => {{
-                    let l = $l;
-                    let r = $r;
-
-                    match l {
-                        PropName::Ident(Ident { ref sym, .. })
-                        | PropName::Str(Str { value: ref sym, .. }) => match *r {
-                            PropName::Ident(Ident { sym: ref r_sym, .. })
-                            | PropName::Str(Str {
-                                value: ref r_sym, ..
-                            }) => return sym == r_sym,
-                            PropName::Num(n) => return sym == &*n.value.to_string(),
-                            _ => return false,
-                        },
-                        PropName::Computed(..) => return false,
-                        _ => {}
-                    }
-                }};
-            }
-
-            check!(l, r);
-            check!(r, l);
-
-            false
-        }
-
         // Report errors for code like
         //
         //      class C {
