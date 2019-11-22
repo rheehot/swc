@@ -1,6 +1,7 @@
 async/es5/asyncDeclare_es5.ts
 async/es6/asyncDeclare_es6.ts
 boolean/assignFromBooleanInterface1
+classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts
 classes/classDeclarations/classExtendingBuiltinType.ts
 classes/classDeclarations/classExtendingNull.ts
 classes/classExpression.ts

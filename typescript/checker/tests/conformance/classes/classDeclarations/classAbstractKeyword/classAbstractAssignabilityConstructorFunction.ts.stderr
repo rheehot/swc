@@ -1,0 +1,180 @@
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            90,
+        ),
+        hi: BytePos(
+            93,
+        ),
+        ctxt: #0,
+    },
+    left: Constructor(
+        Constructor {
+            span: Span {
+                lo: BytePos(
+                    55,
+                ),
+                hi: BytePos(
+                    65,
+                ),
+                ctxt: #0,
+            },
+            type_params: None,
+            params: [],
+            ret_ty: Some(
+                Simple(
+                    TsTypeRef(
+                        TsTypeRef {
+                            span: Span {
+                                lo: BytePos(
+                                    64,
+                                ),
+                                hi: BytePos(
+                                    65,
+                                ),
+                                ctxt: #0,
+                            },
+                            type_name: Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            64,
+                                        ),
+                                        hi: BytePos(
+                                            65,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('A' type=inline),
+                                    type_ann: None,
+                                    optional: false,
+                                },
+                            ),
+                            type_params: None,
+                        },
+                    ),
+                ),
+            ),
+        },
+    ),
+    right: Class(
+        Class {
+            span: Span {
+                lo: BytePos(
+                    96,
+                ),
+                hi: BytePos(
+                    97,
+                ),
+                ctxt: #0,
+            },
+            is_abstract: true,
+            name: Some(
+                Atom('A' type=inline),
+            ),
+            super_class: None,
+            body: [],
+            type_params: None,
+        },
+    ),
+    cause: [],
+}
+ --> $DIR/tests/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts:7:1
+  |
+7 | AAA = A; // error. 
+  | ^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            111,
+        ),
+        hi: BytePos(
+            114,
+        ),
+        ctxt: #0,
+    },
+    left: Constructor(
+        Constructor {
+            span: Span {
+                lo: BytePos(
+                    55,
+                ),
+                hi: BytePos(
+                    65,
+                ),
+                ctxt: #0,
+            },
+            type_params: None,
+            params: [],
+            ret_ty: Some(
+                Simple(
+                    TsTypeRef(
+                        TsTypeRef {
+                            span: Span {
+                                lo: BytePos(
+                                    64,
+                                ),
+                                hi: BytePos(
+                                    65,
+                                ),
+                                ctxt: #0,
+                            },
+                            type_name: Ident(
+                                Ident {
+                                    span: Span {
+                                        lo: BytePos(
+                                            64,
+                                        ),
+                                        hi: BytePos(
+                                            65,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    sym: Atom('A' type=inline),
+                                    type_ann: None,
+                                    optional: false,
+                                },
+                            ),
+                            type_params: None,
+                        },
+                    ),
+                ),
+            ),
+        },
+    ),
+    right: Lit(
+        TsLitType {
+            span: Span {
+                lo: BytePos(
+                    117,
+                ),
+                hi: BytePos(
+                    123,
+                ),
+                ctxt: #0,
+            },
+            lit: Str(
+                Str {
+                    span: Span {
+                        lo: BytePos(
+                            117,
+                        ),
+                        hi: BytePos(
+                            123,
+                        ),
+                        ctxt: #0,
+                    },
+                    value: Atom('asdf' type=inline),
+                    has_escape: false,
+                },
+            ),
+        },
+    ),
+    cause: [],
+}
+ --> $DIR/tests/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts:8:1
+  |
+8 | AAA = "asdf";
+  | ^^^
+
