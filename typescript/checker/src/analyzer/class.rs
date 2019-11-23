@@ -1,8 +1,12 @@
 use super::{scope::ScopeKind, Analyzer};
 use crate::{
-    analyzer::{expr::TypeOfMode, util::is_prop_name_eq, ComputedPropMode, VarVisitor, LOG_VISIT},
+    analyzer::{
+        expr::TypeOfMode,
+        util::{is_prop_name_eq, NormalizeMut},
+        ComputedPropMode, VarVisitor, LOG_VISIT,
+    },
     errors::Error,
-    ty::{Type, TypeRefExt},
+    ty::{self, Type, TypeRefExt},
     util::EqIgnoreNameAndSpan,
 };
 use std::mem;
@@ -76,6 +80,79 @@ impl Fold<Class> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
+    fn validate_inherited_members(&mut self, name: Option<&Ident>, c: &Class, declare: bool) {
+        if c.is_abstract {
+            return;
+        }
+
+        let name_span = name.map(|v| v.span).unwrap_or_else(|| {
+            // TODD: c.span().lo() + BytePos(5) (aka class token)
+            c.span
+        });
+        let mut errors = vec![];
+
+        let res: Result<_, Error> = try {
+            if let Some(super_class) = &c.super_class {
+                let super_ty = self.type_of_expr(
+                    &super_class,
+                    TypeOfMode::RValue,
+                    c.super_type_params.as_ref(),
+                )?;
+
+                match super_ty.normalize() {
+                    Type::Class(sc) => {
+                        'outer: for sm in &sc.body {
+                            match sm {
+                                ty::ClassMember::Method(sm) => {
+                                    for m in &c.body {
+                                        match m {
+                                            ClassMember::Method(ref m) => {
+                                                if !is_prop_name_eq(&m.key, &sm.key) {
+                                                    continue;
+                                                }
+
+                                                if m.kind != MethodKind::Method {
+                                                    unimplemented!(
+                                                        "method property is overriden by \
+                                                         non-methof property: {:?}",
+                                                        m
+                                                    )
+                                                }
+
+                                                // TODO: Validate parameters
+
+                                                // TODO: Validate return type
+                                                continue 'outer;
+                                            }
+                                            _ => {}
+                                        }
+                                    }
+                                }
+                                _ => {
+                                    // TODO: Verify
+                                    continue 'outer;
+                                }
+                            }
+
+                            errors.push(Error::TS2515 { span: name_span });
+
+                            if sc.is_abstract {
+                                // TODO: Check super class of super class
+                            }
+                        }
+                    }
+                    _ => {}
+                }
+            }
+        };
+
+        if let Err(err) = res {
+            errors.push(err);
+        }
+
+        self.info.errors.extend(errors);
+    }
+
     fn validate_class_members(&mut self, c: &Class, declare: bool) {
         // Report errors for code like
         //
@@ -219,9 +296,7 @@ impl Fold<ClassMember> for Analyzer<'_, '_> {
 
 impl Fold<ClassProp> for Analyzer<'_, '_> {
     fn fold(&mut self, p: ClassProp) -> ClassProp {
-        if LOG_VISIT {
-            println!("Fold<ClassProp>");
-        }
+        log_fold!(p);
 
         let p = p.fold_children(self);
 
@@ -252,9 +327,7 @@ impl Fold<ClassProp> for Analyzer<'_, '_> {
 
 impl Fold<ClassExpr> for Analyzer<'_, '_> {
     fn fold(&mut self, c: ClassExpr) -> ClassExpr {
-        if LOG_VISIT {
-            println!("Fold<ClassExpr>");
-        }
+        log_fold!(c);
 
         let ty = match self.validate_type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {
             Ok(ty) => ty,
@@ -271,6 +344,7 @@ impl Fold<ClassExpr> for Analyzer<'_, '_> {
             if let Some(ref i) = c.ident {
                 analyzer.scope.register_type(i.sym.clone(), ty.clone());
 
+                analyzer.validate_inherited_members(None, &c.class, false);
                 analyzer.validate_class_members(&c.class, false);
 
                 match analyzer.scope.declare_var(
@@ -301,12 +375,11 @@ impl Fold<ClassExpr> for Analyzer<'_, '_> {
 
 impl Fold<ClassDecl> for Analyzer<'_, '_> {
     fn fold(&mut self, c: ClassDecl) -> ClassDecl {
-        if LOG_VISIT {
-            println!("Fold<ClassDecl>");
-        }
+        log_fold!(c);
 
-        let c = c.fold_children(self);
+        let c: ClassDecl = c.fold_children(self);
 
+        self.validate_inherited_members(Some(&c.ident), &c.class, c.declare);
         self.validate_class_members(&c.class, c.declare);
 
         let ty = match self.validate_type_of_class(Some(c.ident.sym.clone()), &c.class) {

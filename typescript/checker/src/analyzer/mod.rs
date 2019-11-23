@@ -1077,8 +1077,8 @@ impl Analyzer<'_, '_> {
 ///
 /// Constants are propagated, and
 impl Checker<'_> {
-    pub fn analyze_module(&self,  path: Arc<PathBuf>, m: &Module) -> Info {
-        self.run(||{
+    pub fn analyze_module(&self, path: Arc<PathBuf>, m: &Module) -> Info {
+        self.run(|| {
             let mut a = Analyzer::new(&self.libs, self.rule, Scope::root(), path, &self);
             m.clone().fold_with(&mut a);
 
