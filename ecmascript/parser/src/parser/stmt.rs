@@ -314,7 +314,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
         if self.syntax().typescript() {
             match *expr {
                 Expr::Ident(ref i) => match i.sym {
-                    js_word!("public") | js_word!("static") => {
+                    js_word!("public") | js_word!("static") | js_word!("abstract") => {
                         if eat!("interface") {
                             self.emit_err(i.span, SyntaxError::TS2427);
                             return self
