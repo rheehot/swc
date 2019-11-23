@@ -1,3 +1,6 @@
+ambient/ambientEnumDeclaration1.ts
+ambient/ambientEnumDeclaration2.ts
+ambient/ambientShorthand_declarationEmit.ts
 async/es5/asyncDeclare_es5.ts
 async/es6/asyncDeclare_es6.ts
 boolean/assignFromBooleanInterface1
@@ -9,6 +12,7 @@ classes/classDeclarations/classExtendingBuiltinType.ts
 classes/classDeclarations/classExtendingNull.ts
 classes/classExpression.ts
 constEnums
+emitter/es2019/noCatchBinding/emitter.noCatchBinding.es2019.ts
 es6/classDeclaration/classWithSemicolonClassElementES61.ts
 es6/classDeclaration/classWithSemicolonClassElementES62.ts
 es6/computedProperties/computedPropertyNames10_ES5.ts
@@ -308,6 +312,7 @@ expressions/asOperator/asOpEmitParens.ts
 expressions/asOperator/asOperator1.ts
 expressions/asOperator/asOperator2.ts
 expressions/asOperator/asOperatorNames.ts
+expressions/assignmentOperator/compoundAssignmentLHSIsReference.ts
 expressions/binaryOperators/additionOperator/additionOperatorWithAnyAndEveryType.ts
 expressions/binaryOperators/additionOperator/additionOperatorWithNullValueAndInvalidOperator.ts
 expressions/binaryOperators/additionOperator/additionOperatorWithUndefinedValueAndValidOperator.ts
@@ -602,6 +607,9 @@ types/any/anyAsGenericFunctionCall.ts
 types/any/anyPropertyAccess.ts
 types/any/assignAnyToEveryType.ts
 types/any/assignEveryTypeToAny.ts
+types/literal/stringLiteralsAssertionsInEqualityComparisons01.ts
+types/literal/stringLiteralsWithEqualityChecks01.ts
+types/literal/stringLiteralsWithSwitchStatements01.ts
 types/primitives/
 types/primitives/boolean
 types/primitives/boolean/invalidBooleanAssignments.ts
