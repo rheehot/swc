@@ -9,7 +9,7 @@ use crate::{
     errors::Error,
     loader::Load,
     ty::{self, Alias, ClassInstance, Param, Tuple, Type, TypeRef, TypeRefExt},
-    util::IntoCow,
+    util::{IntoCow, ModuleItemLike, StmtLike},
     Rule,
 };
 use fxhash::{FxHashMap, FxHashSet};
@@ -86,20 +86,18 @@ enum ComputedPropMode {
 
 impl<T> Fold<Vec<T>> for Analyzer<'_, '_>
 where
-    T: FoldWith<Self> + for<'any> VisitWith<ImportFinder<'any>> + Send + Sync,
-    Vec<T>: FoldWith<Self> + for<'any> VisitWith<AmbientFunctionHandler<'any>>,
+    T: FoldWith<Self> + Send + Sync,
+    Vec<T>: FoldWith<Self>
+        + for<'any> VisitWith<AmbientFunctionHandler<'any>>
+        + for<'any> VisitWith<ImportFinder<'any>>,
 {
     fn fold(&mut self, items: Vec<T>) -> Vec<T> {
-        // We first load imports.
-
         {
+            // We first load imports.
             let mut imports: Vec<ImportInfo> = vec![];
 
-            items.iter().for_each(|item| {
-                // Extract imports
-                item.visit_with(&mut ImportFinder { to: &mut imports });
-                // item.fold_with(self);
-            });
+            // Extract imports
+            items.visit_with(&mut ImportFinder { to: &mut imports });
 
             let loader = self.loader;
             let path = self.path.clone();
