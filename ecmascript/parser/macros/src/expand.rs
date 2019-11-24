@@ -54,6 +54,9 @@ where
     T: Parse,
     P: Parse + Token,
 {
+    if t.is_empty() {
+        return Punctuated::new();
+    }
     let parser = Punctuated::parse_separated_nonempty;
     parser.parse2(t).expect("failed parse args")
 }
