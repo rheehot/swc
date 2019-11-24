@@ -4,6 +4,7 @@ ambient/ambientShorthand_declarationEmit.ts
 async/es5/asyncDeclare_es5.ts
 async/es6/asyncDeclare_es6.ts
 boolean/assignFromBooleanInterface1
+classes/classDeclarations/classAbstractKeyword/classAbstractAsIdentifier.ts
 classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts
 classes/classDeclarations/classAbstractKeyword/classAbstractConstructor.ts
 classes/classDeclarations/classAbstractKeyword/classAbstractExtends.ts
