@@ -649,8 +649,8 @@ impl<'a, I: Tokens> Parser<'a, I> {
                 type_params: None,
             };
             match arrow_expr.body {
-                BlockStmtOrExpr::BlockStmt(..) => match *cur!(false)? {
-                    Token::BinOp(..) => {
+                BlockStmtOrExpr::BlockStmt(..) => match cur!(false) {
+                    Ok(&Token::BinOp(..)) => {
                         // ) is required
                         self.emit_err(self.input.cur_span(), SyntaxError::TS1005);
                         let errored_expr =
