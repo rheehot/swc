@@ -3,6 +3,7 @@ name = "swc_ts_checker"
 version = "0.1.0"
 authors = ["강동윤 <kdy1@outlook.kr>"]
 edition = "2018"
+publish = false
 
 [dependencies]
 swc_atoms = { path = "../../atoms" }
