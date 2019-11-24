@@ -360,7 +360,17 @@ impl<'a, I: Tokens> Parser<'a, I> {
 
         expect!('(');
         let test = self.include_in_expr(true).parse_expr()?;
-        expect!(')');
+        if !eat!(')') {
+            self.emit_err(self.input.cur_span(), SyntaxError::TS1005);
+
+            let span = span!(start);
+            return Ok(Stmt::If(IfStmt {
+                span,
+                test,
+                cons: Box::new(Stmt::Expr(Box::new(Expr::Invalid(Invalid { span })))k),
+                alt: Default::default(),
+            }));
+        }
 
         let cons = {
             // Annex B

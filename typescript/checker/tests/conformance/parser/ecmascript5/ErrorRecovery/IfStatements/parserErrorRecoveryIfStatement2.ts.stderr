@@ -1,0 +1,22 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            31,
+        ),
+        hi: BytePos(
+            32,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement2.ts:3:9
+  |
+3 |     if (a
+  |         ^
+
+error: TS1005
+ --> $DIR/tests/conformance/parser/ecmascript5/ErrorRecovery/IfStatements/parserErrorRecoveryIfStatement2.ts:4:3
+  |
+4 |   }
+  |   ^
+
