@@ -195,6 +195,7 @@ impl Analyzer<'_, '_> {
             self.path.clone(),
             self.loader,
         );
+        child.top_level = false;
         child.allow_ref_declaring = self.allow_ref_declaring;
         child.span_allowed_implicit_any = self.span_allowed_implicit_any;
         if !self.return_type_span.is_dummy() {

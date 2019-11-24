@@ -67,10 +67,12 @@ pub(crate) struct Analyzer<'a, 'b> {
     /// The code below is valid even when `noImplicitAny` is given.
     ///
     /// ```typescript
-    /// 
     /// var foo: () => [any] = function bar() {}
     /// ```
     span_allowed_implicit_any: Span,
+
+    top_level: bool,
+    export_equals_span: Span,
 
     computed_prop_mode: ComputedPropMode,
 }
@@ -86,7 +88,7 @@ enum ComputedPropMode {
 
 impl<T> Fold<Vec<T>> for Analyzer<'_, '_>
 where
-    T: FoldWith<Self> + Send + Sync,
+    T: FoldWith<Self> + Send + Sync + StmtLike + ModuleItemLike,
     Vec<T>: FoldWith<Self>
         + for<'any> VisitWith<AmbientFunctionHandler<'any>>
         + for<'any> VisitWith<ImportFinder<'any>>,
@@ -359,6 +361,8 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             pending_exports: Default::default(),
             loader,
             span_allowed_implicit_any: DUMMY_SP,
+            export_equals_span: DUMMY_SP,
+            top_level: true,
             computed_prop_mode: ComputedPropMode::Object,
         }
     }
