@@ -424,6 +424,7 @@ parser/ecmascript5/ErrorRecovery/parserModifierOnPropertySignature2.ts
 parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock1.ts
 parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock3.ts
 parser/ecmascript5/ErrorRecovery/parserModifierOnStatementInBlock4.ts
+parser/ecmascript5/ExportAssignments/parserExportAssignment7.ts
 parser/ecmascript5/Expressions/parserUnaryExpression
 parser/ecmascript5/FunctionDeclarations/
 parser/ecmascript5/FunctionDeclarations/parserFunctionDeclaration1.ts

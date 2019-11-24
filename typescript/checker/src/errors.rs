@@ -244,6 +244,10 @@ pub enum Error {
         span: Span,
     },
 
+    TS2309 {
+        span: Span,
+    },
+
     TS2347 {
         span: Span,
     },

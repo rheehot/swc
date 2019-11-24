@@ -17,7 +17,9 @@ use log::debug;
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use std::{borrow::Cow, cell::RefCell, path::PathBuf, sync::Arc};
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith, DUMMY_SP};
+use swc_common::{
+    util::move_map::MoveMap, Fold, FoldWith, Span, Spanned, Visit, VisitWith, DUMMY_SP,
+};
 use swc_ecma_ast::*;
 
 /// If true, Fold<T> prints `Fold<T>` to stdout.
@@ -93,7 +95,7 @@ where
         + for<'any> VisitWith<AmbientFunctionHandler<'any>>
         + for<'any> VisitWith<ImportFinder<'any>>,
 {
-    fn fold(&mut self, items: Vec<T>) -> Vec<T> {
+    fn fold(&mut self, mut items: Vec<T>) -> Vec<T> {
         {
             // We first load imports.
             let mut imports: Vec<ImportInfo> = vec![];
@@ -137,6 +139,49 @@ where
                     }
                 }
             }
+        }
+
+        if self.top_level {
+            let mut has_normal_export = false;
+            items = items.move_map(|item| match item.try_into_module_decl() {
+                Ok(ModuleDecl::TsExportAssignment(decl)) => {
+                    if self.export_equals_span.is_dummy() {
+                        self.export_equals_span = decl.span;
+                    }
+                    if has_normal_export {
+                        self.info.errors.push(Error::TS2309 { span: decl.span });
+                    }
+
+                    //
+                    match T::try_from_module_decl(ModuleDecl::TsExportAssignment(decl)) {
+                        Ok(v) => v,
+                        _ => unreachable!(),
+                    }
+                }
+                Ok(item) => {
+                    match item {
+                        ModuleDecl::ExportDecl(..)
+                        | ModuleDecl::ExportAll(..)
+                        | ModuleDecl::ExportDefaultDecl(..)
+                        | ModuleDecl::ExportDefaultExpr(..)
+                        | ModuleDecl::TsNamespaceExport(..) => {
+                            has_normal_export = true;
+                            if !self.export_equals_span.is_dummy() {
+                                self.info.errors.push(Error::TS2309 {
+                                    span: self.export_equals_span,
+                                });
+                            }
+                        }
+                        _ => {}
+                    }
+
+                    match T::try_from_module_decl(item) {
+                        Ok(v) => v,
+                        _ => unreachable!(),
+                    }
+                }
+                Err(item) => item,
+            });
         }
 
         if !self.in_declare {
