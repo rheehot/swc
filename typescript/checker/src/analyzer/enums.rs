@@ -51,7 +51,6 @@ impl Fold<TsEnumDecl> for Analyzer<'_, '_> {
                 }
             }
         } else {
-            println!("FOO! {:?} ", e.members);
             e.members = e.members.fold_children(self);
         }
 

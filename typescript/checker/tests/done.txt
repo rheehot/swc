@@ -12,7 +12,16 @@ classes/classDeclarations/classAbstractKeyword/classAbstractWithInterface.ts
 classes/classDeclarations/classExtendingBuiltinType.ts
 classes/classDeclarations/classExtendingNull.ts
 classes/classExpression.ts
+classes/classExpression/index.ts
+classes/classExpressions/classExpression1.ts
+classes/classExpressions/classExpression2.ts
+classes/classExpressions/classExpression3.ts
 constEnums
+controlFlow/controlFlowBinaryAndExpression.ts
+controlFlow/controlFlowBinaryOrExpression.ts
+controlFlow/controlFlowConditionalExpression.ts
+controlFlow/controlFlowDeleteOperator.ts
+controlFlow/controlFlowElementAccess2.ts
 emitter/es2019/noCatchBinding/emitter.noCatchBinding.es2019.ts
 es6/classDeclaration/classWithSemicolonClassElementES61.ts
 es6/classDeclaration/classWithSemicolonClassElementES62.ts
