@@ -16,16 +16,6 @@ use swc_ecma_ast::*;
 // ModuleDecl::TsNamespaceExport(ns) =>
 // unimplemented!("export namespace"),
 
-impl Fold<TsExportAssignment> for Analyzer<'_, '_> {
-    fn fold(&mut self, export: TsExportAssignment) -> TsExportAssignment {
-        let export = export.fold_children(self);
-
-        self.export_default_expr(&export.expr);
-
-        export
-    }
-}
-
 impl Analyzer<'_, '_> {
     #[inline]
     pub(super) fn handle_pending_exports(&mut self) {
@@ -66,7 +56,7 @@ impl Analyzer<'_, '_> {
         assert_eq!(self.pending_exports, vec![]);
     }
 
-    fn export_default_expr(&mut self, expr: &Expr) {
+    pub(super) fn export_default_expr(&mut self, expr: &Expr) {
         assert_eq!(
             self.info.exports.get(&js_word!("default")),
             None,
@@ -170,16 +160,6 @@ impl Fold<ExportDefaultDecl> for Analyzer<'_, '_> {
                 self.export(i.span(), js_word!("default"), Some(i.id.sym.clone()))
             }
         };
-
-        export
-    }
-}
-
-impl Fold<ExportDefaultExpr> for Analyzer<'_, '_> {
-    fn fold(&mut self, export: ExportDefaultExpr) -> ExportDefaultExpr {
-        let export = export.fold_children(self);
-
-        self.export_default_expr(&export.expr);
 
         export
     }

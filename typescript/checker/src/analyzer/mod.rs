@@ -34,6 +34,7 @@ mod enums;
 pub mod export;
 mod expr;
 mod generic;
+mod module_item;
 mod name;
 mod pat;
 mod props;
