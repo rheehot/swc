@@ -239,3 +239,179 @@ where
     T: Clone,
 {
 }
+
+pub(crate) fn pat_to_ts_fn_param(p: Pat) -> TsFnParam {
+    match p {
+        Pat::Ident(i) => TsFnParam::Ident(i),
+        Pat::Rest(rest) => TsFnParam::Rest(rest),
+        Pat::Array(arr) => TsFnParam::Array(arr),
+        Pat::Object(obj) => TsFnParam::Object(obj),
+        // TODO: Pat::Assign()
+        Pat::Assign(assign) => pat_to_ts_fn_param(*assign.left),
+        _ => unreachable!("pat_to_ts_fn_param: Pat: {:?}", p),
+    }
+}
+
+pub(crate) trait RemoveTypes {
+    /// Removes falsy values from `self`.
+    fn remove_falsy(self) -> Type;
+
+    /// Removes truthy values from `self`.
+    fn remove_truthy(self) -> Type;
+}
+
+impl RemoveTypes for Type {
+    fn remove_falsy(self) -> Type {
+        match self {
+            Type::Keyword(TsKeywordType { kind, span }) => match kind {
+                TsKeywordTypeKind::TsUndefinedKeyword | TsKeywordTypeKind::TsNullKeyword => {
+                    return Type::never(span);
+                }
+                _ => {}
+            },
+            Type::Lit(TsLitType {
+                lit:
+                    TsLit::Bool(Bool {
+                        value: false, span, ..
+                    }),
+                ..
+            }) => return Type::never(span),
+
+            Type::Union(u) => return u.remove_falsy(),
+            Type::Intersection(i) => return i.remove_falsy(),
+            _ => {}
+        }
+
+        Cow::Owned(self)
+    }
+
+    fn remove_truthy(self) -> Type {
+        match self {
+            Type::Lit(TsLitType {
+                lit: TsLit::Bool(Bool {
+                    value: true, span, ..
+                }),
+                ..
+            }) => return Type::never(span),
+
+            Type::Union(u) => u.remove_truthy(),
+            Type::Intersection(i) => i.remove_truthy(),
+            _ => Cow::Owned(self),
+        }
+    }
+}
+
+impl RemoveTypes for Intersection {
+    fn remove_falsy(self) -> Type {
+        let types = self
+            .types
+            .into_iter()
+            .map(|ty| ty.remove_falsy())
+            .collect::<Vec<_>>();
+        if types.iter().any(|ty| ty.is_never()) {
+            return Type::never(self.span);
+        }
+
+        Intersection {
+            span: self.span,
+            types,
+        }
+        .into()
+    }
+
+    fn remove_truthy(self) -> Type {
+        let types = self
+            .types
+            .into_iter()
+            .map(|ty| ty.remove_truthy())
+            .collect::<Vec<_>>();
+        if types.iter().any(|ty| ty.is_never()) {
+            return Type::never(self.span);
+        }
+
+        Intersection {
+            span: self.span,
+            types,
+        }
+        .into()
+    }
+}
+
+impl RemoveTypes for Union {
+    fn remove_falsy(self) -> Type {
+        let types = self
+            .types
+            .into_iter()
+            .map(|ty| ty.remove_falsy())
+            .filter(|ty| !ty.is_never())
+            .collect();
+        Union {
+            span: self.span,
+            types,
+        }
+        .into()
+    }
+
+    fn remove_truthy(self) -> Type {
+        let types = self
+            .types
+            .into_iter()
+            .map(|ty| ty.remove_truthy())
+            .filter(|ty| !ty.is_never())
+            .collect();
+        Union {
+            span: self.span,
+            types,
+        }
+        .into()
+    }
+}
+
+impl<'a, T> RemoveTypes for Box<T>
+where
+    T: RemoveTypes,
+{
+    fn remove_falsy(self) -> Type {
+        (*self).remove_falsy()
+    }
+
+    fn remove_truthy(self) -> Type {
+        (*self).remove_truthy()
+    }
+}
+
+pub(crate) trait EndsWithRet {
+    /// Returns true if the statement ends with return, break, continue;
+    fn ends_with_ret(&self) -> bool;
+}
+
+impl EndsWithRet for Stmt {
+    /// Returns true if the statement ends with return, break, continue;
+    fn ends_with_ret(&self) -> bool {
+        match *self {
+            Stmt::Return(..) | Stmt::Break(..) | Stmt::Continue(..) | Stmt::Throw(..) => true,
+            Stmt::Block(ref stmt) => stmt.ends_with_ret(),
+            _ => false,
+        }
+    }
+}
+
+impl EndsWithRet for BlockStmt {
+    /// Returns true if the statement ends with return, break, continue;
+    fn ends_with_ret(&self) -> bool {
+        self.stmts.ends_with_ret()
+    }
+}
+
+impl<T> EndsWithRet for Vec<T>
+where
+    T: EndsWithRet,
+{
+    /// Returns true if the statement ends with return, break, continue;
+    fn ends_with_ret(&self) -> bool {
+        match self.last() {
+            Some(ref stmt) => stmt.ends_with_ret(),
+            _ => false,
+        }
+    }
+}
