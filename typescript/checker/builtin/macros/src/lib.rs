@@ -3,7 +3,6 @@
 #![recursion_limit = "4096"]
 
 extern crate inflector;
-extern crate rayon;
 extern crate swc_common;
 #[macro_use]
 extern crate pmutil;
