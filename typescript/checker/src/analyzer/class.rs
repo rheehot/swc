@@ -13,6 +13,7 @@ use std::mem;
 use swc_atoms::js_word;
 use swc_common::{util::move_map::MoveMap, Fold, FoldWith, Span, Spanned, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
+use swc_ts_checker_macros::validator;
 
 /// # Validations
 ///
@@ -235,6 +236,7 @@ impl Analyzer<'_, '_> {
         self.info.errors.extend(errors);
     }
 
+    #[validator]
     pub(super) fn validate_computed_prop_key(&mut self, span: Span, key: &Expr) {
         let mut errors = vec![];
         let is_symbol_access = match *key {
@@ -249,31 +251,29 @@ impl Analyzer<'_, '_> {
             _ => false,
         };
 
-        analyze!(self, {
-            let ty = match self.type_of(&key) {
-                Ok(ty) => ty,
-                Err(err) => {
-                    match err {
-                        Error::TS2585 { span } => Err(Error::TS2585 { span })?,
-                        _ => {}
-                    }
-
-                    errors.push(err);
-
-                    Type::any(span).owned()
+        let ty = match self.type_of(&key) {
+            Ok(ty) => ty,
+            Err(err) => {
+                match err {
+                    Error::TS2585 { span } => Err(Error::TS2585 { span })?,
+                    _ => {}
                 }
-            };
 
-            match *ty.normalize() {
-                Type::Lit(..) => {}
-                _ if is_symbol_access => {}
-                _ => errors.push(Error::TS1166 { span }),
-            }
+                errors.push(err);
 
-            if !errors.is_empty() {
-                Err(Error::Errors { span, errors })?
+                Type::any(span).owned()
             }
-        });
+        };
+
+        match *ty.normalize() {
+            Type::Lit(..) => {}
+            _ if is_symbol_access => {}
+            _ => errors.push(Error::TS1166 { span }),
+        }
+
+        if !errors.is_empty() {
+            Err(Error::Errors { span, errors })?
+        }
     }
 }
 

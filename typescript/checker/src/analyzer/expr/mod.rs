@@ -1,9 +1,8 @@
-use std::{borrow::Cow, iter::once};
-
-use swc_atoms::{js_word, JsWord};
-use swc_common::{util::iter::IteratorExt as _, Fold, FoldWith, Span, Spanned};
-use swc_ecma_ast::*;
-
+use super::{
+    control_flow::{Comparator, RemoveTypes},
+    export::pat_to_ts_fn_param,
+    Analyzer,
+};
 use crate::{
     analyzer::instantiate_class,
     builtin_types,
@@ -16,12 +15,11 @@ use crate::{
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
-
-use super::{
-    control_flow::{Comparator, RemoveTypes},
-    export::pat_to_ts_fn_param,
-    Analyzer,
-};
+use std::{borrow::Cow, iter::once};
+use swc_atoms::{js_word, JsWord};
+use swc_common::{util::iter::IteratorExt as _, Fold, FoldWith, Span, Spanned};
+use swc_ecma_ast::*;
+use swc_ts_checker_macros::validator;
 
 mod bin;
 mod call_new;
@@ -2416,12 +2414,7 @@ impl Fold<TsTypeAssertion> for Analyzer<'_, '_> {
 
         let expr = expr.fold_children(self);
 
-        match self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann) {
-            Ok(()) => {}
-            Err(err) => {
-                self.info.errors.push(err);
-            }
-        }
+        self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann);
 
         expr
     }
@@ -2433,12 +2426,7 @@ impl Fold<TsAsExpr> for Analyzer<'_, '_> {
 
         let expr = expr.fold_children(self);
 
-        match self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann) {
-            Ok(()) => {}
-            Err(err) => {
-                self.info.errors.push(err);
-            }
-        }
+        self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann);
 
         expr
     }
@@ -2480,7 +2468,8 @@ impl Analyzer<'_, '_> {
     /// ```
     ///
     /// results in error.
-    fn validate_type_cast(&self, span: Span, orig: &Expr, to: &TsType) -> Result<(), Error> {
+    #[validator]
+    fn validate_type_cast(&mut self, span: Span, orig: &Expr, to: &TsType) {
         let orig_ty = self.type_of(orig)?;
         let orig_ty = self.expand_type(span, orig_ty)?;
 
@@ -2488,7 +2477,7 @@ impl Analyzer<'_, '_> {
         let casted_ty = self.expand_type(span, Cow::Owned(casted_ty))?;
         let casted_ty = instantiate_class(casted_ty);
 
-        self.validate_type_cast_inner(span, &orig_ty, &casted_ty)
+        self.validate_type_cast_inner(span, &orig_ty, &casted_ty)?;
     }
 
     fn validate_type_cast_inner(
@@ -2519,11 +2508,11 @@ impl Analyzer<'_, '_> {
                     Type::Tuple(ref rt) => {
                         //
                         if lt.types.len() != rt.types.len() {
-                            return Err(Error::InvalidTupleCast {
+                            Err(Error::InvalidTupleCast {
                                 span,
                                 left: lt.span(),
                                 right: rt.span(),
-                            });
+                            })?;
                         }
 
                         let mut all_castable = true;
