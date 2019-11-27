@@ -81,7 +81,7 @@ impl Fold<Class> for Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     fn validate_inherited_members(&mut self, name: Option<&Ident>, c: &Class, declare: bool) {
-        if c.is_abstract {
+        if c.is_abstract || declare {
             return;
         }
 
