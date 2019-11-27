@@ -1,28 +1,23 @@
+use crate::{analyzer::Analyzer, errors::Error, ty::Type};
 use swc_common::{Fold, FoldWith, Span};
 use swc_ecma_ast::*;
-
-use crate::{analyzer::Analyzer, errors::Error, ty::Type};
+use swc_ts_checker_macros::validator;
 
 impl Analyzer<'_, '_> {
+    #[validator]
     fn check_callee(
         &mut self,
         span: Span,
         callee: &Expr,
         type_args: Option<&TsTypeParamInstantiation>,
     ) {
-        let res: Result<(), Error> = try {
-            let callee_ty = self.type_of(callee)?;
-            match *callee_ty.normalize() {
-                Type::Keyword(TsKeywordType {
-                    kind: TsKeywordTypeKind::TsAnyKeyword,
-                    ..
-                }) if type_args.is_some() => Err(Error::TS2347 { span })?,
-                _ => {}
-            }
-        };
-
-        if let Err(err) = res {
-            self.info.errors.push(err);
+        let callee_ty = self.type_of(callee)?;
+        match *callee_ty.normalize() {
+            Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsAnyKeyword,
+                ..
+            }) if type_args.is_some() => Err(Error::TS2347 { span })?,
+            _ => {}
         }
     }
 }

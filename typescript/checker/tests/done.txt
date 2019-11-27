@@ -625,6 +625,7 @@ types/literal/stringLiteralsWithEqualityChecks01.ts
 types/literal/stringLiteralsWithSwitchStatements01.ts
 types/primitives/
 types/primitives/boolean
+types/primitives/boolean/booleanPropertyAccess.ts
 types/primitives/boolean/invalidBooleanAssignments.ts
 types/primitives/enum
 types/primitives/null/validNullAssignments.ts
