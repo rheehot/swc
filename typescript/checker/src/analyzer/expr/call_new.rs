@@ -1,21 +1,22 @@
-use swc_common::{Fold, FoldWith};
+use swc_common::{Fold, FoldWith, Span};
 use swc_ecma_ast::*;
 
 use crate::{analyzer::Analyzer, errors::Error, ty::Type};
 
-impl Fold<NewExpr> for Analyzer<'_, '_> {
-    fn fold(&mut self, e: NewExpr) -> NewExpr {
-        log_fold!(e);
-
-        let e = e.fold_children(self);
-
+impl Analyzer<'_, '_> {
+    fn check_callee(
+        &mut self,
+        span: Span,
+        callee: &Expr,
+        type_args: Option<&TsTypeParamInstantiation>,
+    ) {
         let res: Result<(), Error> = try {
-            let callee_ty = self.type_of(&e.callee)?;
+            let callee_ty = self.type_of(callee)?;
             match *callee_ty.normalize() {
                 Type::Keyword(TsKeywordType {
                     kind: TsKeywordTypeKind::TsAnyKeyword,
                     ..
-                }) if e.type_args.is_some() => Err(Error::TS2347 { span: e.span })?,
+                }) if type_args.is_some() => Err(Error::TS2347 { span })?,
                 _ => {}
             }
         };
@@ -23,6 +24,16 @@ impl Fold<NewExpr> for Analyzer<'_, '_> {
         if let Err(err) = res {
             self.info.errors.push(err);
         }
+    }
+}
+
+impl Fold<NewExpr> for Analyzer<'_, '_> {
+    fn fold(&mut self, e: NewExpr) -> NewExpr {
+        log_fold!(e);
+
+        let e = e.fold_children(self);
+
+        self.check_callee(e.span, &e.callee, e.type_args.as_ref());
 
         // Check arguments
         if let Some(ref args) = e.args {
