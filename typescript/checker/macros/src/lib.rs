@@ -12,7 +12,7 @@ use pmutil::{Quote, ToTokensExt};
 use proc_macro2::Span;
 use std::{collections::HashMap, fs::read_dir, path::Path, sync::Arc};
 use swc_macros_common::{call_site, print};
-use syn::{punctuated::Punctuated, ImplItemMethod, LitStr, Token};
+use syn::{punctuated::Punctuated, ExprTryBlock, ImplItemMethod, LitStr, ReturnType, Token};
 
 /// This macro converts
 ///
@@ -60,19 +60,59 @@ pub fn validator(
 }
 
 fn expand_validator(i: ImplItemMethod) -> ImplItemMethod {
-    let block = Quote::new_call_site()
-        .quote_with(smart_quote!(Vars { block: &i.block }, {
-            let res: Result<_, Error> = try { block };
+    let should_return = match i.sig.output {
+        ReturnType::Default => false,
+        _ => true,
+    };
 
-            match res {
-                Ok(v) => Ok(v),
-                Err(err) => {
-                    self.info.errors.push(err);
-                    Err(())
+    let try_block = ExprTryBlock {
+        attrs: Default::default(),
+        try_token: call_site(),
+        block: i.block,
+    };
+
+    let block = if should_return {
+        Quote::new_call_site()
+            .quote_with(smart_quote!(
+                Vars {
+                    try_block: &try_block
+                },
+                {
+                    {
+                        let res: Result<_, Error> = try_block;
+
+                        match res {
+                            Ok(v) => Ok(v),
+                            Err(err) => {
+                                self.info.errors.push(err);
+                                Err(())
+                            }
+                        }
+                    }
                 }
-            }
-        }))
-        .parse();
+            ))
+            .parse()
+    } else {
+        Quote::new_call_site()
+            .quote_with(smart_quote!(
+                Vars {
+                    try_block: &try_block
+                },
+                {
+                    {
+                        let res: Result<_, Error> = try_block;
+
+                        match res {
+                            Err(err) => {
+                                self.info.errors.push(err);
+                            }
+                            _ => {}
+                        }
+                    }
+                }
+            ))
+            .parse()
+    };
 
     ImplItemMethod { block, ..i }
 }
