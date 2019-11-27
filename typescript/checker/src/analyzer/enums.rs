@@ -1,3 +1,5 @@
+//! Handles enum.
+
 use super::Analyzer;
 use crate::{
     errors::Error,

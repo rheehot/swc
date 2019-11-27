@@ -1,3 +1,5 @@
+//! Handles binary expressions.
+
 use super::Analyzer;
 use crate::{
     analyzer::control_flow::Comparator,

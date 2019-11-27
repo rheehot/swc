@@ -1,3 +1,5 @@
+//! Handles new expressions and call expressions.
+
 use crate::{analyzer::Analyzer, errors::Error, ty::Type};
 use swc_common::{Fold, FoldWith, Span};
 use swc_ecma_ast::*;
