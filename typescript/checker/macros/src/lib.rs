@@ -5,14 +5,10 @@
 #[macro_use]
 extern crate pmutil;
 extern crate proc_macro;
-#[macro_use]
-extern crate quote;
 
 use pmutil::{Quote, ToTokensExt};
-use proc_macro2::Span;
-use std::{collections::HashMap, fs::read_dir, path::Path, sync::Arc};
 use swc_macros_common::{call_site, print};
-use syn::{punctuated::Punctuated, ExprTryBlock, ImplItemMethod, LitStr, ReturnType, Token};
+use syn::{ExprTryBlock, ImplItemMethod, ReturnType};
 
 /// This macro converts
 ///
