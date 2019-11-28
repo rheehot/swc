@@ -318,6 +318,7 @@ es7/exponentiationOperator/exponentiationOperatorWithEnumUnion.ts
 es7/exponentiationOperator/exponentiationOperatorWithNew.ts
 es7/trailingCommasInGetter.ts
 expr`essions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts
+expresions/
 expressions/asOperator/asOpEmitParens.ts
 expressions/asOperator/asOperator1.ts
 expressions/asOperator/asOperator2.ts
@@ -574,6 +575,7 @@ scanner/ecmascript5/scannerNonAsciiHorizontalWhitespace.ts
 scanner/ecmascript5/scannerNumericLiteral1.ts
 scanner/ecmascript5/scannerNumericLiteral2.ts
 scanner/ecmascript5/scannerNumericLiteral3.ts
+scanner/ecmascript5/scannerNumericLiteral4.ts
 scanner/ecmascript5/scannerNumericLiteral5.ts
 scanner/ecmascript5/scannerNumericLiteral6.ts
 scanner/ecmascript5/scannerNumericLiteral7.ts
@@ -633,8 +635,17 @@ types/primitives/number
 types/primitives/undefined
 types/primitives/void
 types/primitives/void/
+types/stringLiteral/stringLiteralCheckedInIf01.ts
+types/stringLiteral/stringLiteralCheckedInIf02.ts
+types/stringLiteral/stringLiteralTypesAndParenthesizedExpressions01.ts
 types/stringLiteral/stringLiteralTypesAsTags
 types/stringLiteral/stringLiteralTypesInUnion
+types/stringLiteral/stringLiteralTypesOverloadAssignability03.ts
+types/stringLiteral/stringLiteralTypesOverloadAssignability04.ts
+types/stringLiteral/stringLiteralTypesOverloadAssignability05.ts
+types/stringLiteral/stringLiteralTypesOverloads03.ts
+types/stringLiteral/stringLiteralTypesOverloads04.ts
+types/stringLiteral/stringLiteralTypesTypePredicates01.ts
 types/stringLiteral/stringLiteralTypesWithTemplate
 types/thisType/thisTypeInInterfaces
 types/tuple/castingTuple.ts
