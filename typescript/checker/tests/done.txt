@@ -318,7 +318,6 @@ es7/exponentiationOperator/exponentiationOperatorWithEnumUnion.ts
 es7/exponentiationOperator/exponentiationOperatorWithNew.ts
 es7/trailingCommasInGetter.ts
 expr`essions/binaryOperators/arithmeticOperator/arithmeticOperatorWithInvalidOperands.ts
-expresions/
 expressions/asOperator/asOpEmitParens.ts
 expressions/asOperator/asOperator1.ts
 expressions/asOperator/asOperator2.ts
