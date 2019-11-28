@@ -2340,28 +2340,6 @@ enum ExtractKind {
     New,
 }
 
-impl Fold<Stmt> for Analyzer<'_, '_> {
-    fn fold(&mut self, stmt: Stmt) -> Stmt {
-        log_fold!(stmt);
-        let stmt = stmt.fold_children(self);
-
-        match stmt {
-            // Validate expression statements
-            Stmt::Expr(ref expr) => match self.type_of(&expr) {
-                Ok(..) => {}
-                Err(err) => {
-                    self.info.errors.push(err);
-                    return stmt;
-                }
-            },
-
-            _ => {}
-        }
-
-        stmt
-    }
-}
-
 impl Fold<SeqExpr> for Analyzer<'_, '_> {
     fn fold(&mut self, mut expr: SeqExpr) -> SeqExpr {
         log_fold!(expr);
@@ -2573,25 +2551,5 @@ impl Analyzer<'_, '_> {
         }
 
         Ok(())
-    }
-}
-
-impl Fold<ThrowStmt> for Analyzer<'_, '_> {
-    fn fold(&mut self, s: ThrowStmt) -> ThrowStmt {
-        log_fold!(s);
-
-        let s = s.fold_children(self);
-
-        match self
-            .type_of(&s.arg)
-            .and_then(|ty| self.expand_type(s.span, ty))
-        {
-            Ok(..) => {}
-            Err(err) => {
-                self.info.errors.push(err);
-            }
-        }
-
-        s
     }
 }
