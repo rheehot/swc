@@ -367,7 +367,10 @@ impl<'a, I: Tokens> Parser<'a, I> {
             return Ok(Stmt::If(IfStmt {
                 span,
                 test,
-                cons: Box::new(Stmt::Expr(Box::new(Expr::Invalid(Invalid { span })))),
+                cons: Box::new(Stmt::Expr(ExprStmt {
+                    span,
+                    expr: Box::new(Expr::Invalid(Invalid { span })),
+                })),
                 alt: Default::default(),
             }));
         }

@@ -701,13 +701,13 @@ fn quote_exprs_with_type_args(exprs: &[TsExprWithTypeArgs]) -> Punctuated<Quote,
             q().quote_with(smart_quote!(
                 Vars {
                     name: quote_ts_entity_name(&expr.expr),
-                    type_params_v: quote_type_params_instantiation(expr.type_params.as_ref()),
+                    type_args_v: quote_type_params_instantiation(expr.type_args.as_ref()),
                 },
                 {
                     TsExprWithTypeArgs {
                         span: DUMMY_SP,
                         expr: name,
-                        type_params: type_params_v,
+                        type_args: type_args_v,
                     }
                 }
             ))
@@ -784,7 +784,7 @@ fn quote_ty(ty: &TsType) -> syn::Expr {
         TsType::TsTypeQuery(TsTypeQuery { ref expr_name, .. }) => {
             q = q.quote_with(smart_quote!(
                 Vars {
-                    expr_name_v: quote_ts_entity_name(expr_name),
+                    expr_name_v: quote_ts_type_query_expr(expr_name),
                 },
                 {
                     TsType::TsTypeQuery(TsTypeQuery {
@@ -1694,6 +1694,19 @@ fn quote_ident(i: &Ident) -> syn::Expr {
                 optional: optional_v,
             }
         }
+    ))
+    .parse()
+}
+
+fn quote_ts_type_query_expr(e: &TsTypeQueryExpr) -> syn::Expr {
+    q().quote_with(smart_quote!(
+        Vars {
+            i: match e {
+                TsTypeQueryExpr::TsEntityName(e) => quote_ts_entity_name(e),
+                _ => unreachable!(),
+            }
+        },
+        { TsTypeQueryExpr::TsEntityName(i) }
     ))
     .parse()
 }
