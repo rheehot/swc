@@ -27,7 +27,7 @@ use std::{
     path::Path,
 };
 use swc_common::{
-    comments::Comments, errors::DiagnosticBuilder, FileName, Fold, FoldWith, Span, Spanned, CM,
+    comments::Comments, errors::DiagnosticBuilder, FileName, Fold, FoldWith, Span, Spanned,
 };
 use swc_ecma_ast::{Module, *};
 use swc_ecma_parser::{JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig};
@@ -401,34 +401,32 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
     match mode {
         Mode::Error => {
             let res = ::testing::run_test(false, |cm, handler| {
-                CM.set(&cm.clone(), || {
-                    let checker = swc_ts_checker::Checker::new(
-                        cm.clone(),
-                        handler,
-                        libs,
-                        rule,
-                        TsConfig {
-                            tsx: fname.contains("tsx"),
-                            ..ts_config
-                        },
-                        target,
-                    );
+                let checker = swc_ts_checker::Checker::new(
+                    cm.clone(),
+                    handler,
+                    libs,
+                    rule,
+                    TsConfig {
+                        tsx: fname.contains("tsx"),
+                        ..ts_config
+                    },
+                    target,
+                );
 
-                    let errors =
-                        ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
+                let errors =
+                    ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
 
-                    checker.run(|| {
-                        for e in errors {
-                            e.emit(&handler);
-                        }
-                    });
-
-                    if handler.has_errors() {
-                        return Err(());
+                checker.run(|| {
+                    for e in errors {
+                        e.emit(&handler);
                     }
+                });
 
-                    Ok(())
-                })
+                if handler.has_errors() {
+                    return Err(());
+                }
+
+                Ok(())
             });
 
             let err = res.expect_err("should fail, but parsed as");
@@ -441,34 +439,32 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
         }
         Mode::Pass => {
             let res = ::testing::run_test(false, |cm, handler| {
-                CM.set(&cm.clone(), || {
-                    let checker = swc_ts_checker::Checker::new(
-                        cm.clone(),
-                        handler,
-                        libs,
-                        rule,
-                        TsConfig {
-                            tsx: fname.contains("tsx"),
-                            ..ts_config
-                        },
-                        target,
-                    );
+                let checker = swc_ts_checker::Checker::new(
+                    cm.clone(),
+                    handler,
+                    libs,
+                    rule,
+                    TsConfig {
+                        tsx: fname.contains("tsx"),
+                        ..ts_config
+                    },
+                    target,
+                );
 
-                    let errors =
-                        ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
+                let errors =
+                    ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
 
-                    checker.run(|| {
-                        for e in errors {
-                            e.emit(&handler);
-                        }
-                    });
-
-                    if handler.has_errors() {
-                        return Err(());
+                checker.run(|| {
+                    for e in errors {
+                        e.emit(&handler);
                     }
+                });
 
-                    Ok(())
-                })
+                if handler.has_errors() {
+                    return Err(());
+                }
+
+                Ok(())
             });
 
             res.expect("should be parsed and validated");
@@ -484,35 +480,32 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
             let tester = Tester::new();
             let diagnostics = tester
                 .errors(|cm, handler| {
-                    CM.set(&cm.clone(), || {
-                        let checker = swc_ts_checker::Checker::new(
-                            cm.clone(),
-                            &handler,
-                            libs,
-                            rule,
-                            TsConfig {
-                                tsx: fname.contains("tsx"),
-                                ..ts_config
-                            },
-                            target,
-                        );
+                    let checker = swc_ts_checker::Checker::new(
+                        cm.clone(),
+                        &handler,
+                        libs,
+                        rule,
+                        TsConfig {
+                            tsx: fname.contains("tsx"),
+                            ..ts_config
+                        },
+                        target,
+                    );
 
-                        let errors = ::swc_ts_checker::errors::Error::flatten(
-                            checker.check(file_name.into()),
-                        );
+                    let errors =
+                        ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
 
-                        checker.run(|| {
-                            for e in errors {
-                                e.emit(&handler);
-                            }
-                        });
-
-                        if false {
-                            return Ok(());
+                    checker.run(|| {
+                        for e in errors {
+                            e.emit(&handler);
                         }
+                    });
 
-                        return Err(());
-                    })
+                    if false {
+                        return Ok(());
+                    }
+
+                    return Err(());
                 })
                 .expect_err("");
 

@@ -253,11 +253,15 @@ impl Analyzer<'_, '_> {
                                 }
 
                                 // Use last type on ...any or ...unknown
-                                ty @ Type::Keyword(TsKeywordType {
+                                ty
+                                @
+                                Type::Keyword(TsKeywordType {
                                     kind: TsKeywordTypeKind::TsUnknownKeyword,
                                     ..
                                 })
-                                | ty @ Type::Keyword(TsKeywordType {
+                                | ty
+                                @
+                                Type::Keyword(TsKeywordType {
                                     kind: TsKeywordTypeKind::TsAnyKeyword,
                                     ..
                                 }) => special_type = Some(ty),
@@ -1893,7 +1897,8 @@ impl Analyzer<'_, '_> {
 
             Type::Simple(ref sty) => match **sty {
                 TsType::TsTypeQuery(TsTypeQuery {
-                    expr_name: TsEntityName::Ident(Ident { ref sym, .. }),
+                    expr_name:
+                        TsTypeQueryExpr::TsEntityName(TsEntityName::Ident(Ident { ref sym, .. })),
                     ..
                 }) => {
                     if self.scope.find_declaring_fn(sym) {
@@ -2190,7 +2195,7 @@ impl Analyzer<'_, '_> {
 
                     TsType::TsTypeQuery(TsTypeQuery {
                         span,
-                        ref expr_name,
+                        expr_name: TsTypeQueryExpr::TsEntityName(ref expr_name),
                         ..
                     }) => return self.type_of_ts_entity_name(span, expr_name, None),
 
@@ -2392,7 +2397,7 @@ impl Analyzer<'_, '_> {
         &self,
         span: Span,
         n: &TsEntityName,
-        type_params: Option<&TsTypeParamInstantiation>,
+        type_args: Option<&TsTypeParamInstantiation>,
     ) -> Result<TypeRef, Error> {
         match *n {
             TsEntityName::Ident(ref i) => self.type_of_ident(i, TypeOfMode::RValue),

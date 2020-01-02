@@ -496,6 +496,8 @@ impl Analyzer<'_, '_> {
 
                 return Ok(r_ty);
             }
+
+            op!("??") => unimplemented!("type_of_bin_expr (`??`)"),
         }
     }
 }

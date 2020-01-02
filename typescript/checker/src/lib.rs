@@ -170,7 +170,7 @@ impl Checker<'_> {
                 SourceFileInput::from(&*fm),
                 None,
             );
-            let mut parser = Parser::new_with(session, lexer);
+            let mut parser = Parser::new_from(session, lexer);
 
             parser
                 .parse_typescript_module()

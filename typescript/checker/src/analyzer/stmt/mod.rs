@@ -127,7 +127,7 @@ impl Fold<Stmt> for Analyzer<'_, '_> {
 
         match stmt {
             // Validate expression statements
-            Stmt::Expr(ref expr) => match self.type_of(&expr) {
+            Stmt::Expr(ref s) => match self.type_of(&s.expr) {
                 Ok(..) => {}
                 Err(err) => {
                     self.info.errors.push(err);

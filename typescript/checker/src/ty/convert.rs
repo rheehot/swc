@@ -231,7 +231,7 @@ impl From<TsExprWithTypeArgs> for TsExpr<'_> {
         TsExpr {
             span: e.span,
             expr: e.expr,
-            type_params: e.type_params.map(From::from),
+            type_params: e.type_args.map(From::from),
         }
     }
 }
@@ -389,7 +389,7 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
                 //
                 for (i, m) in e.members.iter().enumerate() {
                     match m.id {
-                        TsEnumMemberId::Str((Str { value: ref sym, .. }))
+                        TsEnumMemberId::Str(Str { value: ref sym, .. })
                         | TsEnumMemberId::Ident(Ident { ref sym, .. }) => {
                             if *sym == id.sym {
                                 return arithmetic_opt(e, i, m.init.as_ref().map(|v| &**v));

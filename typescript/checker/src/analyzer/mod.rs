@@ -265,7 +265,7 @@ impl Analyzer<'_, '_> {
                 let _ = self.type_of_ts_entity_name(
                     parent.span,
                     &parent.expr,
-                    parent.type_params.as_ref(),
+                    parent.type_args.as_ref(),
                 )?;
             };
 
@@ -461,7 +461,7 @@ impl Analyzer<'_, '_> {
                     Some(Type::Simple(Cow::Owned(
                         TsTypeQuery {
                             span: f.span,
-                            expr_name: TsEntityName::Ident(name.clone()),
+                            expr_name: TsEntityName::Ident(name.clone()).into(),
                         }
                         .into(),
                     ))),
