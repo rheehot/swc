@@ -219,7 +219,10 @@ impl Analyzer<'_, '_> {
                 match *m {
                     ClassMember::Constructor(ref m) => check!(m, m.body),
                     ClassMember::Method(
-                        ref m @ ClassMethod {
+                        ref
+                        m
+                        @
+                        ClassMethod {
                             is_abstract: false, ..
                         },
                     ) => check!(m, m.function.body),

@@ -237,7 +237,7 @@ impl Analyzer<'_, '_> {
                                                         {
                                                             unimplemented!(
                                                                 "assignment: method property in \
-                                                                 type literal"
+                                             type literal"
                                                             )
                                                         }
 
