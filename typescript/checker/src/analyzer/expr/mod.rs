@@ -45,15 +45,14 @@ pub(super) enum TypeOfMode {
 }
 
 impl Analyzer<'_, '_> {
-    pub(super) fn type_of(&self, expr: &Expr) -> Result<TypeRef, Error> {
-        self.type_of_expr(expr, TypeOfMode::RValue, None)
+    pub fn validate_expr(&mut self, expr: &Expr) -> Result<TypeRef, Error> {
+        self.validate_expr_with_extra(expr, TypeOfMode::RValue, None)
     }
-
-    pub(super) fn type_of_expr(
-        &self,
+    pub fn validate_expr_with_extra(
+        &mut self,
         expr: &Expr,
-        type_mode: TypeOfMode,
-        type_params: Option<&TsTypeParamInstantiation>,
+        mode: TypeOfMode,
+        type_args: Option<&TsTypeParamInstantiation>,
     ) -> Result<TypeRef, Error> {
         let span = expr.span();
 
@@ -441,7 +440,9 @@ impl Analyzer<'_, '_> {
             _ => unimplemented!("typeof ({:#?})", expr),
         }
     }
+}
 
+impl Analyzer<'_, '_> {
     pub(super) fn type_of_ident(&self, i: &Ident, type_mode: TypeOfMode) -> Result<TypeRef, Error> {
         let span = i.span();
 
