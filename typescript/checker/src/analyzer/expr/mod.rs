@@ -15,7 +15,7 @@ use crate::{
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
 };
-use std::{borrow::Cow, iter::once};
+use std::{borrow::Cow, iter::once, sync::Arc};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{util::iter::IteratorExt as _, Fold, FoldWith, Span, Spanned};
 use swc_ecma_ast::*;
@@ -1071,8 +1071,8 @@ impl Analyzer<'_, '_> {
 
             Type::Module(Module { ref exports, .. }) => match prop {
                 Expr::Ident(Ident { ref sym, .. }) => {
-                    if let Some(item) = exports.get(sym) {
-                        return Ok(Type::Arc((*item).clone()).owned());
+                    if let Some(item) = exports.types.get(sym) {
+                        return Ok(Type::Arc(Arc::clone(item)).owned());
                     }
                 }
                 _ => {}

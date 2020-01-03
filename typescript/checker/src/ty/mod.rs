@@ -1,6 +1,7 @@
 use crate::{
     analyzer::Info,
     util::{EqIgnoreNameAndSpan, IntoCow},
+    Exports,
 };
 use fxhash::FxHashMap;
 use std::{borrow::Cow, mem::transmute, sync::Arc};
@@ -152,7 +153,7 @@ pub enum Type<'a> {
 pub struct Module {
     pub span: Span,
     #[fold(ignore)]
-    pub exports: FxHashMap<JsWord, Arc<Type<'static>>>,
+    pub exports: Exports<FxHashMap<JsWord, Arc<Type<'static>>>>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]

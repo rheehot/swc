@@ -10,7 +10,7 @@ use crate::{
     loader::Load,
     ty::{self, Alias, ClassInstance, Param, Tuple, Type, TypeRef, TypeRefExt},
     util::{IntoCow, ModuleItemLike, StmtLike},
-    Rule,
+    Exports, Rule,
 };
 use fxhash::{FxHashMap, FxHashSet};
 use log::debug;
@@ -50,7 +50,7 @@ pub(crate) struct Analyzer<'a, 'b> {
     in_declare: bool,
     resolved_imports: FxHashMap<JsWord, Arc<Type<'static>>>,
     errored_imports: FxHashSet<JsWord>,
-    pending_exports: Vec<((JsWord, Span), Box<Expr>)>,
+    pending_exports: Vec<((JsWord, Span), Type<'static>)>,
 
     /// Span used while inserting return type.
     return_type_span: Span,
@@ -426,7 +426,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
 
 #[derive(Debug, Default)]
 pub struct Info {
-    pub exports: FxHashMap<JsWord, Arc<Type<'static>>>,
+    pub exports: Exports<FxHashMap<JsWord, Arc<Type<'static>>>>,
     pub errors: Vec<Error>,
 }
 

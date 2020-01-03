@@ -44,6 +44,12 @@ pub struct Config {
     pub libs: Vec<Lib>,
 }
 
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct Exports<T> {
+    pub vars: T,
+    pub types: T,
+}
+
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Rule {
     pub no_implicit_any: bool,

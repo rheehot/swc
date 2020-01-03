@@ -1,13 +1,8 @@
 use super::{scope::ScopeKind, Analyzer};
 use crate::{
-    analyzer::{
-        expr::TypeOfMode,
-        util::{is_prop_name_eq, NormalizeMut},
-        ComputedPropMode, VarVisitor, LOG_VISIT,
-    },
+    analyzer::{expr::TypeOfMode, util::is_prop_name_eq, ComputedPropMode, VarVisitor, LOG_VISIT},
     errors::Error,
-    ty::{self, Type, TypeRefExt},
-    util::EqIgnoreNameAndSpan,
+    ty::{self, Type},
 };
 use std::mem;
 use swc_atoms::js_word;

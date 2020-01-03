@@ -3,7 +3,7 @@ use crate::{
     errors::Error,
     ty::{
         Array, Class, ClassInstance, ClassMember, Constructor, EnumVariant, Function, Interface,
-        Intersection, Param, Tuple, Type, TypeElement, TypeLit, TypeRef, TypeRefExt, Union,
+        Intersection, Param, Tuple, Type, TypeElement, TypeLit, TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
 };

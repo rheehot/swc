@@ -23,12 +23,12 @@ impl Analyzer<'_, '_> {
             return;
         }
 
-        let pending_exports: Vec<_> = mem::replace(&mut self.pending_exports, Default::default());
+        let pending_exports = mem::replace(&mut self.pending_exports, Default::default());
 
         for ((sym, _), expr) in pending_exports {
             // TODO: Allow multiple exports with same name.
 
-            debug_assert_eq!(self.info.exports.get(&sym), None);
+            debug_assert_eq!(self.info.exports.types.get(&sym), None);
 
             let exported_sym = if *sym != js_word!("default") {
                 Some(&sym)
@@ -50,7 +50,7 @@ impl Analyzer<'_, '_> {
                     }
                 },
             };
-            self.info.exports.insert(sym, Arc::new(ty));
+            self.info.exports.types.insert(sym, Arc::new(ty));
         }
 
         assert_eq!(self.pending_exports, vec![]);
