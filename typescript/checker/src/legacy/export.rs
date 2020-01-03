@@ -183,15 +183,3 @@ impl Analyzer<'_, '_> {
         self.info.exports.insert(name, Arc::new(ty));
     }
 }
-
-pub fn pat_to_ts_fn_param(p: Pat) -> TsFnParam {
-    match p {
-        Pat::Ident(i) => TsFnParam::Ident(i),
-        Pat::Rest(rest) => TsFnParam::Rest(rest),
-        Pat::Array(arr) => TsFnParam::Array(arr),
-        Pat::Object(obj) => TsFnParam::Object(obj),
-        // TODO: Pat::Assign()
-        Pat::Assign(assign) => pat_to_ts_fn_param(*assign.left),
-        _ => unreachable!("pat_to_ts_fn_param: Pat: {:?}", p),
-    }
-}

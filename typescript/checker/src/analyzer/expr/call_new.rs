@@ -1,11 +1,12 @@
 //! Handles new expressions and call expressions.
 
-use crate::{errors::Error, legacy::Analyzer, ty::Type, ValidationResult};
+use super::super::Analyzer;
+use crate::{errors::Error, ty::Type, ValidationResult};
 use swc_common::{Fold, FoldWith, Span};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
-impl Analyzer<'_, '_> {
+impl Analyzer<'_> {
     #[validator]
     fn check_callee(
         &mut self,

@@ -12,8 +12,8 @@
 #[macro_use]
 extern crate swc_common;
 
-pub use self::builtin_types::Lib;
 use self::{analyzer::Info, errors::Error, resolver::Resolver};
+use crate::ty::TypeRef;
 use chashmap::CHashMap;
 use std::{path::PathBuf, sync::Arc};
 use swc_common::{errors::Handler, Globals, SourceMap};
@@ -23,7 +23,9 @@ use swc_ecma_parser::{
 };
 
 pub mod analyzer;
+mod builtin_types;
 pub mod errors;
+mod legacy;
 pub mod loader;
 pub mod resolver;
 pub mod ty;
@@ -33,7 +35,7 @@ mod util;
 pub type ModuleInfo = Arc<(Module, Info)>;
 
 /// Note: All methods named `validate_*` return [Err] iff it's not recoverable.
-pub type ValidationResult = ValidationResult;
+pub type ValidationResult = Result<TypeRef<'static>, Erorr>;
 
 #[derive(Debug)]
 pub struct Config {

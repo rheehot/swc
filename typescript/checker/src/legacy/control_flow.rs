@@ -5,6 +5,7 @@ use super::{
     Analyzer, Name,
 };
 use crate::{
+    analyzer::util::Comparator,
     errors::Error,
     ty::{Intersection, Tuple, Type, TypeRef, TypeRefExt, Union},
     util::{EqIgnoreNameAndSpan, IntoCow},

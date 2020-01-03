@@ -1,4 +1,4 @@
-use super::{control_flow::RemoveTypes, export::pat_to_ts_fn_param, Analyzer};
+use super::{control_flow::RemoveTypes, Analyzer};
 use crate::{
     builtin_types,
     errors::Error,
@@ -8,7 +8,8 @@ use crate::{
         PropertySignature, Static, Tuple, Type, TypeElement, TypeLit, TypeParamDecl, TypeRef,
         TypeRefExt, Union,
     },
-    util::{EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
+    util::{pat_to_ts_fn_param, EqIgnoreNameAndSpan, EqIgnoreSpan, IntoCow},
+    ValidationResult,
 };
 use std::{borrow::Cow, iter::once, sync::Arc};
 use swc_atoms::{js_word, JsWord};
@@ -36,10 +37,6 @@ pub(super) enum TypeOfMode {
 }
 
 impl Analyzer<'_, '_> {
-    pub fn validate_expr(&mut self, e: &Expr) -> ValidationResult {
-        self.validate_expr_with_extra(e, TypeOfMode::RValue, None)
-    }
-
     pub fn validate_expr_with_extra(
         &mut self,
         e: &Expr,

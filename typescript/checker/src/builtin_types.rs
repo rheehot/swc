@@ -1,8 +1,10 @@
 use crate::{
+    analyzer::Analyzer,
     errors::Error,
-    legacy::{export::pat_to_ts_fn_param, Analyzer, ImportInfo},
+    legacy::ImportInfo,
     loader::Load,
     ty::{self, Class, ClassMember, Method, Module, Static},
+    util::pat_to_ts_fn_param,
 };
 use chashmap::CHashMap;
 use fxhash::FxHashMap;
