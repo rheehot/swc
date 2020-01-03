@@ -1,24 +1,11 @@
-use super::super::{
-    util::{Comparator, ResultExt},
-    Analyzer,
-};
-use crate::{
-    errors::Error,
-    ty::{Type, TypeRef},
-    util::{EqIgnoreSpan, IntoCow},
-    ValidationResult,
-};
+use super::super::Analyzer;
+use crate::{analyzer::util::ResultExt, errors::Error, ty::Type, util::IntoCow, ValidationResult};
 use swc_atoms::js_word;
-use swc_common::{Fold, FoldWith, Span, Spanned};
+use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_> {
-    fn validate_unary_expr_inner(
-        &mut self,
-        span: Span,
-        op: UnaryOp,
-        arg: Option<&TypeRef<'static>>,
-    ) {
+    fn validate_unary_expr_inner(&mut self, span: Span, op: UnaryOp, arg: &Type) {
         let mut errors = vec![];
 
         match op {
@@ -62,11 +49,13 @@ impl Analyzer<'_> {
 
         let mut errors = vec![];
 
-        let arg_ty = self.vaidate_expr(&arg).store(&mut errors);
+        let arg = self.validate_expr(&arg).store(&mut errors);
 
         self.info.errors.extend(errors.drain(..));
 
-        self.validate_unary_inner(arg_ty);
+        if let Some(arg) = arg {
+            self.validate_unary_expr_inner(span, op, &arg);
+        }
 
         match op {
             op!("typeof") => {
@@ -91,7 +80,7 @@ impl Analyzer<'_> {
             _ => {}
         }
 
-        let arg_ty = self.type_of(arg)?;
+        let arg_ty = self.validate_expr(arg)?;
         match *arg_ty {
             Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsUnknownKeyword,
@@ -101,7 +90,7 @@ impl Analyzer<'_> {
         }
 
         match op {
-            op!("!") => return Ok(negate(self.type_of(arg)?.into_owned()).into_cow()),
+            op!("!") => return Ok(negate(self.validate_expr(arg)?.into_owned()).into_cow()),
 
             op!(unary, "-") | op!(unary, "+") => {
                 return Ok(Type::Keyword(TsKeywordType {

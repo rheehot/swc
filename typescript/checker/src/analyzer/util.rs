@@ -1,5 +1,4 @@
-use super::{control_flow::CondFacts, scope::ScopeKind, Analyzer};
-use crate::{errors::Error, ty::Type};
+use crate::ty::Type;
 use std::{borrow::Cow, iter::once};
 use swc_atoms::JsWord;
 use swc_common::{Spanned, Visit};

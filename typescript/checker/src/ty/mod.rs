@@ -1,6 +1,6 @@
 use crate::{
     util::{EqIgnoreNameAndSpan, IntoCow},
-    Exports, Info,
+    Exports,
 };
 use fxhash::FxHashMap;
 use std::{borrow::Cow, mem::transmute, sync::Arc};

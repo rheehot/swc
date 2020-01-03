@@ -4,7 +4,7 @@ use crate::{
     errors::Error,
     ty::{Array, Type},
 };
-use swc_common::{Span, Spanned};
+use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
@@ -16,7 +16,7 @@ impl Analyzer<'_> {
             VarDeclOrPat::VarDecl(..) => {}
             VarDeclOrPat::Pat(ref pat) => match *pat {
                 Pat::Expr(ref e) => {
-                    self.type_of_expr(&e, TypeOfMode::LValue, None)?;
+                    self.validate_expr_with_extra(&e, TypeOfMode::LValue, None)?;
                 }
                 Pat::Ident(ref i) => {
                     // TODO: verify
@@ -30,7 +30,7 @@ impl Analyzer<'_> {
     #[validator]
     fn check_rhs_of_for_loop(&mut self, e: &Expr) {
         // Check iterable
-        self.type_of(e)?;
+        self.validate_expr(e)?;
     }
 
     fn validate_for_loop(&mut self, span: Span, lhs: &VarDeclOrPat, rhs: &Expr) {
@@ -62,9 +62,11 @@ impl Analyzer<'_> {
             _ => {}
         }
     }
+}
 
-    pub(super) fn validate_for_of_stmt(&mut self, s: &ForOfStmt) -> Result<(), Error> {
-        // TODO: Visit children
+impl Visit<ForInStmt> for Analyzer<'_> {
+    fn visit(&mut self, s: &ForInStmt) {
+        s.visit_children(self);
 
         self.check_lhs_of_for_loop(&s.left);
         if match s.left {
@@ -75,12 +77,12 @@ impl Analyzer<'_> {
         }
 
         self.validate_for_loop(s.span, &s.left, &s.right);
-
-        Ok(())
     }
+}
 
-    pub(super) fn validate_for_in_stmt(&mut self, s: &ForInStmt) -> Result<(), Error> {
-        // TODO: Visit children
+impl Visit<ForOfStmt> for Analyzer<'_> {
+    fn visit(&mut self, s: &ForOfStmt) {
+        s.visit_children(self);
 
         self.check_lhs_of_for_loop(&s.left);
         if match s.left {
@@ -91,7 +93,5 @@ impl Analyzer<'_> {
         }
 
         self.validate_for_loop(s.span, &s.left, &s.right);
-
-        Ok(())
     }
 }

@@ -22,6 +22,7 @@ use std::{
 use swc_atoms::JsWord;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
+use swc_ts_checker_macros::validator;
 
 /// Conditional facts
 #[derive(Debug, Clone, Default)]
@@ -202,6 +203,51 @@ impl Analyzer<'_> {
         if ends_with_ret {
             self.scope.facts.extend(facts.false_facts);
         }
+    }
+}
+
+impl Analyzer<'_> {
+    #[validator]
+    fn check_switch_discriminant(&mut self, s: &SwitchStmt) {
+        let discriminant_ty = self.validate_expr(&s.discriminant)?;
+        for case in &s.cases {
+            if let Some(ref test) = case.test {
+                let case_ty = self.validate_expr(&test)?;
+                self.assign(&case_ty, &discriminant_ty, test.span())?
+            }
+        }
+    }
+}
+
+impl Visit<SwitchStmt> for Analyzer<'_> {
+    fn visit(&mut self, stmt: &SwitchStmt) {
+        stmt.visit_children(self);
+
+        self.check_switch_discriminant(&stmt);
+
+        let mut false_facts = CondFacts::default();
+        let mut true_facts = CondFacts::default();
+        // Declared at here as it's important to know if last one ends with return.
+        let mut ends_with_ret = false;
+        let len = stmt.cases.len();
+        let stmt_span = stmt.span();
+
+        let mut errored = false;
+        // Check cases *in order*
+        for (i, case) in stmt.cases.iter().enumerate() {
+            if errored {
+                break;
+            }
+
+            let span = case
+                .test
+                .as_ref()
+                .map(|v| v.span())
+                .unwrap_or_else(|| stmt_span);
+
+            let SwitchCase { cons, .. } = case;
+            let last = i == len - 1;
+            let mut facts = Default::default();
 
         if let Some(ref alt) = s.alt {
             self.validate_stmt(&alt)?;
@@ -372,7 +418,7 @@ impl Analyzer<'_> {
             | Expr::JSXEmpty(..) => return Ok(()),
 
             Expr::Call(..) => {
-                let ty = self.type_of(&test)?;
+                let ty = self.validate_expr(&test)?;
                 match *ty.normalize() {
                     Type::Simple(ref sty) => match **sty {
                         TsType::TsTypePredicate(ref pred) => {
@@ -409,7 +455,7 @@ impl Analyzer<'_> {
             Expr::Paren(ParenExpr { ref expr, .. }) => self.detect_facts(expr, facts)?,
 
             Expr::Ident(ref i) => {
-                let ty = self.type_of(test)?.to_static();
+                let ty = self.validate_expr(test)?.to_static();
                 self.add_true_false(facts, &i.sym, &ty);
             }
 
@@ -445,8 +491,8 @@ impl Analyzer<'_> {
                 ref right,
                 ..
             }) => {
-                let l_ty = self.type_of(left)?;
-                let r_ty = self.type_of(right)?;
+                let l_ty = self.validate_expr(left)?;
+                let r_ty = self.validate_expr(right)?;
 
                 match op {
                     op!("===") | op!("!==") | op!("==") | op!("!=") => {

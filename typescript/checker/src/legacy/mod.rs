@@ -37,7 +37,6 @@ pub(crate) struct Analyzer<'a, 'b> {
     /// This is false iff it should be treated as error when `1.contains()` is
     /// true
     allow_ref_declaring: bool,
-    declaring: Vec<JsWord>,
     path: Arc<PathBuf>,
     loader: &'b dyn Load,
     libs: &'b [Lib],
@@ -222,42 +221,6 @@ impl Fold<TsModuleDecl> for Analyzer<'_, '_> {
     }
 }
 
-impl Fold<TsInterfaceDecl> for Analyzer<'_, '_> {
-    fn fold(&mut self, decl: TsInterfaceDecl) -> TsInterfaceDecl {
-        let decl = decl.fold_children(self);
-
-        self.scope
-            .register_type(decl.id.sym.clone(), decl.clone().into());
-
-        self.resolve_parent_interfaces(&decl.extends);
-
-        decl
-    }
-}
-
-impl Analyzer<'_, '_> {
-    /// Validate that parent interfaces are all resolved.
-    fn resolve_parent_interfaces(&mut self, parents: &[TsExprWithTypeArgs]) {
-        for parent in parents {
-            // Verify parent interface
-            let res: Result<(), _> = try {
-                let _ = self.type_of_ts_entity_name(
-                    parent.span,
-                    &parent.expr,
-                    parent.type_args.as_ref(),
-                )?;
-            };
-
-            match res {
-                Err(err) => {
-                    self.info.errors.push(err);
-                }
-                _ => {}
-            }
-        }
-    }
-}
-
 impl Fold<TsTypeAliasDecl> for Analyzer<'_, '_> {
     fn fold(&mut self, decl: TsTypeAliasDecl) -> TsTypeAliasDecl {
         let ty: Type<'_> = decl.type_ann.clone().into();
@@ -285,78 +248,6 @@ impl Fold<TsTypeAliasDecl> for Analyzer<'_, '_> {
 
         // TODO: Validate type
         decl
-    }
-}
-
-#[derive(Debug)]
-pub(crate) struct ImportFinder<'a> {
-    to: &'a mut Vec<ImportInfo>,
-}
-
-/// Extracts require('foo')
-impl Visit<CallExpr> for ImportFinder<'_> {
-    fn visit(&mut self, expr: &CallExpr) {
-        let span = expr.span();
-
-        match expr.callee {
-            ExprOrSuper::Expr(box Expr::Ident(ref i)) if i.sym == js_word!("require") => {
-                let src = expr
-                    .args
-                    .iter()
-                    .map(|v| match *v.expr {
-                        Expr::Lit(Lit::Str(Str { ref value, .. })) => value.clone(),
-                        _ => unimplemented!("error reporting for dynamic require"),
-                    })
-                    .next()
-                    .unwrap();
-                self.to.push(ImportInfo {
-                    span,
-                    all: true,
-                    items: vec![],
-                    src,
-                });
-            }
-            _ => return,
-        }
-    }
-}
-
-impl Visit<ImportDecl> for ImportFinder<'_> {
-    fn visit(&mut self, import: &ImportDecl) {
-        let span = import.span();
-        let mut items = vec![];
-        let mut all = false;
-
-        for s in &import.specifiers {
-            match *s {
-                ImportSpecifier::Default(ref default) => items.push(Specifier {
-                    export: (js_word!("default"), default.span),
-                    local: (default.local.sym.clone(), default.local.span),
-                }),
-                ImportSpecifier::Specific(ref s) => {
-                    items.push(Specifier {
-                        export: (
-                            s.imported
-                                .clone()
-                                .map(|v| v.sym)
-                                .unwrap_or_else(|| s.local.sym.clone()),
-                            s.span,
-                        ),
-                        local: (s.local.sym.clone(), s.local.span),
-                    });
-                }
-                ImportSpecifier::Namespace(..) => all = true,
-            }
-        }
-
-        if !items.is_empty() {
-            self.to.push(ImportInfo {
-                span,
-                items,
-                all,
-                src: import.src.value.clone(),
-            });
-        }
     }
 }
 
@@ -399,12 +290,6 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             loader,
         )
     }
-}
-
-#[derive(Debug, Default)]
-pub struct Info {
-    pub exports: Exports<FxHashMap<JsWord, Arc<Type<'static>>>>,
-    pub errors: Vec<Error>,
 }
 
 impl Analyzer<'_, '_> {
@@ -666,44 +551,6 @@ impl Fold<ArrowExpr> for Analyzer<'_, '_> {
 
             f
         })
-    }
-}
-
-impl Fold<AssignExpr> for Analyzer<'_, '_> {
-    fn fold(&mut self, expr: AssignExpr) -> AssignExpr {
-        let mut errors = vec![];
-        let span = expr.span();
-        let expr = expr.fold_children(self);
-
-        let rhs_ty = match self
-            .type_of(&expr.right)
-            .and_then(|ty| self.expand_type(span, ty))
-        {
-            Ok(rhs_ty) => {
-                let rhs_ty = rhs_ty.to_static();
-
-                self.check_rvalue(&rhs_ty);
-
-                Ok(rhs_ty)
-            }
-            Err(err) => {
-                errors.push(err);
-                Err(())
-            }
-        };
-
-        self.info.errors.extend(errors);
-
-        let rhs_ty = match rhs_ty {
-            Ok(v) => v.owned(),
-            Err(()) => Type::any(span).owned(),
-        };
-
-        if expr.op == op!("=") {
-            self.try_assign(span, &expr.left, &rhs_ty);
-        }
-
-        expr
     }
 }
 

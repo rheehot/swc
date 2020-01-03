@@ -71,6 +71,16 @@ pub struct Exports<T> {
     pub types: T,
 }
 
+impl<T, E> Exports<T>
+where
+    T: Extend<E> + IntoIterator<Item = E>,
+{
+    pub fn extend(&mut self, other: Self) {
+        self.vars.extend(other.vars);
+        self.types.extend(other.types);
+    }
+}
+
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Rule {
     pub no_implicit_any: bool,

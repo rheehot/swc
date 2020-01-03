@@ -1,20 +1,20 @@
 use super::Analyzer;
-use crate::{
-    errors::Error,
-    ty::{Array, Type},
-    util::EqIgnoreNameAndSpan,
-};
-use swc_common::{Fold, FoldWith, Spanned};
+use crate::{errors::Error, ty::Type, util::EqIgnoreNameAndSpan};
+use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_> {
     fn visit_rest_pat(&mut self, p: &RestPat) {
         let p = p.fold_children(self);
+impl Visit<RestPat> for Analyzer<'_> {
+    fn visit(&mut self, p: &RestPat) {
+        let p = p.visit_children(self);
+
+        let mut errors = vec![];
 
         if let Pat::Assign(AssignPat { ref right, .. }) = *p.arg {
-            analyze!(self, {
-                let value_ty = self.type_of(right)?;
-                let value_ty = self.expand_type(p.span(), value_ty)?;
+            try {
+                let value_ty = self.validate_expr(right)?;
 
                 match value_ty.normalize() {
                     Type::Array(..)
@@ -24,9 +24,10 @@ impl Analyzer<'_> {
                     }) => {}
                     _ => Err(Error::TS2370 { span: p.dot3_token })?,
                 }
-            });
+            }
+            .store(&mut errors);
         } else if let Some(ref type_ann) = p.type_ann {
-            analyze!(self, {
+            try {
                 let ty =
                     self.expand_type(p.span(), Type::from(type_ann.clone().type_ann).owned())?;
 
@@ -38,8 +39,11 @@ impl Analyzer<'_> {
                     }) => {}
                     _ => Err(Error::TS2370 { span: p.dot3_token })?,
                 }
-            });
+            }
+            .store(&mut errors);
         }
+
+        self.info.errors.extend(errors);
 
         p
     }
@@ -48,6 +52,9 @@ impl Analyzer<'_> {
 impl Analyzer<'_> {
     fn visit_assign_pat(&mut self, p: &AssignPat) {
         let p = p.fold_children(self);
+impl Visit<AssignPat> for Analyzer<'_> {
+    fn visit(&mut self, p: &AssignPat) {
+        let p = p.visit_children(self);
 
         //
         match *p.left {

@@ -1,7 +1,10 @@
-use crate::{analyzer::control_flow::CondFacts, ty::Type};
+use super::{control_flow::CondFacts, Analyzer};
+use crate::{errors::Error, ty::Type};
 use fxhash::FxHashMap;
+use std::sync::Arc;
 use swc_atoms::JsWord;
-use swc_ecma_ast::VarDeclKind;
+use swc_common::DUMMY_SP;
+use swc_ecma_ast::*;
 
 #[derive(Debug)]
 pub(crate) struct Scope<'a> {
@@ -10,6 +13,171 @@ pub(crate) struct Scope<'a> {
     pub(super) vars: FxHashMap<JsWord, VarInfo>,
     pub(super) types: FxHashMap<JsWord, Type<'static>>,
     pub(super) facts: CondFacts,
+}
+
+impl Analyzer<'_> {
+    pub(super) fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) -> Result<(), Error> {
+        self.declare_vars_inner(kind, pat, false)
+    }
+
+    /// Updates variable list.
+    ///
+    /// This method should be called for function parameters including error
+    /// variable from a catch clause.
+    fn declare_vars_inner(
+        &mut self,
+        kind: VarDeclKind,
+        pat: &Pat,
+        export: bool,
+    ) -> Result<(), Error> {
+        match *pat {
+            Pat::Ident(ref i) => {
+                let ty = i
+                    .type_ann
+                    .as_ref()
+                    .map(|t| &*t.type_ann)
+                    .cloned()
+                    .map(Type::from);
+                let ty = if let Some(ty) = ty {
+                    match self.expand_type(i.span, ty.owned()) {
+                        Ok(ty) => Some(ty.to_static()),
+                        Err(err) => {
+                            self.info.errors.push(err);
+                            return Ok(());
+                        }
+                    }
+                } else {
+                    None
+                };
+
+                let name = i.sym.clone();
+                self.scope.declare_var(
+                    ty.span(),
+                    kind,
+                    name.clone(),
+                    ty.clone(),
+                    // initialized
+                    true,
+                    // allow_multiple
+                    kind == VarDeclKind::Var,
+                )?;
+                if export {
+                    if let Some(..) = self
+                        .info
+                        .exports
+                        .insert(name, Arc::new(ty.unwrap_or(Type::any(i.span))))
+                    {
+                        unimplemented!("multiple exported variables with same name")
+                    }
+                }
+                return Ok(());
+            }
+            Pat::Assign(ref p) => {
+                let ty = self.validate_expr(&p.right)?;
+                println!(
+                    "({}) declare_vars({:?}), ty = {:?}",
+                    self.scope.depth(),
+                    p.left,
+                    ty
+                );
+                self.declare_vars_inner(kind, &p.left, export)?;
+
+                return Ok(());
+            }
+
+            Pat::Array(ArrayPat { ref elems, .. }) => {
+                // TODO: Handle type annotation
+
+                for elem in elems {
+                    match *elem {
+                        Some(ref elem) => {
+                            self.declare_vars_inner(kind, elem, export)?;
+                        }
+                        // Skip
+                        None => {}
+                    }
+                }
+
+                return Ok(());
+            }
+
+            Pat::Object(ObjectPat { ref props, .. }) => {
+                for prop in props {
+                    match *prop {
+                        ObjectPatProp::KeyValue(KeyValuePatProp { .. }) => {
+                            unimplemented!("ket value pattern in object pattern")
+                        }
+                        ObjectPatProp::Assign(AssignPatProp { .. }) => {
+                            unimplemented!("assign pattern in object pattern")
+                        }
+                        ObjectPatProp::Rest(RestPat { .. }) => {
+                            unimplemented!("rest pattern in object pattern")
+                        }
+                    }
+                }
+
+                return Ok(());
+            }
+
+            Pat::Rest(RestPat {
+                ref arg,
+                type_ann: ref ty,
+                ..
+            }) => {
+                let ty = ty.clone();
+                let arg = arg.clone();
+                return self.declare_vars_inner(kind, &arg, export);
+            }
+
+            _ => unimplemented!("declare_vars for patterns other than ident: {:#?}", pat),
+        }
+    }
+
+    #[inline(never)]
+    pub(super) fn find_var(&self, name: &JsWord) -> Option<&VarInfo> {
+        static ERR_VAR: VarInfo = VarInfo {
+            ty: Some(Type::any(DUMMY_SP)),
+            kind: VarDeclKind::Const,
+            initialized: true,
+            copied: false,
+        };
+
+        if self.errored_imports.get(name).is_some() {
+            return Some(&ERR_VAR);
+        }
+
+        let mut scope = Some(&self.scope);
+
+        while let Some(s) = scope {
+            if let Some(var) = s.vars.get(name) {
+                return Some(var);
+            }
+
+            scope = s.parent;
+        }
+
+        None
+    }
+
+    #[inline(never)]
+    pub(super) fn find_type<'a>(&'a self, name: &JsWord) -> Option<&'a Type<'static>> {
+        #[allow(dead_code)]
+        static ANY: Type = Type::any(DUMMY_SP);
+
+        if self.errored_imports.get(name).is_some() {
+            return Some(&ANY);
+        }
+
+        if let Some(ty) = self.resolved_imports.get(name) {
+            return Some(ty);
+        }
+
+        if let Some(ty) = self.scope.find_type(name) {
+            return Some(ty);
+        }
+
+        None
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -43,6 +211,25 @@ impl<'a> Scope<'a> {
             vars: Default::default(),
             types: Default::default(),
             facts,
+        }
+    }
+
+    /// This method does **not** handle imported types.
+    pub(super) fn find_type(&self, name: &JsWord) -> Option<&Type<'static>> {
+        if let Some(ty) = self.facts.types.get(name) {
+            println!("({}) find_type({}): Found (cond facts)", self.depth(), name);
+            return Some(&ty);
+        }
+
+        if let Some(ty) = self.types.get(name) {
+            println!("({}) find_type({}): Found", self.depth(), name);
+
+            return Some(&ty);
+        }
+
+        match self.parent {
+            Some(ref parent) => parent.find_type(name),
+            None => None,
         }
     }
 }

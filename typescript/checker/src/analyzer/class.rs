@@ -4,16 +4,19 @@ use super::{
     util::{is_prop_name_eq, VarVisitor},
     Analyzer,
 };
-use crate::{errors::Error, swc_common::VisitWith, ty, ty::Type};
+use crate::{analyzer::util::ResultExt, errors::Error, swc_common::VisitWith, ty, ty::Type};
 use std::mem::replace;
 use swc_atoms::js_word;
 use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, DUMMY_SP};
+use swc_common::{util::move_map::MoveMap, Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
 impl Analyzer<'_> {
     fn validate_class_property(&mut self, p: &ClassProp) -> Result<(), Error> {
         // TODO: children
+
+        let mut errors = vec![];
 
         // Verify key if key is computed
         if p.computed {
@@ -23,21 +26,17 @@ impl Analyzer<'_> {
         if let Some(ref ty) = p.type_ann {
             let span = ty.span();
 
-            analyze!(self, {
-                let ty: Type = ty.type_ann.clone().into();
-                self.expand_type(span, ty.owned())?;
-            });
+            let ty: Type = ty.type_ann.clone().into();
+            self.expand_type(span, ty.owned()).store(&mut errors);
         }
 
         if let Some(ref value) = p.value {
-            analyze!(self, {
-                self.validate_expr(&value)?;
-            });
+            self.validate_expr(&value).store(&mut errors);
         }
 
-        self.scope.declaring_prop = None;
+        self.info.errors.extend(errors);
 
-        p
+        Ok(())
     }
 
     fn validate_constructor(&mut self, c: &Constructor) -> Result<(), Error> {
@@ -46,16 +45,11 @@ impl Analyzer<'_> {
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
             let Constructor { params, .. } = c;
 
-            child.return_type_span = c_span;
-
-            let old = child.allow_ref_declaring;
-            child.allow_ref_declaring = false;
-
             {
                 // Validate params
                 // TODO: Move this to parser
                 let mut has_optional = false;
-                for p in &params {
+                for p in params {
                     if has_optional {
                         child.info.errors.push(Error::TS1016 { span: p.span() });
                     }
@@ -78,9 +72,7 @@ impl Analyzer<'_> {
 
                 param.visit_with(&mut visitor);
 
-                child.declaring.extend_from_slice(&names);
-
-                debug_assert_eq!(child.allow_ref_declaring, false);
+                child.declaring.extend(names.clone());
 
                 match param {
                     PatOrTsParamProp::Pat(ref pat) => {
@@ -136,11 +128,9 @@ impl Analyzer<'_> {
 
             child.inferred_return_types.get_mut().insert(c_span, vec![]);
             let c = Constructor { params, ..c }.fold_children(child);
+            let c = Constructor { params, ..c }.visit_children(child);
 
-            debug_assert_eq!(child.allow_ref_declaring, false);
-            child.allow_ref_declaring = old;
-
-            c
+            Ok(())
         })
     }
 
@@ -148,12 +138,7 @@ impl Analyzer<'_> {
         let c_span = c.span();
         let key_span = c.key.span();
 
-        let (entry, c) = self.with_child(ScopeKind::Fn, Default::default(), |child| {
-            child.return_type_span = c_span;
-
-            let old = child.allow_ref_declaring;
-            child.allow_ref_declaring = false;
-
+        self.with_child(ScopeKind::Fn, Default::default(), |child| {
             {
                 // Validate params
                 // TODO: Move this to parser
@@ -183,8 +168,6 @@ impl Analyzer<'_> {
 
                 child.declaring.extend_from_slice(&names);
 
-                debug_assert_eq!(child.allow_ref_declaring, false);
-
                 match child.declare_vars(VarDeclKind::Let, pat) {
                     Ok(()) => {}
                     Err(err) => {
@@ -200,18 +183,8 @@ impl Analyzer<'_> {
             child.inferred_return_types.get_mut().insert(c.span, vec![]);
             c.key = c.key.fold_with(child);
             c.function = c.function.fold_children(child);
-
-            debug_assert_eq!(child.allow_ref_declaring, false);
-            child.allow_ref_declaring = old;
-
-            (
-                child
-                    .inferred_return_types
-                    .get_mut()
-                    .remove_entry(&c_span)
-                    .unwrap_or_default(),
-                c,
-            )
+            c.key.visit_with(child);
+            c.function.visit_children(child);
         });
 
         if c.kind == MethodKind::Getter && c.function.body.is_some() {
@@ -223,11 +196,7 @@ impl Analyzer<'_> {
             }
         }
 
-        *self
-            .inferred_return_types
-            .get_mut()
-            .entry(c.span())
-            .or_default() = entry.1;
+        Ok(())
     }
 
     fn validate_class_members(&mut self, c: &Class, declare: bool) {
@@ -330,7 +299,7 @@ impl Analyzer<'_> {
             _ => false,
         };
 
-        let ty = match self.type_of(&key) {
+        let ty = match self.validate_expr(&key) {
             Ok(ty) => ty,
             Err(err) => {
                 match err {
@@ -435,6 +404,9 @@ impl Analyzer<'_> {
 impl Fold<Class> for Analyzer<'_> {
     fn fold(&mut self, c: Class) -> Class {
         let c = c.fold_children(self);
+impl Visit<Class> for Analyzer<'_> {
+    fn visit(&mut self, c: &Class) {
+        c.visit_children(self);
 
         self.resolve_parent_interfaces(&c.implements);
 
@@ -487,8 +459,6 @@ impl Fold<Class> for Analyzer<'_> {
                 _ => {}
             }
         }
-
-        c
     }
 }
 
@@ -533,14 +503,15 @@ impl Fold<ClassExpr> for Analyzer<'_> {
         });
 
         self.scope.this = old_this;
-
-        c
     }
 }
 
 impl Fold<ClassDecl> for Analyzer<'_> {
     fn fold(&mut self, c: ClassDecl) -> ClassDecl {
         let c: ClassDecl = c.fold_children(self);
+impl Visit<ClassDecl> for Analyzer<'_> {
+    fn visit(&mut self, c: &ClassDecl) {
+        c.visit_children(self);
 
         self.validate_inherited_members(Some(&c.ident), &c.class, c.declare);
         self.validate_class_members(&c.class, c.declare);
@@ -575,7 +546,5 @@ impl Fold<ClassDecl> for Analyzer<'_> {
         }
 
         self.scope.this = old_this;
-
-        c
     }
 }

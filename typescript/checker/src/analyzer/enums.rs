@@ -3,10 +3,10 @@
 use super::Analyzer;
 use crate::{
     errors::Error,
-    ty::{Enum, EnumVariant, Type, TypeRef},
+    ty::{Enum, Type, TypeRef},
 };
 use std::convert::TryInto;
-use swc_common::{Fold, FoldWith, Spanned, Visit, VisitWith};
+use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 impl Fold<TsEnumDecl> for Analyzer<'_> {
@@ -54,13 +54,24 @@ impl Fold<TsEnumDecl> for Analyzer<'_> {
             }
         } else {
             e.members = e.members.fold_children(self);
+            e.members.visit_children(self);
         }
-
-        e
     }
 }
 
 impl Analyzer<'_> {
+    // Check for constant enum in rvalue.
+    pub(super) fn check_rvalue(&mut self, rhs_ty: &Type) {
+        match *rhs_ty.normalize() {
+            Type::Enum(ref e) if e.is_const => {
+                self.info
+                    .errors
+                    .push(Error::ConstEnumUsedAsVar { span: e.span() });
+            }
+            _ => {}
+        }
+    }
+
     pub(super) fn expand_enum_variant<'a>(&'a self, ty: TypeRef<'a>) -> Result<TypeRef<'a>, Error> {
         match ty.normalize() {
             Type::EnumVariant(ref v) => {

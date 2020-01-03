@@ -1,10 +1,14 @@
-use super::{expr::TypeOfMode, scope::ScopeKind, Analyzer};
+use super::{scope::ScopeKind, Analyzer};
 use crate::{
+    analyzer::expr::TypeOfMode,
     errors::Error,
     ty::{Type, TypeRefExt},
 };
 use swc_atoms::js_word;
 use swc_common::{Fold, FoldWith, Spanned};
+use swc_common::{Spanned, Visit, VisitWith};
+use swc_common::{Visit, VisitWith};
+use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy)]
@@ -35,53 +39,49 @@ impl Fold<ComputedPropName> for Analyzer<'_> {
             _ => false,
         };
 
-        analyze!(self, {
-            let mut errors = vec![];
-            let ty = match self.type_of(&node.expr) {
-                Ok(ty) => ty,
-                Err(err) => {
-                    match err {
-                        Error::TS2585 { span } => Err(Error::TS2585 { span })?,
-                        _ => {}
-                    }
-
-                    errors.push(err);
-                    // TODO: Change this to something else (maybe any)
-                    Type::unknown(span).owned()
+        let mut errors = vec![];
+        let ty = match self.validate_expr(&node.expr) {
+            Ok(ty) => ty,
+            Err(err) => {
+                match err {
+                    Error::TS2585 { span } => Err(Error::TS2585 { span })?,
+                    _ => {}
                 }
-            };
-            if match self.computed_prop_mode {
-                ComputedPropMode::Class { has_body } => !has_body,
-                ComputedPropMode::Object => errors.is_empty(),
-            } {
-                let ty = ty.generalize_lit();
-                match *ty.normalize() {
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsAnyKeyword,
-                        ..
-                    })
-                    | Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsStringKeyword,
-                        ..
-                    })
-                    | Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsNumberKeyword,
-                        ..
-                    })
-                    | Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsSymbolKeyword,
-                        ..
-                    }) => {}
-                    _ if is_symbol_access => {}
-                    _ => errors.push(Error::TS2464 { span }),
-                }
-            }
-            if !errors.is_empty() {
-                Err(Error::Errors { span, errors })?
-            }
-        });
 
-        node
+                errors.push(err);
+                // TODO: Change this to something else (maybe any)
+                Type::unknown(span).owned()
+            }
+        };
+        if match self.computed_prop_mode {
+            ComputedPropMode::Class { has_body } => !has_body,
+            ComputedPropMode::Object => errors.is_empty(),
+        } {
+            let ty = ty.generalize_lit();
+            match *ty.normalize() {
+                Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsAnyKeyword,
+                    ..
+                })
+                | Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsStringKeyword,
+                    ..
+                })
+                | Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsNumberKeyword,
+                    ..
+                })
+                | Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsSymbolKeyword,
+                    ..
+                }) => {}
+                _ if is_symbol_access => {}
+                _ => errors.push(Error::TS2464 { span }),
+            }
+        }
+        if !errors.is_empty() {
+            Err(Error::Errors { span, errors })?
+        }
     }
 }
 
@@ -93,10 +93,8 @@ impl Fold<Prop> for Analyzer<'_> {
 
         match n {
             Prop::Shorthand(ref i) => {
-                analyze!(self, {
-                    // TODO: Check if RValue is correct
-                    self.type_of_ident(&i, TypeOfMode::RValue)?;
-                });
+                // TODO: Check if RValue is correct
+                self.type_of_ident(&i, TypeOfMode::RValue)?;
             }
             _ => {}
         }
@@ -126,8 +124,14 @@ impl Fold<GetterProp> for Analyzer<'_> {
                         .unwrap_or_default(),
                     n,
                 )
+                n.visit_children(child);
             })
         };
+impl Visit<GetterProp> for Analyzer<'_> {
+    fn visit(&mut self, n: &GetterProp) {
+        self.with_child(ScopeKind::Fn, Default::default(), |child| {
+            n.visit_children(child);
+        });
 
         if entry.1.is_empty() {
             // getter property must have return statements.
@@ -136,12 +140,6 @@ impl Fold<GetterProp> for Analyzer<'_> {
                 .push(Error::GetterPropWithoutReturn { span: n.key.span() });
         }
 
-        *self
-            .inferred_return_types
-            .get_mut()
-            .entry(n.span())
-            .or_default() = entry.1;
-
         n
     }
 }
@@ -149,6 +147,7 @@ impl Fold<GetterProp> for Analyzer<'_> {
 impl Analyzer<'_> {
     fn validate_ts_method_signature(&mut self, node: TsMethodSignature) -> TsMethodSignature {
         let node = node.fold_children(self);
+        node.visit_children(self);
 
         if node.computed {
             self.validate_computed_prop_key(node.span(), &node.key);
@@ -162,6 +161,7 @@ impl Analyzer<'_> {
         node: TsPropertySignature,
     ) -> Result<TsPropertySignature, Error> {
         let node = node.fold_children(self);
+        node.visit_children(self);
 
         if node.computed {
             self.validate_computed_prop_key(node.span(), &node.key);

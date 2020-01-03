@@ -6,6 +6,8 @@ use crate::{
 use std::{convert::TryInto, mem, sync::Arc};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Span, Spanned};
+use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith};
+use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 // ModuleDecl::ExportNamed(export) => {}
@@ -41,7 +43,7 @@ impl Analyzer<'_> {
                 .and_then(|exported_sym| self.scope.types.remove(&exported_sym))
             {
                 Some(export) => export,
-                None => match self.type_of(&expr) {
+                None => match self.validate_expr(&expr) {
                     Ok(ty) => ty.to_static(),
                     Err(err) => {
                         self.info.errors.push(err);
@@ -62,7 +64,7 @@ impl Analyzer<'_> {
             "A module can export only one item as default"
         );
 
-        let ty = match self.type_of(expr) {
+        let ty = match self.validate_expr(expr) {
             Ok(ty) => ty.to_static(),
             Err(err) => {
                 match err {
@@ -136,6 +138,9 @@ impl Fold<ExportDecl> for Analyzer<'_> {
 impl Fold<ExportDefaultDecl> for Analyzer<'_> {
     fn fold(&mut self, export: ExportDefaultDecl) -> ExportDefaultDecl {
         let export = export.fold_children(self);
+impl Visit<ExportDefaultDecl> for Analyzer<'_> {
+    fn visit(&mut self, export: &ExportDefaultDecl) {
+        export.visit_children(self);
 
         match export.decl {
             DefaultDecl::Fn(ref f) => {
@@ -159,8 +164,6 @@ impl Fold<ExportDefaultDecl> for Analyzer<'_> {
                 self.export(i.span(), js_word!("default"), Some(i.id.sym.clone()))
             }
         };
-
-        export
     }
 }
 
@@ -180,5 +183,21 @@ impl Analyzer<'_> {
         // TODO: Change this to error.
         assert_eq!(self.info.exports.get(&name), None);
         self.info.exports.insert(name, Arc::new(ty));
+    }
+}
+
+impl Visit<TsExportAssignment> for Analyzer<'_> {
+    fn visit(&mut self, s: &TsExportAssignment) {
+        let ty = self.validate_expr(&s.expr)?;
+
+        self.export_expr(js_word!("default"), ty);
+    }
+}
+
+impl Visit<ExportDefaultExpr> for Analyzer<'_> {
+    fn visit(&mut self, s: &ExportDefaultExpr) {
+        let ty = self.validate_expr(&s.expr)?;
+
+        self.export_expr(js_word!("default"), ty);
     }
 }

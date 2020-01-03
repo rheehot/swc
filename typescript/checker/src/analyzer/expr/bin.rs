@@ -8,7 +8,7 @@ use crate::{
     util::{EqIgnoreSpan, IntoCow},
     ValidationResult,
 };
-use swc_common::{Fold, FoldWith, Span, Spanned};
+use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_> {
@@ -246,17 +246,11 @@ impl Analyzer<'_> {
         let lt = self.validate_expr(&left).store(&mut errors);
         let rt = self.validate_expr(&right).store(&mut errors);
 
-        self.validate_bin_inner(op, lt, rt);
+        self.validate_bin_inner(span, op, lt, rt);
 
         let (lt, rt) = match (lt, rt) {
-            (Ok(l), Ok(r)) => (l, r),
-            (Err(e), Ok(_)) | (Ok(_), Err(e)) => return Err(e),
-            (Err(l), Err(r)) => {
-                return Err(Error::Errors {
-                    span,
-                    errors: vec![l, r],
-                })
-            }
+            (Some(l), Some(r)) => (l, r),
+            _ => Err(errors)?,
         };
 
         macro_rules! no_unknown {

@@ -246,13 +246,9 @@ impl Analyzer<'_> {
                                                                 let l_ty = Cow::Owned(
                                                                     type_of_ts_fn_param(l),
                                                                 );
-                                                                let l_ty =
-                                                                    self.expand_type(span, l_ty)?;
                                                                 let r_ty = Cow::Owned(
                                                                     type_of_ts_fn_param(r),
                                                                 );
-                                                                let r_ty =
-                                                                    self.expand_type(span, r_ty)?;
 
                                                                 match self
                                                                     .assign(&l_ty, &r_ty, span)

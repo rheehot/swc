@@ -411,25 +411,6 @@ impl<'a> Scope<'a> {
         Ok(())
     }
 
-    /// This method does cannot handle imported types.
-    pub(super) fn find_type(&self, name: &JsWord) -> Option<&Type<'static>> {
-        if let Some(ty) = self.facts.types.get(name) {
-            println!("({}) find_type({}): Found (cond facts)", self.depth(), name);
-            return Some(&ty);
-        }
-
-        if let Some(ty) = self.types.get(name) {
-            println!("({}) find_type({}): Found", self.depth(), name);
-
-            return Some(&ty);
-        }
-
-        match self.parent {
-            Some(ref parent) => parent.find_type(name),
-            None => None,
-        }
-    }
-
     /// # Interface
     ///
     /// Registers an interface, and merges it with previous interface
@@ -609,32 +590,6 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    #[inline(never)]
-    pub(super) fn find_var(&self, name: &JsWord) -> Option<&VarInfo> {
-        static ERR_VAR: VarInfo = VarInfo {
-            ty: Some(Type::any(DUMMY_SP)),
-            kind: VarDeclKind::Const,
-            initialized: true,
-            copied: false,
-        };
-
-        if self.errored_imports.get(name).is_some() {
-            return Some(&ERR_VAR);
-        }
-
-        let mut scope = Some(&self.scope);
-
-        while let Some(s) = scope {
-            if let Some(var) = s.vars.get(name) {
-                return Some(var);
-            }
-
-            scope = s.parent;
-        }
-
-        None
-    }
-
     pub(super) fn find_var_type<'a>(&'a self, name: &JsWord) -> Option<&'a Type<'static>> {
         // println!("({}) find_var_type({})", self.scope.depth(), name);
         let mut scope = Some(&self.scope);
@@ -682,28 +637,6 @@ impl Analyzer<'_, '_> {
                 }
             }
 
-            return Some(ty);
-        }
-
-        None
-    }
-
-    pub(super) fn find_type<'a>(&'a self, name: &JsWord) -> Option<&'a Type<'static>> {
-        #[allow(dead_code)]
-        static ANY: Type = Type::Keyword(TsKeywordType {
-            span: DUMMY_SP,
-            kind: TsKeywordTypeKind::TsAnyKeyword,
-        });
-
-        if self.errored_imports.get(name).is_some() {
-            return Some(&ANY);
-        }
-
-        if let Some(ty) = self.resolved_imports.get(name) {
-            return Some(ty);
-        }
-
-        if let Some(ty) = self.scope.find_type(name) {
             return Some(ty);
         }
 

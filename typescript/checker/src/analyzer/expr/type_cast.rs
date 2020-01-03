@@ -1,8 +1,7 @@
 use super::{super::Analyzer, instantiate_class};
 use crate::{errors::Error, ty::Type, util::EqIgnoreNameAndSpan, ValidationResult};
-use swc_common::Span;
+use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
-use swc_ts_checker_macros::validator;
 
 impl Analyzer<'_> {
     pub(super) fn validate_ts_type_assertion(&mut self, e: &TsTypeAssertion) -> ValidationResult {

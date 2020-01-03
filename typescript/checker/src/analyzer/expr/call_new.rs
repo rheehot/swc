@@ -11,7 +11,7 @@ use crate::{
     ValidationResult,
 };
 use swc_atoms::js_word;
-use swc_common::{Fold, FoldWith, Span, Spanned};
+use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
@@ -55,7 +55,7 @@ impl Analyzer<'_> {
         if let Some(ref args) = e.args {
             for arg in args {
                 let res: Result<(), Error> = try {
-                    self.type_of(&arg.expr)?;
+                    self.validate_expr(&arg.expr)?;
                 };
 
                 if let Err(err) = res {
@@ -90,7 +90,7 @@ impl Analyzer<'_> {
         // Check arguments
         for arg in &e.args {
             let res: Result<(), Error> = try {
-                self.type_of(&arg.expr)?;
+                self.validate_expr(&arg.expr)?;
             };
 
             if let Err(err) = res {
@@ -276,7 +276,7 @@ impl Analyzer<'_> {
                 }
 
                 // Handle member expression
-                let obj_type = self.type_of(obj)?.generalize_lit();
+                let obj_type = self.validate_expr(obj)?.generalize_lit();
 
                 // Example: `TypeRef(console)` -> `Interface(Console)`
                 let obj_type = self.expand_type(span, obj_type)?;
@@ -357,18 +357,18 @@ impl Analyzer<'_> {
                     Err(if kind == ExtractKind::Call {
                         Error::NoCallSignature {
                             span,
-                            callee: self.type_of(callee)?.to_static(),
+                            callee: self.validate_expr(callee)?.to_static(),
                         }
                     } else {
                         Error::NoNewSignature {
                             span,
-                            callee: self.type_of(callee)?.to_static(),
+                            callee: self.validate_expr(callee)?.to_static(),
                         }
                     })
                 }
             }
             _ => {
-                let ty = self.type_of(callee)?;
+                let ty = self.validate_expr(callee)?;
                 println!("before extract: {:?}", ty);
                 let ty = self.expand_type(span, ty)?;
 

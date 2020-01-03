@@ -1,7 +1,7 @@
 use crate::ty::{Type, TypeElement};
 use std::{ops::RangeInclusive, path::PathBuf};
 use swc_atoms::JsWord;
-use swc_common::{errors::Handler, Span, Spanned};
+use swc_common::{errors::Handler, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::Expr;
 
 #[derive(Debug, Clone, PartialEq, Spanned)]
@@ -371,5 +371,14 @@ impl Error {
         }
 
         buf
+    }
+}
+
+impl From<Vec<Error>> for Error {
+    fn from(errors: Vec<Error>) -> Self {
+        Error::Errors {
+            span: DUMMY_SP,
+            errors,
+        }
     }
 }

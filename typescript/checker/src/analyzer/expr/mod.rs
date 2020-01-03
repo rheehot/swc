@@ -1,14 +1,13 @@
 use super::Analyzer;
 use crate::{
-    analyzer::util::{Comparator, ResultExt},
+    analyzer::util::ResultExt,
     errors::Error,
     ty::{ClassInstance, Tuple, Type, TypeLit, TypeParamInstantiation, TypeRef},
-    util::{EqIgnoreSpan, IntoCow, RemoveTypes},
+    util::{IntoCow, RemoveTypes},
     ValidationResult,
 };
-use std::iter::once;
 use swc_atoms::js_word;
-use swc_common::Spanned;
+use swc_common::{Spanned, VisitWith};
 use swc_ecma_ast::*;
 
 mod bin;
@@ -79,7 +78,7 @@ impl Analyzer<'_> {
                             spread: None,
                             ref expr,
                         }) => {
-                            let ty = self.type_of(expr)?;
+                            let ty = self.validate_expr(expr)?;
                             types.push(ty)
                         }
                         Some(ExprOrSpread {
@@ -179,7 +178,7 @@ impl Analyzer<'_> {
                             members.push(self.type_of_prop(&prop)?);
                         }
                         PropOrSpread::Spread(SpreadElement { ref expr, .. }) => {
-                            match self.type_of(&expr)?.into_owned() {
+                            match self.validate_expr(&expr)?.into_owned() {
                                 Type::TypeLit(TypeLit {
                                     members: spread_members,
                                     ..
@@ -245,8 +244,8 @@ impl Analyzer<'_> {
                     _ => {}
                 }
 
-                let cons_ty = self.type_of(cons)?.into_owned();
-                let alt_ty = self.type_of(alt)?.into_owned();
+                let cons_ty = self.validate_expr(cons)?.into_owned();
+                let alt_ty = self.validate_expr(alt)?.into_owned();
 
                 return Ok(Type::union(vec![cons_ty, alt_ty]).into_cow());
             }
@@ -271,36 +270,7 @@ impl Analyzer<'_> {
 
             Expr::MetaProp(..) => unimplemented!("typeof(MetaProp)"),
 
-            Expr::Assign(AssignExpr {
-                left: PatOrExpr::Pat(box Pat::Ident(ref i)),
-                ref right,
-                ..
-            }) => {
-                if self.declaring.contains(&i.sym) {
-                    return Ok(Type::any(span).owned());
-                }
-
-                return self.type_of(right);
-            }
-
-            Expr::Assign(AssignExpr {
-                left: PatOrExpr::Expr(ref left),
-                ref right,
-                ..
-            }) => {
-                match **left {
-                    Expr::Ident(ref i) => {
-                        if self.declaring.contains(&i.sym) {
-                            return Ok(Type::any(span).owned());
-                        }
-                    }
-                    _ => {}
-                }
-
-                return self.type_of(right);
-            }
-
-            Expr::Assign(AssignExpr { ref right, .. }) => return self.type_of(right),
+            Expr::Assign(e) => self.validate_assign_expr(e),
 
             Expr::TsTypeAssertion(TsTypeAssertion { ref type_ann, .. }) => {
                 return Ok(Type::from(type_ann.clone()).owned());
@@ -310,6 +280,48 @@ impl Analyzer<'_> {
 
             _ => unimplemented!("typeof ({:#?})", e),
         }
+    }
+
+    fn validate_assign_expr(&mut self, e: &AssignExpr) -> ValidationResult {
+        match e.left {
+            PatOrExpr::Pat(box Pat::Ident(ref i)) | PatOrExpr::Expr(box Expr::Ident(ref i)) => {
+                // Type is any if self.declaring contains ident
+            }
+        }
+
+        let mut errors = vec![];
+        let span = e.span();
+        e.visit_children(self);
+
+        let rhs_ty = match self
+            .validate_expr(&e.right)
+            .and_then(|ty| self.expand_type(span, ty))
+        {
+            Ok(rhs_ty) => {
+                let rhs_ty = rhs_ty.to_static();
+
+                self.check_rvalue(&rhs_ty);
+
+                Ok(rhs_ty)
+            }
+            Err(err) => {
+                errors.push(err);
+                Err(())
+            }
+        };
+
+        self.info.errors.extend(errors);
+
+        let rhs_ty = match rhs_ty {
+            Ok(v) => v.owned(),
+            Err(()) => Type::any(span).owned(),
+        };
+
+        if e.op == op!("=") {
+            self.try_assign(span, &e.left, &rhs_ty);
+        }
+
+        Ok(rhs_ty)
     }
 
     fn validate_update_expr(&mut self, e: &UpdateExpr) -> ValidationResult {
@@ -355,7 +367,7 @@ impl Analyzer<'_> {
                 }
                 _ => {}
             }
-            match self.type_of(e) {
+            match self.validate_expr(e) {
                 Ok(..) => {}
                 Err(Error::ReferencedInInit { .. }) => {
                     is_any = true;
@@ -367,7 +379,7 @@ impl Analyzer<'_> {
             return Ok(Type::any(span).owned());
         }
 
-        return self.type_of(&exprs.last().unwrap());
+        return self.validate_expr(&exprs.last().unwrap());
     }
 }
 

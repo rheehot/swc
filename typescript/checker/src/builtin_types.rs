@@ -4,16 +4,12 @@ use crate::{
     loader::Load,
     ty::{self, Class, ClassMember, Method, Module, Static},
     util::pat_to_ts_fn_param,
-    ImportInfo,
+    Exports, ImportInfo,
 };
 use chashmap::CHashMap;
 use fxhash::FxHashMap;
 use lazy_static::lazy_static;
-use std::{
-    collections::hash_map::Entry,
-    path::{Path, PathBuf},
-    sync::Arc,
-};
+use std::{collections::hash_map::Entry, path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{Span, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -261,7 +257,11 @@ pub fn get_type(libs: &[Lib], span: Span, name: &JsWord) -> Result<Type, Error> 
 struct Noop;
 
 impl Load for Noop {
-    fn load(&self, _: Arc<PathBuf>, _: &ImportInfo) -> Result<FxHashMap<JsWord, Arc<Type>>, Error> {
+    fn load(
+        &self,
+        base: Arc<PathBuf>,
+        import: &ImportInfo,
+    ) -> Result<Exports<FxHashMap<JsWord, Arc<Type>>>, Error> {
         unimplemented!()
     }
 }

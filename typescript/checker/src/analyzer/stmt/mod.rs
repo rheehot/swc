@@ -1,57 +1,45 @@
 use super::Analyzer;
-use crate::{analyzer::scope::ScopeKind, errors::Error};
+use crate::analyzer::scope::ScopeKind;
+use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
 
+mod ambient_decl;
 mod loops;
-mod module_items;
 
-impl Analyzer<'_> {
-    pub fn validate_stmt(&mut self, s: &Stmt) -> Result<(), Error> {
-        match s {
-            Stmt::Expr(s) => self.validate_expr_stmt(s),
-            Stmt::Throw(s) => self.validate_throw_stmt(s),
-            Stmt::With(s) => self.validate_with_stmt(s),
-            Stmt::ForOf(s) => self.validate_for_of_stmt(s),
-            Stmt::ForIn(s) => self.validate_for_in_stmt(s),
-            Stmt::If(s) => self.validate_if_stmt(s),
-            Stmt::Return(s) => self.validate_return_stmt(s),
-        }
+/// NOTE: We does **not** dig into with statements.
+impl Visit<WithStmt> for Analyzer<'_> {
+    fn visit(&mut self, s: &WithStmt) {
+        s.obj.visit_with(self);
     }
+}
 
-    fn validate_expr_stmt(&mut self, s: &ExprStmt) -> Result<(), Error> {
-        self.validate_expr(&s.expr)?;
-
-        Ok(())
-    }
-
-    fn validate_throw_stmt(&mut self, s: &ThrowStmt) -> Result<(), Error> {
-        self.validate_expr(&s.arg)?;
-
-        Ok(())
-    }
-
-    /// NOTE: We does **not** dig into with statements.
-    fn validate_with_stmt(&mut self, s: &WithStmt) -> Result<(), Error> {
-        self.validate_expr(&s.obj)?;
-
-        Ok(())
-    }
-
-    fn validate_block_stmt(&mut self, s: &BlockStmt) -> Result<(), Error> {
+impl Visit<BlockStmt> for Analyzer<'_> {
+    fn visit(&mut self, s: &BlockStmt) {
         self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
-            for stmt in &s.stmts {
-                analyzer.validate_stmt(stmt)?;
-            }
-
-            Ok(())
+            s.stmts.visit_with(analyzer)
         })
     }
+}
 
-    fn validate_return_stmt(&mut self, s: &ReturnStmt) -> Result<(), Error> {
-        if let Some(ref arg) = s.arg {
-            self.validate_expr(&arg)?;
+impl Visit<TsInterfaceDecl> for Analyzer<'_> {
+    fn visit(&mut self, decl: &TsInterfaceDecl) {
+        decl.visit_children(self);
+
+        self.scope
+            .register_type(decl.id.sym.clone(), decl.clone().into());
+
+        self.resolve_parent_interfaces(&decl.extends);
+    }
+}
+
+impl Analyzer<'_> {
+    /// Validate that parent interfaces are all resolved.
+    pub(super) fn resolve_parent_interfaces(&mut self, parents: &[TsExprWithTypeArgs]) {
+        for parent in parents {
+            // Verify parent interface
+            let res =
+                self.type_of_ts_entity_name(parent.span, &parent.expr, parent.type_args.as_ref());
+            res.store(&mut self.info.errors);
         }
-
-        Ok(())
     }
 }
