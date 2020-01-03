@@ -1,6 +1,5 @@
-pub use self::name::Name;
 use self::{
-    scope::{Scope, ScopeKind},
+    scope::Scope,
     util::{NormalizeMut, PatExt},
 };
 use super::Checker;
@@ -37,10 +36,6 @@ mod module_item;
 mod pat;
 mod props;
 mod scope;
-mod stmt;
-#[cfg(test)]
-mod tests;
-mod type_facts;
 mod util;
 
 pub(crate) struct Analyzer<'a, 'b> {
@@ -85,6 +80,22 @@ enum ComputedPropMode {
     },
     /// Object literal
     Object,
+}
+
+impl Fold<TsImportEqualsDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, node: TsImportEqualsDecl) -> TsImportEqualsDecl {
+        match node.module_ref {
+            TsModuleRef::TsEntityName(ref e) => {
+                match self.type_of_ts_entity_name(node.span, e, None) {
+                    Ok(..) => {}
+                    Err(err) => self.info.errors.push(err),
+                }
+            }
+            _ => {}
+        }
+
+        node
+    }
 }
 
 impl<T> Fold<Vec<T>> for Analyzer<'_, '_>

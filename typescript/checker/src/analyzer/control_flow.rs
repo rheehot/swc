@@ -1,7 +1,7 @@
+use super::name::Name;
 use crate::ty::Type;
 use fxhash::FxHashMap;
 use std::{collections::hash_map::Entry, hash::Hash};
-use super::name::Name;;
 
 /// Conditional facts
 #[derive(Debug, Clone, Default)]

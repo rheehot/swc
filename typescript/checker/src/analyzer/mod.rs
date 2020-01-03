@@ -9,6 +9,7 @@ mod expr;
 mod name;
 mod scope;
 mod stmt;
+mod type_facts;
 mod util;
 
 /// Note: All methods named `validate_*` return [Err] iff it's not recoverable.
