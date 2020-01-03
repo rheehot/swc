@@ -1,4 +1,4 @@
-use super::{control_flow::CondFacts, util::NormalizeMut, Analyzer, Name};
+use super::{Analyzer, Name};
 use crate::{
     errors::Error,
     ty::{

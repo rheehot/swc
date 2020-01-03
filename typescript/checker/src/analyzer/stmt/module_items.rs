@@ -1,5 +1,6 @@
 use super::super::Analyzer;
 use crate::errors::Error;
+use swc_atoms::js_word;
 use swc_common::Fold;
 use swc_ecma_ast::*;
 

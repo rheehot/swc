@@ -8,6 +8,7 @@ use std::sync::Arc;
 use swc_atoms::JsWord;
 
 mod assign;
+mod class;
 mod control_flow;
 mod expr;
 mod name;
