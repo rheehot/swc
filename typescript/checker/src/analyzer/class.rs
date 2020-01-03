@@ -9,6 +9,7 @@ use std::mem::replace;
 use swc_atoms::js_word;
 use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, DUMMY_SP};
 use swc_common::{util::move_map::MoveMap, Span, Spanned, Visit, DUMMY_SP};
+use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
@@ -185,6 +186,20 @@ impl Analyzer<'_> {
             c.function = c.function.fold_children(child);
             c.key.visit_with(child);
             c.function.visit_children(child);
+            c.key = c.key.visit_with(child);
+            c.function = c.function.visit_children(child);
+
+            debug_assert_eq!(child.allow_ref_declaring, false);
+            child.allow_ref_declaring = old;
+
+            (
+                child
+                    .inferred_return_types
+                    .get_mut()
+                    .remove_entry(&c_span)
+                    .unwrap_or_default(),
+                c,
+            )
         });
 
         if c.kind == MethodKind::Getter && c.function.body.is_some() {
@@ -407,6 +422,9 @@ impl Fold<Class> for Analyzer<'_> {
 impl Visit<Class> for Analyzer<'_> {
     fn visit(&mut self, c: &Class) {
         c.visit_children(self);
+impl Visit<Class> for Analyzer<'_> {
+    fn visit(&mut self, c: &Class) {
+        let c = c.visit_children(self);
 
         self.resolve_parent_interfaces(&c.implements);
 
@@ -462,8 +480,8 @@ impl Visit<Class> for Analyzer<'_> {
     }
 }
 
-impl Fold<ClassExpr> for Analyzer<'_> {
-    fn fold(&mut self, c: ClassExpr) -> ClassExpr {
+impl Visit<ClassExpr> for Analyzer<'_> {
+    fn visit(&mut self, c: &ClassExpr) {
         let ty = match self.validate_type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {
             Ok(ty) => ty,
             Err(err) => {
@@ -499,7 +517,7 @@ impl Fold<ClassExpr> for Analyzer<'_> {
                 }
             }
 
-            c.fold_children(analyzer)
+            c.visit_children(analyzer)
         });
 
         self.scope.this = old_this;
@@ -512,6 +530,9 @@ impl Fold<ClassDecl> for Analyzer<'_> {
 impl Visit<ClassDecl> for Analyzer<'_> {
     fn visit(&mut self, c: &ClassDecl) {
         c.visit_children(self);
+impl Visit<ClassDecl> for Analyzer<'_> {
+    fn visit(&mut self, c: &ClassDecl) {
+        let c: ClassDecl = c.visit_children(self);
 
         self.validate_inherited_members(Some(&c.ident), &c.class, c.declare);
         self.validate_class_members(&c.class, c.declare);

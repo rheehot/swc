@@ -8,6 +8,7 @@ use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Span, Spanned};
 use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith};
 use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_common::{Fold, FoldWith, Span, Spanned, Visit};
 use swc_ecma_ast::*;
 
 // ModuleDecl::ExportNamed(export) => {}
@@ -87,9 +88,9 @@ impl Analyzer<'_> {
     }
 }
 
-impl Fold<ExportDecl> for Analyzer<'_> {
-    fn fold(&mut self, export: ExportDecl) -> ExportDecl {
-        let export = export.fold_children(self);
+impl Visit<ExportDecl> for Analyzer<'_> {
+    fn visit(&mut self, export: &ExportDecl) {
+        let export = export.visit_children(self);
 
         match export.decl {
             Decl::Fn(ref f) => self.export(f.span(), f.ident.sym.clone(), None),
@@ -141,6 +142,9 @@ impl Fold<ExportDefaultDecl> for Analyzer<'_> {
 impl Visit<ExportDefaultDecl> for Analyzer<'_> {
     fn visit(&mut self, export: &ExportDefaultDecl) {
         export.visit_children(self);
+impl Visit<ExportDefaultDecl> for Analyzer<'_> {
+    fn visit(&mut self, export: &ExportDefaultDecl) {
+        let export = export.visit_children(self);
 
         match export.decl {
             DefaultDecl::Fn(ref f) => {

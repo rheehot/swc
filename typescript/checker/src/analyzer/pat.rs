@@ -11,6 +11,7 @@ impl Visit<RestPat> for Analyzer<'_> {
         let p = p.visit_children(self);
 
         let mut errors = vec![];
+        let p = p.visit_children(self);
 
         if let Pat::Assign(AssignPat { ref right, .. }) = *p.arg {
             try {

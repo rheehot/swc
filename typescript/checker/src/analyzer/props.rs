@@ -9,6 +9,7 @@ use swc_common::{Fold, FoldWith, Spanned};
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_common::{Visit, VisitWith};
 use swc_common::{Spanned, Visit, VisitWith};
+use swc_common::{Fold, FoldWith, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy)]
@@ -20,10 +21,10 @@ enum ComputedPropMode {
     Object,
 }
 
-impl Fold<ComputedPropName> for Analyzer<'_> {
-    fn fold(&mut self, node: ComputedPropName) -> ComputedPropName {
+impl Visit<ComputedPropName> for Analyzer<'_> {
+    fn visit(&mut self, node: &ComputedPropName) {
         // TODO: check if it's class or object literal
-        let node = node.fold_children(self);
+        node.visit_children(self);
 
         let span = node.span;
 
@@ -85,11 +86,11 @@ impl Fold<ComputedPropName> for Analyzer<'_> {
     }
 }
 
-impl Fold<Prop> for Analyzer<'_> {
-    fn fold(&mut self, n: Prop) -> Prop {
+impl Visit<Prop> for Analyzer<'_> {
+    fn visit(&mut self, n: &Prop) {
         self.computed_prop_mode = ComputedPropMode::Object;
 
-        let n = n.fold_children(self);
+        let n = n.visit_children(self);
 
         match n {
             Prop::Shorthand(ref i) => {
@@ -103,8 +104,8 @@ impl Fold<Prop> for Analyzer<'_> {
     }
 }
 
-impl Fold<GetterProp> for Analyzer<'_> {
-    fn fold(&mut self, n: GetterProp) -> GetterProp {
+impl Visit<GetterProp> for Analyzer<'_> {
+    fn visit(&mut self, n: &GetterProp) {
         let (entry, n) = {
             self.with_child(ScopeKind::Fn, Default::default(), |child| {
                 child.return_type_span = n.span();
@@ -114,7 +115,7 @@ impl Fold<GetterProp> for Analyzer<'_> {
                     .get_mut()
                     .insert(n.span(), Default::default());
 
-                let n = n.fold_children(child);
+                let n = n.visit_children(child);
 
                 (
                     child
@@ -148,6 +149,7 @@ impl Analyzer<'_> {
     fn validate_ts_method_signature(&mut self, node: TsMethodSignature) -> TsMethodSignature {
         let node = node.fold_children(self);
         node.visit_children(self);
+        let node = node.visit_children(self);
 
         if node.computed {
             self.validate_computed_prop_key(node.span(), &node.key);
@@ -162,6 +164,7 @@ impl Analyzer<'_> {
     ) -> Result<TsPropertySignature, Error> {
         let node = node.fold_children(self);
         node.visit_children(self);
+        let node = node.visit_children(self);
 
         if node.computed {
             self.validate_computed_prop_key(node.span(), &node.key);

@@ -1,5 +1,3 @@
-//! Handles enum.
-
 use super::Analyzer;
 use crate::{
     errors::Error,
@@ -9,8 +7,9 @@ use std::convert::TryInto;
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
-impl Fold<TsEnumDecl> for Analyzer<'_> {
-    fn fold(&mut self, mut e: TsEnumDecl) -> TsEnumDecl {
+/// Handles enum.
+impl Visit<TsEnumDecl> for Analyzer<'_> {
+    fn visit(&mut self, e: &TsEnumDecl) {
         let span = e.span();
 
         // We don't visit enum variants to allow
@@ -26,7 +25,7 @@ impl Fold<TsEnumDecl> for Analyzer<'_> {
         //            h = a | b
         //        }
 
-        //        e.fold_children(self);
+        //        e.visit_children(self);
 
         self.scope.register_type(
             e.id.sym.clone(),
@@ -55,6 +54,7 @@ impl Fold<TsEnumDecl> for Analyzer<'_> {
         } else {
             e.members = e.members.fold_children(self);
             e.members.visit_children(self);
+            e.members = e.members.visit_children(self);
         }
     }
 }

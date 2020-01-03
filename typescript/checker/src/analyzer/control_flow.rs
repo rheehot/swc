@@ -198,7 +198,7 @@ impl Visit<IfStmt> for Analyzer<'_> {
         };
         let ends_with_ret = stmt.cons.ends_with_ret();
         let stmt = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
-            stmt.fold_children(child)
+            stmt.visit_children(child)
         });
         if ends_with_ret {
             self.scope.facts.extend(facts.false_facts);
@@ -226,7 +226,7 @@ impl Visit<SwitchStmt> for Analyzer<'_> {
         self.check_switch_discriminant(&stmt);
 impl Visit<SwitchStmt> for Analyzer<'_> {
     fn visit(&mut self, stmt: &SwitchStmt) {
-        let stmt = stmt.fold_children(self);
+        let stmt = stmt.visit_children(self);
 
         analyze!(self, {
             let discriminant_ty = self.type_of(&stmt.discriminant)?;
