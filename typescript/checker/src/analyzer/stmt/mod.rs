@@ -53,24 +53,4 @@ impl Analyzer<'_> {
 
         Ok(())
     }
-
-    fn validate_if_stmt(&mut self, s: &IfStmt) -> Result<(), Error> {
-        let mut facts = Default::default();
-        match self.detect_facts(&stmt.test, &mut facts) {
-            Ok(()) => (),
-            Err(err) => {
-                self.info.errors.push(err);
-                return stmt;
-            }
-        };
-        let ends_with_ret = stmt.cons.ends_with_ret();
-        let stmt = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
-            stmt.fold_children(child)
-        });
-        if ends_with_ret {
-            self.scope.facts.extend(facts.false_facts);
-        }
-
-        stmt
-    }
 }

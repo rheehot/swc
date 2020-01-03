@@ -1,9 +1,13 @@
-use self::scope::Scope;
+use self::{
+    control_flow::CondFacts,
+    scope::{Scope, ScopeKind},
+};
 use crate::{errors::Error, ty::TypeRef, Exports};
 use fxhash::FxHashMap;
 use std::sync::Arc;
 use swc_atoms::JsWord;
 
+mod assign;
 mod control_flow;
 mod expr;
 mod name;
@@ -24,4 +28,12 @@ pub struct Analyzer<'a> {
 pub struct Info {
     pub errors: Vec<Error>,
     pub exports: Exports<FxHashMap<JsWord, Arc<TypeRef<'static>>>>,
+}
+
+impl Analyzer<'_> {
+    pub(super) fn with_child<F, Ret>(&mut self, kind: ScopeKind, facts: CondFacts, op: F) -> Ret
+    where
+        F: FnOnce(&mut Self) -> Ret,
+    {
+    }
 }

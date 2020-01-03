@@ -4,14 +4,6 @@ use std::{borrow::Cow, iter::once};
 use swc_common::Spanned;
 use swc_ecma_ast::*;
 
-impl Analyzer<'_> {
-    pub(super) fn with_child<F, Ret>(&mut self, kind: ScopeKind, facts: CondFacts, op: F) -> Ret
-    where
-        F: FnOnce(&mut Self) -> Ret,
-    {
-    }
-}
-
 pub trait ResultExt<T, E>: Into<Result<T, E>> {
     fn store<V>(self, to: &mut V) -> Option<T>
     where

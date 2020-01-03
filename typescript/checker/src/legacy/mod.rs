@@ -1,7 +1,4 @@
-use self::{
-    scope::Scope,
-    util::{NormalizeMut, PatExt},
-};
+use self::scope::Scope;
 use super::Checker;
 use crate::{
     builtin_types::Lib,
@@ -26,7 +23,6 @@ const LOG_VISIT: bool = false;
 
 #[macro_use]
 mod macros;
-mod assign;
 mod class;
 mod control_flow;
 mod enums;
