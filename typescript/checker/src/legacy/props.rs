@@ -1,6 +1,6 @@
 use super::{expr::TypeOfMode, ty::Type, Analyzer, ScopeKind};
 use crate::{
-    analyzer::{ComputedPropMode, LOG_VISIT},
+    legacy::{ComputedPropMode, LOG_VISIT},
     errors::Error,
     ty::TypeRefExt,
 };

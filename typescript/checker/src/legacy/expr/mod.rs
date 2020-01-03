@@ -4,7 +4,7 @@ use super::{
     Analyzer,
 };
 use crate::{
-    analyzer::{instantiate_class, ValidationResult},
+    legacy::{instantiate_class, ValidationResult},
     builtin_types,
     errors::Error,
     ty::{

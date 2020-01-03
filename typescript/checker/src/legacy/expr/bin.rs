@@ -2,7 +2,7 @@
 
 use super::Analyzer;
 use crate::{
-    analyzer::control_flow::Comparator,
+    legacy::control_flow::Comparator,
     errors::Error,
     ty::{Type, TypeRef},
     util::{EqIgnoreSpan, IntoCow},

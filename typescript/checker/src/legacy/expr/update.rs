@@ -1,5 +1,5 @@
 use crate::{
-    analyzer::{expr::TypeOfMode, Analyzer, ValidationResult},
+    legacy::{expr::TypeOfMode, Analyzer, ValidationResult},
     errors::Error,
     ty::Type,
 };

@@ -1,5 +1,5 @@
 use crate::{
-    analyzer::{export::pat_to_ts_fn_param, Analyzer, ImportInfo},
+    legacy::{export::pat_to_ts_fn_param, Analyzer, ImportInfo},
     errors::Error,
     loader::Load,
     ty::{self, Class, ClassMember, Method, Module, Static},

@@ -1,5 +1,5 @@
 use crate::{
-    analyzer::{util::is_prop_name_eq, Analyzer},
+    legacy::{util::is_prop_name_eq, Analyzer},
     errors::Error,
     ty::{Array, Type},
     util::EqIgnoreNameAndSpan,

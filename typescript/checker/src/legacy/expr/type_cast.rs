@@ -1,5 +1,5 @@
 use crate::{
-    analyzer::{instantiate_class, Analyzer},
+    legacy::{instantiate_class, Analyzer},
     errors::Error,
     ty::Type,
     util::EqIgnoreNameAndSpan,

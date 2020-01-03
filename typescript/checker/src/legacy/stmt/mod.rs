@@ -1,5 +1,5 @@
 use crate::{
-    analyzer::{expr::TypeOfMode, Analyzer},
+    legacy::{expr::TypeOfMode, Analyzer},
     errors::Error,
     swc_common::Spanned,
     ty::{Array, Type},

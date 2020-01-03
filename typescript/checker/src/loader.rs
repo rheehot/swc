@@ -1,6 +1,6 @@
 use super::Checker;
 use crate::{
-    analyzer::{ImportInfo, Specifier},
+    legacy::{ImportInfo, Specifier},
     errors::Error,
     resolver::Resolve,
     ty::Type,

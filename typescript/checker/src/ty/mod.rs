@@ -1,5 +1,5 @@
 use crate::{
-    analyzer::Info,
+    legacy::Info,
     util::{EqIgnoreNameAndSpan, IntoCow},
     Exports,
 };

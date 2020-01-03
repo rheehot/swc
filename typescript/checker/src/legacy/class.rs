@@ -1,6 +1,6 @@
 use super::{scope::ScopeKind, Analyzer};
 use crate::{
-    analyzer::{expr::TypeOfMode, util::is_prop_name_eq, ComputedPropMode, VarVisitor, LOG_VISIT},
+    legacy::{expr::TypeOfMode, util::is_prop_name_eq, ComputedPropMode, VarVisitor, LOG_VISIT},
     errors::Error,
     ty::{self, Type},
 };

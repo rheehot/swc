@@ -1,5 +1,5 @@
 use crate::{
-    analyzer::{scope::ScopeKind, Analyzer},
+    legacy::{scope::ScopeKind, Analyzer},
     errors::Error,
 };
 use swc_common::{Fold, FoldWith};

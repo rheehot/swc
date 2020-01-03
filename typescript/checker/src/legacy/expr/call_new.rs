@@ -1,6 +1,6 @@
 //! Handles new expressions and call expressions.
 
-use crate::{analyzer::Analyzer, errors::Error, ty::Type};
+use crate::{legacy::Analyzer, errors::Error, ty::Type};
 use swc_common::{Fold, FoldWith, Span};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
