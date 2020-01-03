@@ -1,4 +1,4 @@
-use super::{Analyzer, Name};
+use super::Analyzer;
 use crate::{
     errors::Error,
     ty::{

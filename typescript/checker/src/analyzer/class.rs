@@ -1,10 +1,228 @@
 use super::Analyzer;
-use crate::{errors::Error, ty::Type};
+use crate::{analyzer::scope::ScopeKind, errors::Error, ty::Type};
 use std::mem::replace;
-use swc_common::Span;
+use swc_common::{util::move_map::MoveMap, Span, Spanned};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_> {
+    fn validate_class_property(&mut self, p: &ClassProp) -> Result<(), Error> {
+        // TODO: children
+
+        // Verify key if key is computed
+        if p.computed {
+            self.validate_computed_prop_key(p.span, &p.key);
+        }
+
+        if let Some(ref ty) = p.type_ann {
+            let span = ty.span();
+
+            analyze!(self, {
+                let ty: Type = ty.type_ann.clone().into();
+                self.expand_type(span, ty.owned())?;
+            });
+        }
+
+        if let Some(ref value) = p.value {
+            analyze!(self, {
+                self.validate_expr(&value)?;
+            });
+        }
+
+        self.scope.declaring_prop = None;
+
+        p
+    }
+
+    fn validate_constructor(&mut self, c: &Constructor) -> Result<(), Error> {
+        let c_span = c.span();
+
+        self.with_child(ScopeKind::Fn, Default::default(), |child| {
+            let Constructor { params, .. } = c;
+
+            child.return_type_span = c_span;
+
+            let old = child.allow_ref_declaring;
+            child.allow_ref_declaring = false;
+
+            {
+                // Validate params
+                // TODO: Move this to parser
+                let mut has_optional = false;
+                for p in &params {
+                    if has_optional {
+                        child.info.errors.push(Error::TS1016 { span: p.span() });
+                    }
+
+                    match *p {
+                        PatOrTsParamProp::Pat(Pat::Ident(Ident { optional, .. })) => {
+                            if optional {
+                                has_optional = true;
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+            }
+
+            let params = params.move_map(|param| {
+                let mut names = vec![];
+
+                let mut visitor = VarVisitor { names: &mut names };
+
+                param.visit_with(&mut visitor);
+
+                child.declaring.extend_from_slice(&names);
+
+                debug_assert_eq!(child.allow_ref_declaring, false);
+
+                match param {
+                    PatOrTsParamProp::Pat(ref pat) => {
+                        match child.declare_vars(VarDeclKind::Let, pat) {
+                            Ok(()) => {}
+                            Err(err) => {
+                                child.info.errors.push(err);
+                            }
+                        }
+                    }
+                    PatOrTsParamProp::TsParamProp(ref param) => match param.param {
+                        TsParamPropParam::Ident(ref i)
+                        | TsParamPropParam::Assign(AssignPat {
+                            left: box Pat::Ident(ref i),
+                            ..
+                        }) => {
+                            let ty = i.type_ann.clone().map(Type::from);
+                            let ty = match ty {
+                                Some(ty) => match child.expand_type(i.span, ty.owned()) {
+                                    Ok(ty) => Some(ty.into_owned().into_static()),
+                                    Err(err) => {
+                                        child.info.errors.push(err);
+                                        Some(Type::any(i.span))
+                                    }
+                                },
+                                None => None,
+                            };
+
+                            match child.scope.declare_var(
+                                i.span,
+                                VarDeclKind::Let,
+                                i.sym.clone(),
+                                ty,
+                                true,
+                                false,
+                            ) {
+                                Ok(()) => {}
+                                Err(err) => {
+                                    child.info.errors.push(err);
+                                }
+                            }
+                        }
+                        _ => unreachable!(),
+                    },
+                }
+
+                for n in names {
+                    child.declaring.remove_item(&n).unwrap();
+                }
+
+                param
+            });
+
+            child.inferred_return_types.get_mut().insert(c_span, vec![]);
+            let c = Constructor { params, ..c }.fold_children(child);
+
+            debug_assert_eq!(child.allow_ref_declaring, false);
+            child.allow_ref_declaring = old;
+
+            c
+        })
+    }
+
+    fn validate_class_method(&mut self, c: &ClassMethod) -> Result<(), Error> {
+        let c_span = c.span();
+        let key_span = c.key.span();
+
+        let (entry, c) = self.with_child(ScopeKind::Fn, Default::default(), |child| {
+            child.return_type_span = c_span;
+
+            let old = child.allow_ref_declaring;
+            child.allow_ref_declaring = false;
+
+            {
+                // Validate params
+                // TODO: Move this to parser
+                let mut has_optional = false;
+                for p in &c.function.params {
+                    if has_optional {
+                        child.info.errors.push(Error::TS1016 { span: p.span() });
+                    }
+
+                    match *p {
+                        Pat::Ident(Ident { optional, .. }) => {
+                            if optional {
+                                has_optional = true;
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+            }
+
+            c.function.params.iter().for_each(|pat| {
+                let mut names = vec![];
+
+                let mut visitor = VarVisitor { names: &mut names };
+
+                pat.visit_with(&mut visitor);
+
+                child.declaring.extend_from_slice(&names);
+
+                debug_assert_eq!(child.allow_ref_declaring, false);
+
+                match child.declare_vars(VarDeclKind::Let, pat) {
+                    Ok(()) => {}
+                    Err(err) => {
+                        child.info.errors.push(err);
+                    }
+                }
+
+                for n in names {
+                    child.declaring.remove_item(&n).unwrap();
+                }
+            });
+
+            child.inferred_return_types.get_mut().insert(c.span, vec![]);
+            c.key = c.key.fold_with(child);
+            c.function = c.function.fold_children(child);
+
+            debug_assert_eq!(child.allow_ref_declaring, false);
+            child.allow_ref_declaring = old;
+
+            (
+                child
+                    .inferred_return_types
+                    .get_mut()
+                    .remove_entry(&c_span)
+                    .unwrap_or_default(),
+                c,
+            )
+        });
+
+        if c.kind == MethodKind::Getter && c.function.body.is_some() {
+            // getter property must have return statements.
+            if entry.1.is_empty() {
+                self.info
+                    .errors
+                    .push(Error::GetterPropWithoutReturn { span: key_span });
+            }
+        }
+
+        *self
+            .inferred_return_types
+            .get_mut()
+            .entry(c.span())
+            .or_default() = entry.1;
+    }
+
     fn validate_class_members(&mut self, c: &Class, declare: bool) {
         // Report errors for code like
         //

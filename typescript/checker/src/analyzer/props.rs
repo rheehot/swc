@@ -1,14 +1,19 @@
-use super::{ty::Type, Analyzer};
-use crate::{
-    errors::Error,
-    legacy::{ComputedPropMode, LOG_VISIT},
-    ty::TypeRefExt,
-};
+use super::Analyzer;
+use crate::{errors::Error, ty::TypeRefExt};
 use swc_atoms::js_word;
 use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
-impl Fold<ComputedPropName> for Analyzer<'_, '_> {
+#[derive(Debug, Clone, Copy)]
+enum ComputedPropMode {
+    Class {
+        has_body: bool,
+    },
+    /// Object literal
+    Object,
+}
+
+impl Fold<ComputedPropName> for Analyzer<'_> {
     fn fold(&mut self, node: ComputedPropName) -> ComputedPropName {
         // TODO: check if it's class or object literal
         let node = node.fold_children(self);
@@ -77,7 +82,7 @@ impl Fold<ComputedPropName> for Analyzer<'_, '_> {
     }
 }
 
-impl Fold<Prop> for Analyzer<'_, '_> {
+impl Fold<Prop> for Analyzer<'_> {
     fn fold(&mut self, n: Prop) -> Prop {
         self.computed_prop_mode = ComputedPropMode::Object;
 
@@ -97,7 +102,7 @@ impl Fold<Prop> for Analyzer<'_, '_> {
     }
 }
 
-impl Fold<GetterProp> for Analyzer<'_, '_> {
+impl Fold<GetterProp> for Analyzer<'_> {
     fn fold(&mut self, n: GetterProp) -> GetterProp {
         let (entry, n) = {
             self.with_child(ScopeKind::Fn, Default::default(), |child| {
@@ -138,7 +143,7 @@ impl Fold<GetterProp> for Analyzer<'_, '_> {
     }
 }
 
-impl Fold<TsMethodSignature> for Analyzer<'_, '_> {
+impl Fold<TsMethodSignature> for Analyzer<'_> {
     fn fold(&mut self, node: TsMethodSignature) -> TsMethodSignature {
         if LOG_VISIT {
             println!("Fold<TsMethodSignature>");
@@ -153,7 +158,7 @@ impl Fold<TsMethodSignature> for Analyzer<'_, '_> {
     }
 }
 
-impl Fold<TsPropertySignature> for Analyzer<'_, '_> {
+impl Fold<TsPropertySignature> for Analyzer<'_> {
     fn fold(&mut self, node: TsPropertySignature) -> TsPropertySignature {
         let node = node.fold_children(self);
 

@@ -25,11 +25,9 @@ const LOG_VISIT: bool = false;
 mod macros;
 mod class;
 mod control_flow;
-mod enums;
 pub mod export;
 mod generic;
 mod pat;
-mod props;
 mod scope;
 
 pub(crate) struct Analyzer<'a, 'b> {
@@ -65,15 +63,6 @@ pub(crate) struct Analyzer<'a, 'b> {
     export_equals_span: Span,
 
     computed_prop_mode: ComputedPropMode,
-}
-
-#[derive(Debug, Clone, Copy)]
-enum ComputedPropMode {
-    Class {
-        has_body: bool,
-    },
-    /// Object literal
-    Object,
 }
 
 impl Fold<TsImportEqualsDecl> for Analyzer<'_, '_> {
