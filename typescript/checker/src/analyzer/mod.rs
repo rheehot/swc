@@ -13,6 +13,7 @@ mod control_flow;
 mod enums;
 mod expr;
 mod name;
+mod pat;
 mod props;
 mod scope;
 mod stmt;

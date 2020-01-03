@@ -27,7 +27,6 @@ mod class;
 mod control_flow;
 pub mod export;
 mod generic;
-mod pat;
 mod scope;
 
 pub(crate) struct Analyzer<'a, 'b> {
