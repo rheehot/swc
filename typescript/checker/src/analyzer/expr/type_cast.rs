@@ -1,39 +1,18 @@
-use crate::{
-    errors::Error,
-    legacy::{instantiate_class, Analyzer},
-    ty::Type,
-    util::EqIgnoreNameAndSpan,
-};
-use std::borrow::Cow;
-use swc_common::{Fold, FoldWith, Span, Spanned};
-use swc_ecma_ast::*;
-use swc_ts_checker_macros::validator;
+use super::super::Analyzer;
 
-impl Fold<TsTypeAssertion> for Analyzer<'_, '_> {
-    fn fold(&mut self, expr: TsTypeAssertion) -> TsTypeAssertion {
-        log_fold!(expr);
-
+impl Analyzer<'_> {
+    pub(super) fn validate_ts_type_assertion(&mut self, e: &TsAsExpr) -> ValidationResult {
         let expr = expr.fold_children(self);
 
         self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann);
-
-        expr
     }
-}
 
-impl Fold<TsAsExpr> for Analyzer<'_, '_> {
-    fn fold(&mut self, expr: TsAsExpr) -> TsAsExpr {
-        log_fold!(expr);
-
+    pub(super) fn validate_ts_as_expr(&mut self, e: &TsAsExpr) -> ValidationResult {
         let expr = expr.fold_children(self);
 
         self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann);
-
-        expr
     }
-}
 
-impl Analyzer<'_, '_> {
     /// ```ts
     /// var unionTuple3: [number, string | number] = [10, "foo"];
     /// var unionTuple4 = <[number, number]>unionTuple3;

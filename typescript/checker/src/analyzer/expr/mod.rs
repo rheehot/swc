@@ -11,6 +11,7 @@ use swc_ecma_ast::*;
 
 mod bin;
 mod call_new;
+mod type_cast;
 mod unary;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -46,6 +47,8 @@ impl Analyzer<'_> {
             Expr::Update(e) => self.validate_update_expr(e),
             Expr::New(e) => self.validate_new_expr(e),
             Expr::Call(e) => self.validate_call_expr(e),
+            Expr::TsAs(e) => self.validate_ts_as_expr(e),
+            Expr::TsTypeAssertion(e) => self.validate_ts_type_assertion(e),
         }
     }
 

@@ -17,8 +17,6 @@ use swc_common::{util::iter::IteratorExt as _, Fold, FoldWith, Span, Spanned};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
-mod type_cast;
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(super) enum TypeOfMode {
     /// Used for l-values.
