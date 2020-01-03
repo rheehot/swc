@@ -16,8 +16,7 @@ use swc_ecma_ast::*;
 // ModuleDecl::TsNamespaceExport(ns) =>
 // unimplemented!("export namespace"),
 
-impl Analyzer<'_, '_> {
-    #[inline]
+impl Analyzer<'_> {
     pub(super) fn handle_pending_exports(&mut self) {
         if self.pending_exports.is_empty() {
             return;

@@ -18,7 +18,6 @@ use swc_common::{
 };
 use swc_ecma_ast::*;
 
-pub mod export;
 mod generic;
 mod scope;
 

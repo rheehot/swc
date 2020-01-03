@@ -13,6 +13,7 @@ mod assign;
 mod class;
 mod control_flow;
 mod enums;
+mod export;
 mod expr;
 mod name;
 mod pat;
