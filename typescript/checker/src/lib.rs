@@ -34,6 +34,9 @@ mod util;
 /// Module with information.
 pub type ModuleInfo = Arc<(Module, Info)>;
 
+/// Note: All methods named `validate_*` return [Err] iff it's not recoverable.
+pub type ValidationResult = ValidationResult;
+
 #[derive(Debug)]
 pub struct Config {
     /// Should we generate .d.ts?

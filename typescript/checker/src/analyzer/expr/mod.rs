@@ -4,6 +4,7 @@ use crate::{
     errors::Error,
     ty::{Type, TypeParamInstantiation, TypeRef},
     util::{EqIgnoreSpan, IntoCow},
+    ValidationResult,
 };
 use swc_common::Spanned;
 use swc_ecma_ast::*;
@@ -28,7 +29,7 @@ pub(super) enum TypeOfMode {
 }
 
 impl Analyzer<'_> {
-    pub(super) fn validate_expr(&mut self, e: &Expr) -> Result<TypeRef<'static>, Error> {
+    pub(super) fn validate_expr(&mut self, e: &Expr) -> ValidationResult {
         self.validate_expr_with_extra(e, TypeOfMode::RValue, None)
     }
 
@@ -38,10 +39,12 @@ impl Analyzer<'_> {
         mode: TypeOfMode,
         type_args: Option<&TypeParamInstantiation>,
     ) -> Result<TypeRef, Error> {
-        match e {}
+        match e {
+            Expr::Update(e) => self.validate_update_expr(e),
+        }
     }
 
-    fn validate_update_expr(&mut self, e: &UpdateExpr) -> Result<TypeRef<'static>, Error> {
+    fn validate_update_expr(&mut self, e: &UpdateExpr) -> ValidationResult {
         let span = e.span;
 
         let res = self

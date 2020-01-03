@@ -1,9 +1,12 @@
-use super::super::Analyzer;
+use super::super::{
+    util::{Comparator, ResultExt},
+    Analyzer,
+};
 use crate::{
-    analyzer::util::{Comparator, ResultExt},
     errors::Error,
     ty::{Type, TypeRef},
     util::{EqIgnoreSpan, IntoCow},
+    ValidationResult,
 };
 use swc_common::{Fold, FoldWith, Span, Spanned};
 use swc_ecma_ast::*;
@@ -230,7 +233,7 @@ impl Analyzer<'_> {
         self.info.errors.extend(errors);
     }
 
-    pub(super) fn validate_bin_expr(&mut self, expr: &BinExpr) -> Result<TypeRef<'static>, Error> {
+    pub(super) fn validate_bin_expr(&mut self, expr: &BinExpr) -> ValidationResult {
         let BinExpr {
             span,
             op,

@@ -45,10 +45,6 @@ mod tests;
 mod type_facts;
 mod util;
 
-/// Note: All methods named `validate_*` return [Err] only if it's not
-/// recoverable.
-pub type ValidationResult<'a> = Result<TypeRef<'a>, Error>;
-
 pub(crate) struct Analyzer<'a, 'b> {
     pub info: Info,
     in_declare: bool,

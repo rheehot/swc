@@ -2,7 +2,6 @@ use super::{control_flow::RemoveTypes, export::pat_to_ts_fn_param, Analyzer};
 use crate::{
     builtin_types,
     errors::Error,
-    legacy::{instantiate_class, ValidationResult},
     ty::{
         self, Alias, Array, CallSignature, Class, ClassInstance, ClassMember, ConstructorSignature,
         EnumVariant, IndexSignature, Interface, Intersection, Method, MethodSignature, Module,
