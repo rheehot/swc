@@ -36,7 +36,6 @@ mod module_item;
 mod pat;
 mod props;
 mod scope;
-mod util;
 
 pub(crate) struct Analyzer<'a, 'b> {
     pub info: Info,
