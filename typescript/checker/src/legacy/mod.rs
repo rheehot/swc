@@ -23,8 +23,6 @@ const LOG_VISIT: bool = false;
 
 #[macro_use]
 mod macros;
-mod class;
-mod control_flow;
 pub mod export;
 mod generic;
 mod scope;
