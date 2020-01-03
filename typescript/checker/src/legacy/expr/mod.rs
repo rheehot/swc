@@ -18,7 +18,6 @@ use swc_ts_checker_macros::validator;
 
 mod call_new;
 mod type_cast;
-mod unary;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(super) enum TypeOfMode {
@@ -153,64 +152,6 @@ impl Analyzer<'_, '_> {
             }
 
             Expr::Bin(ref expr) => self.type_of_bin_expr(&expr),
-
-            Expr::Unary(UnaryExpr {
-                span, op, ref arg, ..
-            }) => {
-                match op {
-                    op!("typeof") => {
-                        return Ok(Type::Keyword(TsKeywordType {
-                            span,
-                            kind: TsKeywordTypeKind::TsStringKeyword,
-                        })
-                        .into_cow());
-                    }
-
-                    // `delete foo` returns bool
-                    op!("delete") => {
-                        return Ok(Type::Keyword(TsKeywordType {
-                            span,
-                            kind: TsKeywordTypeKind::TsBooleanKeyword,
-                        })
-                        .owned());
-                    }
-
-                    op!("void") => return Ok(Type::undefined(span).owned()),
-
-                    _ => {}
-                }
-
-                let arg_ty = self.type_of(arg)?;
-                match *arg_ty {
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsUnknownKeyword,
-                        ..
-                    }) => return Err(Error::Unknown { span: arg.span() }),
-                    _ => {}
-                }
-
-                match op {
-                    op!("!") => return Ok(negate(self.type_of(arg)?.into_owned()).into_cow()),
-
-                    op!(unary, "-") | op!(unary, "+") => {
-                        return Ok(Type::Keyword(TsKeywordType {
-                            span,
-                            kind: TsKeywordTypeKind::TsNumberKeyword,
-                        })
-                        .owned());
-                    }
-
-                    op!("~") => {
-                        return Ok(Type::Keyword(TsKeywordType {
-                            span,
-                            kind: TsKeywordTypeKind::TsNumberKeyword,
-                        })
-                        .owned());
-                    }
-
-                    op!("typeof") | op!("delete") | op!("void") => unreachable!(),
-                }
-            }
 
             Expr::TsAs(TsAsExpr { ref type_ann, .. }) => {
                 return Ok(instantiate_class(type_ann.clone().into_cow()));
@@ -2291,48 +2232,6 @@ fn prop_name_to_expr(key: &PropName) -> Box<Expr> {
         PropName::Str(ref s) => box Expr::Lit(Lit::Str(Str { ..s.clone() })),
         PropName::Num(ref s) => box Expr::Lit(Lit::Num(Number { ..s.clone() })),
     }
-}
-
-fn negate(ty: Type) -> Type {
-    match ty {
-        Type::Lit(TsLitType { ref lit, span }) => match *lit {
-            TsLit::Bool(v) => {
-                return Type::Lit(TsLitType {
-                    lit: TsLit::Bool(Bool {
-                        value: !v.value,
-                        ..v
-                    }),
-                    span,
-                });
-            }
-            TsLit::Number(v) => {
-                return Type::Lit(TsLitType {
-                    lit: TsLit::Bool(Bool {
-                        value: v.value != 0.0,
-                        span: v.span,
-                    }),
-                    span,
-                });
-            }
-            TsLit::Str(ref v) => {
-                return Type::Lit(TsLitType {
-                    lit: TsLit::Bool(Bool {
-                        value: v.value != js_word!(""),
-                        span: v.span,
-                    }),
-                    span,
-                });
-            }
-        },
-
-        _ => {}
-    }
-
-    TsKeywordType {
-        span: ty.span(),
-        kind: TsKeywordTypeKind::TsBooleanKeyword,
-    }
-    .into()
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

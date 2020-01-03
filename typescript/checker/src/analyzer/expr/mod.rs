@@ -10,6 +10,7 @@ use swc_common::Spanned;
 use swc_ecma_ast::*;
 
 mod bin;
+mod unary;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(super) enum TypeOfMode {
