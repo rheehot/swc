@@ -26,7 +26,7 @@ use swc_ecma_parser::{
 pub mod analyzer;
 mod builtin_types;
 pub mod errors;
-mod legacy;
+//mod legacy;
 pub mod loader;
 pub mod resolver;
 pub mod ty;

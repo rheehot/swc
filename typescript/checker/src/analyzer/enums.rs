@@ -9,7 +9,7 @@ use std::convert::TryInto;
 use swc_common::{Fold, FoldWith, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
-impl Fold<TsEnumDecl> for Analyzer<'_, '_> {
+impl Fold<TsEnumDecl> for Analyzer<'_> {
     fn fold(&mut self, mut e: TsEnumDecl) -> TsEnumDecl {
         let span = e.span();
 
@@ -60,7 +60,7 @@ impl Fold<TsEnumDecl> for Analyzer<'_, '_> {
     }
 }
 
-impl Analyzer<'_, '_> {
+impl Analyzer<'_> {
     pub(super) fn expand_enum_variant<'a>(&'a self, ty: TypeRef<'a>) -> Result<TypeRef<'a>, Error> {
         match ty.normalize() {
             Type::EnumVariant(ref v) => {

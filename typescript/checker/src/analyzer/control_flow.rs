@@ -554,7 +554,7 @@ impl Analyzer<'_> {
     }
 }
 
-impl Fold<SwitchStmt> for Analyzer<'_, '_> {
+impl Fold<SwitchStmt> for Analyzer<'_> {
     fn fold(&mut self, stmt: SwitchStmt) -> SwitchStmt {
         let stmt = stmt.fold_children(self);
 
@@ -642,7 +642,7 @@ impl Fold<SwitchStmt> for Analyzer<'_, '_> {
     }
 }
 
-impl Fold<CondExpr> for Analyzer<'_, '_> {
+impl Fold<CondExpr> for Analyzer<'_> {
     fn fold(&mut self, e: CondExpr) -> CondExpr {
         let CondExpr { alt, cons, .. } = e;
 

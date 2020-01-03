@@ -4,8 +4,8 @@ use fxhash::FxHashMap;
 pub(crate) struct Scope<'a> {
     parent: Option<&'a Scope<'a>>,
     kind: ScopeKind,
-    vars: FxHashMap<JsWord, Type<'static>>,
-    types: FxHashMap<JsWord, Type<'static>>,
+    pub(super) vars: FxHashMap<JsWord, Type<'static>>,
+    pub(super) types: FxHashMap<JsWord, Type<'static>>,
     facts: CondFacts,
 }
 

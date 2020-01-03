@@ -85,7 +85,7 @@ impl Analyzer<'_> {
     }
 }
 
-impl Fold<ExportDecl> for Analyzer<'_, '_> {
+impl Fold<ExportDecl> for Analyzer<'_> {
     fn fold(&mut self, export: ExportDecl) -> ExportDecl {
         let export = export.fold_children(self);
 
@@ -133,7 +133,7 @@ impl Fold<ExportDecl> for Analyzer<'_, '_> {
     }
 }
 
-impl Fold<ExportDefaultDecl> for Analyzer<'_, '_> {
+impl Fold<ExportDefaultDecl> for Analyzer<'_> {
     fn fold(&mut self, export: ExportDefaultDecl) -> ExportDefaultDecl {
         let export = export.fold_children(self);
 
@@ -164,7 +164,7 @@ impl Fold<ExportDefaultDecl> for Analyzer<'_, '_> {
     }
 }
 
-impl Analyzer<'_, '_> {
+impl Analyzer<'_> {
     /// `scope.regsiter_type` should be called before calling this method.
     fn export(&mut self, span: Span, name: JsWord, from: Option<JsWord>) {
         let from = from.unwrap_or_else(|| name.clone());

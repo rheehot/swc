@@ -46,7 +46,6 @@ pub(crate) struct Scope<'a> {
     ///
     /// TODO: Use vector (for performance)
     pub(super) vars: FxHashMap<JsWord, VarInfo>,
-    pub(super) facts: CondFacts,
     parent: Option<&'a Scope<'a>>,
 }
 

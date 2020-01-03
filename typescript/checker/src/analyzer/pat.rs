@@ -7,7 +7,7 @@ use crate::{
 use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
-impl Fold<RestPat> for Analyzer<'_, '_> {
+impl Fold<RestPat> for Analyzer<'_> {
     fn fold(&mut self, p: RestPat) -> RestPat {
         let p = p.fold_children(self);
 
@@ -45,7 +45,7 @@ impl Fold<RestPat> for Analyzer<'_, '_> {
     }
 }
 
-impl Fold<AssignPat> for Analyzer<'_, '_> {
+impl Fold<AssignPat> for Analyzer<'_> {
     fn fold(&mut self, p: AssignPat) -> AssignPat {
         let p = p.fold_children(self);
 
