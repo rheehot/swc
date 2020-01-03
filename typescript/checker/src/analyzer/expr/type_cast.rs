@@ -5,7 +5,7 @@ use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
 impl Analyzer<'_> {
-    pub(super) fn validate_ts_type_assertion(&mut self, e: &TsAsExpr) -> ValidationResult {
+    pub(super) fn validate_ts_type_assertion(&mut self, e: &TsTypeAssertion) -> ValidationResult {
         let orig_ty = self.validate_expr(&e.expr)?;
 
         self.validate_type_cast(e.span, &orig_ty, &e.type_ann)

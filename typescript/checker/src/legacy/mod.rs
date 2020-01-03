@@ -32,7 +32,6 @@ mod class;
 mod control_flow;
 mod enums;
 pub mod export;
-mod expr;
 mod generic;
 mod module_item;
 mod name;

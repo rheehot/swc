@@ -1,4 +1,4 @@
-use super::{expr::TypeOfMode, ty::Type, Analyzer, ScopeKind};
+use super::{ty::Type, Analyzer, ScopeKind};
 use crate::{
     errors::Error,
     legacy::{ComputedPropMode, LOG_VISIT},

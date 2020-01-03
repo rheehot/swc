@@ -6,6 +6,7 @@ use crate::{
     util::{EqIgnoreSpan, IntoCow},
     ValidationResult,
 };
+use swc_atoms::js_word;
 use swc_common::Spanned;
 use swc_ecma_ast::*;
 
@@ -49,6 +50,330 @@ impl Analyzer<'_> {
             Expr::Call(e) => self.validate_call_expr(e),
             Expr::TsAs(e) => self.validate_ts_as_expr(e),
             Expr::TsTypeAssertion(e) => self.validate_ts_type_assertion(e),
+            //
+            Expr::This(ThisExpr { span }) => {
+                if let Some(ref ty) = self.scope.this() {
+                    return Ok(ty.static_cast());
+                }
+                return Ok(Cow::Owned(Type::from(TsThisType { span })));
+            }
+
+            Expr::Ident(ref i) => self.type_of_ident(i, type_mode),
+
+            Expr::Array(ArrayLit { ref elems, .. }) => {
+                let mut types: Vec<TypeRef> = Vec::with_capacity(elems.len());
+
+                for elem in elems {
+                    let span = elem.span();
+                    match elem {
+                        Some(ExprOrSpread {
+                            spread: None,
+                            ref expr,
+                        }) => {
+                            let ty = self.type_of(expr)?;
+                            types.push(ty)
+                        }
+                        Some(ExprOrSpread {
+                            spread: Some(..), ..
+                        }) => unimplemented!("type of array spread"),
+                        None => {
+                            let ty = Type::undefined(span);
+                            types.push(ty.into_cow())
+                        }
+                    }
+                }
+
+                return Ok(Type::Tuple(Tuple { span, types }).into_cow());
+            }
+
+            Expr::Lit(Lit::Bool(v)) => {
+                return Ok(Type::Lit(TsLitType {
+                    span: v.span,
+                    lit: TsLit::Bool(v),
+                })
+                .into_cow());
+            }
+            Expr::Lit(Lit::Str(ref v)) => {
+                return Ok(Type::Lit(TsLitType {
+                    span: v.span,
+                    lit: TsLit::Str(v.clone()),
+                })
+                .into_cow());
+            }
+            Expr::Lit(Lit::Num(v)) => {
+                return Ok(Type::Lit(TsLitType {
+                    span: v.span,
+                    lit: TsLit::Number(v),
+                })
+                .into_cow());
+            }
+            Expr::Lit(Lit::Null(Null { span })) => {
+                return Ok(Type::Keyword(TsKeywordType {
+                    span,
+                    kind: TsKeywordTypeKind::TsNullKeyword,
+                })
+                .into_cow());
+            }
+            Expr::Lit(Lit::Regex(..)) => {
+                return Ok(TsType::TsTypeRef(TsTypeRef {
+                    span,
+                    type_name: TsEntityName::Ident(Ident {
+                        span,
+                        sym: js_word!("RegExp"),
+                        optional: false,
+                        type_ann: None,
+                    }),
+                    type_params: None,
+                })
+                .into_cow());
+            }
+
+            Expr::Paren(ParenExpr { ref expr, .. }) => return self.type_of(expr),
+
+            Expr::Tpl(ref t) => {
+                // Check if tpl is constant. If it is, it's type is string literal.
+                if t.exprs.is_empty() {
+                    return Ok(Type::Lit(TsLitType {
+                        span: t.span(),
+                        lit: TsLit::Str(
+                            t.quasis[0]
+                                .cooked
+                                .clone()
+                                .unwrap_or_else(|| t.quasis[0].raw.clone()),
+                        ),
+                    })
+                    .into_cow());
+                }
+
+                return Ok(Type::Keyword(TsKeywordType {
+                    span,
+                    kind: TsKeywordTypeKind::TsStringKeyword,
+                })
+                .into_cow());
+            }
+
+            Expr::Bin(ref expr) => self.type_of_bin_expr(&expr),
+
+            Expr::TsAs(TsAsExpr { ref type_ann, .. }) => {
+                return Ok(instantiate_class(type_ann.clone().into_cow()));
+            }
+            Expr::TsTypeCast(TsTypeCastExpr { ref type_ann, .. }) => {
+                return Ok(instantiate_class(type_ann.type_ann.clone().into_cow()));
+            }
+
+            Expr::TsNonNull(TsNonNullExpr { ref expr, .. }) => {
+                return self.type_of(expr).map(|ty| {
+                    // TODO: Optimize
+
+                    ty.remove_falsy()
+                });
+            }
+
+            Expr::Object(ObjectLit { span, ref props }) => {
+                let mut members = Vec::with_capacity(props.len());
+                let mut special_type = None;
+
+                for prop in props.iter() {
+                    match *prop {
+                        PropOrSpread::Prop(ref prop) => {
+                            members.push(self.type_of_prop(&prop)?);
+                        }
+                        PropOrSpread::Spread(SpreadElement { ref expr, .. }) => {
+                            match self.type_of(&expr)?.into_owned() {
+                                Type::TypeLit(TypeLit {
+                                    members: spread_members,
+                                    ..
+                                }) => {
+                                    members.extend(spread_members);
+                                }
+
+                                // Use last type on ...any or ...unknown
+                                ty
+                                @
+                                Type::Keyword(TsKeywordType {
+                                    kind: TsKeywordTypeKind::TsUnknownKeyword,
+                                    ..
+                                })
+                                | ty
+                                @
+                                Type::Keyword(TsKeywordType {
+                                    kind: TsKeywordTypeKind::TsAnyKeyword,
+                                    ..
+                                }) => special_type = Some(ty),
+
+                                ty => unimplemented!("spread with non-type-lit: {:#?}", ty),
+                            }
+                        }
+                    }
+                }
+
+                if let Some(ty) = special_type {
+                    return Ok(ty.into_cow());
+                }
+
+                return Ok(Type::TypeLit(TypeLit { span, members }).into_cow());
+            }
+
+            // https://github.com/Microsoft/TypeScript/issues/26959
+            Expr::Yield(..) => return Ok(Type::any(span).into_cow()),
+
+            Expr::Update(..) => {
+                return Ok(Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsNumberKeyword,
+                    span,
+                })
+                .into_cow());
+            }
+
+            Expr::Cond(CondExpr {
+                ref test,
+                ref cons,
+                ref alt,
+                ..
+            }) => {
+                match **test {
+                    Expr::Ident(ref i) => {
+                        // Check `declaring` before checking variables.
+                        if self.declaring.contains(&i.sym) {
+                            if self.allow_ref_declaring {
+                                return Ok(Type::any(span).owned());
+                            } else {
+                                return Err(Error::ReferencedInInit { span });
+                            }
+                        }
+                    }
+                    _ => {}
+                }
+
+                let cons_ty = self.type_of(cons)?.into_owned();
+                let alt_ty = self.type_of(alt)?.into_owned();
+
+                return Ok(Type::union(once(cons_ty).chain(once(alt_ty))).into_cow());
+            }
+
+            Expr::New(NewExpr {
+                ref callee,
+                ref type_args,
+                ref args,
+                ..
+            }) => {
+                let callee_type = self.extract_call_new_expr_member(
+                    callee,
+                    ExtractKind::New,
+                    args.as_ref().map(|v| &**v).unwrap_or_else(|| &[]),
+                    type_args.as_ref(),
+                )?;
+                return Ok(callee_type);
+            }
+
+            Expr::Call(CallExpr {
+                callee: ExprOrSuper::Expr(ref callee),
+                ref args,
+                ref type_args,
+                ..
+            }) => {
+                let ret_ty = self
+                    .extract_call_new_expr_member(
+                        callee,
+                        ExtractKind::Call,
+                        args,
+                        type_args.as_ref(),
+                    )
+                    .map(|v| v)?;
+
+                return Ok(ret_ty);
+            }
+
+            // super() returns any
+            Expr::Call(CallExpr {
+                callee: ExprOrSuper::Super(..),
+                ..
+            }) => return Ok(Type::any(span).into_cow()),
+
+            Expr::Seq(SeqExpr { ref exprs, .. }) => {
+                assert!(exprs.len() >= 1);
+
+                let mut is_any = false;
+                for e in exprs.iter() {
+                    match **e {
+                        Expr::Ident(ref i) => {
+                            if self.declaring.contains(&i.sym) {
+                                is_any = true;
+                            }
+                        }
+                        _ => {}
+                    }
+                    match self.type_of(e) {
+                        Ok(..) => {}
+                        Err(Error::ReferencedInInit { .. }) => {
+                            is_any = true;
+                        }
+                        Err(..) => {}
+                    }
+                }
+                if is_any {
+                    return Ok(Type::any(span).owned());
+                }
+
+                return self.type_of(&exprs.last().unwrap());
+            }
+
+            Expr::Await(AwaitExpr { .. }) => unimplemented!("typeof(AwaitExpr)"),
+
+            Expr::Class(ClassExpr { ref class, .. }) => {
+                return Ok(self.type_of_class(None, class)?.owned());
+            }
+
+            Expr::Arrow(ref e) => return Ok(self.type_of_arrow_fn(e)?.owned()),
+
+            Expr::Fn(FnExpr { ref function, .. }) => {
+                return Ok(self.type_of_fn(&function)?.owned());
+            }
+
+            Expr::Member(ref expr) => {
+                return self.type_of_member_expr(expr, type_mode);
+            }
+
+            Expr::MetaProp(..) => unimplemented!("typeof(MetaProp)"),
+
+            Expr::Assign(AssignExpr {
+                left: PatOrExpr::Pat(box Pat::Ident(ref i)),
+                ref right,
+                ..
+            }) => {
+                if self.declaring.contains(&i.sym) {
+                    return Ok(Type::any(span).owned());
+                }
+
+                return self.type_of(right);
+            }
+
+            Expr::Assign(AssignExpr {
+                left: PatOrExpr::Expr(ref left),
+                ref right,
+                ..
+            }) => {
+                match **left {
+                    Expr::Ident(ref i) => {
+                        if self.declaring.contains(&i.sym) {
+                            return Ok(Type::any(span).owned());
+                        }
+                    }
+                    _ => {}
+                }
+
+                return self.type_of(right);
+            }
+
+            Expr::Assign(AssignExpr { ref right, .. }) => return self.type_of(right),
+
+            Expr::TsTypeAssertion(TsTypeAssertion { ref type_ann, .. }) => {
+                return Ok(Type::from(type_ann.clone()).owned());
+            }
+
+            Expr::Invalid(ref i) => return Ok(Type::any(i.span()).owned()),
+
+            _ => unimplemented!("typeof ({:#?})", e),
         }
     }
 

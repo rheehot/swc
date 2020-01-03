@@ -1,11 +1,9 @@
 use super::{
-    expr::TypeOfMode,
     scope::{Scope, ScopeKind, VarInfo},
     type_facts::TypeFacts,
     Analyzer, Name,
 };
 use crate::{
-    analyzer::util::Comparator,
     errors::Error,
     ty::{Intersection, Tuple, Type, TypeRef, TypeRefExt, Union},
     util::{EqIgnoreNameAndSpan, IntoCow},

@@ -1,6 +1,6 @@
 use crate::{
     errors::Error,
-    legacy::{expr::TypeOfMode, Analyzer},
+    legacy::Analyzer,
     swc_common::Spanned,
     ty::{Array, Type},
 };
