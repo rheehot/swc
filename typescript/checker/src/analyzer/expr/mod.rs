@@ -6,6 +6,7 @@ use crate::{
     util::{EqIgnoreSpan, IntoCow, RemoveTypes},
     ValidationResult,
 };
+use std::iter::once;
 use swc_atoms::js_word;
 use swc_common::Spanned;
 use swc_ecma_ast::*;
@@ -66,7 +67,7 @@ impl Analyzer<'_> {
                 return Ok(Type::from(TsThisType { span }).owned());
             }
 
-            Expr::Ident(ref i) => self.type_of_ident(i, type_mode),
+            Expr::Ident(ref i) => self.type_of_ident(i, mode),
 
             Expr::Array(ArrayLit { ref elems, .. }) => {
                 let mut types: Vec<TypeRef> = Vec::with_capacity(elems.len());
@@ -247,7 +248,7 @@ impl Analyzer<'_> {
                 let cons_ty = self.type_of(cons)?.into_owned();
                 let alt_ty = self.type_of(alt)?.into_owned();
 
-                return Ok(Type::union(once(cons_ty).chain(once(alt_ty))).into_cow());
+                return Ok(Type::union(vec![cons_ty, alt_ty]).into_cow());
             }
 
             Expr::Seq(e) => self.validate_seq_expr(e),
@@ -265,7 +266,7 @@ impl Analyzer<'_> {
             }
 
             Expr::Member(ref expr) => {
-                return self.type_of_member_expr(expr, type_mode);
+                return self.type_of_member_expr(expr, mode);
             }
 
             Expr::MetaProp(..) => unimplemented!("typeof(MetaProp)"),
@@ -398,5 +399,14 @@ fn instantiate_class(ty: TypeRef) -> TypeRef {
         })
         .owned(),
         _ => ty,
+    }
+}
+
+fn prop_name_to_expr(key: &PropName) -> Box<Expr> {
+    match *key {
+        PropName::Computed(ref p) => p.expr.clone(),
+        PropName::Ident(ref ident) => box Expr::Ident(ident.clone()),
+        PropName::Str(ref s) => box Expr::Lit(Lit::Str(Str { ..s.clone() })),
+        PropName::Num(ref s) => box Expr::Lit(Lit::Num(Number { ..s.clone() })),
     }
 }

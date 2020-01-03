@@ -34,17 +34,14 @@ impl Analyzer<'_> {
     }
 
     fn validate_for_loop(&mut self, span: Span, lhs: &VarDeclOrPat, rhs: &Expr) {
-        let rty = match self.type_of(rhs).and_then(|ty| self.expand_type(span, ty)) {
+        let rty = match self.validate_expr(rhs) {
             Ok(ty) => ty,
             Err(..) => return,
         };
 
         match lhs {
             VarDeclOrPat::Pat(Pat::Expr(ref l)) => {
-                let lty = match self
-                    .type_of_expr(&**l, TypeOfMode::LValue, None)
-                    .and_then(|ty| self.expand_type(span, ty))
-                {
+                let lty = match self.validate_expr_with_extra(&**l, TypeOfMode::LValue, None) {
                     Ok(ty) => ty,
                     Err(..) => return,
                 };
@@ -69,15 +66,15 @@ impl Analyzer<'_> {
     pub(super) fn validate_for_of_stmt(&mut self, s: &ForOfStmt) -> Result<(), Error> {
         // TODO: Visit children
 
-        self.check_lhs_of_for_loop(&n.left);
-        if match n.left {
+        self.check_lhs_of_for_loop(&s.left);
+        if match s.left {
             VarDeclOrPat::VarDecl(VarDecl { ref decls, .. }) => !decls.is_empty(),
             _ => true,
         } {
-            self.check_rhs_of_for_loop(&n.right);
+            self.check_rhs_of_for_loop(&s.right);
         }
 
-        self.validate_for_loop(n.span, &n.left, &n.right);
+        self.validate_for_loop(s.span, &s.left, &s.right);
 
         Ok(())
     }
@@ -85,15 +82,15 @@ impl Analyzer<'_> {
     pub(super) fn validate_for_in_stmt(&mut self, s: &ForInStmt) -> Result<(), Error> {
         // TODO: Visit children
 
-        self.check_lhs_of_for_loop(&n.left);
-        if match n.left {
+        self.check_lhs_of_for_loop(&s.left);
+        if match s.left {
             VarDeclOrPat::VarDecl(VarDecl { ref decls, .. }) => !decls.is_empty(),
             _ => true,
         } {
-            self.check_rhs_of_for_loop(&n.right);
+            self.check_rhs_of_for_loop(&s.right);
         }
 
-        self.validate_for_loop(n.span, &n.left, &n.right);
+        self.validate_for_loop(s.span, &s.left, &s.right);
 
         Ok(())
     }

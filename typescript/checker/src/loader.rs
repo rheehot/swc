@@ -1,5 +1,5 @@
 use super::Checker;
-use crate::{errors::Error, resolver::Resolve, ty::Type};
+use crate::{errors::Error, resolver::Resolve, ty::Type, ImportInfo, Specifier};
 use fxhash::FxHashMap;
 use std::{path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;

@@ -2,7 +2,7 @@ use self::{
     control_flow::CondFacts,
     scope::{Scope, ScopeKind},
 };
-use crate::{errors::Error, ty::TypeRef, Exports};
+use crate::{errors::Error, ty::TypeRef, Exports, Rule};
 use fxhash::FxHashMap;
 use std::sync::Arc;
 use swc_atoms::JsWord;
@@ -29,6 +29,7 @@ mod util;
 pub struct Analyzer<'a> {
     pub info: Info,
 
+    rule: Rule,
     scope: Scope<'a>,
 }
 
@@ -43,5 +44,6 @@ impl Analyzer<'_> {
     where
         F: FnOnce(&mut Self) -> Ret,
     {
+        let child_scope = Scope::new(&self.scope, kind, facts);
     }
 }

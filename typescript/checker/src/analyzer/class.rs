@@ -4,7 +4,7 @@ use super::{
     util::{is_prop_name_eq, VarVisitor},
     Analyzer,
 };
-use crate::{errors::Error, ty, ty::Type};
+use crate::{errors::Error, swc_common::VisitWith, ty, ty::Type};
 use std::mem::replace;
 use swc_atoms::js_word;
 use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, DUMMY_SP};
@@ -434,8 +434,6 @@ impl Analyzer<'_> {
 ///  - TS2515: Validate that class implements all methods.
 impl Fold<Class> for Analyzer<'_> {
     fn fold(&mut self, c: Class) -> Class {
-        log_fold!(c);
-
         let c = c.fold_children(self);
 
         self.resolve_parent_interfaces(&c.implements);
@@ -496,8 +494,6 @@ impl Fold<Class> for Analyzer<'_> {
 
 impl Fold<ClassExpr> for Analyzer<'_> {
     fn fold(&mut self, c: ClassExpr) -> ClassExpr {
-        log_fold!(c);
-
         let ty = match self.validate_type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {
             Ok(ty) => ty,
             Err(err) => {
@@ -544,8 +540,6 @@ impl Fold<ClassExpr> for Analyzer<'_> {
 
 impl Fold<ClassDecl> for Analyzer<'_> {
     fn fold(&mut self, c: ClassDecl) -> ClassDecl {
-        log_fold!(c);
-
         let c: ClassDecl = c.fold_children(self);
 
         self.validate_inherited_members(Some(&c.ident), &c.class, c.declare);

@@ -146,11 +146,8 @@ impl Fold<GetterProp> for Analyzer<'_> {
     }
 }
 
-impl Fold<TsMethodSignature> for Analyzer<'_> {
-    fn fold(&mut self, node: TsMethodSignature) -> TsMethodSignature {
-        if LOG_VISIT {
-            println!("Fold<TsMethodSignature>");
-        }
+impl Analyzer<'_> {
+    fn validate_ts_method_signature(&mut self, node: TsMethodSignature) -> TsMethodSignature {
         let node = node.fold_children(self);
 
         if node.computed {
@@ -159,10 +156,11 @@ impl Fold<TsMethodSignature> for Analyzer<'_> {
 
         node
     }
-}
 
-impl Fold<TsPropertySignature> for Analyzer<'_> {
-    fn fold(&mut self, node: TsPropertySignature) -> TsPropertySignature {
+    fn validate_ts_property_signature(
+        &mut self,
+        node: TsPropertySignature,
+    ) -> Result<TsPropertySignature, Error> {
         let node = node.fold_children(self);
 
         if node.computed {

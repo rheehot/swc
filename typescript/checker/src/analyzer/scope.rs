@@ -1,7 +1,9 @@
 use crate::{analyzer::control_flow::CondFacts, ty::Type};
 use fxhash::FxHashMap;
+use swc_atoms::JsWord;
 use swc_ecma_ast::VarDeclKind;
 
+#[derive(Debug)]
 pub(crate) struct Scope<'a> {
     parent: Option<&'a Scope<'a>>,
     kind: ScopeKind,

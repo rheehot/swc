@@ -4,6 +4,7 @@ use crate::{
     loader::Load,
     ty::{self, Class, ClassMember, Method, Module, Static},
     util::pat_to_ts_fn_param,
+    ImportInfo,
 };
 use chashmap::CHashMap;
 use fxhash::FxHashMap;
