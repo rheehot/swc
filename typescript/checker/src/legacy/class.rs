@@ -1,7 +1,7 @@
 use super::{scope::ScopeKind, Analyzer};
 use crate::{
-    legacy::{expr::TypeOfMode, util::is_prop_name_eq, ComputedPropMode, VarVisitor, LOG_VISIT},
     errors::Error,
+    legacy::{expr::TypeOfMode, util::is_prop_name_eq, ComputedPropMode, VarVisitor, LOG_VISIT},
     ty::{self, Type},
 };
 use std::mem;

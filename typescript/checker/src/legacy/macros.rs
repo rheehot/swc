@@ -15,21 +15,9 @@ pub fn type_name<T>(_: &T) -> &'static str {
 
 macro_rules! log_fold {
     ($e:expr) => {{
-        let ty_name = crate::analyzer::macros::type_name(&$e);
+        let ty_name = crate::legacy::macros::type_name(&$e);
         if crate::analyzer::LOG_VISIT {
             println!("Fold<{}>", ty_name);
-        }
-    }};
-}
-
-macro_rules! store {
-    ($a:expr, $e:expr) => {{
-        match $e {
-            Ok(v) => Some(v),
-            Err(err) => {
-                $a.info.errors.push(err);
-                None
-            }
         }
     }};
 }

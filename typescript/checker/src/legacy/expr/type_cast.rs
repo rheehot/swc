@@ -1,6 +1,6 @@
 use crate::{
-    legacy::{instantiate_class, Analyzer},
     errors::Error,
+    legacy::{instantiate_class, Analyzer},
     ty::Type,
     util::EqIgnoreNameAndSpan,
 };

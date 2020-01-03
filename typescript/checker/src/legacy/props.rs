@@ -1,7 +1,7 @@
 use super::{expr::TypeOfMode, ty::Type, Analyzer, ScopeKind};
 use crate::{
-    legacy::{ComputedPropMode, LOG_VISIT},
     errors::Error,
+    legacy::{ComputedPropMode, LOG_VISIT},
     ty::TypeRefExt,
 };
 use swc_atoms::js_word;

@@ -1,4 +1,4 @@
-use crate::{legacy::Analyzer, errors::Error, ty::Type};
+use crate::{errors::Error, legacy::Analyzer, ty::Type};
 use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 

@@ -1,6 +1,6 @@
 use crate::{
-    legacy::{scope::ScopeKind, Analyzer},
     errors::Error,
+    legacy::{scope::ScopeKind, Analyzer},
 };
 use swc_common::{Fold, FoldWith};
 use swc_ecma_ast::*;

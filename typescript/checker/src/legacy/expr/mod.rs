@@ -1,12 +1,8 @@
-use super::{
-    control_flow::{Comparator, RemoveTypes},
-    export::pat_to_ts_fn_param,
-    Analyzer,
-};
+use super::{control_flow::RemoveTypes, export::pat_to_ts_fn_param, Analyzer};
 use crate::{
-    legacy::{instantiate_class, ValidationResult},
     builtin_types,
     errors::Error,
+    legacy::{instantiate_class, ValidationResult},
     ty::{
         self, Alias, Array, CallSignature, Class, ClassInstance, ClassMember, ConstructorSignature,
         EnumVariant, IndexSignature, Interface, Intersection, Method, MethodSignature, Module,
@@ -21,11 +17,9 @@ use swc_common::{util::iter::IteratorExt as _, Fold, FoldWith, Span, Spanned};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
-mod bin;
 mod call_new;
 mod type_cast;
 mod unary;
-mod update;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub(super) enum TypeOfMode {

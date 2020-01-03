@@ -1,6 +1,6 @@
 use crate::{
-    legacy::{export::pat_to_ts_fn_param, Analyzer, ImportInfo},
     errors::Error,
+    legacy::{export::pat_to_ts_fn_param, Analyzer, ImportInfo},
     loader::Load,
     ty::{self, Class, ClassMember, Method, Module, Static},
 };

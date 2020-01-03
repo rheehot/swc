@@ -1,7 +1,7 @@
 use super::Checker;
 use crate::{
-    legacy::{ImportInfo, Specifier},
     errors::Error,
+    legacy::{ImportInfo, Specifier},
     resolver::Resolve,
     ty::Type,
 };

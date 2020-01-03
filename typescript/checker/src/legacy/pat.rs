@@ -1,6 +1,6 @@
 use crate::{
-    legacy::{util::is_prop_name_eq, Analyzer},
     errors::Error,
+    legacy::{util::is_prop_name_eq, Analyzer},
     ty::{Array, Type},
     util::EqIgnoreNameAndSpan,
 };
