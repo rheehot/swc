@@ -1,9 +1,15 @@
 //! Handles new expressions and call expressions.
 
 use super::super::Analyzer;
-use crate::{builtin_types, errors::Error, ty::Type, ValidationResult};
+use crate::{
+    builtin_types,
+    errors::Error,
+    ty::{Method, Type, TypeElement, TypeRefExt},
+    util::IntoCow,
+    ValidationResult,
+};
 use swc_atoms::js_word;
-use swc_common::{Fold, FoldWith, Span};
+use swc_common::{Fold, FoldWith, Span, Spanned};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
@@ -32,6 +38,13 @@ impl Analyzer<'_> {
     }
 
     pub(super) fn validate_new_expr(&mut self, e: &NewExpr) -> ValidationResult {
+        let NewExpr {
+            span,
+            ref callee,
+            ref args,
+            ref type_args,
+        } = *e;
+
         // TODO: e.visit_children
 
         self.check_callee(e.span, &e.callee, e.type_args.as_ref());
@@ -59,6 +72,13 @@ impl Analyzer<'_> {
     }
 
     pub(super) fn validate_call_expr(&mut self, e: &CallExpr) -> ValidationResult {
+        let CallExpr {
+            span,
+            ref callee,
+            ref args,
+            ref type_args,
+        } = *e;
+
         // TODO: validate children
 
         // Check arguments
@@ -78,7 +98,7 @@ impl Analyzer<'_> {
                 let callee_ty = self.type_of(&callee);
                 let callee_ty = match callee_ty {
                     Ok(v) => v,
-                    Err(_) => return e,
+                    Err(_) => return,
                 };
                 match *callee_ty.normalize() {
                     Type::Keyword(TsKeywordType {
