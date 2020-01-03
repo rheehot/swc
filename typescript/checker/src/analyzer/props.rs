@@ -1,5 +1,8 @@
-use super::Analyzer;
-use crate::{analyzer::scope::ScopeKind, errors::Error, ty::TypeRefExt};
+use super::{expr::TypeOfMode, scope::ScopeKind, Analyzer};
+use crate::{
+    errors::Error,
+    ty::{Type, TypeRefExt},
+};
 use swc_atoms::js_word;
 use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;

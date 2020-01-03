@@ -1,8 +1,15 @@
 use super::Analyzer;
-use crate::{analyzer::scope::ScopeKind, errors::Error, ty::Type};
+use crate::{
+    analyzer::{expr::TypeOfMode, scope::ScopeKind, util::is_prop_name_eq},
+    errors::Error,
+    ty,
+    ty::Type,
+};
 use std::mem::replace;
+use swc_atoms::js_word;
 use swc_common::{util::move_map::MoveMap, Span, Spanned};
 use swc_ecma_ast::*;
+use swc_ts_checker_macros::validator;
 
 impl Analyzer<'_> {
     fn validate_class_property(&mut self, p: &ClassProp) -> Result<(), Error> {
@@ -248,7 +255,7 @@ impl Analyzer<'_> {
 
                         if $body.is_none() {
                             if name.is_some() && !is_prop_name_eq(&name.unwrap(), &m.key) {
-                                for span in mem::replace(&mut spans, vec![]) {
+                                for span in replace(&mut spans, vec![]) {
                                     errors.push(Error::TS2391 { span });
                                 }
                             }
@@ -266,11 +273,11 @@ impl Analyzer<'_> {
                                     PropName::Ident(Ident::new(js_word!("constructor"), DUMMY_SP));
 
                                 if is_prop_name_eq(&name.unwrap(), &constructor_name) {
-                                    for span in mem::replace(&mut spans, vec![]) {
+                                    for span in replace(&mut spans, vec![]) {
                                         errors.push(Error::TS2391 { span });
                                     }
                                 } else if is_prop_name_eq(&m.key, &constructor_name) {
-                                    for span in mem::replace(&mut spans, vec![]) {
+                                    for span in replace(&mut spans, vec![]) {
                                         errors.push(Error::TS2389 { span });
                                     }
                                 } else {

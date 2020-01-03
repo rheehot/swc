@@ -1,6 +1,6 @@
-use super::{name::Name, Analyzer};
+use super::{name::Name, type_facts::TypeFacts, Analyzer};
 use crate::{
-    analyzer::{scope::ScopeKind, util::Comparator},
+    analyzer::{expr::TypeOfMode, scope::ScopeKind, util::Comparator},
     errors::Error,
     ty::Type,
 };
@@ -13,6 +13,7 @@ use std::{
     mem::replace,
     ops::{AddAssign, BitOr, Not},
 };
+use swc_common::Span;
 use swc_ecma_ast::*;
 
 /// Conditional facts

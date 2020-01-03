@@ -18,11 +18,6 @@ use swc_common::{
 };
 use swc_ecma_ast::*;
 
-/// If true, Fold<T> prints `Fold<T>` to stdout.
-const LOG_VISIT: bool = false;
-
-#[macro_use]
-mod macros;
 pub mod export;
 mod generic;
 mod scope;
@@ -199,8 +194,6 @@ where
 
 impl Fold<TsModuleDecl> for Analyzer<'_, '_> {
     fn fold(&mut self, decl: TsModuleDecl) -> TsModuleDecl {
-        log_fold!(decl);
-
         let span = decl.span;
 
         let mut new = Analyzer::new(
@@ -232,8 +225,6 @@ impl Fold<TsModuleDecl> for Analyzer<'_, '_> {
 
 impl Fold<TsInterfaceDecl> for Analyzer<'_, '_> {
     fn fold(&mut self, decl: TsInterfaceDecl) -> TsInterfaceDecl {
-        log_fold!(decl);
-
         let decl = decl.fold_children(self);
 
         self.scope
@@ -270,8 +261,6 @@ impl Analyzer<'_, '_> {
 
 impl Fold<TsTypeAliasDecl> for Analyzer<'_, '_> {
     fn fold(&mut self, decl: TsTypeAliasDecl) -> TsTypeAliasDecl {
-        log_fold!(decl);
-
         let ty: Type<'_> = decl.type_ann.clone().into();
 
         let ty = if decl.type_params.is_none() {

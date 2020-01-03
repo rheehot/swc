@@ -51,34 +51,6 @@ pub(crate) struct Scope<'a> {
 }
 
 impl<'a> Scope<'a> {
-    pub fn new(parent: &'a Scope<'a>, kind: ScopeKind, facts: CondFacts) -> Self {
-        Scope {
-            parent: Some(parent),
-            types: Default::default(),
-            this: None,
-            kind,
-            vars: Default::default(),
-            facts,
-            declaring_fn: None,
-            declaring_prop: Default::default(),
-        }
-    }
-
-    pub fn root() -> Self {
-        Scope {
-            parent: None,
-            types: Default::default(),
-            this: None,
-            kind: ScopeKind::Fn,
-            vars: Default::default(),
-            facts: Default::default(),
-            declaring_fn: None,
-            declaring_prop: Default::default(),
-        }
-    }
-}
-
-impl<'a> Scope<'a> {
     pub(super) fn find_declaring_fn(&self, name: &JsWord) -> bool {
         if let Some(ref d_fn) = self.declaring_fn {
             if *d_fn == *name {
