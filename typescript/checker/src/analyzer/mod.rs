@@ -7,6 +7,8 @@ use fxhash::FxHashMap;
 use std::sync::Arc;
 use swc_atoms::JsWord;
 
+#[macro_use]
+mod macros;
 mod assign;
 mod class;
 mod control_flow;

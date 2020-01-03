@@ -1,7 +1,7 @@
 use super::Analyzer;
 use crate::{
     errors::Error,
-    legacy::{ComputedPropMode, VarVisitor, LOG_VISIT},
+    legacy::{VarVisitor, LOG_VISIT},
     ty::{self, Type},
 };
 use std::mem;
