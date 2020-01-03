@@ -12,6 +12,8 @@ impl Analyzer<'_> {
             Stmt::With(s) => self.validate_with_stmt(s),
             Stmt::ForOf(s) => self.validate_for_of_stmt(s),
             Stmt::ForIn(s) => self.validate_for_in_stmt(s),
+            Stmt::If(s) => self.validate_if_stmt(s),
+            Stmt::Return(s) => self.validate_return_stmt(s),
         }
     }
 
@@ -37,8 +39,38 @@ impl Analyzer<'_> {
     fn validate_block_stmt(&mut self, s: &BlockStmt) -> Result<(), Error> {
         self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
             for stmt in &s.stmts {
-                analyzer.validate_stmt(stmt);
+                analyzer.validate_stmt(stmt)?;
             }
+
+            Ok(())
         })
+    }
+
+    fn validate_return_stmt(&mut self, s: &ReturnStmt) -> Result<(), Error> {
+        if let Some(ref arg) = s.arg {
+            self.validate_expr(&arg)?;
+        }
+
+        Ok(())
+    }
+
+    fn validate_if_stmt(&mut self, s: &IfStmt) -> Result<(), Error> {
+        let mut facts = Default::default();
+        match self.detect_facts(&stmt.test, &mut facts) {
+            Ok(()) => (),
+            Err(err) => {
+                self.info.errors.push(err);
+                return stmt;
+            }
+        };
+        let ends_with_ret = stmt.cons.ends_with_ret();
+        let stmt = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
+            stmt.fold_children(child)
+        });
+        if ends_with_ret {
+            self.scope.facts.extend(facts.false_facts);
+        }
+
+        stmt
     }
 }

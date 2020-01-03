@@ -1,4 +1,4 @@
-use super::{scope::ScopeKind, Analyzer};
+use super::Analyzer;
 use crate::{
     errors::Error,
     legacy::{util::is_prop_name_eq, ComputedPropMode, VarVisitor, LOG_VISIT},

@@ -607,39 +607,6 @@ impl Analyzer<'_, '_> {
     }
 }
 
-/// Modifies `self.inferred_return_types`
-impl Fold<ReturnStmt> for Analyzer<'_, '_> {
-    fn fold(&mut self, stmt: ReturnStmt) -> ReturnStmt {
-        let stmt = stmt.fold_children(self);
-
-        self.visit_return_arg(stmt.span, stmt.arg.as_ref().map(|v| &**v));
-
-        stmt
-    }
-}
-
-impl Fold<IfStmt> for Analyzer<'_, '_> {
-    fn fold(&mut self, stmt: IfStmt) -> IfStmt {
-        let mut facts = Default::default();
-        match self.detect_facts(&stmt.test, &mut facts) {
-            Ok(()) => (),
-            Err(err) => {
-                self.info.errors.push(err);
-                return stmt;
-            }
-        };
-        let ends_with_ret = stmt.cons.ends_with_ret();
-        let stmt = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
-            stmt.fold_children(child)
-        });
-        if ends_with_ret {
-            self.scope.facts.extend(facts.false_facts);
-        }
-
-        stmt
-    }
-}
-
 impl Fold<SwitchStmt> for Analyzer<'_, '_> {
     fn fold(&mut self, stmt: SwitchStmt) -> SwitchStmt {
         let stmt = stmt.fold_children(self);
