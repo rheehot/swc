@@ -2,7 +2,7 @@ use super::Analyzer;
 use crate::{
     analyzer::util::{Comparator, ResultExt},
     errors::Error,
-    ty::{Type, TypeParamInstantiation, TypeRef},
+    ty::{ClassInstance, Tuple, Type, TypeParamInstantiation, TypeRef},
     util::{EqIgnoreSpan, IntoCow},
     ValidationResult,
 };
@@ -78,5 +78,36 @@ impl Analyzer<'_> {
             span,
         })
         .into_cow())
+    }
+}
+
+fn instantiate_class(ty: TypeRef) -> TypeRef {
+    let span = ty.span();
+
+    match *ty.normalize() {
+        Type::Tuple(Tuple { ref types, span }) => Type::Tuple(Tuple {
+            span,
+            types: types
+                .iter()
+                .map(|ty| {
+                    // TODO: Remove clone
+                    instantiate_class(ty.clone())
+                })
+                .collect(),
+        })
+        .owned(),
+
+        Type::Class(ref cls) => Type::ClassInstance(ClassInstance {
+            // TODO
+            span,
+
+            // TODO; Remove clone
+            cls: cls.clone(),
+
+            // TODO
+            type_args: None,
+        })
+        .owned(),
+        _ => ty,
     }
 }

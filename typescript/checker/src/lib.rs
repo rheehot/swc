@@ -12,6 +12,7 @@
 #[macro_use]
 extern crate swc_common;
 
+pub use self::builtin_types::Lib;
 use self::{analyzer::Info, errors::Error, resolver::Resolver};
 use crate::ty::TypeRef;
 use chashmap::CHashMap;
@@ -35,7 +36,7 @@ mod util;
 pub type ModuleInfo = Arc<(Module, Info)>;
 
 /// Note: All methods named `validate_*` return [Err] iff it's not recoverable.
-pub type ValidationResult = Result<TypeRef<'static>, Erorr>;
+pub type ValidationResult = Result<TypeRef<'static>, Error>;
 
 #[derive(Debug)]
 pub struct Config {

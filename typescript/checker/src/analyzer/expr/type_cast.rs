@@ -1,16 +1,20 @@
-use super::super::Analyzer;
+use super::{super::Analyzer, instantiate_class};
+use crate::{errors::Error, ty::Type, util::EqIgnoreNameAndSpan, ValidationResult};
+use swc_common::Span;
+use swc_ecma_ast::*;
+use swc_ts_checker_macros::validator;
 
 impl Analyzer<'_> {
     pub(super) fn validate_ts_type_assertion(&mut self, e: &TsAsExpr) -> ValidationResult {
-        let expr = expr.fold_children(self);
+        let orig_ty = self.validate_expr(&e.expr)?;
 
-        self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann);
+        self.validate_type_cast(e.span, &orig_ty, &e.type_ann)
     }
 
     pub(super) fn validate_ts_as_expr(&mut self, e: &TsAsExpr) -> ValidationResult {
-        let expr = expr.fold_children(self);
+        let orig_ty = self.validate_expr(&e.expr)?;
 
-        self.validate_type_cast(expr.span, &expr.expr, &expr.type_ann);
+        self.validate_type_cast(e.span, &orig_ty, &e.type_ann)
     }
 
     /// ```ts
@@ -26,16 +30,14 @@ impl Analyzer<'_> {
     /// ```
     ///
     /// results in error.
-    #[validator]
-    fn validate_type_cast(&mut self, span: Span, orig: &Expr, to: &TsType) {
-        let orig_ty = self.type_of(orig)?;
+    fn validate_type_cast(&mut self, span: Span, orig_ty: &Type, to: &TsType) -> ValidationResult {
         let orig_ty = self.expand_type(span, orig_ty)?;
 
         let casted_ty = Type::from(to.clone());
-        let casted_ty = self.expand_type(span, Cow::Owned(casted_ty))?;
+        let casted_ty = self.expand_type(span, casted_ty.owned())?;
         let casted_ty = instantiate_class(casted_ty);
 
-        self.validate_type_cast_inner(span, &orig_ty, &casted_ty)?;
+        self.validate_type_cast_inner(span, &orig_ty, &casted_ty)
     }
 
     fn validate_type_cast_inner(
@@ -43,7 +45,7 @@ impl Analyzer<'_> {
         span: Span,
         orig_ty: &Type,
         casted_ty: &Type,
-    ) -> Result<(), Error> {
+    ) -> ValidationResult {
         match *orig_ty.normalize() {
             Type::Union(ref rt) => {
                 let castable = rt

@@ -1170,35 +1170,6 @@ impl Analyzer<'_, '_> {
     }
 }
 
-fn instantiate_class(ty: TypeRef) -> TypeRef {
-    let span = ty.span();
-
-    match *ty.normalize() {
-        Type::Tuple(Tuple { ref types, span }) => Cow::Owned(Type::Tuple(Tuple {
-            span,
-            types: types
-                .iter()
-                .map(|ty| {
-                    // TODO: Remove clone
-                    instantiate_class(ty.clone())
-                })
-                .collect(),
-        })),
-
-        Type::Class(ref cls) => Cow::Owned(Type::ClassInstance(ClassInstance {
-            // TODO
-            span,
-
-            // TODO; Remove clone
-            cls: cls.clone(),
-
-            // TODO
-            type_args: None,
-        })),
-        _ => ty,
-    }
-}
-
 /// Handles
 ///
 /// ```ts
