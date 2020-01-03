@@ -28,7 +28,6 @@ mod control_flow;
 mod enums;
 pub mod export;
 mod generic;
-mod module_item;
 mod pat;
 mod props;
 mod scope;
