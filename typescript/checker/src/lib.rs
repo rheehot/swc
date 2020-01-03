@@ -14,7 +14,7 @@ extern crate swc_common;
 
 pub use self::builtin_types::Lib;
 use self::{analyzer::Info, errors::Error, resolver::Resolver};
-use crate::ty::TypeRef;
+use crate::{analyzer::Analyzer, swc_common::VisitWith, ty::TypeRef};
 use chashmap::CHashMap;
 use std::{path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
@@ -48,9 +48,6 @@ pub mod loader;
 pub mod resolver;
 pub mod ty;
 mod util;
-
-/// Module with information.
-pub type ModuleInfo = Arc<(Module, Info)>;
 
 pub type ValidationResult = Result<TypeRef<'static>, Error>;
 
@@ -107,7 +104,7 @@ pub struct Checker<'a> {
     ts_config: TsConfig,
     target: JscTarget,
     /// Cache
-    modules: Arc<CHashMap<PathBuf, ModuleInfo>>,
+    modules: Arc<CHashMap<PathBuf, (Module, Info)>>,
     resolver: Resolver,
     current: Arc<CHashMap<PathBuf, ()>>,
     libs: Vec<Lib>,
@@ -184,7 +181,7 @@ impl Checker<'_> {
         })
     }
 
-    fn load_module(&self, path: PathBuf) -> ModuleInfo {
+    fn load_module(&self, path: PathBuf) -> (Module, Info) {
         let cached = self.modules.get(&path);
 
         if let Some(cached) = cached {
@@ -225,8 +222,12 @@ impl Checker<'_> {
                     }
                 })
         });
-        let info = self.analyze_module(Arc::new(path.clone()), &module);
-        let res = Arc::new((module, info));
+        let mut a = Analyzer::root(&self.libs, self.rule);
+        module.visit_with(&mut a);
+
+        let info = a.info;
+
+        let res = (module, info);
         self.modules.insert(path.clone(), res.clone());
         self.current.remove(&path);
 

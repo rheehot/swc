@@ -12,6 +12,7 @@ use smallvec::SmallVec;
 use std::sync::Arc;
 use swc_atoms::JsWord;
 use swc_common::Span;
+use swc_common::{SourceMap, Span};
 use swc_ts_builtin_types::Lib;
 
 mod assign;
@@ -31,7 +32,7 @@ mod util;
 
 /// Note: All methods named `validate_*` return [Err] iff it's not recoverable.
 #[derive(Debug)]
-pub struct Analyzer<'a> {
+pub(crate) struct Analyzer<'a> {
     pub info: Info,
     resolved_imports: FxHashMap<JsWord, Arc<Type<'static>>>,
     errored_imports: FxHashSet<JsWord>,
@@ -40,10 +41,11 @@ pub struct Analyzer<'a> {
     declaring: SmallVec<[JsWord; 8]>,
 
     rule: Rule,
+    libs: &'a [Lib],
     scope: Scope<'a>,
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Info {
     pub errors: Vec<Error>,
     pub exports: Exports<FxHashMap<JsWord, Arc<TypeRef<'static>>>>,
@@ -85,9 +87,26 @@ impl<'a> Analyzer<'a> {
     }
 
     fn with_child<F, Ret>(&mut self, kind: ScopeKind, facts: CondFacts, op: F) -> Ret
+    pub(super) fn with_child<F, Ret>(&mut self, kind: ScopeKind, facts: CondFacts, op: F) -> Ret
     where
-        F: FnOnce(&mut Self) -> Ret,
+        F: for<'any> FnOnce(&mut Analyzer<'any>) -> Ret,
     {
         let child_scope = Scope::new(&self.scope, kind, facts);
+        let (ret, info) = {
+            let mut child = self.new(child_scope);
+
+            let ret = op(&mut child);
+
+            (ret, child.info)
+        };
+
+        self.info.errors.extend(info.errors);
+        assert!(info.exports.types.is_empty(), "child cannot export a type");
+        assert!(
+            info.exports.vars.is_empty(),
+            "child cannot export a variable"
+        );
+
+        ret
     }
 }

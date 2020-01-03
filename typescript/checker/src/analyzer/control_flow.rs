@@ -20,7 +20,7 @@ use std::{
     ops::{AddAssign, BitOr, Not},
 };
 use swc_atoms::JsWord;
-use swc_common::{Span, Spanned};
+use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
@@ -186,20 +186,20 @@ impl BitOr for CondFacts {
     }
 }
 
-impl Analyzer<'_> {
-    pub(super) fn validate_if_stmt(&mut self, s: &IfStmt) -> Result<(), Error> {
+impl Visit<IfStmt> for Analyzer<'_> {
+    fn visit(&mut self, stmt: &IfStmt) {
         let mut facts = Default::default();
-        match self.detect_facts(&s.test, &mut facts) {
+        match self.detect_facts(&stmt.test, &mut facts) {
             Ok(()) => (),
             Err(err) => {
                 self.info.errors.push(err);
-                return Ok(());
+                return;
             }
         };
-        let ends_with_ret = s.cons.ends_with_ret();
-        self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
-            child.validate_stmt(&s.cons)
-        })?;
+        let ends_with_ret = stmt.cons.ends_with_ret();
+        let stmt = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
+            stmt.fold_children(child)
+        });
         if ends_with_ret {
             self.scope.facts.extend(facts.false_facts);
         }
@@ -224,6 +224,20 @@ impl Visit<SwitchStmt> for Analyzer<'_> {
         stmt.visit_children(self);
 
         self.check_switch_discriminant(&stmt);
+impl Visit<SwitchStmt> for Analyzer<'_> {
+    fn visit(&mut self, stmt: &SwitchStmt) {
+        let stmt = stmt.fold_children(self);
+
+        analyze!(self, {
+            let discriminant_ty = self.type_of(&stmt.discriminant)?;
+            for case in &stmt.cases {
+                if let Some(ref test) = case.test {
+                    let case_ty = self.type_of(&test)?;
+                    let case_ty = self.expand_type(case.span(), case_ty)?;
+                    self.assign(&case_ty, &discriminant_ty, test.span())?
+                }
+            }
+        });
 
         let mut false_facts = CondFacts::default();
         let mut true_facts = CondFacts::default();
@@ -249,13 +263,49 @@ impl Visit<SwitchStmt> for Analyzer<'_> {
             let last = i == len - 1;
             let mut facts = Default::default();
 
-        if let Some(ref alt) = s.alt {
-            self.validate_stmt(&alt)?;
+            ends_with_ret = cons.ends_with_ret();
+
+            match case.test {
+                Some(ref test) => {
+                    match self.detect_facts(
+                        &Expr::Bin(BinExpr {
+                            op: op!("==="),
+                            span,
+                            left: stmt.discriminant.clone(),
+                            right: test.clone(),
+                        }),
+                        &mut facts,
+                    ) {
+                        Ok(()) => {}
+                        Err(err) => {
+                            self.info.errors.push(err);
+                            errored = true;
+                            continue;
+                        }
+                    }
+                }
+                None => {}
+            }
+
+            true_facts = true_facts | facts.true_facts;
+            self.with_child(ScopeKind::Flow, true_facts.clone(), |child| {
+                cons.visit_with(child);
+            });
+            false_facts += facts.false_facts;
+
+            if ends_with_ret || last {
+                true_facts = CondFacts::default();
+                true_facts += false_facts.clone();
+            }
         }
 
-        Ok(())
+        if ends_with_ret {
+            self.scope.facts.extend(false_facts);
+        }
     }
+}
 
+impl Analyzer<'_> {
     pub(super) fn try_assign(&mut self, span: Span, lhs: &PatOrExpr, ty: &Type) {
         let res: Result<(), Error> = try {
             match *lhs {
@@ -612,92 +662,6 @@ impl Visit<SwitchStmt> for Analyzer<'_> {
 }
 
 impl Analyzer<'_> {
-    pub(super) fn validate_switch_stmt(&mut self, s: &SwitchStmt) -> Result<(), Error> {
-        // TODO: children
-
-        analyze!(self, {
-            let discriminant_ty = self.type_of(&s.discriminant)?;
-            for case in &s.cases {
-                if let Some(ref test) = case.test {
-                    let case_ty = self.type_of(&test)?;
-                    let case_ty = self.expand_type(case.span(), case_ty)?;
-                    self.assign(&case_ty, &discriminant_ty, test.span())?
-                }
-            }
-        });
-
-        let mut false_facts = CondFacts::default();
-        let mut true_facts = CondFacts::default();
-        // Declared at here as it's important to know if last one ends with return.
-        let mut ends_with_ret = false;
-        let len = s.cases.len();
-        let stmt_span = s.span();
-
-        let mut errored = false;
-        // Check cases *in order*
-        for (i, mut case) in s.cases.iter().enumerate() {
-            if errored {
-                break;
-            }
-
-            let span = case
-                .test
-                .as_ref()
-                .map(|v| v.span())
-                .unwrap_or_else(|| stmt_span);
-
-            let SwitchCase { cons, .. } = case;
-            let last = i == len - 1;
-            let mut facts = Default::default();
-
-            ends_with_ret = cons.ends_with_ret();
-
-            match case.test {
-                Some(ref test) => {
-                    match self.detect_facts(
-                        &Expr::Bin(BinExpr {
-                            op: op!("==="),
-                            span,
-                            left: s.discriminant.clone(),
-                            right: test.clone(),
-                        }),
-                        &mut facts,
-                    ) {
-                        Ok(()) => {}
-                        Err(err) => {
-                            self.info.errors.push(err);
-                            errored = true;
-                            continue;
-                        }
-                    }
-                }
-                None => {}
-            }
-
-            true_facts = true_facts | facts.true_facts;
-            self.with_child(ScopeKind::Flow, true_facts.clone(), |child| {
-                for s in &cons {
-                    child.validate_stmt(s)?;
-                }
-
-                Ok(())
-            })?;
-
-            false_facts += facts.false_facts;
-
-            if ends_with_ret || last {
-                true_facts = CondFacts::default();
-                true_facts += false_facts.clone();
-            }
-        }
-
-        if ends_with_ret {
-            self.scope.facts.extend(false_facts);
-        }
-
-        Ok(())
-    }
-
     fn validate_cond_expr(&mut self, e: &CondExpr) -> ValidationResult {
         // TODO: children
 
