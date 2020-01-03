@@ -1,4 +1,4 @@
-use crate::ty::{Class, Type, TypeElement};
+use crate::ty::{Class, Intersection, Type, TypeElement, TypeRef, Union};
 use std::{borrow::Cow, mem::transmute};
 use swc_atoms::js_word;
 use swc_common::{Fold, FoldWith, Span, DUMMY_SP};
@@ -266,6 +266,31 @@ impl RemoveTypes for Type {
             Type::Keyword(TsKeywordType { kind, span }) => match kind {
                 TsKeywordTypeKind::TsUndefinedKeyword | TsKeywordTypeKind::TsNullKeyword => {
                     return Type::never(span);
+pub(crate) trait RemoveTypes<'a> {
+    /// Removes falsy values from `self`.
+    fn remove_falsy(self) -> TypeRef<'a>;
+
+    /// Removes truthy values from `self`.
+    fn remove_truthy(self) -> TypeRef<'a>;
+}
+
+/// TODO: Optimize
+impl<'a> RemoveTypes<'a> for TypeRef<'a> {
+    fn remove_falsy(self) -> TypeRef<'a> {
+        self.into_owned().remove_falsy()
+    }
+
+    fn remove_truthy(self) -> TypeRef<'a> {
+        self.into_owned().remove_truthy()
+    }
+}
+
+impl<'a> RemoveTypes<'a> for Type<'a> {
+    fn remove_falsy(self) -> TypeRef<'a> {
+        match self {
+            Type::Keyword(TsKeywordType { kind, span }) => match kind {
+                TsKeywordTypeKind::TsUndefinedKeyword | TsKeywordTypeKind::TsNullKeyword => {
+                    return Type::never(span).into_cow();
                 }
                 _ => {}
             },
@@ -276,6 +301,7 @@ impl RemoveTypes for Type {
                     }),
                 ..
             }) => return Type::never(span),
+            }) => return Type::never(span).into_cow(),
 
             Type::Union(u) => return u.remove_falsy(),
             Type::Intersection(i) => return i.remove_falsy(),
@@ -286,6 +312,7 @@ impl RemoveTypes for Type {
     }
 
     fn remove_truthy(self) -> Type {
+    fn remove_truthy(self) -> TypeRef<'a> {
         match self {
             Type::Lit(TsLitType {
                 lit: TsLit::Bool(Bool {
@@ -293,6 +320,7 @@ impl RemoveTypes for Type {
                 }),
                 ..
             }) => return Type::never(span),
+            }) => return Type::never(span).into_cow(),
 
             Type::Union(u) => u.remove_truthy(),
             Type::Intersection(i) => i.remove_truthy(),
@@ -303,6 +331,8 @@ impl RemoveTypes for Type {
 
 impl RemoveTypes for Intersection {
     fn remove_falsy(self) -> Type {
+impl<'a> RemoveTypes<'a> for Intersection<'a> {
+    fn remove_falsy(self) -> TypeRef<'a> {
         let types = self
             .types
             .into_iter()
@@ -310,6 +340,7 @@ impl RemoveTypes for Intersection {
             .collect::<Vec<_>>();
         if types.iter().any(|ty| ty.is_never()) {
             return Type::never(self.span);
+            return Type::never(self.span).into_cow();
         }
 
         Intersection {
@@ -320,6 +351,10 @@ impl RemoveTypes for Intersection {
     }
 
     fn remove_truthy(self) -> Type {
+        .into_cow()
+    }
+
+    fn remove_truthy(self) -> TypeRef<'a> {
         let types = self
             .types
             .into_iter()
@@ -327,6 +362,7 @@ impl RemoveTypes for Intersection {
             .collect::<Vec<_>>();
         if types.iter().any(|ty| ty.is_never()) {
             return Type::never(self.span);
+            return Type::never(self.span).into_cow();
         }
 
         Intersection {
@@ -339,6 +375,12 @@ impl RemoveTypes for Intersection {
 
 impl RemoveTypes for Union {
     fn remove_falsy(self) -> Type {
+        .into_cow()
+    }
+}
+
+impl<'a> RemoveTypes<'a> for Union<'a> {
+    fn remove_falsy(self) -> TypeRef<'a> {
         let types = self
             .types
             .into_iter()
@@ -353,6 +395,10 @@ impl RemoveTypes for Union {
     }
 
     fn remove_truthy(self) -> Type {
+        .into_cow()
+    }
+
+    fn remove_truthy(self) -> TypeRef<'a> {
         let types = self
             .types
             .into_iter()
@@ -376,11 +422,25 @@ where
     }
 
     fn remove_truthy(self) -> Type {
+        .into_cow()
+    }
+}
+
+impl<'a, T> RemoveTypes<'a> for Box<T>
+where
+    T: RemoveTypes<'a>,
+{
+    fn remove_falsy(self) -> TypeRef<'a> {
+        (*self).remove_falsy()
+    }
+
+    fn remove_truthy(self) -> TypeRef<'a> {
         (*self).remove_truthy()
     }
 }
 
 pub(crate) trait EndsWithRet {
+trait EndsWithRet {
     /// Returns true if the statement ends with return, break, continue;
     fn ends_with_ret(&self) -> bool;
 }

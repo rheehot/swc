@@ -2,8 +2,8 @@ use super::Analyzer;
 use crate::{
     analyzer::util::{Comparator, ResultExt},
     errors::Error,
-    ty::{ClassInstance, Tuple, Type, TypeParamInstantiation, TypeRef},
-    util::{EqIgnoreSpan, IntoCow},
+    ty::{ClassInstance, Tuple, Type, TypeLit, TypeParamInstantiation, TypeRef},
+    util::{EqIgnoreSpan, IntoCow, RemoveTypes},
     ValidationResult,
 };
 use swc_atoms::js_word;
@@ -43,7 +43,15 @@ impl Analyzer<'_> {
         mode: TypeOfMode,
         type_args: Option<&TypeParamInstantiation>,
     ) -> Result<TypeRef, Error> {
+        let span = e.span();
+
         match e {
+            // super() returns any
+            Expr::Call(CallExpr {
+                callee: ExprOrSuper::Super(..),
+                ..
+            }) => Ok(Type::any(span).into_cow()),
+
             Expr::Bin(e) => self.validate_bin_expr(e),
             Expr::Update(e) => self.validate_update_expr(e),
             Expr::New(e) => self.validate_new_expr(e),
@@ -55,7 +63,7 @@ impl Analyzer<'_> {
                 if let Some(ref ty) = self.scope.this() {
                     return Ok(ty.static_cast());
                 }
-                return Ok(Cow::Owned(Type::from(TsThisType { span })));
+                return Ok(Type::from(TsThisType { span }).owned());
             }
 
             Expr::Ident(ref i) => self.type_of_ident(i, type_mode),
@@ -128,7 +136,7 @@ impl Analyzer<'_> {
                 .into_cow());
             }
 
-            Expr::Paren(ParenExpr { ref expr, .. }) => return self.type_of(expr),
+            Expr::Paren(ParenExpr { ref expr, .. }) => self.validate_expr(&expr),
 
             Expr::Tpl(ref t) => {
                 // Check if tpl is constant. If it is, it's type is string literal.
@@ -154,19 +162,10 @@ impl Analyzer<'_> {
 
             Expr::Bin(ref expr) => self.type_of_bin_expr(&expr),
 
-            Expr::TsAs(TsAsExpr { ref type_ann, .. }) => {
-                return Ok(instantiate_class(type_ann.clone().into_cow()));
-            }
-            Expr::TsTypeCast(TsTypeCastExpr { ref type_ann, .. }) => {
-                return Ok(instantiate_class(type_ann.type_ann.clone().into_cow()));
-            }
-
             Expr::TsNonNull(TsNonNullExpr { ref expr, .. }) => {
-                return self.type_of(expr).map(|ty| {
-                    // TODO: Optimize
+                let expr = self.validate_expr(&expr)?;
 
-                    ty.remove_falsy()
-                });
+                Ok(expr.remove_falsy())
             }
 
             Expr::Object(ObjectLit { span, ref props }) => {
@@ -251,72 +250,7 @@ impl Analyzer<'_> {
                 return Ok(Type::union(once(cons_ty).chain(once(alt_ty))).into_cow());
             }
 
-            Expr::New(NewExpr {
-                ref callee,
-                ref type_args,
-                ref args,
-                ..
-            }) => {
-                let callee_type = self.extract_call_new_expr_member(
-                    callee,
-                    ExtractKind::New,
-                    args.as_ref().map(|v| &**v).unwrap_or_else(|| &[]),
-                    type_args.as_ref(),
-                )?;
-                return Ok(callee_type);
-            }
-
-            Expr::Call(CallExpr {
-                callee: ExprOrSuper::Expr(ref callee),
-                ref args,
-                ref type_args,
-                ..
-            }) => {
-                let ret_ty = self
-                    .extract_call_new_expr_member(
-                        callee,
-                        ExtractKind::Call,
-                        args,
-                        type_args.as_ref(),
-                    )
-                    .map(|v| v)?;
-
-                return Ok(ret_ty);
-            }
-
-            // super() returns any
-            Expr::Call(CallExpr {
-                callee: ExprOrSuper::Super(..),
-                ..
-            }) => return Ok(Type::any(span).into_cow()),
-
-            Expr::Seq(SeqExpr { ref exprs, .. }) => {
-                assert!(exprs.len() >= 1);
-
-                let mut is_any = false;
-                for e in exprs.iter() {
-                    match **e {
-                        Expr::Ident(ref i) => {
-                            if self.declaring.contains(&i.sym) {
-                                is_any = true;
-                            }
-                        }
-                        _ => {}
-                    }
-                    match self.type_of(e) {
-                        Ok(..) => {}
-                        Err(Error::ReferencedInInit { .. }) => {
-                            is_any = true;
-                        }
-                        Err(..) => {}
-                    }
-                }
-                if is_any {
-                    return Ok(Type::any(span).owned());
-                }
-
-                return self.type_of(&exprs.last().unwrap());
-            }
+            Expr::Seq(e) => self.validate_seq_expr(e),
 
             Expr::Await(AwaitExpr { .. }) => unimplemented!("typeof(AwaitExpr)"),
 
@@ -403,6 +337,36 @@ impl Analyzer<'_> {
             span,
         })
         .into_cow())
+    }
+
+    fn validate_seq_expr(&mut self, e: &SeqExpr) -> ValidationResult {
+        let SeqExpr { span, ref exprs } = *e;
+
+        assert!(exprs.len() >= 1);
+
+        let mut is_any = false;
+        for e in exprs.iter() {
+            match **e {
+                Expr::Ident(ref i) => {
+                    if self.declaring.contains(&i.sym) {
+                        is_any = true;
+                    }
+                }
+                _ => {}
+            }
+            match self.type_of(e) {
+                Ok(..) => {}
+                Err(Error::ReferencedInInit { .. }) => {
+                    is_any = true;
+                }
+                Err(..) => {}
+            }
+        }
+        if is_any {
+            return Ok(Type::any(span).owned());
+        }
+
+        return self.type_of(&exprs.last().unwrap());
     }
 }
 
