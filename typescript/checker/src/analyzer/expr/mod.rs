@@ -40,6 +40,7 @@ impl Analyzer<'_> {
         type_args: Option<&TypeParamInstantiation>,
     ) -> Result<TypeRef, Error> {
         match e {
+            Expr::Bin(e) => self.validate_bin_expr(e),
             Expr::Update(e) => self.validate_update_expr(e),
         }
     }
