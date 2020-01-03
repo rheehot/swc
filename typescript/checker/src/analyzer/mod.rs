@@ -23,7 +23,7 @@ use swc_common::{
 use swc_ecma_ast::*;
 
 /// If true, Fold<T> prints `Fold<T>` to stdout.
-const LOG_VISIT: bool = true;
+const LOG_VISIT: bool = false;
 
 #[macro_use]
 mod macros;
@@ -44,6 +44,10 @@ mod stmt;
 mod tests;
 mod type_facts;
 mod util;
+
+/// Note: All methods named `validate_*` return [Err] only if it's not
+/// recoverable.
+pub type ValidationResult<'a> = Result<TypeRef<'a>, Error>;
 
 pub(crate) struct Analyzer<'a, 'b> {
     pub info: Info,

@@ -1,24 +1,19 @@
 use crate::{
-    analyzer::{expr::TypeOfMode, Analyzer},
+    analyzer::{expr::TypeOfMode, Analyzer, ValidationResult},
     errors::Error,
     ty::Type,
 };
 use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
-impl Fold<UpdateExpr> for Analyzer<'_, '_> {
-    fn fold(&mut self, e: UpdateExpr) -> UpdateExpr {
-        log_fold!(e);
+impl Analyzer<'_, '_> {
+    pub(super) fn validate_update_expr(&mut self, e: &UpdateExpr) -> ValidationResult {
+        let span = e.span;
 
-        let e = e.fold_children(self);
-
-        let mut errors = vec![];
-
-        match self
-            .type_of_expr(&e.arg, TypeOfMode::LValue, None)
-            .and_then(|ty| self.expand_type(ty.span(), ty))
-        {
-            Ok(ty) => match *ty.normalize() {
+        let res = self
+            .validate_expr_with_extra(&e.arg, TypeOfMode::LValue, None)
+            .and_then(|ty| self.expand_type(span, ty))
+            .and_then(|ty| match *ty.normalize() {
                 Type::Keyword(TsKeywordType {
                     kind: TsKeywordTypeKind::TsStringKeyword,
                     ..
@@ -27,15 +22,17 @@ impl Fold<UpdateExpr> for Analyzer<'_, '_> {
                     lit: TsLit::Str(..),
                     ..
                 })
-                | Type::Array(..) => errors.push(Error::TS2356 { span: e.arg.span() }),
+                | Type::Array(..) => Err(Error::TS2356 { span: e.arg.span() }),
 
-                _ => {}
-            },
-            Err(err) => errors.push(err),
-        }
+                _ => Ok(()),
+            });
 
-        self.info.errors.extend(errors);
+        store!(self, res);
 
-        e
+        Ok(Type::Keyword(TsKeywordType {
+            kind: TsKeywordTypeKind::TsNumberKeyword,
+            span,
+        })
+        .into_cow())
     }
 }

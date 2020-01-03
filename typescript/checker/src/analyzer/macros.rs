@@ -21,3 +21,15 @@ macro_rules! log_fold {
         }
     }};
 }
+
+macro_rules! store {
+    ($a:expr, $e:expr) => {{
+        match $e {
+            Ok(v) => Some(v),
+            Err(err) => {
+                $a.info.errors.push(err);
+                None
+            }
+        }
+    }};
+}

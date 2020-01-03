@@ -4,7 +4,7 @@ use super::{
     Analyzer,
 };
 use crate::{
-    analyzer::instantiate_class,
+    analyzer::{instantiate_class, ValidationResult},
     builtin_types,
     errors::Error,
     ty::{
@@ -45,18 +45,19 @@ pub(super) enum TypeOfMode {
 }
 
 impl Analyzer<'_, '_> {
-    pub fn validate_expr(&mut self, expr: &Expr) -> Result<TypeRef, Error> {
-        self.validate_expr_with_extra(expr, TypeOfMode::RValue, None)
+    pub fn validate_expr(&mut self, e: &Expr) -> ValidationResult {
+        self.validate_expr_with_extra(e, TypeOfMode::RValue, None)
     }
+
     pub fn validate_expr_with_extra(
         &mut self,
-        expr: &Expr,
-        mode: TypeOfMode,
+        e: &Expr,
+        type_mode: TypeOfMode,
         type_args: Option<&TsTypeParamInstantiation>,
-    ) -> Result<TypeRef, Error> {
-        let span = expr.span();
+    ) -> ValidationResult {
+        let span = e.span();
 
-        match *expr {
+        match *e {
             Expr::This(ThisExpr { span }) => {
                 if let Some(ref ty) = self.scope.this() {
                     return Ok(ty.static_cast());
@@ -437,7 +438,7 @@ impl Analyzer<'_, '_> {
 
             Expr::Invalid(ref i) => return Ok(Type::any(i.span()).owned()),
 
-            _ => unimplemented!("typeof ({:#?})", expr),
+            _ => unimplemented!("typeof ({:#?})", e),
         }
     }
 }
