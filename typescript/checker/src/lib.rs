@@ -13,7 +13,7 @@
 extern crate swc_common;
 
 pub use self::builtin_types::Lib;
-use self::{legacy::Info, errors::Error, resolver::Resolver};
+use self::{errors::Error, legacy::Info, resolver::Resolver};
 use chashmap::CHashMap;
 use std::{path::PathBuf, sync::Arc};
 use swc_common::{errors::Handler, Globals, SourceMap};
@@ -22,9 +22,10 @@ use swc_ecma_parser::{
     lexer::Lexer, JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig,
 };
 
-pub mod legacy;
+pub mod analyzer;
 mod builtin_types;
 pub mod errors;
+pub mod legacy;
 pub mod loader;
 pub mod resolver;
 pub mod ty;
