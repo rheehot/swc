@@ -10,6 +10,7 @@ use swc_common::Spanned;
 use swc_ecma_ast::*;
 
 mod bin;
+mod call_new;
 mod unary;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -43,6 +44,8 @@ impl Analyzer<'_> {
         match e {
             Expr::Bin(e) => self.validate_bin_expr(e),
             Expr::Update(e) => self.validate_update_expr(e),
+            Expr::New(e) => self.validate_new_expr(e),
+            Expr::Call(e) => self.validate_call_expr(e),
         }
     }
 

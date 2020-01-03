@@ -16,7 +16,6 @@ use swc_common::{util::iter::IteratorExt as _, Fold, FoldWith, Span, Spanned};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
-mod call_new;
 mod type_cast;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
