@@ -2,6 +2,7 @@ use self::scope::Scope;
 use crate::{errors::Error, ty::TypeRef, Exports};
 use fxhash::FxHashMap;
 use std::sync::Arc;
+use swc_atoms::JsWord;
 
 mod expr;
 mod scope;

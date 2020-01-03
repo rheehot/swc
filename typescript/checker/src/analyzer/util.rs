@@ -2,7 +2,7 @@ use crate::errors::Error;
 use std::iter::once;
 
 pub trait ResultExt<T, E>: Into<Result<T, E>> {
-    fn store<V>(self, to: &mut V) -> Optton<T>
+    fn store<V>(self, to: &mut V) -> Option<T>
     where
         V: Extend<E>,
     {

@@ -16,7 +16,7 @@ pub fn type_name<T>(_: &T) -> &'static str {
 macro_rules! log_fold {
     ($e:expr) => {{
         let ty_name = crate::legacy::macros::type_name(&$e);
-        if crate::analyzer::LOG_VISIT {
+        if crate::legacy::LOG_VISIT {
             println!("Fold<{}>", ty_name);
         }
     }};
