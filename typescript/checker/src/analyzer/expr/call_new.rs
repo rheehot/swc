@@ -62,13 +62,12 @@ impl Analyzer<'_> {
             }
         }
 
-        let ret_ty = self.extract_call_new_expr_member(
+        self.extract_call_new_expr_member(
             callee,
             ExtractKind::New,
             args.as_ref().map(|v| &**v).unwrap_or_else(|| &[]),
             type_args.as_ref(),
-        )?;
-        Ok(ret_ty)
+        )
     }
 
     pub(super) fn validate_call_expr(&mut self, e: &CallExpr) -> ValidationResult {
@@ -78,6 +77,11 @@ impl Analyzer<'_> {
             ref args,
             ref type_args,
         } = *e;
+
+        let callee = match callee {
+            ExprOrSuper::Super(..) => return Ok(Type::any(span).owned()),
+            ExprOrSuper::Expr(callee) => callee,
+        };
 
         // TODO: validate children
 
@@ -93,44 +97,28 @@ impl Analyzer<'_> {
         }
 
         // Check callee
-        let res: Result<(), Error> = try {
-            if let ExprOrSuper::Expr(ref callee) = e.callee {
-                let callee_ty = self.type_of(&callee);
-                let callee_ty = match callee_ty {
-                    Ok(v) => v,
-                    Err(_) => return,
-                };
-                match *callee_ty.normalize() {
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsAnyKeyword,
-                        ..
-                    }) if e.type_args.is_some() => Err(Error::TS2347 { span: e.span })?,
-                    _ => {}
-                }
-            }
-        };
-
-        if let Err(err) = res {
-            self.info.errors.push(err);
+        let callee_ty = self.validate_expr(&callee)?;
+        match *callee_ty.normalize() {
+            Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsAnyKeyword,
+                ..
+            }) if e.type_args.is_some() => self.info.errors.push(Error::TS2347 { span: e.span }),
+            _ => {}
         }
 
-        let ret_ty = self
-            .extract_call_new_expr_member(callee, ExtractKind::Call, args, type_args.as_ref())
-            .map(|v| v)?;
-
-        return Ok(ret_ty);
+        self.extract_call_new_expr_member(callee, ExtractKind::Call, args, type_args.as_ref())
     }
 
     /// Calculates the return type of a new /call expression.
     ///
     /// Called only from [type_of_expr]
-    fn extract_call_new_expr_member<'e>(
-        &'e self,
+    fn extract_call_new_expr_member(
+        &mut self,
         callee: &Expr,
         kind: ExtractKind,
         args: &[ExprOrSpread],
         type_args: Option<&TsTypeParamInstantiation>,
-    ) -> Result<TypeRef<'e>, Error> {
+    ) -> ValidationResult {
         let span = callee.span();
 
         match *callee {

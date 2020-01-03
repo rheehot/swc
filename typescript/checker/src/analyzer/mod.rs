@@ -9,6 +9,7 @@ mod scope;
 mod stmt;
 mod util;
 
+/// Note: All methods named `validate_*` return [Err] iff it's not recoverable.
 #[derive(Debug)]
 pub struct Analyzer<'a> {
     pub info: Info,
