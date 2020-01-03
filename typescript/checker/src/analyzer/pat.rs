@@ -1,6 +1,6 @@
+use super::Analyzer;
 use crate::{
     errors::Error,
-    legacy::Analyzer,
     ty::{Array, Type},
     util::EqIgnoreNameAndSpan,
 };

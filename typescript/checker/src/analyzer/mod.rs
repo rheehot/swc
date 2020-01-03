@@ -6,6 +6,7 @@ use crate::{errors::Error, ty::TypeRef, Exports};
 use fxhash::FxHashMap;
 use std::sync::Arc;
 use swc_atoms::JsWord;
+use swc_common::Span;
 
 #[macro_use]
 mod macros;

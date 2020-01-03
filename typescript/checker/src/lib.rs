@@ -17,11 +17,28 @@ use self::{analyzer::Info, errors::Error, resolver::Resolver};
 use crate::ty::TypeRef;
 use chashmap::CHashMap;
 use std::{path::PathBuf, sync::Arc};
-use swc_common::{errors::Handler, Globals, SourceMap};
+use swc_atoms::JsWord;
+use swc_common::{errors::Handler, Globals, SourceMap, Span};
 use swc_ecma_ast::Module;
 use swc_ecma_parser::{
     lexer::Lexer, JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig,
 };
+
+#[derive(Debug, PartialEq, Eq)]
+pub struct ImportInfo {
+    pub span: Span,
+    pub items: Vec<Specifier>,
+    pub all: bool,
+    pub src: JsWord,
+}
+
+pub type Id = (JsWord, Span);
+
+#[derive(Debug, PartialEq, Eq)]
+pub struct Specifier {
+    pub local: Id,
+    pub export: Id,
+}
 
 pub mod analyzer;
 mod builtin_types;

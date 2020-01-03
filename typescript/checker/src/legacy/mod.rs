@@ -407,20 +407,6 @@ pub struct Info {
     pub errors: Vec<Error>,
 }
 
-#[derive(Debug, PartialEq, Eq)]
-pub struct ImportInfo {
-    pub span: Span,
-    pub items: Vec<Specifier>,
-    pub all: bool,
-    pub src: JsWord,
-}
-
-#[derive(Debug, PartialEq, Eq)]
-pub struct Specifier {
-    pub local: (JsWord, Span),
-    pub export: (JsWord, Span),
-}
-
 impl Analyzer<'_, '_> {
     /// TODO: Handle recursive funciton
     fn visit_fn(&mut self, name: Option<&Ident>, f: &Function) -> Type<'static> {
