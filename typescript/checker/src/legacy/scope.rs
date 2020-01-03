@@ -28,15 +28,6 @@ pub(super) struct VarInfo {
     pub copied: bool,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(crate) enum ScopeKind {
-    Block,
-    Fn,
-    ArrowFn,
-    /// If statement, conditional expression, switch case
-    Flow,
-}
-
 #[derive(Debug)]
 pub(crate) struct Scope<'a> {
     /// Expanded type.

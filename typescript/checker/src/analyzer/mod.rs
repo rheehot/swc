@@ -4,7 +4,9 @@ use fxhash::FxHashMap;
 use std::sync::Arc;
 use swc_atoms::JsWord;
 
+mod control_flow;
 mod expr;
+mod name;
 mod scope;
 mod stmt;
 mod util;

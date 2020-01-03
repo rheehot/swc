@@ -1,5 +1,5 @@
 use super::Analyzer;
-use crate::errors::Error;
+use crate::{analyzer::scope::ScopeKind, errors::Error};
 use swc_ecma_ast::*;
 
 mod loops;
@@ -32,5 +32,13 @@ impl Analyzer<'_> {
         self.validate_expr(&s.obj)?;
 
         Ok(())
+    }
+
+    fn validate_block_stmt(&mut self, s: &BlockStmt) -> Result<(), Error> {
+        self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
+            for stmt in &s.stmts {
+                analyzer.validate_stmt(stmt);
+            }
+        })
     }
 }

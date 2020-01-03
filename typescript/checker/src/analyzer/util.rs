@@ -1,5 +1,14 @@
+use super::{control_flow::CondFacts, scope::ScopeKind, Analyzer};
 use crate::errors::Error;
 use std::iter::once;
+
+impl Analyzer<'_> {
+    pub(super) fn with_child<F, Ret>(&mut self, kind: ScopeKind, facts: CondFacts, op: F) -> Ret
+    where
+        F: FnOnce(&mut Self) -> Ret,
+    {
+    }
+}
 
 pub trait ResultExt<T, E>: Into<Result<T, E>> {
     fn store<V>(self, to: &mut V) -> Option<T>

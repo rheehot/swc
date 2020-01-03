@@ -6,6 +6,7 @@ use crate::{
 };
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
+use swc_ts_checker_macros::validator;
 
 impl Analyzer<'_> {
     #[validator]

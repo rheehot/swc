@@ -34,7 +34,6 @@ mod enums;
 pub mod export;
 mod generic;
 mod module_item;
-mod name;
 mod pat;
 mod props;
 mod scope;
@@ -701,14 +700,6 @@ impl Fold<ArrowExpr> for Analyzer<'_, '_> {
             }
 
             f
-        })
-    }
-}
-
-impl Fold<BlockStmt> for Analyzer<'_, '_> {
-    fn fold(&mut self, stmt: BlockStmt) -> BlockStmt {
-        self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
-            stmt.fold_children(analyzer)
         })
     }
 }
