@@ -1,4 +1,4 @@
-use super::{util::NormalizeMut, Analyzer};
+use super::Analyzer;
 use crate::{
     errors::Error,
     ty::{self, Conditional, Mapped, Tuple, Type, TypeParam, TypeParamDecl},

@@ -3,6 +3,7 @@ use crate::{analyzer::scope::ScopeKind, errors::Error};
 use swc_ecma_ast::*;
 
 mod loops;
+mod module_items;
 
 impl Analyzer<'_> {
     pub fn validate_stmt(&mut self, s: &Stmt) -> Result<(), Error> {

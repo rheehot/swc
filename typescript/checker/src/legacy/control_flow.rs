@@ -1,7 +1,6 @@
 use super::{
-    scope::{Scope, ScopeKind, VarInfo},
-    type_facts::TypeFacts,
-    Analyzer, Name,
+    scope::{Scope, VarInfo},
+    Analyzer,
 };
 use crate::{
     errors::Error,
