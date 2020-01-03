@@ -1,13 +1,13 @@
-use super::Analyzer;
-use crate::{
-    analyzer::{expr::TypeOfMode, scope::ScopeKind, util::is_prop_name_eq},
-    errors::Error,
-    ty,
-    ty::Type,
+use super::{
+    expr::TypeOfMode,
+    scope::ScopeKind,
+    util::{is_prop_name_eq, VarVisitor},
+    Analyzer,
 };
+use crate::{errors::Error, ty, ty::Type};
 use std::mem::replace;
 use swc_atoms::js_word;
-use swc_common::{util::move_map::MoveMap, Span, Spanned};
+use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 

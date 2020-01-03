@@ -1,7 +1,7 @@
 use super::{control_flow::CondFacts, scope::ScopeKind, Analyzer};
 use crate::{errors::Error, ty::Type};
 use std::{borrow::Cow, iter::once};
-use swc_common::Spanned;
+use swc_common::{Spanned, Visit};
 use swc_ecma_ast::*;
 
 pub trait ResultExt<T, E>: Into<Result<T, E>> {
@@ -174,5 +174,19 @@ impl<'a, 'b> NormalizeMut<'b> for Cow<'a, Type<'b>> {
 
             _ => owned,
         }
+    }
+}
+
+pub(super) struct VarVisitor<'a> {
+    pub names: &'a mut Vec<JsWord>,
+}
+
+impl Visit<Expr> for VarVisitor<'_> {
+    fn visit(&mut self, _: &Expr) {}
+}
+
+impl Visit<Ident> for VarVisitor<'_> {
+    fn visit(&mut self, i: &Ident) {
+        self.names.push(i.sym.clone())
     }
 }

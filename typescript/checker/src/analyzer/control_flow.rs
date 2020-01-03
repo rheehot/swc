@@ -1,8 +1,14 @@
 use super::{name::Name, type_facts::TypeFacts, Analyzer};
 use crate::{
-    analyzer::{expr::TypeOfMode, scope::ScopeKind, util::Comparator},
+    analyzer::{
+        expr::TypeOfMode,
+        scope::{ScopeKind, VarInfo},
+        util::Comparator,
+    },
     errors::Error,
-    ty::Type,
+    ty::{Tuple, Type},
+    util::EndsWithRet,
+    ValidationResult,
 };
 use fxhash::FxHashMap;
 use std::{
@@ -13,7 +19,8 @@ use std::{
     mem::replace,
     ops::{AddAssign, BitOr, Not},
 };
-use swc_common::Span;
+use swc_atoms::JsWord;
+use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
 /// Conditional facts
@@ -181,22 +188,26 @@ impl BitOr for CondFacts {
 impl Analyzer<'_> {
     pub(super) fn validate_if_stmt(&mut self, s: &IfStmt) -> Result<(), Error> {
         let mut facts = Default::default();
-        match self.detect_facts(&stmt.test, &mut facts) {
+        match self.detect_facts(&s.test, &mut facts) {
             Ok(()) => (),
             Err(err) => {
                 self.info.errors.push(err);
-                return stmt;
+                return Ok(());
             }
         };
-        let ends_with_ret = stmt.cons.ends_with_ret();
-        let stmt = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
-            child.validate_stmt(&stmt)
-        });
+        let ends_with_ret = s.cons.ends_with_ret();
+        self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
+            child.validate_stmt(&s.cons)
+        })?;
         if ends_with_ret {
             self.scope.facts.extend(facts.false_facts);
         }
 
-        stmt
+        if let Some(ref alt) = s.alt {
+            self.validate_stmt(&alt)?;
+        }
+
+        Ok(())
     }
 
     pub(super) fn try_assign(&mut self, span: Span, lhs: &PatOrExpr, ty: &Type) {
@@ -554,13 +565,13 @@ impl Analyzer<'_> {
     }
 }
 
-impl Fold<SwitchStmt> for Analyzer<'_> {
-    fn fold(&mut self, stmt: SwitchStmt) -> SwitchStmt {
-        let stmt = stmt.fold_children(self);
+impl Analyzer<'_> {
+    pub(super) fn validate_switch_stmt(&mut self, s: &SwitchStmt) -> Result<(), Error> {
+        // TODO: children
 
         analyze!(self, {
-            let discriminant_ty = self.type_of(&stmt.discriminant)?;
-            for case in &stmt.cases {
+            let discriminant_ty = self.type_of(&s.discriminant)?;
+            for case in &s.cases {
                 if let Some(ref test) = case.test {
                     let case_ty = self.type_of(&test)?;
                     let case_ty = self.expand_type(case.span(), case_ty)?;
@@ -573,16 +584,14 @@ impl Fold<SwitchStmt> for Analyzer<'_> {
         let mut true_facts = CondFacts::default();
         // Declared at here as it's important to know if last one ends with return.
         let mut ends_with_ret = false;
-        let len = stmt.cases.len();
-        let stmt_span = stmt.span();
+        let len = s.cases.len();
+        let stmt_span = s.span();
 
-        let mut cases = Vec::with_capacity(len);
         let mut errored = false;
         // Check cases *in order*
-        for (i, mut case) in stmt.cases.into_iter().enumerate() {
+        for (i, mut case) in s.cases.iter().enumerate() {
             if errored {
-                cases.push(case);
-                continue;
+                break;
             }
 
             let span = case
@@ -603,7 +612,7 @@ impl Fold<SwitchStmt> for Analyzer<'_> {
                         &Expr::Bin(BinExpr {
                             op: op!("==="),
                             span,
-                            left: stmt.discriminant.clone(),
+                            left: s.discriminant.clone(),
                             right: test.clone(),
                         }),
                         &mut facts,
@@ -612,7 +621,6 @@ impl Fold<SwitchStmt> for Analyzer<'_> {
                         Err(err) => {
                             self.info.errors.push(err);
                             errored = true;
-                            cases.push(SwitchCase { cons, ..case });
                             continue;
                         }
                     }
@@ -621,53 +629,46 @@ impl Fold<SwitchStmt> for Analyzer<'_> {
             }
 
             true_facts = true_facts | facts.true_facts;
-            case.cons = self.with_child(ScopeKind::Flow, true_facts.clone(), |child| {
-                cons.fold_with(child)
-            });
+            self.with_child(ScopeKind::Flow, true_facts.clone(), |child| {
+                for s in &cons {
+                    child.validate_stmt(s)?;
+                }
+
+                Ok(())
+            })?;
+
             false_facts += facts.false_facts;
 
             if ends_with_ret || last {
                 true_facts = CondFacts::default();
                 true_facts += false_facts.clone();
             }
-
-            cases.push(case);
         }
 
         if ends_with_ret {
             self.scope.facts.extend(false_facts);
         }
 
-        SwitchStmt { cases, ..stmt }
+        Ok(())
     }
-}
 
-impl Fold<CondExpr> for Analyzer<'_> {
-    fn fold(&mut self, e: CondExpr) -> CondExpr {
+    fn validate_cond_expr(&mut self, e: &CondExpr) -> ValidationResult {
+        // TODO: children
+
         let CondExpr { alt, cons, .. } = e;
 
         let mut facts = Default::default();
-        match self.detect_facts(&e.test, &mut facts) {
-            Ok(()) => (),
-            Err(err) => {
-                self.info.errors.push(err);
-                return CondExpr { cons, alt, ..e };
-            }
-        };
-        let test = e.test.fold_with(self);
-        let cons = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
-            cons.fold_with(child)
-        });
-        let alt = self.with_child(ScopeKind::Flow, facts.false_facts, |child| {
-            alt.fold_with(child)
-        });
+        self.detect_facts(&e.test, &mut facts)?;
 
-        CondExpr {
-            test,
-            cons,
-            alt,
-            ..e
-        }
+        self.validate_expr(&e.test)?;
+        self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
+            child.validate_expr(&cons)
+        })?;
+        self.with_child(ScopeKind::Flow, facts.false_facts, |child| {
+            child.validate_expr(&alt)
+        })?;
+
+        Ok(())
     }
 }
 

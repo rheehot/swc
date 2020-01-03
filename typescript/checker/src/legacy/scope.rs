@@ -18,16 +18,6 @@ use swc_atoms::JsWord;
 use swc_common::{Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
-#[derive(Debug, Clone)]
-pub(super) struct VarInfo {
-    pub kind: VarDeclKind,
-    pub initialized: bool,
-    pub ty: Option<Type<'static>>,
-    /// Copied from parent scope. If this is true, it's not a variable
-    /// declaration.
-    pub copied: bool,
-}
-
 #[derive(Debug)]
 pub(crate) struct Scope<'a> {
     /// Expanded type.

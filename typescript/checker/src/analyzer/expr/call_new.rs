@@ -1,10 +1,9 @@
 //! Handles new expressions and call expressions.
-
 use super::super::Analyzer;
 use crate::{
     builtin_types,
     errors::Error,
-    ty::{Method, Type, TypeElement, TypeRefExt},
+    ty::{CallSignature, Method, Static, Type, TypeElement, TypeRefExt},
     util::IntoCow,
     ValidationResult,
 };
