@@ -135,7 +135,7 @@ impl Analyzer<'_, '_> {
                             kind: TsKeywordTypeKind::TsStringKeyword,
                         }),
                     ])
-                    .owned(),
+                    ,
                     span,
                 );
             }};
@@ -215,12 +215,12 @@ impl Analyzer<'_, '_> {
                                                 TypeElement::Property(ref el) => match rm {
                                                     TypeElement::Property(ref r_el) => {
                                                         self.assign_inner(
-                                                            el.type_ann.as_ref().unwrap_or(
-                                                                &Type::any(span).owned(),
-                                                            ),
-                                                            r_el.type_ann.as_ref().unwrap_or(
-                                                                &Type::any(span).owned(),
-                                                            ),
+                                                            el.type_ann
+                                                                .as_ref()
+                                                                .unwrap_or(&Type::any(span)),
+                                                            r_el.type_ann
+                                                                .as_ref()
+                                                                .unwrap_or(&Type::any(span)),
                                                             span,
                                                         )?;
                                                         continue 'l;

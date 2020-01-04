@@ -227,7 +227,7 @@ impl Fold<TsTypeAliasDecl> for Analyzer<'_, '_> {
             decl.id.sym.clone(),
             Type::Alias(Alias {
                 span: decl.span(),
-                ty: box ty.owned(),
+                ty: box ty,
                 type_params: decl.type_params.clone().map(From::from),
             }),
         );
@@ -417,7 +417,7 @@ impl Analyzer<'_, '_> {
                                     });
                                 }
 
-                                *t = Type::any(span).owned();
+                                *t = Type::any(span);
                             }
                         }
 
@@ -699,7 +699,7 @@ impl Fold<VarDecl> for Analyzer<'_, '_> {
                                             }
                                         }
                                         // Widen tuple types
-                                        *t = Type::any(span).owned();
+                                        *t = Type::any(span);
 
                                         if self.rule.no_implicit_any {
                                             match v.name {

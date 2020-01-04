@@ -293,8 +293,8 @@ impl Analyzer<'_, '_> {
         self.info.errors.extend(errors);
 
         let rhs_ty = match rhs_ty {
-            Ok(v) => v.owned(),
-            Err(()) => Type::any(span).owned(),
+            Ok(v) => v,
+            Err(()) => Type::any(span),
         };
 
         if e.op == op!("=") {
@@ -378,7 +378,7 @@ impl Analyzer<'_, '_> {
                     return Ok(Type::Function(ty::Function {
                         span,
                         params: vec![],
-                        ret_ty: box Type::any(span).owned(),
+                        ret_ty: box Type::any(span),
                         type_params: None,
                     })
                     .owned());
@@ -482,9 +482,7 @@ fn instantiate_class(ty: Type) -> Type {
                     instantiate_class(ty.clone())
                 })
                 .collect(),
-        })
-        .owned(),
-
+        }),
         Type::Class(ref cls) => Type::ClassInstance(ClassInstance {
             // TODO
             span,
@@ -494,8 +492,7 @@ fn instantiate_class(ty: Type) -> Type {
 
             // TODO
             type_args: None,
-        })
-        .owned(),
+        }),
         _ => ty,
     }
 }

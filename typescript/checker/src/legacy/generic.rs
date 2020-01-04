@@ -240,7 +240,7 @@ impl<'a, 'b> Fold<Cow<'a, Type<'b>>> for GenericExpander<'_, '_> {
                     // Handle references to type parameters
                     for (idx, p) in self.decl.params.iter().enumerate() {
                         if p.name == *sym {
-                            return Type::from(self.i.params[idx].clone()).owned();
+                            return Type::from(self.i.params[idx].clone());
                         }
                     }
 

@@ -89,8 +89,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                                 .return_type
                                                 .clone()
                                                 .map(|v| v.type_ann.into())
-                                                .unwrap_or_else(|| Type::any(DUMMY_SP))
-                                                .owned(),
+                                                .unwrap_or_else(|| Type::any(DUMMY_SP)),
                                         }
                                         .into(),
                                     );
@@ -130,8 +129,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                                             params: v.function.params,
                                                             ret_ty: box Type::from(
                                                                 v.function.return_type.unwrap(),
-                                                            )
-                                                            .owned(),
+                                                            ),
                                                         })
                                                     }
                                                     swc_ecma_ast::ClassMember::PrivateMethod(_) => {

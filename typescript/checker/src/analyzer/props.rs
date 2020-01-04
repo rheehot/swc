@@ -57,7 +57,7 @@ impl Analyzer<'_, '_> {
 
                 errors.push(err);
                 // TODO: Change this to something else (maybe any)
-                Type::unknown(span).owned()
+                Type::unknown(span)
             }
         };
         if match self.computed_prop_mode {

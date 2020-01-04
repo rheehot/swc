@@ -386,7 +386,6 @@ impl Type {
                         TsLit::Str(Str { .. }) => TsKeywordTypeKind::TsStringKeyword,
                     },
                 })
-                .owned()
             }
             Type::Union(Union { ref types, .. }) => {
                 let mut tys: Vec<Type> = Vec::with_capacity(types.len());

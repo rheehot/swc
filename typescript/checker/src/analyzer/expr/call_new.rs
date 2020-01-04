@@ -286,14 +286,12 @@ impl Analyzer<'_, '_> {
                         kind: TsKeywordTypeKind::TsNumberKeyword,
                         ..
                     }) => builtin_types::get_type(self.libs, span, &js_word!("Number"))
-                        .expect("Builtin type named 'Number' should exist")
-                        .owned(),
+                        .expect("Builtin type named 'Number' should exist"),
                     Type::Keyword(TsKeywordType {
                         kind: TsKeywordTypeKind::TsStringKeyword,
                         ..
                     }) => builtin_types::get_type(self.libs, span, &js_word!("String"))
-                        .expect("Builtin type named 'String' should exist")
-                        .owned(),
+                        .expect("Builtin type named 'String' should exist"),
                     _ => obj_type,
                 };
 

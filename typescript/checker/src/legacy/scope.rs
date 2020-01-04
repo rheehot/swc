@@ -135,7 +135,7 @@ impl<'a> Scope<'a> {
 
                         for (elem, types) in elems.into_iter().zip(
                             buf.into_iter()
-                                .chain(repeat_with(|| vec![Type::undefined(span).owned()])),
+                                .chain(repeat_with(|| vec![Type::undefined(span)])),
                         ) {
                             match *elem {
                                 Some(ref elem) => {
@@ -169,7 +169,7 @@ impl<'a> Scope<'a> {
                             TypeElement::Index(IndexSignature { ref type_ann, .. }) => {
                                 index_el = Some(match *type_ann {
                                     Some(ref ty) => ty.clone(),
-                                    None => Type::any(key.span()).owned(),
+                                    None => Type::any(key.span()),
                                 });
                             }
                             _ => {}
@@ -434,7 +434,7 @@ impl Analyzer<'_, '_> {
                             let span = ty.span();
                             for excluded_ty in excludes.iter() {
                                 if ty.eq_ignore_name_and_span(excluded_ty) {
-                                    *ty = Type::never(span).owned()
+                                    *ty = Type::never(span)
                                 }
                             }
                         }

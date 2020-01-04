@@ -344,7 +344,7 @@ impl Analyzer<'_, '_> {
 
                 errors.push(err);
 
-                Type::any(span).owned()
+                Type::any(span)
             }
         };
 

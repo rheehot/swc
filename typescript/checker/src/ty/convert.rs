@@ -454,7 +454,7 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
 //            is_static: self.is_static,
 //            type_params: self.type_params.map(|v| v.into_static()),
 //            params: self.params,
-//            ret_ty: box self.ret_ty.into_owned().into_static().owned(),
+//            ret_ty: box self.ret_ty.into_owned().into_static(),
 //        }
 //    }
 //}
