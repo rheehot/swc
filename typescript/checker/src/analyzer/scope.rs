@@ -214,6 +214,13 @@ impl<'a> Scope<'a> {
         }
     }
 
+    pub(super) fn depth(&self) -> usize {
+        match self.parent {
+            Some(ref p) => p.depth() + 1,
+            None => 0,
+        }
+    }
+
     /// This method does **not** handle imported types.
     pub(super) fn find_type(&self, name: &JsWord) -> Option<&Type<'static>> {
         if let Some(ty) = self.facts.types.get(name) {

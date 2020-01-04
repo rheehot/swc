@@ -53,13 +53,6 @@ impl<'a> Scope<'a> {
         }
     }
 
-    pub(super) fn depth(&self) -> usize {
-        match self.parent {
-            Some(ref p) => p.depth() + 1,
-            None => 0,
-        }
-    }
-
     pub(super) fn this(&self) -> Option<&Type<'static>> {
         if let Some(ref this) = self.this {
             return Some(this);
