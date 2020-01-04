@@ -9,9 +9,8 @@ use crate::{
     ty::{Type, TypeRef},
     Exports, ImportInfo, Rule,
 };
-use bitflags::_core::hash::BuildHasherDefault;
-use fxhash::{FxHashMap, FxHashSet, FxHasher};
-use std::{collections::HashMap, path::PathBuf, sync::Arc};
+use fxhash::{FxHashMap, FxHashSet};
+use std::{path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::Span;
 use swc_common::{SourceMap, Span};
