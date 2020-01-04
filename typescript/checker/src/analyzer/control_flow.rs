@@ -623,7 +623,6 @@ impl Analyzer<'_, '_> {
                         match **left {
                             Expr::Ident(ref i) => {
                                 //
-                                let r_ty = self.expand_type(right.span(), r_ty)?;
 
                                 facts
                                     .true_facts
