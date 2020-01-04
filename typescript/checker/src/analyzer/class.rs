@@ -125,7 +125,7 @@ impl Analyzer<'_, '_> {
                         .scope
                         .declaring
                         .iter()
-                        .rposition(|name| n == name)
+                        .rposition(|name| n == *name)
                         .expect("failed to find inserted name");
                     child.scope.declaring.remove(idx);
                 }
@@ -183,7 +183,13 @@ impl Analyzer<'_, '_> {
                 }
 
                 for n in names {
-                    child.scope.declaring.remove_item(&n).unwrap();
+                    let idx = child
+                        .scope
+                        .declaring
+                        .iter()
+                        .rposition(|name| n == *name)
+                        .expect("failed to find inserted name");
+                    child.scope.declaring.remove(idx);
                 }
             });
 
@@ -358,7 +364,7 @@ impl Analyzer<'_, '_> {
 
         let res: Result<_, Error> = try {
             if let Some(super_class) = &c.super_class {
-                let super_ty = self.type_of_expr(
+                let super_ty = self.validate_expr_with_extra(
                     &super_class,
                     TypeOfMode::RValue,
                     c.super_type_params.as_ref(),

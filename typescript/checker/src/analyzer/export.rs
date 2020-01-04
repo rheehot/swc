@@ -3,7 +3,7 @@ use crate::{
     errors::Error,
     ty::{Type, TypeRefExt},
 };
-use std::{convert::TryInto, mem, sync::Arc};
+use std::{convert::TryInto, mem, mem::replace, sync::Arc};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Span, Spanned};
 use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith};
@@ -25,7 +25,7 @@ impl Analyzer<'_, '_> {
             return;
         }
 
-        let pending_exports = mem::replace(&mut self.pending_exports, Default::default());
+        let pending_exports = replace(&mut self.pending_exports, Default::default());
 
         for ((sym, _), expr) in pending_exports {
             // TODO: Allow multiple exports with same name.

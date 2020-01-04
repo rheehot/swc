@@ -211,6 +211,7 @@ impl<'a> Scope<'a> {
             parent,
 
             kind,
+            declaring: Default::default(),
             vars: Default::default(),
             types: Default::default(),
             facts,

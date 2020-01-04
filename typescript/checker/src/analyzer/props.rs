@@ -1,6 +1,6 @@
 use super::{scope::ScopeKind, Analyzer};
 use crate::{
-    analyzer::expr::TypeOfMode,
+    analyzer::{expr::TypeOfMode, util::ResultExt},
     errors::Error,
     ty::{Type, TypeRefExt},
 };
@@ -95,7 +95,8 @@ impl Visit<Prop> for Analyzer<'_, '_> {
         match n {
             Prop::Shorthand(ref i) => {
                 // TODO: Check if RValue is correct
-                self.type_of_ident(&i, TypeOfMode::RValue)?;
+                self.type_of_ident(&i, TypeOfMode::RValue)
+                    .store(&mut self.info.errors);
             }
             _ => {}
         }
