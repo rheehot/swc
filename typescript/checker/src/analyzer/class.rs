@@ -14,8 +14,12 @@ use swc_common::{Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
+prevent!(ClassProp);
+prevent!(Constructor);
+prevent!(ClassMethod);
+
 impl Analyzer<'_, '_> {
-    fn validate_class_property(&mut self, p: &ClassProp) -> Result<(), Error> {
+    fn validate_class_property(&mut self, p: &ClassProp) -> Result<ty::ClassMember, Error> {
         // TODO: children
 
         let mut errors = vec![];
@@ -41,7 +45,7 @@ impl Analyzer<'_, '_> {
         Ok(())
     }
 
-    fn validate_constructor(&mut self, c: &Constructor) -> Result<(), Error> {
+    fn validate_constructor(&mut self, c: &Constructor) -> Result<ty::Constructor, Error> {
         let c_span = c.span();
 
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
@@ -132,7 +136,7 @@ impl Analyzer<'_, '_> {
         })
     }
 
-    fn validate_class_method(&mut self, c: &ClassMethod) -> Result<(), Error> {
+    fn validate_class_method(&mut self, c: &ClassMethod) -> Result<ty::ClassMember, Error> {
         let c_span = c.span();
         let key_span = c.key.span();
 
