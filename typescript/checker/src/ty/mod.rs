@@ -399,7 +399,7 @@ impl Type {
                     }
                 }
 
-                return Type::union(tys).into_cow();
+                return Type::union(tys);
             }
             _ => {}
         }
@@ -596,7 +596,7 @@ impl Type {
 }
 
 fn static_type(ty: Cow<Type>) -> Type {
-    ty.into_owned().into_static().into_cow()
+    ty.into_owned().into_static()
 }
 
 fn map_types<'a, 'b, F>(types: Vec<Type>, map: F) -> Vec<Type>

@@ -50,7 +50,7 @@ impl From<TsTypeAliasDecl> for Alias {
     fn from(d: TsTypeAliasDecl) -> Self {
         Alias {
             span: d.span,
-            ty: box d.type_ann.into_cow(),
+            ty: box d.type_ann,
             type_params: d.type_params.map(From::from),
         }
     }
@@ -100,7 +100,7 @@ impl From<TsType> for Type {
                 box elem_type,
             }) => Type::Array(Array {
                 span,
-                elem_type: box elem_type.into_cow(),
+                elem_type: box elem_type,
             }),
             TsType::TsFnOrConstructorType(TsFnOrConstructorType::TsFnType(TsFnType {
                 span,
@@ -111,7 +111,7 @@ impl From<TsType> for Type {
                 span,
                 params,
                 type_params: type_params.map(From::from),
-                ret_ty: box type_ann.type_ann.into_cow(),
+                ret_ty: box type_ann.type_ann,
             }),
             TsType::TsFnOrConstructorType(TsFnOrConstructorType::TsConstructorType(
                 TsConstructorType {
@@ -258,10 +258,10 @@ impl From<TsConditionalType> for Conditional {
     fn from(t: TsConditionalType) -> Self {
         Conditional {
             span: t.span,
-            check_type: box t.check_type.into_cow(),
-            extends_type: box t.extends_type.into_cow(),
-            true_type: box t.true_type.into_cow(),
-            false_type: box t.false_type.into_cow(),
+            check_type: box t.check_type,
+            extends_type: box t.extends_type,
+            true_type: box t.true_type,
+            false_type: box t.false_type,
         }
     }
 }
@@ -283,7 +283,7 @@ impl From<TsTypeOperator> for Operator {
         Operator {
             span: ty.span,
             op: ty.op,
-            ty: box ty.type_ann.into_cow(),
+            ty: box ty.type_ann,
         }
     }
 }
