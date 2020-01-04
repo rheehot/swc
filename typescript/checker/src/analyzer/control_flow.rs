@@ -663,8 +663,6 @@ prevent!(CondExpr);
 
 impl Analyzer<'_, '_> {
     fn validate_cond_expr(&mut self, e: &CondExpr) -> ValidationResult {
-        // TODO: children
-
         let CondExpr { alt, cons, .. } = e;
 
         let mut facts = Default::default();
