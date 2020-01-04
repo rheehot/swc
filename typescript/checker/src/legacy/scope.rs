@@ -53,39 +53,6 @@ impl<'a> Scope<'a> {
         }
     }
 
-    pub(super) fn this(&self) -> Option<&Type<'static>> {
-        if let Some(ref this) = self.this {
-            return Some(this);
-        }
-
-        match self.parent {
-            Some(ref parent) => parent.this(),
-            None => None,
-        }
-    }
-
-    pub(super) fn get_var(&self, sym: &JsWord) -> Option<&VarInfo> {
-        if let Some(ref v) = self.vars.get(sym) {
-            return Some(v);
-        }
-
-        self.search_parent(sym)
-    }
-
-    pub(super) fn search_parent(&self, sym: &JsWord) -> Option<&VarInfo> {
-        let mut parent = self.parent;
-
-        while let Some(p) = parent {
-            if let Some(var_info) = p.vars.get(sym) {
-                return Some(var_info);
-            }
-
-            parent = p.parent;
-        }
-
-        None
-    }
-
     /// Overrides a varaible. Used for removing lazily-typed stuffs.
     pub fn override_var(
         &mut self,
