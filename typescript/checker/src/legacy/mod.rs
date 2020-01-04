@@ -375,9 +375,7 @@ impl Analyzer<'_, '_> {
                         child.info.errors.push(err);
                     }
                 }
-                for n in names {
-                    child.declaring.remove_item(&n).unwrap();
-                }
+                child.scope.remove_declaring(names);
             });
 
             if let Some(name) = name {
@@ -576,9 +574,7 @@ impl Fold<VarDecl> for Analyzer<'_, '_> {
 
                 macro_rules! remove_declaring {
                     () => {{
-                        for n in names {
-                            self.declaring.remove_item(&n).unwrap();
-                        }
+                        self.scope.remove_declaring(names);
                         debug_assert_eq!(Some(self.declaring.clone()), debug_declaring);
                     }};
                 }

@@ -10,6 +10,7 @@ use swc_atoms::js_word;
 use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, DUMMY_SP};
 use swc_common::{util::move_map::MoveMap, Span, Spanned, Visit, DUMMY_SP};
 use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, Visit, DUMMY_SP};
+use swc_common::{Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
@@ -66,7 +67,7 @@ impl Analyzer<'_, '_> {
                 }
             }
 
-            let params = params.move_map(|param| {
+            params.into_iter().for_each(|param| {
                 let mut names = vec![];
 
                 let mut visitor = VarVisitor { names: &mut names };
@@ -120,17 +121,7 @@ impl Analyzer<'_, '_> {
                     },
                 }
 
-                for n in names {
-                    let idx = child
-                        .scope
-                        .declaring
-                        .iter()
-                        .rposition(|name| n == *name)
-                        .expect("failed to find inserted name");
-                    child.scope.declaring.remove(idx);
-                }
-
-                param
+                child.scope.remove_declaring(names);
             });
 
             child.inferred_return_types.get_mut().insert(c_span, vec![]);
@@ -182,15 +173,7 @@ impl Analyzer<'_, '_> {
                     }
                 }
 
-                for n in names {
-                    let idx = child
-                        .scope
-                        .declaring
-                        .iter()
-                        .rposition(|name| n == *name)
-                        .expect("failed to find inserted name");
-                    child.scope.declaring.remove(idx);
-                }
+                child.scope.remove_declaring(names);
             });
 
             child.inferred_return_types.get_mut().insert(c.span, vec![]);
