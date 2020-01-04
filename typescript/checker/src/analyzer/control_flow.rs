@@ -317,12 +317,7 @@ impl Analyzer<'_, '_> {
                     match **expr {
                         // TODO: Validate
                         Expr::Member(MemberExpr { .. }) => return,
-                        _ => unimplemented!(
-                            "assign: {:?} = {:?}\nFile: {}",
-                            expr,
-                            ty,
-                            self.path.display()
-                        ),
+                        _ => unimplemented!("assign: {:?} = {:?}", expr, ty),
                     }
                 }
 
