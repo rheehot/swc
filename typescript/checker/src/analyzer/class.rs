@@ -121,7 +121,12 @@ impl Analyzer<'_> {
                 }
 
                 for n in names {
-                    child.declaring.remove_item(&n).unwrap();
+                    let idx = child
+                        .declaring
+                        .iter()
+                        .rposition(|name| n == name)
+                        .expect("failed to find inserted name");
+                    child.declaring.remove(idx).unwrap();
                 }
 
                 param

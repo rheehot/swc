@@ -1,13 +1,15 @@
 use super::Analyzer;
 use crate::{
     analyzer::util::ResultExt,
+    builtin_types,
     errors::Error,
+    ty,
     ty::{ClassInstance, Tuple, Type, TypeLit, TypeParamInstantiation, TypeRef},
     util::{IntoCow, RemoveTypes},
     ValidationResult,
 };
 use swc_atoms::js_word;
-use swc_common::{Spanned, VisitWith};
+use swc_common::{Span, Spanned, VisitWith};
 use swc_ecma_ast::*;
 
 mod bin;
@@ -380,6 +382,112 @@ impl Analyzer<'_> {
         }
 
         return self.validate_expr(&exprs.last().unwrap());
+    }
+
+    pub(super) fn type_of_ident(&mut self, i: &Ident, type_mode: TypeOfMode) -> ValidationResult {
+        let span = i.span();
+
+        match i.sym {
+            js_word!("arguments") => return Ok(Type::any(span).owned()),
+            js_word!("Symbol") => {
+                return Ok(builtin_types::get_var(self.libs, i.span, &js_word!("Symbol"))?.owned());
+            }
+            js_word!("undefined") => return Ok(Type::undefined(span).into_cow()),
+            js_word!("void") => return Ok(Type::any(span).into_cow()),
+            js_word!("eval") => match type_mode {
+                TypeOfMode::LValue => return Err(Error::CannotAssignToNonVariable { span }),
+                TypeOfMode::RValue => {
+                    return Ok(Type::Function(ty::Function {
+                        span,
+                        params: vec![],
+                        ret_ty: box Type::any(span).owned(),
+                        type_params: None,
+                    })
+                    .owned());
+                }
+            },
+            _ => {}
+        }
+
+        if i.sym == js_word!("require") {
+            unreachable!("typeof(require('...'))");
+        }
+
+        if let Some(ty) = self.resolved_imports.get(&i.sym) {
+            println!(
+                "({}) type_of({}): resolved import",
+                self.scope.depth(),
+                i.sym
+            );
+            return Ok(ty.static_cast());
+        }
+
+        if let Some(ty) = self.find_type(&i.sym) {
+            println!("({}) type_of({}): find_type", self.scope.depth(), i.sym);
+            return Ok(ty.clone().respan(span).owned());
+        }
+
+        // Check `declaring` before checking variables.
+        if self.declaring.contains(&i.sym) {
+            println!(
+                "({}) reference in initialization: {}",
+                self.scope.depth(),
+                i.sym
+            );
+
+            if self.allow_ref_declaring {
+                return Ok(Type::any(span).owned());
+            } else {
+                return Err(Error::ReferencedInInit { span });
+            }
+        }
+
+        if let Some(ty) = self.find_var_type(&i.sym) {
+            println!("({}) type_of({}): find_var_type", self.scope.depth(), i.sym);
+            return Ok(ty.clone().respan(span).owned());
+        }
+
+        if let Some(_var) = self.find_var(&i.sym) {
+            // TODO: Infer type or use type hint to handle
+            //
+            // let id: (x: Foo) => Foo = x => x;
+            //
+            return Ok(Type::any(span).into_cow());
+        }
+
+        if let Ok(ty) = builtin_types::get_var(self.libs, span, &i.sym) {
+            return Ok(ty.owned());
+        }
+
+        println!(
+            "({}) type_of(): undefined symbol: {}",
+            self.scope.depth(),
+            i.sym,
+        );
+
+        return Err(Error::UndefinedSymbol { span: i.span });
+    }
+
+    pub(super) fn type_of_ts_entity_name(
+        &self,
+        span: Span,
+        n: &TsEntityName,
+        type_args: Option<&TsTypeParamInstantiation>,
+    ) -> ValidationResult {
+        match *n {
+            TsEntityName::Ident(ref i) => self.type_of_ident(i, TypeOfMode::RValue),
+            TsEntityName::TsQualifiedName(ref qname) => {
+                let obj_ty = self.type_of_ts_entity_name(span, &qname.left, None)?;
+
+                self.access_property(
+                    span,
+                    obj_ty,
+                    &Expr::Ident(qname.right.clone()),
+                    false,
+                    TypeOfMode::RValue,
+                )
+            }
+        }
     }
 }
 

@@ -310,7 +310,7 @@ impl Analyzer<'_> {
         let res: Result<(), Error> = try {
             match *lhs {
                 PatOrExpr::Expr(ref expr) | PatOrExpr::Pat(box Pat::Expr(ref expr)) => {
-                    let lhs_ty = self.type_of_expr(expr, TypeOfMode::LValue, None)?;
+                    let lhs_ty = self.validate_expr_with_extra(expr, TypeOfMode::LValue, None)?;
 
                     self.assign(&lhs_ty, &ty, span)?;
 
