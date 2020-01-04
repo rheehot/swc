@@ -669,14 +669,14 @@ impl Analyzer<'_, '_> {
         self.detect_facts(&e.test, &mut facts)?;
 
         self.validate_expr(&e.test)?;
-        self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
+        let cons = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
             child.validate_expr(&cons)
         })?;
-        self.with_child(ScopeKind::Flow, facts.false_facts, |child| {
+        let alt = self.with_child(ScopeKind::Flow, facts.false_facts, |child| {
             child.validate_expr(&alt)
         })?;
 
-        Ok(())
+        Ok(Type::union(vec![cons, alt]).owned())
     }
 }
 
