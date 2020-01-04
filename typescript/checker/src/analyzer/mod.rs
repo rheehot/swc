@@ -7,10 +7,11 @@ use crate::{
     errors::Error,
     loader::Load,
     ty::{Type, TypeRef},
-    Exports, Rule,
+    Exports, ImportInfo, Rule,
 };
-use fxhash::{FxHashMap, FxHashSet};
-use std::sync::Arc;
+use bitflags::_core::hash::BuildHasherDefault;
+use fxhash::{FxHashMap, FxHashSet, FxHasher};
+use std::{collections::HashMap, path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::Span;
 use swc_common::{SourceMap, Span};
@@ -52,6 +53,7 @@ pub struct Analyzer<'a, 'b> {
 
     allow_ref_declaring: bool,
     computed_prop_mode: ComputedPropMode,
+    is_builtin: bool,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -70,14 +72,24 @@ fn _assert_types() {
 
 impl<'a, 'b> Analyzer<'a, 'b> {
     pub fn root(libs: &'b [Lib], rule: Rule, loader: &'b dyn Load) -> Self {
-        Self::new_inner(libs, rule, loader, Scope::root())
+        Self::new_inner(libs, rule, loader, Scope::root(), false)
+    }
+
+    pub(crate) fn for_builtin() -> Self {
+        Self::new_inner(&[], Default::default(), &NoopLoader, Scope::root(), true)
     }
 
     fn new(&self, scope: Scope<'a>) -> Self {
-        Self::new_inner(self.libs, self.rule, self.loader, scope)
+        Self::new_inner(self.libs, self.rule, self.loader, scope, false)
     }
 
-    fn new_inner(libs: &'b [Lib], rule: Rule, loader: &'b dyn Load, scope: Scope<'a>) -> Self {
+    fn new_inner(
+        libs: &'b [Lib],
+        rule: Rule,
+        loader: &'b dyn Load,
+        scope: Scope<'a>,
+        is_builtin: bool,
+    ) -> Self {
         Self {
             info: Default::default(),
             resolved_imports: Default::default(),
@@ -89,6 +101,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             loader,
             allow_ref_declaring: false,
             computed_prop_mode: ComputedPropMode::Object,
+            is_builtin,
         }
     }
 
@@ -118,5 +131,16 @@ impl<'a, 'b> Analyzer<'a, 'b> {
         );
 
         ret
+    }
+}
+
+struct NoopLoader;
+impl Load for NoopLoader {
+    fn load(
+        &self,
+        base: Arc<PathBuf>,
+        import: &ImportInfo,
+    ) -> Result<Exports<FxHashMap<JsWord, Arc<Type<'static>>>>, Error> {
+        unreachable!("builtin module should not import other moduel")
     }
 }
