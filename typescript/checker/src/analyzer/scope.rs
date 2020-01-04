@@ -18,16 +18,12 @@ pub(crate) struct Scope<'a> {
     pub(super) facts: CondFacts,
 }
 
-impl Analyzer<'_, '_> {
-    pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) -> Result<(), Error> {
-        self.declare_vars_inner(kind, pat, false)
-    }
-
+impl Scope<'_> {
     pub fn remove_declaring<I>(&mut self, names: impl IntoIterator<IntoIter = I, Item = JsWord>)
     where
         I: Iterator<Item = JsWord> + DoubleEndedIterator,
     {
-        for name in names.into_iter().rev() {
+        for n in names.into_iter().rev() {
             let idx = self
                 .declaring
                 .iter()
@@ -35,6 +31,12 @@ impl Analyzer<'_, '_> {
                 .expect("failed to find inserted name");
             self.declaring.remove(idx);
         }
+    }
+}
+
+impl Analyzer<'_, '_> {
+    pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) -> Result<(), Error> {
+        self.declare_vars_inner(kind, pat, false)
     }
 
     /// Updates variable list.
