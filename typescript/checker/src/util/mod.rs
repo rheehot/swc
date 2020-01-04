@@ -297,7 +297,7 @@ impl RemoveTypes for Type {
             _ => {}
         }
 
-        Cow::Owned(self)
+        self
     }
 
     fn remove_truthy(self) -> Type {
@@ -313,7 +313,7 @@ impl RemoveTypes for Type {
 
             Type::Union(u) => u.remove_truthy(),
             Type::Intersection(i) => i.remove_truthy(),
-            _ => Cow::Owned(self),
+            _ => self,
         }
     }
 }
