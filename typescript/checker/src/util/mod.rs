@@ -1,5 +1,5 @@
 use crate::ty::{Class, Intersection, Type, TypeElement, Union};
-use std::{borrow::Cow, mem::transmute};
+use std::mem::transmute;
 use swc_atoms::js_word;
 use swc_common::{Fold, FoldWith, Span, DUMMY_SP};
 use swc_ecma_ast::*;
