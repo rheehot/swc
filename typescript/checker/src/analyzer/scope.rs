@@ -68,6 +68,7 @@ impl Analyzer<'_, '_> {
                     if let Some(..) = self
                         .info
                         .exports
+                        .vars
                         .insert(name, Arc::new(ty.unwrap_or(Type::any(i.span))))
                     {
                         unimplemented!("multiple exported variables with same name")

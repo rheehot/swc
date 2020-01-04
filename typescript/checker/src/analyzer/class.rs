@@ -24,12 +24,12 @@ impl Analyzer<'_, '_> {
             self.validate_computed_prop_key(p.span, &p.key);
         }
 
-        if let Some(ref ty) = p.type_ann {
-            let span = ty.span();
-
-            let ty: Type = ty.type_ann.clone().into();
-            self.expand_type(span, ty.owned()).store(&mut errors);
-        }
+        //if let Some(ref ty) = p.type_ann {
+        //    let span = ty.span();
+        //
+        //    let ty: Type = ty.type_ann.clone().into();
+        //    self.expand_type(span, ty.owned()).store(&mut errors);
+        //}
 
         if let Some(ref value) = p.value {
             self.validate_expr(&value).store(&mut errors);
@@ -91,16 +91,16 @@ impl Analyzer<'_, '_> {
                             ..
                         }) => {
                             let ty = i.type_ann.clone().map(Type::from);
-                            let ty = match ty {
-                                Some(ty) => match child.expand_type(i.span, ty.owned()) {
-                                    Ok(ty) => Some(ty.into_owned().into_static()),
-                                    Err(err) => {
-                                        child.info.errors.push(err);
-                                        Some(Type::any(i.span))
-                                    }
-                                },
-                                None => None,
-                            };
+                            //let ty = match ty {
+                            //    Some(ty) => match child.expand_type(i.span, ty.owned()) {
+                            //        Ok(ty) => Some(ty.into_owned().into_static()),
+                            //        Err(err) => {
+                            //            child.info.errors.push(err);
+                            //            Some(Type::any(i.span))
+                            //        }
+                            //    },
+                            //    None => None,
+                            //};
 
                             match child.scope.declare_var(
                                 i.span,

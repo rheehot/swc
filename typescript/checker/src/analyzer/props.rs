@@ -132,17 +132,19 @@ impl Visit<GetterProp> for Analyzer<'_, '_> {
 impl Visit<GetterProp> for Analyzer<'_> {
     fn visit(&mut self, n: &GetterProp) {
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
-            n.visit_children(child);
+            n.key.visit_with(child);
+
+            if let Some(body) = &n.body {
+                let ret_ty = child.visit_stmts_for_return(&body.stmts);
+
+                if let None = ret_ty {
+                    // getter property must have return statements.
+                    self.info
+                        .errors
+                        .push(Error::GetterPropWithoutReturn { span: n.key.span() });
+                }
+            }
         });
-
-        if entry.1.is_empty() {
-            // getter property must have return statements.
-            self.info
-                .errors
-                .push(Error::GetterPropWithoutReturn { span: n.key.span() });
-        }
-
-        n
     }
 }
 
@@ -155,22 +157,22 @@ impl Analyzer<'_, '_> {
         if node.computed {
             self.validate_computed_prop_key(node.span(), &node.key);
         }
-
-        node
     }
+}
 
     fn validate_ts_property_signature(
         &mut self,
         node: TsPropertySignature,
     ) -> Result<TsPropertySignature, Error> {
         let node = node.fold_children(self);
+impl Visit<TsPropertySignature> for Analyzer<'_, '_> {
+    fn visit(&mut self, node: &TsPropertySignature) {
         node.visit_children(self);
         let node = node.visit_children(self);
 
         if node.computed {
-            self.validate_computed_prop_key(node.span(), &node.key);
+            self.validate_computed_prop_key(node.span(), &node.key)
+                .store(&mut self.info.errors);
         }
-
-        node
     }
 }

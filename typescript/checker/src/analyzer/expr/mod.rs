@@ -491,7 +491,7 @@ impl Analyzer<'_, '_> {
     }
 }
 
-fn instantiate_class(ty: TypeRef) -> TypeRef {
+fn instantiate_class(ty: Type<'static>) -> Type<'static> {
     let span = ty.span();
 
     match *ty.normalize() {

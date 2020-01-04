@@ -1,5 +1,9 @@
 use super::Analyzer;
-use crate::analyzer::{scope::ScopeKind, util::ResultExt};
+use crate::{
+    analyzer::{scope::ScopeKind, util::ResultExt},
+    errors::Error,
+    ty::Type,
+};
 use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -33,6 +37,12 @@ impl Visit<TsInterfaceDecl> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
+    pub(super) fn visit_stmts_for_return(
+        &mut self,
+        stmts: &[Stmt],
+    ) -> Result<Option<Type<'static>>, Error> {
+    }
+
     /// Validate that parent interfaces are all resolved.
     pub(super) fn resolve_parent_interfaces(&mut self, parents: &[TsExprWithTypeArgs]) {
         for parent in parents {

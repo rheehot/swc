@@ -3,7 +3,7 @@ use crate::{
     errors::Error,
     ty::{Type, TypeRefExt},
 };
-use std::{convert::TryInto, mem, mem::replace, sync::Arc};
+use std::{convert::TryInto, mem::replace, sync::Arc};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Span, Spanned};
 use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith};
