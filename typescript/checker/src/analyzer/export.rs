@@ -191,6 +191,7 @@ impl Analyzer<'_, '_> {
     }
 }
 
+/// Done
 impl Visit<TsExportAssignment> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &TsExportAssignment) {
         let ty = self.validate_expr(&s.expr)?;
@@ -199,6 +200,7 @@ impl Visit<TsExportAssignment> for Analyzer<'_, '_> {
     }
 }
 
+/// Done
 impl Visit<ExportDefaultExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &ExportDefaultExpr) {
         let ty = self.validate_expr(&s.expr)?;
