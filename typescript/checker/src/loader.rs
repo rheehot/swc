@@ -34,9 +34,18 @@ impl Load for Checker<'_> {
                 ref export,
             } in import.items.iter()
             {
-                if let Some(exported) = module.1.exports.get(&export.0) {
-                    result.insert(local.0.clone(), exported.clone());
-                } else {
+                let mut done = false;
+                if let Some(ty) = module.1.exports.types.get(&export.0) {
+                    done = true;
+                    result.types.insert(export.0.clone(), ty.clone());
+                }
+
+                if let Some(var) = module.1.exports.vars.get(&export.0) {
+                    done = true;
+                    result.vars.insert(export.0, var.clone());
+                }
+
+                if !done {
                     errors.push(local.clone());
                 }
             }

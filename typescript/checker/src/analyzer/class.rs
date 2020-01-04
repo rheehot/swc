@@ -73,7 +73,7 @@ impl Analyzer<'_, '_> {
 
                 param.visit_with(&mut visitor);
 
-                child.declaring.extend(names.clone());
+                child.scope.declaring.extend(names.clone());
 
                 match param {
                     PatOrTsParamProp::Pat(ref pat) => {
@@ -122,11 +122,12 @@ impl Analyzer<'_, '_> {
 
                 for n in names {
                     let idx = child
+                        .scope
                         .declaring
                         .iter()
                         .rposition(|name| n == name)
                         .expect("failed to find inserted name");
-                    child.declaring.remove(idx).unwrap();
+                    child.scope.declaring.remove(idx);
                 }
 
                 param
@@ -172,7 +173,7 @@ impl Analyzer<'_, '_> {
 
                 pat.visit_with(&mut visitor);
 
-                child.declaring.extend_from_slice(&names);
+                child.scope.declaring.extend(names.clone());
 
                 match child.declare_vars(VarDeclKind::Let, pat) {
                     Ok(()) => {}
@@ -182,7 +183,7 @@ impl Analyzer<'_, '_> {
                 }
 
                 for n in names {
-                    child.declaring.remove_item(&n).unwrap();
+                    child.scope.declaring.remove_item(&n).unwrap();
                 }
             });
 

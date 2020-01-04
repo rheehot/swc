@@ -235,7 +235,7 @@ impl Analyzer<'_, '_> {
                 match **test {
                     Expr::Ident(ref i) => {
                         // Check `declaring` before checking variables.
-                        if self.declaring.contains(&i.sym) {
+                        if self.scope.declaring.contains(&i.sym) {
                             if self.allow_ref_declaring {
                                 return Ok(Type::any(span).owned());
                             } else {
@@ -363,7 +363,7 @@ impl Analyzer<'_, '_> {
         for e in exprs.iter() {
             match **e {
                 Expr::Ident(ref i) => {
-                    if self.declaring.contains(&i.sym) {
+                    if self.scope.declaring.contains(&i.sym) {
                         is_any = true;
                     }
                 }
@@ -428,7 +428,7 @@ impl Analyzer<'_, '_> {
         }
 
         // Check `declaring` before checking variables.
-        if self.declaring.contains(&i.sym) {
+        if self.scope.declaring.contains(&i.sym) {
             println!(
                 "({}) reference in initialization: {}",
                 self.scope.depth(),

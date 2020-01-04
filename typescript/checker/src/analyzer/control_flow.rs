@@ -391,7 +391,7 @@ impl Analyzer<'_, '_> {
                                 });
                             }
 
-                            if self.allow_ref_declaring && self.declaring.contains(&i.sym) {
+                            if self.allow_ref_declaring && self.scope.declaring.contains(&i.sym) {
                                 return Ok(());
                             } else {
                                 // undefined symbol

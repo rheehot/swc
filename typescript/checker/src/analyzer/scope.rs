@@ -1,6 +1,7 @@
 use super::{control_flow::CondFacts, Analyzer};
 use crate::{errors::Error, ty::Type};
 use fxhash::FxHashMap;
+use smallvec::SmallVec;
 use std::sync::Arc;
 use swc_atoms::JsWord;
 use swc_common::DUMMY_SP;
@@ -10,6 +11,8 @@ use swc_ecma_ast::*;
 pub(crate) struct Scope<'a> {
     parent: Option<&'a Scope<'a>>,
     kind: ScopeKind,
+    pub declaring: SmallVec<[JsWord; 8]>,
+
     pub(super) vars: FxHashMap<JsWord, VarInfo>,
     pub(super) types: FxHashMap<JsWord, Type<'static>>,
     pub(super) facts: CondFacts,

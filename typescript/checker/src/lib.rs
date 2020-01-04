@@ -222,7 +222,7 @@ impl Checker<'_> {
                     }
                 })
         });
-        let mut a = Analyzer::root(&self.libs, self.rule);
+        let mut a = Analyzer::root(&self.libs, self.rule, self);
         module.visit_with(&mut a);
 
         let info = a.info;

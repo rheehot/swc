@@ -9,7 +9,6 @@ use crate::{
     Exports, Rule,
 };
 use fxhash::{FxHashMap, FxHashSet};
-use smallvec::SmallVec;
 use std::sync::Arc;
 use swc_atoms::JsWord;
 use swc_common::Span;
@@ -42,8 +41,6 @@ pub struct Analyzer<'a, 'b> {
     errored_imports: FxHashSet<JsWord>,
     pending_exports: Vec<((JsWord, Span), Type<'static>)>,
 
-    declaring: SmallVec<[JsWord; 8]>,
-
     rule: Rule,
     libs: &'b [Lib],
     scope: Scope<'a>,
@@ -72,7 +69,6 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             resolved_imports: Default::default(),
             errored_imports: Default::default(),
             pending_exports: Default::default(),
-            declaring: Default::default(),
             rule,
             libs,
             scope: Scope::root(),
@@ -86,7 +82,6 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             resolved_imports: Default::default(),
             errored_imports: Default::default(),
             pending_exports: Default::default(),
-            declaring: Default::default(),
             rule: self.rule,
             libs: self.libs,
             scope,
