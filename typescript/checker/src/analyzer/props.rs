@@ -96,7 +96,7 @@ impl Visit<Prop> for Analyzer<'_, '_> {
     fn visit(&mut self, n: &Prop) {
         self.computed_prop_mode = ComputedPropMode::Object;
 
-        let n = n.visit_children(self);
+        n.visit_children(self);
 
         match n {
             Prop::Shorthand(ref i) => {
@@ -106,8 +106,6 @@ impl Visit<Prop> for Analyzer<'_, '_> {
             }
             _ => {}
         }
-
-        n
     }
 }
 
