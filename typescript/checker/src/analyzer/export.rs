@@ -19,7 +19,7 @@ use swc_ecma_ast::*;
 // ModuleDecl::TsNamespaceExport(ns) =>
 // unimplemented!("export namespace"),
 
-impl Analyzer<'_> {
+impl Analyzer<'_, '_> {
     pub(super) fn handle_pending_exports(&mut self) {
         if self.pending_exports.is_empty() {
             return;
@@ -88,7 +88,7 @@ impl Analyzer<'_> {
     }
 }
 
-impl Visit<ExportDecl> for Analyzer<'_> {
+impl Visit<ExportDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, export: &ExportDecl) {
         let export = export.visit_children(self);
 
@@ -140,6 +140,7 @@ impl Fold<ExportDefaultDecl> for Analyzer<'_> {
     fn fold(&mut self, export: ExportDefaultDecl) -> ExportDefaultDecl {
         let export = export.fold_children(self);
 impl Visit<ExportDefaultDecl> for Analyzer<'_> {
+impl Visit<ExportDefaultDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, export: &ExportDefaultDecl) {
         export.visit_children(self);
 impl Visit<ExportDefaultDecl> for Analyzer<'_> {
@@ -171,7 +172,7 @@ impl Visit<ExportDefaultDecl> for Analyzer<'_> {
     }
 }
 
-impl Analyzer<'_> {
+impl Analyzer<'_, '_> {
     /// `scope.regsiter_type` should be called before calling this method.
     fn export(&mut self, span: Span, name: JsWord, from: Option<JsWord>) {
         let from = from.unwrap_or_else(|| name.clone());
@@ -190,7 +191,7 @@ impl Analyzer<'_> {
     }
 }
 
-impl Visit<TsExportAssignment> for Analyzer<'_> {
+impl Visit<TsExportAssignment> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &TsExportAssignment) {
         let ty = self.validate_expr(&s.expr)?;
 
@@ -198,7 +199,7 @@ impl Visit<TsExportAssignment> for Analyzer<'_> {
     }
 }
 
-impl Visit<ExportDefaultExpr> for Analyzer<'_> {
+impl Visit<ExportDefaultExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &ExportDefaultExpr) {
         let ty = self.validate_expr(&s.expr)?;
 

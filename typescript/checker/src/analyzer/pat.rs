@@ -7,6 +7,7 @@ impl Analyzer<'_> {
     fn visit_rest_pat(&mut self, p: &RestPat) {
         let p = p.fold_children(self);
 impl Visit<RestPat> for Analyzer<'_> {
+impl Visit<RestPat> for Analyzer<'_, '_> {
     fn visit(&mut self, p: &RestPat) {
         let p = p.visit_children(self);
 
@@ -54,6 +55,7 @@ impl Analyzer<'_> {
     fn visit_assign_pat(&mut self, p: &AssignPat) {
         let p = p.fold_children(self);
 impl Visit<AssignPat> for Analyzer<'_> {
+impl Visit<AssignPat> for Analyzer<'_, '_> {
     fn visit(&mut self, p: &AssignPat) {
         let p = p.visit_children(self);
 

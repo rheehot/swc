@@ -186,7 +186,7 @@ impl BitOr for CondFacts {
     }
 }
 
-impl Visit<IfStmt> for Analyzer<'_> {
+impl Visit<IfStmt> for Analyzer<'_, '_> {
     fn visit(&mut self, stmt: &IfStmt) {
         let mut facts = Default::default();
         match self.detect_facts(&stmt.test, &mut facts) {
@@ -206,7 +206,7 @@ impl Visit<IfStmt> for Analyzer<'_> {
     }
 }
 
-impl Analyzer<'_> {
+impl Analyzer<'_, '_> {
     #[validator]
     fn check_switch_discriminant(&mut self, s: &SwitchStmt) {
         let discriminant_ty = self.validate_expr(&s.discriminant)?;
@@ -219,7 +219,7 @@ impl Analyzer<'_> {
     }
 }
 
-impl Visit<SwitchStmt> for Analyzer<'_> {
+impl Visit<SwitchStmt> for Analyzer<'_, '_> {
     fn visit(&mut self, stmt: &SwitchStmt) {
         stmt.visit_children(self);
 
@@ -305,7 +305,7 @@ impl Visit<SwitchStmt> for Analyzer<'_> {
     }
 }
 
-impl Analyzer<'_> {
+impl Analyzer<'_, '_> {
     pub(super) fn try_assign(&mut self, span: Span, lhs: &PatOrExpr, ty: &Type) {
         let res: Result<(), Error> = try {
             match *lhs {
@@ -661,7 +661,7 @@ impl Analyzer<'_> {
     }
 }
 
-impl Analyzer<'_> {
+impl Analyzer<'_, '_> {
     fn validate_cond_expr(&mut self, e: &CondExpr) -> ValidationResult {
         // TODO: children
 

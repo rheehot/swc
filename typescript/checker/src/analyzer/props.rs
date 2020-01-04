@@ -21,7 +21,7 @@ enum ComputedPropMode {
     Object,
 }
 
-impl Visit<ComputedPropName> for Analyzer<'_> {
+impl Visit<ComputedPropName> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &ComputedPropName) {
         // TODO: check if it's class or object literal
         node.visit_children(self);
@@ -86,7 +86,7 @@ impl Visit<ComputedPropName> for Analyzer<'_> {
     }
 }
 
-impl Visit<Prop> for Analyzer<'_> {
+impl Visit<Prop> for Analyzer<'_, '_> {
     fn visit(&mut self, n: &Prop) {
         self.computed_prop_mode = ComputedPropMode::Object;
 
@@ -104,7 +104,7 @@ impl Visit<Prop> for Analyzer<'_> {
     }
 }
 
-impl Visit<GetterProp> for Analyzer<'_> {
+impl Visit<GetterProp> for Analyzer<'_, '_> {
     fn visit(&mut self, n: &GetterProp) {
         let (entry, n) = {
             self.with_child(ScopeKind::Fn, Default::default(), |child| {
@@ -145,7 +145,7 @@ impl Visit<GetterProp> for Analyzer<'_> {
     }
 }
 
-impl Analyzer<'_> {
+impl Analyzer<'_, '_> {
     fn validate_ts_method_signature(&mut self, node: TsMethodSignature) -> TsMethodSignature {
         let node = node.fold_children(self);
         node.visit_children(self);

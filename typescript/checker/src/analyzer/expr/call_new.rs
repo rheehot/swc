@@ -21,7 +21,7 @@ enum ExtractKind {
     Call,
 }
 
-impl Analyzer<'_> {
+impl Analyzer<'_, '_> {
     #[validator]
     fn check_callee(
         &mut self,

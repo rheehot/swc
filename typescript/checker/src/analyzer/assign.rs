@@ -12,7 +12,7 @@ use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
-impl Analyzer<'_> {
+impl Analyzer<'_, '_> {
     pub fn assign(&self, left: &Type, right: &Type, span: Span) -> Result<(), Error> {
         self.assign_inner(left, right, span)
             .map_err(|err| match err {

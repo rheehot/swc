@@ -15,7 +15,7 @@ pub(crate) struct Scope<'a> {
     pub(super) facts: CondFacts,
 }
 
-impl Analyzer<'_> {
+impl Analyzer<'_, '_> {
     pub(super) fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) -> Result<(), Error> {
         self.declare_vars_inner(kind, pat, false)
     }

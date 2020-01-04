@@ -22,23 +22,9 @@ mod generic;
 mod scope;
 
 pub(crate) struct Analyzer<'a, 'b> {
-    pub info: Info,
-    in_declare: bool,
-    resolved_imports: FxHashMap<JsWord, Arc<Type<'static>>>,
-    errored_imports: FxHashSet<JsWord>,
-    pending_exports: Vec<((JsWord, Span), Type<'static>)>,
-
-    /// Span used while inserting return type.
-    return_type_span: Span,
-    /// Infered from arrow expressions and return statements.
-    inferred_return_types: RefCell<FxHashMap<Span, Vec<Type<'static>>>>,
-
-    scope: Scope<'a>,
     /// This is false iff it should be treated as error when `1.contains()` is
     /// true
     allow_ref_declaring: bool,
-    path: Arc<PathBuf>,
-    loader: &'b dyn Load,
     libs: &'b [Lib],
     rule: Rule,
 

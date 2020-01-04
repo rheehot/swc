@@ -8,7 +8,7 @@ use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
-impl Analyzer<'_> {
+impl Analyzer<'_, '_> {
     #[validator]
     fn check_lhs_of_for_loop(&mut self, e: &VarDeclOrPat) {
         // Check iterable
@@ -64,7 +64,7 @@ impl Analyzer<'_> {
     }
 }
 
-impl Visit<ForInStmt> for Analyzer<'_> {
+impl Visit<ForInStmt> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &ForInStmt) {
         s.visit_children(self);
 
@@ -80,7 +80,7 @@ impl Visit<ForInStmt> for Analyzer<'_> {
     }
 }
 
-impl Visit<ForOfStmt> for Analyzer<'_> {
+impl Visit<ForOfStmt> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &ForOfStmt) {
         s.visit_children(self);
 

@@ -4,6 +4,7 @@ use self::{
 };
 use crate::{
     errors::Error,
+    loader::Load,
     ty::{Type, TypeRef},
     Exports, Rule,
 };
@@ -33,7 +34,10 @@ mod util;
 /// Note: All methods named `validate_*` return [Err] iff it's not recoverable.
 #[derive(Debug)]
 pub(crate) struct Analyzer<'a> {
+pub struct Analyzer<'a,'b> {
+pub struct Analyzer<'a, 'b> {
     pub info: Info,
+
     resolved_imports: FxHashMap<JsWord, Arc<Type<'static>>>,
     errored_imports: FxHashSet<JsWord>,
     pending_exports: Vec<((JsWord, Span), Type<'static>)>,
@@ -41,8 +45,10 @@ pub(crate) struct Analyzer<'a> {
     declaring: SmallVec<[JsWord; 8]>,
 
     rule: Rule,
-    libs: &'a [Lib],
+    libs: &'b [Lib],
     scope: Scope<'a>,
+
+    loader: &'b dyn Load,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -59,8 +65,8 @@ fn _assert_types() {
     is_send::<Info>();
 }
 
-impl<'a> Analyzer<'a> {
-    pub fn root(libs: &'a [Lib], rule: Rule) -> Self {
+impl<'a, 'b> Analyzer<'a, 'b> {
+    pub fn root(libs: &'b [Lib], rule: Rule, loader: &'b dyn Load) -> Self {
         Self {
             info: Default::default(),
             resolved_imports: Default::default(),
@@ -70,6 +76,7 @@ impl<'a> Analyzer<'a> {
             rule,
             libs,
             scope: Scope::root(),
+            loader,
         }
     }
 
@@ -83,6 +90,7 @@ impl<'a> Analyzer<'a> {
             rule: self.rule,
             libs: self.libs,
             scope,
+            loader: self.loader,
         }
     }
 
@@ -90,6 +98,10 @@ impl<'a> Analyzer<'a> {
     pub(super) fn with_child<F, Ret>(&mut self, kind: ScopeKind, facts: CondFacts, op: F) -> Ret
     where
         F: for<'any> FnOnce(&mut Analyzer<'any>) -> Ret,
+        where
+            F: for<'aa,'bb> FnOnce(&mut Analyzer<'aa,'bb>) -> Ret,
+    where
+        F: for<'aa, 'bb> FnOnce(&mut Analyzer<'aa, 'bb>) -> Ret,
     {
         let child_scope = Scope::new(&self.scope, kind, facts);
         let (ret, info) = {

@@ -13,7 +13,7 @@ use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
-impl Analyzer<'_> {
+impl Analyzer<'_, '_> {
     fn validate_class_property(&mut self, p: &ClassProp) -> Result<(), Error> {
         // TODO: children
 
@@ -425,6 +425,7 @@ impl Fold<Class> for Analyzer<'_> {
     fn fold(&mut self, c: Class) -> Class {
         let c = c.fold_children(self);
 impl Visit<Class> for Analyzer<'_> {
+impl Visit<Class> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &Class) {
         c.visit_children(self);
 impl Visit<Class> for Analyzer<'_> {
@@ -485,7 +486,7 @@ impl Visit<Class> for Analyzer<'_> {
     }
 }
 
-impl Visit<ClassExpr> for Analyzer<'_> {
+impl Visit<ClassExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassExpr) {
         let ty = match self.validate_type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {
             Ok(ty) => ty,
@@ -533,6 +534,7 @@ impl Fold<ClassDecl> for Analyzer<'_> {
     fn fold(&mut self, c: ClassDecl) -> ClassDecl {
         let c: ClassDecl = c.fold_children(self);
 impl Visit<ClassDecl> for Analyzer<'_> {
+impl Visit<ClassDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassDecl) {
         c.visit_children(self);
 impl Visit<ClassDecl> for Analyzer<'_> {

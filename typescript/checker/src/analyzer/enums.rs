@@ -8,7 +8,7 @@ use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 /// Handles enum.
-impl Visit<TsEnumDecl> for Analyzer<'_> {
+impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, e: &TsEnumDecl) {
         let span = e.span();
 
@@ -59,7 +59,7 @@ impl Visit<TsEnumDecl> for Analyzer<'_> {
     }
 }
 
-impl Analyzer<'_> {
+impl Analyzer<'_, '_> {
     // Check for constant enum in rvalue.
     pub(super) fn check_rvalue(&mut self, rhs_ty: &Type) {
         match *rhs_ty.normalize() {
