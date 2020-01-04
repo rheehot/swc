@@ -37,10 +37,7 @@ impl Visit<TsInterfaceDecl> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    pub(super) fn visit_stmts_for_return(
-        &mut self,
-        stmts: &[Stmt],
-    ) -> Result<Option<Type<'static>>, Error> {
+    pub(super) fn visit_stmts_for_return(&mut self, stmts: &[Stmt]) -> Result<Option<Type>, Error> {
         unimplemented!("visit_stmts_for_return")
     }
 

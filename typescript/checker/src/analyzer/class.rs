@@ -19,10 +19,7 @@ prevent!(Constructor);
 prevent!(ClassMethod);
 
 impl Analyzer<'_, '_> {
-    fn validate_class_property(
-        &mut self,
-        p: &ClassProp,
-    ) -> Result<ty::ClassProperty<'static>, Error> {
+    fn validate_class_property(&mut self, p: &ClassProp) -> Result<ty::ClassProperty, Error> {
         // TODO: children
 
         let mut errors = vec![];
@@ -60,7 +57,7 @@ impl Analyzer<'_, '_> {
         })
     }
 
-    fn validate_constructor(&mut self, c: &Constructor) -> Result<ty::Constructor<'static>, Error> {
+    fn validate_constructor(&mut self, c: &Constructor) -> Result<ty::Constructor, Error> {
         let c_span = c.span();
 
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
@@ -86,7 +83,7 @@ impl Analyzer<'_, '_> {
                 }
             }
 
-            params.into_iter().for_each(|param| {
+            for param in params {
                 let mut names = vec![];
 
                 let mut visitor = VarVisitor { names: &mut names };
@@ -141,17 +138,18 @@ impl Analyzer<'_, '_> {
                 }
 
                 child.scope.remove_declaring(names);
-            });
+            }
 
             child.inferred_return_types.get_mut().insert(c_span, vec![]);
             let c = Constructor { params, ..c }.fold_children(child);
             let c = Constructor { params, ..c }.visit_children(child);
 
             Ok(())
+            Ok(ty::Constructor {})
         })
     }
 
-    fn validate_class_method(&mut self, c: &ClassMethod) -> Result<ty::ClassMember, Error> {
+    fn validate_class_method(&mut self, c: &ClassMethod) -> Result<ty::Method, Error> {
         let c_span = c.span();
         let key_span = c.key.span();
 
@@ -227,10 +225,14 @@ impl Analyzer<'_, '_> {
             }
         }
 
-        Ok(())
+        Ok(ty::Method {})
     }
 
-    fn validate_class_members(&mut self, c: &Class, declare: bool) {
+    fn validate_class_members(
+        &mut self,
+        c: &Class,
+        declare: bool,
+    ) -> Result<Vec<ty::ClassMember>, Error> {
         // Report errors for code like
         //
         //      class C {
@@ -313,6 +315,8 @@ impl Analyzer<'_, '_> {
         }
 
         self.info.errors.extend(errors);
+
+        Ok(vec![])
     }
 
     #[validator]

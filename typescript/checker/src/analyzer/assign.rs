@@ -3,7 +3,7 @@ use crate::{
     errors::Error,
     ty::{
         Array, Class, ClassInstance, ClassMember, Constructor, EnumVariant, Function, Interface,
-        Intersection, Param, Tuple, Type, TypeElement, TypeLit, TypeRefExt, Union,
+        Intersection, Param, Tuple, Type, TypeElement, TypeLit, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
 };
@@ -19,8 +19,8 @@ impl Analyzer<'_, '_> {
                 Error::AssignFailed { .. } => err,
                 _ => Error::AssignFailed {
                     span: err.span(),
-                    left: left.to_static(),
-                    right: right.to_static(),
+                    left: left.clone(),
+                    right: right.clone(),
                     cause: vec![err],
                 },
             })
@@ -31,8 +31,8 @@ impl Analyzer<'_, '_> {
             () => {{
                 return Err(Error::AssignFailed {
                     span,
-                    left: to.to_static(),
-                    right: rhs.to_static(),
+                    left: to,
+                    right: rhs,
                     cause: vec![],
                 });
             }};
@@ -358,7 +358,7 @@ impl Analyzer<'_, '_> {
                                 TypeElement::Property(ref lp) => {
                                     for rm in body {
                                         match rm {
-                                            ClassMember::ClassProp(ref rp) => {
+                                            ClassMember::Property(ref rp) => {
                                                 if is_key_eq(&lp.key, &rp.key) {
                                                     continue 'l;
                                                 }
@@ -599,8 +599,8 @@ impl Analyzer<'_, '_> {
                         .assign_inner(&elem_type, &rhs_elem_type, span)
                         .map_err(|cause| Error::AssignFailed {
                             span,
-                            left: to.to_static(),
-                            right: rhs.to_static(),
+                            left: to,
+                            right: rhs,
                             cause: vec![cause],
                         });
                 }
@@ -800,7 +800,7 @@ impl Analyzer<'_, '_> {
                 return Err(Error::AssignFailed {
                     span,
                     left: Type::Enum(e.clone()),
-                    right: rhs.to_static(),
+                    right: rhs,
                     cause: vec![],
                 });
             }
@@ -998,7 +998,7 @@ fn count_required_params(v: &[TsFnParam]) -> usize {
         .count()
 }
 
-fn type_of_ts_fn_param<'a>(p: &TsFnParam) -> Type<'a> {
+fn type_of_ts_fn_param<'a>(p: &TsFnParam) -> Type {
     match p {
         TsFnParam::Ident(Ident { type_ann, .. })
         | TsFnParam::Array(ArrayPat { type_ann, .. })

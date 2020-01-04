@@ -13,8 +13,13 @@
 extern crate swc_common;
 
 pub use self::builtin_types::Lib;
-use self::{analyzer::Info, errors::Error, resolver::Resolver};
-use crate::{analyzer::Analyzer, swc_common::VisitWith, ty::TypeRef};
+use crate::{
+    analyzer::{Analyzer, Info},
+    errors::Error,
+    resolver::Resolver,
+    swc_common::VisitWith,
+    ty::Type,
+};
 use chashmap::CHashMap;
 use std::{path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
@@ -49,7 +54,7 @@ pub mod resolver;
 pub mod ty;
 mod util;
 
-pub type ValidationResult = Result<TypeRef<'static>, Error>;
+pub type ValidationResult = Result<Type, Error>;
 
 #[derive(Debug)]
 pub struct Config {

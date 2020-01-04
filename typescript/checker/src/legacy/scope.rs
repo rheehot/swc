@@ -2,7 +2,7 @@ use super::Analyzer;
 use crate::{
     errors::Error,
     ty::{
-        IndexSignature, Interface, PropertySignature, Tuple, Type, TypeElement, TypeLit, TypeRef,
+        IndexSignature, Interface, PropertySignature, Tuple, Type, TypeElement, TypeLit,
         TypeRefExt, Union,
     },
     util::{EqIgnoreNameAndSpan, IntoCow},
@@ -24,8 +24,8 @@ pub(crate) struct Scope<'a> {
     ///
     /// e.g. `interface Foo { name: string; }` is saved as `{ 'Foo': { name:
     /// string; } }`
-    pub(super) types: FxHashMap<JsWord, Type<'static>>,
-    pub(super) this: Option<Type<'static>>,
+    pub(super) types: FxHashMap<JsWord, Type>,
+    pub(super) this: Option<Type>,
 
     pub(super) declaring_fn: Option<JsWord>,
     /// `Some(name)` while declaring a class property.
@@ -54,12 +54,7 @@ impl<'a> Scope<'a> {
     }
 
     /// Overrides a varaible. Used for removing lazily-typed stuffs.
-    pub fn override_var(
-        &mut self,
-        kind: VarDeclKind,
-        name: JsWord,
-        ty: Type<'static>,
-    ) -> Result<(), Error> {
+    pub fn override_var(&mut self, kind: VarDeclKind, name: JsWord, ty: Type) -> Result<(), Error> {
         self.declare_var(ty.span(), kind, name, Some(ty), true, true)?;
 
         Ok(())
@@ -69,7 +64,7 @@ impl<'a> Scope<'a> {
         &mut self,
         kind: VarDeclKind,
         pat: &Pat,
-        ty: Type<'static>,
+        ty: Type,
     ) -> Result<(), Error> {
         let span = pat.span();
 
@@ -127,12 +122,7 @@ impl<'a> Scope<'a> {
                                     types: ref elem_types,
                                     ..
                                 }) => {
-                                    buf.push(
-                                        elem_types
-                                            .iter()
-                                            .map(|v| v.to_static().into_cow())
-                                            .collect(),
-                                    );
+                                    buf.push(elem_types.iter().map(|v| v.into_cow()).collect());
                                 }
                                 _ => {
                                     errors.push(Error::NotTuple { span: ty.span() });
@@ -164,7 +154,7 @@ impl<'a> Scope<'a> {
             }
 
             Pat::Object(ObjectPat { ref props, .. }) => {
-                fn find<'a>(members: &[TypeElement<'a>], key: &PropName) -> Option<TypeRef<'a>> {
+                fn find<'a>(members: &[TypeElement<'a>], key: &PropName) -> Option<Type<'a>> {
                     let mut index_el = None;
                     // First, we search for Property
                     for m in members {
@@ -406,7 +396,7 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    pub(super) fn find_var_type<'a>(&'a self, name: &JsWord) -> Option<&'a Type<'static>> {
+    pub(super) fn find_var_type<'a>(&'a self, name: &JsWord) -> Option<&'a Type> {
         // println!("({}) find_var_type({})", self.scope.depth(), name);
         let mut scope = Some(&self.scope);
         while let Some(s) = scope {

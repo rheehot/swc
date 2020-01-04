@@ -16,7 +16,7 @@ use swc_ecma_ast::*;
 use swc_ts_builtin_types::load;
 pub use swc_ts_builtin_types::Lib;
 
-type Type = ty::Type<'static>;
+type Type = ty::Type;
 
 #[derive(Debug, Default)]
 struct Merged {

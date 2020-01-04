@@ -46,7 +46,7 @@ impl Analyzer<'_, '_> {
         &self,
         span: Span,
         orig_ty: Type,
-        casted_ty: Type<'static>,
+        casted_ty: Type,
     ) -> ValidationResult {
         match *orig_ty.normalize() {
             Type::Union(ref rt) => {

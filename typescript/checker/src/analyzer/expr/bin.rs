@@ -4,7 +4,7 @@ use super::super::{
 };
 use crate::{
     errors::Error,
-    ty::{Type, TypeRef},
+    ty::Type,
     util::{EqIgnoreSpan, IntoCow},
     ValidationResult,
 };
@@ -14,13 +14,7 @@ use swc_ecma_ast::*;
 prevent!(BinExpr);
 
 impl Analyzer<'_, '_> {
-    fn validate_bin_inner(
-        &mut self,
-        span: Span,
-        op: BinaryOp,
-        lt: Option<TypeRef<'static>>,
-        rt: Option<TypeRef<'static>>,
-    ) {
+    fn validate_bin_inner(&mut self, span: Span, op: BinaryOp, lt: Option<Type>, rt: Option<Type>) {
         let mut errors = vec![];
 
         match op {

@@ -8,7 +8,7 @@ use super::{
 };
 use crate::{
     errors::Error,
-    ty::{Tuple, Type, TypeRefExt},
+    ty::{Tuple, Type},
     util::EndsWithRet,
     ValidationResult,
 };
@@ -30,9 +30,9 @@ use swc_ts_checker_macros::validator;
 #[derive(Debug, Clone, Default)]
 pub(crate) struct CondFacts {
     pub facts: FxHashMap<Name, TypeFacts>,
-    pub vars: FxHashMap<Name, Type<'static>>,
-    pub excludes: FxHashMap<Name, Vec<Type<'static>>>,
-    pub types: FxHashMap<JsWord, Type<'static>>,
+    pub vars: FxHashMap<Name, Type>,
+    pub excludes: FxHashMap<Name, Vec<Type>>,
+    pub types: FxHashMap<JsWord, Type>,
 }
 
 impl CondFacts {
@@ -132,7 +132,7 @@ impl Merge for VarInfo {
     }
 }
 
-impl Merge for Type<'_> {
+impl Merge for Type {
     fn or(&mut self, r: Self) {
         let l_span = self.span();
 
@@ -446,7 +446,7 @@ impl Analyzer<'_, '_> {
         )
     }
 
-    fn add_true_false(&self, facts: &mut Facts, sym: &JsWord, ty: &Type<'static>) {
+    fn add_true_false(&self, facts: &mut Facts, sym: &JsWord, ty: &Type) {
         facts.insert_var(sym, ty.clone(), false);
     }
 
@@ -504,7 +504,7 @@ impl Analyzer<'_, '_> {
             Expr::Paren(ParenExpr { ref expr, .. }) => self.detect_facts(expr, facts)?,
 
             Expr::Ident(ref i) => {
-                let ty = self.validate_expr(test)?.to_static();
+                let ty = self.validate_expr(test)?;
                 self.add_true_false(facts, &i.sym, &ty);
             }
 
@@ -676,12 +676,16 @@ impl Analyzer<'_, '_> {
         self.detect_facts(&e.test, &mut facts)?;
 
         self.validate_expr(&test)?;
-        let cons = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
-            child.validate_expr(&cons)
-        })?;
-        let alt = self.with_child(ScopeKind::Flow, facts.false_facts, |child| {
-            child.validate_expr(&alt)
-        })?;
+        let cons = self
+            .with_child(ScopeKind::Flow, facts.true_facts, |child| {
+                child.validate_expr(&cons)
+            })?
+            .into_owned();
+        let alt = self
+            .with_child(ScopeKind::Flow, facts.false_facts, |child| {
+                child.validate_expr(&alt)
+            })?
+            .into_owned();
 
         match **test {
             Expr::Ident(ref i) => {
@@ -702,7 +706,7 @@ impl Analyzer<'_, '_> {
 }
 
 impl Facts {
-    fn insert_var<N: Into<Name>>(&mut self, name: N, ty: Type<'static>, negate: bool) {
+    fn insert_var<N: Into<Name>>(&mut self, name: N, ty: Type, negate: bool) {
         let name = name.into();
 
         if negate {

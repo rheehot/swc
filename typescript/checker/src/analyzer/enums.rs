@@ -1,7 +1,7 @@
 use super::Analyzer;
 use crate::{
     errors::Error,
-    ty::{Enum, Type, TypeRef},
+    ty::{Enum, Type},
 };
 use std::convert::TryInto;
 use swc_common::{Spanned, Visit, VisitWith};
@@ -72,7 +72,7 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    pub(super) fn expand_enum_variant<'a>(&'a self, ty: TypeRef<'a>) -> Result<TypeRef<'a>, Error> {
+    pub(super) fn expand_enum_variant(&self, ty: Type) -> Result<Type, Error> {
         match ty.normalize() {
             Type::EnumVariant(ref v) => {
                 if let Some(Type::Enum(Enum { ref members, .. })) =

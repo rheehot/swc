@@ -162,14 +162,14 @@ pub enum Error {
 
     MissingFields {
         span: Span,
-        fields: Vec<TypeElement<'static>>,
+        fields: Vec<TypeElement>,
     },
 
     /// TS2322
     AssignFailed {
         span: Span,
-        left: Type<'static>,
-        right: Type<'static>,
+        left: Type,
+        right: Type,
         cause: Vec<Error>,
     },
 
@@ -210,12 +210,12 @@ pub enum Error {
 
     NoNewSignature {
         span: Span,
-        callee: Type<'static>,
+        callee: Type,
     },
 
     NoCallSignature {
         span: Span,
-        callee: Type<'static>,
+        callee: Type,
     },
 
     WrongTypeParams {

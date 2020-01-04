@@ -14,7 +14,7 @@ pub(crate) struct Scope<'a> {
     pub declaring: SmallVec<[JsWord; 8]>,
 
     pub(super) vars: FxHashMap<JsWord, VarInfo>,
-    pub(super) types: FxHashMap<JsWord, Type<'static>>,
+    pub(super) types: FxHashMap<JsWord, Type>,
     pub(super) facts: CondFacts,
 
     pub(super) this: Option<JsWord>,
@@ -39,7 +39,7 @@ impl Scope<'_> {
     ///
     /// Registers an interface, and merges it with previous interface
     /// declaration if required.
-    pub fn register_type(&mut self, name: JsWord, ty: Type<'static>) {
+    pub fn register_type(&mut self, name: JsWord, ty: Type) {
         let depth = self.depth();
 
         if cfg!(debug_assertions) {
@@ -85,7 +85,7 @@ impl Scope<'_> {
         }
     }
 
-    pub fn this(&self) -> Option<&Type<'static>> {
+    pub fn this(&self) -> Option<&Type> {
         if let Some(ref this) = self.this {
             return Some(this);
         }
@@ -123,7 +123,7 @@ impl Scope<'_> {
         span: Span,
         kind: VarDeclKind,
         name: JsWord,
-        ty: Option<Type<'static>>,
+        ty: Option<Type>,
         initialized: bool,
         allow_multiple: bool,
     ) -> Result<(), Error> {
@@ -137,7 +137,7 @@ impl Scope<'_> {
         if cfg!(debug_assertions) {
             match ty {
                 Some(Type::Simple(ref t)) => match **t {
-                    TsType::TsTypeRef(..) => panic!("Var's kind should not be TypeRef"),
+                    TsType::TsTypeRef(..) => panic!("Var's kind should not be Type"),
                     _ => {}
                 },
                 _ => {}
@@ -359,7 +359,7 @@ impl Analyzer<'_, '_> {
     }
 
     #[inline(never)]
-    pub(super) fn find_type<'a>(&'a self, name: &JsWord) -> Option<&'a Type<'static>> {
+    pub(super) fn find_type<'a>(&'a self, name: &JsWord) -> Option<&'a Type> {
         #[allow(dead_code)]
         static ANY: Type = Type::any(DUMMY_SP);
 
@@ -383,7 +383,7 @@ impl Analyzer<'_, '_> {
 pub(crate) struct VarInfo {
     pub kind: VarDeclKind,
     pub initialized: bool,
-    pub ty: Option<Type<'static>>,
+    pub ty: Option<Type>,
     /// Copied from parent scope. If this is true, it's not a variable
     /// declaration.
     pub copied: bool,
@@ -422,7 +422,7 @@ impl<'a> Scope<'a> {
     }
 
     /// This method does **not** handle imported types.
-    pub(super) fn find_type(&self, name: &JsWord) -> Option<&Type<'static>> {
+    pub(super) fn find_type(&self, name: &JsWord) -> Option<&Type> {
         if let Some(ty) = self.facts.types.get(name) {
             println!("({}) find_type({}): Found (cond facts)", self.depth(), name);
             return Some(&ty);

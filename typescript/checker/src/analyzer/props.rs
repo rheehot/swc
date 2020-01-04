@@ -2,7 +2,7 @@ use super::{scope::ScopeKind, Analyzer};
 use crate::{
     analyzer::{expr::TypeOfMode, util::ResultExt},
     errors::Error,
-    ty::{Type, TypeRefExt},
+    ty::Type,
 };
 use swc_atoms::js_word;
 use swc_common::{Fold, FoldWith, Spanned};

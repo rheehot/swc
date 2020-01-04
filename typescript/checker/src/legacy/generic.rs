@@ -39,8 +39,8 @@ impl Analyzer<'_, '_> {
         &self,
         i: &TsTypeParamInstantiation,
         decl: &TypeParamDecl,
-        mut ty: Cow<'b, Type<'a>>,
-    ) -> Result<Cow<'b, Type<'a>>, Error> {
+        mut ty: Cow<'b, Type>,
+    ) -> Result<Cow<'b, Type>, Error> {
         match *ty.normalize() {
             Type::TypeLit(..) | Type::Keyword(..) | Type::Lit(..) => return Ok(ty),
 

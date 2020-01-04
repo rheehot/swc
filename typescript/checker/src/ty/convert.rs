@@ -9,7 +9,7 @@ use std::convert::TryFrom;
 use swc_common::Spanned;
 use swc_ecma_ast::*;
 
-impl From<TsTypeParamDecl> for TypeParamDecl<'_> {
+impl From<TsTypeParamDecl> for TypeParamDecl {
     fn from(decl: TsTypeParamDecl) -> Self {
         TypeParamDecl {
             span: decl.span,
@@ -18,7 +18,7 @@ impl From<TsTypeParamDecl> for TypeParamDecl<'_> {
     }
 }
 
-impl From<TsTypeParam> for TypeParam<'_> {
+impl From<TsTypeParam> for TypeParam {
     fn from(p: TsTypeParam) -> Self {
         TypeParam {
             span: p.span,
@@ -29,14 +29,14 @@ impl From<TsTypeParam> for TypeParam<'_> {
     }
 }
 
-impl From<TsTypeAnn> for Type<'_> {
+impl From<TsTypeAnn> for Type {
     #[inline]
     fn from(ann: TsTypeAnn) -> Self {
         ann.type_ann.into()
     }
 }
 
-impl<T> From<Box<T>> for Type<'_>
+impl<T> From<Box<T>> for Type
 where
     T: Into<Self>,
 {
@@ -46,7 +46,7 @@ where
     }
 }
 
-impl From<TsTypeAliasDecl> for Alias<'_> {
+impl From<TsTypeAliasDecl> for Alias {
     fn from(d: TsTypeAliasDecl) -> Self {
         Alias {
             span: d.span,
@@ -56,7 +56,7 @@ impl From<TsTypeAliasDecl> for Alias<'_> {
     }
 }
 
-impl From<TsInterfaceDecl> for Interface<'_> {
+impl From<TsInterfaceDecl> for Interface {
     fn from(d: TsInterfaceDecl) -> Self {
         Interface {
             span: d.span,
@@ -68,13 +68,13 @@ impl From<TsInterfaceDecl> for Interface<'_> {
     }
 }
 
-impl From<TsInterfaceDecl> for Type<'_> {
+impl From<TsInterfaceDecl> for Type {
     fn from(d: TsInterfaceDecl) -> Self {
         Type::Interface(d.into())
     }
 }
 
-impl From<TsType> for Type<'_> {
+impl From<TsType> for Type {
     fn from(ty: TsType) -> Self {
         match ty {
             TsType::TsThisType(this) => this.into(),
@@ -136,13 +136,13 @@ impl From<TsType> for Type<'_> {
     }
 }
 
-impl From<TsTypeAliasDecl> for Type<'_> {
+impl From<TsTypeAliasDecl> for Type {
     fn from(decl: TsTypeAliasDecl) -> Self {
         Type::Alias(decl.into())
     }
 }
 
-impl From<TsTypeLit> for TypeLit<'_> {
+impl From<TsTypeLit> for TypeLit {
     fn from(lit: TsTypeLit) -> Self {
         TypeLit {
             span: lit.span,
@@ -151,7 +151,7 @@ impl From<TsTypeLit> for TypeLit<'_> {
     }
 }
 
-impl From<TsTypeElement> for TypeElement<'_> {
+impl From<TsTypeElement> for TypeElement {
     fn from(e: TsTypeElement) -> Self {
         match e {
             TsTypeElement::TsCallSignatureDecl(d) => TypeElement::Call(d.into()),
@@ -163,7 +163,7 @@ impl From<TsTypeElement> for TypeElement<'_> {
     }
 }
 
-impl From<TsConstructSignatureDecl> for ConstructorSignature<'_> {
+impl From<TsConstructSignatureDecl> for ConstructorSignature {
     fn from(d: TsConstructSignatureDecl) -> Self {
         ConstructorSignature {
             span: d.span,
@@ -174,7 +174,7 @@ impl From<TsConstructSignatureDecl> for ConstructorSignature<'_> {
     }
 }
 
-impl From<TsCallSignatureDecl> for CallSignature<'_> {
+impl From<TsCallSignatureDecl> for CallSignature {
     fn from(d: TsCallSignatureDecl) -> Self {
         CallSignature {
             span: d.span,
@@ -185,7 +185,7 @@ impl From<TsCallSignatureDecl> for CallSignature<'_> {
     }
 }
 
-impl From<TsMethodSignature> for MethodSignature<'_> {
+impl From<TsMethodSignature> for MethodSignature {
     fn from(d: TsMethodSignature) -> Self {
         MethodSignature {
             span: d.span,
@@ -200,7 +200,7 @@ impl From<TsMethodSignature> for MethodSignature<'_> {
     }
 }
 
-impl From<TsIndexSignature> for IndexSignature<'_> {
+impl From<TsIndexSignature> for IndexSignature {
     fn from(d: TsIndexSignature) -> Self {
         IndexSignature {
             span: d.span,
@@ -211,7 +211,7 @@ impl From<TsIndexSignature> for IndexSignature<'_> {
     }
 }
 
-impl From<TsPropertySignature> for PropertySignature<'_> {
+impl From<TsPropertySignature> for PropertySignature {
     fn from(d: TsPropertySignature) -> Self {
         PropertySignature {
             span: d.span,
@@ -226,7 +226,7 @@ impl From<TsPropertySignature> for PropertySignature<'_> {
     }
 }
 
-impl From<TsExprWithTypeArgs> for TsExpr<'_> {
+impl From<TsExprWithTypeArgs> for TsExpr {
     fn from(e: TsExprWithTypeArgs) -> Self {
         TsExpr {
             span: e.span,
@@ -236,7 +236,7 @@ impl From<TsExprWithTypeArgs> for TsExpr<'_> {
     }
 }
 
-impl From<TsTypeParamInstantiation> for TypeParamInstantiation<'_> {
+impl From<TsTypeParamInstantiation> for TypeParamInstantiation {
     fn from(i: TsTypeParamInstantiation) -> Self {
         TypeParamInstantiation {
             span: i.span,
@@ -245,7 +245,7 @@ impl From<TsTypeParamInstantiation> for TypeParamInstantiation<'_> {
     }
 }
 
-impl From<TsTupleType> for Tuple<'_> {
+impl From<TsTupleType> for Tuple {
     fn from(t: TsTupleType) -> Self {
         Tuple {
             span: t.span,
@@ -254,7 +254,7 @@ impl From<TsTupleType> for Tuple<'_> {
     }
 }
 
-impl From<TsConditionalType> for Conditional<'_> {
+impl From<TsConditionalType> for Conditional {
     fn from(t: TsConditionalType) -> Self {
         Conditional {
             span: t.span,
@@ -266,7 +266,7 @@ impl From<TsConditionalType> for Conditional<'_> {
     }
 }
 
-impl From<TsMappedType> for Mapped<'_> {
+impl From<TsMappedType> for Mapped {
     fn from(ty: TsMappedType) -> Self {
         Mapped {
             span: ty.span,
@@ -278,7 +278,7 @@ impl From<TsMappedType> for Mapped<'_> {
     }
 }
 
-impl From<TsTypeOperator> for Operator<'_> {
+impl From<TsTypeOperator> for Operator {
     fn from(ty: TsTypeOperator) -> Self {
         Operator {
             span: ty.span,
@@ -288,7 +288,7 @@ impl From<TsTypeOperator> for Operator<'_> {
     }
 }
 
-impl From<swc_ecma_ast::Constructor> for Constructor<'_> {
+impl From<swc_ecma_ast::Constructor> for Constructor {
     fn from(c: swc_ecma_ast::Constructor) -> Self {
         fn from_pat(pat: Pat) -> TsFnParam {
             match pat {
@@ -324,7 +324,7 @@ impl From<swc_ecma_ast::Constructor> for Constructor<'_> {
     }
 }
 
-impl TryFrom<TsEnumDecl> for Type<'_> {
+impl TryFrom<TsEnumDecl> for Type {
     type Error = Error;
 
     fn try_from(e: TsEnumDecl) -> Result<Self, Error> {
@@ -446,15 +446,15 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
     .into())
 }
 
-impl Method<'_> {
-    pub fn into_static(self) -> Method<'static> {
-        Method {
-            span: self.span,
-            key: self.key,
-            is_static: self.is_static,
-            type_params: self.type_params.map(|v| v.into_static()),
-            params: self.params,
-            ret_ty: box self.ret_ty.into_owned().into_static().owned(),
-        }
-    }
-}
+//impl Method {
+//    pub fn into_static(self) -> Method<'static> {
+//        Method {
+//            span: self.span,
+//            key: self.key,
+//            is_static: self.is_static,
+//            type_params: self.type_params.map(|v| v.into_static()),
+//            params: self.params,
+//            ret_ty: box self.ret_ty.into_owned().into_static().owned(),
+//        }
+//    }
+//}

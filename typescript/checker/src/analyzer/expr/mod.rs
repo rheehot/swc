@@ -4,7 +4,7 @@ use crate::{
     builtin_types,
     errors::Error,
     ty,
-    ty::{ClassInstance, Tuple, Type, TypeLit, TypeParamInstantiation, TypeRef},
+    ty::{ClassInstance, Tuple, Type, TypeLit, TypeParamInstantiation},
     util::{IntoCow, RemoveTypes},
     ValidationResult,
 };
@@ -44,7 +44,7 @@ impl Analyzer<'_, '_> {
         e: &Expr,
         mode: TypeOfMode,
         type_args: Option<TypeParamInstantiation>,
-    ) -> Result<TypeRef, Error> {
+    ) -> Result<Type, Error> {
         let span = e.span();
 
         match e {
@@ -71,7 +71,7 @@ impl Analyzer<'_, '_> {
             Expr::Ident(ref i) => self.type_of_ident(i, mode),
 
             Expr::Array(ArrayLit { ref elems, .. }) => {
-                let mut types: Vec<TypeRef> = Vec::with_capacity(elems.len());
+                let mut types: Vec<Type> = Vec::with_capacity(elems.len());
 
                 for elem in elems {
                     let span = elem.span();
@@ -278,7 +278,7 @@ impl Analyzer<'_, '_> {
             .and_then(|ty| self.expand_type(span, ty))
         {
             Ok(rhs_ty) => {
-                let rhs_ty = rhs_ty.to_static();
+                let rhs_ty = rhs_ty;
 
                 self.check_rvalue(&rhs_ty);
 
@@ -469,7 +469,7 @@ impl Analyzer<'_, '_> {
     }
 }
 
-fn instantiate_class(ty: Type<'static>) -> Type<'static> {
+fn instantiate_class(ty: Type) -> Type {
     let span = ty.span();
 
     match *ty.normalize() {

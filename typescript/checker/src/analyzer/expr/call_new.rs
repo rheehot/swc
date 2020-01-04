@@ -3,10 +3,7 @@ use super::{super::Analyzer, prop_name_to_expr};
 use crate::{
     builtin_types,
     errors::Error,
-    ty::{
-        CallSignature, ClassInstance, ConstructorSignature, Method, Static, Type, TypeElement,
-        TypeRefExt,
-    },
+    ty::{CallSignature, ClassInstance, ConstructorSignature, Method, Static, Type, TypeElement},
     util::IntoCow,
     ValidationResult,
 };
@@ -281,7 +278,7 @@ impl Analyzer<'_, '_> {
                 // Handle member expression
                 let obj_type = self.validate_expr(obj)?.generalize_lit();
 
-                // Example: `TypeRef(console)` -> `Interface(Console)`
+                // Example: `Type(console)` -> `Interface(Console)`
                 let obj_type = self.expand_type(span, obj_type)?;
 
                 let obj_type = match *obj_type.normalize() {
@@ -331,7 +328,7 @@ impl Analyzer<'_, '_> {
                                     ..
                                 }) => {
                                     if prop_name_to_expr(key).eq_ignore_span(&*prop) {
-                                        return Ok(ret_ty.clone().to_static().owned());
+                                        return Ok(ret_ty.clone().owned());
                                     }
                                 }
                                 _ => {}
@@ -360,12 +357,12 @@ impl Analyzer<'_, '_> {
                     Err(if kind == ExtractKind::Call {
                         Error::NoCallSignature {
                             span,
-                            callee: self.validate_expr(callee)?.to_static(),
+                            callee: self.validate_expr(callee)?,
                         }
                     } else {
                         Error::NoNewSignature {
                             span,
-                            callee: self.validate_expr(callee)?.to_static(),
+                            callee: self.validate_expr(callee)?,
                         }
                     })
                 }
@@ -383,7 +380,7 @@ impl Analyzer<'_, '_> {
     fn extract<'a>(
         &'a self,
         span: Span,
-        ty: &Type<'a>,
+        ty: &Type,
         kind: ExtractKind,
         args: &[ExprOrSpread],
         type_args: Option<&TsTypeParamInstantiation>,
@@ -391,7 +388,7 @@ impl Analyzer<'_, '_> {
         if cfg!(debug_assertions) {
             match *ty.normalize() {
                 Type::Simple(ref s) => match **s {
-                    TsType::TsTypeRef(ref s) => unreachable!("TypeRef: {:#?}", s),
+                    TsType::TsTypeRef(ref s) => unreachable!("Type: {:#?}", s),
                     _ => {}
                 },
                 _ => {}
@@ -401,18 +398,8 @@ impl Analyzer<'_, '_> {
         macro_rules! ret_err {
             () => {{
                 match kind {
-                    ExtractKind::Call => {
-                        return Err(Error::NoCallSignature {
-                            span,
-                            callee: ty.to_static(),
-                        })
-                    }
-                    ExtractKind::New => {
-                        return Err(Error::NoNewSignature {
-                            span,
-                            callee: ty.to_static(),
-                        })
-                    }
+                    ExtractKind::Call => return Err(Error::NoCallSignature { span, callee: ty }),
+                    ExtractKind::New => return Err(Error::NoNewSignature { span, callee: ty }),
                 }
             }};
         }

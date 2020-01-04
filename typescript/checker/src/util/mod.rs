@@ -1,4 +1,4 @@
-use crate::ty::{Class, Intersection, Type, TypeElement, TypeRef, Union};
+use crate::ty::{Class, Intersection, Type, TypeElement, Union};
 use std::{borrow::Cow, mem::transmute};
 use swc_atoms::js_word;
 use swc_common::{Fold, FoldWith, Span, DUMMY_SP};
@@ -94,13 +94,13 @@ macro_rules! impl_by_clone {
         }
     };
 }
-impl_by_clone!(Type<'_>);
+impl_by_clone!(Type);
 impl_by_clone!(Expr);
-impl_by_clone!(TypeElement<'_>);
+impl_by_clone!(TypeElement);
 impl_by_clone!(TsLit);
 impl_by_clone!(TsLitType);
 impl_by_clone!(PropName);
-impl_by_clone!(Class<'_>);
+impl_by_clone!(Class);
 
 struct SpanRemover;
 impl Fold<Span> for SpanRemover {
@@ -268,25 +268,14 @@ impl RemoveTypes for Type {
                     return Type::never(span);
 pub(crate) trait RemoveTypes<'a> {
     /// Removes falsy values from `self`.
-    fn remove_falsy(self) -> TypeRef<'a>;
+    fn remove_falsy(self) -> Type;
 
     /// Removes truthy values from `self`.
-    fn remove_truthy(self) -> TypeRef<'a>;
+    fn remove_truthy(self) -> Type;
 }
 
-/// TODO: Optimize
-impl<'a> RemoveTypes<'a> for TypeRef<'a> {
-    fn remove_falsy(self) -> TypeRef<'a> {
-        self.into_owned().remove_falsy()
-    }
-
-    fn remove_truthy(self) -> TypeRef<'a> {
-        self.into_owned().remove_truthy()
-    }
-}
-
-impl<'a> RemoveTypes<'a> for Type<'a> {
-    fn remove_falsy(self) -> TypeRef<'a> {
+impl RemoveTypes for Type {
+    fn remove_falsy(self) -> Type {
         match self {
             Type::Keyword(TsKeywordType { kind, span }) => match kind {
                 TsKeywordTypeKind::TsUndefinedKeyword | TsKeywordTypeKind::TsNullKeyword => {
@@ -332,7 +321,7 @@ impl<'a> RemoveTypes<'a> for Type<'a> {
 impl RemoveTypes for Intersection {
     fn remove_falsy(self) -> Type {
 impl<'a> RemoveTypes<'a> for Intersection<'a> {
-    fn remove_falsy(self) -> TypeRef<'a> {
+    fn remove_falsy(self) -> Type {
         let types = self
             .types
             .into_iter()
@@ -354,7 +343,7 @@ impl<'a> RemoveTypes<'a> for Intersection<'a> {
         .into_cow()
     }
 
-    fn remove_truthy(self) -> TypeRef<'a> {
+    fn remove_truthy(self) -> Type {
         let types = self
             .types
             .into_iter()
@@ -379,8 +368,8 @@ impl RemoveTypes for Union {
     }
 }
 
-impl<'a> RemoveTypes<'a> for Union<'a> {
-    fn remove_falsy(self) -> TypeRef<'a> {
+impl RemoveTypes for Union {
+    fn remove_falsy(self) -> Type {
         let types = self
             .types
             .into_iter()
@@ -398,7 +387,7 @@ impl<'a> RemoveTypes<'a> for Union<'a> {
         .into_cow()
     }
 
-    fn remove_truthy(self) -> TypeRef<'a> {
+    fn remove_truthy(self) -> Type {
         let types = self
             .types
             .into_iter()
@@ -426,15 +415,15 @@ where
     }
 }
 
-impl<'a, T> RemoveTypes<'a> for Box<T>
+impl<'a, T> RemoveTypes for Box<T>
 where
-    T: RemoveTypes<'a>,
+    T: RemoveTypes,
 {
-    fn remove_falsy(self) -> TypeRef<'a> {
+    fn remove_falsy(self) -> Type {
         (*self).remove_falsy()
     }
 
-    fn remove_truthy(self) -> TypeRef<'a> {
+    fn remove_truthy(self) -> Type {
         (*self).remove_truthy()
     }
 }

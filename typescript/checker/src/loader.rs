@@ -9,7 +9,7 @@ pub trait Load: Send + Sync {
         &self,
         base: Arc<PathBuf>,
         import: &ImportInfo,
-    ) -> Result<Exports<FxHashMap<JsWord, Arc<Type<'static>>>>, Error>;
+    ) -> Result<Exports<FxHashMap<JsWord, Arc<Type>>>, Error>;
 }
 
 impl Load for Checker<'_> {
@@ -17,7 +17,7 @@ impl Load for Checker<'_> {
         &self,
         base: Arc<PathBuf>,
         import: &ImportInfo,
-    ) -> Result<Exports<FxHashMap<JsWord, Arc<Type<'static>>>>, Error> {
+    ) -> Result<Exports<FxHashMap<JsWord, Arc<Type>>>, Error> {
         let mut result = Exports::default();
         let mut errors = vec![];
 
@@ -77,7 +77,7 @@ where
         &self,
         base: Arc<PathBuf>,
         import: &ImportInfo,
-    ) -> Result<Exports<FxHashMap<JsWord, Arc<Type<'static>>>>, Error> {
+    ) -> Result<Exports<FxHashMap<JsWord, Arc<Type>>>, Error> {
         (**self).load(base, import)
     }
 }

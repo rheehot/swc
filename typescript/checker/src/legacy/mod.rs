@@ -4,7 +4,7 @@ use crate::{
     builtin_types::Lib,
     errors::Error,
     loader::Load,
-    ty::{self, Alias, ClassInstance, Param, Tuple, Type, TypeRef, TypeRefExt},
+    ty::{self, Alias, ClassInstance, Param, Tuple, Type, TypeRefExt},
     util::{IntoCow, ModuleItemLike, StmtLike},
     Exports, Rule,
 };
@@ -209,11 +209,11 @@ impl Fold<TsModuleDecl> for Analyzer<'_, '_> {
 
 impl Fold<TsTypeAliasDecl> for Analyzer<'_, '_> {
     fn fold(&mut self, decl: TsTypeAliasDecl) -> TsTypeAliasDecl {
-        let ty: Type<'_> = decl.type_ann.clone().into();
+        let ty: Type = decl.type_ann.clone().into();
 
         let ty = if decl.type_params.is_none() {
             match self.expand_type(decl.span(), ty.owned()) {
-                Ok(ty) => ty.to_static(),
+                Ok(ty) => ty,
                 Err(err) => {
                     self.info.errors.push(err);
                     Type::any(decl.span())
@@ -280,7 +280,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
 
 impl Analyzer<'_, '_> {
     /// TODO: Handle recursive funciton
-    fn visit_fn(&mut self, name: Option<&Ident>, f: &Function) -> Type<'static> {
+    fn visit_fn(&mut self, name: Option<&Ident>, f: &Function) -> Type {
         let fn_ty = self.with_child(ScopeKind::Fn, Default::default(), |child| {
             child.return_type_span = f.span();
 
@@ -425,7 +425,7 @@ impl Analyzer<'_, '_> {
                     }
 
                     // Validate return type
-                    match child.expand_type(ret_ty.span(), ret_ty.to_static().owned()) {
+                    match child.expand_type(ret_ty.span(), ret_ty.owned()) {
                         Ok(ret_ty) => {}
                         Err(err) => child.info.errors.push(err),
                     }
@@ -445,7 +445,7 @@ impl Analyzer<'_, '_> {
         });
 
         match fn_ty {
-            Ok(ty) => ty.to_static(),
+            Ok(ty) => ty,
             Err(err) => {
                 self.info.errors.push(err);
                 Type::any(f.span)
@@ -608,7 +608,7 @@ impl Fold<VarDecl> for Analyzer<'_, '_> {
                         .and_then(|ty| self.expand_type(span, ty))
                     {
                         Ok(ty) => {
-                            let ty = ty.to_static();
+                            let ty = ty;
                             self.check_rvalue(&ty);
                             ty
                         }
@@ -642,7 +642,7 @@ impl Fold<VarDecl> for Analyzer<'_, '_> {
                                 }
                             };
                             let error = self.assign(&ty, &value_ty, v_span);
-                            let ty = ty.to_static();
+                            let ty = ty;
                             match error {
                                 Ok(()) => {
                                     match self.scope.declare_complex_vars(kind, &v.name, ty) {
@@ -673,7 +673,7 @@ impl Fold<VarDecl> for Analyzer<'_, '_> {
                                         unreachable!()
                                     }
                                 }
-                                ty => ty.to_static(),
+                                ty => ty,
                             };
 
                             let mut type_errors = vec![];
