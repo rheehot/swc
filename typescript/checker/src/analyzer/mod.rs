@@ -3,14 +3,19 @@ use self::{
     scope::{Scope, ScopeKind},
 };
 use crate::{
-    analyzer::props::ComputedPropMode, errors::Error, loader::Load, ty::Type, Exports, ImportInfo,
-    Rule,
+    analyzer::{props::ComputedPropMode, util::ResultExt},
+    errors::Error,
+    loader::Load,
+    ty::Type,
+    Exports, ImportInfo, Rule,
 };
 use fxhash::{FxHashMap, FxHashSet};
 use std::{path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::Span;
 use swc_common::{SourceMap, Span};
+use swc_common::{Span, Visit};
+use swc_ecma_ast::Decorator;
 use swc_ts_builtin_types::Lib;
 
 #[macro_use]
@@ -139,5 +144,12 @@ impl Load for NoopLoader {
         import: &ImportInfo,
     ) -> Result<Exports<FxHashMap<JsWord, Arc<Type<'static>>>>, Error> {
         unreachable!("builtin module should not import other moduel")
+    }
+}
+
+/// Done
+impl Visit<Decorator> for Analyzer<'_, '_> {
+    fn visit(&mut self, d: &Decorator) {
+        self.validate_expr(&d.expr).store(&mut self.info.errors);
     }
 }
