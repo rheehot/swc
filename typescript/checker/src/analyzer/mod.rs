@@ -59,7 +59,7 @@ pub struct Analyzer<'a, 'b> {
 #[derive(Debug, Clone, Default)]
 pub struct Info {
     pub errors: Vec<Error>,
-    pub exports: Exports<FxHashMap<JsWord, Arc<TypeRef<'static>>>>,
+    pub exports: Exports<FxHashMap<JsWord, Arc<Type<'static>>>>,
 }
 
 impl Analyzer<'_> {
