@@ -23,6 +23,11 @@ enum ComputedPropMode {
 
 impl Visit<ComputedPropName> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &ComputedPropName) {
+prevent!(ComputedPropName);
+
+impl Analyzer<'_, '_> {
+    #[validator]
+    fn visit_computed_property_name(&mut self, node: &ComputedPropName, mode: ComputedPropMode) {
         // TODO: check if it's class or object literal
         node.visit_children(self);
 

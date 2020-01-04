@@ -15,6 +15,9 @@ use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
+prevent!(CallExpr);
+prevent!(NewExpr);
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum ExtractKind {
     New,

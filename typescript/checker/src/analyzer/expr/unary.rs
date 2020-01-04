@@ -4,6 +4,8 @@ use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
+prevent!(UnaryExpr);
+
 impl Analyzer<'_, '_> {
     fn validate_unary_expr_inner(&mut self, span: Span, op: UnaryOp, arg: &Type) {
         let mut errors = vec![];

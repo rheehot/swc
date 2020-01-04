@@ -3,6 +3,9 @@ use crate::{errors::Error, ty::Type, util::EqIgnoreNameAndSpan, ValidationResult
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
+prevent!(TsTypeAssertion);
+prevent!(TsAsExpr);
+
 impl Analyzer<'_, '_> {
     pub(super) fn validate_ts_type_assertion(&mut self, e: &TsTypeAssertion) -> ValidationResult {
         let orig_ty = self.validate_expr(&e.expr)?;

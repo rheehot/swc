@@ -15,6 +15,8 @@ use swc_common::Span;
 use swc_common::{SourceMap, Span};
 use swc_ts_builtin_types::Lib;
 
+#[macro_use]
+mod macros;
 mod assign;
 mod class;
 mod control_flow;

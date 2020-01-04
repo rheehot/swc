@@ -11,6 +11,8 @@ use crate::{
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
+prevent!(BinExpr);
+
 impl Analyzer<'_, '_> {
     fn validate_bin_inner(
         &mut self,
