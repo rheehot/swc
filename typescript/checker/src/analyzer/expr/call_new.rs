@@ -4,7 +4,6 @@ use crate::{
     builtin_types,
     errors::Error,
     ty::{CallSignature, ClassInstance, ConstructorSignature, Method, Static, Type, TypeElement},
-    util::IntoCow,
     ValidationResult,
 };
 use swc_atoms::js_word;
@@ -257,8 +256,7 @@ impl Analyzer<'_, '_> {
                             return Ok(TsKeywordType {
                                 span,
                                 kind: TsKeywordTypeKind::TsStringKeyword,
-                            }
-                            .into_cow());
+                            });
                         }};
                     }
                     match **prop {
@@ -305,7 +303,7 @@ impl Analyzer<'_, '_> {
                         kind: TsKeywordTypeKind::TsAnyKeyword,
                         ..
                     }) => {
-                        return Ok(Type::any(span).into_cow());
+                        return Ok(Type::any(span));
                     }
 
                     Type::Interface(ref i) => {
@@ -370,7 +368,7 @@ impl Analyzer<'_, '_> {
                 println!("before extract: {:?}", ty);
                 let ty = self.expand_type(span, ty)?;
 
-                Ok(self.extract(span, &ty, kind, args, type_args)?.into_cow())
+                Ok(self.extract(span, &ty, kind, args, type_args)?)
             }
         }
     }

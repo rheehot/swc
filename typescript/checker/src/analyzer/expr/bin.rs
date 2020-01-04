@@ -2,12 +2,7 @@ use super::super::{
     util::{Comparator, ResultExt},
     Analyzer,
 };
-use crate::{
-    errors::Error,
-    ty::Type,
-    util::{EqIgnoreSpan, IntoCow},
-    ValidationResult,
-};
+use crate::{errors::Error, ty::Type, util::EqIgnoreSpan, ValidationResult};
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
@@ -421,8 +416,7 @@ impl Analyzer<'_, '_> {
                 return Ok(Type::Keyword(TsKeywordType {
                     kind: TsKeywordTypeKind::TsNumberKeyword,
                     span,
-                })
-                .into_cow());
+                }));
             }
 
             op!("===") | op!("!==") | op!("!=") | op!("==") => {

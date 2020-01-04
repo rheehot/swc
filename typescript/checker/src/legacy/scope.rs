@@ -122,7 +122,7 @@ impl<'a> Scope<'a> {
                                     types: ref elem_types,
                                     ..
                                 }) => {
-                                    buf.push(elem_types.iter().map(|v| v.into_cow()).collect());
+                                    buf.push(elem_types.iter().map(|v| v).collect());
                                 }
                                 _ => {
                                     errors.push(Error::NotTuple { span: ty.span() });

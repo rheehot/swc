@@ -1,7 +1,4 @@
-use crate::{
-    util::{EqIgnoreNameAndSpan, IntoCow},
-    Exports,
-};
+use crate::{util::EqIgnoreNameAndSpan, Exports};
 use fxhash::FxHashMap;
 use std::{borrow::Cow, mem::transmute, sync::Arc};
 use swc_atoms::JsWord;
@@ -422,7 +419,7 @@ impl Type {
                     tys.extend(types);
                 }
 
-                _ => tys.push(ty.into_cow()),
+                _ => tys.push(ty),
             }
         }
 
@@ -615,7 +612,7 @@ where
 //            Type::TypeLit(lit) => Type::TypeLit(lit),
 //            Type::Lit(lit) => Type::Lit(lit),
 //            Type::Keyword(lit) => Type::Keyword(lit),
-//            Type::Simple(s) => Type::Simple(s.into_owned().into_cow()),
+//            Type::Simple(s) => Type::Simple(s.into_owned()),
 //            Type::Array(Array { span, elem_type }) => Type::Array(Array {
 //                span,
 //                elem_type: box static_type(*elem_type),

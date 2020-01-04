@@ -224,22 +224,6 @@ where
     }
 }
 
-pub trait IntoCow<'a, T>: Sized + Into<T>
-where
-    T: Clone,
-{
-    fn into_cow(self) -> Cow<'a, T> {
-        Cow::Owned(self.into())
-    }
-}
-
-impl<T, S> IntoCow<'_, T> for S
-where
-    Self: Into<T>,
-    T: Clone,
-{
-}
-
 pub(crate) fn pat_to_ts_fn_param(p: Pat) -> TsFnParam {
     match p {
         Pat::Ident(i) => TsFnParam::Ident(i),

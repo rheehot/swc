@@ -317,8 +317,8 @@ impl Analyzer<'_, '_> {
                         let ty = Type::Param(Param {
                             span: param.span,
                             name: param.name.sym.clone(),
-                            constraint: param.constraint.as_ref().map(|v| box v.clone().into_cow()),
-                            default: param.default.as_ref().map(|v| box v.clone().into_cow()),
+                            constraint: param.constraint.as_ref().map(|v| box v.clone()),
+                            default: param.default.as_ref().map(|v| box v.clone()),
                         });
 
                         debug!(
@@ -501,8 +501,8 @@ impl Fold<ArrowExpr> for Analyzer<'_, '_> {
                         let ty = Type::Param(Param {
                             span: param.span,
                             name: param.name.sym.clone(),
-                            constraint: param.constraint.as_ref().map(|v| box v.clone().into_cow()),
-                            default: param.default.as_ref().map(|v| box v.clone().into_cow()),
+                            constraint: param.constraint.as_ref().map(|v| box v.clone()),
+                            default: param.default.as_ref().map(|v| box v.clone()),
                         });
 
                         child

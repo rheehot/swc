@@ -4,7 +4,7 @@ use super::{
     PropertySignature, TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl,
     TypeParamInstantiation, Union,
 };
-use crate::{errors::Error, util::IntoCow};
+use crate::errors::Error;
 use std::convert::TryFrom;
 use swc_common::Spanned;
 use swc_ecma_ast::*;
@@ -23,8 +23,8 @@ impl From<TsTypeParam> for TypeParam {
         TypeParam {
             span: p.span,
             name: p.name.sym,
-            constraint: p.constraint.map(|v| box v.into_cow()),
-            default: p.default.map(|v| box v.into_cow()),
+            constraint: p.constraint.map(|v| box v),
+            default: p.default.map(|v| box v),
         }
     }
 }
@@ -85,14 +85,14 @@ impl From<TsType> for Type {
                 TsUnionType { span, types },
             )) => Union {
                 span,
-                types: types.into_iter().map(|v| v.into_cow()).collect(),
+                types: types.into_iter().map(|v| v).collect(),
             }
             .into(),
             TsType::TsUnionOrIntersectionType(TsUnionOrIntersectionType::TsIntersectionType(
                 TsIntersectionType { span, types },
             )) => Intersection {
                 span,
-                types: types.into_iter().map(|v| v.into_cow()).collect(),
+                types: types.into_iter().map(|v| v).collect(),
             }
             .into(),
             TsType::TsArrayType(TsArrayType {
@@ -124,14 +124,14 @@ impl From<TsType> for Type {
                 span,
                 params,
                 type_params: type_params.map(From::from),
-                ret_ty: Some(box type_ann.type_ann.into_cow()),
+                ret_ty: Some(box type_ann.type_ann),
             }),
             TsType::TsTypeLit(lit) => Type::TypeLit(lit.into()),
             TsType::TsConditionalType(cond) => Type::Conditional(cond.into()),
             TsType::TsMappedType(ty) => Type::Mapped(ty.into()),
             TsType::TsTypeOperator(ty) => Type::Operator(ty.into()),
             TsType::TsParenthesizedType(TsParenthesizedType { type_ann, .. }) => type_ann.into(),
-            _ => Type::Simple(ty.into_cow()),
+            _ => Type::Simple(ty),
         }
     }
 }
@@ -206,7 +206,7 @@ impl From<TsIndexSignature> for IndexSignature {
             span: d.span,
             params: d.params,
             readonly: d.readonly,
-            type_ann: d.type_ann.map(|v| v.into_cow()),
+            type_ann: d.type_ann.map(|v| v),
         }
     }
 }
@@ -220,7 +220,7 @@ impl From<TsPropertySignature> for PropertySignature {
             optional: d.optional,
             params: d.params,
             readonly: d.readonly,
-            type_ann: d.type_ann.map(|v| v.into_cow()),
+            type_ann: d.type_ann.map(|v| v),
             type_params: d.type_params.map(From::from),
         }
     }
@@ -240,7 +240,7 @@ impl From<TsTypeParamInstantiation> for TypeParamInstantiation {
     fn from(i: TsTypeParamInstantiation) -> Self {
         TypeParamInstantiation {
             span: i.span,
-            params: i.params.into_iter().map(|v| v.into_cow()).collect(),
+            params: i.params.into_iter().map(|v| v).collect(),
         }
     }
 }
@@ -249,7 +249,7 @@ impl From<TsTupleType> for Tuple {
     fn from(t: TsTupleType) -> Self {
         Tuple {
             span: t.span,
-            types: t.elem_types.into_iter().map(|v| (*v).into_cow()).collect(),
+            types: t.elem_types.into_iter().map(|v| (*v)).collect(),
         }
     }
 }
@@ -273,7 +273,7 @@ impl From<TsMappedType> for Mapped {
             readonly: ty.readonly,
             optional: ty.optional,
             type_param: ty.type_param.into(),
-            ty: ty.type_ann.map(|v| box v.into_cow()),
+            ty: ty.type_ann.map(|v| box v),
         }
     }
 }

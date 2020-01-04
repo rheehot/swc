@@ -5,7 +5,7 @@ use crate::{
     errors::Error,
     ty,
     ty::{ClassInstance, Tuple, Type, TypeLit, TypeParamInstantiation},
-    util::{IntoCow, RemoveTypes},
+    util::RemoveTypes,
     ValidationResult,
 };
 use swc_atoms::js_word;
@@ -55,7 +55,7 @@ impl Analyzer<'_, '_> {
             Expr::Call(CallExpr {
                 callee: ExprOrSuper::Super(..),
                 ..
-            }) => Ok(Type::any(span).into_cow()),
+            }) => Ok(Type::any(span)),
 
             Expr::Bin(e) => self.validate_bin_expr(e),
             Expr::Update(e) => self.validate_update_expr(e),
@@ -91,41 +91,37 @@ impl Analyzer<'_, '_> {
                         }) => unimplemented!("type of array spread"),
                         None => {
                             let ty = Type::undefined(span);
-                            types.push(ty.into_cow())
+                            types.push(ty)
                         }
                     }
                 }
 
-                return Ok(Type::Tuple(Tuple { span, types }).into_cow());
+                return Ok(Type::Tuple(Tuple { span, types }));
             }
 
             Expr::Lit(Lit::Bool(v)) => {
                 return Ok(Type::Lit(TsLitType {
                     span: v.span,
                     lit: TsLit::Bool(v),
-                })
-                .into_cow());
+                }));
             }
             Expr::Lit(Lit::Str(ref v)) => {
                 return Ok(Type::Lit(TsLitType {
                     span: v.span,
                     lit: TsLit::Str(v.clone()),
-                })
-                .into_cow());
+                }));
             }
             Expr::Lit(Lit::Num(v)) => {
                 return Ok(Type::Lit(TsLitType {
                     span: v.span,
                     lit: TsLit::Number(v),
-                })
-                .into_cow());
+                }));
             }
             Expr::Lit(Lit::Null(Null { span })) => {
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsNullKeyword,
-                })
-                .into_cow());
+                }));
             }
             Expr::Lit(Lit::Regex(..)) => {
                 return Ok(TsType::TsTypeRef(TsTypeRef {
@@ -137,8 +133,7 @@ impl Analyzer<'_, '_> {
                         type_ann: None,
                     }),
                     type_params: None,
-                })
-                .into_cow());
+                }));
             }
 
             Expr::Paren(ParenExpr { ref expr, .. }) => self.validate_expr(&expr),
@@ -154,15 +149,13 @@ impl Analyzer<'_, '_> {
                                 .clone()
                                 .unwrap_or_else(|| t.quasis[0].raw.clone()),
                         ),
-                    })
-                    .into_cow());
+                    }));
                 }
 
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsStringKeyword,
-                })
-                .into_cow());
+                }));
             }
 
             Expr::Bin(ref expr) => self.type_of_bin_expr(&expr),
@@ -212,21 +205,20 @@ impl Analyzer<'_, '_> {
                 }
 
                 if let Some(ty) = special_type {
-                    return Ok(ty.into_cow());
+                    return Ok(ty);
                 }
 
-                return Ok(Type::TypeLit(TypeLit { span, members }).into_cow());
+                return Ok(Type::TypeLit(TypeLit { span, members }));
             }
 
             // https://github.com/Microsoft/TypeScript/issues/26959
-            Expr::Yield(..) => return Ok(Type::any(span).into_cow()),
+            Expr::Yield(..) => return Ok(Type::any(span)),
 
             Expr::Update(..) => {
                 return Ok(Type::Keyword(TsKeywordType {
                     kind: TsKeywordTypeKind::TsNumberKeyword,
                     span,
-                })
-                .into_cow());
+                }));
             }
 
             Expr::Cond(e) => {
@@ -331,8 +323,7 @@ impl Analyzer<'_, '_> {
         Ok(Type::Keyword(TsKeywordType {
             kind: TsKeywordTypeKind::TsNumberKeyword,
             span,
-        })
-        .into_cow())
+        }))
     }
 
     fn validate_seq_expr(&mut self, e: &SeqExpr) -> ValidationResult {
@@ -373,8 +364,8 @@ impl Analyzer<'_, '_> {
             js_word!("Symbol") => {
                 return Ok(builtin_types::get_var(self.libs, i.span, &js_word!("Symbol"))?.owned());
             }
-            js_word!("undefined") => return Ok(Type::undefined(span).into_cow()),
-            js_word!("void") => return Ok(Type::any(span).into_cow()),
+            js_word!("undefined") => return Ok(Type::undefined(span)),
+            js_word!("void") => return Ok(Type::any(span)),
             js_word!("eval") => match type_mode {
                 TypeOfMode::LValue => return Err(Error::CannotAssignToNonVariable { span }),
                 TypeOfMode::RValue => {
@@ -433,7 +424,7 @@ impl Analyzer<'_, '_> {
             //
             // let id: (x: Foo) => Foo = x => x;
             //
-            return Ok(Type::any(span).into_cow());
+            return Ok(Type::any(span));
         }
 
         if let Ok(ty) = builtin_types::get_var(self.libs, span, &i.sym) {

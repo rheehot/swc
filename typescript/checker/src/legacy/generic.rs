@@ -176,8 +176,7 @@ impl Analyzer<'_, '_> {
                     params,
                     type_params,
                     ret_ty,
-                })
-                .into_cow());
+                }));
             }
 
             _ => {}
@@ -203,7 +202,7 @@ impl Analyzer<'_, '_> {
             let c = self.expand_type_params(i, decl, Cow::Borrowed(c))?;
 
             if let Cow::Owned(c) = c {
-                tp.to_mut().constraint = Some(box c.into_cow());
+                tp.to_mut().constraint = Some(box c);
             }
         }
 

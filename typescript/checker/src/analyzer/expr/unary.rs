@@ -1,5 +1,5 @@
 use super::super::Analyzer;
-use crate::{analyzer::util::ResultExt, errors::Error, ty::Type, util::IntoCow, ValidationResult};
+use crate::{analyzer::util::ResultExt, errors::Error, ty::Type, ValidationResult};
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
@@ -64,8 +64,7 @@ impl Analyzer<'_, '_> {
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsStringKeyword,
-                })
-                .into_cow());
+                }));
             }
 
             // `delete foo` returns bool
@@ -92,7 +91,7 @@ impl Analyzer<'_, '_> {
         }
 
         match op {
-            op!("!") => return Ok(negate(self.validate_expr(arg)?.into_owned()).into_cow()),
+            op!("!") => return Ok(negate(self.validate_expr(arg)?.into_owned())),
 
             op!(unary, "-") | op!(unary, "+") => {
                 return Ok(Type::Keyword(TsKeywordType {
