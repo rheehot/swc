@@ -1,12 +1,14 @@
-use super::{name::Name, type_facts::TypeFacts, Analyzer};
+use super::{
+    expr::TypeOfMode,
+    name::Name,
+    scope::{ScopeKind, VarInfo},
+    type_facts::TypeFacts,
+    util::Comparator,
+    Analyzer,
+};
 use crate::{
-    analyzer::{
-        expr::TypeOfMode,
-        scope::{ScopeKind, VarInfo},
-        util::Comparator,
-    },
     errors::Error,
-    ty::{Tuple, Type},
+    ty::{Tuple, Type, TypeRefExt},
     util::EndsWithRet,
     ValidationResult,
 };
@@ -386,12 +388,14 @@ impl Analyzer<'_, '_> {
                                 });
                             }
 
-                            if self.allow_ref_declaring && self.scope.declaring.contains(&i.sym) {
-                                return Ok(());
+                            return if self.allow_ref_declaring
+                                && self.scope.declaring.contains(&i.sym)
+                            {
+                                Ok(())
                             } else {
                                 // undefined symbol
-                                return Err(Error::UndefinedSymbol { span: i.span });
-                            }
+                                Err(Error::UndefinedSymbol { span: i.span })
+                            };
                         };
 
                         // Variable is defined on parent scope.

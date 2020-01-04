@@ -141,7 +141,7 @@ impl Visit<GetterProp> for Analyzer<'_> {
             n.key.visit_with(child);
 
             if let Some(body) = &n.body {
-                let ret_ty = child.visit_stmts_for_return(&body.stmts);
+                let ret_ty = child.visit_stmts_for_return(&body.stmts)?;
 
                 if let None = ret_ty {
                     // getter property must have return statements.
@@ -151,7 +151,10 @@ impl Visit<GetterProp> for Analyzer<'_> {
                         .push(Error::GetterPropWithoutReturn { span: n.key.span() });
                 }
             }
-        });
+
+            Ok(())
+        })
+        .store(&mut self.info.errors);
     }
 }
 
@@ -180,8 +183,7 @@ impl Visit<TsPropertySignature> for Analyzer<'_, '_> {
         let node = node.visit_children(self);
 
         if node.computed {
-            self.validate_computed_prop_key(node.span(), &node.key)
-                .store(&mut self.info.errors);
+            self.validate_computed_prop_key(node.span(), &node.key);
         }
     }
 }

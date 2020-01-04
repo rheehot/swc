@@ -50,6 +50,7 @@ pub struct Analyzer<'a, 'b> {
 
     loader: &'b dyn Load,
 
+    allow_ref_declaring: bool,
     computed_prop_mode: ComputedPropMode,
 }
 
@@ -86,6 +87,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             libs,
             scope,
             loader,
+            allow_ref_declaring: false,
             computed_prop_mode: ComputedPropMode::Object,
         }
     }

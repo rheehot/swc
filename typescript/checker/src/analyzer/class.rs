@@ -198,7 +198,7 @@ impl Analyzer<'_, '_> {
         });
 
         if c.kind == MethodKind::Getter && c.function.body.is_some() {
-            let ret_ty = self.visit_stmts_for_return(&c.function.body.as_ref().unwrap().stmts);
+            let ret_ty = self.visit_stmts_for_return(&c.function.body.as_ref().unwrap().stmts)?;
 
             // getter property must have return statements.
             if let None = ret_ty {

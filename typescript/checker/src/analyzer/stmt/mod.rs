@@ -41,6 +41,7 @@ impl Analyzer<'_, '_> {
         &mut self,
         stmts: &[Stmt],
     ) -> Result<Option<Type<'static>>, Error> {
+        unimplemented!("visit_stmts_for_return")
     }
 
     /// Validate that parent interfaces are all resolved.
