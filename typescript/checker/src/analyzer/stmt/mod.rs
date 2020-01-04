@@ -1,5 +1,5 @@
 use super::Analyzer;
-use crate::analyzer::scope::ScopeKind;
+use crate::analyzer::{scope::ScopeKind, util::ResultExt};
 use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
 
