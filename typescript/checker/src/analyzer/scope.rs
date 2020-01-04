@@ -286,7 +286,7 @@ impl Analyzer<'_, '_> {
 }
 
 #[derive(Debug, Clone)]
-pub(super) struct VarInfo {
+pub(crate) struct VarInfo {
     pub kind: VarDeclKind,
     pub initialized: bool,
     pub ty: Option<Type<'static>>,

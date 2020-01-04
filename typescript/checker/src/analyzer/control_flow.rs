@@ -659,6 +659,8 @@ impl Analyzer<'_, '_> {
     }
 }
 
+prevent!(CondExpr);
+
 impl Analyzer<'_, '_> {
     fn validate_cond_expr(&mut self, e: &CondExpr) -> ValidationResult {
         // TODO: children
