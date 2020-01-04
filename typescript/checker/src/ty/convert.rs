@@ -1,6 +1,6 @@
 use super::{
     Alias, Array, CallSignature, Conditional, Constructor, ConstructorSignature, Enum, EnumMember,
-    Function, IndexSignature, Interface, Intersection, Mapped, Method, MethodSignature, Operator,
+    Function, IndexSignature, Interface, Intersection, Mapped, MethodSignature, Operator,
     PropertySignature, TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl,
     TypeParamInstantiation, Union,
 };

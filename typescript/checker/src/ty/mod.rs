@@ -4,7 +4,7 @@ use crate::{
 };
 use fxhash::FxHashMap;
 use std::{borrow::Cow, mem::transmute, sync::Arc};
-use swc_atoms::{js_word, JsWord};
+use swc_atoms::JsWord;
 use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 

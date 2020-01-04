@@ -1,5 +1,4 @@
-use crate::ty::Type;
-use std::{borrow::Cow, iter::once};
+use std::iter::once;
 use swc_atoms::JsWord;
 use swc_common::{Spanned, Visit};
 use swc_ecma_ast::*;
