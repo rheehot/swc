@@ -34,6 +34,9 @@ pub(super) enum TypeOfMode {
     RValue,
 }
 
+prevent!(Expr);
+prevent!(ParenExpr);
+
 impl Analyzer<'_, '_> {
     pub(super) fn validate_expr(&mut self, e: &Expr) -> ValidationResult {
         self.validate_expr_with_extra(e, TypeOfMode::RValue, None)

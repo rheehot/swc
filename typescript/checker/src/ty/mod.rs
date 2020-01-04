@@ -608,11 +608,11 @@ where
 //impl Type {
 //    pub fn into_static(self) -> Type {
 //        match self {
-//            Type::Operator(ty) => Type::Operator(ty.into_static()),
-//            Type::Mapped(ty) => Type::Mapped(ty.into_static()),
-//            Type::Conditional(cond) => Type::Conditional(cond.into_static()),
+//            Type::Operator(ty) => Type::Operator(ty),
+//            Type::Mapped(ty) => Type::Mapped(ty),
+//            Type::Conditional(cond) => Type::Conditional(cond),
 //            Type::This(this) => Type::This(this),
-//            Type::TypeLit(lit) => Type::TypeLit(lit.into_static()),
+//            Type::TypeLit(lit) => Type::TypeLit(lit),
 //            Type::Lit(lit) => Type::Lit(lit),
 //            Type::Keyword(lit) => Type::Keyword(lit),
 //            Type::Simple(s) => Type::Simple(s.into_owned().into_cow()),
@@ -637,7 +637,7 @@ where
 //                ret_ty,
 //            }) => Type::Function(Function {
 //                span,
-//                type_params: type_params.map(|v| v.into_static()),
+//                type_params: type_params.map(|v| v),
 //                params,
 //                ret_ty: box static_type(*ret_ty),
 //            }),
@@ -649,22 +649,22 @@ where
 //                ret_ty,
 //            }) => Type::Constructor(Constructor {
 //                span,
-//                type_params: type_params.map(|v| v.into_static()),
+//                type_params: type_params.map(|v| v),
 //                params,
 //                ret_ty: ret_ty.map(|ret_ty| box static_type(*ret_ty)),
 //            }),
 //
-//            Type::Method(m) => Type::Method(m.into_static()),
+//            Type::Method(m) => Type::Method(m),
 //
-//            Type::Interface(i) => Type::Interface(i.into_static()),
+//            Type::Interface(i) => Type::Interface(i),
 //
-//            Type::Param(p) => Type::Param(p.into_static()),
+//            Type::Param(p) => Type::Param(p),
 //
 //            Type::Enum(e) => Type::Enum(e),
 //            Type::EnumVariant(e) => Type::EnumVariant(e),
-//            Type::Class(c) => Type::Class(c.into_static()),
-//            Type::ClassInstance(c) => Type::ClassInstance(c.into_static()),
-//            Type::Alias(a) => Type::Alias(a.into_static()),
+//            Type::Class(c) => Type::Class(c),
+//            Type::ClassInstance(c) => Type::ClassInstance(c),
+//            Type::Alias(a) => Type::Alias(a),
 //            Type::Namespace(n) => Type::Namespace(n),
 //            Type::Module(m) => Type::Module(m),
 //
@@ -672,7 +672,7 @@ where
 //
 //            Type::Static(s) => Type::Static(s),
 //
-//            Type::Tuple(t) => Type::Tuple(t.into_static()),
+//            Type::Tuple(t) => Type::Tuple(t),
 //        }
 //    }
 //}
@@ -734,10 +734,10 @@ impl Type {
 //        Interface {
 //            span: self.span,
 //            name: self.name,
-//            type_params: self.type_params.map(|v| v.into_static()),
+//            type_params: self.type_params.map(|v| v),
 //            extends: self.extends.into_iter().map(|v|
-// v.into_static()).collect(),            body: self.body.into_iter().map(|v|
-// v.into_static()).collect(),        }
+// v).collect(),            body: self.body.into_iter().map(|v|
+// v).collect(),        }
 //    }
 //}
 
@@ -746,7 +746,7 @@ impl Type {
 //        TsExpr {
 //            span: self.span,
 //            expr: self.expr,
-//            type_params: self.type_params.map(|v| v.into_static()),
+//            type_params: self.type_params.map(|v| v),
 //        }
 //    }
 //}
@@ -762,12 +762,12 @@ impl Type {
 //impl TypeElement {
 //    pub fn into_static(self) -> TypeElement<'static> {
 //        match self {
-//            TypeElement::Call(call) => TypeElement::Call(call.into_static()),
+//            TypeElement::Call(call) => TypeElement::Call(call),
 //            TypeElement::Constructor(c) =>
-// TypeElement::Constructor(c.into_static()),            TypeElement::Index(i)
-// => TypeElement::Index(i.into_static()),            TypeElement::Method(m) =>
-// TypeElement::Method(m.into_static()),            TypeElement::Property(p) =>
-// TypeElement::Property(p.into_static()),        }
+// TypeElement::Constructor(c),            TypeElement::Index(i)
+// => TypeElement::Index(i),            TypeElement::Method(m) =>
+// TypeElement::Method(m),            TypeElement::Property(p) =>
+// TypeElement::Property(p),        }
 //    }
 //}
 //
@@ -785,7 +785,7 @@ impl Type {
 //        CallSignature {
 //            span: self.span,
 //            params: self.params,
-//            type_params: self.type_params.map(|v| v.into_static()),
+//            type_params: self.type_params.map(|v| v),
 //            ret_ty: self.ret_ty.map(static_type),
 //        }
 //    }
@@ -797,7 +797,7 @@ impl Type {
 //            span: self.span,
 //            params: self.params,
 //            ret_ty: self.ret_ty.map(static_type),
-//            type_params: self.type_params.map(|v| v.into_static()),
+//            type_params: self.type_params.map(|v| v),
 //        }
 //    }
 //}
@@ -823,7 +823,7 @@ impl Type {
 //            params: self.params,
 //            readonly: self.readonly,
 //            ret_ty: self.ret_ty.map(static_type),
-//            type_params: self.type_params.map(|v| v.into_static()),
+//            type_params: self.type_params.map(|v| v),
 //        }
 //    }
 //}
@@ -838,7 +838,7 @@ impl Type {
 //            params: self.params,
 //            readonly: self.readonly,
 //            type_ann: self.type_ann.map(static_type),
-//            type_params: self.type_params.map(|v| v.into_static()),
+//            type_params: self.type_params.map(|v| v),
 //        }
 //    }
 //}
@@ -859,7 +859,7 @@ impl Type {
 //        TypeParamDecl {
 //            span: self.span,
 //            params: self.params.into_iter().map(|v|
-// v.into_static()).collect(),        }
+// v).collect(),        }
 //    }
 //}
 //
@@ -868,7 +868,7 @@ impl Type {
 //        TypeLit {
 //            span: self.span,
 //            members: self.members.into_iter().map(|v|
-// v.into_static()).collect(),        }
+// v).collect(),        }
 //    }
 //}
 //
@@ -876,7 +876,7 @@ impl Type {
 //    pub fn into_static(self) -> Alias<'static> {
 //        Alias {
 //            span: self.span,
-//            type_params: self.type_params.map(|v| v.into_static()),
+//            type_params: self.type_params.map(|v| v),
 //            ty: box static_type(*self.ty),
 //        }
 //    }
@@ -942,8 +942,8 @@ impl Type {
 //            span: self.span,
 //            is_abstract: self.is_abstract,
 //            name: self.name,
-//            body: self.body.into_iter().map(|v| v.into_static()).collect(),
-//            type_params: self.type_params.map(|v| v.into_static()),
+//            body: self.body.into_iter().map(|v| v).collect(),
+//            type_params: self.type_params.map(|v| v),
 //            super_class: self.super_class.map(|v| box static_type(*v)),
 //            // implements: map_types(self.implements, static_type),
 //        }
@@ -955,7 +955,7 @@ impl Type {
 //        ClassInstance {
 //            span: self.span,
 //            cls: self.cls,
-//            type_args: self.type_args.map(|v| v.into_static()),
+//            type_args: self.type_args.map(|v| v),
 //        }
 //    }
 //}
@@ -964,8 +964,8 @@ impl Type {
 //    pub fn into_static(self) -> ClassMember<'static> {
 //        match self {
 //            ClassMember::Constructor(v) =>
-// ClassMember::Constructor(v.into_static()),            ClassMember::Method(v)
-// => ClassMember::Method(v.into_static()),            ClassMember::Property(v)
+// ClassMember::Constructor(v),            ClassMember::Method(v)
+// => ClassMember::Method(v),            ClassMember::Property(v)
 // => ClassMember::Property(v),            ClassMember::IndexSignature(v) =>
 // ClassMember::IndexSignature(v),        }
 //    }
@@ -976,7 +976,7 @@ impl Type {
 //        Constructor {
 //            span: self.span,
 //            params: self.params,
-//            type_params: self.type_params.map(|v| v.into_static()),
+//            type_params: self.type_params.map(|v| v),
 //            ret_ty: self.ret_ty.map(|v| box Cow::Owned(v.to_static())),
 //        }
 //    }

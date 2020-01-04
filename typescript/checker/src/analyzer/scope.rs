@@ -80,7 +80,7 @@ impl Scope<'_> {
             }
             Entry::Vacant(e) => {
                 println!("({}) register_type({})", depth, e.key());
-                e.insert(ty.into_static());
+                e.insert(ty);
             }
         }
     }

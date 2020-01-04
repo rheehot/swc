@@ -452,7 +452,7 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
 //            span: self.span,
 //            key: self.key,
 //            is_static: self.is_static,
-//            type_params: self.type_params.map(|v| v.into_static()),
+//            type_params: self.type_params.map(|v| v),
 //            params: self.params,
 //            ret_ty: box self.ret_ty.into_owned(),
 //        }

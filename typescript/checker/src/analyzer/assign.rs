@@ -268,7 +268,7 @@ impl Analyzer<'_, '_> {
                                 }
 
                                 // No property with `key` found.
-                                missing_fields.push(m.clone().into_static());
+                                missing_fields.push(m.clone());
                             } else {
                                 match m {
                                     // TODO: Check type of the index.
@@ -286,7 +286,7 @@ impl Analyzer<'_, '_> {
                                             }
                                         }
 
-                                        missing_fields.push(m.clone().into_static());
+                                        missing_fields.push(m.clone());
                                     }
                                     _ => {}
                                 }

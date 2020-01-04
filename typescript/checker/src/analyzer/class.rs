@@ -110,7 +110,7 @@ impl Analyzer<'_, '_> {
                             let ty = i.type_ann.clone().map(Type::from);
                             //let ty = match ty {
                             //    Some(ty) => match child.expand_type(i.span, ty.owned()) {
-                            //        Ok(ty) => Some(ty.into_owned().into_static()),
+                            //        Ok(ty) => Some(ty.into_owned()),
                             //        Err(err) => {
                             //            child.info.errors.push(err);
                             //            Some(Type::any(i.span))
