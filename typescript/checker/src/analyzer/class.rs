@@ -353,8 +353,14 @@ impl Analyzer<'_, '_> {
                     .super_type_params
                     .as_ref()
                     .map(|i| self.visit_ts_type_param_instantiation(i));
-                let super_ty =
-                    self.validate_expr_with_extra(&super_class, TypeOfMode::RValue, type_args)?;
+                let super_ty = self.validate_expr_with_extra(
+                    &super_class,
+                    TypeOfMode::RValue,
+                    match type_args {
+                        Some(v) => Some(v?),
+                        None => None,
+                    },
+                )?;
 
                 match super_ty.normalize() {
                     Type::Class(sc) => {

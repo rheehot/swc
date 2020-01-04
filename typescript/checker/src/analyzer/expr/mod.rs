@@ -43,7 +43,7 @@ impl Analyzer<'_, '_> {
         &mut self,
         e: &Expr,
         mode: TypeOfMode,
-        type_args: Option<&TypeParamInstantiation>,
+        type_args: Option<TypeParamInstantiation>,
     ) -> Result<TypeRef, Error> {
         let span = e.span();
 
