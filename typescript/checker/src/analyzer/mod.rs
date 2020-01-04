@@ -3,6 +3,7 @@ use self::{
     scope::{Scope, ScopeKind},
 };
 use crate::{
+    analyzer::props::ComputedPropMode,
     errors::Error,
     loader::Load,
     ty::{Type, TypeRef},
@@ -48,6 +49,8 @@ pub struct Analyzer<'a, 'b> {
     scope: Scope<'a>,
 
     loader: &'b dyn Load,
+
+    computed_prop_mode: ComputedPropMode,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -66,6 +69,14 @@ fn _assert_types() {
 
 impl<'a, 'b> Analyzer<'a, 'b> {
     pub fn root(libs: &'b [Lib], rule: Rule, loader: &'b dyn Load) -> Self {
+        Self::new_inner(libs, rule, loader, Scope::root())
+    }
+
+    fn new(&self, scope: Scope<'a>) -> Self {
+        Self::new_inner(self.libs, self.rule, self.loader, scope)
+    }
+
+    fn new_inner(libs: &'b [Lib], rule: Rule, loader: &'b dyn Load, scope: Scope<'a>) -> Self {
         Self {
             info: Default::default(),
             resolved_imports: Default::default(),
@@ -73,21 +84,9 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             pending_exports: Default::default(),
             rule,
             libs,
-            scope: Scope::root(),
-            loader,
-        }
-    }
-
-    fn new(&self, scope: Scope<'a>) -> Self {
-        Self {
-            info: Default::default(),
-            resolved_imports: Default::default(),
-            errored_imports: Default::default(),
-            pending_exports: Default::default(),
-            rule: self.rule,
-            libs: self.libs,
             scope,
-            loader: self.loader,
+            loader,
+            computed_prop_mode: ComputedPropMode::Object,
         }
     }
 

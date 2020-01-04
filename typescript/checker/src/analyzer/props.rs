@@ -13,7 +13,7 @@ use swc_common::{Fold, FoldWith, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy)]
-enum ComputedPropMode {
+pub(super) enum ComputedPropMode {
     Class {
         has_body: bool,
     },
@@ -27,9 +27,10 @@ prevent!(ComputedPropName);
 
 impl Analyzer<'_, '_> {
     #[validator]
-    fn visit_computed_property_name(&mut self, node: &ComputedPropName, mode: ComputedPropMode) {
-        // TODO: check if it's class or object literal
+    fn visit(&mut self, node: &ComputedPropName) {
         node.visit_children(self);
+
+        let mode = self.computed_prop_mode;
 
         let span = node.span;
 
