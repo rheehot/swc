@@ -2,7 +2,7 @@ use super::{control_flow::CondFacts, Analyzer};
 use crate::{errors::Error, ty::Type};
 use fxhash::FxHashMap;
 use smallvec::SmallVec;
-use std::sync::Arc;
+use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::DUMMY_SP;
 use swc_ecma_ast::*;
@@ -16,6 +16,8 @@ pub(crate) struct Scope<'a> {
     pub(super) vars: FxHashMap<JsWord, VarInfo>,
     pub(super) types: FxHashMap<JsWord, Type<'static>>,
     pub(super) facts: CondFacts,
+
+    pub(super) this: Option<JsWord>,
 }
 
 impl Scope<'_> {
@@ -30,6 +32,56 @@ impl Scope<'_> {
                 .rposition(|name| n == *name)
                 .expect("failed to find inserted name");
             self.declaring.remove(idx);
+        }
+    }
+
+    /// # Interface
+    ///
+    /// Registers an interface, and merges it with previous interface
+    /// declaration if required.
+    pub fn register_type(&mut self, name: JsWord, ty: Type<'static>) {
+        let depth = self.depth();
+
+        if cfg!(debug_assertions) {
+            match ty.normalize() {
+                Type::Alias(ref alias) => {
+                    //
+                    if alias.type_params.is_none() {
+                        match **alias.ty {
+                            Type::Simple(ref s_ty) => match **s_ty {
+                                TsType::TsTypeRef(..) => panic!(
+                                    "Type alias without type parameters should be expanded before \
+                                     .register_type()"
+                                ),
+                                _ => {}
+                            },
+                            _ => {}
+                        }
+                    }
+                }
+                _ => {}
+            }
+        }
+
+        match self.types.entry(name) {
+            Entry::Occupied(mut e) => {
+                println!("({}) register_type({}): duplicate", depth, e.key());
+
+                // TODO: Match -> .map
+                match (e.get_mut(), ty) {
+                    (&mut Type::Interface(ref mut orig), Type::Interface(ref mut i)) => {
+                        // TODO: Check fields' type
+                        // TODO: Sort function members like
+                        // https://www.typescriptlang.org/docs/handbook/declaration-merging.html#merging-interfaces
+                        orig.body.append(&mut i.body);
+                    }
+                    ref ty => unreachable!("{:?} cannot be merged with {:?}", ty.0, ty.1),
+                }
+            }
+            Entry::Vacant(e) => {
+                println!("({}) register_type({})", depth, e.key());
+                e.insert(ty.into_static());
+            }
         }
     }
 }
