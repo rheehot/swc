@@ -595,7 +595,7 @@ impl Type {
 }
 
 fn static_type(ty: Cow<Type>) -> Type {
-    ty.into_owned().into_static()
+    ty.into_owned()
 }
 
 fn map_types<'a, 'b, F>(types: Vec<Type>, map: F) -> Vec<Type>
@@ -920,7 +920,7 @@ impl Type {
 //            span: self.span,
 //            readonly: self.readonly,
 //            optional: self.optional,
-//            type_param: self.type_param.into_static(),
+//            type_param: self.type_param,
 //            ty: self.ty.map(|ty| box static_type(*ty)),
 //        }
 //    }
@@ -954,7 +954,7 @@ impl Type {
 //    pub fn into_static(self) -> ClassInstance<'static> {
 //        ClassInstance {
 //            span: self.span,
-//            cls: self.cls.into_static(),
+//            cls: self.cls,
 //            type_args: self.type_args.map(|v| v.into_static()),
 //        }
 //    }

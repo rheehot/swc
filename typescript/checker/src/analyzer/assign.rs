@@ -599,8 +599,8 @@ impl Analyzer<'_, '_> {
                         .assign_inner(&elem_type, &rhs_elem_type, span)
                         .map_err(|cause| Error::AssignFailed {
                             span,
-                            left: to,
-                            right: rhs,
+                            left: to.clone(),
+                            right: rhs.clone(),
                             cause: vec![cause],
                         });
                 }
@@ -800,7 +800,7 @@ impl Analyzer<'_, '_> {
                 return Err(Error::AssignFailed {
                     span,
                     left: Type::Enum(e.clone()),
-                    right: rhs,
+                    right: rhs.clone(),
                     cause: vec![],
                 });
             }
