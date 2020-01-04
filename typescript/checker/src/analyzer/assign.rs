@@ -31,8 +31,8 @@ impl Analyzer<'_, '_> {
             () => {{
                 return Err(Error::AssignFailed {
                     span,
-                    left: to,
-                    right: rhs,
+                    left: to.clone(),
+                    right: rhs.clone(),
                     cause: vec![],
                 });
             }};
