@@ -3,11 +3,8 @@ use self::{
     scope::{Scope, ScopeKind},
 };
 use crate::{
-    analyzer::props::ComputedPropMode,
-    errors::Error,
-    loader::Load,
-    ty::{Type, TypeRef},
-    Exports, ImportInfo, Rule,
+    analyzer::props::ComputedPropMode, errors::Error, loader::Load, ty::Type, Exports, ImportInfo,
+    Rule,
 };
 use fxhash::{FxHashMap, FxHashSet};
 use std::{path::PathBuf, sync::Arc};
