@@ -31,6 +31,7 @@ mod props;
 mod scope;
 mod stmt;
 mod type_facts;
+mod type_params;
 mod util;
 
 /// Note: All methods named `validate_*` return [Err] iff it's not recoverable.

@@ -349,11 +349,12 @@ impl Analyzer<'_, '_> {
 
         let res: Result<_, Error> = try {
             if let Some(super_class) = &c.super_class {
-                let super_ty = self.validate_expr_with_extra(
-                    &super_class,
-                    TypeOfMode::RValue,
-                    c.super_type_params.as_ref(),
-                )?;
+                let type_args = c
+                    .super_type_params
+                    .as_ref()
+                    .map(|i| self.visit_ts_type_param_instantiation(i));
+                let super_ty =
+                    self.validate_expr_with_extra(&super_class, TypeOfMode::RValue, type_args)?;
 
                 match super_ty.normalize() {
                     Type::Class(sc) => {
