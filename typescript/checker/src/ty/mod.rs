@@ -196,8 +196,22 @@ pub struct ClassInstance<'a> {
 pub enum ClassMember<'a> {
     Constructor(Constructor<'a>),
     Method(Method<'a>),
-    ClassProp(ClassProp),
-    TsIndexSignature(TsIndexSignature),
+    ClassProperty(ClassProperty<'a>),
+    IndexSignature(IndexSignature<'a>),
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct ClassProperty<'a> {
+    pub span: Span,
+    pub key: Box<Expr>,
+    pub value: Option<TypeRef<'a>>,
+    pub is_static: bool,
+    pub computed: bool,
+    pub accessibility: Option<Accessibility>,
+    pub is_abstract: bool,
+    pub is_optional: bool,
+    pub readonly: bool,
+    pub definite: bool,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]

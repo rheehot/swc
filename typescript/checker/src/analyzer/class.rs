@@ -19,7 +19,10 @@ prevent!(Constructor);
 prevent!(ClassMethod);
 
 impl Analyzer<'_, '_> {
-    fn validate_class_property(&mut self, p: &ClassProp) -> Result<ty::ClassMember, Error> {
+    fn validate_class_property(
+        &mut self,
+        p: &ClassProp,
+    ) -> Result<ty::ClassProperty<'static>, Error> {
         // TODO: children
 
         let mut errors = vec![];
@@ -36,16 +39,28 @@ impl Analyzer<'_, '_> {
         //    self.expand_type(span, ty.owned()).store(&mut errors);
         //}
 
-        if let Some(ref value) = p.value {
-            self.validate_expr(&value).store(&mut errors);
-        }
+        let value = p
+            .value
+            .as_ref()
+            .and_then(|e| self.validate_expr(&e).store(&mut errors));
 
         self.info.errors.extend(errors);
 
-        Ok(())
+        Ok(ty::ClassProperty {
+            span: p.span,
+            key: p.key.clone(),
+            value,
+            is_static: p.is_static,
+            computed: p.computed,
+            accessibility: p.accessibility,
+            is_abstract: p.is_abstract,
+            is_optional: p.is_optional,
+            readonly: p.readonly,
+            definite: p.definite,
+        })
     }
 
-    fn validate_constructor(&mut self, c: &Constructor) -> Result<ty::Constructor, Error> {
+    fn validate_constructor(&mut self, c: &Constructor) -> Result<ty::Constructor<'static>, Error> {
         let c_span = c.span();
 
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
