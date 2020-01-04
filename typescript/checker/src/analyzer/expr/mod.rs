@@ -226,30 +226,8 @@ impl Analyzer<'_, '_> {
                 .into_cow());
             }
 
-            Expr::Cond(CondExpr {
-                ref test,
-                ref cons,
-                ref alt,
-                ..
-            }) => {
-                match **test {
-                    Expr::Ident(ref i) => {
-                        // Check `declaring` before checking variables.
-                        if self.scope.declaring.contains(&i.sym) {
-                            if self.allow_ref_declaring {
-                                return Ok(Type::any(span).owned());
-                            } else {
-                                return Err(Error::ReferencedInInit { span });
-                            }
-                        }
-                    }
-                    _ => {}
-                }
-
-                let cons_ty = self.validate_expr(cons)?.into_owned();
-                let alt_ty = self.validate_expr(alt)?.into_owned();
-
-                return Ok(Type::union(vec![cons_ty, alt_ty]).into_cow());
+            Expr::Cond(e) => {
+                self.validate_cond_expr(&e)?;
             }
 
             Expr::Seq(e) => self.validate_seq_expr(e),

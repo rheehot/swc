@@ -662,19 +662,40 @@ impl Analyzer<'_, '_> {
 prevent!(CondExpr);
 
 impl Analyzer<'_, '_> {
-    fn validate_cond_expr(&mut self, e: &CondExpr) -> ValidationResult {
-        let CondExpr { alt, cons, .. } = e;
+    pub(super) fn validate_cond_expr(&mut self, e: &CondExpr) -> ValidationResult {
+        let CondExpr {
+            span,
+            test,
+            alt,
+            cons,
+            ..
+        } = e;
+        let span = *span;
 
         let mut facts = Default::default();
         self.detect_facts(&e.test, &mut facts)?;
 
-        self.validate_expr(&e.test)?;
+        self.validate_expr(&test)?;
         let cons = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
             child.validate_expr(&cons)
         })?;
         let alt = self.with_child(ScopeKind::Flow, facts.false_facts, |child| {
             child.validate_expr(&alt)
         })?;
+
+        match **test {
+            Expr::Ident(ref i) => {
+                // Check `declaring` before checking variables.
+                if self.scope.declaring.contains(&i.sym) {
+                    return if self.allow_ref_declaring {
+                        Ok(Type::any(span).owned())
+                    } else {
+                        Err(Error::ReferencedInInit { span })
+                    };
+                }
+            }
+            _ => {}
+        }
 
         Ok(Type::union(vec![cons, alt]).owned())
     }
