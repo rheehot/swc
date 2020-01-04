@@ -238,7 +238,7 @@ impl Analyzer<'_, '_> {
                     .map(Type::from);
                 let ty = if let Some(ty) = ty {
                     match self.expand_type(i.span, ty.owned()) {
-                        Ok(ty) => Some(ty.to_static()),
+                        Ok(ty) => Some(ty),
                         Err(err) => {
                             self.info.errors.push(err);
                             return Ok(());

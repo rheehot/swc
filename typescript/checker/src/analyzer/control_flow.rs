@@ -370,7 +370,7 @@ impl Analyzer<'_, '_> {
                                 && var_info.ty.as_ref().unwrap().is_unknown()
                             {
                                 // Type narrowing
-                                Some(ty.to_static())
+                                Some(ty)
                             } else {
                                 return Ok(());
                             };
@@ -595,13 +595,13 @@ impl Analyzer<'_, '_> {
                             right: (&**right, &r_ty),
                         };
 
-                        match c.take(|(l, l_ty), (_, r_ty)| match **l_ty {
+                        match c.take(|(l, l_ty), (_, r_ty)| match *l_ty {
                             Type::Keyword(TsKeywordType {
                                 kind: TsKeywordTypeKind::TsUnknownKeyword,
                                 ..
                             }) => {
                                 //
-                                Some((Name::try_from(l), r_ty.to_static()))
+                                Some((Name::try_from(l), r_ty))
                             }
                             _ => None,
                         }) {
@@ -624,10 +624,7 @@ impl Analyzer<'_, '_> {
                             Expr::Ident(ref i) => {
                                 //
 
-                                facts
-                                    .true_facts
-                                    .vars
-                                    .insert(Name::from(&i.sym), r_ty.to_static());
+                                facts.true_facts.vars.insert(Name::from(&i.sym), r_ty);
 
                                 return Ok(());
                             }

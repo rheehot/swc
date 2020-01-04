@@ -757,7 +757,7 @@ impl Fold<VarDecl> for Analyzer<'_, '_> {
                                 Some(ty) => {
                                     match self.expand_type(span, ty.owned()).map(instantiate_class)
                                     {
-                                        Ok(ty) => Some(ty.to_static()),
+                                        Ok(ty) => Some(ty),
                                         Err(err) => {
                                             self.info.errors.push(err);
                                             inject_any!();

@@ -240,6 +240,18 @@ pub enum TypeElement {
     Index(IndexSignature),
 }
 
+impl TypeElement {
+    pub fn key(&self) -> Option<&Expr> {
+        match self {
+            TypeElement::Call(..) => None,
+            TypeElement::Constructor(..) => Some(&Expr::Ident(Ident::new())),
+            TypeElement::Property(p) => Some(&p.key),
+            TypeElement::Method(m) => Some(&m.key),
+            TypeElement::Index(_) => None,
+        }
+    }
+}
+
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct CallSignature {
     pub span: Span,
@@ -974,7 +986,7 @@ impl Type {
 //            span: self.span,
 //            params: self.params,
 //            type_params: self.type_params.map(|v| v),
-//            ret_ty: self.ret_ty.map(|v| box Cow::Owned(v.to_static())),
+//            ret_ty: self.ret_ty.map(|v| box Cow::Owned(v)),
 //        }
 //    }
 //}
