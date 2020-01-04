@@ -139,7 +139,8 @@ impl Visit<GetterProp> for Analyzer<'_> {
 
                 if let None = ret_ty {
                     // getter property must have return statements.
-                    self.info
+                    child
+                        .info
                         .errors
                         .push(Error::GetterPropWithoutReturn { span: n.key.span() });
                 }
@@ -151,6 +152,8 @@ impl Visit<GetterProp> for Analyzer<'_> {
 impl Analyzer<'_, '_> {
     fn validate_ts_method_signature(&mut self, node: TsMethodSignature) -> TsMethodSignature {
         let node = node.fold_children(self);
+impl Visit<TsMethodSignature> for Analyzer<'_, '_> {
+    fn visit(&mut self, node: &TsMethodSignature) {
         node.visit_children(self);
         let node = node.visit_children(self);
 
