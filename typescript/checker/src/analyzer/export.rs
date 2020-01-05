@@ -1,5 +1,6 @@
 use super::Analyzer;
 use crate::{
+    analyzer::util::ResultExt,
     errors::Error,
     ty::Type,
     validator::{Validate, ValidateWith},
@@ -97,9 +98,12 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
             }
             Decl::TsEnum(ref e) => {
                 // TODO: Allow multiple exports with same name.
-                debug_assert_eq!(self.info.exports.get(&e.id.sym), None);
+                debug_assert_eq!(self.info.exports.types.get(&e.id.sym), None);
 
-                let ty = e.validate_with(self).store(&mut self.info.errors)?;
+                let ty = e
+                    .validate_with(self)
+                    .store(&mut self.info.errors)
+                    .map(Type::from);
 
                 self.info.exports.types.insert(
                     e.id.sym.clone(),
@@ -119,8 +123,6 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
                 self.export(decl.span, decl.id.sym.clone(), None)
             }
         }
-
-        export
     }
 }
 
@@ -146,7 +148,7 @@ impl Visit<ExportDefaultDecl> for Analyzer<'_> {
                     Ok(ty) => ty,
                     Err(err) => {
                         self.info.errors.push(err);
-                        return export;
+                        return;
                     }
                 };
                 self.scope.register_type(i.clone(), fn_ty);
@@ -175,7 +177,7 @@ impl Analyzer<'_, '_> {
 
         // TODO: Change this to error.
         assert_eq!(self.info.exports.types.get(&name), None);
-        self.info.exports.types.insert(name, Arc::new(ty));
+        self.info.exports.types.insert(name, Arc::new(ty.clone()));
     }
 }
 
