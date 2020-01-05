@@ -1,3 +1,4 @@
+use std::ops::Try;
 use swc_common::VisitWith;
 
 /// Visit with output
@@ -46,12 +47,12 @@ where
     }
 }
 
-impl<T, V> Validate<[T]> for V
+impl<T, V, O, E> Validate<[T]> for V
 where
     T: VisitWith<Self>,
-    Self: Validate<T>,
+    Self: Validate<T, Output = Result<O, E>>,
 {
-    type Output = Vec<<Self as Validate<T>>::Output>;
+    type Output = Result<Vec<O>, E>;
 
     fn validate(&mut self, nodes: &[T]) -> Self::Output {
         let mut outputs = Vec::with_capacity(nodes.len());
