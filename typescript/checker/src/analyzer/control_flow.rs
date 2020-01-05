@@ -10,6 +10,7 @@ use crate::{
     errors::Error,
     ty::{Tuple, Type},
     util::EndsWithRet,
+    validator::Validate,
     ValidationResult,
 };
 use fxhash::FxHashMap;
@@ -658,8 +659,10 @@ impl Analyzer<'_, '_> {
 
 prevent!(CondExpr);
 
-impl Analyzer<'_, '_> {
-    pub(super) fn validate_cond_expr(&mut self, e: &CondExpr) -> ValidationResult {
+impl Validate<CondExpr> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
+
+    fn validate(&mut self, e: &CondExpr) -> Self::Output {
         let CondExpr {
             span,
             test,

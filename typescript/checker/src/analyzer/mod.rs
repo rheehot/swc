@@ -3,12 +3,8 @@ use self::{
     scope::{Scope, ScopeKind},
 };
 use crate::{
-    analyzer::{props::ComputedPropMode, util::ResultExt},
-    errors::Error,
-    loader::Load,
-    ty::Type,
-    validator::Validate,
-    Exports, ImportInfo, Rule,
+    analyzer::props::ComputedPropMode, errors::Error, loader::Load, ty::Type, Exports, ImportInfo,
+    Rule,
 };
 use fxhash::{FxHashMap, FxHashSet};
 use std::{path::PathBuf, sync::Arc};
@@ -152,6 +148,6 @@ impl Load for NoopLoader {
 /// Done
 impl Visit<Decorator> for Analyzer<'_, '_> {
     fn visit(&mut self, d: &Decorator) {
-        self.check(&d.expr);
+        self.check(&*d.expr);
     }
 }
