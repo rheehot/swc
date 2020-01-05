@@ -255,7 +255,7 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
             .members
             .iter()
             .enumerate()
-            .map(|(i, m): (usize, &TsEnumMember)| {
+            .map(|(i, m)| -> Result<_, Error> {
                 Ok(EnumMember {
                     id: m.id.clone(),
                     val: compute(&e, i, m.init.as_ref().map(|v| &**v))?,

@@ -1,7 +1,13 @@
 use super::super::Analyzer;
-use crate::{errors::Error, ty::Type, validator::Validate, ValidationResult};
+use crate::{
+    analyzer::util::ResultExt,
+    errors::Error,
+    ty::Type,
+    validator::{Validate, ValidateWith},
+    ValidationResult,
+};
 use swc_atoms::js_word;
-use swc_common::{Span, Spanned};
+use swc_common::{Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 prevent!(UnaryExpr);
@@ -40,21 +46,6 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
 
             op!("void") => return Ok(Type::undefined(span)),
 
-            _ => {}
-        }
-
-        let arg_ty = self.validate(arg)?;
-        match *arg_ty {
-            Type::Keyword(TsKeywordType {
-                kind: TsKeywordTypeKind::TsUnknownKeyword,
-                ..
-            }) => return Err(Error::Unknown { span: arg.span() }),
-            _ => {}
-        }
-
-        match op {
-            op!("!") => return Ok(negate(arg.validate_with(self)?)),
-
             op!(unary, "-") | op!(unary, "+") => {
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
@@ -68,9 +59,26 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
                     kind: TsKeywordTypeKind::TsNumberKeyword,
                 }));
             }
-
-            op!("typeof") | op!("delete") | op!("void") => unreachable!(),
+            _ => {}
         }
+
+        match arg {
+            Some(Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsUnknownKeyword,
+                ..
+            })) => return Err(Error::Unknown { span: arg.span() }),
+            _ => {}
+        }
+
+        if let Some(arg) = arg {
+            match op {
+                op!("!") => return Ok(negate(arg)),
+
+                op!("typeof") | op!("delete") | op!("void") => unreachable!(),
+            }
+        }
+
+        unimplemented!("validate(UnaryExpr)")
     }
 }
 

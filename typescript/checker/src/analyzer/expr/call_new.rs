@@ -383,8 +383,8 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    fn extract<'a>(
-        &'a self,
+    fn extract(
+        &mut self,
         span: Span,
         ty: Type,
         kind: ExtractKind,
@@ -527,13 +527,13 @@ impl Analyzer<'_, '_> {
                 .into());
             }
 
-            Type::Simple(TsType::TsTypeQuery(TsTypeQuery {
+            Type::Query(TsTypeQuery {
                 expr_name: TsTypeQueryExpr::TsEntityName(TsEntityName::Ident(Ident { ref sym, .. })),
                 ..
-            })) => {
-                if self.scope.find_declaring_fn(sym) {
-                    return Ok(Type::any(span));
-                }
+            }) => {
+                //if self.scope.find_declaring_fn(sym) {
+                //    return Ok(Type::any(span));
+                //}
 
                 ret_err!();
             }
@@ -543,21 +543,18 @@ impl Analyzer<'_, '_> {
     }
 
     fn check_method_call(
-        &self,
+        &mut self,
         span: Span,
-        c: MethodSignature,
+        c: &MethodSignature,
         args: &[ExprOrSpread],
     ) -> ValidationResult {
         // Validate arguments
         for (i, p) in c.params.into_iter().enumerate() {
-            let lhs = p.ty;
-            if let Some(lhs) = lhs {
-                // TODO: Handle spread
-                // TODO: Validate optional parameters
-                if args.len() > i {
-                    let args_ty = args[i].expr.validate_with(self)?;
-                    self.assign(&lhs, &args_ty, args[i].span())?;
-                }
+            // TODO: Handle spread
+            // TODO: Validate optional parameters
+            if args.len() > i {
+                let args_ty = args[i].expr.validate_with(self)?;
+                self.assign(&p.ty, &args_ty, args[i].span())?;
             }
         }
 
