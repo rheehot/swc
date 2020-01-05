@@ -66,7 +66,7 @@ where
     type Output = Result<Vec<O>, E>;
 
     fn validate(&mut self, nodes: &Vec<T>) -> Self::Output {
-        self.validate(&**nodes)
+        nodes.iter().map(|node| self.validate(node)).collect()
     }
 }
 
