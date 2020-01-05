@@ -40,7 +40,7 @@ where
 
     fn validate(&mut self, node: &Option<T>) -> Self::Output {
         match node {
-            Some(ref n) => self.validate(n),
+            Some(ref n) => Some(self.validate(n)),
             None => None,
         }
     }
@@ -56,7 +56,7 @@ where
     fn validate(&mut self, nodes: &[T]) -> Self::Output {
         let mut outputs = Vec::with_capacity(nodes.len());
         for node in nodes {
-            outputs.push(self.validate(node)?);
+            outputs.push(self.validate(node));
         }
         outputs
     }
