@@ -59,6 +59,18 @@ where
     }
 }
 
+impl<T, V, O, E> Validate<Vec<T>> for V
+where
+    T: VisitWith<Self>,
+    Self: Validate<T, Output = Result<O, E>>,
+{
+    type Output = Result<Vec<O>, E>;
+
+    fn validate(&mut self, nodes: &Vec<T>) -> Self::Output {
+        self.validate(&**nodes)
+    }
+}
+
 impl<'a, T, V> Validate<&'a T> for V
 where
     T: VisitWith<Self>,
