@@ -3,6 +3,7 @@ use crate::{
     analyzer::{scope::ScopeKind, util::ResultExt},
     errors::Error,
     ty::Type,
+    validator::Validate,
 };
 use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
@@ -29,8 +30,12 @@ impl Visit<TsInterfaceDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, decl: &TsInterfaceDecl) {
         decl.visit_children(self);
 
-        self.scope
-            .register_type(decl.id.sym.clone(), decl.clone().into());
+        let ty: Type = self.validate(decl).store(&mut self.info.errors).into();
+
+        self.scope.register_type(
+            decl.id.sym.clone(),
+            ty.unwrap_or_else(|| Type::any(decl.span)),
+        );
 
         self.resolve_parent_interfaces(&decl.extends);
     }

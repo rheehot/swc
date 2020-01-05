@@ -4,7 +4,7 @@ use fxhash::FxHashMap;
 use smallvec::SmallVec;
 use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
-use swc_common::{Span, DUMMY_SP};
+use swc_common::{Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[derive(Debug)]

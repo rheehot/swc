@@ -41,13 +41,7 @@ impl Analyzer<'_, '_> {
                 .and_then(|exported_sym| self.scope.types.remove(&exported_sym))
             {
                 Some(export) => export,
-                None => match self.validate(&expr) {
-                    Ok(ty) => ty,
-                    Err(err) => {
-                        self.info.errors.push(err);
-                        return;
-                    }
-                },
+                None => return,
             };
             self.info.exports.types.insert(sym, Arc::new(ty));
         }
@@ -107,7 +101,7 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
                 // TODO: Allow multiple exports with same name.
                 debug_assert_eq!(self.info.exports.get(&e.id.sym), None);
 
-                self.info.exports.insert(
+                self.info.exports.types.insert(
                     e.id.sym.clone(),
                     Arc::new({
                         let span = e.span();
@@ -183,8 +177,8 @@ impl Analyzer<'_, '_> {
         };
 
         // TODO: Change this to error.
-        assert_eq!(self.info.exports.get(&name), None);
-        self.info.exports.insert(name, Arc::new(ty));
+        assert_eq!(self.info.exports.types.get(&name), None);
+        self.info.exports.types.insert(name, Arc::new(ty));
     }
 }
 

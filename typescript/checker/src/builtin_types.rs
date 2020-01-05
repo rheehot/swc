@@ -4,6 +4,7 @@ use crate::{
     loader::Load,
     ty::{self, Class, ClassMember, Method, Module, Static},
     util::pat_to_ts_fn_param,
+    validator::Validate,
     Exports, ImportInfo,
 };
 use chashmap::CHashMap;
@@ -45,6 +46,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
         }
 
         let mut merged = box Merged::default();
+        let mut analyzer = Analyzer::for_builtin();
 
         for module in load(ls) {
             match *module.body {
@@ -106,47 +108,9 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                         span: c.class.span,
                                         name: Some(c.ident.sym.clone()),
                                         is_abstract: c.class.is_abstract,
-                                        body: c
-                                            .class
-                                            .body
-                                            .clone()
-                                            .into_iter()
-                                            .map(|v| {
-                                                //
-                                                match v {
-                                                    swc_ecma_ast::ClassMember::Constructor(v) => {
-                                                        ClassMember::Constructor(v.into())
-                                                    }
-                                                    swc_ecma_ast::ClassMember::Method(v) => {
-                                                        ClassMember::Method(Method {
-                                                            span: Default::default(),
-                                                            key: v.key,
-                                                            is_static: v.is_static,
-                                                            type_params: v
-                                                                .function
-                                                                .type_params
-                                                                .map(From::from),
-                                                            params: v.function.params,
-                                                            ret_ty: box Type::from(
-                                                                v.function.return_type.unwrap(),
-                                                            ),
-                                                        })
-                                                    }
-                                                    swc_ecma_ast::ClassMember::PrivateMethod(_) => {
-                                                        unreachable!()
-                                                    }
-                                                    swc_ecma_ast::ClassMember::ClassProp(v) => {
-                                                        ClassMember::ClassProp(v)
-                                                    }
-                                                    swc_ecma_ast::ClassMember::PrivateProp(_) => {
-                                                        unreachable!()
-                                                    }
-                                                    swc_ecma_ast::ClassMember::TsIndexSignature(
-                                                        v,
-                                                    ) => ClassMember::IndexSignature(v),
-                                                }
-                                            })
-                                            .collect(),
+                                        body: analyzer
+                                            .validate(&c.class.body)
+                                            .expect("builtin: failed to validate class body"),
                                         super_class: None,
                                         // implements: vec![],
                                         type_params: c.class.type_params.clone().map(From::from),
@@ -219,6 +183,8 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                 _ => unreachable!(),
             }
         }
+
+        assert_eq!(analyzer.info.errors, vec![]);
 
         Some(Box::leak(merged))
     });
