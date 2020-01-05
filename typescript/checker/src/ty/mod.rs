@@ -220,7 +220,7 @@ pub struct TypeParam {
 pub struct TsExpr {
     pub span: Span,
     pub expr: TsEntityName,
-    pub type_params: Option<TypeParamInstantiation>,
+    pub type_args: Option<TypeParamInstantiation>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
