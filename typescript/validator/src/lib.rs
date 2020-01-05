@@ -6,7 +6,7 @@ use swc_common::{Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 /// Visit with output
-pub trait Validate<T> {
+pub trait Validate<T: ?Sized> {
     type Output: Output;
 
     fn validate(&mut self, node: &T) -> Self::Output;
@@ -26,8 +26,35 @@ where
 
     default fn validate(&mut self, node: &T) -> Self::Output {
         println!("Validate<{}> (default)", type_name::<T>());
-        node.visit_children(self);
+        node.validate_children(self);
         Self::Output::unit()
+    }
+}
+
+pub trait ValidateWith<V> {
+    type Output;
+    fn validate_with(&self, v: &mut V) -> Self::Output;
+
+    fn validate_children(&self, v: &mut V);
+}
+
+impl<V, T> ValidateWith<V> for T
+where
+    V: Validate<T>,
+    T: VisitWith<V>,
+{
+    type Output = V::Output;
+
+    fn validate_with(&self, v: &mut V) -> Self::Output {
+        println!("{}.validate_with", type_name::<T>());
+
+        v.validate(self)
+    }
+
+    fn validate_children(&self, v: &mut V) {
+        println!("{}.validate_children", type_name::<T>());
+
+        self.visit_children(v);
     }
 }
 
@@ -45,11 +72,11 @@ impl Output for () {
     fn unit() -> Self {}
 }
 
-impl Visit<Ident> for Analyzer {
-    fn visit(&mut self, node: &Ident) {
-        println!("Visit<Ident>");
-    }
-}
+//impl Visit<Ident> for Analyzer {
+//    fn visit(&mut self, node: &Ident) {
+//        println!("Visit<Ident>");
+//    }
+//}
 
 impl Validate<Ident> for Analyzer {
     type Output = Result<(), ()>;
