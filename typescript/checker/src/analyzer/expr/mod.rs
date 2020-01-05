@@ -34,7 +34,6 @@ pub enum TypeOfMode {
 }
 
 prevent!(Expr);
-prevent!(ParenExpr);
 
 impl Validate<Expr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
@@ -43,6 +42,18 @@ impl Validate<Expr> for Analyzer<'_, '_> {
         self.validate_expr(e, TypeOfMode::RValue, None)
     }
 }
+
+prevent!(ParenExpr);
+
+impl Validate<ParenExpr> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
+
+    fn validate(&mut self, e: &ParenExpr) -> Self::Output {
+        self.validate(&e.expr)
+    }
+}
+
+prevent!(AssignExpr);
 
 impl Validate<AssignExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
@@ -90,6 +101,8 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
     }
 }
 
+prevent!(UpdateExpr);
+
 impl Validate<UpdateExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -120,6 +133,8 @@ impl Validate<UpdateExpr> for Analyzer<'_, '_> {
         }))
     }
 }
+
+prevent!(SeqExpr);
 
 impl Validate<SeqExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
