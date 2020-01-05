@@ -55,11 +55,7 @@ where
     type Output = Result<Vec<O>, E>;
 
     fn validate(&mut self, nodes: &[T]) -> Self::Output {
-        let mut outputs = Vec::with_capacity(nodes.len());
-        for node in nodes {
-            outputs.push(self.validate(node));
-        }
-        outputs
+        nodes.iter().map(|node| self.validate(node)).collect()
     }
 }
 
