@@ -17,10 +17,11 @@ use swc_ts_checker_macros::validator;
 prevent!(ClassProp);
 prevent!(Constructor);
 prevent!(ClassMethod);
+prevent!(TsFnParam);
 
 impl Analyzer<'_, '_> {
     fn validate_class_property(&mut self, p: &ClassProp) -> Result<ty::ClassProperty, Error> {
-        // TODO: children
+        p.visit_children(self);
 
         let mut errors = vec![];
 
@@ -36,10 +37,10 @@ impl Analyzer<'_, '_> {
         //    self.expand_type(span, ty.owned()).store(&mut errors);
         //}
 
-        let value = p
-            .value
-            .as_ref()
-            .and_then(|e| self.validate_expr(&e).store(&mut errors));
+        let value = match p.value.as_ref().and_then(|e| self.validate_expr(&e)) {
+            Some(res) => Some(res),
+            None => None,
+        };
 
         self.info.errors.extend(errors);
 
@@ -139,16 +140,6 @@ impl Analyzer<'_, '_> {
 
                 child.scope.remove_declaring(names);
             }
-            fn from_pat(pat: Pat) -> TsFnParam {
-                match pat {
-                    Pat::Ident(v) => v.into(),
-                    Pat::Array(v) => v.into(),
-                    Pat::Rest(v) => v.into(),
-                    Pat::Object(v) => v.into(),
-                    Pat::Assign(v) => from_pat(*v.left),
-                    _ => unreachable!("constructor with parameter {:?}", pat),
-                }
-            }
 
             child.inferred_return_types.get_mut().insert(c_span, vec![]);
             let c = Constructor { params, ..c }.fold_children(child);
@@ -172,12 +163,15 @@ impl Analyzer<'_, '_> {
                         })
                         | PatOrTsParamProp::Pat(pat) => from_pat(pat),
                     })
-                    .collect(),
+                    .map(|param| self.validate_fn_param(param))
+                    .collect::<Result<_, _>>()?,
             })
         })
     }
 
-    fn validate_class_method(&mut self, c: &ClassMethod) -> Result<ty::Method, Error> {
+    pub fn validate_fn_param(&mut self, p: &TsFnParam) -> Result<ty::FnParam, Error> {}
+
+    pub fn validate_class_method(&mut self, c: &ClassMethod) -> Result<ty::Method, Error> {
         let c_span = c.span();
         let key_span = c.key.span();
 
@@ -624,5 +618,16 @@ impl Visit<ClassDecl> for Analyzer<'_> {
         }
 
         self.scope.this = old_this;
+    }
+}
+
+fn from_pat(pat: Pat) -> TsFnParam {
+    match pat {
+        Pat::Ident(v) => v.into(),
+        Pat::Array(v) => v.into(),
+        Pat::Rest(v) => v.into(),
+        Pat::Object(v) => v.into(),
+        Pat::Assign(v) => from_pat(*v.left),
+        _ => unreachable!("constructor with parameter {:?}", pat),
     }
 }

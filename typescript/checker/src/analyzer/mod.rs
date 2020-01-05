@@ -23,6 +23,7 @@ mod macros;
 mod assign;
 mod class;
 mod control_flow;
+mod convert;
 mod enums;
 mod export;
 mod expr;

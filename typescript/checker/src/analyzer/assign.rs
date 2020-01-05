@@ -37,37 +37,6 @@ impl Analyzer<'_, '_> {
             }};
         }
 
-        /// Ensure that $ty is valid.
-        /// Type::Array / Type::FnOrConstructor / Type::UnionOrIntersection is
-        /// considered invalid
-        macro_rules! verify {
-            ($ty:expr) => {{
-                if cfg!(debug_assertions) {
-                    match $ty {
-                        Type::Simple(ref ty) => match **ty {
-                            TsType::TsFnOrConstructorType(..)
-                            | TsType::TsArrayType(..)
-                            | TsType::TsKeywordType(..)
-                            | TsType::TsLitType(..)
-                            | TsType::TsUnionOrIntersectionType(..)
-                            | TsType::TsTypeLit(..)
-                            | TsType::TsThisType(..)
-                            | TsType::TsTupleType(..)
-                            | TsType::TsConditionalType(..)
-                            | TsType::TsMappedType(..)
-                            | TsType::TsTypeOperator(..) => {
-                                unreachable!("this type should be converted to `Type`")
-                            }
-                            _ => {}
-                        },
-                        _ => {}
-                    }
-                }
-            }};
-        }
-        verify!(to);
-        verify!(rhs);
-
         macro_rules! handle_enum_in_rhs {
             ($e:expr) => {{
                 let e = $e;
@@ -900,21 +869,21 @@ impl Analyzer<'_, '_> {
                 }
             }
 
-            Type::Simple(ref s) => match **s {
-                TsType::TsTypePredicate(..) => match *rhs.normalize() {
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsBooleanKeyword,
-                        ..
-                    })
-                    | Type::Lit(TsLitType {
-                        lit: TsLit::Bool(..),
-                        ..
-                    }) => return Ok(()),
-                    _ => {}
-                },
-
-                _ => {}
-            },
+            //Type::Simple(ref s) => match **s {
+            //    TsType::TsTypePredicate(..) => match *rhs.normalize() {
+            //        Type::Keyword(TsKeywordType {
+            //            kind: TsKeywordTypeKind::TsBooleanKeyword,
+            //            ..
+            //        })
+            //        | Type::Lit(TsLitType {
+            //            lit: TsLit::Bool(..),
+            //            ..
+            //        }) => return Ok(()),
+            //        _ => {}
+            //    },
+            //
+            //    _ => {}
+            //},
 
             // TODO: Check type arguments
             Type::ClassInstance(ClassInstance { cls: ref l_cls, .. }) => {

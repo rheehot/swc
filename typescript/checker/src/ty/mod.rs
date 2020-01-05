@@ -5,7 +5,6 @@ use swc_atoms::JsWord;
 use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
-mod convert;
 pub mod merge;
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned, FromVariant)]
@@ -15,7 +14,6 @@ pub enum Type {
     TypeLit(TypeLit),
     Keyword(TsKeywordType),
     Conditional(Conditional),
-    Simple(Cow<'static, TsType>),
     Tuple(Tuple),
     Array(Array),
     Union(Union),

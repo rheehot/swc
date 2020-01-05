@@ -1,10 +1,12 @@
-use super::{
-    Alias, Array, CallSignature, Conditional, Constructor, ConstructorSignature, Enum, EnumMember,
-    Function, IndexSignature, Interface, Intersection, Mapped, MethodSignature, Operator,
-    PropertySignature, TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl,
-    TypeParamInstantiation, Union,
+use crate::{
+    errors::Error,
+    ty::{
+        Alias, Array, CallSignature, Conditional, Constructor, ConstructorSignature, Enum,
+        EnumMember, Function, IndexSignature, Interface, Intersection, Mapped, MethodSignature,
+        Operator, PropertySignature, TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParam,
+        TypeParamDecl, TypeParamInstantiation, Union,
+    },
 };
-use crate::errors::Error;
 use std::convert::TryFrom;
 use swc_common::Spanned;
 use swc_ecma_ast::*;
