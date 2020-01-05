@@ -25,6 +25,7 @@ mod convert;
 mod enums;
 mod export;
 mod expr;
+mod generic;
 mod import;
 mod name;
 mod pat;
