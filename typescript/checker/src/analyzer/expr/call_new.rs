@@ -4,6 +4,7 @@ use crate::{
     builtin_types,
     errors::Error,
     ty::{CallSignature, ClassInstance, ConstructorSignature, Method, Static, Type, TypeElement},
+    validator::Validate,
     ValidationResult,
 };
 use swc_atoms::js_word;
@@ -14,7 +15,7 @@ use swc_ts_checker_macros::validator;
 prevent!(CallExpr);
 prevent!(NewExpr);
 
-impl Validator<CallExpr> for Analyzer<'_, '_> {
+impl Validate<CallExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
     fn validate(&mut self, e: &CallExpr) -> ValidationResult {
@@ -57,7 +58,7 @@ impl Validator<CallExpr> for Analyzer<'_, '_> {
     }
 }
 
-impl Validator<NewExpr> for Analyzer<'_, '_> {
+impl Validate<NewExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
     fn validate(&mut self, e: &NewExpr) -> ValidationResult {
