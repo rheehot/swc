@@ -406,7 +406,7 @@ impl Type {
                     let ty = ty.clone().generalize_lit();
                     let dup = tys.iter().any(|t| t.eq_ignore_name_and_span(&ty));
                     if !dup {
-                        tys.push(ty.into_owned());
+                        tys.push(ty);
                     }
                 }
 
@@ -440,10 +440,7 @@ impl Type {
 
         match tys.len() {
             0 => unreachable!("Type::union() should not be called with an empty iterator"),
-            1 => {
-                let v = tys.into_iter().next().unwrap();
-                v.into_owned()
-            }
+            1 => tys.into_iter().next().unwrap(),
             _ => Type::Union(Union { span, types: tys }),
         }
     }
@@ -601,10 +598,6 @@ impl Type {
     }
 }
 
-fn static_type(ty: Cow<Type>) -> Type {
-    ty.into_owned()
-}
-
 fn map_types<'a, 'b, F>(types: Vec<Type>, map: F) -> Vec<Type>
 where
     F: Fn(Type) -> Type,
@@ -622,7 +615,7 @@ where
 //            Type::TypeLit(lit) => Type::TypeLit(lit),
 //            Type::Lit(lit) => Type::Lit(lit),
 //            Type::Keyword(lit) => Type::Keyword(lit),
-//            Type::Simple(s) => Type::Simple(s.into_owned()),
+//            Type::Simple(s) => Type::Simple(s),
 //            Type::Array(Array { span, elem_type }) => Type::Array(Array {
 //                span,
 //                elem_type: box static_type(*elem_type),
