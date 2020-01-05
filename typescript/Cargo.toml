@@ -5,3 +5,4 @@ authors = ["강동윤 <kdy1997.dev@gmail.com>"]
 
 [dependencies]
 swc_ts_checker = { path = "./checker" }
+validator = { path = "./validator" }
