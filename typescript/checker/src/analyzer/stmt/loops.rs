@@ -16,7 +16,7 @@ impl Analyzer<'_, '_> {
             VarDeclOrPat::VarDecl(..) => {}
             VarDeclOrPat::Pat(ref pat) => match *pat {
                 Pat::Expr(ref e) => {
-                    self.validater_with_extra(&e, TypeOfMode::LValue, None)?;
+                    self.validate_with_extra(&e, TypeOfMode::LValue, None)?;
                 }
                 Pat::Ident(ref i) => {
                     // TODO: verify
@@ -30,18 +30,18 @@ impl Analyzer<'_, '_> {
     #[validator]
     fn check_rhs_of_for_loop(&mut self, e: &Expr) {
         // Check iterable
-        self.validater(e)?;
+        self.validate(e)?;
     }
 
     fn validate_for_loop(&mut self, span: Span, lhs: &VarDeclOrPat, rhs: &Expr) {
-        let rty = match self.validater(rhs) {
+        let rty = match self.validate(rhs) {
             Ok(ty) => ty,
             Err(..) => return,
         };
 
         match lhs {
             VarDeclOrPat::Pat(Pat::Expr(ref l)) => {
-                let lty = match self.validater_with_extra(&**l, TypeOfMode::LValue, None) {
+                let lty = match self.validate_with_extra(&**l, TypeOfMode::LValue, None) {
                     Ok(ty) => ty,
                     Err(..) => return,
                 };

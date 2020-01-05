@@ -212,10 +212,10 @@ impl Visit<IfStmt> for Analyzer<'_, '_> {
 impl Analyzer<'_, '_> {
     #[validator]
     fn check_switch_discriminant(&mut self, s: &SwitchStmt) {
-        let discriminant_ty = self.validater(&s.discriminant)?;
+        let discriminant_ty = self.validate(&s.discriminant)?;
         for case in &s.cases {
             if let Some(ref test) = case.test {
-                let case_ty = self.validater(&test)?;
+                let case_ty = self.validate(&test)?;
                 self.assign(&case_ty, &discriminant_ty, test.span())?
             }
         }
@@ -313,7 +313,7 @@ impl Analyzer<'_, '_> {
         let res: Result<(), Error> = try {
             match *lhs {
                 PatOrExpr::Expr(ref expr) | PatOrExpr::Pat(box Pat::Expr(ref expr)) => {
-                    let lhs_ty = self.validater_with_extra(expr, TypeOfMode::LValue, None)?;
+                    let lhs_ty = self.validate_with_extra(expr, TypeOfMode::LValue, None)?;
 
                     self.assign(&lhs_ty, &ty, span)?;
 
@@ -468,7 +468,7 @@ impl Analyzer<'_, '_> {
             | Expr::JSXEmpty(..) => return Ok(()),
 
             Expr::Call(..) => {
-                let ty = self.validater(&test)?;
+                let ty = self.validate(&test)?;
                 match *ty.normalize() {
                     Type::Simple(ref sty) => match **sty {
                         TsType::TsTypePredicate(ref pred) => {
@@ -505,7 +505,7 @@ impl Analyzer<'_, '_> {
             Expr::Paren(ParenExpr { ref expr, .. }) => self.detect_facts(expr, facts)?,
 
             Expr::Ident(ref i) => {
-                let ty = self.validater(test)?;
+                let ty = self.validate(test)?;
                 self.add_true_false(facts, &i.sym, &ty);
             }
 
@@ -541,8 +541,8 @@ impl Analyzer<'_, '_> {
                 ref right,
                 ..
             }) => {
-                let l_ty = self.validater(left)?;
-                let r_ty = self.validater(right)?;
+                let l_ty = self.validate(left)?;
+                let r_ty = self.validate(right)?;
 
                 match op {
                     op!("===") | op!("!==") | op!("==") | op!("!=") => {
@@ -675,15 +675,15 @@ impl Validate<CondExpr> for Analyzer<'_, '_> {
         let mut facts = Default::default();
         self.detect_facts(&e.test, &mut facts)?;
 
-        self.validater(&test)?;
+        self.validate(&test)?;
         let cons = self
             .with_child(ScopeKind::Flow, facts.true_facts, |child| {
-                child.validater(&cons)
+                child.validate(&cons)
             })?
             .into_owned();
         let alt = self
             .with_child(ScopeKind::Flow, facts.false_facts, |child| {
-                child.validater(&alt)
+                child.validate(&alt)
             })?
             .into_owned();
 

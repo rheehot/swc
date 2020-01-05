@@ -60,7 +60,7 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
         let value = p
             .value
             .as_ref()
-            .and_then(|e| self.validater(&e).store(&mut errors));
+            .and_then(|e| self.validate(&e).store(&mut errors));
 
         self.info.errors.extend(errors);
 
@@ -403,7 +403,7 @@ impl Analyzer<'_, '_> {
         // }
 
         let super_class = match c.super_class {
-            Some(ref expr) => Some(box self.validater(&expr)?),
+            Some(ref expr) => Some(box self.validate(&expr)?),
             None => None,
         };
 
@@ -551,7 +551,7 @@ impl Analyzer<'_, '_> {
             _ => false,
         };
 
-        let ty = match self.validater(&key) {
+        let ty = match self.validate(&key) {
             Ok(ty) => ty,
             Err(err) => {
                 match err {
@@ -593,7 +593,7 @@ impl Analyzer<'_, '_> {
                     .super_type_params
                     .as_ref()
                     .map(|i| self.visit_ts_type_param_instantiation(i));
-                let super_ty = self.validater_with_extra(
+                let super_ty = self.validate_with_extra(
                     &super_class,
                     TypeOfMode::RValue,
                     match type_args {

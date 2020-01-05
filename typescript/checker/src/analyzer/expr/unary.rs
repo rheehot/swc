@@ -16,7 +16,7 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
 
         let mut errors = vec![];
 
-        let arg = self.validater(&arg).store(&mut errors);
+        let arg = self.validate(&arg).store(&mut errors);
 
         self.info.errors.extend(errors.drain(..));
 
@@ -46,7 +46,7 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
             _ => {}
         }
 
-        let arg_ty = self.validater(arg)?;
+        let arg_ty = self.validate(arg)?;
         match *arg_ty {
             Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsUnknownKeyword,
@@ -56,7 +56,7 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
         }
 
         match op {
-            op!("!") => return Ok(negate(self.validater(arg)?.into_owned())),
+            op!("!") => return Ok(negate(self.validate(arg)?.into_owned())),
 
             op!(unary, "-") | op!(unary, "+") => {
                 return Ok(Type::Keyword(TsKeywordType {
