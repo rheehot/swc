@@ -14,64 +14,10 @@ use swc_ts_checker_macros::validator;
 prevent!(CallExpr);
 prevent!(NewExpr);
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum ExtractKind {
-    New,
-    Call,
-}
+impl Validator<CallExpr> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
 
-impl Analyzer<'_, '_> {
-    #[validator]
-    fn check_callee(
-        &mut self,
-        span: Span,
-        callee: &Expr,
-        type_args: Option<&TsTypeParamInstantiation>,
-    ) {
-        let callee_ty = self.visit_expr(callee)?;
-        match *callee_ty.normalize() {
-            Type::Keyword(TsKeywordType {
-                kind: TsKeywordTypeKind::TsAnyKeyword,
-                ..
-            }) if type_args.is_some() => Err(Error::TS2347 { span })?,
-            _ => {}
-        }
-    }
-
-    pub(super) fn visit_new_expr(&mut self, e: &NewExpr) -> ValidationResult {
-        let NewExpr {
-            span,
-            ref callee,
-            ref args,
-            ref type_args,
-        } = *e;
-
-        // TODO: e.visit_children
-
-        self.check_callee(e.span, &e.callee, e.type_args.as_ref());
-
-        // Check arguments
-        if let Some(ref args) = e.args {
-            for arg in args {
-                let res: Result<(), Error> = try {
-                    self.visit_expr(&arg.expr)?;
-                };
-
-                if let Err(err) = res {
-                    self.info.errors.push(err);
-                }
-            }
-        }
-
-        self.extract_call_new_expr_member(
-            callee,
-            ExtractKind::New,
-            args.as_ref().map(|v| &**v).unwrap_or_else(|| &[]),
-            type_args.as_ref(),
-        )
-    }
-
-    pub(super) fn validate_call_expr(&mut self, e: &CallExpr) -> ValidationResult {
+    fn validate(&mut self, e: &CallExpr) -> ValidationResult {
         let CallExpr {
             span,
             ref callee,
@@ -108,6 +54,68 @@ impl Analyzer<'_, '_> {
         }
 
         self.extract_call_new_expr_member(callee, ExtractKind::Call, args, type_args.as_ref())
+    }
+}
+
+impl Validator<NewExpr> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
+
+    fn validate(&mut self, e: &NewExpr) -> ValidationResult {
+        let NewExpr {
+            span,
+            ref callee,
+            ref args,
+            ref type_args,
+        } = *e;
+
+        // TODO: e.visit_children
+
+        self.check_callee(e.span, &e.callee, e.type_args.as_ref());
+
+        // Check arguments
+        if let Some(ref args) = e.args {
+            for arg in args {
+                let res: Result<(), Error> = try {
+                    self.visit_expr(&arg.expr)?;
+                };
+
+                if let Err(err) = res {
+                    self.info.errors.push(err);
+                }
+            }
+        }
+
+        self.extract_call_new_expr_member(
+            callee,
+            ExtractKind::New,
+            args.as_ref().map(|v| &**v).unwrap_or_else(|| &[]),
+            type_args.as_ref(),
+        )
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum ExtractKind {
+    New,
+    Call,
+}
+
+impl Analyzer<'_, '_> {
+    #[validator]
+    fn check_callee(
+        &mut self,
+        span: Span,
+        callee: &Expr,
+        type_args: Option<&TsTypeParamInstantiation>,
+    ) {
+        let callee_ty = self.visit_expr(callee)?;
+        match *callee_ty.normalize() {
+            Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsAnyKeyword,
+                ..
+            }) if type_args.is_some() => Err(Error::TS2347 { span })?,
+            _ => {}
+        }
     }
 
     /// Calculates the return type of a new /call expression.
