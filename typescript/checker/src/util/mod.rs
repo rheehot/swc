@@ -87,8 +87,6 @@ macro_rules! impl_by_clone {
                 // In current implementation, l and r lives until the functions return, so it's
                 // safe.
 
-                // TODO: Ensure that this is correct.
-                let r: Self = unsafe { transmute(r) };
                 l == r
             }
         }
