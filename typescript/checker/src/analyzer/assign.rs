@@ -2,12 +2,11 @@ use super::Analyzer;
 use crate::{
     errors::Error,
     ty::{
-        Array, Class, ClassInstance, ClassMember, Constructor, EnumVariant, Function, Interface,
-        Intersection, Param, Tuple, Type, TypeElement, TypeLit, Union,
+        Array, Class, ClassInstance, ClassMember, Constructor, EnumVariant, FnParam, Function,
+        Interface, Intersection, Param, Tuple, Type, TypeElement, TypeLit, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
 };
-use std::borrow::Cow;
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
@@ -243,12 +242,8 @@ impl Analyzer<'_, '_> {
 
                                                         for (i, r) in rm.params.iter().enumerate() {
                                                             if let Some(ref l) = lm.params.get(i) {
-                                                                let l_ty = Cow::Owned(
-                                                                    type_of_ts_fn_param(l),
-                                                                );
-                                                                let r_ty = Cow::Owned(
-                                                                    type_of_ts_fn_param(r),
-                                                                );
+                                                                let l_ty = l.ty;
+                                                                let r_ty = r.ty;
 
                                                                 match self
                                                                     .assign(&l_ty, &r_ty, span)
@@ -989,13 +984,8 @@ fn is_key_eq(l: &Expr, r: &Expr) -> bool {
     }
 }
 
-fn count_required_params(v: &[TsFnParam]) -> usize {
-    v.iter()
-        .filter(|v| match v {
-            TsFnParam::Ident(Ident { optional: true, .. }) => false,
-            _ => true,
-        })
-        .count()
+fn count_required_params(v: &[FnParam]) -> usize {
+    v.iter().filter(|v| v.required).count()
 }
 
 fn type_of_ts_fn_param<'a>(p: &TsFnParam) -> Type {

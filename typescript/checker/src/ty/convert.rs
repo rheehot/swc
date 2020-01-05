@@ -288,42 +288,6 @@ impl From<TsTypeOperator> for Operator {
     }
 }
 
-impl From<swc_ecma_ast::Constructor> for Constructor {
-    fn from(c: swc_ecma_ast::Constructor) -> Self {
-        fn from_pat(pat: Pat) -> TsFnParam {
-            match pat {
-                Pat::Ident(v) => v.into(),
-                Pat::Array(v) => v.into(),
-                Pat::Rest(v) => v.into(),
-                Pat::Object(v) => v.into(),
-                Pat::Assign(v) => from_pat(*v.left),
-                _ => unreachable!("constructor with parameter {:?}", pat),
-            }
-        }
-
-        Constructor {
-            span: c.span,
-            params: c
-                .params
-                .into_iter()
-                .map(|v| match v {
-                    PatOrTsParamProp::TsParamProp(TsParamProp {
-                        param: TsParamPropParam::Ident(i),
-                        ..
-                    }) => TsFnParam::Ident(i),
-                    PatOrTsParamProp::TsParamProp(TsParamProp {
-                        param: TsParamPropParam::Assign(AssignPat { left: box pat, .. }),
-                        ..
-                    })
-                    | PatOrTsParamProp::Pat(pat) => from_pat(pat),
-                })
-                .collect(),
-            type_params: None,
-            ret_ty: None,
-        }
-    }
-}
-
 impl TryFrom<TsEnumDecl> for Type {
     type Error = Error;
 

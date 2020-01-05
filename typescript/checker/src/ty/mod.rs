@@ -255,7 +255,7 @@ impl TypeElement {
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct CallSignature {
     pub span: Span,
-    pub params: Vec<TsFnParam>,
+    pub params: Vec<FnParam>,
     pub type_params: Option<TypeParamDecl>,
     pub ret_ty: Option<Type>,
 }
@@ -263,7 +263,7 @@ pub struct CallSignature {
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct ConstructorSignature {
     pub span: Span,
-    pub params: Vec<TsFnParam>,
+    pub params: Vec<FnParam>,
     pub ret_ty: Option<Type>,
     pub type_params: Option<TypeParamDecl>,
 }
@@ -275,7 +275,7 @@ pub struct PropertySignature {
     pub key: Box<Expr>,
     pub computed: bool,
     pub optional: bool,
-    pub params: Vec<TsFnParam>,
+    pub params: Vec<FnParam>,
     pub type_ann: Option<Type>,
     pub type_params: Option<TypeParamDecl>,
 }
@@ -287,14 +287,14 @@ pub struct MethodSignature {
     pub key: Box<Expr>,
     pub computed: bool,
     pub optional: bool,
-    pub params: Vec<TsFnParam>,
+    pub params: Vec<FnParam>,
     pub ret_ty: Option<Type>,
     pub type_params: Option<TypeParamDecl>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct IndexSignature {
-    pub params: Vec<TsFnParam>,
+    pub params: Vec<FnParam>,
     pub type_ann: Option<Type>,
 
     pub readonly: bool,
@@ -312,6 +312,13 @@ pub struct Array {
 pub struct Union {
     pub span: Span,
     pub types: Vec<Type>,
+}
+
+#[derive(Debug, Fold, Clone, Spanned)]
+pub struct FnParam {
+    pub span: Span,
+    pub required: bool,
+    pub ty: Type,
 }
 
 /// This impl is wrong.
@@ -371,16 +378,14 @@ pub struct EnumVariant {
 pub struct Function {
     pub span: Span,
     pub type_params: Option<TypeParamDecl>,
-    pub params: Vec<TsFnParam>,
+    pub params: Vec<FnParam>,
     pub ret_ty: Box<Type>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct Constructor {
     pub span: Span,
-    pub type_params: Option<TypeParamDecl>,
-    pub params: Vec<TsFnParam>,
-    pub ret_ty: Option<Box<Type>>,
+    pub params: Vec<FnParam>,
 }
 
 impl Type {

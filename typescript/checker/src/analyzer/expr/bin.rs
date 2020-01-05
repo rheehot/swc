@@ -271,7 +271,7 @@ impl Analyzer<'_, '_> {
                     right: (&**right, &rt),
                 };
 
-                if let Some(()) = c.take(|(_, lt), (_, _)| match **lt {
+                if let Some(()) = c.take(|(_, lt), (_, _)| match *lt {
                     Type::Keyword(TsKeywordType {
                         kind: TsKeywordTypeKind::TsUnknownKeyword,
                         ..
