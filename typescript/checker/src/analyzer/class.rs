@@ -428,7 +428,11 @@ impl Analyzer<'_, '_> {
             body: c
                 .body
                 .iter()
-                .filter_map(|m| self.validate(m))
+                .filter_map(|m| match self.validate(m) {
+                    Ok(Some(v)) => Some(Ok(v)),
+                    Ok(None) => None,
+                    Err(err) => Some(Err(err)),
+                })
                 .collect::<Result<_, _>>()?,
         })
     }
