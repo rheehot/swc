@@ -244,7 +244,7 @@ impl Analyzer<'_, '_> {
                                 // TODO:
                                 return self.check_method_call(
                                     span,
-                                    candidates.into_iter().next().unwrap(),
+                                    &candidates.into_iter().next().unwrap(),
                                     args,
                                 );
                             }
@@ -252,7 +252,7 @@ impl Analyzer<'_, '_> {
                                 //
                                 for c in candidates {
                                     if c.params.len() == args.len() {
-                                        return self.check_method_call(span, c, args);
+                                        return self.check_method_call(span, &c, args);
                                     }
                                 }
 
