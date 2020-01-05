@@ -16,7 +16,7 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
 
         if let Pat::Assign(AssignPat { ref right, .. }) = *p.arg {
             try {
-                let value_ty = self.visit_expr(right)?;
+                let value_ty = self.validater(right)?;
 
                 match value_ty.normalize() {
                     Type::Array(..)

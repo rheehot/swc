@@ -21,8 +21,8 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
 
         let mut errors = vec![];
 
-        let lt = self.visit_expr(&left).store(&mut errors);
-        let rt = self.visit_expr(&right).store(&mut errors);
+        let lt = self.validater(&left).store(&mut errors);
+        let rt = self.validater(&right).store(&mut errors);
 
         self.validate_bin_inner(span, op, lt, rt);
 

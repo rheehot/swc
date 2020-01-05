@@ -41,7 +41,7 @@ impl Analyzer<'_, '_> {
                 .and_then(|exported_sym| self.scope.types.remove(&exported_sym))
             {
                 Some(export) => export,
-                None => match self.visit_expr(&expr) {
+                None => match self.validater(&expr) {
                     Ok(ty) => ty,
                     Err(err) => {
                         self.info.errors.push(err);
@@ -62,7 +62,7 @@ impl Analyzer<'_, '_> {
             "A module can export only one item as default"
         );
 
-        let ty = match self.visit_expr(expr) {
+        let ty = match self.validater(expr) {
             Ok(ty) => ty,
             Err(err) => {
                 match err {
@@ -191,7 +191,7 @@ impl Analyzer<'_, '_> {
 /// Done
 impl Visit<TsExportAssignment> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &TsExportAssignment) {
-        let ty = self.visit_expr(&s.expr)?;
+        let ty = self.validater(&s.expr)?;
 
         self.export_expr(js_word!("default"), ty);
     }
@@ -200,7 +200,7 @@ impl Visit<TsExportAssignment> for Analyzer<'_, '_> {
 /// Done
 impl Visit<ExportDefaultExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &ExportDefaultExpr) {
-        let ty = self.visit_expr(&s.expr)?;
+        let ty = self.validater(&s.expr)?;
 
         self.export_expr(js_word!("default"), ty);
     }

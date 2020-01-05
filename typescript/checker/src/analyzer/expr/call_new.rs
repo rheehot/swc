@@ -36,7 +36,7 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
         // Check arguments
         for arg in &e.args {
             let res: Result<(), Error> = try {
-                self.visit_expr(&arg.expr)?;
+                self.validater(&arg.expr)?;
             };
 
             if let Err(err) = res {
@@ -45,7 +45,7 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
         }
 
         // Check callee
-        let callee_ty = self.visit_expr(&callee)?;
+        let callee_ty = self.validater(&callee)?;
         match *callee_ty.normalize() {
             Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsAnyKeyword,
@@ -77,7 +77,7 @@ impl Validate<NewExpr> for Analyzer<'_, '_> {
         if let Some(ref args) = e.args {
             for arg in args {
                 let res: Result<(), Error> = try {
-                    self.visit_expr(&arg.expr)?;
+                    self.validater(&arg.expr)?;
                 };
 
                 if let Err(err) = res {
@@ -109,7 +109,7 @@ impl Analyzer<'_, '_> {
         callee: &Expr,
         type_args: Option<&TsTypeParamInstantiation>,
     ) {
-        let callee_ty = self.visit_expr(callee)?;
+        let callee_ty = self.validater(callee)?;
         match *callee_ty.normalize() {
             Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsAnyKeyword,
@@ -283,7 +283,7 @@ impl Analyzer<'_, '_> {
                 }
 
                 // Handle member expression
-                let obj_type = self.visit_expr(obj)?.generalize_lit();
+                let obj_type = self.validater(obj)?.generalize_lit();
 
                 // Example: `Type(console)` -> `Interface(Console)`
                 let obj_type = self.expand_type(span, obj_type)?;
@@ -362,18 +362,18 @@ impl Analyzer<'_, '_> {
                     Err(if kind == ExtractKind::Call {
                         Error::NoCallSignature {
                             span,
-                            callee: self.visit_expr(callee)?,
+                            callee: self.validater(callee)?,
                         }
                     } else {
                         Error::NoNewSignature {
                             span,
-                            callee: self.visit_expr(callee)?,
+                            callee: self.validater(callee)?,
                         }
                     })
                 }
             }
             _ => {
-                let ty = self.visit_expr(callee)?;
+                let ty = self.validater(callee)?;
                 println!("before extract: {:?}", ty);
                 let ty = self.expand_type(span, ty)?;
 
