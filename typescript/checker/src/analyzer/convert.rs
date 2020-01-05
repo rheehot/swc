@@ -1,6 +1,7 @@
 use super::Analyzer;
 use crate::{
     errors::Error,
+    ty,
     ty::{
         Alias, Array, CallSignature, Conditional, ConstructorSignature, Enum, EnumMember,
         IndexSignature, Interface, Intersection, Mapped, MethodSignature, Operator,
@@ -393,6 +394,30 @@ impl Validate<TsIntersectionType> for Analyzer<'_, '_> {
     }
 }
 
+impl Validate<TsFnType> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::Function>;
+
+    fn validate(&mut self, t: &TsFnType) -> Self::Output {
+        Ok(ty::Function {})
+    }
+}
+
+impl Validate<TsConstructorType> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::Constructor>;
+
+    fn validate(&mut self, t: &TsConstructorType) -> Self::Output {
+        Ok(ty::Constructor {})
+    }
+}
+
+impl Validate<TsParenthesizedType> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
+
+    fn validate(&mut self, t: &TsParenthesizedType) -> Self::Output {
+        t.type_ann.validate_with(self)
+    }
+}
+
 impl Validate<TsType> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -400,7 +425,7 @@ impl Validate<TsType> for Analyzer<'_, '_> {
         let span = ty.span();
 
         Ok(match ty {
-            TsType::TsThisType(this) => this.into(),
+            TsType::TsThisType(this) => Type::This(*this),
             TsType::TsLitType(ty) => Type::Lit(*ty),
             TsType::TsKeywordType(ty) => Type::Keyword(*ty),
             TsType::TsTupleType(ty) => Type::Tuple(self.validate(ty)?),
@@ -412,12 +437,12 @@ impl Validate<TsType> for Analyzer<'_, '_> {
             }
             TsType::TsArrayType(arr) => Type::Array(self.validate(arr)?),
             TsType::TsFnOrConstructorType(TsFnOrConstructorType::TsFnType(f)) => {
-                Type::Function(self.validate(f))
+                Type::Function(self.validate(f)?)
             }
             TsType::TsFnOrConstructorType(TsFnOrConstructorType::TsConstructorType(c)) => {
-                Type::Constructor(self.validate(c))
+                Type::Constructor(self.validate(c)?)
             }
-            TsType::TsTypeLit(lit) => Type::TypeLit(lit.into()),
+            TsType::TsTypeLit(lit) => Type::TypeLit(self.validate(lit)?),
             TsType::TsConditionalType(cond) => Type::Conditional(self.validate(&cond)?),
             TsType::TsMappedType(ty) => Type::Mapped(self.validate(ty)?),
             TsType::TsTypeOperator(ty) => Type::Operator(self.validate(ty)?),

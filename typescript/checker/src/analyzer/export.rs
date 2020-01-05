@@ -1,5 +1,5 @@
 use super::Analyzer;
-use crate::{errors::Error, ty::Type};
+use crate::{errors::Error, ty::Type, validator::Validate};
 use std::{convert::TryInto, mem::replace, sync::Arc};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Span, Spanned};

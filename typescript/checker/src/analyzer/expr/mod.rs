@@ -1,5 +1,6 @@
 use super::Analyzer;
 use crate::{
+    analyzer::util::ResultExt,
     builtin_types,
     errors::Error,
     ty,
@@ -186,12 +187,12 @@ impl Analyzer<'_, '_> {
                 ..
             }) => Ok(Type::any(span)),
 
-            Expr::Bin(e) => self.validate_bin_expr(e),
-            Expr::Update(e) => self.validate_update_expr(e),
-            Expr::New(e) => self.validate_new_expr(e),
-            Expr::Call(e) => self.validate_call_expr(e),
-            Expr::TsAs(e) => self.validate_ts_as_expr(e),
-            Expr::TsTypeAssertion(e) => self.validate_ts_type_assertion(e),
+            Expr::Bin(e) => self.validate(e),
+            Expr::Update(e) => self.validate(e),
+            Expr::New(e) => self.validate(e),
+            Expr::Call(e) => self.validate(e),
+            Expr::TsAs(e) => self.validate(e),
+            Expr::TsTypeAssertion(e) => self.validate(e),
             //
             Expr::This(ThisExpr { span }) => {
                 if let Some(ref ty) = self.scope.this() {

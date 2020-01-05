@@ -2,8 +2,8 @@ use super::Analyzer;
 use crate::{
     errors::Error,
     ty::{Enum, Type},
+    validator::Validate,
 };
-use std::convert::TryInto;
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -27,10 +27,12 @@ impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
 
         //        e.visit_children(self);
 
+        let ty = self.validate(e);
+
         self.scope.register_type(
             e.id.sym.clone(),
-            match e.clone().try_into() {
-                Ok(ty) => ty,
+            match ty {
+                Ok(ty) => ty.into(),
                 Err(..) => Type::any(span),
             },
         );
