@@ -305,7 +305,7 @@ impl Analyzer<'_, '_> {
                             members.push(self.type_of_prop(&prop)?);
                         }
                         PropOrSpread::Spread(SpreadElement { ref expr, .. }) => {
-                            match self.validate(&expr)?.into_owned() {
+                            match self.validate(&expr)? {
                                 Type::TypeLit(TypeLit {
                                     members: spread_members,
                                     ..

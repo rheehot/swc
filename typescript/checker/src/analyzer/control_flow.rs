@@ -371,7 +371,7 @@ impl Analyzer<'_, '_> {
                                 && var_info.ty.as_ref().unwrap().is_unknown()
                             {
                                 // Type narrowing
-                                Some(ty)
+                                Some(ty.clone())
                             } else {
                                 return Ok(());
                             };
@@ -447,13 +447,13 @@ impl Analyzer<'_, '_> {
         )
     }
 
-    fn add_true_false(&self, facts: &mut Facts, sym: &JsWord, ty: &Type) {
+    fn add_true_false(&mut self, facts: &mut Facts, sym: &JsWord, ty: &Type) {
         facts.insert_var(sym, ty.clone(), false);
     }
 
     /// Returns (type facts when test is matched, type facts when test is not
     /// matched)
-    fn detect_facts(&self, test: &Expr, facts: &mut Facts) -> Result<(), Error> {
+    fn detect_facts(&mut self, test: &Expr, facts: &mut Facts) -> Result<(), Error> {
         match *test {
             // Useless
             Expr::Fn(..)
@@ -469,18 +469,18 @@ impl Analyzer<'_, '_> {
 
             Expr::Call(..) => {
                 let ty = self.validate(&test)?;
-                match *ty.normalize() {
-                    Type::Simple(ref sty) => match **sty {
-                        TsType::TsTypePredicate(ref pred) => {
-                            //
-                            let name = Name::from(&pred.param_name);
-                            let ty = Type::from(pred.type_ann.clone());
-                            facts.insert_var(name.clone(), ty.clone(), false);
-                        }
-                        _ => {}
-                    },
-                    _ => {}
-                }
+                //match *ty.normalize() {
+                //    Type::Simple(ref sty) => match **sty {
+                //        TsType::TsTypePredicate(ref pred) => {
+                //            //
+                //            let name = Name::from(&pred.param_name);
+                //            let ty = Type::from(pred.type_ann.clone());
+                //            facts.insert_var(name.clone(), ty.clone(), false);
+                //        }
+                //        _ => {}
+                //    },
+                //    _ => {}
+                //}
 
                 return Ok(());
             }
@@ -676,16 +676,12 @@ impl Validate<CondExpr> for Analyzer<'_, '_> {
         self.detect_facts(&e.test, &mut facts)?;
 
         self.validate(&test)?;
-        let cons = self
-            .with_child(ScopeKind::Flow, facts.true_facts, |child| {
-                child.validate(&cons)
-            })?
-            .into_owned();
-        let alt = self
-            .with_child(ScopeKind::Flow, facts.false_facts, |child| {
-                child.validate(&alt)
-            })?
-            .into_owned();
+        let cons = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
+            child.validate(&cons)
+        })?;
+        let alt = self.with_child(ScopeKind::Flow, facts.false_facts, |child| {
+            child.validate(&alt)
+        })?;
 
         match **test {
             Expr::Ident(ref i) => {

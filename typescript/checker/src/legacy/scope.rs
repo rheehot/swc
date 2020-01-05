@@ -101,7 +101,7 @@ impl<'a> Scope<'a> {
                         for (elem, ty) in elems.into_iter().zip(types) {
                             match *elem {
                                 Some(ref elem) => {
-                                    self.declare_complex_vars(kind, elem, ty.into_owned())?;
+                                    self.declare_complex_vars(kind, elem, ty)?;
                                 }
                                 None => {
                                     // Skip

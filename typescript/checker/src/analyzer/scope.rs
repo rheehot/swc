@@ -1,5 +1,5 @@
 use super::{control_flow::CondFacts, Analyzer};
-use crate::{errors::Error, ty::Type};
+use crate::{errors::Error, ty::Type, validator::Validate};
 use fxhash::FxHashMap;
 use smallvec::SmallVec;
 use std::{collections::hash_map::Entry, sync::Arc};
@@ -159,11 +159,11 @@ impl Scope<'_> {
                 }
 
                 v.ty = if let Some(ty) = ty {
-                    let ty = ty.generalize_lit().into_owned();
+                    let ty = ty.generalize_lit();
 
                     Some(if let Some(var_ty) = v.ty {
                         println!("\tdeclare_var: ty = {:?}", ty);
-                        let var_ty = var_ty.generalize_lit().into_owned();
+                        let var_ty = var_ty.generalize_lit();
 
                         // if k.as_ref() == "co1" {
                         //     v.ty = Some(var_ty);
@@ -236,17 +236,6 @@ impl Analyzer<'_, '_> {
                     .map(|t| &*t.type_ann)
                     .cloned()
                     .map(Type::from);
-                let ty = if let Some(ty) = ty {
-                    match self.expand_type(i.span, ty) {
-                        Ok(ty) => Some(ty),
-                        Err(err) => {
-                            self.info.errors.push(err);
-                            return Ok(());
-                        }
-                    }
-                } else {
-                    None
-                };
 
                 let name = i.sym.clone();
                 self.scope.declare_var(

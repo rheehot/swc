@@ -5,7 +5,6 @@ use super::{
     Analyzer,
 };
 use crate::{
-    analyzer::util::ResultExt,
     errors::Error,
     swc_common::VisitWith,
     ty,
@@ -128,7 +127,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                             let ty = i.type_ann.clone().map(Type::from);
                             //let ty = match ty {
                             //    Some(ty) => match child.expand_type(i.span, ty) {
-                            //        Ok(ty) => Some(ty.into_owned()),
+                            //        Ok(ty) => Some(ty),
                             //        Err(err) => {
                             //            child.info.errors.push(err);
                             //            Some(Type::any(i.span))
@@ -358,7 +357,7 @@ impl Analyzer<'_, '_> {
         //                 init: p.value.clone(),
         //                 type_ann: Some(TsTypeAnn {
         //                     span: ty.span(),
-        //                     type_ann: box ty.into_owned(),
+        //                     type_ann: box ty,
         //                 }),
 
         //                 // TODO:
@@ -719,10 +718,10 @@ impl Visit<Class> for Analyzer<'_> {
 impl Visit<ClassExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassExpr) {
         let ty = match self.validate_type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {
-            Ok(ty) => ty,
+            Ok(ty) => ty.into(),
             Err(err) => {
                 self.info.errors.push(err);
-                Type::any(c.span()).into()
+                Type::any(c.span())
             }
         };
 
@@ -775,17 +774,18 @@ impl Visit<ClassDecl> for Analyzer<'_> {
         self.validate_class_members(&c.class, c.declare);
 
         let ty = match self.validate_type_of_class(Some(c.ident.sym.clone()), &c.class) {
-            Ok(ty) => ty,
+            Ok(ty) => ty.into(),
             Err(err) => {
                 self.info.errors.push(err);
-                Type::any(c.span()).into()
+                Type::any(c.span())
             }
         };
 
         let old_this = self.scope.this.take();
         self.scope.this = Some(ty.clone());
 
-        self.scope.register_type(c.ident.sym.clone(), ty.clone());
+        self.scope
+            .register_type(c.ident.sym.clone(), ty.clone().into());
 
         match self.scope.declare_var(
             ty.span(),

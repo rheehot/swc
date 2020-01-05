@@ -104,36 +104,31 @@ impl From<TsType> for Type {
                 span,
                 elem_type: box elem_type,
             }),
-            TsType::TsFnOrConstructorType(TsFnOrConstructorType::TsFnType(TsFnType {
-                span,
-                params,
-                type_params,
-                type_ann,
-            })) => Type::Function(Function {
-                span,
-                params,
-                type_params: type_params.map(From::from),
-                ret_ty: box type_ann.type_ann,
-            }),
-            TsType::TsFnOrConstructorType(TsFnOrConstructorType::TsConstructorType(
-                TsConstructorType {
-                    span,
-                    params,
-                    type_params,
-                    type_ann,
-                },
-            )) => Type::Constructor(Constructor {
-                span,
-                params,
-                type_params: type_params.map(From::from),
-                ret_ty: Some(box type_ann.type_ann),
-            }),
+            //TsType::TsFnOrConstructorType(TsFnOrConstructorType::TsFnType(TsFnType {
+            //    span,
+            //    params,
+            //    type_params,
+            //    type_ann,
+            //})) => Type::Function(Function {
+            //    span,
+            //    params,
+            //    type_params: type_params.map(From::from),
+            //    ret_ty: box type_ann.type_ann,
+            //}),
+            //TsType::TsFnOrConstructorType(TsFnOrConstructorType::TsConstructorType(
+            //    TsConstructorType {
+            //        span,
+            //        params,
+            //        type_params,
+            //        type_ann,
+            //    },
+            //)) => Type::Constructor(Constructor { span, params }),
             TsType::TsTypeLit(lit) => Type::TypeLit(lit.into()),
             TsType::TsConditionalType(cond) => Type::Conditional(cond.into()),
             TsType::TsMappedType(ty) => Type::Mapped(ty.into()),
             TsType::TsTypeOperator(ty) => Type::Operator(ty.into()),
             TsType::TsParenthesizedType(TsParenthesizedType { type_ann, .. }) => type_ann.into(),
-            _ => Type::Simple(ty),
+            _ => unimplemented!("TsType: {:?}", ty),
         }
     }
 }
@@ -420,7 +415,7 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
 //            is_static: self.is_static,
 //            type_params: self.type_params.map(|v| v),
 //            params: self.params,
-//            ret_ty: box self.ret_ty.into_owned(),
+//            ret_ty: box self.ret_ty,
 //        }
 //    }
 //}

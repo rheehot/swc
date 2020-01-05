@@ -53,7 +53,7 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
         }
 
         match op {
-            op!("!") => return Ok(negate(self.validate(arg)?.into_owned())),
+            op!("!") => return Ok(negate(self.validate(arg)?)),
 
             op!(unary, "-") | op!(unary, "+") => {
                 return Ok(Type::Keyword(TsKeywordType {

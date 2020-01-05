@@ -385,7 +385,7 @@ impl Analyzer<'_, '_> {
     fn extract<'a>(
         &'a self,
         span: Span,
-        ty: &Type,
+        ty: Type,
         kind: ExtractKind,
         args: &[ExprOrSpread],
         type_args: Option<&TsTypeParamInstantiation>,
