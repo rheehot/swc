@@ -411,6 +411,7 @@ impl<'a> Scope<'a> {
             vars: Default::default(),
             types: Default::default(),
             facts,
+            this: None,
         }
     }
 
