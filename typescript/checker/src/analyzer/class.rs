@@ -8,7 +8,7 @@ use crate::{
     errors::Error,
     swc_common::VisitWith,
     ty,
-    ty::{IndexSignature, Type},
+    ty::Type,
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -46,7 +46,7 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
         //    self.expand_type(span, ty).store(&mut errors);
         //}
 
-        let value: Option<Type> = p.value.as_ref().and_then(|e| self.check(&e));
+        let value: Option<Type> = try_opt!(self.validate(&p.value));
 
         Ok(ty::ClassProperty {
             span: p.span,
@@ -172,7 +172,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                         | PatOrTsParamProp::Pat(pat) => from_pat(pat),
                     })
                     .map(|param| self.validate(&param))
-                    .collects::<Result<_, _>>()?,
+                    .collect::<Result<_, _>>()?,
             })
         })
     }
@@ -712,7 +712,7 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
         };
 
         let old_this = self.scope.this.take();
-        self.scope.this = Some(ty.clone());
+        // self.scope.this = Some(ty.clone());
 
         let c = self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
             if let Some(ref i) = c.ident {
@@ -768,7 +768,7 @@ impl Visit<ClassDecl> for Analyzer<'_> {
         };
 
         let old_this = self.scope.this.take();
-        self.scope.this = Some(ty.clone());
+        // self.scope.this = Some(ty.clone());
 
         self.scope
             .register_type(c.ident.sym.clone(), ty.clone().into());

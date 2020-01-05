@@ -1,4 +1,3 @@
-use std::ops::Try;
 use swc_common::VisitWith;
 
 /// Visit with output

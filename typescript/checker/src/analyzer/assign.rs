@@ -957,14 +957,14 @@ fn count_required_params(v: &[FnParam]) -> usize {
     v.iter().filter(|v| v.required).count()
 }
 
-fn type_of_ts_fn_param<'a>(p: &TsFnParam) -> Type {
-    match p {
-        TsFnParam::Ident(Ident { type_ann, .. })
-        | TsFnParam::Array(ArrayPat { type_ann, .. })
-        | TsFnParam::Object(ObjectPat { type_ann, .. })
-        | TsFnParam::Rest(RestPat { type_ann, .. }) => type_ann
-            .clone()
-            .map(|ty| Type::from(ty))
-            .unwrap_or(Type::any(p.span())),
-    }
-}
+//fn type_of_ts_fn_param<'a>(p: &TsFnParam) -> Type {
+//    match p {
+//        TsFnParam::Ident(Ident { type_ann, .. })
+//        | TsFnParam::Array(ArrayPat { type_ann, .. })
+//        | TsFnParam::Object(ObjectPat { type_ann, .. })
+//        | TsFnParam::Rest(RestPat { type_ann, .. }) => type_ann
+//            .clone()
+//            .map(|ty| Type::from(ty))
+//            .unwrap_or(Type::any(p.span())),
+//    }
+//}

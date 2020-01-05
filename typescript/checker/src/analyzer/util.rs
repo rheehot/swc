@@ -1,25 +1,24 @@
 use super::Analyzer;
-use crate::{errors::Error, validator::Validate};
 use std::iter::once;
 use swc_atoms::JsWord;
 use swc_common::{Spanned, Visit};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
-    /// Validates and store errors if required.
-    pub fn check<T, O>(&mut self, node: &T) -> Option<O>
-    where
-        Self: Validate<T, Output = Result<O, Error>>,
-    {
-        let res: Result<O, _> = self.validate(node);
-        match res {
-            Ok(v) => Some(v),
-            Err(err) => {
-                self.info.errors.push(err);
-                None
-            }
-        }
-    }
+    //    /// Validates and store errors if required.
+    //    pub fn check<T, O>(&mut self, node: &T) -> Option<O>
+    //    where
+    //        Self: Validate<T, Output = Result<O, Error>>,
+    //    {
+    //        let res: Result<O, _> = self.validate(node);
+    //        match res {
+    //            Ok(v) => Some(v),
+    //            Err(err) => {
+    //                self.info.errors.push(err);
+    //                None
+    //            }
+    //        }
+    //    }
 }
 
 pub trait ResultExt<T, E>: Into<Result<T, E>> {

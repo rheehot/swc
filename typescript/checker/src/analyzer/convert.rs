@@ -2,10 +2,10 @@ use super::Analyzer;
 use crate::{
     errors::Error,
     ty::{
-        Alias, Array, CallSignature, Conditional, Constructor, ConstructorSignature, Enum,
-        EnumMember, Function, IndexSignature, Interface, Intersection, Mapped, MethodSignature,
-        Operator, PropertySignature, TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParam,
-        TypeParamDecl, TypeParamInstantiation, Union,
+        Alias, Array, CallSignature, Conditional, ConstructorSignature, Enum, EnumMember,
+        IndexSignature, Interface, Intersection, Mapped, MethodSignature, Operator,
+        PropertySignature, TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl,
+        TypeParamInstantiation, Union,
     },
     validator::Validate,
     ValidationResult,
@@ -18,10 +18,10 @@ impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeParamDecl>;
 
     fn validate(&mut self, decl: &TsTypeParamDecl) -> Self::Output {
-        TypeParamDecl {
+        Ok(TypeParamDecl {
             span: decl.span,
-            params: decl.params.into_iter().map(From::from).collect(),
-        }
+            params: self.validate(&decl.params)?,
+        })
     }
 }
 
@@ -29,12 +29,12 @@ impl Validate<TsTypeParam> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeParam>;
 
     fn validate(&mut self, p: &TsTypeParam) -> Self::Output {
-        TypeParam {
+        Ok(TypeParam {
             span: p.span,
             name: p.name.sym,
-            constraint: p.constraint.map(|v| box v),
-            default: p.default.map(|v| box v),
-        }
+            constraint: try_opt!(self.validate(&p.constraint)).map(Box::new),
+            default: try_opt!(self.validate(&p.default)).map(Box::new),
+        })
     }
 }
 
@@ -53,8 +53,8 @@ impl Validate<TsTypeAliasDecl> for Analyzer<'_, '_> {
     fn validate(&mut self, d: &TsTypeAliasDecl) -> Self::Output {
         Ok(Alias {
             span: d.span,
-            ty: self.validate(&d.type_ann)?,
-            type_params: self.validate(&d.type_params)?,
+            ty: box self.validate(&d.type_ann)?,
+            type_params: try_opt!(self.validate(&d.type_params)),
         })
     }
 }
@@ -66,9 +66,9 @@ impl Validate<TsInterfaceDecl> for Analyzer<'_, '_> {
         Ok(Interface {
             span: d.span,
             name: d.id.sym,
-            type_params: d.type_params.map(From::from),
-            extends: d.extends.into_iter().map(From::from).collect(),
-            body: d.body.body.into_iter().map(From::from).collect(),
+            type_params: try_opt!(self.validate(&d.type_params)),
+            extends: self.validate(&d.extends)?,
+            body: self.validate(&d.body.body)?,
         })
     }
 }

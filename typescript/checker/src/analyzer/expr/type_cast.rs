@@ -115,7 +115,7 @@ impl Analyzer<'_, '_> {
 
             Type::Array(ref lt) => {
                 //
-                match *orig_ty {
+                match orig_ty {
                     Type::Tuple(ref rt) => {
                         if rt.types[0].eq_ignore_name_and_span(&lt.elem_type) {
                             return Ok(());
@@ -133,10 +133,10 @@ impl Analyzer<'_, '_> {
 
         self.assign(&casted_ty, &orig_ty, span)?;
 
-        match *casted_ty {
+        match casted_ty {
             Type::Tuple(ref rt) => {
                 //
-                match *orig_ty {
+                match orig_ty {
                     Type::Tuple(ref lt) => {}
                     _ => {}
                 }
@@ -144,6 +144,6 @@ impl Analyzer<'_, '_> {
             _ => {}
         }
 
-        Ok(())
+        Ok(casted_ty)
     }
 }
