@@ -2,7 +2,7 @@ use crate::{
     analyzer::Analyzer,
     errors::Error,
     loader::Load,
-    ty::{self, Class, ClassMember, Method, Module, Static},
+    ty::{self, Class, Module, Static},
     util::pat_to_ts_fn_param,
     validator::Validate,
     Exports, ImportInfo,
@@ -162,7 +162,9 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                         Entry::Occupied(mut e) => match *e.get_mut() {
                                             ty::Type::Interface(ref mut v) => {
                                                 v.body.extend(
-                                                    i.body.body.clone().into_iter().map(From::from),
+                                                    analyzer.validate(&i.body.body).expect(
+                                                        "builtin: failed to parse interface body",
+                                                    ),
                                                 );
                                             }
                                             _ => unreachable!(

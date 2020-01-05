@@ -29,14 +29,7 @@ impl Analyzer<'_, '_> {
 
             debug_assert_eq!(self.info.exports.types.get(&sym), None);
 
-            let exported_sym = if *sym != js_word!("default") {
-                Some(&sym)
-            } else {
-                match *expr {
-                    Expr::Ident(ref i) => Some(&i.sym),
-                    _ => None,
-                }
-            };
+            let exported_sym = sym;
             let ty = match exported_sym
                 .and_then(|exported_sym| self.scope.types.remove(&exported_sym))
             {

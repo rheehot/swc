@@ -398,7 +398,12 @@ impl Validate<TsFnType> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Function>;
 
     fn validate(&mut self, t: &TsFnType) -> Self::Output {
-        Ok(ty::Function {})
+        Ok(ty::Function {
+            span: t.span,
+            type_params: try_opt!(t.type_params.validate_with(self)),
+            params: t.params.validate_with(self)?,
+            ret_ty: t.type_ann.validate_with(self)?,
+        })
     }
 }
 
