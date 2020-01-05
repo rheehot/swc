@@ -1,6 +1,10 @@
 use super::{super::Analyzer, instantiate_class};
 use crate::{
-    errors::Error, ty::Type, util::EqIgnoreNameAndSpan, validator::Validate, ValidationResult,
+    errors::Error,
+    ty::Type,
+    util::EqIgnoreNameAndSpan,
+    validator::{Validate, ValidateWith},
+    ValidationResult,
 };
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
@@ -43,21 +47,15 @@ impl Analyzer<'_, '_> {
     ///
     /// results in error.
     fn validate_type_cast(&mut self, span: Span, orig_ty: &Type, to: &TsType) -> ValidationResult {
-        let orig_ty = self.expand_type(span, orig_ty)?;
-
-        let casted_ty = Type::from(to.clone());
-        let casted_ty = self.expand_type(span, casted_ty)?;
+        let casted_ty = to.validate_with(self)?;
         let casted_ty = instantiate_class(casted_ty);
 
-        self.validate_type_cast_inner(span, orig_ty, casted_ty)
+        self.validate_type_cast_inner(span, orig_ty, casted_ty);
+
+        Ok(casted_ty)
     }
 
-    fn validate_type_cast_inner(
-        &self,
-        span: Span,
-        orig_ty: Type,
-        casted_ty: Type,
-    ) -> ValidationResult {
+    fn validate_type_cast_inner(&self, span: Span, orig_ty: &Type, casted_ty: &Type) {
         match *orig_ty.normalize() {
             Type::Union(ref rt) => {
                 let castable = rt
@@ -66,7 +64,7 @@ impl Analyzer<'_, '_> {
                     .any(|v| casted_ty.eq_ignore_name_and_span(v));
 
                 if castable {
-                    return Ok(casted_ty);
+                    return;
                 }
             }
 
@@ -105,7 +103,7 @@ impl Analyzer<'_, '_> {
                         }
 
                         if all_castable {
-                            return Ok(());
+                            return;
                         }
                     }
 
@@ -118,7 +116,7 @@ impl Analyzer<'_, '_> {
                 match orig_ty {
                     Type::Tuple(ref rt) => {
                         if rt.types[0].eq_ignore_name_and_span(&lt.elem_type) {
-                            return Ok(());
+                            return;
                         }
                     }
 
@@ -143,7 +141,5 @@ impl Analyzer<'_, '_> {
             }
             _ => {}
         }
-
-        Ok(casted_ty)
     }
 }
