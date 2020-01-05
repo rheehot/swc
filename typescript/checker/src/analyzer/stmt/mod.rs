@@ -30,7 +30,10 @@ impl Visit<TsInterfaceDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, decl: &TsInterfaceDecl) {
         decl.visit_children(self);
 
-        let ty: Option<Type> = self.validate(decl).store(&mut self.info.errors).into();
+        let ty = self
+            .validate(decl)
+            .store(&mut self.info.errors)
+            .map(Type::from);
 
         self.scope.register_type(
             decl.id.sym.clone(),

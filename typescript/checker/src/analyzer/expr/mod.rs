@@ -1,11 +1,14 @@
 use super::Analyzer;
 use crate::{
-    analyzer::util::ResultExt,
+    analyzer::{props::prop_name_to_expr, util::ResultExt},
     builtin_types,
     errors::Error,
     ty,
-    ty::{ClassInstance, Tuple, Type, TypeLit, TypeParamInstantiation},
-    util::RemoveTypes,
+    ty::{
+        Array, ClassInstance, EnumVariant, FnParam, IndexSignature, Interface, Ref, Tuple, Type,
+        TypeElement, TypeLit, TypeParamInstantiation, Union,
+    },
+    util::{EqIgnoreNameAndSpan, EqIgnoreSpan, RemoveTypes},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -195,7 +198,7 @@ impl Analyzer<'_, '_> {
             Expr::This(ThisExpr { span }) => {
                 let span = *span;
                 if let Some(ty) = self.scope.this() {
-                    return Ok(ty.clone());
+                    return Ok(ty.into_owned());
                 }
                 return Ok(Type::from(TsThisType { span }));
             }
@@ -253,7 +256,7 @@ impl Analyzer<'_, '_> {
                 }));
             }
             Expr::Lit(Lit::Regex(..)) => {
-                return Ok(Type::TsTypeRef(TsTypeRef {
+                return Ok(Type::Ref(Ref {
                     span,
                     type_name: TsEntityName::Ident(Ident {
                         span,
@@ -298,7 +301,7 @@ impl Analyzer<'_, '_> {
                 for prop in props.iter() {
                     match *prop {
                         PropOrSpread::Prop(ref prop) => {
-                            members.push(props.validate_with(self)?);
+                            members.push(prop.validate_with(self)?);
                         }
                         PropOrSpread::Spread(SpreadElement { ref expr, .. }) => {
                             match self.validate(&expr)? {
@@ -371,6 +374,412 @@ impl Analyzer<'_, '_> {
 
             _ => unimplemented!("typeof ({:#?})", e),
         }
+    }
+
+    fn access_property(
+        &mut self,
+        span: Span,
+        obj: Type,
+        prop: &Expr,
+        computed: bool,
+        type_mode: TypeOfMode,
+    ) -> ValidationResult {
+        macro_rules! handle_type_els {
+            ($members:expr) => {{
+                let prop_ty = if computed {
+                    prop.validate_with(self)?.generalize_lit()
+                } else {
+                    match prop {
+                        Expr::Ident(..) => Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsStringKeyword,
+                            span,
+                        }),
+                        _ => unreachable!(),
+                    }
+                };
+
+                for el in $members.iter() {
+                    match el {
+                        TypeElement::Index(IndexSignature {
+                            ref params,
+                            ref type_ann,
+                            ..
+                        }) => {
+                            if params.len() != 1 {
+                                unimplemented!("Index signature with multiple parameters")
+                            }
+                            match params[0] {
+                                FnParam::Ident(ref i) => {
+                                    assert!(i.type_ann.is_some());
+
+                                    let index_ty = Type::from(i.type_ann.as_ref().unwrap().clone());
+                                    if index_ty.eq_ignore_name_and_span(&prop_ty) {
+                                        if let Some(ref type_ann) = type_ann {
+                                            return Ok(type_ann.clone());
+                                        }
+                                        return Ok(Type::any(span));
+                                    }
+                                }
+
+                                _ => unimplemented!("TsFnParam other than index in IndexSignature"),
+                            }
+                        }
+                        _ => {}
+                    }
+
+                    if let Some(key) = el.key() {
+                        let is_el_computed = match *el {
+                            TypeElement::Property(ref p) => p.computed,
+                            _ => false,
+                        };
+                        let is_eq = is_el_computed == computed
+                            && match prop {
+                                Expr::Ident(Ident { sym: ref value, .. })
+                                | Expr::Lit(Lit::Str(Str { ref value, .. })) => match key {
+                                    Expr::Ident(Ident {
+                                        sym: ref r_value, ..
+                                    })
+                                    | Expr::Lit(Lit::Str(Str {
+                                        value: ref r_value, ..
+                                    })) => value == r_value,
+                                    _ => false,
+                                },
+                                _ => false,
+                            };
+                        if is_eq || key.eq_ignore_span(prop) {
+                            match el {
+                                TypeElement::Property(ref p) => {
+                                    if type_mode == TypeOfMode::LValue && p.readonly {
+                                        return Err(Error::ReadOnly { span });
+                                    }
+
+                                    if let Some(ref type_ann) = p.type_ann {
+                                        return Ok(type_ann.clone());
+                                    }
+
+                                    // TODO: no implicit any?
+                                    return Ok(Type::any(span));
+                                }
+
+                                _ => {}
+                            }
+                        }
+                    }
+                }
+            }};
+        }
+
+        let obj = obj.generalize_lit();
+
+        match *obj.normalize() {
+            Type::Lit(..) => unreachable!(),
+
+            Type::Enum(ref e) => {
+                // TODO: Check if variant exists.
+                macro_rules! ret {
+                    ($sym:expr) => {{
+                        // Computed values are not permitted in an enum with string valued members.
+                        if e.is_const && type_mode == TypeOfMode::RValue {
+                            for m in &e.members {
+                                match m.id {
+                                    TsEnumMemberId::Ident(Ident { ref sym, .. })
+                                    | TsEnumMemberId::Str(Str { value: ref sym, .. }) => {
+                                        if sym == $sym {
+                                            return Ok(Type::Lit(TsLitType {
+                                                span: m.span(),
+                                                lit: m.val.clone().into(),
+                                            }));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if e.is_const && computed {
+                            return Err(Error::ConstEnumNonIndexAccess { span: prop.span() });
+                        }
+
+                        if e.is_const && type_mode == TypeOfMode::LValue {
+                            return Err(Error::InvalidLValue { span: prop.span() });
+                        }
+
+                        debug_assert_ne!(span, prop.span());
+                        return Ok(Type::EnumVariant(EnumVariant {
+                            span: match type_mode {
+                                TypeOfMode::LValue => prop.span(),
+                                TypeOfMode::RValue => span,
+                            },
+                            enum_name: e.id.sym.clone(),
+                            name: $sym.clone(),
+                        }));
+                    }};
+                }
+                match *prop {
+                    Expr::Ident(Ident { ref sym, .. }) if !computed => {
+                        ret!(sym);
+                    }
+                    Expr::Lit(Lit::Str(Str { value: ref sym, .. })) => {
+                        ret!(sym);
+                    }
+                    Expr::Lit(Lit::Num(Number { value, .. })) => {
+                        let idx = value.round() as usize;
+                        if e.members.len() > idx {
+                            return Ok(Type::Lit(TsLitType {
+                                span,
+                                lit: e.members[idx].val.clone(),
+                            }));
+                        }
+                        return Ok(Type::Keyword(TsKeywordType {
+                            span,
+                            kind: TsKeywordTypeKind::TsStringKeyword,
+                        }));
+                    }
+
+                    _ => {
+                        if e.is_const {
+                            return Err(Error::ConstEnumNonIndexAccess { span: prop.span() });
+                        }
+                        return Err(Error::Unimplemented {
+                            span,
+                            msg: format!("access_property\nProp: {:?}", prop),
+                        });
+                    }
+                }
+            }
+
+            // enum Foo { A }
+            //
+            // Foo.A.toString()
+            Type::EnumVariant(EnumVariant {
+                ref enum_name,
+                ref name,
+                span,
+                ..
+            }) => match self.find_type(enum_name) {
+                Some(ref v) => match **v {
+                    Type::Enum(ref e) => {
+                        for v in e.members.iter() {
+                            let new_obj_ty = Type::Lit(TsLitType {
+                                span,
+                                lit: v.val.clone(),
+                            });
+                            return self
+                                .access_property(span, new_obj_ty, prop, computed, type_mode);
+                        }
+                        unreachable!("Enum {} does not have a variant named {}", enum_name, name);
+                    }
+                    _ => unreachable!("Enum named {} does not exist", enum_name),
+                },
+                _ => unreachable!("Enum named {} does not exist", enum_name),
+            },
+
+            Type::Class(ref c) => {
+                for v in c.body.iter() {
+                    match v {
+                        ty::ClassMember::Property(ref class_prop) => {
+                            match *class_prop.key {
+                                Expr::Ident(ref i) => {
+                                    if self.scope.declaring_prop.as_ref() == Some(&i.sym) {
+                                        return Err(Error::ReferencedInInit { span });
+                                    }
+                                }
+                                _ => {}
+                            }
+                            //
+                            if (*class_prop.key).eq_ignore_span(&*prop) {
+                                return Ok(match class_prop.value {
+                                    Some(ref ty) => ty.clone(),
+                                    None => Type::any(span),
+                                });
+                            }
+                        }
+                        ty::ClassMember::Method(ref mtd) => {
+                            let mtd_key = prop_name_to_expr(&mtd.key);
+                            if (*mtd_key).eq_ignore_span(&mtd_key) {
+                                return Ok(Type::Method(mtd.clone()));
+                            }
+                        }
+                        _ => unimplemented!("Non-property class member"),
+                    }
+                }
+            }
+
+            Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsAnyKeyword,
+                ..
+            }) => {
+                return Ok(Type::Keyword(TsKeywordType {
+                    span,
+                    kind: TsKeywordTypeKind::TsAnyKeyword,
+                }));
+            }
+
+            Type::Keyword(TsKeywordType {
+                kind: TsKeywordTypeKind::TsUnknownKeyword,
+                ..
+            }) => return Err(Error::Unknown { span: obj.span() }),
+
+            Type::Keyword(TsKeywordType { kind, .. }) => {
+                let word = match kind {
+                    TsKeywordTypeKind::TsStringKeyword => js_word!("String"),
+                    TsKeywordTypeKind::TsNumberKeyword => js_word!("Number"),
+                    TsKeywordTypeKind::TsBooleanKeyword => js_word!("Boolean"),
+                    TsKeywordTypeKind::TsObjectKeyword => js_word!("Object"),
+                    TsKeywordTypeKind::TsSymbolKeyword => js_word!("Symbol"),
+                    _ => unimplemented!("access_property: obj: TSKeywordType {:?}", kind),
+                };
+                let interface = builtin_types::get_type(self.libs, span, &word)?;
+                return self.access_property(span, interface, prop, computed, type_mode);
+            }
+
+            Type::Array(Array { elem_type, .. }) => {
+                let array_ty = builtin_types::get_type(self.libs, span, &js_word!("Array"))
+                    .expect("Array should be loaded");
+
+                match prop.validate_with(self) {
+                    Ok(ty) => match ty.normalize() {
+                        Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsNumberKeyword,
+                            ..
+                        })
+                        | Type::Lit(TsLitType {
+                            lit: TsLit::Number(..),
+                            ..
+                        }) => return Ok(*elem_type),
+
+                        _ => {}
+                    },
+                    _ => {}
+                }
+
+                return self.access_property(span, array_ty, prop, computed, type_mode);
+            }
+
+            Type::Interface(Interface { ref body, .. }) => {
+                handle_type_els!(body);
+
+                // TODO: Check parent interfaces
+
+                return Err(Error::NoSuchProperty {
+                    span,
+                    prop: Some(prop.clone()),
+                });
+            }
+
+            Type::TypeLit(TypeLit { ref members, .. }) => {
+                handle_type_els!(members);
+
+                return Err(Error::NoSuchProperty {
+                    span,
+                    prop: Some(prop.clone()),
+                });
+            }
+
+            Type::Union(ty::Union { ref types, .. }) => {
+                debug_assert!(types.len() >= 1);
+
+                let mut tys = vec![];
+                let mut errors = Vec::with_capacity(types.len());
+
+                for ty in types {
+                    match self.access_property(span, ty.clone(), prop, computed, type_mode) {
+                        Ok(ty) => tys.push(ty),
+                        Err(err) => errors.push(err),
+                    }
+                }
+
+                if type_mode != TypeOfMode::LValue {
+                    if !errors.is_empty() {
+                        return Err(Error::UnionError { span, errors });
+                    }
+                } else {
+                    // In l-value context, it's success if one of types matches it.
+                    let is_err = errors.iter().any(|err| match *err {
+                        Error::ReadOnly { .. } => true,
+                        _ => false,
+                    });
+                    if tys.is_empty() || is_err {
+                        assert_ne!(errors.len(), 0);
+                        return Err(Error::UnionError { span, errors });
+                    }
+                }
+
+                // TODO: Validate that the ty has same type instead of returning union.
+                return Ok(Type::union(tys));
+            }
+
+            Type::Tuple(Tuple { ref types, .. }) => match *prop {
+                Expr::Lit(Lit::Num(n)) => {
+                    let v = n.value.round() as i64;
+                    if v < 0 || types.len() <= v as usize {
+                        return Err(Error::TupleIndexError {
+                            span: n.span(),
+                            index: v,
+                            len: types.len() as u64,
+                        });
+                    }
+
+                    return Ok(types[v as usize]);
+                }
+                _ => {
+                    if types.is_empty() {
+                        return Ok(Type::any(span));
+                    }
+
+                    //                    if types.len() == 1 {
+                    //                        return Ok(Cow::Borrowed(&types[0]));
+                    //                    }
+
+                    return Ok(Type::Union(Union {
+                        span,
+                        types: types.clone(),
+                    }));
+                }
+            },
+
+            Type::ClassInstance(ClassInstance { ref cls, .. }) => {
+                //
+                for m in &cls.body {
+                    //
+                    match *m {
+                        ClassMember::ClassProp(ref p) => {
+                            // TODO: normalized string / ident
+                            if (&*p.key).eq_ignore_name_and_span(&prop) {
+                                if let Some(ref ty) = p.type_ann {
+                                    return Ok(Type::from(ty.clone()));
+                                }
+
+                                return Ok(Type::any(p.key.span()));
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+            }
+
+            Type::Module(ty::Module { ref exports, .. }) => match prop {
+                Expr::Ident(Ident { ref sym, .. }) => {
+                    if let Some(item) = exports.vars.get(sym) {
+                        return Ok(Type::Arc((*item).clone()));
+                    }
+                }
+                _ => {}
+            },
+
+            Type::This(..) => {
+                if let Some(ref this) = self.scope.this {
+                    return self.access_property(span, this.clone(), prop, computed, type_mode);
+                }
+            }
+
+            _ => {}
+        }
+
+        unimplemented!(
+            "access_property(MemberExpr):\nObject: {:?}\nProp: {:?}",
+            obj,
+            prop
+        );
     }
 
     pub fn type_of_ident(&mut self, i: &Ident, type_mode: TypeOfMode) -> ValidationResult {
@@ -523,7 +932,7 @@ impl Analyzer<'_, '_> {
                     if errors.is_empty() {
                         return Ok(ty.unwrap());
                     } else {
-                        match self.type_of(&prop) {
+                        match prop.validate_with(self) {
                             Ok(..) => match ty {
                                 Ok(ty) => {
                                     if errors.is_empty() {

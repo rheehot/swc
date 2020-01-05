@@ -186,14 +186,6 @@ impl Validate<TsFnParam> for Analyzer<'_, '_> {
     }
 }
 
-impl Validate<Pat> for Analyzer<'_, '_> {
-    type Output = ValidationResult<ty::FnParam>;
-
-    fn validate(&mut self, p: &Pat) -> Self::Output {
-        unimplemented!("validate(Pat)")
-    }
-}
-
 impl Validate<ClassMethod> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Method>;
 

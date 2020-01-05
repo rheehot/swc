@@ -1,13 +1,13 @@
 use super::{control_flow::CondFacts, name::Name, Analyzer};
 use crate::{
     errors::Error,
-    ty::{self, Type},
+    ty::{self, Ref, Type},
     util::EqIgnoreNameAndSpan,
     validator::{Validate, ValidateWith},
 };
 use fxhash::FxHashMap;
 use smallvec::SmallVec;
-use std::{collections::hash_map::Entry, sync::Arc};
+use std::{borrow::Cow, collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -52,7 +52,7 @@ impl Scope<'_> {
                 Type::Alias(ref alias) => {
                     //
                     if alias.type_params.is_none() {
-                        match **alias.ty {
+                        match *alias.ty {
                             Type::Simple(ref s_ty) => match **s_ty {
                                 TsType::TsTypeRef(..) => panic!(
                                     "Type alias without type parameters should be expanded before \
@@ -90,9 +90,13 @@ impl Scope<'_> {
         }
     }
 
-    pub fn this(&self) -> Option<&Type> {
+    pub fn this(&self) -> Option<Cow<Type>> {
         if let Some(ref this) = self.this {
-            return Some(this);
+            return Some(Cow::Owned(Type::Ref(Ref {
+                span: DUMMY_SP,
+                type_name: self.this.into(),
+                type_params: None,
+            })));
         }
 
         match self.parent {
@@ -141,10 +145,7 @@ impl Scope<'_> {
 
         if cfg!(debug_assertions) {
             match ty {
-                Some(Type::Simple(ref t)) => match **t {
-                    TsType::TsTypeRef(..) => panic!("Var's kind should not be Type"),
-                    _ => {}
-                },
+                Some(Type::Ref(..)) => panic!("Var's kind should not be Type"),
                 _ => {}
             }
         }

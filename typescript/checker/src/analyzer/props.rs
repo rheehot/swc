@@ -168,7 +168,7 @@ impl Validate<Prop> for Analyzer<'_, '_> {
                 optional: false,
                 params: p.function.params.validate_with(self)?,
                 ret_ty: try_opt!(p.function.return_type.validate_with(self)),
-                type_params: try_opt!(p.function.type_params),
+                type_params: try_opt!(p.function.type_params.validate_with(self)),
             }
             .into(),
         })

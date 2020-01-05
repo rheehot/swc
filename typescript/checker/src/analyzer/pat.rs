@@ -1,5 +1,12 @@
 use super::Analyzer;
-use crate::{errors::Error, ty::Type, util::EqIgnoreNameAndSpan};
+use crate::{
+    errors::Error,
+    ty,
+    ty::Type,
+    util::EqIgnoreNameAndSpan,
+    validator::{Validate, ValidateWith},
+    ValidationResult,
+};
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -7,16 +14,24 @@ impl Analyzer<'_> {
     fn visit_rest_pat(&mut self, p: &RestPat) {
         let p = p.fold_children(self);
 impl Visit<RestPat> for Analyzer<'_> {
+impl Validate<Pat> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::FnParam>;
+
+    fn validate(&mut self, p: &Pat) -> Self::Output {
+        unimplemented!("validate(Pat)")
+    }
+}
+
 impl Visit<RestPat> for Analyzer<'_, '_> {
     fn visit(&mut self, p: &RestPat) {
-        let p = p.visit_children(self);
+        p.visit_children(self);
 
         let mut errors = vec![];
         let p = p.visit_children(self);
 
         if let Pat::Assign(AssignPat { ref right, .. }) = *p.arg {
             try {
-                let value_ty = self.validate(right)?;
+                let value_ty = right.validate_with(self)?;
 
                 match value_ty.normalize() {
                     Type::Array(..)
@@ -30,7 +45,7 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
             .store(&mut errors);
         } else if let Some(ref type_ann) = p.type_ann {
             try {
-                let ty = self.expand_type(p.span(), Type::from(type_ann.clone().type_ann))?;
+                let ty = type_ann.validate_with(self)?;
 
                 match *ty.normalize() {
                     Type::Array(..)
@@ -45,8 +60,6 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
         }
 
         self.info.errors.extend(errors);
-
-        p
     }
 }
 
@@ -56,7 +69,7 @@ impl Analyzer<'_> {
 impl Visit<AssignPat> for Analyzer<'_> {
 impl Visit<AssignPat> for Analyzer<'_, '_> {
     fn visit(&mut self, p: &AssignPat) {
-        let p = p.visit_children(self);
+        p.visit_children(self);
 
         //
         match *p.left {

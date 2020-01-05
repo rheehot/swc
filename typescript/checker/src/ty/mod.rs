@@ -11,6 +11,7 @@ pub mod merge;
 pub enum Type {
     This(TsThisType),
     Lit(TsLitType),
+    Ref(Ref),
     TypeLit(TypeLit),
     Keyword(TsKeywordType),
     Conditional(Conditional),
@@ -62,6 +63,13 @@ pub enum Type {
     Static(Static),
 
     Arc(#[fold(ignore)] Arc<Type>),
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct Ref {
+    pub span: Span,
+    pub type_name: TsEntityName,
+    pub type_params: Option<TypeParamInstantiation>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
