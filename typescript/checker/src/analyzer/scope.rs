@@ -53,13 +53,10 @@ impl Scope<'_> {
                     //
                     if alias.type_params.is_none() {
                         match *alias.ty {
-                            Type::Simple(ref s_ty) => match **s_ty {
-                                TsType::TsTypeRef(..) => panic!(
-                                    "Type alias without type parameters should be expanded before \
-                                     .register_type()"
-                                ),
-                                _ => {}
-                            },
+                            Type::Ref(..) => panic!(
+                                "Type alias without type parameters should be expanded before \
+                                 .register_type()"
+                            ),
                             _ => {}
                         }
                     }
@@ -94,7 +91,7 @@ impl Scope<'_> {
         if let Some(ref this) = self.this {
             return Some(Cow::Owned(Type::Ref(Ref {
                 span: DUMMY_SP,
-                type_name: self.this.into(),
+                type_name: TsEntityName::Ident(Ident::new(this.clone().into(), DUMMY_SP)),
                 type_params: None,
             })));
         }
@@ -348,7 +345,7 @@ impl Analyzer<'_, '_> {
         None
     }
 
-    pub(super) fn find_var_type(&self, name: &JsWord) -> Option<&Type> {
+    pub(super) fn find_var_type(&self, name: &JsWord) -> Option<Cow<Type>> {
         // println!("({}) find_var_type({})", self.scope.depth(), name);
         let mut scope = Some(&self.scope);
         while let Some(s) = scope {
@@ -358,7 +355,7 @@ impl Analyzer<'_, '_> {
                     self.scope.depth(),
                     name
                 );
-                return Some(v);
+                return Some(Cow::Borrowed(v));
             }
 
             scope = s.parent;
@@ -373,16 +370,16 @@ impl Analyzer<'_, '_> {
 
             let name = Name::from(name);
 
-            let ty = match var.ty {
-                Some(ref ty) => ty,
+            let mut ty = match var.ty {
+                Some(ref ty) => ty.clone(),
                 _ => return None,
             };
 
             if let Some(ref excludes) = self.scope.facts.excludes.get(&name) {
-                match *ty.normalize_mut() {
+                match ty {
                     Type::Union(ty::Union { ref mut types, .. }) => {
                         for ty in types {
-                            let span = ty.span();
+                            let span = (*ty).span();
                             for excluded_ty in excludes.iter() {
                                 if ty.eq_ignore_name_and_span(excluded_ty) {
                                     *ty = Type::never(span)
@@ -394,7 +391,7 @@ impl Analyzer<'_, '_> {
                 }
             }
 
-            return Some(ty);
+            return Some(Cow::Owned(ty));
         }
 
         None

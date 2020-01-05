@@ -1,5 +1,6 @@
 use super::Analyzer;
 use crate::{
+    analyzer::util::ResultExt,
     errors::Error,
     ty,
     ty::Type,
@@ -30,7 +31,7 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
         let p = p.visit_children(self);
 
         if let Pat::Assign(AssignPat { ref right, .. }) = *p.arg {
-            try {
+            let res: Result<_, _> = try {
                 let value_ty = right.validate_with(self)?;
 
                 match value_ty.normalize() {
@@ -41,10 +42,10 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
                     }) => {}
                     _ => Err(Error::TS2370 { span: p.dot3_token })?,
                 }
-            }
-            .store(&mut errors);
+            };
+            res.store(&mut errors);
         } else if let Some(ref type_ann) = p.type_ann {
-            try {
+            let res: Result<_, _> = try {
                 let ty = type_ann.validate_with(self)?;
 
                 match *ty.normalize() {
@@ -55,8 +56,9 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
                     }) => {}
                     _ => Err(Error::TS2370 { span: p.dot3_token })?,
                 }
-            }
-            .store(&mut errors);
+            };
+
+            res.store(&mut errors);
         }
 
         self.info.errors.extend(errors);
@@ -117,7 +119,5 @@ impl Visit<AssignPat> for Analyzer<'_, '_> {
             }
             _ => {}
         }
-
-        p
     }
 }

@@ -399,33 +399,33 @@ impl Analyzer<'_, '_> {
                 };
 
                 for el in $members.iter() {
-                    match el {
-                        TypeElement::Index(IndexSignature {
-                            ref params,
-                            ref type_ann,
-                            ..
-                        }) => {
-                            if params.len() != 1 {
-                                unimplemented!("Index signature with multiple parameters")
-                            }
-                            match params[0] {
-                                FnParam::Ident(ref i) => {
-                                    assert!(i.type_ann.is_some());
-
-                                    let index_ty = Type::from(i.type_ann.as_ref().unwrap().clone());
-                                    if index_ty.eq_ignore_name_and_span(&prop_ty) {
-                                        if let Some(ref type_ann) = type_ann {
-                                            return Ok(type_ann.clone());
-                                        }
-                                        return Ok(Type::any(span));
-                                    }
-                                }
-
-                                _ => unimplemented!("TsFnParam other than index in IndexSignature"),
-                            }
-                        }
-                        _ => {}
-                    }
+                    //match el {
+                    //    TypeElement::Index(IndexSignature {
+                    //        ref params,
+                    //        ref type_ann,
+                    //        ..
+                    //    }) => {
+                    //        if params.len() != 1 {
+                    //            unimplemented!("Index signature with multiple parameters")
+                    //        }
+                    //        match params[0] {
+                    //            FnParam::Ident(ref i) => {
+                    //                assert!(i.type_ann.is_some());
+                    //
+                    //                let index_ty =
+                    // Type::from(i.type_ann.as_ref().unwrap().clone());                
+                    // if index_ty.eq_ignore_name_and_span(&prop_ty) {                  
+                    // if let Some(ref type_ann) = type_ann {                        
+                    // return Ok(type_ann.clone());                    }
+                    //                    return Ok(Type::any(span));
+                    //                }
+                    //            }
+                    //
+                    //            _ => unimplemented!("TsFnParam other than index in
+                    // IndexSignature"),        }
+                    //    }
+                    //    _ => {}
+                    //}
 
                     if let Some(key) = el.key() {
                         let is_el_computed = match *el {
@@ -742,11 +742,11 @@ impl Analyzer<'_, '_> {
                 for m in &cls.body {
                     //
                     match *m {
-                        ClassMember::ClassProp(ref p) => {
+                        ty::ClassMember::Property(ref p) => {
                             // TODO: normalized string / ident
                             if (&*p.key).eq_ignore_name_and_span(&prop) {
-                                if let Some(ref ty) = p.type_ann {
-                                    return Ok(Type::from(ty.clone()));
+                                if let Some(ref ty) = p.value {
+                                    return Ok(ty.clone());
                                 }
 
                                 return Ok(Type::any(p.key.span()));
@@ -767,8 +767,14 @@ impl Analyzer<'_, '_> {
             },
 
             Type::This(..) => {
-                if let Some(ref this) = self.scope.this {
-                    return self.access_property(span, this.clone(), prop, computed, type_mode);
+                if let Some(ref this) = self.scope.this() {
+                    return self.access_property(
+                        span,
+                        this.into_owned(),
+                        prop,
+                        computed,
+                        type_mode,
+                    );
                 }
             }
 
@@ -972,9 +978,7 @@ impl Validate<Function> for Analyzer<'_, '_> {
     fn validate(&mut self, f: &Function) -> Self::Output {
         let mut errors = vec![];
 
-        let declared_ret_ty = f.return_type.validate_with(self)?;
-
-        let declared_ret_ty = match declared_ret_ty.map(|ret_ty| {
+        let declared_ret_ty = try_opt!(f.return_type.validate_with(self)).map(|ret_ty| {
             let span = ret_ty.span();
             match ret_ty {
                 Type::Class(cls) => Type::ClassInstance(ClassInstance {
@@ -984,16 +988,12 @@ impl Validate<Function> for Analyzer<'_, '_> {
                 }),
                 ty => ty,
             }
-        }) {
-            Some(Ok(ty)) => Some(ty),
-            Some(Err(err)) => {
-                errors.push(err);
-                Some(declared_ret_ty.unwrap())
-            }
-            None => None,
-        };
+        });
 
-        let inferred_return_type = f.body.as_ref().map(|_| self.infer_return_type(f.span));
+        let inferred_return_type = f
+            .body
+            .as_ref()
+            .map(|body| self.visit_stmts_for_return(&body.stmts));
         let inferred_return_type = match inferred_return_type {
             Some(Some(inferred_return_type)) => {
                 if let Some(ref declared) = declared_ret_ty {
