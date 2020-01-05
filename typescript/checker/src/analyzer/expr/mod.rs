@@ -5,6 +5,7 @@ use crate::{
     errors::Error,
     ty,
     ty::{ClassInstance, Tuple, Type, TypeLit, TypeParamInstantiation},
+    util::RemoveTypes,
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -189,7 +190,8 @@ impl Analyzer<'_, '_> {
             Expr::Call(e) => self.validate(e),
             Expr::TsAs(e) => self.validate(e),
             Expr::TsTypeAssertion(e) => self.validate(e),
-            //
+            Expr::Assign(e) => e.validate_with(self),
+
             Expr::This(ThisExpr { span }) => {
                 let span = *span;
                 if let Some(ty) = self.scope.this() {
@@ -286,7 +288,7 @@ impl Analyzer<'_, '_> {
             }
 
             Expr::TsNonNull(TsNonNullExpr { ref expr, .. }) => {
-                Ok(expr.validate_with(&expr)?.remove_falsy())
+                Ok(expr.validate_with(self)?.remove_falsy())
             }
 
             Expr::Object(ObjectLit { span, ref props }) => {
@@ -296,7 +298,7 @@ impl Analyzer<'_, '_> {
                 for prop in props.iter() {
                     match *prop {
                         PropOrSpread::Prop(ref prop) => {
-                            members.push(self.type_of_prop(&prop)?);
+                            members.push(props.validate_with(self)?);
                         }
                         PropOrSpread::Spread(SpreadElement { ref expr, .. }) => {
                             match self.validate(&expr)? {
@@ -364,8 +366,6 @@ impl Analyzer<'_, '_> {
             }
 
             Expr::MetaProp(..) => unimplemented!("typeof(MetaProp)"),
-
-            Expr::Assign(e) => self.validate_assign_expr(e),
 
             Expr::Invalid(ref i) => return Ok(Type::any(i.span())),
 
@@ -508,14 +508,5 @@ fn instantiate_class(ty: Type) -> Type {
             type_args: None,
         }),
         _ => ty,
-    }
-}
-
-fn prop_name_to_expr(key: &PropName) -> Box<Expr> {
-    match *key {
-        PropName::Computed(ref p) => p.expr.clone(),
-        PropName::Ident(ref ident) => box Expr::Ident(ident.clone()),
-        PropName::Str(ref s) => box Expr::Lit(Lit::Str(Str { ..s.clone() })),
-        PropName::Num(ref s) => box Expr::Lit(Lit::Num(Number { ..s.clone() })),
     }
 }

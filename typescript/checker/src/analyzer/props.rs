@@ -2,7 +2,10 @@ use super::{scope::ScopeKind, Analyzer};
 use crate::{
     analyzer::{expr::TypeOfMode, util::ResultExt},
     errors::Error,
-    ty::Type,
+    ty::{MethodSignature, PropertySignature, Type, TypeElement},
+    util::pat_to_ts_fn_param,
+    validator::Validate,
+    ValidationResult,
 };
 use swc_atoms::js_word;
 use swc_common::{Fold, FoldWith, Spanned};
@@ -92,13 +95,15 @@ impl Analyzer<'_, '_> {
     }
 }
 
-impl Visit<Prop> for Analyzer<'_, '_> {
-    fn visit(&mut self, n: &Prop) {
+impl Validate<Prop> for Analyzer<'_, '_> {
+    type Output = ValidationResult<TypeElement>;
+
+    fn validate(&mut self, prop: &Prop) -> Self::Output {
         self.computed_prop_mode = ComputedPropMode::Object;
 
-        n.visit_children(self);
+        prop.visit_children(self);
 
-        match n {
+        match prop {
             Prop::Shorthand(ref i) => {
                 // TODO: Check if RValue is correct
                 self.type_of_ident(&i, TypeOfMode::RValue)
@@ -106,6 +111,75 @@ impl Visit<Prop> for Analyzer<'_, '_> {
             }
             _ => {}
         }
+
+        let span = prop.span();
+
+        Ok(match *prop {
+            Prop::Shorthand(..) => PropertySignature {
+                span: prop.span(),
+                key: prop_key_to_expr(&prop),
+                params: Default::default(),
+                optional: false,
+                readonly: false,
+                computed: false,
+                type_ann: Default::default(),
+                type_params: Default::default(),
+            }
+            .into(),
+
+            Prop::KeyValue(ref kv) => {
+                let ty = self.type_of(&kv.value)?;
+                let ty = self.expand_type(prop.span(), ty)?;
+
+                PropertySignature {
+                    span: prop.span(),
+                    key: prop_key_to_expr(&prop),
+                    params: Default::default(),
+                    optional: false,
+                    readonly: false,
+                    computed: false,
+                    type_ann: Some(ty),
+                    type_params: Default::default(),
+                }
+                .into()
+            }
+
+            Prop::Assign(ref p) => unimplemented!("type_of_prop(AssignProperty): {:?}", p),
+            Prop::Getter(ref p) => PropertySignature {
+                span: prop.span(),
+                key: prop_key_to_expr(&prop),
+                params: Default::default(),
+                optional: false,
+                readonly: false,
+                computed: false,
+                type_ann: match self.infer_return_type(p.span()) {
+                    Some(ty) => Some(ty.owned()),
+                    // This is error, but it's handled by GetterProp visitor.
+                    None => None,
+                },
+                type_params: Default::default(),
+            }
+            .into(),
+            Prop::Setter(ref p) => unimplemented!("type_of_prop(SetterProperty): {:?}", p),
+
+            Prop::Method(ref p) => MethodSignature {
+                span,
+                readonly: false,
+                key: prop_key_to_expr(&prop),
+                computed: false,
+                optional: false,
+                params: p
+                    .function
+                    .params
+                    .iter()
+                    .cloned()
+                    .map(pat_to_ts_fn_param)
+                    .collect(),
+                ret_ty: p.function.return_type.clone().map(|v| v.into_cow()),
+                type_params: p.function.type_params.clone().map(|v| v.into()),
+            }
+            .into(),
+        })
     }
 }
 
@@ -183,5 +257,25 @@ impl Visit<TsPropertySignature> for Analyzer<'_, '_> {
         if node.computed {
             self.validate_computed_prop_key(node.span(), &node.key);
         }
+    }
+}
+
+fn prop_key_to_expr(p: &Prop) -> Box<Expr> {
+    match *p {
+        Prop::Shorthand(ref i) => box Expr::Ident(i.clone()),
+        Prop::Assign(AssignProp { ref key, .. }) => box Expr::Ident(key.clone()),
+        Prop::Getter(GetterProp { ref key, .. })
+        | Prop::KeyValue(KeyValueProp { ref key, .. })
+        | Prop::Method(MethodProp { ref key, .. })
+        | Prop::Setter(SetterProp { ref key, .. }) => prop_name_to_expr(key),
+    }
+}
+
+pub(super) fn prop_name_to_expr(key: &PropName) -> Box<Expr> {
+    match *key {
+        PropName::Computed(ref p) => p.expr.clone(),
+        PropName::Ident(ref ident) => box Expr::Ident(ident.clone()),
+        PropName::Str(ref s) => box Expr::Lit(Lit::Str(Str { ..s.clone() })),
+        PropName::Num(ref s) => box Expr::Lit(Lit::Num(Number { ..s.clone() })),
     }
 }

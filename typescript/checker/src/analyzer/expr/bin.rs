@@ -37,7 +37,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                 no_unknown!(rt);
             }};
             ($ty:expr) => {{
-                match *$ty {
+                match $ty {
                     Type::Keyword(TsKeywordType {
                         kind: TsKeywordTypeKind::TsUnknownKeyword,
                         ..
@@ -69,7 +69,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     return Err(Error::Unknown { span });
                 }
 
-                match *lt {
+                match lt {
                     Type::Keyword(TsKeywordType {
                         kind: TsKeywordTypeKind::TsNumberKeyword,
                         ..
@@ -77,7 +77,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     | Type::Lit(TsLitType {
                         lit: TsLit::Number(..),
                         ..
-                    }) => match *rt {
+                    }) => match rt {
                         Type::Keyword(TsKeywordType {
                             kind: TsKeywordTypeKind::TsNumberKeyword,
                             ..
@@ -96,7 +96,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     _ => {}
                 }
 
-                if let Some(()) = c.take(|(_, lt), (_, _)| match **lt {
+                if let Some(()) = c.take(|(_, lt), (_, _)| match *lt {
                     Type::Keyword(TsKeywordType {
                         kind: TsKeywordTypeKind::TsStringKeyword,
                         ..
@@ -140,7 +140,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                 // Rule:
                 //  - null is invalid operand
                 //  - undefined is invalid operand
-                if c.both(|(_, ty)| match **ty {
+                if c.both(|(_, ty)| match *ty {
                     Type::Keyword(TsKeywordType {
                         kind: TsKeywordTypeKind::TsUndefinedKeyword,
                         ..
@@ -251,10 +251,10 @@ impl Analyzer<'_, '_> {
                     let lt = lt.unwrap();
                     let rt = rt.unwrap();
 
-                    let has_overlap = lt.eq_ignore_span(&*rt) || {
+                    let has_overlap = lt.eq_ignore_span(&rt) || {
                         let c = Comparator {
-                            left: &*lt,
-                            right: &*rt,
+                            left: &lt,
+                            right: &rt,
                         };
 
                         // Check if type overlaps.

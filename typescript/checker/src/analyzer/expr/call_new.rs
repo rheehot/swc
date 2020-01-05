@@ -1,6 +1,7 @@
 //! Handles new expressions and call expressions.
-use super::{super::Analyzer, prop_name_to_expr};
+use super::super::Analyzer;
 use crate::{
+    analyzer::props::prop_name_to_expr,
     builtin_types,
     errors::Error,
     ty,
@@ -264,10 +265,10 @@ impl Analyzer<'_, '_> {
                     // Handle toString()
                     macro_rules! handle {
                         () => {{
-                            return Ok(TsKeywordType {
+                            return Ok(Type::from(TsKeywordType {
                                 span,
                                 kind: TsKeywordTypeKind::TsStringKeyword,
-                            });
+                            }));
                         }};
                     }
                     match **prop {

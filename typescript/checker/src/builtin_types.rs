@@ -3,7 +3,6 @@ use crate::{
     errors::Error,
     loader::Load,
     ty::{self, Class, Module, Static},
-    util::pat_to_ts_fn_param,
     validator::{Validate, ValidateWith},
     Exports, ImportInfo,
 };
@@ -64,7 +63,9 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                     };
                                     merged.vars.insert(
                                         name.sym.clone(),
-                                        name.type_ann.clone().unwrap().into(),
+                                        name.type_ann
+                                            .validate_with(&mut analyzer)
+                                            .expect("builtin: failed to parse type of a varaible"),
                                     );
                                 }
 
@@ -79,10 +80,11 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                             span: DUMMY_SP,
                                             params: function
                                                 .params
-                                                .iter()
-                                                .cloned()
-                                                .map(pat_to_ts_fn_param)
-                                                .collect(),
+                                                .validate_with(&mut analyzer)
+                                                .expect(
+                                                    "builtin: failed to parse parameters of a \
+                                                     function",
+                                                ),
                                             type_params: function
                                                 .type_params
                                                 .clone()
@@ -90,10 +92,13 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                             ret_ty: box function
                                                 .return_type
                                                 .validate_with(&mut analyzer)
-                                                .expect(
-                                                    "builtin: failed to parse return type of a \
-                                                     function",
-                                                ),
+                                                .map(|res| {
+                                                    res.expect(
+                                                        "builtin: failed to parse return type of \
+                                                         a function",
+                                                    )
+                                                })
+                                                .unwrap_or_else(|| Type::any(ident.sp)),
                                         }
                                         .into(),
                                     );
