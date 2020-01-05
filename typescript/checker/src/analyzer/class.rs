@@ -10,7 +10,7 @@ use crate::{
     swc_common::VisitWith,
     ty,
     ty::{IndexSignature, Type},
-    validator::Validate,
+    validator::{Validate, ValidateWith},
     ValidationResult,
 };
 use std::mem::replace;
@@ -37,9 +37,11 @@ impl Validate<TsIndexSignature> for Analyzer<'_, '_> {
     }
 }
 
-impl Analyzer<'_, '_> {
-    pub fn visit_class_property(&mut self, p: &ClassProp) -> ValidationResult<ty::ClassProperty> {
-        p.visit_children(self);
+impl Validate<ClassProp> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::ClassProperty>;
+
+    fn validate(&mut self, p: &ClassProp) -> Self::Output {
+        p.validate_children(self);
 
         let mut errors = vec![];
 
@@ -75,8 +77,12 @@ impl Analyzer<'_, '_> {
             definite: p.definite,
         })
     }
+}
 
-    pub fn visit_constructor(&mut self, c: &Constructor) -> Result<ty::Constructor, Error> {
+impl Validate<Constructor> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::Constructor>;
+
+    fn validate(&mut self, c: &Constructor) -> Self::Output {
         let c_span = c.span();
 
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
@@ -186,12 +192,18 @@ impl Analyzer<'_, '_> {
             })
         })
     }
+}
+impl Validate<TsFnParam> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::FnParam>;
 
-    pub fn validate_fn_param(&mut self, p: &TsFnParam) -> Result<ty::FnParam, Error> {
+    fn validate(&mut self, p: &TsFnParam) -> Self::Output {
         unimplemented!("validate_fn_param")
     }
+}
+impl Validate<ClassMethod> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::Method>;
 
-    pub fn validate_class_method(&mut self, c: &ClassMethod) -> Result<ty::Method, Error> {
+    fn validate(&mut self, c: &ClassMethod) -> Self::Output {
         let c_span = c.span();
         let key_span = c.key.span();
 
@@ -269,7 +281,9 @@ impl Analyzer<'_, '_> {
 
         unimplemented!("validate_class_method")
     }
+}
 
+impl Analyzer<'_, '_> {
     /// In almost case, this method returns `Ok`.
     pub(super) fn validate_type_of_class(
         &mut self,
