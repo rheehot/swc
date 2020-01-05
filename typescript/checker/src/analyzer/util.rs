@@ -1,7 +1,26 @@
+use super::Analyzer;
+use crate::validator::Validate;
 use std::iter::once;
 use swc_atoms::JsWord;
 use swc_common::{Spanned, Visit};
 use swc_ecma_ast::*;
+
+impl Analyzer<'_, '_> {
+    /// Validates and store errors if required.
+    pub fn check<T, O, E>(&mut self, node: &T) -> Option<<Self as Validate<T>>::Output>
+    where
+        Self: Validate<T, Output = Result<O, E>>,
+    {
+        let res: Result<O, E> = self.validate(node);
+        match res {
+            Ok(v) => Some(v),
+            Err(err) => {
+                self.info.errors.push(err);
+                None
+            }
+        }
+    }
+}
 
 pub trait ResultExt<T, E>: Into<Result<T, E>> {
     fn store<V>(self, to: &mut V) -> Option<T>

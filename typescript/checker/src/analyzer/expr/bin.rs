@@ -17,7 +17,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
             op,
             ref left,
             ref right,
-        } = *expr;
+        } = *e;
 
         let mut errors = vec![];
 
