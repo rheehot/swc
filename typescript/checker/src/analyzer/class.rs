@@ -28,14 +28,6 @@ prevent!(ClassMethod);
 prevent!(TsFnParam);
 prevent!(TsIndexSignature);
 
-impl Validate<TsIndexSignature> for Analyzer<'_, '_> {
-    type Output = ValidationResult<IndexSignature>;
-
-    fn validate(&mut self, s: &TsIndexSignature) -> Self::Output {
-        unimplemented!("validate_ts_index_signature")
-    }
-}
-
 impl Validate<ClassProp> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::ClassProperty>;
 

@@ -1,3 +1,4 @@
+use super::Analyzer;
 use crate::{
     errors::Error,
     ty::{
@@ -6,13 +7,17 @@ use crate::{
         Operator, PropertySignature, TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParam,
         TypeParamDecl, TypeParamInstantiation, Union,
     },
+    validator::Validate,
+    ValidationResult,
 };
 use std::convert::TryFrom;
 use swc_common::Spanned;
 use swc_ecma_ast::*;
 
-impl From<TsTypeParamDecl> for TypeParamDecl {
-    fn from(decl: TsTypeParamDecl) -> Self {
+impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
+    type Output = ValidationResult<TypeParamDecl>;
+
+    fn validate(&mut self, decl: &TsTypeParamDecl) -> Self::Output {
         TypeParamDecl {
             span: decl.span,
             params: decl.params.into_iter().map(From::from).collect(),
@@ -20,8 +25,10 @@ impl From<TsTypeParamDecl> for TypeParamDecl {
     }
 }
 
-impl From<TsTypeParam> for TypeParam {
-    fn from(p: TsTypeParam) -> Self {
+impl Validate<TsTypeParam> for Analyzer<'_, '_> {
+    type Output = ValidationResult<TypeParam>;
+
+    fn validate(&mut self, p: &TsTypeParam) -> Self::Output {
         TypeParam {
             span: p.span,
             name: p.name.sym,
@@ -31,25 +38,19 @@ impl From<TsTypeParam> for TypeParam {
     }
 }
 
-impl From<TsTypeAnn> for Type {
+impl Validate<TsTypeAnn> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
+
     #[inline]
-    fn from(ann: TsTypeAnn) -> Self {
+    fn validate(&mut self, ann: &TsTypeAnn) -> Self::Output {
         ann.type_ann.into()
     }
 }
 
-impl<T> From<Box<T>> for Type
-where
-    T: Into<Self>,
-{
-    #[inline]
-    fn from(ty: Box<T>) -> Self {
-        (*ty).into()
-    }
-}
+impl Validate<TsTypeAliasDecl> for Analyzer<'_, '_> {
+    type Output = ValidationResult<Alias>;
 
-impl From<TsTypeAliasDecl> for Alias {
-    fn from(d: TsTypeAliasDecl) -> Self {
+    fn validate(&mut self, d: &TsTypeAliasDecl) -> Self::Output {
         Alias {
             span: d.span,
             ty: box d.type_ann,
@@ -58,8 +59,10 @@ impl From<TsTypeAliasDecl> for Alias {
     }
 }
 
-impl From<TsInterfaceDecl> for Interface {
-    fn from(d: TsInterfaceDecl) -> Self {
+impl Validate<TsInterfaceDecl> for Analyzer<'_, '_> {
+    type Output = ValidationResult<Interface>;
+
+    fn validate(&mut self, d: &TsInterfaceDecl) -> Self::Output {
         Interface {
             span: d.span,
             name: d.id.sym,
@@ -70,14 +73,10 @@ impl From<TsInterfaceDecl> for Interface {
     }
 }
 
-impl From<TsInterfaceDecl> for Type {
-    fn from(d: TsInterfaceDecl) -> Self {
-        Type::Interface(d.into())
-    }
-}
+impl Validate<TsType> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
 
-impl From<TsType> for Type {
-    fn from(ty: TsType) -> Self {
+    fn validate(&mut self, ty: &TsType) -> Self::Output {
         match ty {
             TsType::TsThisType(this) => this.into(),
             TsType::TsLitType(ty) => ty.into(),
@@ -133,14 +132,10 @@ impl From<TsType> for Type {
     }
 }
 
-impl From<TsTypeAliasDecl> for Type {
-    fn from(decl: TsTypeAliasDecl) -> Self {
-        Type::Alias(decl.into())
-    }
-}
+impl Validate<TsTypeLit> for Analyzer<'_, '_> {
+    type Output = ValidationResult<TypeLit>;
 
-impl From<TsTypeLit> for TypeLit {
-    fn from(lit: TsTypeLit) -> Self {
+    fn validate(&mut self, lit: &TsTypeLit) -> Self::Output {
         TypeLit {
             span: lit.span,
             members: lit.members.into_iter().map(From::from).collect(),
@@ -148,8 +143,10 @@ impl From<TsTypeLit> for TypeLit {
     }
 }
 
-impl From<TsTypeElement> for TypeElement {
-    fn from(e: TsTypeElement) -> Self {
+impl Validate<TsTypeElement> for Analyzer<'_, '_> {
+    type Output = ValidationResult<TypeElement>;
+
+    fn validate(&mut self, e: &TsTypeElement) -> Self::Output {
         match e {
             TsTypeElement::TsCallSignatureDecl(d) => TypeElement::Call(d.into()),
             TsTypeElement::TsConstructSignatureDecl(d) => TypeElement::Constructor(d.into()),
@@ -160,8 +157,10 @@ impl From<TsTypeElement> for TypeElement {
     }
 }
 
-impl From<TsConstructSignatureDecl> for ConstructorSignature {
-    fn from(d: TsConstructSignatureDecl) -> Self {
+impl Validate<TsConstructSignatureDecl> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ConstructorSignature>;
+
+    fn validate(&mut self, d: &TsConstructSignatureDecl) -> Self::Output {
         ConstructorSignature {
             span: d.span,
             params: d.params,
@@ -171,8 +170,10 @@ impl From<TsConstructSignatureDecl> for ConstructorSignature {
     }
 }
 
-impl From<TsCallSignatureDecl> for CallSignature {
-    fn from(d: TsCallSignatureDecl) -> Self {
+impl Validate<TsCallSignatureDecl> for Analyzer<'_, '_> {
+    type Output = ValidationResult<CallSignature>;
+
+    fn validate(&mut self, d: &TsCallSignatureDecl) -> Self::Output {
         CallSignature {
             span: d.span,
             params: d.params,
@@ -182,8 +183,10 @@ impl From<TsCallSignatureDecl> for CallSignature {
     }
 }
 
-impl From<TsMethodSignature> for MethodSignature {
-    fn from(d: TsMethodSignature) -> Self {
+impl Validate<TsMethodSignature> for Analyzer<'_, '_> {
+    type Output = ValidationResult<MethodSignature>;
+
+    fn validate(&mut self, d: &TsMethodSignature) -> Self::Output {
         MethodSignature {
             span: d.span,
             readonly: d.readonly,
@@ -197,8 +200,10 @@ impl From<TsMethodSignature> for MethodSignature {
     }
 }
 
-impl From<TsIndexSignature> for IndexSignature {
-    fn from(d: TsIndexSignature) -> Self {
+impl Validate<TsIndexSignature> for Analyzer<'_, '_> {
+    type Output = ValidationResult<IndexSignature>;
+
+    fn validate(&mut self, d: &TsIndexSignature) -> Self::Output {
         IndexSignature {
             span: d.span,
             params: d.params,
@@ -208,8 +213,10 @@ impl From<TsIndexSignature> for IndexSignature {
     }
 }
 
-impl From<TsPropertySignature> for PropertySignature {
-    fn from(d: TsPropertySignature) -> Self {
+impl Validate<TsPropertySignature> for Analyzer<'_, '_> {
+    type Output = ValidationResult<PropertySignature>;
+
+    fn validate(&mut self, d: &TsPropertySignature) -> Self::Output {
         PropertySignature {
             span: d.span,
             computed: d.computed,
@@ -223,8 +230,10 @@ impl From<TsPropertySignature> for PropertySignature {
     }
 }
 
-impl From<TsExprWithTypeArgs> for TsExpr {
-    fn from(e: TsExprWithTypeArgs) -> Self {
+impl Validate<TsExprWithTypeArgs> for Analyzer<'_, '_> {
+    type Output = ValidationResult<TsExpr>;
+
+    fn validate(&mut self, e: &TsExprWithTypeArgs) -> Self::Output {
         TsExpr {
             span: e.span,
             expr: e.expr,
@@ -233,8 +242,10 @@ impl From<TsExprWithTypeArgs> for TsExpr {
     }
 }
 
-impl From<TsTypeParamInstantiation> for TypeParamInstantiation {
-    fn from(i: TsTypeParamInstantiation) -> Self {
+impl Validate<TsTypeParamInstantiation> for Analyzer<'_, '_> {
+    type Output = ValidationResult<TypeParamInstantiation>;
+
+    fn validate(&mut self, i: &TsTypeParamInstantiation) -> Self::Output {
         TypeParamInstantiation {
             span: i.span,
             params: i.params.into_iter().map(|v| v).collect(),
@@ -242,8 +253,10 @@ impl From<TsTypeParamInstantiation> for TypeParamInstantiation {
     }
 }
 
-impl From<TsTupleType> for Tuple {
-    fn from(t: TsTupleType) -> Self {
+impl Validate<TsTupleType> for Analyzer<'_, '_> {
+    type Output = ValidationResult<Tuple>;
+
+    fn validate(&mut self, t: &TsTupleType) -> Self::Output {
         Tuple {
             span: t.span,
             types: t.elem_types.into_iter().map(|v| (*v)).collect(),
@@ -251,8 +264,10 @@ impl From<TsTupleType> for Tuple {
     }
 }
 
-impl From<TsConditionalType> for Conditional {
-    fn from(t: TsConditionalType) -> Self {
+impl Validate<TsConditionalType> for Analyzer<'_, '_> {
+    type Output = ValidationResult<Conditional>;
+
+    fn validate(&mut self, t: &TsConditionalType) -> Self::Output {
         Conditional {
             span: t.span,
             check_type: box t.check_type,
@@ -263,8 +278,10 @@ impl From<TsConditionalType> for Conditional {
     }
 }
 
-impl From<TsMappedType> for Mapped {
-    fn from(ty: TsMappedType) -> Self {
+impl Validate<TsMappedType> for Analyzer<'_, '_> {
+    type Output = ValidationResult<Mapped>;
+
+    fn validate(&mut self, ty: &TsMappedType) -> Self::Output {
         Mapped {
             span: ty.span,
             readonly: ty.readonly,
@@ -275,8 +292,10 @@ impl From<TsMappedType> for Mapped {
     }
 }
 
-impl From<TsTypeOperator> for Operator {
-    fn from(ty: TsTypeOperator) -> Self {
+impl Validate<TsTypeOperator> for Analyzer<'_, '_> {
+    type Output = ValidationResult<Operator>;
+
+    fn validate(&mut self, ty: &TsTypeOperator) -> Self::Output {
         Operator {
             span: ty.span,
             op: ty.op,
