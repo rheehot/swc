@@ -1,14 +1,15 @@
-use super::{control_flow::CondFacts, Analyzer};
+use super::{control_flow::CondFacts, name::Name, Analyzer};
 use crate::{
     errors::Error,
-    ty::Type,
+    ty::{self, Type},
+    util::EqIgnoreNameAndSpan,
     validator::{Validate, ValidateWith},
 };
 use fxhash::FxHashMap;
 use smallvec::SmallVec;
 use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
-use swc_common::{Span, DUMMY_SP};
+use swc_common::{Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[derive(Debug)]
@@ -234,7 +235,7 @@ impl Analyzer<'_, '_> {
     ) -> Result<(), Error> {
         match *pat {
             Pat::Ident(ref i) => {
-                let ty = i.type_ann.validate_with(self)?;
+                let ty = try_opt!(i.type_ann.validate_with(self));
 
                 let name = i.sym.clone();
                 self.scope.declare_var(
@@ -341,6 +342,58 @@ impl Analyzer<'_, '_> {
             }
 
             scope = s.parent;
+        }
+
+        None
+    }
+
+    pub(super) fn find_var_type(&self, name: &JsWord) -> Option<&Type> {
+        // println!("({}) find_var_type({})", self.scope.depth(), name);
+        let mut scope = Some(&self.scope);
+        while let Some(s) = scope {
+            if let Some(ref v) = s.facts.vars.get(&Name::from(name)) {
+                println!(
+                    "({}) find_var_type({}): Handled from facts",
+                    self.scope.depth(),
+                    name
+                );
+                return Some(v);
+            }
+
+            scope = s.parent;
+        }
+
+        if let Some(var) = self.find_var(name) {
+            println!(
+                "({}) find_var_type({}): Handled from scope.find_var",
+                self.scope.depth(),
+                name
+            );
+
+            let name = Name::from(name);
+
+            let ty = match var.ty {
+                Some(ref ty) => ty,
+                _ => return None,
+            };
+
+            if let Some(ref excludes) = self.scope.facts.excludes.get(&name) {
+                match *ty.normalize_mut() {
+                    Type::Union(ty::Union { ref mut types, .. }) => {
+                        for ty in types {
+                            let span = ty.span();
+                            for excluded_ty in excludes.iter() {
+                                if ty.eq_ignore_name_and_span(excluded_ty) {
+                                    *ty = Type::never(span)
+                                }
+                            }
+                        }
+                    }
+                    _ => {}
+                }
+            }
+
+            return Some(ty);
         }
 
         None

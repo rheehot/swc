@@ -50,12 +50,15 @@ impl Analyzer<'_, '_> {
     pub fn resolve_parent_interfaces(&mut self, parents: &[TsExprWithTypeArgs]) {
         for parent in parents {
             // Verify parent interface
-            self.type_of_ts_entity_name(
-                parent.span,
-                &parent.expr,
-                try_opt!(parent.type_args.validate_with(self)),
-            )
-            .store(&mut self.info.errors);
+            let res: Result<_, _> = try {
+                self.type_of_ts_entity_name(
+                    parent.span,
+                    &parent.expr,
+                    try_opt!(parent.type_args.validate_with(self)),
+                );
+            };
+
+            res.store(&mut self.info.errors);
         }
     }
 }

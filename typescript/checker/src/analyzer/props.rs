@@ -3,7 +3,6 @@ use crate::{
     analyzer::{expr::TypeOfMode, util::ResultExt},
     errors::Error,
     ty::{MethodSignature, PropertySignature, Type, TypeElement},
-    util::pat_to_ts_fn_param,
     validator::{Validate, ValidateWith},
     ValidationResult,
 };

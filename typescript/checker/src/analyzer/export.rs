@@ -161,14 +161,14 @@ impl Visit<ExportDefaultDecl> for Analyzer<'_> {
                     .as_ref()
                     .map(|v| v.sym.clone())
                     .unwrap_or(js_word!("default"));
-                let fn_ty = match self.type_of_fn(&f.function) {
+                let fn_ty = match f.function.validate_with(self) {
                     Ok(ty) => ty,
                     Err(err) => {
                         self.info.errors.push(err);
                         return;
                     }
                 };
-                self.scope.register_type(i.clone(), fn_ty);
+                self.scope.register_type(i.clone(), fn_ty.into());
                 self.export(f.span(), js_word!("default"), Some(i))
             }
             DefaultDecl::Class(..) => unimplemented!("export default class"),
