@@ -161,7 +161,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                         _ => unreachable!(),
                                     };
 
-                                    let mut analyzer = Analyzer::for_builtin(&ls, &Noop);
+                                    let mut analyzer = Analyzer::for_builtin();
 
                                     m.body.visit_with(&mut analyzer);
 
