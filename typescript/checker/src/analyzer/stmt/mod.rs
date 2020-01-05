@@ -37,12 +37,12 @@ impl Visit<TsInterfaceDecl> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    pub(super) fn visit_stmts_for_return(&mut self, stmts: &[Stmt]) -> Result<Option<Type>, Error> {
+    pub fn visit_stmts_for_return(&mut self, stmts: &[Stmt]) -> Result<Option<Type>, Error> {
         unimplemented!("visit_stmts_for_return")
     }
 
     /// Validate that parent interfaces are all resolved.
-    pub(super) fn resolve_parent_interfaces(&mut self, parents: &[TsExprWithTypeArgs]) {
+    pub fn resolve_parent_interfaces(&mut self, parents: &[TsExprWithTypeArgs]) {
         for parent in parents {
             // Verify parent interface
             let res =

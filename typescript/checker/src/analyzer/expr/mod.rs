@@ -17,7 +17,7 @@ mod type_cast;
 mod unary;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(super) enum TypeOfMode {
+pub enum TypeOfMode {
     /// Used for l-values.
     ///
     /// This is used to allow
@@ -40,7 +40,7 @@ impl Validate<Expr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
     fn validate(&mut self, e: &Expr) -> Self::Output {
-        self.validate_with_extra(e, TypeOfMode::RValue, None)
+        self.validate_expr(e, TypeOfMode::RValue, None)
     }
 }
 
@@ -97,7 +97,7 @@ impl Validate<UpdateExpr> for Analyzer<'_, '_> {
         let span = e.span;
 
         let res = self
-            .validate_with_extra(&e.arg, TypeOfMode::LValue, None)
+            .validate_expr(&e.arg, TypeOfMode::LValue, None)
             .and_then(|ty| self.expand_type(span, ty))
             .and_then(|ty| match *ty.normalize() {
                 Type::Keyword(TsKeywordType {
@@ -156,7 +156,7 @@ impl Validate<SeqExpr> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    pub(super) fn visit_expr_with_extra(
+    pub fn validate_expr(
         &mut self,
         e: &Expr,
         mode: TypeOfMode,
@@ -371,7 +371,7 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    pub(super) fn type_of_ident(&mut self, i: &Ident, type_mode: TypeOfMode) -> ValidationResult {
+    pub fn type_of_ident(&mut self, i: &Ident, type_mode: TypeOfMode) -> ValidationResult {
         let span = i.span();
 
         match i.sym {
@@ -458,7 +458,7 @@ impl Analyzer<'_, '_> {
         return Err(Error::UndefinedSymbol { span: i.span });
     }
 
-    pub(super) fn type_of_ts_entity_name(
+    pub fn type_of_ts_entity_name(
         &self,
         span: Span,
         n: &TsEntityName,

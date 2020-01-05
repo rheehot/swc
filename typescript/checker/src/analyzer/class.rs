@@ -431,7 +431,7 @@ impl Analyzer<'_, '_> {
             body: c
                 .body
                 .iter()
-                .filter_map(|m| self.visit_class_member(m))
+                .filter_map(|m| self.validate(m))
                 .collect::<Result<_, _>>()?,
         })
     }
@@ -584,7 +584,7 @@ impl Analyzer<'_, '_> {
                     .super_type_params
                     .as_ref()
                     .map(|i| self.visit_ts_type_param_instantiation(i));
-                let super_ty = self.validate_with_extra(
+                let super_ty = self.validate_expr(
                     &super_class,
                     TypeOfMode::RValue,
                     match type_args {
