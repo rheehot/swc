@@ -56,7 +56,7 @@ mod util;
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-pub type ValidationResult = Result<Type>;
+pub type ValidationResult<T = Type> = Result<T>;
 
 #[derive(Debug)]
 pub struct Config {

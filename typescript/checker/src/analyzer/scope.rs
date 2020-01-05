@@ -272,7 +272,7 @@ impl Analyzer<'_, '_> {
                 return Ok(());
             }
             Pat::Assign(ref p) => {
-                let ty = self.validate_expr(&p.right)?;
+                let ty = self.visit_expr(&p.right)?;
                 println!(
                     "({}) declare_vars({:?}), ty = {:?}",
                     self.scope.depth(),

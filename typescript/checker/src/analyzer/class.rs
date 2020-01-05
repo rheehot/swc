@@ -4,12 +4,20 @@ use super::{
     util::{is_prop_name_eq, VarVisitor},
     Analyzer,
 };
-use crate::{analyzer::util::ResultExt, errors::Error, swc_common::VisitWith, ty, ty::Type};
+use crate::{
+    analyzer::util::ResultExt,
+    errors::Error,
+    swc_common::VisitWith,
+    ty,
+    ty::{IndexSignature, Type},
+    ValidationResult,
+};
 use std::mem::replace;
 use swc_atoms::js_word;
 use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, DUMMY_SP};
 use swc_common::{util::move_map::MoveMap, Span, Spanned, Visit, DUMMY_SP};
 use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, Visit, DUMMY_SP};
+use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
@@ -18,9 +26,10 @@ prevent!(ClassProp);
 prevent!(Constructor);
 prevent!(ClassMethod);
 prevent!(TsFnParam);
+prevent!(TsIndexSignature);
 
 impl Analyzer<'_, '_> {
-    pub fn validate_class_property(&mut self, p: &ClassProp) -> Result<ty::ClassProperty, Error> {
+    pub fn visit_class_property(&mut self, p: &ClassProp) -> ValidationResult<ty::ClassProperty> {
         p.visit_children(self);
 
         let mut errors = vec![];
@@ -40,7 +49,7 @@ impl Analyzer<'_, '_> {
         let value = p
             .value
             .as_ref()
-            .and_then(|e| self.validate_expr(&e).store(&mut errors));
+            .and_then(|e| self.visit_expr(&e).store(&mut errors));
 
         self.info.errors.extend(errors);
 
@@ -58,7 +67,7 @@ impl Analyzer<'_, '_> {
         })
     }
 
-    pub fn validate_constructor(&mut self, c: &Constructor) -> Result<ty::Constructor, Error> {
+    pub fn visit_constructor(&mut self, c: &Constructor) -> Result<ty::Constructor, Error> {
         let c_span = c.span();
 
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
@@ -169,7 +178,9 @@ impl Analyzer<'_, '_> {
         })
     }
 
-    pub fn validate_fn_param(&mut self, p: &TsFnParam) -> Result<ty::FnParam, Error> {}
+    pub fn validate_fn_param(&mut self, p: &TsFnParam) -> Result<ty::FnParam, Error> {
+        unimplemented!("validate_fn_param")
+    }
 
     pub fn validate_class_method(&mut self, c: &ClassMethod) -> Result<ty::Method, Error> {
         let c_span = c.span();
@@ -247,14 +258,182 @@ impl Analyzer<'_, '_> {
             }
         }
 
-        Ok(ty::Method {})
+        unimplemented!("validate_class_method")
+    }
+
+    /// In almost case, this method returns `Ok`.
+    pub(super) fn validate_type_of_class(
+        &mut self,
+        name: Option<JsWord>,
+        c: &swc_ecma_ast::Class,
+    ) -> ValidationResult<ty::Class> {
+        for m in c.body.iter() {
+            match *m {
+                swc_ecma_ast::ClassMember::ClassProp(ref prop) => match prop.type_ann {
+                    Some(ref ty) => {
+                        let ty = Type::from(ty.clone());
+                        if ty.is_any() || ty.is_unknown() {
+                        } else {
+                            if prop.value.is_none() {
+                                // TODO: Uncomment this after implementing a
+                                // constructor checker.
+                                // self.info
+                                //     .errors
+                                //     .push(Error::ClassPropertyInitRequired {
+                                // span })
+                            }
+                        }
+                    }
+                    None => {}
+                },
+                _ => {}
+            }
+        }
+
+        self.type_of_class(name, c)
+    }
+
+    fn type_of_class(
+        &mut self,
+        name: Option<JsWord>,
+        c: &swc_ecma_ast::Class,
+    ) -> ValidationResult<ty::Class> {
+        // let mut type_props = vec![];
+        // for member in &c.body {
+        //     let span = member.span();
+        //     let any = any(span);
+
+        //     match member {
+        //         ClassMember::ClassProp(ref p) => {
+        //             let ty = match p.type_ann.as_ref().map(|ty|
+        // Type::from(&*ty.type_ann)) {                 Some(ty) => ty,
+        //                 None => match p.value {
+        //                     Some(ref e) => self.type_of(&e)?,
+        //                     None => any,
+        //                 },
+        //             };
+
+        //
+        // type_props.push(TypeElement::TsPropertySignature(TsPropertySignature {
+        //                 span,
+        //                 key: p.key.clone(),
+        //                 optional: p.is_optional,
+        //                 readonly: p.readonly,
+        //                 init: p.value.clone(),
+        //                 type_ann: Some(TsTypeAnn {
+        //                     span: ty.span(),
+        //                     type_ann: box ty.into_owned(),
+        //                 }),
+
+        //                 // TODO:
+        //                 computed: false,
+
+        //                 // TODO:
+        //                 params: Default::default(),
+
+        //                 // TODO:
+        //                 type_params: Default::default(),
+        //             }));
+        //         }
+
+        //         // TODO:
+        //         ClassMember::Constructor(ref c) => {
+        //             type_props.push(TypeElement::TsConstructSignatureDecl(
+        //                 TsConstructSignatureDecl {
+        //                     span,
+
+        //                     // TODO:
+        //                     type_ann: None,
+
+        //                     params: c
+        //                         .params
+        //                         .iter()
+        //                         .map(|param| match *param {
+        //                             PatOrTsParamProp::Pat(ref pat) => {
+        //                                 pat_to_ts_fn_param(pat.clone())
+        //                             }
+        //                             PatOrTsParamProp::TsParamProp(ref prop) => match
+        // prop.param {
+        // TsParamPropParam::Ident(ref i) => {
+        // TsFnParam::Ident(i.clone())                                 }
+        //                                 TsParamPropParam::Assign(AssignPat {
+        //                                     ref left, ..
+        //                                 }) => pat_to_ts_fn_param(*left.clone()),
+        //                             },
+        //                         })
+        //                         .collect(),
+
+        //                     // TODO:
+        //                     type_params: Default::default(),
+        //                 },
+        //             ));
+        //         }
+
+        //         // TODO:
+        //         ClassMember::Method(..) => {}
+
+        //         // TODO:
+        //         ClassMember::TsIndexSignature(..) => {}
+
+        //         ClassMember::PrivateMethod(..) | ClassMember::PrivateProp(..) => {}
+        //     }
+        // }
+
+        let super_class = match c.super_class {
+            Some(ref expr) => Some(box self.visit_expr(&expr)?),
+            None => None,
+        };
+
+        // TODO: Check for implements
+
+        Ok(ty::Class {
+            span: c.span,
+            name,
+            is_abstract: c.is_abstract,
+            super_class,
+            type_params: c.clone().type_params.map(From::from),
+            body: c
+                .body
+                .iter()
+                .filter_map(|m| self.visit_class_member(m))
+                .collect::<Result<_, _>>()?,
+        })
+    }
+
+    pub fn visit_class_member(
+        &mut self,
+        m: &ClassMember,
+    ) -> Option<ValidationResult<ty::ClassMember>> {
+        match m {
+            swc_ecma_ast::ClassMember::Constructor(v) => {
+                Some(self.visit_constructor(&v).map(From::from))
+            }
+            swc_ecma_ast::ClassMember::Method(v) => {
+                Some(self.visit_class_method(&v).map(From::from))
+            }
+            swc_ecma_ast::ClassMember::PrivateMethod(_) => None,
+            swc_ecma_ast::ClassMember::ClassProp(v) => {
+                Some(self.visit_class_property(&v).map(From::from))
+            }
+            swc_ecma_ast::ClassMember::PrivateProp(_) => None,
+            swc_ecma_ast::ClassMember::TsIndexSignature(v) => {
+                Some(self.validate_ts_index_signature(&v).map(From::from))
+            }
+        }
+    }
+
+    pub fn validate_ts_index_signature(
+        &mut self,
+        s: &TsIndexSignature,
+    ) -> ValidationResult<IndexSignature> {
+        unimplemented!("validate_ts_index_signature")
     }
 
     fn validate_class_members(
         &mut self,
         c: &Class,
         declare: bool,
-    ) -> Result<Vec<ty::ClassMember>, Error> {
+    ) -> ValidationResult<Vec<ty::ClassMember>> {
         // Report errors for code like
         //
         //      class C {
@@ -356,7 +535,7 @@ impl Analyzer<'_, '_> {
             _ => false,
         };
 
-        let ty = match self.validate_expr(&key) {
+        let ty = match self.visit_expr(&key) {
             Ok(ty) => ty,
             Err(err) => {
                 match err {
@@ -398,7 +577,7 @@ impl Analyzer<'_, '_> {
                     .super_type_params
                     .as_ref()
                     .map(|i| self.visit_ts_type_param_instantiation(i));
-                let super_ty = self.validate_expr_with_extra(
+                let super_ty = self.visit_expr_with_extra(
                     &super_class,
                     TypeOfMode::RValue,
                     match type_args {

@@ -211,10 +211,10 @@ impl Visit<IfStmt> for Analyzer<'_, '_> {
 impl Analyzer<'_, '_> {
     #[validator]
     fn check_switch_discriminant(&mut self, s: &SwitchStmt) {
-        let discriminant_ty = self.validate_expr(&s.discriminant)?;
+        let discriminant_ty = self.visit_expr(&s.discriminant)?;
         for case in &s.cases {
             if let Some(ref test) = case.test {
-                let case_ty = self.validate_expr(&test)?;
+                let case_ty = self.visit_expr(&test)?;
                 self.assign(&case_ty, &discriminant_ty, test.span())?
             }
         }
@@ -312,7 +312,7 @@ impl Analyzer<'_, '_> {
         let res: Result<(), Error> = try {
             match *lhs {
                 PatOrExpr::Expr(ref expr) | PatOrExpr::Pat(box Pat::Expr(ref expr)) => {
-                    let lhs_ty = self.validate_expr_with_extra(expr, TypeOfMode::LValue, None)?;
+                    let lhs_ty = self.visit_expr_with_extra(expr, TypeOfMode::LValue, None)?;
 
                     self.assign(&lhs_ty, &ty, span)?;
 
@@ -467,7 +467,7 @@ impl Analyzer<'_, '_> {
             | Expr::JSXEmpty(..) => return Ok(()),
 
             Expr::Call(..) => {
-                let ty = self.validate_expr(&test)?;
+                let ty = self.visit_expr(&test)?;
                 match *ty.normalize() {
                     Type::Simple(ref sty) => match **sty {
                         TsType::TsTypePredicate(ref pred) => {
@@ -504,7 +504,7 @@ impl Analyzer<'_, '_> {
             Expr::Paren(ParenExpr { ref expr, .. }) => self.detect_facts(expr, facts)?,
 
             Expr::Ident(ref i) => {
-                let ty = self.validate_expr(test)?;
+                let ty = self.visit_expr(test)?;
                 self.add_true_false(facts, &i.sym, &ty);
             }
 
@@ -540,8 +540,8 @@ impl Analyzer<'_, '_> {
                 ref right,
                 ..
             }) => {
-                let l_ty = self.validate_expr(left)?;
-                let r_ty = self.validate_expr(right)?;
+                let l_ty = self.visit_expr(left)?;
+                let r_ty = self.visit_expr(right)?;
 
                 match op {
                     op!("===") | op!("!==") | op!("==") | op!("!=") => {
@@ -672,15 +672,15 @@ impl Analyzer<'_, '_> {
         let mut facts = Default::default();
         self.detect_facts(&e.test, &mut facts)?;
 
-        self.validate_expr(&test)?;
+        self.visit_expr(&test)?;
         let cons = self
             .with_child(ScopeKind::Flow, facts.true_facts, |child| {
-                child.validate_expr(&cons)
+                child.visit_expr(&cons)
             })?
             .into_owned();
         let alt = self
             .with_child(ScopeKind::Flow, facts.false_facts, |child| {
-                child.validate_expr(&alt)
+                child.visit_expr(&alt)
             })?
             .into_owned();
 

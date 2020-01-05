@@ -38,16 +38,16 @@ prevent!(Expr);
 prevent!(ParenExpr);
 
 impl Analyzer<'_, '_> {
-    pub(super) fn validate_expr(&mut self, e: &Expr) -> ValidationResult {
-        self.validate_expr_with_extra(e, TypeOfMode::RValue, None)
+    pub(super) fn visit_expr(&mut self, e: &Expr) -> ValidationResult {
+        self.visit_expr_with_extra(e, TypeOfMode::RValue, None)
     }
 
-    pub(super) fn validate_expr_with_extra(
+    pub(super) fn visit_expr_with_extra(
         &mut self,
         e: &Expr,
         mode: TypeOfMode,
         type_args: Option<TypeParamInstantiation>,
-    ) -> Result<Type, Error> {
+    ) -> ValidationResult<Type> {
         let span = e.span();
 
         match e {
@@ -83,7 +83,7 @@ impl Analyzer<'_, '_> {
                             spread: None,
                             ref expr,
                         }) => {
-                            let ty = self.validate_expr(expr)?;
+                            let ty = self.visit_expr(expr)?;
                             types.push(ty)
                         }
                         Some(ExprOrSpread {
@@ -136,7 +136,7 @@ impl Analyzer<'_, '_> {
                 }));
             }
 
-            Expr::Paren(ParenExpr { ref expr, .. }) => self.validate_expr(&expr),
+            Expr::Paren(ParenExpr { ref expr, .. }) => self.visit_expr(&expr),
 
             Expr::Tpl(ref t) => {
                 // Check if tpl is constant. If it is, it's type is string literal.
@@ -161,7 +161,7 @@ impl Analyzer<'_, '_> {
             Expr::Bin(ref expr) => self.type_of_bin_expr(&expr),
 
             Expr::TsNonNull(TsNonNullExpr { ref expr, .. }) => {
-                let expr = self.validate_expr(&expr)?;
+                let expr = self.visit_expr(&expr)?;
 
                 Ok(expr.remove_falsy())
             }
@@ -176,7 +176,7 @@ impl Analyzer<'_, '_> {
                             members.push(self.type_of_prop(&prop)?);
                         }
                         PropOrSpread::Spread(SpreadElement { ref expr, .. }) => {
-                            match self.validate_expr(&expr)?.into_owned() {
+                            match self.visit_expr(&expr)?.into_owned() {
                                 Type::TypeLit(TypeLit {
                                     members: spread_members,
                                     ..
@@ -257,7 +257,7 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    fn validate_assign_expr(&mut self, e: &AssignExpr) -> ValidationResult {
+    fn visit_assign_expr(&mut self, e: &AssignExpr) -> ValidationResult {
         match e.left {
             PatOrExpr::Pat(box Pat::Ident(ref i)) | PatOrExpr::Expr(box Expr::Ident(ref i)) => {
                 // Type is any if self.declaring contains ident
@@ -269,7 +269,7 @@ impl Analyzer<'_, '_> {
         e.visit_children(self);
 
         let rhs_ty = match self
-            .validate_expr(&e.right)
+            .visit_expr(&e.right)
             .and_then(|ty| self.expand_type(span, ty))
         {
             Ok(rhs_ty) => {
@@ -303,7 +303,7 @@ impl Analyzer<'_, '_> {
         let span = e.span;
 
         let res = self
-            .validate_expr_with_extra(&e.arg, TypeOfMode::LValue, None)
+            .visit_expr_with_extra(&e.arg, TypeOfMode::LValue, None)
             .and_then(|ty| self.expand_type(span, ty))
             .and_then(|ty| match *ty.normalize() {
                 Type::Keyword(TsKeywordType {
@@ -341,7 +341,7 @@ impl Analyzer<'_, '_> {
                 }
                 _ => {}
             }
-            match self.validate_expr(e) {
+            match self.visit_expr(e) {
                 Ok(..) => {}
                 Err(Error::ReferencedInInit { .. }) => {
                     is_any = true;
@@ -353,7 +353,7 @@ impl Analyzer<'_, '_> {
             return Ok(Type::any(span).owned());
         }
 
-        return self.validate_expr(&exprs.last().unwrap());
+        return self.visit_expr(&exprs.last().unwrap());
     }
 
     pub(super) fn type_of_ident(&mut self, i: &Ident, type_mode: TypeOfMode) -> ValidationResult {

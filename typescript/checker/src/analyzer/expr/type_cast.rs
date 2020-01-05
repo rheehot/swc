@@ -7,16 +7,16 @@ prevent!(TsTypeAssertion);
 prevent!(TsAsExpr);
 
 impl Analyzer<'_, '_> {
-    pub(super) fn validate_ts_type_assertion(&mut self, e: &TsTypeAssertion) -> ValidationResult {
-        let orig_ty = self.validate_expr(&e.expr)?;
+    pub(super) fn visit_ts_type_assertion(&mut self, e: &TsTypeAssertion) -> ValidationResult {
+        let orig_ty = self.visit_expr(&e.expr)?;
 
-        self.validate_type_cast(e.span, &orig_ty, &e.type_ann)
+        self.visit_type_cast(e.span, &orig_ty, &e.type_ann)
     }
 
-    pub(super) fn validate_ts_as_expr(&mut self, e: &TsAsExpr) -> ValidationResult {
-        let orig_ty = self.validate_expr(&e.expr)?;
+    pub(super) fn visit_ts_as_expr(&mut self, e: &TsAsExpr) -> ValidationResult {
+        let orig_ty = self.visit_expr(&e.expr)?;
 
-        self.validate_type_cast(e.span, &orig_ty, &e.type_ann)
+        self.visit_type_cast(e.span, &orig_ty, &e.type_ann)
     }
 
     /// ```ts

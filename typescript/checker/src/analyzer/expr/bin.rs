@@ -224,7 +224,7 @@ impl Analyzer<'_, '_> {
         self.info.errors.extend(errors);
     }
 
-    pub(super) fn validate_bin_expr(&mut self, expr: &BinExpr) -> ValidationResult {
+    pub fn visit_bin_expr(&mut self, expr: &BinExpr) -> ValidationResult {
         let BinExpr {
             span,
             op,
@@ -234,8 +234,8 @@ impl Analyzer<'_, '_> {
 
         let mut errors = vec![];
 
-        let lt = self.validate_expr(&left).store(&mut errors);
-        let rt = self.validate_expr(&right).store(&mut errors);
+        let lt = self.visit_expr(&left).store(&mut errors);
+        let rt = self.visit_expr(&right).store(&mut errors);
 
         self.validate_bin_inner(span, op, lt, rt);
 

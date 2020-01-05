@@ -151,6 +151,6 @@ impl Load for NoopLoader {
 /// Done
 impl Visit<Decorator> for Analyzer<'_, '_> {
     fn visit(&mut self, d: &Decorator) {
-        self.validate_expr(&d.expr).store(&mut self.info.errors);
+        self.visit_expr(&d.expr).store(&mut self.info.errors);
     }
 }

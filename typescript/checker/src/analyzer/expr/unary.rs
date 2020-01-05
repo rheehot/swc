@@ -51,7 +51,7 @@ impl Analyzer<'_, '_> {
 
         let mut errors = vec![];
 
-        let arg = self.validate_expr(&arg).store(&mut errors);
+        let arg = self.visit_expr(&arg).store(&mut errors);
 
         self.info.errors.extend(errors.drain(..));
 
@@ -81,7 +81,7 @@ impl Analyzer<'_, '_> {
             _ => {}
         }
 
-        let arg_ty = self.validate_expr(arg)?;
+        let arg_ty = self.visit_expr(arg)?;
         match *arg_ty {
             Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsUnknownKeyword,
@@ -91,7 +91,7 @@ impl Analyzer<'_, '_> {
         }
 
         match op {
-            op!("!") => return Ok(negate(self.validate_expr(arg)?.into_owned())),
+            op!("!") => return Ok(negate(self.visit_expr(arg)?.into_owned())),
 
             op!(unary, "-") | op!(unary, "+") => {
                 return Ok(Type::Keyword(TsKeywordType {

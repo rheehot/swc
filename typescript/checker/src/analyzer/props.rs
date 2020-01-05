@@ -47,7 +47,7 @@ impl Analyzer<'_, '_> {
         };
 
         let mut errors = vec![];
-        let ty = match self.validate_expr(&node.expr) {
+        let ty = match self.visit_expr(&node.expr) {
             Ok(ty) => ty,
             Err(err) => {
                 match err {
