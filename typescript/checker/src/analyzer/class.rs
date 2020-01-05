@@ -10,6 +10,7 @@ use crate::{
     swc_common::VisitWith,
     ty,
     ty::{IndexSignature, Type},
+    visit::Validate,
     ValidationResult,
 };
 use std::mem::replace;
@@ -27,6 +28,14 @@ prevent!(Constructor);
 prevent!(ClassMethod);
 prevent!(TsFnParam);
 prevent!(TsIndexSignature);
+
+impl Validate<TsIndexSignature> for Analyzer<'_, '_> {
+    type Output = ValidationResult<IndexSignature>;
+
+    fn validate(&mut self, s: &TsIndexSignature) -> Self::Output {
+        unimplemented!("validate_ts_index_signature")
+    }
+}
 
 impl Analyzer<'_, '_> {
     pub fn visit_class_property(&mut self, p: &ClassProp) -> ValidationResult<ty::ClassProperty> {
@@ -420,13 +429,6 @@ impl Analyzer<'_, '_> {
                 Some(self.validate_ts_index_signature(&v).map(From::from))
             }
         }
-    }
-
-    pub fn validate_ts_index_signature(
-        &mut self,
-        s: &TsIndexSignature,
-    ) -> ValidationResult<IndexSignature> {
-        unimplemented!("validate_ts_index_signature")
     }
 
     fn validate_class_members(

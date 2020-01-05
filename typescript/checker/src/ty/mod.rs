@@ -312,7 +312,7 @@ pub struct Union {
     pub types: Vec<Type>,
 }
 
-#[derive(Debug, Fold, Clone, Spanned)]
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct FnParam {
     pub span: Span,
     pub required: bool,

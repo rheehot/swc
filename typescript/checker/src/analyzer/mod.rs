@@ -7,6 +7,7 @@ use crate::{
     errors::Error,
     loader::Load,
     ty::Type,
+    visit::Validate,
     Exports, ImportInfo, Rule,
 };
 use fxhash::{FxHashMap, FxHashSet};
@@ -57,6 +58,17 @@ pub struct Analyzer<'a, 'b> {
     allow_ref_declaring: bool,
     computed_prop_mode: ComputedPropMode,
     is_builtin: bool,
+}
+
+default impl<T> Validate<T> for Analyzer<'_, '_>
+where
+    Self: Visit<T>,
+{
+    type Output = ();
+
+    fn validate(&mut self, node: &T) -> Self::Output {
+        swc_common::Visit::visit(self, node)
+    }
 }
 
 #[derive(Debug, Clone, Default)]
