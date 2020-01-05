@@ -1,24 +1,34 @@
 use super::{super::Analyzer, instantiate_class};
-use crate::{errors::Error, ty::Type, util::EqIgnoreNameAndSpan, ValidationResult};
+use crate::{
+    errors::Error, ty::Type, util::EqIgnoreNameAndSpan, validator::Validate, ValidationResult,
+};
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
 prevent!(TsTypeAssertion);
 prevent!(TsAsExpr);
 
+impl Validate<TsTypeAssertion> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
+
+    fn validate(&mut self, e: &TsTypeAssertion) -> ValidationResult {
+        let orig_ty = self.visit_expr(&e.expr)?;
+
+        self.visit_type_cast(e.span, &orig_ty, &e.type_ann)
+    }
+}
+
+impl Validate<TsAsExpr> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
+
+    fn validate(&mut self, e: &TsAsExpr) -> ValidationResult {
+        let orig_ty = self.visit_expr(&e.expr)?;
+
+        self.visit_type_cast(e.span, &orig_ty, &e.type_ann)
+    }
+}
+
 impl Analyzer<'_, '_> {
-    pub(super) fn visit_ts_type_assertion(&mut self, e: &TsTypeAssertion) -> ValidationResult {
-        let orig_ty = self.visit_expr(&e.expr)?;
-
-        self.visit_type_cast(e.span, &orig_ty, &e.type_ann)
-    }
-
-    pub(super) fn visit_ts_as_expr(&mut self, e: &TsAsExpr) -> ValidationResult {
-        let orig_ty = self.visit_expr(&e.expr)?;
-
-        self.visit_type_cast(e.span, &orig_ty, &e.type_ann)
-    }
-
     /// ```ts
     /// var unionTuple3: [number, string | number] = [10, "foo"];
     /// var unionTuple4 = <[number, number]>unionTuple3;

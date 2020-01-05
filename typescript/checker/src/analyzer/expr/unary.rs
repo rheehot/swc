@@ -1,52 +1,17 @@
 use super::super::Analyzer;
-use crate::{analyzer::util::ResultExt, errors::Error, ty::Type, ValidationResult};
+use crate::{
+    analyzer::util::ResultExt, errors::Error, ty::Type, validator::Validate, ValidationResult,
+};
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
 prevent!(UnaryExpr);
 
-impl Analyzer<'_, '_> {
-    fn validate_unary_expr_inner(&mut self, span: Span, op: UnaryOp, arg: &Type) {
-        let mut errors = vec![];
+impl Validate<UnaryExpr> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
 
-        match op {
-            op!("typeof") | op!("delete") | op!("void") => match arg.normalize() {
-                Type::EnumVariant(..) if op == op!("delete") => {
-                    errors.push(Error::TS2704 { span: arg.span() })
-                }
-
-                _ => {}
-            },
-
-            op!("~") | op!(unary, "-") | op!(unary, "+") => match arg.normalize() {
-                Type::Keyword(TsKeywordType {
-                    kind: TsKeywordTypeKind::TsNumberKeyword,
-                    ..
-                }) => {}
-
-                Type::Keyword(TsKeywordType {
-                    kind: TsKeywordTypeKind::TsNullKeyword,
-                    ..
-                }) => errors.push(Error::TS2531 { span: arg.span() }),
-
-                Type::Keyword(TsKeywordType {
-                    kind: TsKeywordTypeKind::TsUndefinedKeyword,
-                    ..
-                }) => errors.push(Error::TS2532 { span: arg.span() }),
-
-                _ => {
-                    //
-                }
-            },
-
-            _ => {}
-        }
-
-        self.info.errors.extend(errors);
-    }
-
-    pub(super) fn validate_unary_expr(&mut self, e: &UnaryExpr) -> ValidationResult {
+    fn validate(&mut self, e: &UnaryExpr) -> Self::Output {
         let UnaryExpr { span, op, ref arg } = *e;
 
         let mut errors = vec![];
@@ -111,6 +76,47 @@ impl Analyzer<'_, '_> {
 
             op!("typeof") | op!("delete") | op!("void") => unreachable!(),
         }
+    }
+}
+
+impl Analyzer<'_, '_> {
+    fn validate_unary_expr_inner(&mut self, span: Span, op: UnaryOp, arg: &Type) {
+        let mut errors = vec![];
+
+        match op {
+            op!("typeof") | op!("delete") | op!("void") => match arg.normalize() {
+                Type::EnumVariant(..) if op == op!("delete") => {
+                    errors.push(Error::TS2704 { span: arg.span() })
+                }
+
+                _ => {}
+            },
+
+            op!("~") | op!(unary, "-") | op!(unary, "+") => match arg.normalize() {
+                Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsNumberKeyword,
+                    ..
+                }) => {}
+
+                Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsNullKeyword,
+                    ..
+                }) => errors.push(Error::TS2531 { span: arg.span() }),
+
+                Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                    ..
+                }) => errors.push(Error::TS2532 { span: arg.span() }),
+
+                _ => {
+                    //
+                }
+            },
+
+            _ => {}
+        }
+
+        self.info.errors.extend(errors);
     }
 }
 
