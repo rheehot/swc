@@ -116,10 +116,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                             left: box Pat::Ident(ref i),
                             ..
                         }) => {
-                            let ty = match i.type_ann {
-                                Some(ref ty) => Some(self.validate(ty)?),
-                                None => None,
-                            };
+                            let ty = try_opt!(self.validate(&i.type_ann));
                             //let ty = match ty {
                             //    Some(ty) => match child.expand_type(i.span, ty) {
                             //        Ok(ty) => Some(ty),
@@ -175,7 +172,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                         | PatOrTsParamProp::Pat(pat) => from_pat(pat),
                     })
                     .map(|param| self.validate(&param))
-                    .collect::<Result<_, _>>()?,
+                    .collects::<Result<_, _>>()?,
             })
         })
     }
@@ -301,7 +298,7 @@ impl Analyzer<'_, '_> {
             match *m {
                 swc_ecma_ast::ClassMember::ClassProp(ref prop) => match prop.type_ann {
                     Some(ref ty) => {
-                        let ty = Type::from(ty.clone());
+                        let ty = self.validate(ty)?;
                         if ty.is_any() || ty.is_unknown() {
                         } else {
                             if prop.value.is_none() {
@@ -421,7 +418,7 @@ impl Analyzer<'_, '_> {
             name,
             is_abstract: c.is_abstract,
             super_class,
-            type_params: c.clone().type_params.map(From::from),
+            type_params: try_opt!(self.validate(&c.type_params)),
             body: c
                 .body
                 .iter()
@@ -578,14 +575,8 @@ impl Analyzer<'_, '_> {
                     .super_type_params
                     .as_ref()
                     .map(|i| self.visit_ts_type_param_instantiation(i));
-                let super_ty = self.validate_expr(
-                    &super_class,
-                    TypeOfMode::RValue,
-                    match type_args {
-                        Some(v) => Some(v?),
-                        None => None,
-                    },
-                )?;
+                let super_ty =
+                    self.validate_expr(&super_class, TypeOfMode::RValue, try_opt!(type_args))?;
 
                 match super_ty.normalize() {
                     Type::Class(sc) => {
