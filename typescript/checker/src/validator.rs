@@ -31,6 +31,18 @@ where
     }
 }
 
+impl<'a, T, V> Validate<&'a T> for V
+where
+    T: VisitWith<Self>,
+    Self: Validate<T>,
+{
+    type Output = <Self as Validate<T>>::Output;
+
+    fn validate(&mut self, node: &&T) -> Self::Output {
+        self.validate(&**node)
+    }
+}
+
 pub trait ValidateWith<V> {
     type Output;
     fn validate_with(&self, v: &mut V) -> Self::Output;

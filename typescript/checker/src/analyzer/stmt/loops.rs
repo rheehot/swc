@@ -3,6 +3,7 @@ use crate::{
     analyzer::expr::TypeOfMode,
     errors::Error,
     ty::{Array, Type},
+    validator::Validate,
 };
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;

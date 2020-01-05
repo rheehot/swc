@@ -7,7 +7,7 @@ use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
     /// Validates and store errors if required.
-    pub fn check<T, O>(&mut self, node: &T) -> Option<<Self as Validate<T>>::Output>
+    pub fn check<T, O>(&mut self, node: &T) -> Option<O>
     where
         Self: Validate<T, Output = Result<O, Error>>,
     {

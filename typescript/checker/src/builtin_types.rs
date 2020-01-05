@@ -143,7 +143,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                                     }
                                                     swc_ecma_ast::ClassMember::TsIndexSignature(
                                                         v,
-                                                    ) => ClassMember::TsIndexSignature(v),
+                                                    ) => ClassMember::IndexSignature(v),
                                                 }
                                             })
                                             .collect(),
