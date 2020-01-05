@@ -72,11 +72,21 @@ impl Output for () {
     fn unit() -> Self {}
 }
 
-//impl Visit<Ident> for Analyzer {
-//    fn visit(&mut self, node: &Ident) {
-//        println!("Visit<Ident>");
-//    }
-//}
+impl Visit<Box<Expr>> for Analyzer {
+    fn visit(&mut self, e: &Box<Expr>) {
+        println!("Visit<{}>", type_name::<Box<Expr>>());
+
+        e.visit_children(self);
+    }
+}
+
+impl Visit<Expr> for Analyzer {
+    fn visit(&mut self, e: &Expr) {
+        println!("Visit<{}>", type_name::<Expr>());
+
+        e.visit_children(self);
+    }
+}
 
 impl Validate<Ident> for Analyzer {
     type Output = Result<(), ()>;
