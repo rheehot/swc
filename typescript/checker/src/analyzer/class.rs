@@ -10,7 +10,7 @@ use crate::{
     swc_common::VisitWith,
     ty,
     ty::{IndexSignature, Type},
-    visit::Validate,
+    validator::Validate,
     ValidationResult,
 };
 use std::mem::replace;

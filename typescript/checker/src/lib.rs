@@ -48,7 +48,7 @@ pub struct Specifier {
 pub mod analyzer;
 mod builtin_types;
 pub mod errors;
-pub mod visit;
+pub mod validator;
 //mod legacy;
 pub mod loader;
 pub mod resolver;

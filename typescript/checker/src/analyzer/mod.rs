@@ -7,7 +7,7 @@ use crate::{
     errors::Error,
     loader::Load,
     ty::Type,
-    visit::Validate,
+    validator::Validate,
     Exports, ImportInfo, Rule,
 };
 use fxhash::{FxHashMap, FxHashSet};
