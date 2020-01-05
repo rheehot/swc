@@ -360,6 +360,39 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
     .into())
 }
 
+impl Validate<TsArrayType> for Analyzer<'_, '_> {
+    type Output = ValidationResult<Array>;
+
+    fn validate(&mut self, node: &TsArrayType) -> Self::Output {
+        Ok(Array {
+            span: node.span,
+            elem_type: box node.elem_type.validate_with(self)?,
+        })
+    }
+}
+
+impl Validate<TsUnionType> for Analyzer<'_, '_> {
+    type Output = ValidationResult<Union>;
+
+    fn validate(&mut self, u: &TsUnionType) -> Self::Output {
+        Ok(Union {
+            span: u.span,
+            types: self.validate(&u.types)?,
+        })
+    }
+}
+
+impl Validate<TsIntersectionType> for Analyzer<'_, '_> {
+    type Output = ValidationResult<Intersection>;
+
+    fn validate(&mut self, u: &TsIntersectionType) -> Self::Output {
+        Ok(Intersection {
+            span: u.span,
+            types: self.validate(&u.types)?,
+        })
+    }
+}
+
 impl Validate<TsType> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -368,54 +401,27 @@ impl Validate<TsType> for Analyzer<'_, '_> {
 
         Ok(match ty {
             TsType::TsThisType(this) => this.into(),
-            TsType::TsLitType(ty) => ty.into(),
-            TsType::TsKeywordType(ty) => ty.into(),
-            TsType::TsTupleType(ty) => Type::Tuple(ty.into()),
-            TsType::TsUnionOrIntersectionType(TsUnionOrIntersectionType::TsUnionType(
-                TsUnionType { span, types },
-            )) => Union {
-                span,
-                types: types.into_iter().map(|v| v).collect(),
+            TsType::TsLitType(ty) => Type::Lit(*ty),
+            TsType::TsKeywordType(ty) => Type::Keyword(*ty),
+            TsType::TsTupleType(ty) => Type::Tuple(self.validate(ty)?),
+            TsType::TsUnionOrIntersectionType(TsUnionOrIntersectionType::TsUnionType(u)) => {
+                Type::Union(self.validate(u)?)
             }
-            .into(),
-            TsType::TsUnionOrIntersectionType(TsUnionOrIntersectionType::TsIntersectionType(
-                TsIntersectionType { span, types },
-            )) => Intersection {
-                span,
-                types: types.into_iter().map(|v| v).collect(),
+            TsType::TsUnionOrIntersectionType(TsUnionOrIntersectionType::TsIntersectionType(i)) => {
+                Type::Intersection(self.validate(i)?)
             }
-            .into(),
-            TsType::TsArrayType(TsArrayType {
-                span,
-                box elem_type,
-            }) => Type::Array(Array {
-                span,
-                elem_type: box elem_type,
-            }),
-            //TsType::TsFnOrConstructorType(TsFnOrConstructorType::TsFnType(TsFnType {
-            //    span,
-            //    params,
-            //    type_params,
-            //    type_ann,
-            //})) => Type::Function(Function {
-            //    span,
-            //    params,
-            //    type_params: type_params.map(From::from),
-            //    ret_ty: box type_ann.type_ann,
-            //}),
-            //TsType::TsFnOrConstructorType(TsFnOrConstructorType::TsConstructorType(
-            //    TsConstructorType {
-            //        span,
-            //        params,
-            //        type_params,
-            //        type_ann,
-            //    },
-            //)) => Type::Constructor(Constructor { span, params }),
+            TsType::TsArrayType(arr) => Type::Array(self.validate(arr)?),
+            TsType::TsFnOrConstructorType(TsFnOrConstructorType::TsFnType(f)) => {
+                Type::Function(self.validate(f))
+            }
+            TsType::TsFnOrConstructorType(TsFnOrConstructorType::TsConstructorType(c)) => {
+                Type::Constructor(self.validate(c))
+            }
             TsType::TsTypeLit(lit) => Type::TypeLit(lit.into()),
-            TsType::TsConditionalType(cond) => Type::Conditional(cond.into()),
-            TsType::TsMappedType(ty) => Type::Mapped(ty.into()),
-            TsType::TsTypeOperator(ty) => Type::Operator(ty.into()),
-            TsType::TsParenthesizedType(TsParenthesizedType { type_ann, .. }) => type_ann.into(),
+            TsType::TsConditionalType(cond) => Type::Conditional(self.validate(&cond)?),
+            TsType::TsMappedType(ty) => Type::Mapped(self.validate(ty)?),
+            TsType::TsTypeOperator(ty) => Type::Operator(self.validate(ty)?),
+            TsType::TsParenthesizedType(ty) => self.validate(ty)?,
             _ => unimplemented!("TsType: {:?}", ty),
         })
     }
