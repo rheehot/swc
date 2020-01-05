@@ -1,5 +1,5 @@
 use super::Analyzer;
-use crate::validator::Validate;
+use crate::{errors::Error, validator::Validate};
 use std::iter::once;
 use swc_atoms::JsWord;
 use swc_common::{Spanned, Visit};
@@ -7,11 +7,11 @@ use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
     /// Validates and store errors if required.
-    pub fn check<T, O, E>(&mut self, node: &T) -> Option<<Self as Validate<T>>::Output>
+    pub fn check<T, O>(&mut self, node: &T) -> Option<<Self as Validate<T>>::Output>
     where
-        Self: Validate<T, Output = Result<O, E>>,
+        Self: Validate<T, Output = Result<O, Error>>,
     {
-        let res: Result<O, E> = self.validate(node);
+        let res: Result<O, _> = self.validate(node);
         match res {
             Ok(v) => Some(v),
             Err(err) => {
