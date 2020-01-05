@@ -1,6 +1,6 @@
 use crate::{util::EqIgnoreNameAndSpan, Exports};
 use fxhash::FxHashMap;
-use std::{borrow::Cow, mem::transmute, sync::Arc};
+use std::{mem::transmute, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
