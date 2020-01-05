@@ -5,7 +5,7 @@ use crate::{
     ty::Type,
     validator::{Validate, ValidateWith},
 };
-use std::{convert::TryInto, mem::replace, sync::Arc};
+use std::{mem::replace, sync::Arc};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Span, Spanned};
 use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith};
@@ -22,24 +22,41 @@ use swc_ecma_ast::*;
 // unimplemented!("export namespace"),
 
 impl Analyzer<'_, '_> {
+    /// This methods exports unresolved expressions, which depends on
+    /// expressions that comes after the expression.
     pub(super) fn handle_pending_exports(&mut self) {
         if self.pending_exports.is_empty() {
             return;
         }
 
-        let pending_exports = replace(&mut self.pending_exports, Default::default());
+        let pending_exports: Vec<_> = replace(&mut self.pending_exports, Default::default());
 
         for ((sym, _), expr) in pending_exports {
             // TODO: Allow multiple exports with same name.
 
-            debug_assert_eq!(self.info.exports.types.get(&sym), None);
+            debug_assert_eq!(self.info.exports.vars.get(&sym), None);
 
-            let exported_sym = sym;
-            let ty = match self.scope.types.remove(&exported_sym) {
-                Some(export) => export,
-                None => return,
+            let exported_sym = if *sym != js_word!("default") {
+                Some(&sym)
+            } else {
+                match expr {
+                    Expr::Ident(ref i) => Some(&i.sym),
+                    _ => None,
+                }
             };
-            self.info.exports.types.insert(sym, Arc::new(ty));
+            let ty = match exported_sym
+                .and_then(|exported_sym| self.scope.types.remove(&exported_sym))
+            {
+                Some(export) => export,
+                None => match expr.validate_with(self) {
+                    Ok(ty) => ty,
+                    Err(err) => {
+                        self.info.errors.push(err);
+                        return;
+                    }
+                },
+            };
+            self.info.exports.vars.insert(sym, Arc::new(ty));
         }
 
         assert_eq!(self.pending_exports, vec![]);
@@ -163,6 +180,8 @@ impl Visit<ExportDefaultDecl> for Analyzer<'_> {
 }
 
 impl Analyzer<'_, '_> {
+    /// Exports a type.
+    ///
     /// `scope.regsiter_type` should be called before calling this method.
     fn export(&mut self, span: Span, name: JsWord, from: Option<JsWord>) {
         let from = from.unwrap_or_else(|| name.clone());
@@ -179,22 +198,23 @@ impl Analyzer<'_, '_> {
         assert_eq!(self.info.exports.types.get(&name), None);
         self.info.exports.types.insert(name, Arc::new(ty.clone()));
     }
+
+    /// Exports a varaible.
+    fn export_expr(&mut self, name: JsWord, e: &Expr) {
+        unimplemented!("export_expr")
+    }
 }
 
 /// Done
 impl Visit<TsExportAssignment> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &TsExportAssignment) {
-        let ty = self.validate(&s.expr)?;
-
-        self.export_expr(js_word!("default"), ty);
+        self.export_expr(js_word!("default"), &s.expr);
     }
 }
 
 /// Done
 impl Visit<ExportDefaultExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &ExportDefaultExpr) {
-        let ty = self.validate(&s.expr)?;
-
-        self.export_expr(js_word!("default"), ty);
+        self.export_expr(js_word!("default"), &s.expr);
     }
 }

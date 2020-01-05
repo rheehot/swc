@@ -1,10 +1,14 @@
 use super::{control_flow::CondFacts, Analyzer};
-use crate::{errors::Error, ty::Type, validator::Validate};
+use crate::{
+    errors::Error,
+    ty::Type,
+    validator::{Validate, ValidateWith},
+};
 use fxhash::FxHashMap;
 use smallvec::SmallVec;
 use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
-use swc_common::{Span, Spanned, DUMMY_SP};
+use swc_common::{Span, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[derive(Debug)]
@@ -230,12 +234,7 @@ impl Analyzer<'_, '_> {
     ) -> Result<(), Error> {
         match *pat {
             Pat::Ident(ref i) => {
-                let ty = i
-                    .type_ann
-                    .as_ref()
-                    .map(|t| &*t.type_ann)
-                    .cloned()
-                    .map(Type::from);
+                let ty = i.type_ann.validate_with(self)?;
 
                 let name = i.sym.clone();
                 self.scope.declare_var(

@@ -227,7 +227,7 @@ impl Analyzer<'_, '_> {
                             };
 
                             // TODO: Remove clone
-                            for m in methods.into_iter().map(|v| v.clone().static_cast()) {
+                            for m in methods.into_iter().map(|v| v.clone()) {
                                 check!(m);
                             }
                         }
@@ -286,9 +286,6 @@ impl Analyzer<'_, '_> {
 
                 // Handle member expression
                 let obj_type = self.validate(obj)?.generalize_lit();
-
-                // Example: `Type(console)` -> `Interface(Console)`
-                let obj_type = self.expand_type(span, obj_type)?;
 
                 let obj_type = match *obj_type.normalize() {
                     Type::Keyword(TsKeywordType {

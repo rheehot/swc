@@ -5,7 +5,7 @@ use crate::{
     errors::Error,
     ty,
     ty::{ClassInstance, Tuple, Type, TypeLit, TypeParamInstantiation},
-    validator::Validate,
+    validator::{Validate, ValidateWith},
     ValidationResult,
 };
 use swc_atoms::js_word;
@@ -70,10 +70,7 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
         let span = e.span();
         e.visit_children(self);
 
-        let rhs_ty = match self
-            .validate(&e.right)
-            .and_then(|ty| self.expand_type(span, ty))
-        {
+        let rhs_ty = match self.validate(&e.right) {
             Ok(rhs_ty) => {
                 let rhs_ty = rhs_ty;
 
@@ -112,7 +109,6 @@ impl Validate<UpdateExpr> for Analyzer<'_, '_> {
 
         let res = self
             .validate_expr(&e.arg, TypeOfMode::LValue, None)
-            .and_then(|ty| self.expand_type(span, ty))
             .and_then(|ty| match *ty.normalize() {
                 Type::Keyword(TsKeywordType {
                     kind: TsKeywordTypeKind::TsStringKeyword,
@@ -195,8 +191,9 @@ impl Analyzer<'_, '_> {
             Expr::TsTypeAssertion(e) => self.validate(e),
             //
             Expr::This(ThisExpr { span }) => {
-                if let Some(ref ty) = self.scope.this() {
-                    return Ok(ty.static_cast());
+                let span = *span;
+                if let Some(ty) = self.scope.this() {
+                    return Ok(ty.clone());
                 }
                 return Ok(Type::from(TsThisType { span }));
             }
@@ -232,7 +229,7 @@ impl Analyzer<'_, '_> {
             Expr::Lit(Lit::Bool(v)) => {
                 return Ok(Type::Lit(TsLitType {
                     span: v.span,
-                    lit: TsLit::Bool(v),
+                    lit: TsLit::Bool(*v),
                 }));
             }
             Expr::Lit(Lit::Str(ref v)) => {
@@ -244,17 +241,17 @@ impl Analyzer<'_, '_> {
             Expr::Lit(Lit::Num(v)) => {
                 return Ok(Type::Lit(TsLitType {
                     span: v.span,
-                    lit: TsLit::Number(v),
+                    lit: TsLit::Number(*v),
                 }));
             }
             Expr::Lit(Lit::Null(Null { span })) => {
                 return Ok(Type::Keyword(TsKeywordType {
-                    span,
+                    span: *span,
                     kind: TsKeywordTypeKind::TsNullKeyword,
                 }));
             }
             Expr::Lit(Lit::Regex(..)) => {
-                return Ok(TsType::TsTypeRef(TsTypeRef {
+                return Ok(Type::TsTypeRef(TsTypeRef {
                     span,
                     type_name: TsEntityName::Ident(Ident {
                         span,
@@ -288,12 +285,8 @@ impl Analyzer<'_, '_> {
                 }));
             }
 
-            Expr::Bin(ref expr) => self.type_of_bin_expr(&expr),
-
             Expr::TsNonNull(TsNonNullExpr { ref expr, .. }) => {
-                let expr = self.validate(&expr)?;
-
-                Ok(expr.remove_falsy())
+                Ok(expr.validate_with(&expr)?.remove_falsy())
             }
 
             Expr::Object(ObjectLit { span, ref props }) => {
@@ -338,7 +331,10 @@ impl Analyzer<'_, '_> {
                     return Ok(ty);
                 }
 
-                return Ok(Type::TypeLit(TypeLit { span, members }));
+                return Ok(Type::TypeLit(TypeLit {
+                    span: *span,
+                    members,
+                }));
             }
 
             // https://github.com/Microsoft/TypeScript/issues/26959
@@ -350,12 +346,6 @@ impl Analyzer<'_, '_> {
                     span,
                 }));
             }
-
-            Expr::Cond(e) => {
-                self.validate_cond_expr(&e)?;
-            }
-
-            Expr::Seq(e) => self.validate_seq_expr(e),
 
             Expr::Await(AwaitExpr { .. }) => unimplemented!("typeof(AwaitExpr)"),
 
@@ -376,10 +366,6 @@ impl Analyzer<'_, '_> {
             Expr::MetaProp(..) => unimplemented!("typeof(MetaProp)"),
 
             Expr::Assign(e) => self.validate_assign_expr(e),
-
-            Expr::TsTypeAssertion(TsTypeAssertion { ref type_ann, .. }) => {
-                return Ok(Type::from(type_ann.clone()));
-            }
 
             Expr::Invalid(ref i) => return Ok(Type::any(i.span())),
 
@@ -425,7 +411,7 @@ impl Analyzer<'_, '_> {
                 self.scope.depth(),
                 i.sym
             );
-            return Ok(ty.static_cast());
+            return Ok(Type::Arc(ty.clone()));
         }
 
         if let Some(ty) = self.find_type(&i.sym) {

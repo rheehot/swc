@@ -89,9 +89,11 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                                 .map(From::from),
                                             ret_ty: box function
                                                 .return_type
-                                                .clone()
-                                                .map(|v| v.type_ann.into())
-                                                .unwrap_or_else(|| Type::any(DUMMY_SP)),
+                                                .validate_with(&mut analyzer)
+                                                .expect(
+                                                    "builtin: failed to parse return type of a \
+                                                     function",
+                                                ),
                                         }
                                         .into(),
                                     );
@@ -110,10 +112,22 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                         is_abstract: c.class.is_abstract,
                                         body: analyzer
                                             .validate(&c.class.body)
-                                            .expect("builtin: failed to validate class body"),
+                                            .expect("builtin: failed to validate class body")
+                                            .into_iter()
+                                            .filter_map(|v| v)
+                                            .collect(),
                                         super_class: None,
                                         // implements: vec![],
-                                        type_params: c.class.type_params.clone().map(From::from),
+                                        type_params: c
+                                            .class
+                                            .type_params
+                                            .validate_with(&mut analyzer)
+                                            .map(|opt| {
+                                                opt.expect(
+                                                    "builtin: failed to parse type parmas of a \
+                                                     class",
+                                                )
+                                            }),
                                     });
 
                                     merged.types.insert(c.ident.sym.clone(), ty);
@@ -174,7 +188,8 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                         Entry::Vacant(e) => {
                                             e.insert(
                                                 i.validate_with(&mut analyzer)
-                                                    .expect("builtin: failed to parse interface"),
+                                                    .expect("builtin: failed to parse interface")
+                                                    .into(),
                                             );
                                         }
                                     }

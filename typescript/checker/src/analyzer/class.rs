@@ -270,20 +270,26 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
 }
 
 impl Validate<ClassMember> for Analyzer<'_, '_> {
-    type Output = Option<ValidationResult<ty::ClassMember>>;
+    type Output = ValidationResult<Option<ty::ClassMember>>;
 
     fn validate(&mut self, m: &ClassMember) -> Self::Output {
-        match m {
+        Ok(match m {
             swc_ecma_ast::ClassMember::PrivateMethod(_)
             | swc_ecma_ast::ClassMember::PrivateProp(_) => None,
 
-            swc_ecma_ast::ClassMember::Constructor(v) => Some(self.validate(&v).map(From::from)),
-            swc_ecma_ast::ClassMember::Method(v) => Some(self.validate(&v).map(From::from)),
-            swc_ecma_ast::ClassMember::ClassProp(v) => Some(self.validate(&v).map(From::from)),
-            swc_ecma_ast::ClassMember::TsIndexSignature(v) => {
-                Some(self.validate(&v).map(From::from))
+            swc_ecma_ast::ClassMember::Constructor(v) => {
+                Some(ty::ClassMember::Constructor(v.validate_with(self)?))
             }
-        }
+            swc_ecma_ast::ClassMember::Method(v) => {
+                Some(ty::ClassMember::Method(v.validate_with(self)?))
+            }
+            swc_ecma_ast::ClassMember::ClassProp(v) => {
+                Some(ty::ClassMember::Property(v.validate_with(self)?))
+            }
+            swc_ecma_ast::ClassMember::TsIndexSignature(v) => {
+                Some(ty::ClassMember::IndexSignature(v.validate_with(self)?))
+            }
+        })
     }
 }
 
