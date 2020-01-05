@@ -108,7 +108,7 @@ impl Analyzer<'_, '_> {
                         }
 
                         if all_castable {
-                            return;
+                            return Ok(());
                         }
                     }
 

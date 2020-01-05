@@ -1,13 +1,9 @@
 use super::super::Analyzer;
 use crate::{
-    analyzer::util::ResultExt,
-    errors::Error,
-    ty::Type,
-    validator::{Validate, ValidateWith},
-    ValidationResult,
+    analyzer::util::ResultExt, errors::Error, ty::Type, validator::Validate, ValidationResult,
 };
 use swc_atoms::js_word;
-use swc_common::{Span, Spanned, DUMMY_SP};
+use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
 prevent!(UnaryExpr);

@@ -558,6 +558,6 @@ impl Analyzer<'_, '_> {
             }
         }
 
-        return Ok(c.ret_ty.unwrap_or_else(|| Type::any(span).owned()));
+        return Ok(c.ret_ty.unwrap_or_else(|| Type::any(span)));
     }
 }

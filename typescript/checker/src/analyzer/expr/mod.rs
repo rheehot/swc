@@ -5,8 +5,8 @@ use crate::{
     errors::Error,
     ty,
     ty::{
-        Array, ClassInstance, EnumVariant, Interface, Ref, Tuple, Type, TypeElement, TypeLit,
-        TypeParamInstantiation, Union,
+        Array, ClassInstance, EnumVariant, FnParam, Interface, Ref, Tuple, Type, TypeElement,
+        TypeLit, TypeParamDecl, TypeParamInstantiation, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, RemoveTypes},
     validator::{Validate, ValidateWith},
@@ -969,6 +969,136 @@ impl Analyzer<'_, '_> {
             return Err(errors.remove(0));
         }
         return Err(Error::Errors { span, errors });
+    }
+
+    fn try_instantiate_simple(
+        &mut self,
+        span: Span,
+        callee_span: Span,
+        ret_type: &Type,
+        param_decls: &[FnParam],
+        decl: Option<&TypeParamDecl>,
+        args: &[ExprOrSpread],
+        _: Option<&TsTypeParamInstantiation>,
+    ) -> ValidationResult {
+        {
+            // let type_params_len = ty_params_decl.map(|decl|
+            // decl.params.len()).unwrap_or(0); let type_args_len = i.map(|v|
+            // v.params.len()).unwrap_or(0);
+
+            // // TODO: Handle multiple definitions
+            // let min = ty_params_decl
+            //     .map(|decl| decl.params.iter().filter(|p|
+            // p.default.is_none()).count())
+            //     .unwrap_or(type_params_len);
+
+            // let expected = min..=type_params_len;
+            // if !expected.contains(&type_args_len) {
+            //     return Err(Error::WrongTypeParams {
+            //         span,
+            //         callee: callee_span,
+            //         expected,
+            //         actual: type_args_len,
+            //     });
+            // }
+        }
+
+        {
+            // TODO: Handle default parameters
+            // TODO: Handle multiple definitions
+
+            let min = param_decls
+                .iter()
+                .filter(|p| match p {
+                    TsFnParam::Ident(Ident { optional: true, .. }) => false,
+                    _ => true,
+                })
+                .count();
+
+            let expected = min..=param_decls.len();
+            if !expected.contains(&args.len()) {
+                return Err(Error::WrongParams {
+                    span,
+                    callee: callee_span,
+                    expected,
+                    actual: args.len(),
+                });
+            }
+        }
+
+        if let Some(..) = decl {
+            unimplemented!(
+                "try_instantiate should be used instead of try_instantiate_simple as type \
+                 parameter is deefined on the function"
+            )
+        } else {
+            Ok(ret_type.clone())
+        }
+    }
+
+    fn try_instantiate(
+        &mut self,
+        span: Span,
+        callee_span: Span,
+        fn_type: &ty::Function,
+        args: &[ExprOrSpread],
+        i: Option<&TsTypeParamInstantiation>,
+    ) -> ValidationResult {
+        let param_decls = &fn_type.params;
+        let decl = &fn_type.type_params;
+        let type_params = if let Some(ref type_params) = fn_type.type_params {
+            type_params
+        } else {
+            // TODO: Report an error if i is not None
+            return Ok((*fn_type.ret_ty).clone());
+        };
+
+        {
+            // TODO: Handle default parameters
+            // TODO: Handle multiple definitions
+
+            let min = param_decls.iter().filter(|p| p.required).count();
+
+            let expected = min..=param_decls.len();
+            if !expected.contains(&args.len()) {
+                return Err(Error::WrongParams {
+                    span,
+                    callee: callee_span,
+                    expected,
+                    actual: args.len(),
+                });
+            }
+        }
+
+        let v;
+
+        let i = match i {
+            Some(i) => i,
+            None => {
+                v = self.infer_arg_types(args, &type_params, &fn_type.params)?;
+                &v
+            }
+        };
+
+        if let Some(ref decl) = decl {
+            // To handle
+            //
+            // function foo<T extends "foo">(f: (x: T) => T) {
+            //     return f;
+            // }
+            //
+            // we should expand the whole function, because return type contains type
+            // parameter declared on the function.
+            let expanded_fn_type =
+                self.expand_type_params(i, decl, Type::Function(fn_type.clone()))?;
+            let expanded_fn_type = match expanded_fn_type {
+                Type::Function(f) => f,
+                _ => unreachable!(),
+            };
+            Ok((*expanded_fn_type.ret_ty).clone())
+        } else {
+            Ok((*fn_type.ret_ty).clone())
+        }
     }
 }
 

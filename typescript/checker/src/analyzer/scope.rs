@@ -22,6 +22,9 @@ pub(crate) struct Scope<'a> {
     pub(super) types: FxHashMap<JsWord, Type>,
     pub(super) facts: CondFacts,
 
+    /// [Some] while declaring a class property.
+    pub(super) declaring_prop: Option<JsWord>,
+
     pub(super) this: Option<JsWord>,
 }
 
@@ -451,6 +454,7 @@ impl<'a> Scope<'a> {
             types: Default::default(),
             facts,
             this: None,
+            declaring_prop: None,
         }
     }
 
