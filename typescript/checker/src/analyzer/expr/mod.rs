@@ -352,13 +352,13 @@ impl Analyzer<'_, '_> {
             Expr::Await(AwaitExpr { .. }) => unimplemented!("typeof(AwaitExpr)"),
 
             Expr::Class(ClassExpr { ref class, .. }) => {
-                return Ok(self.type_of_class(None, class)?);
+                return Ok(self.type_of_class(None, class)?.into());
             }
 
-            Expr::Arrow(ref e) => return Ok(self.type_of_arrow_fn(e)?),
+            Expr::Arrow(ref e) => return Ok(e.validate_with(self)?.into()),
 
             Expr::Fn(FnExpr { ref function, .. }) => {
-                return Ok(self.type_of_fn(&function)?);
+                return Ok(function.validate_with(self)?.into());
             }
 
             Expr::Member(ref expr) => {
@@ -480,6 +480,195 @@ impl Analyzer<'_, '_> {
                 )
             }
         }
+    }
+
+    fn type_of_member_expr(
+        &mut self,
+        expr: &MemberExpr,
+        type_mode: TypeOfMode,
+    ) -> ValidationResult {
+        let MemberExpr {
+            ref obj,
+            computed,
+            ref prop,
+            span,
+            ..
+        } = *expr;
+
+        let mut errors = vec![];
+        match *obj {
+            ExprOrSuper::Expr(ref obj) => {
+                let obj_ty = match obj.validate_with(self) {
+                    Ok(ty) => ty,
+                    Err(err) => {
+                        // Recover error if possible.
+                        if computed {
+                            errors.push(err);
+                            Type::any(span)
+                        } else {
+                            return Err(err);
+                        }
+                    }
+                };
+
+                if computed {
+                    let ty = match self.access_property(span, obj_ty, prop, computed, type_mode) {
+                        Ok(v) => Ok(v),
+                        Err(err) => {
+                            errors.push(err);
+
+                            Err(())
+                        }
+                    };
+                    if errors.is_empty() {
+                        return Ok(ty.unwrap());
+                    } else {
+                        match self.type_of(&prop) {
+                            Ok(..) => match ty {
+                                Ok(ty) => {
+                                    if errors.is_empty() {
+                                        return Ok(ty);
+                                    } else {
+                                        return Err(Error::Errors { span, errors });
+                                    }
+                                }
+                                Err(()) => return Err(Error::Errors { span, errors }),
+                            },
+                            Err(err) => errors.push(err),
+                        }
+                    }
+                } else {
+                    match self.access_property(span, obj_ty, prop, computed, type_mode) {
+                        Ok(v) => return Ok(v),
+                        Err(err) => {
+                            errors.push(err);
+                            return Err(Error::Errors { span, errors });
+                        }
+                    }
+                }
+            }
+            _ => unimplemented!("type_of_member_expr(super.foo)"),
+        }
+
+        if errors.len() == 1 {
+            return Err(errors.remove(0));
+        }
+        return Err(Error::Errors { span, errors });
+    }
+}
+
+impl Validate<Function> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::Function>;
+
+    fn validate(&mut self, f: &Function) -> Self::Output {
+        let mut errors = vec![];
+
+        let declared_ret_ty = f.return_type.validate_with(self)?;
+
+        let declared_ret_ty = match declared_ret_ty.map(|ret_ty| {
+            let span = ret_ty.span();
+            match ret_ty {
+                Type::Class(cls) => Type::ClassInstance(ClassInstance {
+                    span,
+                    cls,
+                    type_args: None,
+                }),
+                ty => ty,
+            }
+        }) {
+            Some(Ok(ty)) => Some(ty),
+            Some(Err(err)) => {
+                errors.push(err);
+                Some(declared_ret_ty.unwrap())
+            }
+            None => None,
+        };
+
+        let inferred_return_type = f.body.as_ref().map(|_| self.infer_return_type(f.span));
+        let inferred_return_type = match inferred_return_type {
+            Some(Some(inferred_return_type)) => {
+                if let Some(ref declared) = declared_ret_ty {
+                    let span = inferred_return_type.span();
+
+                    self.assign(&declared, &inferred_return_type, span)?;
+                }
+
+                inferred_return_type
+            }
+            Some(None) => {
+                let mut span = f.span;
+
+                if let Some(ref declared) = declared_ret_ty {
+                    span = declared.span();
+
+                    match *declared.normalize() {
+                        Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsAnyKeyword,
+                            ..
+                        })
+                        | Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsVoidKeyword,
+                            ..
+                        }) => {}
+                        _ => errors.push(Error::ReturnRequired { span }),
+                    }
+                }
+
+                Type::any(span)
+            }
+            None => Type::any(f.span),
+        };
+
+        self.info.errors.extend(errors);
+
+        Ok(ty::Function {
+            span: f.span,
+            params: f.params.validate_with(self)?,
+            type_params: try_opt!(f.type_params.validate_with(self)),
+            ret_ty: box declared_ret_ty.unwrap_or_else(|| inferred_return_type),
+        }
+        .into())
+    }
+}
+
+impl Validate<ArrowExpr> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::Function>;
+
+    fn validate(&mut self, f: &ArrowExpr) -> Self::Output {
+        let declared_ret_ty = f
+            .return_type
+            .validate_with(self)
+            .store(&mut self.info.errors);
+        let declared_ret_ty = match declared_ret_ty {
+            Some(ty) => {
+                let span = ty.span();
+                Some(match ty {
+                    Type::Class(cls) => Type::ClassInstance(ClassInstance {
+                        span,
+                        cls,
+                        type_args: None,
+                    }),
+                    _ => ty,
+                })
+            }
+            None => None,
+        };
+
+        let inferred_return_type = self.infer_return_type(f.span());
+        if let Some(ref declared) = declared_ret_ty {
+            let span = inferred_return_type.span();
+            if let Some(ref inferred) = inferred_return_type {
+                self.assign(declared, inferred, span)?;
+            }
+        }
+
+        Ok(ty::Function {
+            span: f.span,
+            params: f.params.validate_with(self)?,
+            type_params: try_opt!(f.type_params.validate_with(self)),
+            ret_ty: box declared_ret_ty
+                .unwrap_or_else(|| inferred_return_type.unwrap_or_else(|| Type::any(f.span))),
+        })
     }
 }
 

@@ -5,7 +5,10 @@ use crate::{
     builtin_types,
     errors::Error,
     ty,
-    ty::{CallSignature, ClassInstance, ConstructorSignature, Method, Static, Type, TypeElement},
+    ty::{
+        CallSignature, ClassInstance, ConstructorSignature, Method, MethodSignature, Static, Type,
+        TypeElement,
+    },
     util::EqIgnoreSpan,
     validator::{Validate, ValidateWith},
     ValidationResult,
@@ -544,5 +547,37 @@ impl Analyzer<'_, '_> {
 
             _ => ret_err!(),
         }
+    }
+
+    fn check_method_call(
+        &self,
+        span: Span,
+        c: MethodSignature,
+        args: &[ExprOrSpread],
+    ) -> Result<Type, Error> {
+        // Validate arguments
+        for (i, p) in c.params.into_iter().enumerate() {
+            match p {
+                TsFnParam::Ident(Ident { type_ann, .. })
+                | TsFnParam::Array(ArrayPat { type_ann, .. })
+                | TsFnParam::Rest(RestPat { type_ann, .. })
+                | TsFnParam::Object(ObjectPat { type_ann, .. }) => {
+                    let lhs = match type_ann.map(Type::from) {
+                        Some(lhs) => Some(self.expand_type(span, lhs)?),
+                        None => None,
+                    };
+                    if let Some(lhs) = lhs {
+                        // TODO: Handle spread
+                        // TODO: Validate optional parameters
+                        if args.len() > i {
+                            let args_ty = self.type_of(&args[i].expr)?;
+                            self.assign(&lhs, &*args_ty, args[i].span())?;
+                        }
+                    }
+                }
+            }
+        }
+
+        return Ok(c.ret_ty.unwrap_or_else(|| Type::any(span).owned()));
     }
 }

@@ -182,7 +182,15 @@ impl Validate<TsFnParam> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 
     fn validate(&mut self, p: &TsFnParam) -> Self::Output {
-        unimplemented!("validate_fn_param")
+        unimplemented!("validate(TsFnParam)")
+    }
+}
+
+impl Validate<Pat> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::FnParam>;
+
+    fn validate(&mut self, p: &Pat) -> Self::Output {
+        unimplemented!("validate(Pat)")
     }
 }
 
@@ -326,7 +334,7 @@ impl Analyzer<'_, '_> {
         self.type_of_class(name, c)
     }
 
-    fn type_of_class(
+    pub(super) fn type_of_class(
         &mut self,
         name: Option<JsWord>,
         c: &swc_ecma_ast::Class,

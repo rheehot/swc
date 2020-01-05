@@ -226,7 +226,7 @@ impl Analyzer<'_, '_> {
     ///
     /// This method should be called for function parameters including error
     /// variable from a catch clause.
-    fn declare_vars_inner(
+    pub(super) fn declare_vars_inner(
         &mut self,
         kind: VarDeclKind,
         pat: &Pat,

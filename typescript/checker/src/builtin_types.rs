@@ -65,7 +65,12 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                         name.sym.clone(),
                                         name.type_ann
                                             .validate_with(&mut analyzer)
-                                            .expect("builtin: failed to parse type of a varaible"),
+                                            .map(|res| {
+                                                res.expect(
+                                                    "builtin: failed to parse type of a variable",
+                                                )
+                                            })
+                                            .expect("builtin: all variables should have a type"),
                                     );
                                 }
 
@@ -87,8 +92,13 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                                 ),
                                             type_params: function
                                                 .type_params
-                                                .clone()
-                                                .map(From::from),
+                                                .validate_with(&mut analyzer)
+                                                .map(|res| {
+                                                    res.expect(
+                                                        "builtin: failed to parse type parameters \
+                                                         of a function",
+                                                    )
+                                                }),
                                             ret_ty: box function
                                                 .return_type
                                                 .validate_with(&mut analyzer)
@@ -98,7 +108,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                                          a function",
                                                     )
                                                 })
-                                                .unwrap_or_else(|| Type::any(ident.sp)),
+                                                .unwrap_or_else(|| Type::any(ident.span)),
                                         }
                                         .into(),
                                     );

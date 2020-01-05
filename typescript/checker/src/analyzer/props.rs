@@ -4,7 +4,7 @@ use crate::{
     errors::Error,
     ty::{MethodSignature, PropertySignature, Type, TypeElement},
     util::pat_to_ts_fn_param,
-    validator::Validate,
+    validator::{Validate, ValidateWith},
     ValidationResult,
 };
 use swc_atoms::js_word;
@@ -128,8 +128,7 @@ impl Validate<Prop> for Analyzer<'_, '_> {
             .into(),
 
             Prop::KeyValue(ref kv) => {
-                let ty = self.type_of(&kv.value)?;
-                let ty = self.expand_type(prop.span(), ty)?;
+                let ty = kv.value.validate_with(self)?;
 
                 PropertySignature {
                     span: prop.span(),
@@ -168,15 +167,9 @@ impl Validate<Prop> for Analyzer<'_, '_> {
                 key: prop_key_to_expr(&prop),
                 computed: false,
                 optional: false,
-                params: p
-                    .function
-                    .params
-                    .iter()
-                    .cloned()
-                    .map(pat_to_ts_fn_param)
-                    .collect(),
-                ret_ty: p.function.return_type.clone().map(|v| v.into_cow()),
-                type_params: p.function.type_params.clone().map(|v| v.into()),
+                params: p.function.params.validate_with(self)?,
+                ret_ty: try_opt!(p.function.return_type.validate_with(self)),
+                type_params: try_opt!(p.function.type_params),
             }
             .into(),
         })
