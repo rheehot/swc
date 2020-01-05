@@ -46,7 +46,7 @@ impl Analyzer<'_, '_> {
         let orig_ty = self.expand_type(span, orig_ty)?;
 
         let casted_ty = Type::from(to.clone());
-        let casted_ty = self.expand_type(span, casted_ty.owned())?;
+        let casted_ty = self.expand_type(span, casted_ty)?;
         let casted_ty = instantiate_class(casted_ty);
 
         self.validate_type_cast_inner(span, orig_ty, casted_ty)
@@ -66,7 +66,7 @@ impl Analyzer<'_, '_> {
                     .any(|v| casted_ty.eq_ignore_name_and_span(v));
 
                 if castable {
-                    return Ok(casted_ty.owned());
+                    return Ok(casted_ty);
                 }
             }
 

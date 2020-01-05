@@ -242,7 +242,9 @@ impl TypeElement {
     pub fn key(&self) -> Option<&Expr> {
         match self {
             TypeElement::Call(..) => None,
-            TypeElement::Constructor(..) => Some(&Expr::Ident(Ident::new())),
+            TypeElement::Constructor(ref c) => {
+                Some(&Expr::Ident(Ident::new("constructor".into(), c.span)))
+            }
             TypeElement::Property(p) => Some(&p.key),
             TypeElement::Method(m) => Some(&m.key),
             TypeElement::Index(_) => None,

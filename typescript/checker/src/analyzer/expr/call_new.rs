@@ -27,7 +27,7 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
         } = *e;
 
         let callee = match callee {
-            ExprOrSuper::Super(..) => return Ok(Type::any(span).owned()),
+            ExprOrSuper::Super(..) => return Ok(Type::any(span)),
             ExprOrSuper::Expr(callee) => callee,
         };
 
@@ -333,7 +333,7 @@ impl Analyzer<'_, '_> {
                                     ..
                                 }) => {
                                     if prop_name_to_expr(key).eq_ignore_span(&*prop) {
-                                        return Ok(ret_ty.clone().owned());
+                                        return Ok(ret_ty.clone());
                                     }
                                 }
                                 _ => {}
@@ -347,7 +347,7 @@ impl Analyzer<'_, '_> {
                         if let Ok(ty) =
                             builtin_types::get_type(self.libs, span, &js_word!("Symbol"))
                         {
-                            return Ok(ty.owned());
+                            return Ok(ty);
                         }
                     }
 
@@ -424,7 +424,7 @@ impl Analyzer<'_, '_> {
                             match self.try_instantiate_simple(
                                 span,
                                 ty.span(),
-                                &ret_ty.as_ref().unwrap_or(&Type::any(span).owned()),
+                                &ret_ty.as_ref().unwrap_or(&Type::any(span)),
                                 params,
                                 type_params.as_ref(),
                                 args,
@@ -444,7 +444,7 @@ impl Analyzer<'_, '_> {
                             match self.try_instantiate_simple(
                                 span,
                                 ty.span(),
-                                &ret_ty.as_ref().unwrap_or(&Type::any(span).owned()),
+                                &ret_ty.as_ref().unwrap_or(&Type::any(span)),
                                 params,
                                 type_params.as_ref(),
                                 args,

@@ -85,8 +85,7 @@ impl Analyzer<'_, '_> {
                         return Ok(Type::Lit(TsLitType {
                             span: v.span,
                             lit: v.val.clone(),
-                        })
-                        .owned());
+                        }));
                     }
                 }
             }

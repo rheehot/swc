@@ -212,7 +212,7 @@ impl Fold<TsTypeAliasDecl> for Analyzer<'_, '_> {
         let ty: Type = decl.type_ann.clone().into();
 
         let ty = if decl.type_params.is_none() {
-            match self.expand_type(decl.span(), ty.owned()) {
+            match self.expand_type(decl.span(), ty) {
                 Ok(ty) => ty,
                 Err(err) => {
                     self.info.errors.push(err);
@@ -425,7 +425,7 @@ impl Analyzer<'_, '_> {
                     }
 
                     // Validate return type
-                    match child.expand_type(ret_ty.span(), ret_ty.owned()) {
+                    match child.expand_type(ret_ty.span(), ret_ty) {
                         Ok(ret_ty) => {}
                         Err(err) => child.info.errors.push(err),
                     }
@@ -755,8 +755,7 @@ impl Fold<VarDecl> for Analyzer<'_, '_> {
                             let ty = match type_ann.as_ref().map(|t| Type::from(t.type_ann.clone()))
                             {
                                 Some(ty) => {
-                                    match self.expand_type(span, ty.owned()).map(instantiate_class)
-                                    {
+                                    match self.expand_type(span, ty).map(instantiate_class) {
                                         Ok(ty) => Some(ty),
                                         Err(err) => {
                                             self.info.errors.push(err);

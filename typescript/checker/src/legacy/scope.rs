@@ -162,7 +162,7 @@ impl<'a> Scope<'a> {
                             TypeElement::Property(PropertySignature { ref type_ann, .. }) => {
                                 return match *type_ann {
                                     Some(ref ty) => Some(ty.clone()),
-                                    None => Some(Type::any(key.span()).owned()),
+                                    None => Some(Type::any(key.span())),
                                 }
                             }
 
@@ -292,7 +292,7 @@ impl Analyzer<'_, '_> {
                     .cloned()
                     .map(Type::from);
                 let ty = if let Some(ty) = ty {
-                    match self.expand_type(i.span, ty.owned()) {
+                    match self.expand_type(i.span, ty) {
                         Ok(ty) => Some(ty),
                         Err(err) => {
                             self.info.errors.push(err);

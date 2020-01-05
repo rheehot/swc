@@ -30,8 +30,7 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
             .store(&mut errors);
         } else if let Some(ref type_ann) = p.type_ann {
             try {
-                let ty =
-                    self.expand_type(p.span(), Type::from(type_ann.clone().type_ann).owned())?;
+                let ty = self.expand_type(p.span(), Type::from(type_ann.clone().type_ann))?;
 
                 match *ty.normalize() {
                     Type::Array(..)

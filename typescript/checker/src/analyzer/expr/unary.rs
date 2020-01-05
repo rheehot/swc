@@ -1,7 +1,5 @@
 use super::super::Analyzer;
-use crate::{
-    analyzer::util::ResultExt, errors::Error, ty::Type, validator::Validate, ValidationResult,
-};
+use crate::{errors::Error, ty::Type, validator::Validate, ValidationResult};
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
@@ -37,11 +35,10 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsBooleanKeyword,
-                })
-                .owned());
+                }));
             }
 
-            op!("void") => return Ok(Type::undefined(span).owned()),
+            op!("void") => return Ok(Type::undefined(span)),
 
             _ => {}
         }
@@ -62,16 +59,14 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsNumberKeyword,
-                })
-                .owned());
+                }));
             }
 
             op!("~") => {
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsNumberKeyword,
-                })
-                .owned());
+                }));
             }
 
             op!("typeof") | op!("delete") | op!("void") => unreachable!(),

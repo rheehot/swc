@@ -89,8 +89,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                             return Ok(Type::Keyword(TsKeywordType {
                                 span,
                                 kind: TsKeywordTypeKind::TsStringKeyword,
-                            })
-                            .owned());
+                            }));
                         }
                         _ => {}
                     },
@@ -112,8 +111,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     return Ok(Type::Keyword(TsKeywordType {
                         span,
                         kind: TsKeywordTypeKind::TsStringKeyword,
-                    })
-                    .owned());
+                    }));
                 }
 
                 // Rule:
@@ -129,7 +127,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
 
                     None
                 }) {
-                    return Ok(Type::Keyword(TsKeywordType { span, kind }).owned());
+                    return Ok(Type::Keyword(TsKeywordType { span, kind }));
                 }
 
                 if c.any(|(_, ty)| {
@@ -173,8 +171,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     return Ok(Type::Keyword(TsKeywordType {
                         span,
                         kind: TsKeywordTypeKind::TsBooleanKeyword,
-                    })
-                    .owned());
+                    }));
                 }
 
                 unimplemented!("type_of_bin(+)\nLeft: {:#?}\nRight: {:#?}", lt, rt)
@@ -185,8 +182,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsNumberKeyword,
-                })
-                .owned());
+                }));
             }
 
             op!(bin, "-")
@@ -210,8 +206,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsBooleanKeyword,
-                })
-                .owned());
+                }));
             }
 
             op!("<=") | op!("<") | op!(">=") | op!(">") | op!("in") | op!("instanceof") => {
@@ -220,8 +215,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsBooleanKeyword,
-                })
-                .owned());
+                }));
             }
 
             op!("||") | op!("&&") => {
@@ -231,7 +225,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     Type::Keyword(TsKeywordType {
                         kind: TsKeywordTypeKind::TsAnyKeyword,
                         ..
-                    }) => return Ok(Type::any(span).owned()),
+                    }) => return Ok(Type::any(span)),
 
                     _ => {}
                 }

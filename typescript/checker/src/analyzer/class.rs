@@ -43,8 +43,6 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
     fn validate(&mut self, p: &ClassProp) -> Self::Output {
         p.validate_children(self);
 
-        let mut errors = vec![];
-
         // Verify key if key is computed
         if p.computed {
             self.validate_computed_prop_key(p.span, &p.key);
@@ -54,15 +52,10 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
         //    let span = ty.span();
         //
         //    let ty: Type = ty.type_ann.clone().into();
-        //    self.expand_type(span, ty.owned()).store(&mut errors);
+        //    self.expand_type(span, ty).store(&mut errors);
         //}
 
-        let value = p
-            .value
-            .as_ref()
-            .and_then(|e| self.validate(&e).store(&mut errors));
-
-        self.info.errors.extend(errors);
+        let value: Option<Type> = p.value.as_ref().and_then(|e| self.check(&e));
 
         Ok(ty::ClassProperty {
             span: p.span,
@@ -134,7 +127,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                         }) => {
                             let ty = i.type_ann.clone().map(Type::from);
                             //let ty = match ty {
-                            //    Some(ty) => match child.expand_type(i.span, ty.owned()) {
+                            //    Some(ty) => match child.expand_type(i.span, ty) {
                             //        Ok(ty) => Some(ty.into_owned()),
                             //        Err(err) => {
                             //            child.info.errors.push(err);
@@ -187,12 +180,13 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                         })
                         | PatOrTsParamProp::Pat(pat) => from_pat(pat),
                     })
-                    .map(|param| self.validate_fn_param(&param))
+                    .map(|param| self.validate(&param))
                     .collect::<Result<_, _>>()?,
             })
         })
     }
 }
+
 impl Validate<TsFnParam> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 
@@ -200,6 +194,7 @@ impl Validate<TsFnParam> for Analyzer<'_, '_> {
         unimplemented!("validate_fn_param")
     }
 }
+
 impl Validate<ClassMethod> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Method>;
 
@@ -280,6 +275,24 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
         }
 
         unimplemented!("validate_class_method")
+    }
+}
+
+impl Validate<ClassMember> for Analyzer<'_, '_> {
+    type Output = Option<ValidationResult<ty::ClassMember>>;
+
+    fn validate(&mut self, m: &ClassMember) -> Self::Output {
+        match m {
+            swc_ecma_ast::ClassMember::PrivateMethod(_)
+            | swc_ecma_ast::ClassMember::PrivateProp(_) => None,
+
+            swc_ecma_ast::ClassMember::Constructor(v) => Some(self.validate(&v).map(From::from)),
+            swc_ecma_ast::ClassMember::Method(v) => Some(self.validate(&v).map(From::from)),
+            swc_ecma_ast::ClassMember::ClassProp(v) => Some(self.validate(&v).map(From::from)),
+            swc_ecma_ast::ClassMember::TsIndexSignature(v) => {
+                Some(self.validate(&v).map(From::from))
+            }
+        }
     }
 }
 
@@ -421,28 +434,6 @@ impl Analyzer<'_, '_> {
                 .filter_map(|m| self.visit_class_member(m))
                 .collect::<Result<_, _>>()?,
         })
-    }
-
-    pub fn visit_class_member(
-        &mut self,
-        m: &ClassMember,
-    ) -> Option<ValidationResult<ty::ClassMember>> {
-        match m {
-            swc_ecma_ast::ClassMember::Constructor(v) => {
-                Some(self.visit_constructor(&v).map(From::from))
-            }
-            swc_ecma_ast::ClassMember::Method(v) => {
-                Some(self.visit_class_method(&v).map(From::from))
-            }
-            swc_ecma_ast::ClassMember::PrivateMethod(_) => None,
-            swc_ecma_ast::ClassMember::ClassProp(v) => {
-                Some(self.visit_class_property(&v).map(From::from))
-            }
-            swc_ecma_ast::ClassMember::PrivateProp(_) => None,
-            swc_ecma_ast::ClassMember::TsIndexSignature(v) => {
-                Some(self.validate_ts_index_signature(&v).map(From::from))
-            }
-        }
     }
 
     fn validate_class_members(

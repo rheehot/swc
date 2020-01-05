@@ -52,7 +52,7 @@ impl Analyzer<'_, '_> {
                     // Handle references to type parameters
                     for (idx, p) in decl.params.iter().enumerate() {
                         if p.name == *sym {
-                            return Ok(Type::from(i.params[idx].clone()).owned());
+                            return Ok(Type::from(i.params[idx].clone()));
                         }
                     }
 

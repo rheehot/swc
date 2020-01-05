@@ -692,7 +692,7 @@ impl Validate<CondExpr> for Analyzer<'_, '_> {
                 // Check `declaring` before checking variables.
                 if self.scope.declaring.contains(&i.sym) {
                     return if self.allow_ref_declaring {
-                        Ok(Type::any(span).owned())
+                        Ok(Type::any(span))
                     } else {
                         Err(Error::ReferencedInInit { span })
                     };
@@ -701,7 +701,7 @@ impl Validate<CondExpr> for Analyzer<'_, '_> {
             _ => {}
         }
 
-        Ok(Type::union(vec![cons, alt]).owned())
+        Ok(Type::union(vec![cons, alt]))
     }
 }
 

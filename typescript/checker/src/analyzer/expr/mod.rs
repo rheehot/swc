@@ -1,11 +1,9 @@
 use super::Analyzer;
 use crate::{
-    analyzer::util::ResultExt,
     builtin_types,
     errors::Error,
     ty,
     ty::{ClassInstance, Tuple, Type, TypeLit, TypeParamInstantiation},
-    util::RemoveTypes,
     validator::Validate,
     ValidationResult,
 };
@@ -150,7 +148,7 @@ impl Validate<SeqExpr> for Analyzer<'_, '_> {
             }
         }
         if is_any {
-            return Ok(Type::any(span).owned());
+            return Ok(Type::any(span));
         }
 
         return self.validate(&exprs.last().unwrap());
@@ -184,7 +182,7 @@ impl Analyzer<'_, '_> {
                 if let Some(ref ty) = self.scope.this() {
                     return Ok(ty.static_cast());
                 }
-                return Ok(Type::from(TsThisType { span }).owned());
+                return Ok(Type::from(TsThisType { span }));
             }
 
             Expr::Ident(ref i) => self.type_of_ident(i, mode),
@@ -346,13 +344,13 @@ impl Analyzer<'_, '_> {
             Expr::Await(AwaitExpr { .. }) => unimplemented!("typeof(AwaitExpr)"),
 
             Expr::Class(ClassExpr { ref class, .. }) => {
-                return Ok(self.type_of_class(None, class)?.owned());
+                return Ok(self.type_of_class(None, class)?);
             }
 
-            Expr::Arrow(ref e) => return Ok(self.type_of_arrow_fn(e)?.owned()),
+            Expr::Arrow(ref e) => return Ok(self.type_of_arrow_fn(e)?),
 
             Expr::Fn(FnExpr { ref function, .. }) => {
-                return Ok(self.type_of_fn(&function)?.owned());
+                return Ok(self.type_of_fn(&function)?);
             }
 
             Expr::Member(ref expr) => {
@@ -364,10 +362,10 @@ impl Analyzer<'_, '_> {
             Expr::Assign(e) => self.validate_assign_expr(e),
 
             Expr::TsTypeAssertion(TsTypeAssertion { ref type_ann, .. }) => {
-                return Ok(Type::from(type_ann.clone()).owned());
+                return Ok(Type::from(type_ann.clone()));
             }
 
-            Expr::Invalid(ref i) => return Ok(Type::any(i.span()).owned()),
+            Expr::Invalid(ref i) => return Ok(Type::any(i.span())),
 
             _ => unimplemented!("typeof ({:#?})", e),
         }
@@ -377,9 +375,13 @@ impl Analyzer<'_, '_> {
         let span = i.span();
 
         match i.sym {
-            js_word!("arguments") => return Ok(Type::any(span).owned()),
+            js_word!("arguments") => return Ok(Type::any(span)),
             js_word!("Symbol") => {
-                return Ok(builtin_types::get_var(self.libs, i.span, &js_word!("Symbol"))?.owned());
+                return Ok(builtin_types::get_var(
+                    self.libs,
+                    i.span,
+                    &js_word!("Symbol"),
+                )?);
             }
             js_word!("undefined") => return Ok(Type::undefined(span)),
             js_word!("void") => return Ok(Type::any(span)),
@@ -391,8 +393,7 @@ impl Analyzer<'_, '_> {
                         params: vec![],
                         ret_ty: box Type::any(span),
                         type_params: None,
-                    })
-                    .owned());
+                    }));
                 }
             },
             _ => {}
@@ -413,7 +414,7 @@ impl Analyzer<'_, '_> {
 
         if let Some(ty) = self.find_type(&i.sym) {
             println!("({}) type_of({}): find_type", self.scope.depth(), i.sym);
-            return Ok(ty.clone().respan(span).owned());
+            return Ok(ty.clone().respan(span));
         }
 
         // Check `declaring` before checking variables.
@@ -425,7 +426,7 @@ impl Analyzer<'_, '_> {
             );
 
             if self.allow_ref_declaring {
-                return Ok(Type::any(span).owned());
+                return Ok(Type::any(span));
             } else {
                 return Err(Error::ReferencedInInit { span });
             }
@@ -433,7 +434,7 @@ impl Analyzer<'_, '_> {
 
         if let Some(ty) = self.find_var_type(&i.sym) {
             println!("({}) type_of({}): find_var_type", self.scope.depth(), i.sym);
-            return Ok(ty.clone().respan(span).owned());
+            return Ok(ty.clone().respan(span));
         }
 
         if let Some(_var) = self.find_var(&i.sym) {
@@ -445,7 +446,7 @@ impl Analyzer<'_, '_> {
         }
 
         if let Ok(ty) = builtin_types::get_var(self.libs, span, &i.sym) {
-            return Ok(ty.owned());
+            return Ok(ty);
         }
 
         println!(
