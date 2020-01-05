@@ -43,7 +43,7 @@ impl Validate<TsTypeAnn> for Analyzer<'_, '_> {
 
     #[inline]
     fn validate(&mut self, ann: &TsTypeAnn) -> Self::Output {
-        ann.type_ann.into()
+        self.validate(&ann.type_ann)
     }
 }
 
@@ -51,11 +51,11 @@ impl Validate<TsTypeAliasDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<Alias>;
 
     fn validate(&mut self, d: &TsTypeAliasDecl) -> Self::Output {
-        Alias {
+        Ok(Alias {
             span: d.span,
-            ty: box d.type_ann,
-            type_params: d.type_params.map(From::from),
-        }
+            ty: self.validate(&d.type_ann)?,
+            type_params: self.validate(&d.type_params)?,
+        })
     }
 }
 
@@ -63,13 +63,13 @@ impl Validate<TsInterfaceDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<Interface>;
 
     fn validate(&mut self, d: &TsInterfaceDecl) -> Self::Output {
-        Interface {
+        Ok(Interface {
             span: d.span,
             name: d.id.sym,
             type_params: d.type_params.map(From::from),
             extends: d.extends.into_iter().map(From::from).collect(),
             body: d.body.body.into_iter().map(From::from).collect(),
-        }
+        })
     }
 }
 
@@ -77,6 +77,8 @@ impl Validate<TsType> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
     fn validate(&mut self, ty: &TsType) -> Self::Output {
+        let span = ty.span();
+
         match ty {
             TsType::TsThisType(this) => this.into(),
             TsType::TsLitType(ty) => ty.into(),
@@ -206,7 +208,7 @@ impl Validate<TsIndexSignature> for Analyzer<'_, '_> {
     fn validate(&mut self, d: &TsIndexSignature) -> Self::Output {
         IndexSignature {
             span: d.span,
-            params: d.params,
+            params: self.validate(&d.params)?,
             readonly: d.readonly,
             type_ann: d.type_ann.map(|v| v),
         }

@@ -116,7 +116,10 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                             left: box Pat::Ident(ref i),
                             ..
                         }) => {
-                            let ty = i.type_ann.clone().map(Type::from);
+                            let ty = match i.type_ann {
+                                Some(ref ty) => Some(self.validate(ty)?),
+                                None => None,
+                            };
                             //let ty = match ty {
                             //    Some(ty) => match child.expand_type(i.span, ty) {
                             //        Ok(ty) => Some(ty),

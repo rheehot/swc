@@ -31,6 +31,37 @@ where
     }
 }
 
+impl<T, V> Validate<Option<T>> for V
+where
+    T: VisitWith<Self>,
+    Self: Validate<T>,
+{
+    type Output = Option<<Self as Validate<T>>::Output>;
+
+    fn validate(&mut self, node: &Option<T>) -> Self::Output {
+        match node {
+            Some(ref n) => self.validate(n),
+            None => None,
+        }
+    }
+}
+
+impl<T, V> Validate<[T]> for V
+where
+    T: VisitWith<Self>,
+    Self: Validate<T>,
+{
+    type Output = Vec<<Self as Validate<T>>::Output>;
+
+    fn validate(&mut self, nodes: &[T]) -> Self::Output {
+        let mut outputs = Vec::with_capacity(nodes.len());
+        for node in nodes {
+            outputs.push(self.validate(node)?);
+        }
+        outputs
+    }
+}
+
 impl<'a, T, V> Validate<&'a T> for V
 where
     T: VisitWith<Self>,
