@@ -20,7 +20,7 @@ prevent!(ClassMethod);
 prevent!(TsFnParam);
 
 impl Analyzer<'_, '_> {
-    fn validate_class_property(&mut self, p: &ClassProp) -> Result<ty::ClassProperty, Error> {
+    pub fn validate_class_property(&mut self, p: &ClassProp) -> Result<ty::ClassProperty, Error> {
         p.visit_children(self);
 
         let mut errors = vec![];
@@ -37,10 +37,10 @@ impl Analyzer<'_, '_> {
         //    self.expand_type(span, ty.owned()).store(&mut errors);
         //}
 
-        let value = match p.value.as_ref().and_then(|e| self.validate_expr(&e)) {
-            Some(res) => Some(res),
-            None => None,
-        };
+        let value = p
+            .value
+            .as_ref()
+            .and_then(|e| self.validate_expr(&e).store(&mut errors));
 
         self.info.errors.extend(errors);
 
@@ -58,7 +58,7 @@ impl Analyzer<'_, '_> {
         })
     }
 
-    fn validate_constructor(&mut self, c: &Constructor) -> Result<ty::Constructor, Error> {
+    pub fn validate_constructor(&mut self, c: &Constructor) -> Result<ty::Constructor, Error> {
         let c_span = c.span();
 
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
@@ -163,7 +163,7 @@ impl Analyzer<'_, '_> {
                         })
                         | PatOrTsParamProp::Pat(pat) => from_pat(pat),
                     })
-                    .map(|param| self.validate_fn_param(param))
+                    .map(|param| self.validate_fn_param(&param))
                     .collect::<Result<_, _>>()?,
             })
         })

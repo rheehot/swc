@@ -590,11 +590,6 @@ impl Type {
 
             Type::ClassInstance(c) => Type::ClassInstance(ClassInstance { span, ..c }),
 
-            Type::Simple(ty) => Type::Simple(Cow::Owned(match *ty {
-                TsType::TsTypeRef(ref t) => TsType::TsTypeRef(TsTypeRef { span, ..t.clone() }),
-                ref ty => ty.clone(),
-            })),
-
             Type::Param(p) => Type::Param(Param { span, ..p }),
 
             Type::Static(s) => Type::Static(Static { span, ..s }),
