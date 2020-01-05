@@ -327,7 +327,7 @@ impl Analyzer<'_, '_> {
                         search_members_for_prop!(t.members.iter());
                     }
 
-                    Type::Class(Class { ref body, .. }) => {
+                    Type::Class(ty::Class { ref body, .. }) => {
                         for member in body.iter() {
                             match *member {
                                 ty::ClassMember::Method(Method {
@@ -390,13 +390,10 @@ impl Analyzer<'_, '_> {
         kind: ExtractKind,
         args: &[ExprOrSpread],
         type_args: Option<&TsTypeParamInstantiation>,
-    ) -> Result<Type, Error> {
+    ) -> ValidationResult {
         if cfg!(debug_assertions) {
             match *ty.normalize() {
-                Type::Simple(ref s) => match **s {
-                    TsType::TsTypeRef(ref s) => unreachable!("Type: {:#?}", s),
-                    _ => {}
-                },
+                Type::Ref(ref s) => unreachable!("Type::Ref: {:#?}", s),
                 _ => {}
             }
         }
@@ -530,20 +527,16 @@ impl Analyzer<'_, '_> {
                 .into());
             }
 
-            Type::Simple(ref sty) => match **sty {
-                TsType::TsTypeQuery(TsTypeQuery {
-                    expr_name:
-                        TsTypeQueryExpr::TsEntityName(TsEntityName::Ident(Ident { ref sym, .. })),
-                    ..
-                }) => {
-                    if self.scope.find_declaring_fn(sym) {
-                        return Ok(Type::any(span));
-                    }
-
-                    ret_err!();
+            Type::Simple(TsType::TsTypeQuery(TsTypeQuery {
+                expr_name: TsTypeQueryExpr::TsEntityName(TsEntityName::Ident(Ident { ref sym, .. })),
+                ..
+            })) => {
+                if self.scope.find_declaring_fn(sym) {
+                    return Ok(Type::any(span));
                 }
-                _ => ret_err!(),
-            },
+
+                ret_err!();
+            }
 
             _ => ret_err!(),
         }
@@ -554,26 +547,16 @@ impl Analyzer<'_, '_> {
         span: Span,
         c: MethodSignature,
         args: &[ExprOrSpread],
-    ) -> Result<Type, Error> {
+    ) -> ValidationResult {
         // Validate arguments
         for (i, p) in c.params.into_iter().enumerate() {
-            match p {
-                TsFnParam::Ident(Ident { type_ann, .. })
-                | TsFnParam::Array(ArrayPat { type_ann, .. })
-                | TsFnParam::Rest(RestPat { type_ann, .. })
-                | TsFnParam::Object(ObjectPat { type_ann, .. }) => {
-                    let lhs = match type_ann.map(Type::from) {
-                        Some(lhs) => Some(self.expand_type(span, lhs)?),
-                        None => None,
-                    };
-                    if let Some(lhs) = lhs {
-                        // TODO: Handle spread
-                        // TODO: Validate optional parameters
-                        if args.len() > i {
-                            let args_ty = self.type_of(&args[i].expr)?;
-                            self.assign(&lhs, &*args_ty, args[i].span())?;
-                        }
-                    }
+            let lhs = p.ty;
+            if let Some(lhs) = lhs {
+                // TODO: Handle spread
+                // TODO: Validate optional parameters
+                if args.len() > i {
+                    let args_ty = args[i].expr.validate_with(self)?;
+                    self.assign(&lhs, &args_ty, args[i].span())?;
                 }
             }
         }

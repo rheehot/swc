@@ -150,8 +150,12 @@ impl Validate<Prop> for Analyzer<'_, '_> {
                 optional: false,
                 readonly: false,
                 computed: false,
-                type_ann: match self.infer_return_type(p.span()) {
-                    Some(ty) => Some(ty.owned()),
+                type_ann: match p
+                    .body
+                    .as_ref()
+                    .map(|bs| self.visit_stmts_for_return(&bs.stmts))
+                {
+                    Some(ty) => ty?,
                     // This is error, but it's handled by GetterProp visitor.
                     None => None,
                 },

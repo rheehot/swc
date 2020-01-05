@@ -5,8 +5,8 @@ use crate::{
     errors::Error,
     ty,
     ty::{
-        Array, ClassInstance, EnumVariant, FnParam, IndexSignature, Interface, Ref, Tuple, Type,
-        TypeElement, TypeLit, TypeParamInstantiation, Union,
+        Array, ClassInstance, EnumVariant, Interface, Ref, Tuple, Type, TypeElement, TypeLit,
+        TypeParamInstantiation, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, RemoveTypes},
     validator::{Validate, ValidateWith},
@@ -413,9 +413,9 @@ impl Analyzer<'_, '_> {
                     //                assert!(i.type_ann.is_some());
                     //
                     //                let index_ty =
-                    // Type::from(i.type_ann.as_ref().unwrap().clone());                
-                    // if index_ty.eq_ignore_name_and_span(&prop_ty) {                  
-                    // if let Some(ref type_ann) = type_ann {                        
+                    // Type::from(i.type_ann.as_ref().unwrap().clone());
+                    // if index_ty.eq_ignore_name_and_span(&prop_ty) {
+                    // if let Some(ref type_ann) = type_ann {
                     // return Ok(type_ann.clone());                    }
                     //                    return Ok(Type::any(span));
                     //                }
@@ -990,10 +990,10 @@ impl Validate<Function> for Analyzer<'_, '_> {
             }
         });
 
-        let inferred_return_type = f
+        let inferred_return_type = try_opt!(f
             .body
             .as_ref()
-            .map(|body| self.visit_stmts_for_return(&body.stmts));
+            .map(|body| self.visit_stmts_for_return(&body.stmts)));
         let inferred_return_type = match inferred_return_type {
             Some(Some(inferred_return_type)) => {
                 if let Some(ref declared) = declared_ret_ty {
@@ -1044,10 +1044,14 @@ impl Validate<ArrowExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Function>;
 
     fn validate(&mut self, f: &ArrowExpr) -> Self::Output {
-        let declared_ret_ty = f
-            .return_type
-            .validate_with(self)
-            .store(&mut self.info.errors);
+        let declared_ret_ty = match f.return_type.validate_with(self) {
+            Some(Ok(ty)) => Some(ty),
+            Some(Err(err)) => {
+                self.info.errors.push(err);
+                Some(Type::any(f.span))
+            }
+            None => None,
+        };
         let declared_ret_ty = match declared_ret_ty {
             Some(ty) => {
                 let span = ty.span();

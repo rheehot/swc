@@ -12,6 +12,7 @@ pub enum Type {
     This(TsThisType),
     Lit(TsLitType),
     Ref(Ref),
+    Query(TsTypeQuery),
     TypeLit(TypeLit),
     Keyword(TsKeywordType),
     Conditional(Conditional),
