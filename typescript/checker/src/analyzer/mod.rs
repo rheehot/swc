@@ -13,7 +13,7 @@ use swc_atoms::JsWord;
 use swc_common::Span;
 use swc_common::{SourceMap, Span};
 use swc_common::{Span, Visit};
-use swc_ecma_ast::Decorator;
+use swc_ecma_ast::{Decorator, Expr};
 use swc_ts_builtin_types::Lib;
 
 #[macro_use]
@@ -44,7 +44,7 @@ pub struct Analyzer<'a, 'b> {
 
     resolved_imports: FxHashMap<JsWord, Arc<Type>>,
     errored_imports: FxHashSet<JsWord>,
-    pending_exports: Vec<((JsWord, Span), Type)>,
+    pending_exports: Vec<((JsWord, Span), Expr)>,
 
     rule: Rule,
     libs: &'b [Lib],

@@ -1,5 +1,9 @@
 use super::Analyzer;
-use crate::{errors::Error, ty::Type, validator::Validate};
+use crate::{
+    errors::Error,
+    ty::Type,
+    validator::{Validate, ValidateWith},
+};
 use std::{convert::TryInto, mem::replace, sync::Arc};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Span, Spanned};
@@ -30,9 +34,7 @@ impl Analyzer<'_, '_> {
             debug_assert_eq!(self.info.exports.types.get(&sym), None);
 
             let exported_sym = sym;
-            let ty = match exported_sym
-                .and_then(|exported_sym| self.scope.types.remove(&exported_sym))
-            {
+            let ty = match self.scope.types.remove(&exported_sym) {
                 Some(export) => export,
                 None => return,
             };
@@ -44,7 +46,7 @@ impl Analyzer<'_, '_> {
 
     pub(super) fn export_default_expr(&mut self, expr: &Expr) {
         assert_eq!(
-            self.info.exports.get(&js_word!("default")),
+            self.info.exports.vars.get(&js_word!("default")),
             None,
             "A module can export only one item as default"
         );
@@ -59,7 +61,7 @@ impl Analyzer<'_, '_> {
                     // declare namespace React {}
                     Error::UndefinedSymbol { .. } => {
                         self.pending_exports
-                            .push(((js_word!("default"), expr.span()), box expr.clone()));
+                            .push(((js_word!("default"), expr.span()), expr.clone()));
                         return;
                     }
                     _ => {}
@@ -68,13 +70,16 @@ impl Analyzer<'_, '_> {
                 return;
             }
         };
-        self.info.exports.insert(js_word!("default"), Arc::new(ty));
+        self.info
+            .exports
+            .vars
+            .insert(js_word!("default"), Arc::new(ty));
     }
 }
 
 impl Visit<ExportDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, export: &ExportDecl) {
-        let export = export.visit_children(self);
+        export.visit_children(self);
 
         match export.decl {
             Decl::Fn(ref f) => self.export(f.span(), f.ident.sym.clone(), None),
@@ -94,14 +99,13 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
                 // TODO: Allow multiple exports with same name.
                 debug_assert_eq!(self.info.exports.get(&e.id.sym), None);
 
+                let ty = e.validate_with(self).store(&mut self.info.errors)?;
+
                 self.info.exports.types.insert(
                     e.id.sym.clone(),
                     Arc::new({
                         let span = e.span();
-                        match e.clone().try_into() {
-                            Ok(ty) => ty,
-                            Err(e) => Type::any(span),
-                        }
+                        ty.unwrap_or_else(|| Type::any(span))
                     }),
                 );
             }

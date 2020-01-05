@@ -402,7 +402,7 @@ impl Validate<TsFnType> for Analyzer<'_, '_> {
             span: t.span,
             type_params: try_opt!(t.type_params.validate_with(self)),
             params: t.params.validate_with(self)?,
-            ret_ty: t.type_ann.validate_with(self)?,
+            ret_ty: box t.type_ann.validate_with(self)?,
         })
     }
 }
@@ -411,7 +411,10 @@ impl Validate<TsConstructorType> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Constructor>;
 
     fn validate(&mut self, t: &TsConstructorType) -> Self::Output {
-        Ok(ty::Constructor {})
+        Ok(ty::Constructor {
+            span: t.span,
+            params: t.params.validate_with(self)?,
+        })
     }
 }
 

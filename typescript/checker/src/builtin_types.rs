@@ -4,7 +4,7 @@ use crate::{
     loader::Load,
     ty::{self, Class, Module, Static},
     util::pat_to_ts_fn_param,
-    validator::Validate,
+    validator::{Validate, ValidateWith},
     Exports, ImportInfo,
 };
 use chashmap::CHashMap;
@@ -172,7 +172,10 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                             ),
                                         },
                                         Entry::Vacant(e) => {
-                                            e.insert(i.clone().into());
+                                            e.insert(
+                                                i.validate_with(&mut analyzer)
+                                                    .expect("builtin: failed to parse interface"),
+                                            );
                                         }
                                     }
                                 }

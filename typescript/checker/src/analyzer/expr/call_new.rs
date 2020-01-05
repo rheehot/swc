@@ -3,8 +3,10 @@ use super::{super::Analyzer, prop_name_to_expr};
 use crate::{
     builtin_types,
     errors::Error,
+    ty,
     ty::{CallSignature, ClassInstance, ConstructorSignature, Method, Static, Type, TypeElement},
-    validator::Validate,
+    util::EqIgnoreSpan,
+    validator::{Validate, ValidateWith},
     ValidationResult,
 };
 use swc_atoms::js_word;
@@ -327,13 +329,13 @@ impl Analyzer<'_, '_> {
                     Type::Class(Class { ref body, .. }) => {
                         for member in body.iter() {
                             match *member {
-                                ClassMember::Method(Method {
+                                ty::ClassMember::Method(Method {
                                     ref key,
                                     ref ret_ty,
                                     ..
                                 }) => {
                                     if prop_name_to_expr(key).eq_ignore_span(&*prop) {
-                                        return Ok(ret_ty.clone());
+                                        return Ok(*ret_ty.clone());
                                     }
                                 }
                                 _ => {}
@@ -373,11 +375,9 @@ impl Analyzer<'_, '_> {
                 }
             }
             _ => {
-                let ty = self.validate(callee)?;
-                println!("before extract: {:?}", ty);
-                let ty = self.expand_type(span, ty)?;
+                let ty = callee.validate_with(self)?;
 
-                Ok(self.extract(span, &ty, kind, args, type_args)?)
+                Ok(self.extract(span, ty, kind, args, type_args)?)
             }
         }
     }
@@ -496,7 +496,8 @@ impl Analyzer<'_, '_> {
             Type::Union(ref u) => {
                 let mut errors = vec![];
                 for ty in &u.types {
-                    match self.extract(span, &ty, kind, args, type_args) {
+                    // TODO: Remove clone
+                    match self.extract(span, ty.clone(), kind, args, type_args) {
                         Ok(ty) => return Ok(ty),
                         Err(err) => errors.push(err),
                     }
@@ -523,7 +524,7 @@ impl Analyzer<'_, '_> {
                 return Ok(ClassInstance {
                     span,
                     cls: cls.clone(),
-                    type_args: type_args.cloned().map(From::from),
+                    type_args: try_opt!(type_args.validate_with(self)),
                 }
                 .into());
             }
