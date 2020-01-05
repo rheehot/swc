@@ -6,6 +6,7 @@ use crate::{
     ty,
     ty::{ClassInstance, Tuple, Type, TypeLit, TypeParamInstantiation},
     util::RemoveTypes,
+    validator::Validate,
     ValidationResult,
 };
 use swc_atoms::js_word;
@@ -37,11 +38,126 @@ pub(super) enum TypeOfMode {
 prevent!(Expr);
 prevent!(ParenExpr);
 
-impl Analyzer<'_, '_> {
-    pub(super) fn visit_expr(&mut self, e: &Expr) -> ValidationResult {
+impl Validate<Expr> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
+
+    fn validate(&mut self, e: &Expr) -> Self::Output {
         self.visit_expr_with_extra(e, TypeOfMode::RValue, None)
     }
+}
 
+impl Validate<AssignExpr> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
+
+    fn validate(&mut self, e: &AssignExpr) -> Self::Output {
+        match e.left {
+            PatOrExpr::Pat(box Pat::Ident(ref i)) | PatOrExpr::Expr(box Expr::Ident(ref i)) => {
+                // Type is any if self.declaring contains ident
+            }
+        }
+
+        let mut errors = vec![];
+        let span = e.span();
+        e.visit_children(self);
+
+        let rhs_ty = match self
+            .visit_expr(&e.right)
+            .and_then(|ty| self.expand_type(span, ty))
+        {
+            Ok(rhs_ty) => {
+                let rhs_ty = rhs_ty;
+
+                self.check_rvalue(&rhs_ty);
+
+                Ok(rhs_ty)
+            }
+            Err(err) => {
+                errors.push(err);
+                Err(())
+            }
+        };
+
+        self.info.errors.extend(errors);
+
+        let rhs_ty = match rhs_ty {
+            Ok(v) => v,
+            Err(()) => Type::any(span),
+        };
+
+        if e.op == op!("=") {
+            self.try_assign(span, &e.left, &rhs_ty);
+        }
+
+        Ok(rhs_ty)
+    }
+}
+
+impl Validate<UpdateExpr> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
+
+    fn validate(&mut self, e: &UpdateExpr) -> Self::Output {
+        let span = e.span;
+
+        let res = self
+            .visit_expr_with_extra(&e.arg, TypeOfMode::LValue, None)
+            .and_then(|ty| self.expand_type(span, ty))
+            .and_then(|ty| match *ty.normalize() {
+                Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsStringKeyword,
+                    ..
+                })
+                | Type::Lit(TsLitType {
+                    lit: TsLit::Str(..),
+                    ..
+                })
+                | Type::Array(..) => Err(Error::TS2356 { span: e.arg.span() }),
+
+                _ => Ok(()),
+            })
+            .store(&mut self.info.errors);
+
+        Ok(Type::Keyword(TsKeywordType {
+            kind: TsKeywordTypeKind::TsNumberKeyword,
+            span,
+        }))
+    }
+}
+
+impl Validate<SeqExpr> for Analyzer<'_, '_> {
+    type Output = ValidationResult;
+
+    fn validate(&mut self, e: &SeqExpr) -> Self::Output {
+        let SeqExpr { span, ref exprs } = *e;
+
+        assert!(exprs.len() >= 1);
+
+        let mut is_any = false;
+        for e in exprs.iter() {
+            match **e {
+                Expr::Ident(ref i) => {
+                    if self.scope.declaring.contains(&i.sym) {
+                        is_any = true;
+                    }
+                }
+                _ => {}
+            }
+            match self.visit_expr(e) {
+                Ok(..) => {}
+                Err(Error::ReferencedInInit { .. }) => {
+                    is_any = true;
+                }
+                Err(..) => {}
+            }
+        }
+        if is_any {
+            return Ok(Type::any(span).owned());
+        }
+
+        return self.visit_expr(&exprs.last().unwrap());
+    }
+}
+
+impl Analyzer<'_, '_> {
     pub(super) fn visit_expr_with_extra(
         &mut self,
         e: &Expr,
@@ -257,105 +373,6 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    fn visit_assign_expr(&mut self, e: &AssignExpr) -> ValidationResult {
-        match e.left {
-            PatOrExpr::Pat(box Pat::Ident(ref i)) | PatOrExpr::Expr(box Expr::Ident(ref i)) => {
-                // Type is any if self.declaring contains ident
-            }
-        }
-
-        let mut errors = vec![];
-        let span = e.span();
-        e.visit_children(self);
-
-        let rhs_ty = match self
-            .visit_expr(&e.right)
-            .and_then(|ty| self.expand_type(span, ty))
-        {
-            Ok(rhs_ty) => {
-                let rhs_ty = rhs_ty;
-
-                self.check_rvalue(&rhs_ty);
-
-                Ok(rhs_ty)
-            }
-            Err(err) => {
-                errors.push(err);
-                Err(())
-            }
-        };
-
-        self.info.errors.extend(errors);
-
-        let rhs_ty = match rhs_ty {
-            Ok(v) => v,
-            Err(()) => Type::any(span),
-        };
-
-        if e.op == op!("=") {
-            self.try_assign(span, &e.left, &rhs_ty);
-        }
-
-        Ok(rhs_ty)
-    }
-
-    fn validate_update_expr(&mut self, e: &UpdateExpr) -> ValidationResult {
-        let span = e.span;
-
-        let res = self
-            .visit_expr_with_extra(&e.arg, TypeOfMode::LValue, None)
-            .and_then(|ty| self.expand_type(span, ty))
-            .and_then(|ty| match *ty.normalize() {
-                Type::Keyword(TsKeywordType {
-                    kind: TsKeywordTypeKind::TsStringKeyword,
-                    ..
-                })
-                | Type::Lit(TsLitType {
-                    lit: TsLit::Str(..),
-                    ..
-                })
-                | Type::Array(..) => Err(Error::TS2356 { span: e.arg.span() }),
-
-                _ => Ok(()),
-            })
-            .store(&mut self.info.errors);
-
-        Ok(Type::Keyword(TsKeywordType {
-            kind: TsKeywordTypeKind::TsNumberKeyword,
-            span,
-        }))
-    }
-
-    fn validate_seq_expr(&mut self, e: &SeqExpr) -> ValidationResult {
-        let SeqExpr { span, ref exprs } = *e;
-
-        assert!(exprs.len() >= 1);
-
-        let mut is_any = false;
-        for e in exprs.iter() {
-            match **e {
-                Expr::Ident(ref i) => {
-                    if self.scope.declaring.contains(&i.sym) {
-                        is_any = true;
-                    }
-                }
-                _ => {}
-            }
-            match self.visit_expr(e) {
-                Ok(..) => {}
-                Err(Error::ReferencedInInit { .. }) => {
-                    is_any = true;
-                }
-                Err(..) => {}
-            }
-        }
-        if is_any {
-            return Ok(Type::any(span).owned());
-        }
-
-        return self.visit_expr(&exprs.last().unwrap());
-    }
-
     pub(super) fn type_of_ident(&mut self, i: &Ident, type_mode: TypeOfMode) -> ValidationResult {
         let span = i.span();
 
@@ -444,7 +461,7 @@ impl Analyzer<'_, '_> {
         &self,
         span: Span,
         n: &TsEntityName,
-        type_args: Option<&TsTypeParamInstantiation>,
+        type_args: Option<TypeParamInstantiation>,
     ) -> ValidationResult {
         match *n {
             TsEntityName::Ident(ref i) => self.type_of_ident(i, TypeOfMode::RValue),
