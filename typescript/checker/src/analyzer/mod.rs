@@ -4,8 +4,9 @@ use crate::{
     analyzer::{pat::PatMode, props::ComputedPropMode},
     errors::Error,
     loader::Load,
-    ty::Type,
-    validator::Validate,
+    ty,
+    ty::{Alias, Type},
+    validator::{Validate, ValidateWith},
     Exports, ImportInfo, Rule,
 };
 use fxhash::{FxHashMap, FxHashSet};
@@ -18,6 +19,7 @@ use swc_atoms::JsWord;
 use swc_common::Span;
 use swc_common::{SourceMap, Span};
 use swc_common::{Span, Visit};
+use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 use swc_ts_builtin_types::Lib;
 
@@ -210,7 +212,7 @@ impl Visit<Decorator> for Analyzer<'_, '_> {
 }
 
 impl Visit<TsImportEqualsDecl> for Analyzer<'_, '_> {
-    fn fold(&mut self, node: TsImportEqualsDecl) -> TsImportEqualsDecl {
+    fn visit(&mut self, node: &TsImportEqualsDecl) {
         match node.module_ref {
             TsModuleRef::TsEntityName(ref e) => {
                 match self.type_of_ts_entity_name(node.span, e, None) {
@@ -220,28 +222,20 @@ impl Visit<TsImportEqualsDecl> for Analyzer<'_, '_> {
             }
             _ => {}
         }
-
-        node
     }
 }
 
 impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
-    fn fold(&mut self, decl: TsModuleDecl) -> TsModuleDecl {
+    fn visit(&mut self, decl: &TsModuleDecl) {
         let span = decl.span;
 
-        let mut new = Analyzer::new(
-            self.libs,
-            self.rule,
-            Scope::root(),
-            self.path.clone(),
-            self.loader,
-        );
-        new.in_declare = decl.declare;
+        let mut new = self.new(Scope::root());
+        new.ctx.in_declare = decl.declare;
 
-        let decl = decl.fold_children(&mut new);
+        decl.visit_children(&mut new);
         self.info.errors.append(&mut new.info.errors);
 
-        self.scope.register_type(
+        self.register_type(
             match decl.id {
                 TsModuleName::Ident(ref i) => i.sym.clone(),
                 TsModuleName::Str(ref s) => s.value.clone(),
@@ -250,38 +244,28 @@ impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
                 span,
                 exports: new.info.exports,
             }),
-        );
-
-        decl
+        )
+        .store(&mut self.info.errors);
     }
 }
 
 impl Visit<TsTypeAliasDecl> for Analyzer<'_, '_> {
-    fn fold(&mut self, decl: TsTypeAliasDecl) -> TsTypeAliasDecl {
-        let ty: Type = decl.type_ann.clone().into();
+    fn visit(&mut self, decl: &TsTypeAliasDecl) {
+        let res: Result<_, _> = try {
+            let ty: Type = decl.type_ann.validate_with(self)?;
 
-        let ty = if decl.type_params.is_none() {
-            match self.expand_type(decl.span(), ty) {
-                Ok(ty) => ty,
-                Err(err) => {
-                    self.info.errors.push(err);
-                    Type::any(decl.span())
-                }
-            }
-        } else {
-            ty
+            let type_params = try_opt!(decl.type_params.validate_with(self));
+
+            self.register_type(
+                decl.id.sym.clone(),
+                Type::Alias(Alias {
+                    span: decl.span(),
+                    ty: box ty,
+                    type_params,
+                }),
+            )?;
         };
 
-        self.scope.register_type(
-            decl.id.sym.clone(),
-            Type::Alias(Alias {
-                span: decl.span(),
-                ty: box ty,
-                type_params: decl.type_params.clone().map(From::from),
-            }),
-        );
-
-        // TODO: Validate type
-        decl
+        res.store(&mut self.info.errors);
     }
 }

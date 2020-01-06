@@ -11,11 +11,7 @@ use crate::{
 };
 use fxhash::FxHashMap;
 use smallvec::SmallVec;
-use std::{
-    borrow::Cow,
-    collections::hash_map::Entry,
-    iter::{repeat, repeat_with},
-};
+use std::{borrow::Cow, collections::hash_map::Entry, iter::repeat};
 use swc_atoms::JsWord;
 use swc_common::{Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -30,6 +26,7 @@ pub(crate) struct Scope<'a> {
     pub(super) types: FxHashMap<JsWord, Type>,
     pub(super) facts: CondFacts,
 
+    pub(super) declaring_fn: Option<JsWord>,
     /// [Some] while declaring a class property.
     pub(super) declaring_prop: Option<JsWord>,
 
@@ -37,6 +34,13 @@ pub(crate) struct Scope<'a> {
 }
 
 impl Scope<'_> {
+    /// Overrides a variable. Used for removing lazily-typed stuffs.
+    pub fn override_var(&mut self, kind: VarDeclKind, name: JsWord, ty: Type) -> Result<(), Error> {
+        self.declare_var(ty.span(), kind, name, Some(ty), true, true)?;
+
+        Ok(())
+    }
+
     pub fn remove_declaring<I>(&mut self, names: impl IntoIterator<IntoIter = I, Item = JsWord>)
     where
         I: Iterator<Item = JsWord> + DoubleEndedIterator,
@@ -706,6 +710,7 @@ impl<'a> Scope<'a> {
             facts,
             this: None,
             declaring_prop: None,
+            declaring_fn: None,
         }
     }
 
