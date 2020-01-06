@@ -1,0 +1,17 @@
+error: NoSuchVar {
+    span: Span {
+        lo: BytePos(
+            52,
+        ),
+        hi: BytePos(
+            58,
+        ),
+        ctxt: #0,
+    },
+    name: Atom('Symbol' type=static),
+}
+ --> $DIR/tests/conformance/Symbols/ES5SymbolProperty3.ts:5:6
+  |
+5 |     [Symbol.iterator]() { }
+  |      ^^^^^^
+

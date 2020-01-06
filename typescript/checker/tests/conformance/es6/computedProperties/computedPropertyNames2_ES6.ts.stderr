@@ -1,30 +1,10 @@
-error: GetterPropWithoutReturn {
-    span: Span {
-        lo: BytePos(
-            151,
-        ),
-        hi: BytePos(
-            165,
-        ),
-        ctxt: #0,
-    },
-}
+error: A 'get' accessor must return a value.
  --> $DIR/tests/conformance/es6/computedProperties/computedPropertyNames2_ES6.ts:7:9
   |
 7 |     get [accessorName]() { }
   |         ^^^^^^^^^^^^^^
 
-error: GetterPropWithoutReturn {
-    span: Span {
-        lo: BytePos(
-            219,
-        ),
-        hi: BytePos(
-            233,
-        ),
-        ctxt: #0,
-    },
-}
+error: A 'get' accessor must return a value.
  --> $DIR/tests/conformance/es6/computedProperties/computedPropertyNames2_ES6.ts:9:16
   |
 9 |     static get [accessorName]() { }
