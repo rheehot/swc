@@ -1,0 +1,6 @@
+error[TS1094]: An accessor cannot have type parameters
+ --> $DIR/tests/conformance/parser/ecmascript5/Accessors/parserSetAccessorWithTypeParameters1.ts:3:8
+  |
+3 |    set foo<T>(v) { }
+  |        ^^^
+

@@ -221,6 +221,11 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
                 let params = c.function.params.validate_with(child)?;
 
                 let type_params = try_opt!(c.function.type_params.validate_with(child));
+                if c.kind == MethodKind::Getter
+                    || c.kind == MethodKind::Setter && type_params.is_some()
+                {
+                    child.info.errors.push(Error::TS1094 { span: key_span })
+                }
 
                 c.key.visit_with(child);
                 // c.function.visit_children(child);

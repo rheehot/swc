@@ -1,0 +1,22 @@
+error[TS1094]: An accessor cannot have type parameters
+ --> $DIR/tests/conformance/parser/ecmascript5/Accessors/parserGetAccessorWithTypeParameters1.ts:3:7
+  |
+3 |   get foo<T>() { }
+  |       ^^^
+
+error[]: GetterPropWithoutReturn {
+    span: Span {
+        lo: BytePos(
+            34,
+        ),
+        hi: BytePos(
+            37,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/parser/ecmascript5/Accessors/parserGetAccessorWithTypeParameters1.ts:3:7
+  |
+3 |   get foo<T>() { }
+  |       ^^^
+

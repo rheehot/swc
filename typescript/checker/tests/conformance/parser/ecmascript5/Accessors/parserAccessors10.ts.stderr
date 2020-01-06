@@ -4,7 +4,7 @@ error: TS1042
 3 |   public get foo() { }
   |   ^^^^^^
 
-error: GetterPropWithoutReturn {
+error[]: GetterPropWithoutReturn {
     span: Span {
         lo: BytePos(
             41,

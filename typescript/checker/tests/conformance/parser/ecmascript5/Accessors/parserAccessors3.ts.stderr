@@ -1,4 +1,4 @@
-error: GetterPropWithoutReturn {
+error[]: GetterPropWithoutReturn {
     span: Span {
         lo: BytePos(
             31,

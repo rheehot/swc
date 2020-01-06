@@ -1,7 +1,10 @@
 use crate::ty::{Type, TypeElement};
 use std::{ops::RangeInclusive, path::PathBuf};
 use swc_atoms::JsWord;
-use swc_common::{errors::Handler, Span, Spanned, DUMMY_SP};
+use swc_common::{
+    errors::{DiagnosticId, Handler},
+    Span, Spanned, DUMMY_SP,
+};
 use swc_ecma_ast::Expr;
 
 #[derive(Debug, Clone, PartialEq, Spanned)]
@@ -248,6 +251,10 @@ pub enum Error {
         span: Span,
     },
 
+    TS1094 {
+        span: Span,
+    },
+
     TS1319 {
         span: Span,
     },
@@ -346,6 +353,7 @@ pub enum Error {
 }
 
 impl Error {
+    #[cold]
     pub fn emit(self, h: &Handler) {
         let span = self.span();
 
@@ -353,8 +361,15 @@ impl Error {
             Error::Unimplemented { ref msg, .. } => {
                 h.struct_err(&format!("unimplemented\n{}", msg))
             }
+            Error::TS1094 { span } => h.struct_err("An accessor cannot have type parameters"),
             _ => h.struct_err(&format!("{:#?}", self)),
         };
+        err.set_span(span);
+
+        err.code(DiagnosticId::Error(String::from(match self {
+            Error::TS1094 { .. } => "TS1094",
+            _ => "",
+        })));
 
         err.set_span(span).emit();
     }
