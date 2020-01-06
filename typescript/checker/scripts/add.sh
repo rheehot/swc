@@ -13,7 +13,7 @@ bash ./scripts/sort.sh
 
 # We are developing
 export TEST="$1"
-cargo test --test tests -- conformance | grep --color -E 'swc_ts_checker|$'
+cargo test --test tests -- conformance | grep --color -E 'swc_ecma_ast|swc_ts_checker|$'
 
 echo "$1" >> ./tests/done.txt
 bash ./scripts/sort.sh
