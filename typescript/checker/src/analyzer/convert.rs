@@ -469,7 +469,12 @@ impl Validate<TsType> for Analyzer<'_, '_> {
             TsType::TsParenthesizedType(ty) => self.validate(ty)?,
             TsType::TsTypeRef(ty) => Type::Ref(self.validate(ty)?),
             TsType::TsTypeQuery(ty) => Type::Query(ty.clone()),
-            _ => unimplemented!("TsType: {:?}", ty),
+            TsType::TsOptionalType(ty) => unimplemented!("{:?}", ty),
+            TsType::TsRestType(ty) => unimplemented!("{:?}", ty),
+            TsType::TsInferType(ty) => unimplemented!("{:?}", ty),
+            TsType::TsIndexedAccessType(ty) => unimplemented!("{:?}", ty),
+            TsType::TsTypePredicate(ty) => unimplemented!("{:?}", ty),
+            TsType::TsImportType(ty) => unimplemented!("{:?}", ty),
         })
     }
 }
