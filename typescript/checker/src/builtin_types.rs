@@ -182,16 +182,12 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                 Stmt::Decl(Decl::TsTypeAlias(ref a)) => {
                                     debug_assert_eq!(merged.types.get(&a.id.sym), None);
 
-                                    a.visit_with(&mut analyzer);
-
-                                    let ty = analyzer
-                                        .info
-                                        .exports
-                                        .types
-                                        .remove(&a.id.sym)
+                                    let ty = a
+                                        .validate_with(&mut analyzer)
+                                        .map(Type::from)
                                         .expect("builtin: failed to process type alias");
 
-                                    merged.types.insert(a.id.sym.clone(), Type::Arc(ty));
+                                    merged.types.insert(a.id.sym.clone(), ty);
                                 }
 
                                 // Merge interface
