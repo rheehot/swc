@@ -170,7 +170,17 @@ impl Analyzer<'_, '_> {
                 type_params: Default::default(),
             }
             .into(),
-            Prop::Setter(ref p) => unimplemented!("type_of_prop(SetterProperty): {:?}", p),
+            Prop::Setter(ref p) => PropertySignature {
+                span: prop.span(),
+                key: prop_key_to_expr(&prop),
+                params: vec![p.param.validate_with(self)?],
+                optional: false,
+                readonly: false,
+                computed: false,
+                type_ann: None,
+                type_params: Default::default(),
+            }
+            .into(),
 
             Prop::Method(ref p) => MethodSignature {
                 span,
