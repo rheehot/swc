@@ -55,7 +55,7 @@ impl Analyzer<'_, '_> {
             // Verify parent interface
             let res: Result<_, _> = try {
                 let type_args = try_opt!(parent.type_args.validate_with(self));
-                self.type_of_ts_entity_name(parent.span, &parent.expr, type_args);
+                self.type_of_ts_entity_name(parent.span, &parent.expr, type_args)?;
             };
 
             res.store(&mut self.info.errors);

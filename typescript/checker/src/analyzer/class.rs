@@ -5,6 +5,7 @@ use super::{
     Analyzer,
 };
 use crate::{
+    analyzer::util::ResultExt,
     errors::Error,
     swc_common::VisitWith,
     ty,
@@ -724,32 +725,36 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
         let old_this = self.scope.this.take();
         // self.scope.this = Some(ty.clone());
 
-        let c = self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
-            if let Some(ref i) = c.ident {
-                analyzer.scope.register_type(i.sym.clone(), ty.clone());
+        let c = self
+            .with_child(ScopeKind::Block, Default::default(), |analyzer| {
+                if let Some(ref i) = c.ident {
+                    analyzer.scope.register_type(i.sym.clone(), ty.clone());
 
-                analyzer.validate_inherited_members(None, &c.class, false);
-                analyzer.validate_class_members(&c.class, false);
+                    analyzer.validate_inherited_members(None, &c.class, false);
+                    analyzer.validate_class_members(&c.class, false)?;
 
-                match analyzer.scope.declare_var(
-                    ty.span(),
-                    VarDeclKind::Var,
-                    i.sym.clone(),
-                    Some(ty),
-                    // initialized = true
-                    true,
-                    // declare Class does not allow multiple declarations.
-                    false,
-                ) {
-                    Ok(()) => {}
-                    Err(err) => {
-                        analyzer.info.errors.push(err);
+                    match analyzer.scope.declare_var(
+                        ty.span(),
+                        VarDeclKind::Var,
+                        i.sym.clone(),
+                        Some(ty),
+                        // initialized = true
+                        true,
+                        // declare Class does not allow multiple declarations.
+                        false,
+                    ) {
+                        Ok(()) => {}
+                        Err(err) => {
+                            analyzer.info.errors.push(err);
+                        }
                     }
                 }
-            }
 
-            c.visit_children(analyzer)
-        });
+                c.visit_children(analyzer);
+
+                Ok(())
+            })
+            .store(&mut self.info.errors);
 
         self.scope.this = old_this;
     }
@@ -767,7 +772,8 @@ impl Visit<ClassDecl> for Analyzer<'_> {
         let c: ClassDecl = c.visit_children(self);
 
         self.validate_inherited_members(Some(&c.ident), &c.class, c.declare);
-        self.validate_class_members(&c.class, c.declare);
+        self.validate_class_members(&c.class, c.declare)
+            .store(&mut self.info.errors);
 
         let ty = match self.validate_type_of_class(Some(c.ident.sym.clone()), &c.class) {
             Ok(ty) => ty.into(),

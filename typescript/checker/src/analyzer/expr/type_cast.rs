@@ -50,7 +50,7 @@ impl Analyzer<'_, '_> {
         let casted_ty = to.validate_with(self)?;
         let casted_ty = instantiate_class(casted_ty);
 
-        self.validate_type_cast_inner(span, orig_ty, &casted_ty);
+        self.validate_type_cast_inner(span, orig_ty, &casted_ty)?;
 
         Ok(casted_ty)
     }

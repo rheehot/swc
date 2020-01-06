@@ -24,7 +24,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
         let lt = self.validate(&left).store(&mut errors);
         let rt = self.validate(&right).store(&mut errors);
 
-        self.validate_bin_inner(span, op, lt, rt);
+        self.validate_bin_inner(span, op, lt.as_ref(), rt.as_ref());
 
         let (lt, rt) = match (lt, rt) {
             (Some(l), Some(r)) => (l, r),
@@ -239,7 +239,13 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    fn validate_bin_inner(&mut self, span: Span, op: BinaryOp, lt: Option<Type>, rt: Option<Type>) {
+    fn validate_bin_inner(
+        &mut self,
+        span: Span,
+        op: BinaryOp,
+        lt: Option<&Type>,
+        rt: Option<&Type>,
+    ) {
         let ls = lt.span();
         let rs = rt.span();
 
