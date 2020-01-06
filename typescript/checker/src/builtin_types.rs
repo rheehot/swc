@@ -38,7 +38,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
         return &*cached;
     }
 
-    println!("----- loading builtin -----");
+    println!("\n\n\n\n\n----- loading builtin -----");
 
     // We hold write lock (thus block readers) while merging.
     CACHE.alter(libs, |v| {
@@ -212,6 +212,8 @@ fn merge(ls: &[Lib]) -> &'static Merged {
 
         Some(Box::leak(merged))
     });
+
+    println!("----- loaded builtin -----\n\n\n\n\n");
 
     return &*CACHE.get(ls).unwrap();
 }
