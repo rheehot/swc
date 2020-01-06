@@ -47,7 +47,27 @@ impl Visit<TsInterfaceDecl> for Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     pub fn visit_stmts_for_return(&mut self, stmts: &[Stmt]) -> Result<Option<Type>, Error> {
-        unimplemented!("visit_stmts_for_return")
+        let types = {
+            let mut v = ReturnTypeCollector {
+                analyzer: &mut *self,
+                types: Default::default(),
+            };
+
+            stmts.visit_with(&mut v);
+
+            v.types
+        };
+
+        let mut buf = Vec::with_capacity(types.len());
+        for ty in types {
+            buf.extend(ty.store(&mut self.info.errors));
+        }
+
+        if buf.is_empty() {
+            return Ok(None);
+        }
+
+        Ok(Some(Type::union(buf)))
     }
 
     /// Validate that parent interfaces are all resolved.
@@ -64,6 +84,30 @@ impl Analyzer<'_, '_> {
     }
 }
 
-struct ReturnTypeCollector<'a, A: Validate<Expr, Output = ValidationResult>> {
-    pub types: Vec<Type>,
+struct ReturnTypeCollector<A> {
+    pub analyzer: A,
+    pub types: Vec<Result<Type, Error>>,
 }
+
+impl<A> Visit<ReturnStmt> for ReturnTypeCollector<A>
+where
+    A: Validate<Expr, Output = ValidationResult>,
+{
+    fn visit(&mut self, s: &ReturnStmt) {
+        if let Some(ty) = s.arg.validate_with(&mut self.analyzer) {
+            self.types.push(ty)
+        }
+    }
+}
+
+macro_rules! noop {
+    ($T:ty) => {
+        impl<A> Visit<$T> for ReturnTypeCollector<A> {
+            #[inline(always)]
+            fn visit(&mut self, _: &$T) {}
+        }
+    };
+}
+
+noop!(Function);
+noop!(ArrowExpr);
