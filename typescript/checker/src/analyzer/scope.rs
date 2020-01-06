@@ -391,7 +391,6 @@ impl Scope<'_> {
                     let ty = ty.generalize_lit().into_owned();
 
                     Some(if let Some(var_ty) = v.ty {
-                        println!("\tdeclare_var");
                         let var_ty = var_ty.generalize_lit().into_owned();
 
                         // if k.as_ref() == "co1" {
