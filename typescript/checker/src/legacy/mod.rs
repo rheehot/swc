@@ -18,9 +18,6 @@ use swc_common::{
 };
 use swc_ecma_ast::*;
 
-mod generic;
-mod scope;
-
 pub(crate) struct Analyzer<'a, 'b> {
     /// This is false iff it should be treated as error when `1.contains()` is
     /// true
@@ -39,22 +36,6 @@ pub(crate) struct Analyzer<'a, 'b> {
     export_equals_span: Span,
 
     computed_prop_mode: ComputedPropMode,
-}
-
-impl Fold<TsImportEqualsDecl> for Analyzer<'_, '_> {
-    fn fold(&mut self, node: TsImportEqualsDecl) -> TsImportEqualsDecl {
-        match node.module_ref {
-            TsModuleRef::TsEntityName(ref e) => {
-                match self.type_of_ts_entity_name(node.span, e, None) {
-                    Ok(..) => {}
-                    Err(err) => self.info.errors.push(err),
-                }
-            }
-            _ => {}
-        }
-
-        node
-    }
 }
 
 impl<T> Fold<Vec<T>> for Analyzer<'_, '_>
@@ -234,47 +215,6 @@ impl Fold<TsTypeAliasDecl> for Analyzer<'_, '_> {
 
         // TODO: Validate type
         decl
-    }
-}
-
-impl<'a, 'b> Analyzer<'a, 'b> {
-    pub fn new(
-        libs: &'b [Lib],
-        rule: Rule,
-        scope: Scope<'a>,
-        path: Arc<PathBuf>,
-        loader: &'b dyn Load,
-    ) -> Self {
-        Analyzer {
-            libs,
-            rule,
-            scope,
-            in_declare: false,
-            info: Default::default(),
-            return_type_span: Default::default(),
-            inferred_return_types: Default::default(),
-            path,
-            allow_ref_declaring: false,
-            declaring: vec![],
-            resolved_imports: Default::default(),
-            errored_imports: Default::default(),
-            pending_exports: Default::default(),
-            loader,
-            span_allowed_implicit_any: DUMMY_SP,
-            export_equals_span: DUMMY_SP,
-            top_level: true,
-            computed_prop_mode: ComputedPropMode::Object,
-        }
-    }
-
-    pub fn for_builtin(libs: &'b [Lib], loader: &'b dyn Load) -> Self {
-        Self::new(
-            libs,
-            Default::default(),
-            Scope::root(),
-            Arc::new(PathBuf::from("<builtin>")),
-            loader,
-        )
     }
 }
 

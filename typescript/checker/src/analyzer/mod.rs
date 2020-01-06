@@ -18,7 +18,7 @@ use swc_atoms::JsWord;
 use swc_common::Span;
 use swc_common::{SourceMap, Span};
 use swc_common::{Span, Visit};
-use swc_ecma_ast::{Decorator, Expr};
+use swc_ecma_ast::*;
 use swc_ts_builtin_types::Lib;
 
 #[macro_use]
@@ -30,6 +30,7 @@ mod convert;
 mod enums;
 mod export;
 mod expr;
+mod function;
 mod generic;
 mod import;
 mod name;
@@ -205,5 +206,82 @@ impl Load for NoopLoader {
 impl Visit<Decorator> for Analyzer<'_, '_> {
     fn visit(&mut self, d: &Decorator) {
         self.validate(&d.expr).store(&mut self.info.errors);
+    }
+}
+
+impl Visit<TsImportEqualsDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, node: TsImportEqualsDecl) -> TsImportEqualsDecl {
+        match node.module_ref {
+            TsModuleRef::TsEntityName(ref e) => {
+                match self.type_of_ts_entity_name(node.span, e, None) {
+                    Ok(..) => {}
+                    Err(err) => self.info.errors.push(err),
+                }
+            }
+            _ => {}
+        }
+
+        node
+    }
+}
+
+impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, decl: TsModuleDecl) -> TsModuleDecl {
+        let span = decl.span;
+
+        let mut new = Analyzer::new(
+            self.libs,
+            self.rule,
+            Scope::root(),
+            self.path.clone(),
+            self.loader,
+        );
+        new.in_declare = decl.declare;
+
+        let decl = decl.fold_children(&mut new);
+        self.info.errors.append(&mut new.info.errors);
+
+        self.scope.register_type(
+            match decl.id {
+                TsModuleName::Ident(ref i) => i.sym.clone(),
+                TsModuleName::Str(ref s) => s.value.clone(),
+            },
+            Type::Module(ty::Module {
+                span,
+                exports: new.info.exports,
+            }),
+        );
+
+        decl
+    }
+}
+
+impl Visit<TsTypeAliasDecl> for Analyzer<'_, '_> {
+    fn fold(&mut self, decl: TsTypeAliasDecl) -> TsTypeAliasDecl {
+        let ty: Type = decl.type_ann.clone().into();
+
+        let ty = if decl.type_params.is_none() {
+            match self.expand_type(decl.span(), ty) {
+                Ok(ty) => ty,
+                Err(err) => {
+                    self.info.errors.push(err);
+                    Type::any(decl.span())
+                }
+            }
+        } else {
+            ty
+        };
+
+        self.scope.register_type(
+            decl.id.sym.clone(),
+            Type::Alias(Alias {
+                span: decl.span(),
+                ty: box ty,
+                type_params: decl.type_params.clone().map(From::from),
+            }),
+        );
+
+        // TODO: Validate type
+        decl
     }
 }
