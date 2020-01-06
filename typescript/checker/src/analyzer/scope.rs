@@ -362,10 +362,6 @@ impl Scope<'_> {
             initialized,
         );
 
-        if name == *"string" {
-            panic!()
-        }
-
         if cfg!(debug_assertions) {
             match ty {
                 Some(Type::Ref(..)) => panic!("Var's kind should not be Type"),
