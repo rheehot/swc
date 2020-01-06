@@ -51,6 +51,8 @@ pub struct Analyzer<'a, 'b> {
     libs: &'b [Lib],
     scope: Scope<'a>,
 
+    in_declare: bool,
+
     loader: &'b dyn Load,
 
     allow_ref_declaring: bool,
@@ -100,6 +102,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             rule,
             libs,
             scope,
+            in_declare: false,
             loader,
             allow_ref_declaring: false,
             computed_prop_mode: ComputedPropMode::Object,
@@ -116,9 +119,11 @@ impl<'a, 'b> Analyzer<'a, 'b> {
     where
         F: for<'aa, 'bb> FnOnce(&mut Analyzer<'aa, 'bb>) -> Ret,
     {
+        let in_declare = self.in_declare;
         let child_scope = Scope::new(&self.scope, kind, facts);
         let (ret, info) = {
             let mut child = self.new(child_scope);
+            child.in_declare = in_declare;
 
             let ret = op(&mut child);
 

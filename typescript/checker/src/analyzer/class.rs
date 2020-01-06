@@ -221,14 +221,18 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
                 let params = c.function.params.validate_with(child)?;
 
                 let type_params = try_opt!(c.function.type_params.validate_with(child));
-                if c.kind == MethodKind::Getter
-                    || c.kind == MethodKind::Setter && type_params.is_some()
+                if (c.kind == MethodKind::Getter || c.kind == MethodKind::Setter)
+                    && type_params.is_some()
                 {
                     child.info.errors.push(Error::TS1094 { span: key_span })
                 }
 
                 c.key.visit_with(child);
                 // c.function.visit_children(child);
+
+                if child.in_declare && c.function.body.is_some() {
+                    child.info.errors.push(Error::TS1183 { span: key_span })
+                }
 
                 if c.kind == MethodKind::Setter && c.function.return_type.is_some() {
                     child.info.errors.push(Error::TS1095 { span: key_span })
@@ -792,10 +796,15 @@ impl Fold<ClassDecl> for Analyzer<'_> {
 impl Visit<ClassDecl> for Analyzer<'_> {
 impl Visit<ClassDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassDecl) {
+        let orig_in_declare = self.in_declare;
+        self.in_declare |= c.declare;
+
         c.visit_children(self);
 impl Visit<ClassDecl> for Analyzer<'_> {
     fn visit(&mut self, c: &ClassDecl) {
         let c: ClassDecl = c.visit_children(self);
+
+        self.in_declare = orig_in_declare;
 
         self.validate_inherited_members(Some(&c.ident), &c.class, c.declare);
         self.validate_class_members(&c.class, c.declare)

@@ -259,6 +259,10 @@ pub enum Error {
         span: Span,
     },
 
+    TS1183 {
+        span: Span,
+    },
+
     TS1319 {
         span: Span,
     },
@@ -367,6 +371,9 @@ impl Error {
             }
             Error::TS2378 { .. } => h.struct_err("A 'get' accessor must return a value."),
             Error::TS1094 { span } => h.struct_err("An accessor cannot have type parameters"),
+            Error::TS1183 { .. } => {
+                h.struct_err("An implementation cannot be declared in ambient contexts")
+            }
             Error::TS1095 { span } => {
                 h.struct_err("A 'set' accessor cannot have a return type annotation.")
             }
