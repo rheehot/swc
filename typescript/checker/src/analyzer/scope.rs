@@ -165,7 +165,7 @@ impl Scope<'_> {
                 }
 
                 v.ty = if let Some(ty) = ty {
-                    let ty = ty.generalize_lit();
+                    let ty = ty.generalize_lit().into_owned();
 
                     Some(if let Some(var_ty) = v.ty {
                         println!("\tdeclare_var: ty = {:?}", ty);
@@ -180,15 +180,15 @@ impl Scope<'_> {
                         match ty {
                             Type::Function(..) => {}
                             _ => {
-                                let generalized_var_ty = var_ty.clone().generalize_lit();
+                                let generalized_var_ty = var_ty.generalize_lit();
                                 if !ty.eq_ignore_name_and_span(&generalized_var_ty) {
-                                    v.ty = Some(var_ty);
+                                    v.ty = Some(var_ty.into_owned());
                                     restore!();
                                     return Err(Error::RedclaredVarWithDifferentType { span });
                                 }
                             }
                         }
-                        Type::union(vec![ty, var_ty])
+                        Type::union(vec![ty, var_ty.into_owned()])
                     } else {
                         ty
                     })

@@ -302,7 +302,7 @@ impl Analyzer<'_, '_> {
                         ..
                     }) => builtin_types::get_type(self.libs, span, &js_word!("String"))
                         .expect("Builtin type named 'String' should exist"),
-                    _ => obj_type,
+                    _ => obj_type.into_owned(),
                 };
 
                 match *obj_type.normalize() {

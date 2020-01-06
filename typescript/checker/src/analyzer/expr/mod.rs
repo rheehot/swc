@@ -392,7 +392,7 @@ impl Analyzer<'_, '_> {
         macro_rules! handle_type_els {
             ($members:expr) => {{
                 let prop_ty = if computed {
-                    prop.validate_with(self)?.generalize_lit()
+                    prop.validate_with(self)?.generalize_lit().into_owned()
                 } else {
                     match prop {
                         Expr::Ident(..) => Type::Keyword(TsKeywordType {

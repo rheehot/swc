@@ -403,33 +403,32 @@ impl Type {
 
         match self.normalize() {
             Type::Lit(TsLitType { ref lit, .. }) => {
-                return Type::Keyword(TsKeywordType {
+                return Cow::Owned(Type::Keyword(TsKeywordType {
                     span,
                     kind: match *lit {
                         TsLit::Bool(Bool { .. }) => TsKeywordTypeKind::TsBooleanKeyword,
                         TsLit::Number(Number { .. }) => TsKeywordTypeKind::TsNumberKeyword,
                         TsLit::Str(Str { .. }) => TsKeywordTypeKind::TsStringKeyword,
                     },
-                })
-                .into()
+                }))
             }
             Type::Union(Union { ref types, .. }) => {
                 let mut tys: Vec<Type> = Vec::with_capacity(types.len());
 
                 for ty in types {
-                    let ty = ty.clone().generalize_lit();
+                    let ty = ty.generalize_lit().into_owned();
                     let dup = tys.iter().any(|t| t.eq_ignore_name_and_span(&ty));
                     if !dup {
                         tys.push(ty);
                     }
                 }
 
-                return Type::union(tys).into();
+                return Cow::Owned(Type::union(tys));
             }
             _ => {}
         }
 
-        self.into()
+        Cow::Borrowed(self)
     }
 
     pub fn union<I: IntoIterator<Item = Self>>(iter: I) -> Self {

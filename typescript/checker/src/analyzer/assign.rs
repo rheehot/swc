@@ -211,11 +211,10 @@ impl Analyzer<'_, '_> {
 
                                                         for (i, r) in rm.params.iter().enumerate() {
                                                             if let Some(ref l) = lm.params.get(i) {
-                                                                let l_ty = l.ty;
-                                                                let r_ty = r.ty;
+                                                                let l_ty = &l.ty;
+                                                                let r_ty = &r.ty;
 
-                                                                match self
-                                                                    .assign(&l_ty, &r_ty, span)
+                                                                match self.assign(l_ty, r_ty, span)
                                                                 {
                                                                     Ok(()) => {}
                                                                     Err(err) => errors.push(err),
