@@ -80,15 +80,19 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                     ref ident,
                                     ref function,
                                     ..
-                                })) => {
-                                    merged.types.insert(
-                                        ident.sym.clone(),
-                                        function
-                                            .validate_with(&mut analyzer)
-                                            .expect("builtin: failed to parse function")
-                                            .into(),
-                                    );
-                                }
+                                })) => analyzer.with_child(
+                                    ScopeKind::Fn,
+                                    Default::default(),
+                                    |analyzer| {
+                                        merged.types.insert(
+                                            ident.sym.clone(),
+                                            function
+                                                .validate_with(analyzer)
+                                                .expect("builtin: failed to parse function")
+                                                .into(),
+                                        );
+                                    },
+                                ),
 
                                 Stmt::Decl(Decl::Class(ref c)) => {
                                     debug_assert_eq!(merged.types.get(&c.ident.sym), None);
