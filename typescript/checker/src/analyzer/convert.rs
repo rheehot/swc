@@ -4,9 +4,9 @@ use crate::{
     ty,
     ty::{
         Alias, Array, CallSignature, Conditional, ConstructorSignature, Enum, EnumMember,
-        ImportType, IndexSignature, InferType, Interface, Intersection, Mapped, MethodSignature,
-        Operator, Predicate, PropertySignature, QueryExpr, QueryType, TsExpr, Tuple, Type,
-        TypeElement, TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
+        ImportType, IndexSignature, IndexedAccessType, InferType, Interface, Intersection, Mapped,
+        MethodSignature, Operator, Predicate, PropertySignature, QueryExpr, QueryType, TsExpr,
+        Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
     },
     validator::{Validate, ValidateWith},
     ValidationResult,
@@ -498,6 +498,19 @@ impl Validate<TsTypePredicate> for Analyzer<'_, '_> {
     }
 }
 
+impl Validate<TsIndexedAccessType> for Analyzer<'_, '_> {
+    type Output = ValidationResult<IndexedAccessType>;
+
+    fn validate(&mut self, t: &TsIndexedAccessType) -> Self::Output {
+        Ok(IndexedAccessType {
+            span: t.span,
+            readonly: t.readonly,
+            obj_type: box t.obj_type.validate_with(self)?,
+            index_type: box t.index_type.validate_with(self)?,
+        })
+    }
+}
+
 impl Validate<TsType> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -532,7 +545,7 @@ impl Validate<TsType> for Analyzer<'_, '_> {
             TsType::TsOptionalType(ty) => unimplemented!("{:?}", ty),
             TsType::TsRestType(ty) => unimplemented!("{:?}", ty),
             TsType::TsInferType(ty) => Type::Infer(ty.validate_with(self)?),
-            TsType::TsIndexedAccessType(ty) => unimplemented!("{:?}", ty),
+            TsType::TsIndexedAccessType(ty) => Type::IndexedAccessType(ty.validate_with(self)?),
             TsType::TsTypePredicate(ty) => Type::Predicate(ty.validate_with(self)?),
             TsType::TsImportType(ty) => Type::Import(ty.validate_with(self)?),
         })

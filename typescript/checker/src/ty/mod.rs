@@ -15,6 +15,7 @@ pub enum Type {
     Infer(InferType),
     Import(ImportType),
     Predicate(Predicate),
+    IndexedAccessType(IndexedAccessType),
 
     Ref(Ref),
     TypeLit(TypeLit),
@@ -68,6 +69,14 @@ pub enum Type {
     Static(Static),
 
     Arc(#[fold(ignore)] Arc<Type>),
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct IndexedAccessType {
+    pub span: Span,
+    pub readonly: bool,
+    pub obj_type: Box<Type>,
+    pub index_type: Box<Type>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
@@ -648,9 +657,16 @@ impl Type {
             Type::Ref(ty) => Type::Ref(Ref { span, ..ty }),
 
             Type::Query(ty) => Type::Query(QueryType { span, ..ty }),
+
             Type::Infer(ty) => Type::Infer(InferType { span, ..ty }),
+
             Type::Import(ty) => Type::Import(ImportType { span, ..ty }),
+
             Type::Predicate(ty) => Type::Predicate(Predicate { span, ..ty }),
+
+            Type::IndexedAccessType(ty) => {
+                Type::IndexedAccessType(IndexedAccessType { span, ..ty })
+            }
         }
     }
 }
