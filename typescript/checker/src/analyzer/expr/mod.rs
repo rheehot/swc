@@ -840,10 +840,14 @@ impl Analyzer<'_, '_> {
             return Ok(ty.clone());
         }
 
+        println!("({}): Finding type: {}", self.scope.depth(), i.sym);
+
         if let Some(ty) = self.find_type(&i.sym) {
             println!("({}) type_of({}): find_type", self.scope.depth(), i.sym);
             return Ok(ty.clone().respan(span));
         }
+
+        println!("({}): Check declaring: {}", self.scope.depth(), i.sym);
 
         // Check `declaring` before checking variables.
         if self.scope.declaring.contains(&i.sym) {
@@ -860,10 +864,19 @@ impl Analyzer<'_, '_> {
             }
         }
 
+        println!("({}): find_var_type({})", self.scope.depth(), i.sym);
+
         if let Some(ty) = self.find_var_type(&i.sym) {
             println!("({}) type_of({}): find_var_type", self.scope.depth(), i.sym);
             return Ok(ty.into_owned().respan(span));
         }
+
+        println!(
+            "({}): find_var({})\n{:?}",
+            self.scope.depth(),
+            i.sym,
+            self.scope.vars
+        );
 
         if let Some(_var) = self.find_var(&i.sym) {
             // TODO: Infer type or use type hint to handle

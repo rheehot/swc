@@ -13,12 +13,12 @@ use swc_ecma_ast::*;
 impl Analyzer<'_, '_> {
     /// TODO: Handle recursive funciton
     fn visit_fn(&mut self, name: Option<&Ident>, f: &Function) -> Type {
-        let fn_ty = self.with_child(ScopeKind::Fn, Default::default(), |child| {
+        let fn_ty: Result<_, _> = try {
             let no_implicit_any_span = name.as_ref().map(|name| name.span);
 
             if let Some(name) = name {
                 // We use `typeof function` to infer recursive function's return type.
-                match child.scope.declare_var(
+                match self.scope.declare_var(
                     f.span,
                     VarDeclKind::Var,
                     name.sym.clone(),
@@ -33,17 +33,17 @@ impl Analyzer<'_, '_> {
                 ) {
                     Ok(()) => {}
                     Err(err) => {
-                        child.info.errors.push(err);
+                        self.info.errors.push(err);
                     }
                 }
             }
 
             if let Some(name) = name {
-                assert_eq!(child.scope.declaring_fn, None);
-                child.scope.declaring_fn = Some(name.sym.clone());
+                assert_eq!(self.scope.declaring_fn, None);
+                self.scope.declaring_fn = Some(name.sym.clone());
             }
 
-            let mut fn_ty = f.validate_with(child)?;
+            let mut fn_ty = f.validate_with(self)?;
             match fn_ty {
                 // Handle tuple widening of the return type.
                 ty::Function { ref mut ret_ty, .. } => {
@@ -82,11 +82,11 @@ impl Analyzer<'_, '_> {
             }
 
             if let Some(name) = name {
-                child.scope.declaring_fn = Some(name.sym.clone());
+                self.scope.declaring_fn = Some(name.sym.clone());
             }
 
-            Ok(fn_ty)
-        });
+            fn_ty
+        };
 
         match fn_ty {
             Ok(ty) => ty.into(),
