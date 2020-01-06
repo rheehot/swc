@@ -51,11 +51,19 @@ impl Validate<TsTypeAliasDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<Alias>;
 
     fn validate(&mut self, d: &TsTypeAliasDecl) -> Self::Output {
-        Ok(Alias {
-            span: d.span,
-            ty: box self.validate(&d.type_ann)?,
-            type_params: try_opt!(self.validate(&d.type_params)),
-        })
+        let alias = {
+            let ty: Type = d.type_ann.validate_with(self)?;
+            let type_params = try_opt!(d.type_params.validate_with(self));
+            let alias = Alias {
+                span: d.span(),
+                ty: box ty,
+                type_params,
+            };
+            self.register_type(d.id.sym.clone(), Type::Alias(alias.clone()))?;
+            alias
+        };
+
+        Ok(alias)
     }
 }
 

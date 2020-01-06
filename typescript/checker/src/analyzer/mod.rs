@@ -248,24 +248,3 @@ impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
         .store(&mut self.info.errors);
     }
 }
-
-impl Visit<TsTypeAliasDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, decl: &TsTypeAliasDecl) {
-        let res: Result<_, _> = try {
-            let ty: Type = decl.type_ann.validate_with(self)?;
-
-            let type_params = try_opt!(decl.type_params.validate_with(self));
-
-            self.register_type(
-                decl.id.sym.clone(),
-                Type::Alias(Alias {
-                    span: decl.span(),
-                    ty: box ty,
-                    type_params,
-                }),
-            )?;
-        };
-
-        res.store(&mut self.info.errors);
-    }
-}
