@@ -194,45 +194,52 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
         let c_span = c.span();
         let key_span = c.key.span();
 
-        self.with_child(ScopeKind::Fn, Default::default(), |child| {
-            {
-                // Validate params
-                // TODO: Move this to parser
-                let mut has_optional = false;
-                for p in &c.function.params {
-                    if has_optional {
-                        child.info.errors.push(Error::TS1016 { span: p.span() });
-                    }
-
-                    match *p {
-                        Pat::Ident(Ident { optional, .. }) => {
-                            if optional {
-                                has_optional = true;
-                            }
+        let (params, type_params, ret_ty) = self.with_child(
+            ScopeKind::Fn,
+            Default::default(),
+            |child| -> ValidationResult<_> {
+                {
+                    // Validate params
+                    // TODO: Move this to parser
+                    let mut has_optional = false;
+                    for p in &c.function.params {
+                        if has_optional {
+                            child.info.errors.push(Error::TS1016 { span: p.span() });
                         }
-                        _ => {}
-                    }
-                }
-            }
 
-            c.function.params.iter().for_each(|pat| {
-                let mut names = vec![];
-
-                let mut visitor = VarVisitor { names: &mut names };
-
-                pat.visit_with(&mut visitor);
-
-                child.scope.declaring.extend(names.clone());
-
-                match child.declare_vars(VarDeclKind::Let, pat) {
-                    Ok(()) => {}
-                    Err(err) => {
-                        child.info.errors.push(err);
+                        match *p {
+                            Pat::Ident(Ident { optional, .. }) => {
+                                if optional {
+                                    has_optional = true;
+                                }
+                            }
+                            _ => {}
+                        }
                     }
                 }
 
-                child.scope.remove_declaring(names);
-            });
+                let params = c.function.params.validate_with(child)?;
+
+                let type_params = try_opt!(c.function.type_params.validate_with(child));
+
+                c.key.visit_with(child);
+                // c.function.visit_children(child);
+
+                let declared_ret_ty = try_opt!(c.function.return_type.validate_with(child));
+
+                let inferred_ret_ty = match c
+                    .function
+                    .body
+                    .as_ref()
+                    .map(|bs| child.visit_stmts_for_return(&bs.stmts))
+                {
+                    Some(Ok(ty)) => ty,
+                    Some(err) => err?,
+                    None => None,
+                };
+
+                let ret_ty = declared_ret_ty
+                    .unwrap_or_else(|| inferred_ret_ty.unwrap_or_else(|| Type::any(c_span)));
 
             child.inferred_return_types.get_mut().insert(c.span, vec![]);
             c.key = c.key.fold_with(child);
@@ -254,19 +261,31 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
                 c,
             )
         });
+                Ok((params, type_params, ret_ty))
+            },
+        )?;
 
         if c.kind == MethodKind::Getter && c.function.body.is_some() {
-            let ret_ty = self.visit_stmts_for_return(&c.function.body.as_ref().unwrap().stmts)?;
+            // Inferred return type.
+            let inferred_ret_ty =
+                self.visit_stmts_for_return(&c.function.body.as_ref().unwrap().stmts)?;
 
             // getter property must have return statements.
-            if let None = ret_ty {
+            if let None = inferred_ret_ty {
                 self.info
                     .errors
                     .push(Error::GetterPropWithoutReturn { span: key_span });
             }
         }
 
-        unimplemented!("validate_class_method")
+        Ok(ty::Method {
+            span: c_span,
+            key: c.key.clone(),
+            is_static: c.is_static,
+            type_params,
+            params,
+            ret_ty: box ret_ty,
+        })
     }
 }
 

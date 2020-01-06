@@ -145,7 +145,7 @@ pub struct Method {
     pub key: PropName,
     pub is_static: bool,
     pub type_params: Option<TypeParamDecl>,
-    pub params: Vec<Pat>,
+    pub params: Vec<FnParam>,
     pub ret_ty: Box<Type>,
 }
 

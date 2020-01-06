@@ -1,6 +1,6 @@
 use super::Analyzer;
 use crate::{
-    analyzer::util::ResultExt,
+    analyzer::util::{PatExt, ResultExt, VarVisitor},
     errors::Error,
     ty,
     ty::Type,
@@ -19,7 +19,31 @@ impl Validate<Pat> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 
     fn validate(&mut self, p: &Pat) -> Self::Output {
-        unimplemented!("validate(Pat)")
+        let mut names = vec![];
+
+        let mut visitor = VarVisitor { names: &mut names };
+
+        p.visit_with(&mut visitor);
+
+        self.scope.declaring.extend(names.clone());
+
+        match self.declare_vars(VarDeclKind::Let, p) {
+            Ok(()) => {}
+            Err(err) => {
+                self.info.errors.push(err);
+            }
+        }
+
+        self.scope.remove_declaring(names);
+
+        Ok(ty::FnParam {
+            span: p.span(),
+            required: match p {
+                Pat::Ident(i) => !i.optional,
+                _ => true,
+            },
+            ty: try_opt!(p.get_ty().validate_with(self)).unwrap_or_else(|| Type::any(p.span())),
+        })
     }
 }
 
