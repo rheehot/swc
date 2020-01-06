@@ -4,17 +4,7 @@ error: TS1094
 2 | var v = { get foo(v: number) { } };
   |               ^^^
 
-error[]: GetterPropWithoutReturn {
-    span: Span {
-        lo: BytePos(
-            31,
-        ),
-        hi: BytePos(
-            34,
-        ),
-        ctxt: #0,
-    },
-}
+error: A 'get' accessor must return a value.
  --> $DIR/tests/conformance/parser/ecmascript5/Accessors/parserAccessors7.ts:2:15
   |
 2 | var v = { get foo(v: number) { } };

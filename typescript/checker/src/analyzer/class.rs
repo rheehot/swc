@@ -277,9 +277,7 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
 
             // getter property must have return statements.
             if let None = inferred_ret_ty {
-                self.info
-                    .errors
-                    .push(Error::GetterPropWithoutReturn { span: key_span });
+                self.info.errors.push(Error::TS2378 { span: key_span });
             }
         }
 

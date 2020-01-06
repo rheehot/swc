@@ -4,17 +4,7 @@ error: TS1042
 3 |   public get foo() { }
   |   ^^^^^^
 
-error[]: GetterPropWithoutReturn {
-    span: Span {
-        lo: BytePos(
-            41,
-        ),
-        hi: BytePos(
-            44,
-        ),
-        ctxt: #0,
-    },
-}
+error: A 'get' accessor must return a value.
  --> $DIR/tests/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts:3:14
   |
 3 |   public get foo() { }

@@ -213,10 +213,7 @@ impl Visit<GetterProp> for Analyzer<'_> {
 
                 if let None = ret_ty {
                     // getter property must have return statements.
-                    child
-                        .info
-                        .errors
-                        .push(Error::GetterPropWithoutReturn { span: n.key.span() });
+                    child.info.errors.push(Error::TS2378 { span: n.key.span() });
                 }
             }
 

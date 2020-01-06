@@ -126,7 +126,7 @@ pub enum Error {
     },
 
     /// TS2378
-    GetterPropWithoutReturn {
+    TS2378 {
         span: Span,
     },
 
@@ -361,15 +361,15 @@ impl Error {
             Error::Unimplemented { ref msg, .. } => {
                 h.struct_err(&format!("unimplemented\n{}", msg))
             }
+            Error::TS2378 { .. } => h.struct_err("A 'get' accessor must return a value."),
             Error::TS1094 { span } => h.struct_err("An accessor cannot have type parameters"),
             _ => h.struct_err(&format!("{:#?}", self)),
         };
         err.set_span(span);
 
-        err.code(DiagnosticId::Error(String::from(match self {
-            Error::TS1094 { .. } => "TS1094",
-            _ => "",
-        })));
+        //        err.code(DiagnosticId::Error(String::from(match self {
+        //            _ => "",
+        //        })));
 
         err.set_span(span).emit();
     }
