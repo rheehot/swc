@@ -378,7 +378,7 @@ impl Scope<'_> {
                 if !allow_multiple {
                     return Err(Error::DuplicateName { name, span });
                 }
-                println!("\tdeclare_var: found entry ({:?})", e.get());
+                println!("\tdeclare_var: found entry");
                 let (k, mut v) = e.remove_entry();
 
                 macro_rules! restore {
@@ -391,7 +391,7 @@ impl Scope<'_> {
                     let ty = ty.generalize_lit().into_owned();
 
                     Some(if let Some(var_ty) = v.ty {
-                        println!("\tdeclare_var: ty = {:?}", ty);
+                        println!("\tdeclare_var");
                         let var_ty = var_ty.generalize_lit().into_owned();
 
                         // if k.as_ref() == "co1" {
