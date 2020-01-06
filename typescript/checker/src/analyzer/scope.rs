@@ -47,7 +47,7 @@ impl Scope<'_> {
     ///
     /// Registers an interface, and merges it with previous interface
     /// declaration if required.
-    pub fn register_type(&mut self, name: JsWord, ty: Type) {
+    fn register_type(&mut self, name: JsWord, ty: Type) {
         let depth = self.depth();
 
         if cfg!(debug_assertions) {
@@ -220,6 +220,16 @@ impl Scope<'_> {
 }
 
 impl Analyzer<'_, '_> {
+    pub(super) fn register_type(&mut self, name: JsWord, ty: Type) -> Result<(), Error> {
+        if self.is_builtin {
+            self.info.exports.types.insert(name, ty.into_arc());
+        } else {
+            self.scope.register_type(name, ty);
+        }
+
+        Ok(())
+    }
+
     pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) -> Result<(), Error> {
         self.declare_vars_inner(kind, pat, false)
     }

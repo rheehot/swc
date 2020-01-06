@@ -758,7 +758,7 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
         let c = self
             .with_child(ScopeKind::Block, Default::default(), |analyzer| {
                 if let Some(ref i) = c.ident {
-                    analyzer.scope.register_type(i.sym.clone(), ty.clone());
+                    analyzer.register_type(i.sym.clone(), ty.clone())?;
 
                     analyzer.validate_inherited_members(None, &c.class, false);
                     analyzer.validate_class_members(&c.class, false)?;
@@ -821,8 +821,8 @@ impl Visit<ClassDecl> for Analyzer<'_> {
         let old_this = self.scope.this.take();
         // self.scope.this = Some(ty.clone());
 
-        self.scope
-            .register_type(c.ident.sym.clone(), ty.clone().into());
+        self.register_type(c.ident.sym.clone(), ty.clone().into())
+            .store(&mut self.info.errors);
 
         match self.scope.declare_var(
             ty.span(),

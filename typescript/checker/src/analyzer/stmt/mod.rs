@@ -36,10 +36,11 @@ impl Visit<TsInterfaceDecl> for Analyzer<'_, '_> {
             .store(&mut self.info.errors)
             .map(Type::from);
 
-        self.scope.register_type(
+        self.register_type(
             decl.id.sym.clone(),
             ty.unwrap_or_else(|| Type::any(decl.span)),
-        );
+        )
+        .store(&mut self.info.errors);
 
         self.resolve_parent_interfaces(&decl.extends);
     }

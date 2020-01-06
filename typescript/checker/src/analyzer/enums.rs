@@ -1,5 +1,6 @@
 use super::Analyzer;
 use crate::{
+    analyzer::util::ResultExt,
     errors::Error,
     ty::{Enum, Type},
     validator::Validate,
@@ -29,13 +30,14 @@ impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
 
         let ty = self.validate(e);
 
-        self.scope.register_type(
+        self.register_type(
             e.id.sym.clone(),
             match ty {
                 Ok(ty) => ty.into(),
                 Err(..) => Type::any(span),
             },
-        );
+        )
+        .store(&mut self.info.errors);
 
         // Validate const enums
         if e.is_const {

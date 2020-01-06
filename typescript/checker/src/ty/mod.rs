@@ -1013,3 +1013,12 @@ impl Type {
 //        }
 //    }
 //}
+
+impl Type {
+    pub fn into_arc(self) -> Arc<Type> {
+        match self {
+            Self::Arc(ty) => ty,
+            _ => Arc::new(self),
+        }
+    }
+}

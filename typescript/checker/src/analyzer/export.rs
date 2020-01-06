@@ -168,7 +168,8 @@ impl Visit<ExportDefaultDecl> for Analyzer<'_> {
                         return;
                     }
                 };
-                self.scope.register_type(i.clone(), fn_ty.into());
+                self.register_type(i.clone(), fn_ty.into())
+                    .store(&mut self.info.errors);
                 self.export(f.span(), js_word!("default"), Some(i))
             }
             DefaultDecl::Class(..) => unimplemented!("export default class"),
