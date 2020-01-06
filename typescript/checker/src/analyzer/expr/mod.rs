@@ -1191,7 +1191,12 @@ impl Validate<ArrowExpr> for Analyzer<'_, '_> {
             None => None,
         };
 
-        let inferred_return_type = self.infer_return_type(f.span());
+        let inferred_return_type = {
+            match f.body {
+                BlockStmtOrExpr::Expr(ref e) => Some(e.validate_with(self)?),
+                BlockStmtOrExpr::BlockStmt(ref s) => self.visit_stmts_for_return(&s.stmts)?,
+            }
+        };
         if let Some(ref declared) = declared_ret_ty {
             let span = inferred_return_type.span();
             if let Some(ref inferred) = inferred_return_type {
