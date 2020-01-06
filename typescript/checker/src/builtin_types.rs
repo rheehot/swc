@@ -265,7 +265,7 @@ impl Load for Noop {
         &self,
         base: Arc<PathBuf>,
         import: &ImportInfo,
-    ) -> Result<Exports<FxHashMap<JsWord, Arc<Type>>>, Error> {
+    ) -> Result<Exports<FxHashMap<JsWord, Type>>, Error> {
         unimplemented!()
     }
 }

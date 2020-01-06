@@ -56,7 +56,7 @@ impl Analyzer<'_, '_> {
                     }
                 },
             };
-            self.info.exports.vars.insert(sym, Arc::new(ty));
+            self.info.exports.vars.insert(sym, ty.freeze());
         }
 
         assert_eq!(self.pending_exports, vec![]);
@@ -91,7 +91,7 @@ impl Analyzer<'_, '_> {
         self.info
             .exports
             .vars
-            .insert(js_word!("default"), Arc::new(ty));
+            .insert(js_word!("default"), ty.freeze());
     }
 }
 
@@ -124,10 +124,11 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
 
                 self.info.exports.types.insert(
                     e.id.sym.clone(),
-                    Arc::new({
+                    {
                         let span = e.span();
                         ty.unwrap_or_else(|| Type::any(span))
-                    }),
+                    }
+                    .freeze(),
                 );
             }
             Decl::TsModule(..) => unimplemented!("export module "),
@@ -197,7 +198,7 @@ impl Analyzer<'_, '_> {
 
         // TODO: Change this to error.
         assert_eq!(self.info.exports.types.get(&name), None);
-        self.info.exports.types.insert(name, Arc::new(ty.clone()));
+        self.info.exports.types.insert(name, ty.clone().freeze());
     }
 
     /// Exports a varaible.

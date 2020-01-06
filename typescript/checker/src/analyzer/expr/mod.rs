@@ -765,7 +765,7 @@ impl Analyzer<'_, '_> {
             Type::Module(ty::Module { ref exports, .. }) => match prop {
                 Expr::Ident(Ident { ref sym, .. }) => {
                     if let Some(item) = exports.vars.get(sym) {
-                        return Ok(Type::Arc((*item).clone()));
+                        return Ok(item.clone().freeze());
                     }
                 }
                 _ => {}
@@ -820,12 +820,13 @@ impl Analyzer<'_, '_> {
         }
 
         if let Some(ty) = self.resolved_imports.get(&i.sym) {
+            assert!(ty.is_arc());
             println!(
                 "({}) type_of({}): resolved import",
                 self.scope.depth(),
                 i.sym
             );
-            return Ok(Type::Arc(ty.clone()));
+            return Ok(ty.clone());
         }
 
         if let Some(ty) = self.find_type(&i.sym) {

@@ -485,8 +485,8 @@ impl Analyzer<'_, '_> {
                 kind: TsKeywordTypeKind::TsUnknownKeyword,
                 ..
             }) => {
-                if to.is_keyword(TsKeywordTypeKind::TsAnyKeyword)
-                    || to.is_keyword(TsKeywordTypeKind::TsUndefinedKeyword)
+                if to.is_kwd(TsKeywordTypeKind::TsAnyKeyword)
+                    || to.is_kwd(TsKeywordTypeKind::TsUndefinedKeyword)
                 {
                     return Ok(());
                 }

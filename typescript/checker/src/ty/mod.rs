@@ -1,5 +1,6 @@
 use crate::{util::EqIgnoreNameAndSpan, Exports};
 use fxhash::FxHashMap;
+use is_macro::Is;
 use std::{borrow::Cow, mem::transmute, sync::Arc};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
@@ -7,7 +8,7 @@ use swc_ecma_ast::*;
 
 pub mod merge;
 
-#[derive(Debug, Fold, Clone, PartialEq, Spanned, FromVariant)]
+#[derive(Debug, Fold, Clone, PartialEq, Spanned, FromVariant, Is)]
 pub enum Type {
     This(TsThisType),
     Lit(TsLitType),
@@ -17,12 +18,14 @@ pub enum Type {
     Predicate(Predicate),
     IndexedAccessType(IndexedAccessType),
 
+    #[is(name = "ts_ref")]
     Ref(Ref),
     TypeLit(TypeLit),
     Keyword(TsKeywordType),
     Conditional(Conditional),
     Tuple(Tuple),
     Array(Array),
+    #[is(name = "ts_union")]
     Union(Union),
     Intersection(Intersection),
     Function(Function),
@@ -35,6 +38,7 @@ pub enum Type {
     EnumVariant(EnumVariant),
 
     Interface(Interface),
+    #[is(name = "ts_enum")]
     Enum(Enum),
 
     Mapped(Mapped),
@@ -66,6 +70,7 @@ pub enum Type {
     /// Used for storing core types.
     ///
     /// Don't match on this directly. Instead, use `.normalize()`.
+    #[is(name = "ts_static")]
     Static(Static),
 
     Arc(#[fold(ignore)] Arc<Type>),
@@ -116,7 +121,7 @@ pub struct ImportType {
 pub struct Module {
     pub span: Span,
     #[fold(ignore)]
-    pub exports: Exports<FxHashMap<JsWord, Arc<Type>>>,
+    pub exports: Exports<FxHashMap<JsWord, Type>>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
@@ -558,14 +563,15 @@ impl Type {
 }
 
 impl Type {
-    pub fn is_keyword(&self, k: TsKeywordTypeKind) -> bool {
+    pub fn is_kwd(&self, k: TsKeywordTypeKind) -> bool {
         match *self.normalize() {
             Type::Keyword(TsKeywordType { kind, .. }) if kind == k => true,
             _ => false,
         }
     }
+
     pub fn is_never(&self) -> bool {
-        self.is_keyword(TsKeywordTypeKind::TsNeverKeyword)
+        self.is_kwd(TsKeywordTypeKind::TsNeverKeyword)
     }
 
     pub const fn never<'any>(span: Span) -> Type {
@@ -1065,10 +1071,11 @@ impl Type {
 //}
 
 impl Type {
-    pub fn into_arc(self) -> Arc<Type> {
+    /// Freeze the type.
+    pub fn freeze(self) -> Type {
         match self {
-            Self::Arc(ty) => ty,
-            _ => Arc::new(self),
+            Self::Static(..) | Self::Arc(..) => self,
+            _ => Type::Arc(Arc::new(self)),
         }
     }
 }

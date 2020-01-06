@@ -222,7 +222,7 @@ impl Scope<'_> {
 impl Analyzer<'_, '_> {
     pub(super) fn register_type(&mut self, name: JsWord, ty: Type) -> Result<(), Error> {
         if self.is_builtin {
-            self.info.exports.types.insert(name, ty.into_arc());
+            self.info.exports.types.insert(name, ty.freeze());
         } else {
             self.scope.register_type(name, ty);
         }
@@ -264,7 +264,7 @@ impl Analyzer<'_, '_> {
                         .info
                         .exports
                         .vars
-                        .insert(name, Arc::new(ty.unwrap_or(Type::any(i.span))))
+                        .insert(name, ty.unwrap_or(Type::any(i.span)).freeze())
                     {
                         unimplemented!("multiple exported variables with same name")
                     }

@@ -131,8 +131,8 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                 }
 
                 if c.any(|(_, ty)| {
-                    ty.is_keyword(TsKeywordTypeKind::TsUndefinedKeyword)
-                        || ty.is_keyword(TsKeywordTypeKind::TsNullKeyword)
+                    ty.is_kwd(TsKeywordTypeKind::TsUndefinedKeyword)
+                        || ty.is_kwd(TsKeywordTypeKind::TsNullKeyword)
                 }) {
                     return Err(Error::TS2365 { span });
                 }

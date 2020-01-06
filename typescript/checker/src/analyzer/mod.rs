@@ -43,7 +43,7 @@ pub struct Analyzer<'a,'b> {
 pub struct Analyzer<'a, 'b> {
     pub info: Info,
 
-    resolved_imports: FxHashMap<JsWord, Arc<Type>>,
+    resolved_imports: FxHashMap<JsWord, Type>,
     errored_imports: FxHashSet<JsWord>,
     pending_exports: Vec<((JsWord, Span), Expr)>,
 
@@ -63,7 +63,7 @@ pub struct Analyzer<'a, 'b> {
 #[derive(Debug, Clone, Default)]
 pub struct Info {
     pub errors: Vec<Error>,
-    pub exports: Exports<FxHashMap<JsWord, Arc<Type>>>,
+    pub exports: Exports<FxHashMap<JsWord, Type>>,
 }
 
 impl Analyzer<'_> {
@@ -147,7 +147,7 @@ impl Load for NoopLoader {
         &self,
         _: Arc<PathBuf>,
         _: &ImportInfo,
-    ) -> Result<Exports<FxHashMap<JsWord, Arc<Type>>>, Error> {
+    ) -> Result<Exports<FxHashMap<JsWord, Type>>, Error> {
         unreachable!("builtin module should not import other module")
     }
 }
