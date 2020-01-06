@@ -13,6 +13,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
         let ctx = Ctx {
             pat_mode: PatMode::Decl,
             in_declare: self.ctx.in_declare || var.declare,
+            allow_ref_declaring: true,
             ..self.ctx
         };
         self.with_ctx(ctx)
@@ -54,11 +55,7 @@ impl Analyzer<'_, '_> {
                 }
 
                 if v.init.is_some() {
-                    let ctx = Ctx {
-                        allow_ref_declaring: true,
-                        ..self.ctx
-                    };
-                    self.with_ctx(ctx).visit(&v.name);
+                    self.visit(&v.name);
                 }
 
                 if let Some(ref init) = v.init {
