@@ -1007,13 +1007,7 @@ impl Analyzer<'_, '_> {
             // TODO: Handle default parameters
             // TODO: Handle multiple definitions
 
-            let min = param_decls
-                .iter()
-                .filter(|p| match p {
-                    TsFnParam::Ident(Ident { optional: true, .. }) => false,
-                    _ => true,
-                })
-                .count();
+            let min = param_decls.iter().filter(|p| p.required).count();
 
             let expected = min..=param_decls.len();
             if !expected.contains(&args.len()) {
@@ -1073,10 +1067,10 @@ impl Analyzer<'_, '_> {
         let v;
 
         let i = match i {
-            Some(i) => i,
+            Some(i) => i.validate_with(self)?,
             None => {
                 v = self.infer_arg_types(args, &type_params, &fn_type.params)?;
-                &v
+                v
             }
         };
 
