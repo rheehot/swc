@@ -426,6 +426,18 @@ impl Validate<TsParenthesizedType> for Analyzer<'_, '_> {
     }
 }
 
+impl Validate<TsTypeRef> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::Ref>;
+
+    fn validate(&mut self, t: &TsTypeRef) -> Self::Output {
+        Ok(ty::Ref {
+            span: t.span,
+            type_name: t.type_name.clone(),
+            type_params: try_opt!(t.type_params.validate_with(self)),
+        })
+    }
+}
+
 impl Validate<TsType> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -455,6 +467,8 @@ impl Validate<TsType> for Analyzer<'_, '_> {
             TsType::TsMappedType(ty) => Type::Mapped(self.validate(ty)?),
             TsType::TsTypeOperator(ty) => Type::Operator(self.validate(ty)?),
             TsType::TsParenthesizedType(ty) => self.validate(ty)?,
+            TsType::TsTypeRef(ty) => Type::Ref(self.validate(ty)?),
+            TsType::TsTypeQuery(ty) => Type::Query(ty.clone()),
             _ => unimplemented!("TsType: {:?}", ty),
         })
     }

@@ -637,6 +637,7 @@ types/primitives/number
 types/primitives/undefined
 types/primitives/void
 types/primitives/void/
+types/stringLiteral/
 types/stringLiteral/stringLiteralCheckedInIf01.ts
 types/stringLiteral/stringLiteralCheckedInIf02.ts
 types/stringLiteral/stringLiteralTypesAndParenthesizedExpressions01.ts

@@ -1,14 +1,4 @@
-error: GetterPropWithoutReturn {
-    span: Span {
-        lo: BytePos(
-            34,
-        ),
-        hi: BytePos(
-            35,
-        ),
-        ctxt: #0,
-    },
-}
+error: A 'get' accessor must return a value.
  --> $DIR/tests/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration3.ts:3:7
   |
 3 |   get 0() { }

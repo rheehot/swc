@@ -4,17 +4,7 @@ error: TS1031
 3 |     declare get Foo() { }
   |     ^^^^^^^
 
-error: GetterPropWithoutReturn {
-    span: Span {
-        lo: BytePos(
-            44,
-        ),
-        hi: BytePos(
-            47,
-        ),
-        ctxt: #0,
-    },
-}
+error: A 'get' accessor must return a value.
  --> $DIR/tests/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration11.ts:3:17
   |
 3 |     declare get Foo() { }

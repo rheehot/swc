@@ -1,14 +1,4 @@
-error: GetterPropWithoutReturn {
-    span: Span {
-        lo: BytePos(
-            30,
-        ),
-        hi: BytePos(
-            33,
-        ),
-        ctxt: #0,
-    },
-}
+error: A 'get' accessor must return a value.
  --> $DIR/tests/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName4.ts:2:15
   |
 2 | var v = { get [e]() { } };
