@@ -1147,6 +1147,17 @@ impl Validate<Function> for Analyzer<'_, '_> {
                 }
             }
 
+            let type_params = try_opt!(f.type_params.validate_with(child));
+
+            let params = {
+                let ctx = Ctx {
+                    pat_mode: PatMode::Decl,
+                    allow_ref_declaring: false,
+                    ..child.ctx
+                };
+                f.params.validate_with(&mut *child.with_ctx(ctx))?
+            };
+
             let declared_ret_ty = try_opt!(f.return_type.validate_with(child)).map(|ret_ty| {
                 let span = ret_ty.span();
                 match ret_ty {
@@ -1199,19 +1210,10 @@ impl Validate<Function> for Analyzer<'_, '_> {
 
             child.info.errors.extend(errors);
 
-            let params = {
-                let ctx = Ctx {
-                    pat_mode: PatMode::Decl,
-                    allow_ref_declaring: false,
-                    ..child.ctx
-                };
-                f.params.validate_with(&mut *child.with_ctx(ctx))?
-            };
-
             Ok(ty::Function {
                 span: f.span,
                 params,
-                type_params: try_opt!(f.type_params.validate_with(child)),
+                type_params,
                 ret_ty: box declared_ret_ty.unwrap_or_else(|| inferred_return_type),
             }
             .into())
