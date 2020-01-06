@@ -646,6 +646,7 @@ types/stringLiteral/stringLiteralTypesInUnion
 types/stringLiteral/stringLiteralTypesOverloadAssignability03.ts
 types/stringLiteral/stringLiteralTypesOverloadAssignability04.ts
 types/stringLiteral/stringLiteralTypesOverloadAssignability05.ts
+types/stringLiteral/stringLiteralTypesOverloads02.ts
 types/stringLiteral/stringLiteralTypesOverloads03.ts
 types/stringLiteral/stringLiteralTypesOverloads04.ts
 types/stringLiteral/stringLiteralTypesTypePredicates01.ts

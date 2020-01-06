@@ -78,6 +78,7 @@ pub enum Error {
     },
 
     DuplicateName {
+        name: JsWord,
         span: Span,
     },
 

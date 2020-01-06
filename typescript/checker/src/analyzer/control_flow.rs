@@ -389,7 +389,7 @@ impl Analyzer<'_, '_> {
                                 });
                             }
 
-                            return if self.allow_ref_declaring
+                            return if self.ctx.allow_ref_declaring
                                 && self.scope.declaring.contains(&i.sym)
                             {
                                 Ok(())
@@ -687,7 +687,7 @@ impl Validate<CondExpr> for Analyzer<'_, '_> {
             Expr::Ident(ref i) => {
                 // Check `declaring` before checking variables.
                 if self.scope.declaring.contains(&i.sym) {
-                    return if self.allow_ref_declaring {
+                    return if self.ctx.allow_ref_declaring {
                         Ok(Type::any(span))
                     } else {
                         Err(Error::ReferencedInInit { span })

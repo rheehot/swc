@@ -1,5 +1,5 @@
 use crate::{
-    analyzer::Analyzer,
+    analyzer::{Analyzer, ScopeKind},
     errors::Error,
     loader::Load,
     ty::{self, Class, Module, Static},
@@ -37,6 +37,8 @@ fn merge(ls: &[Lib]) -> &'static Merged {
     if let Some(cached) = CACHE.get(&libs) {
         return &*cached;
     }
+
+    println!("----- loading builtin -----");
 
     // We hold write lock (thus block readers) while merging.
     CACHE.alter(libs, |v| {
@@ -81,36 +83,10 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                 })) => {
                                     merged.types.insert(
                                         ident.sym.clone(),
-                                        ty::Function {
-                                            span: DUMMY_SP,
-                                            params: function
-                                                .params
-                                                .validate_with(&mut analyzer)
-                                                .expect(
-                                                    "builtin: failed to parse parameters of a \
-                                                     function",
-                                                ),
-                                            type_params: function
-                                                .type_params
-                                                .validate_with(&mut analyzer)
-                                                .map(|res| {
-                                                    res.expect(
-                                                        "builtin: failed to parse type parameters \
-                                                         of a function",
-                                                    )
-                                                }),
-                                            ret_ty: box function
-                                                .return_type
-                                                .validate_with(&mut analyzer)
-                                                .map(|res| {
-                                                    res.expect(
-                                                        "builtin: failed to parse return type of \
-                                                         a function",
-                                                    )
-                                                })
-                                                .unwrap_or_else(|| Type::any(ident.span)),
-                                        }
-                                        .into(),
+                                        function
+                                            .validate_with(&mut analyzer)
+                                            .expect("builtin: failed to parse function")
+                                            .into(),
                                     );
                                 }
 
@@ -121,29 +97,37 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                     // other class.
                                     debug_assert_eq!(c.class.super_class, None);
                                     debug_assert_eq!(c.class.implements, vec![]);
-                                    let ty = Type::Class(Class {
-                                        span: c.class.span,
-                                        name: Some(c.ident.sym.clone()),
-                                        is_abstract: c.class.is_abstract,
-                                        body: analyzer
-                                            .validate(&c.class.body)
-                                            .expect("builtin: failed to validate class body")
-                                            .into_iter()
-                                            .filter_map(|v| v)
-                                            .collect(),
-                                        super_class: None,
-                                        // implements: vec![],
-                                        type_params: c
-                                            .class
-                                            .type_params
-                                            .validate_with(&mut analyzer)
-                                            .map(|opt| {
-                                                opt.expect(
-                                                    "builtin: failed to parse type parmas of a \
-                                                     class",
-                                                )
-                                            }),
-                                    });
+                                    let ty = analyzer.with_child(
+                                        ScopeKind::Flow,
+                                        Default::default(),
+                                        |analyzer| {
+                                            Type::Class(Class {
+                                                span: c.class.span,
+                                                name: Some(c.ident.sym.clone()),
+                                                is_abstract: c.class.is_abstract,
+                                                body: analyzer
+                                                    .validate(&c.class.body)
+                                                    .expect(
+                                                        "builtin: failed to validate class body",
+                                                    )
+                                                    .into_iter()
+                                                    .filter_map(|v| v)
+                                                    .collect(),
+                                                super_class: None,
+                                                // implements: vec![],
+                                                type_params: c
+                                                    .class
+                                                    .type_params
+                                                    .validate_with(analyzer)
+                                                    .map(|opt| {
+                                                        opt.expect(
+                                                            "builtin: failed to parse type parmas \
+                                                             of a class",
+                                                        )
+                                                    }),
+                                            })
+                                        },
+                                    );
 
                                     merged.types.insert(c.ident.sym.clone(), ty);
                                 }

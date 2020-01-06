@@ -1,6 +1,6 @@
 use super::{scope::ScopeKind, Analyzer};
 use crate::{
-    analyzer::{expr::TypeOfMode, util::ResultExt},
+    analyzer::{expr::TypeOfMode, util::ResultExt, Ctx},
     errors::Error,
     ty::{MethodSignature, PropertySignature, Type, TypeElement},
     validator::{Validate, ValidateWith},
@@ -32,7 +32,7 @@ impl Analyzer<'_, '_> {
     fn visit(&mut self, node: &ComputedPropName) {
         node.visit_children(self);
 
-        let mode = self.computed_prop_mode;
+        let mode = self.ctx.computed_prop_mode;
 
         let span = node.span;
 
@@ -98,8 +98,16 @@ impl Validate<Prop> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeElement>;
 
     fn validate(&mut self, prop: &Prop) -> Self::Output {
-        self.computed_prop_mode = ComputedPropMode::Object;
+        let ctx = Ctx {
+            computed_prop_mode: ComputedPropMode::Object,
+            ..self.ctx
+        };
+        self.with_ctx(ctx).validate_prop(prop)
+    }
+}
 
+impl Analyzer<'_, '_> {
+    fn validate_prop(&mut self, prop: &Prop) -> ValidationResult<TypeElement> {
         prop.visit_children(self);
 
         match prop {

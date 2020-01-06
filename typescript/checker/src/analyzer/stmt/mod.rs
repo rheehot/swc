@@ -10,6 +10,7 @@ use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
 
 mod ambient_decl;
+mod decl;
 mod loops;
 
 /// NOTE: We does **not** dig into with statements.

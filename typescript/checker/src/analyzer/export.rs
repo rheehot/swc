@@ -5,7 +5,7 @@ use crate::{
     ty::Type,
     validator::{Validate, ValidateWith},
 };
-use std::{mem::replace, sync::Arc};
+use std::mem::replace;
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Span, Spanned};
 use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith};

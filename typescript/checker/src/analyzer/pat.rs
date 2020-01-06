@@ -15,26 +15,41 @@ impl Analyzer<'_> {
     fn visit_rest_pat(&mut self, p: &RestPat) {
         let p = p.fold_children(self);
 impl Visit<RestPat> for Analyzer<'_> {
+#[derive(Debug, Clone, Copy)]
+pub(super) enum PatMode {
+    /// Used for assignment expressions
+    Assign,
+    /// Used for variable declarations, function parameters and parameter of a
+    /// catch clause
+    Decl,
+}
+
 impl Validate<Pat> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 
     fn validate(&mut self, p: &Pat) -> Self::Output {
-        let mut names = vec![];
+        match self.ctx.pat_mode {
+            PatMode::Decl => {
+                let mut names = vec![];
 
-        let mut visitor = VarVisitor { names: &mut names };
+                let mut visitor = VarVisitor { names: &mut names };
 
-        p.visit_with(&mut visitor);
+                p.visit_with(&mut visitor);
 
-        self.scope.declaring.extend(names.clone());
+                self.scope.declaring.extend(names.clone());
 
-        match self.declare_vars(VarDeclKind::Let, p) {
-            Ok(()) => {}
-            Err(err) => {
-                self.info.errors.push(err);
+                match self.declare_vars(VarDeclKind::Let, p) {
+                    Ok(()) => {}
+                    Err(err) => {
+                        self.info.errors.push(err);
+                    }
+                }
+
+                self.scope.remove_declaring(names);
             }
-        }
 
-        self.scope.remove_declaring(names);
+            PatMode::Assign => {}
+        }
 
         Ok(ty::FnParam {
             span: p.span(),

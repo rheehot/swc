@@ -1,14 +1,19 @@
-use self::{
-    control_flow::CondFacts,
-    scope::{Scope, ScopeKind},
-    util::ResultExt,
-};
+pub(crate) use self::scope::ScopeKind;
+use self::{control_flow::CondFacts, scope::Scope, util::ResultExt};
 use crate::{
-    analyzer::props::ComputedPropMode, errors::Error, loader::Load, ty::Type, validator::Validate,
+    analyzer::{pat::PatMode, props::ComputedPropMode},
+    errors::Error,
+    loader::Load,
+    ty::Type,
+    validator::Validate,
     Exports, ImportInfo, Rule,
 };
 use fxhash::{FxHashMap, FxHashSet};
-use std::{path::PathBuf, sync::Arc};
+use std::{
+    ops::{Deref, DerefMut},
+    path::PathBuf,
+    sync::Arc,
+};
 use swc_atoms::JsWord;
 use swc_common::Span;
 use swc_common::{SourceMap, Span};
@@ -36,6 +41,14 @@ mod type_facts;
 mod type_params;
 mod util;
 
+#[derive(Debug, Clone, Copy)]
+struct Ctx {
+    in_declare: bool,
+    pat_mode: PatMode,
+    computed_prop_mode: ComputedPropMode,
+    allow_ref_declaring: bool,
+}
+
 /// Note: All methods named `validate_*` return [Err] iff it's not recoverable.
 #[derive(Debug)]
 pub(crate) struct Analyzer<'a> {
@@ -51,12 +64,10 @@ pub struct Analyzer<'a, 'b> {
     libs: &'b [Lib],
     scope: Scope<'a>,
 
-    in_declare: bool,
+    ctx: Ctx,
 
     loader: &'b dyn Load,
 
-    allow_ref_declaring: bool,
-    computed_prop_mode: ComputedPropMode,
     is_builtin: bool,
 }
 
@@ -102,10 +113,13 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             rule,
             libs,
             scope,
-            in_declare: false,
+            ctx: Ctx {
+                in_declare: false,
+                allow_ref_declaring: false,
+                pat_mode: PatMode::Assign,
+                computed_prop_mode: ComputedPropMode::Object,
+            },
             loader,
-            allow_ref_declaring: false,
-            computed_prop_mode: ComputedPropMode::Object,
             is_builtin,
         }
     }
@@ -116,14 +130,15 @@ impl<'a, 'b> Analyzer<'a, 'b> {
         F: for<'any> FnOnce(&mut Analyzer<'any>) -> Ret,
         where
             F: for<'aa,'bb> FnOnce(&mut Analyzer<'aa,'bb>) -> Ret,
+    pub(crate) fn with_child<F, Ret>(&mut self, kind: ScopeKind, facts: CondFacts, op: F) -> Ret
     where
         F: for<'aa, 'bb> FnOnce(&mut Analyzer<'aa, 'bb>) -> Ret,
     {
-        let in_declare = self.in_declare;
+        let ctx = self.ctx;
         let child_scope = Scope::new(&self.scope, kind, facts);
         let (ret, info) = {
             let mut child = self.new(child_scope);
-            child.in_declare = in_declare;
+            child.ctx = ctx;
 
             let ret = op(&mut child);
 
@@ -138,6 +153,40 @@ impl<'a, 'b> Analyzer<'a, 'b> {
         );
 
         ret
+    }
+
+    pub(super) fn with_ctx(&mut self, ctx: Ctx) -> WithCtx<'_, 'a, 'b> {
+        let orig_ctx = self.ctx;
+        self.ctx = ctx;
+        WithCtx {
+            analyzer: self,
+            orig_ctx,
+        }
+    }
+}
+
+struct WithCtx<'a, 'b, 'c> {
+    analyzer: &'a mut Analyzer<'b, 'c>,
+    orig_ctx: Ctx,
+}
+
+impl Drop for WithCtx<'_, '_, '_> {
+    fn drop(&mut self) {
+        self.analyzer.ctx = self.orig_ctx;
+    }
+}
+
+impl<'b, 'c> Deref for WithCtx<'_, 'b, 'c> {
+    type Target = Analyzer<'b, 'c>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.analyzer
+    }
+}
+
+impl<'b, 'c> DerefMut for WithCtx<'_, 'b, 'c> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut *self.analyzer
     }
 }
 

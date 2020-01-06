@@ -5,7 +5,7 @@ use super::{
     Analyzer,
 };
 use crate::{
-    analyzer::util::ResultExt,
+    analyzer::{util::ResultExt, Ctx},
     errors::Error,
     swc_common::VisitWith,
     ty,
@@ -260,7 +260,7 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
                 c.key.visit_with(child);
                 // c.function.visit_children(child);
 
-                if child.in_declare && c.function.body.is_some() {
+                if child.ctx.in_declare && c.function.body.is_some() {
                     child.info.errors.push(Error::TS1183 { span: key_span })
                 }
 
@@ -826,15 +826,17 @@ impl Fold<ClassDecl> for Analyzer<'_> {
 impl Visit<ClassDecl> for Analyzer<'_> {
 impl Visit<ClassDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassDecl) {
-        let orig_in_declare = self.in_declare;
-        self.in_declare |= c.declare;
+        let ctx = Ctx { ..self.ctx };
+        self.with_ctx(ctx).visit_class_decl(c);
+    }
+}
 
+impl Analyzer<'_, '_> {
+    fn visit_class_decl(&mut self, c: &ClassDecl) {
         c.visit_children(self);
 impl Visit<ClassDecl> for Analyzer<'_> {
     fn visit(&mut self, c: &ClassDecl) {
         let c: ClassDecl = c.visit_children(self);
-
-        self.in_declare = orig_in_declare;
 
         self.validate_inherited_members(Some(&c.ident), &c.class, c.declare);
         self.validate_class_members(&c.class, c.declare)

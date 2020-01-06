@@ -1,6 +1,6 @@
 use super::Analyzer;
 use crate::{
-    analyzer::{props::prop_name_to_expr, util::ResultExt},
+    analyzer::{pat::PatMode, props::prop_name_to_expr, util::ResultExt, Ctx},
     builtin_types,
     errors::Error,
     ty,
@@ -64,6 +64,16 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
     fn validate(&mut self, e: &AssignExpr) -> Self::Output {
+        let ctx = Ctx {
+            pat_mode: PatMode::Assign,
+            ..self.ctx
+        };
+        self.with_ctx(ctx).validate_assign_expr(e)
+    }
+}
+
+impl Analyzer<'_, '_> {
+    fn validate_assign_expr(&mut self, e: &AssignExpr) -> ValidationResult {
         let span = e.span();
 
         let any_span = match e.left {
@@ -79,8 +89,9 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
             _ => None,
         };
 
-        let mut errors = vec![];
         e.left.visit_with(self);
+
+        let mut errors = vec![];
 
         let rhs_ty = match e.right.validate_with(self) {
             Ok(rhs_ty) => {
@@ -842,7 +853,7 @@ impl Analyzer<'_, '_> {
                 i.sym
             );
 
-            if self.allow_ref_declaring {
+            if self.ctx.allow_ref_declaring {
                 return Ok(Type::any(span));
             } else {
                 return Err(Error::ReferencedInInit { span });
