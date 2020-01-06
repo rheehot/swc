@@ -80,7 +80,7 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
         };
 
         let mut errors = vec![];
-        e.visit_children(self);
+        e.left.visit_with(self);
 
         let rhs_ty = match e.right.validate_with(self) {
             Ok(rhs_ty) => {

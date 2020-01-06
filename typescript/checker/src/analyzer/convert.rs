@@ -5,8 +5,8 @@ use crate::{
     ty::{
         Alias, Array, CallSignature, Conditional, ConstructorSignature, Enum, EnumMember,
         ImportType, IndexSignature, InferType, Interface, Intersection, Mapped, MethodSignature,
-        Operator, PropertySignature, QueryExpr, QueryType, TsExpr, Tuple, Type, TypeElement,
-        TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
+        Operator, Predicate, PropertySignature, QueryExpr, QueryType, TsExpr, Tuple, Type,
+        TypeElement, TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
     },
     validator::{Validate, ValidateWith},
     ValidationResult,
@@ -486,6 +486,18 @@ impl Validate<TsTypeQuery> for Analyzer<'_, '_> {
     }
 }
 
+impl Validate<TsTypePredicate> for Analyzer<'_, '_> {
+    type Output = ValidationResult<Predicate>;
+
+    fn validate(&mut self, t: &TsTypePredicate) -> Self::Output {
+        Ok(Predicate {
+            span: t.span,
+            param_name: t.param_name.clone(),
+            ty: box t.type_ann.validate_with(self)?,
+        })
+    }
+}
+
 impl Validate<TsType> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -521,8 +533,8 @@ impl Validate<TsType> for Analyzer<'_, '_> {
             TsType::TsRestType(ty) => unimplemented!("{:?}", ty),
             TsType::TsInferType(ty) => Type::Infer(ty.validate_with(self)?),
             TsType::TsIndexedAccessType(ty) => unimplemented!("{:?}", ty),
-            TsType::TsTypePredicate(ty) => unimplemented!("{:?}", ty),
-            TsType::TsImportType(ty) => unimplemented!("{:?}", ty),
+            TsType::TsTypePredicate(ty) => Type::Predicate(ty.validate_with(self)?),
+            TsType::TsImportType(ty) => Type::Import(ty.validate_with(self)?),
         })
     }
 }

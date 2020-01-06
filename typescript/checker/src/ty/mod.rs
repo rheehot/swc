@@ -14,6 +14,7 @@ pub enum Type {
     Query(QueryType),
     Infer(InferType),
     Import(ImportType),
+    Predicate(Predicate),
 
     Ref(Ref),
     TypeLit(TypeLit),
@@ -426,6 +427,13 @@ pub struct Constructor {
     pub params: Vec<FnParam>,
 }
 
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct Predicate {
+    pub span: Span,
+    pub param_name: TsThisTypeOrIdent,
+    pub ty: Box<Type>,
+}
+
 impl Type {
     pub fn generalize_lit(&self) -> Cow<Self> {
         let span = self.span();
@@ -642,6 +650,7 @@ impl Type {
             Type::Query(ty) => Type::Query(QueryType { span, ..ty }),
             Type::Infer(ty) => Type::Infer(InferType { span, ..ty }),
             Type::Import(ty) => Type::Import(ImportType { span, ..ty }),
+            Type::Predicate(ty) => Type::Predicate(Predicate { span, ..ty }),
         }
     }
 }
