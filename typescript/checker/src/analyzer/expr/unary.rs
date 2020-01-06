@@ -71,6 +71,8 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
                 op!("!") => return Ok(negate(arg)),
 
                 op!("typeof") | op!("delete") | op!("void") => unreachable!(),
+
+                _ => {}
             }
         }
 

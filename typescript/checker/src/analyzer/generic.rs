@@ -1,6 +1,5 @@
 use super::Analyzer;
 use crate::{
-    errors::Error,
     ty::{
         self, Conditional, FnParam, Mapped, Ref, Tuple, Type, TypeParam, TypeParamDecl,
         TypeParamInstantiation,
@@ -8,7 +7,6 @@ use crate::{
     validator::ValidateWith,
     ValidationResult,
 };
-use std::borrow::Cow;
 use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
@@ -41,7 +39,7 @@ impl Analyzer<'_, '_> {
 
     pub(super) fn expand_type_params(
         &mut self,
-        i: TypeParamInstantiation,
+        i: &TypeParamInstantiation,
         decl: &TypeParamDecl,
         mut ty: Type,
     ) -> ValidationResult {
@@ -63,25 +61,19 @@ impl Analyzer<'_, '_> {
                 return Ok(ty);
             }
 
-            Type::Operator(ref op) => {
+            Type::Operator(ref mut op) => {
                 let expanded = self.expand_type_params(i, decl, *op.ty)?;
 
-                match ty.normalize_mut() {
-                    Type::Operator(ref mut operator) => {
-                        operator.ty = box expanded;
-                    }
-
-                    ref ty => unreachable!("{:#?}", ty),
-                }
+                op.ty = box expanded;
 
                 return Ok(ty);
             }
 
             Type::Conditional(Conditional {
                 check_type,
-                ref extends_type,
-                ref true_type,
-                ref false_type,
+                extends_type,
+                true_type,
+                false_type,
                 ..
             }) => {
                 let check_type = self.expand_type_params(i, decl, *check_type)?;
@@ -106,14 +98,8 @@ impl Analyzer<'_, '_> {
                 )
             }
 
-            Type::Mapped(Mapped {
-                readonly: _,
-                optional: _,
-                ty: _,
-                ref type_param,
-                ..
-            }) => {
-                let type_param = self.expand_type_param(i, decl, type_param)?;
+            Type::Mapped(t) => {
+                let type_param = self.expand_type_param(&i, decl, t.type_param)?;
 
                 // TODO:
                 //
@@ -121,29 +107,19 @@ impl Analyzer<'_, '_> {
                 //     type T51 = T50<any>;  // { [x: string]: number }
                 //     type T52 = T50<unknown>;  // {}
 
-                if let Cow::Owned(type_param) = type_param {
-                    match ty.normalize_mut() {
-                        Type::Mapped(ref mut ty) => {
-                            ty.type_param = type_param;
-                        }
-
-                        ref ty => unreachable!("{:#?}", ty),
-                    }
-                }
-
-                return Ok(ty);
+                return Ok(Type::Mapped(Mapped { type_param, ..t }));
             }
 
             Type::Tuple(Tuple { ref types, .. }) => {
                 let mut buf = vec![];
 
                 for (idx, t) in types.into_iter().enumerate() {
-                    let t = self.expand_type_params(i, decl, t)?;
+                    let t = self.expand_type_params(i, decl, t.clone())?;
                     buf.push((idx, t))
                 }
 
                 for (idx, t) in buf {
-                    match ty.normalize_mut() {
+                    match ty {
                         Type::Tuple(ref mut tuple) => {
                             tuple.types[idx] = t;
                         }
@@ -186,23 +162,19 @@ impl Analyzer<'_, '_> {
         )
     }
 
-    fn expand_type_param<'a, 'b>(
+    fn expand_type_param(
         &mut self,
         i: &TypeParamInstantiation,
         decl: &TypeParamDecl,
-        type_param: &'a TypeParam,
-    ) -> Result<Cow<'a, TypeParam>, Error> {
-        let mut tp = Cow::Borrowed(type_param);
+        mut type_param: TypeParam,
+    ) -> ValidationResult<TypeParam> {
+        if let Some(c) = type_param.constraint {
+            let c = self.expand_type_params(i, decl, *c.clone())?;
 
-        if let Some(ref c) = type_param.constraint {
-            let c = self.expand_type_params(i, decl, Cow::Borrowed(c))?;
-
-            if let Cow::Owned(c) = c {
-                tp.to_mut().constraint = Some(box c);
-            }
+            type_param.constraint = Some(box c);
         }
 
-        Ok(tp)
+        Ok(type_param)
     }
 
     /// Returns `Some(true)` if `child` extends `parent`.
@@ -226,24 +198,21 @@ impl Fold<Type> for GenericExpander<'_> {
         let ty = ty.fold_children(self);
 
         match ty.normalize() {
-            Type::Simple(ref sty) => match **sty {
-                TsType::TsTypeRef(TsTypeRef {
-                    type_name: TsEntityName::Ident(Ident { ref sym, .. }),
-                    type_params: None,
-                    ..
-                }) => {
-                    // Handle references to type parameters
-                    for (idx, p) in self.decl.params.iter().enumerate() {
-                        if p.name == *sym {
-                            return Type::from(self.i.params[idx].clone());
-                        }
+            Type::Ref(Ref {
+                type_name: TsEntityName::Ident(Ident { ref sym, .. }),
+                type_params: None,
+                ..
+            }) => {
+                // Handle references to type parameters
+                for (idx, p) in self.decl.params.iter().enumerate() {
+                    if p.name == *sym {
+                        return Type::from(self.i.params[idx].clone());
                     }
-
-                    // Normal type reference
-                    ty
                 }
-                _ => ty,
-            },
+
+                // Normal type reference
+                ty
+            }
             _ => ty,
         }
     }

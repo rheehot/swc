@@ -64,17 +64,25 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
     fn validate(&mut self, e: &AssignExpr) -> Self::Output {
-        match e.left {
+        let span = e.span();
+
+        let any_span = match e.left {
             PatOrExpr::Pat(box Pat::Ident(ref i)) | PatOrExpr::Expr(box Expr::Ident(ref i)) => {
                 // Type is any if self.declaring contains ident
+                if self.scope.declaring.contains(&i.sym) {
+                    Some(span)
+                } else {
+                    None
+                }
             }
-        }
+
+            _ => None,
+        };
 
         let mut errors = vec![];
-        let span = e.span();
         e.visit_children(self);
 
-        let rhs_ty = match self.validate(&e.right) {
+        let rhs_ty = match e.right.validate_with(self) {
             Ok(rhs_ty) => {
                 let rhs_ty = rhs_ty;
 
@@ -97,6 +105,10 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
 
         if e.op == op!("=") {
             self.try_assign(span, &e.left, &rhs_ty);
+        }
+
+        if let Some(span) = any_span {
+            return Ok(Type::any(span));
         }
 
         Ok(rhs_ty)
@@ -344,13 +356,6 @@ impl Analyzer<'_, '_> {
 
             // https://github.com/Microsoft/TypeScript/issues/26959
             Expr::Yield(..) => return Ok(Type::any(span)),
-
-            Expr::Update(..) => {
-                return Ok(Type::Keyword(TsKeywordType {
-                    kind: TsKeywordTypeKind::TsNumberKeyword,
-                    span,
-                }));
-            }
 
             Expr::Await(AwaitExpr { .. }) => unimplemented!("typeof(AwaitExpr)"),
 
@@ -1084,7 +1089,7 @@ impl Analyzer<'_, '_> {
             // we should expand the whole function, because return type contains type
             // parameter declared on the function.
             let expanded_fn_type =
-                self.expand_type_params(i, decl, Type::Function(fn_type.clone()))?;
+                self.expand_type_params(&i, decl, Type::Function(fn_type.clone()))?;
             let expanded_fn_type = match expanded_fn_type {
                 Type::Function(f) => f,
                 _ => unreachable!(),

@@ -182,7 +182,8 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                 Stmt::Decl(Decl::TsTypeAlias(ref a)) => {
                                     debug_assert_eq!(merged.types.get(&a.id.sym), None);
 
-                                    merged.types.insert(a.id.sym.clone(), a.clone().into());
+                                    // merged.types.insert(a.id.sym.clone(), a.clone().into());
+                                    unimplemented!("ts_type_alias in builtin")
                                 }
 
                                 // Merge interface

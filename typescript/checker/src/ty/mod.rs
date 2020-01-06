@@ -605,6 +605,10 @@ impl Type {
             Type::Tuple(ty) => Type::Tuple(Tuple { span, ..ty }),
 
             Type::Arc(arc) => Type::Arc(arc),
+
+            Type::Ref(ty) => Type::Ref(Ref { span, ..ty }),
+
+            Type::Query(ty) => Type::Query(TsTypeQuery { span, ..ty }),
         }
     }
 }
