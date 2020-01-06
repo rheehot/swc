@@ -116,7 +116,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                             left: box Pat::Ident(ref i),
                             ..
                         }) => {
-                            let ty = try_opt!(self.validate(&i.type_ann));
+                            let ty = try_opt!(child.validate(&i.type_ann));
                             //let ty = match ty {
                             //    Some(ty) => match child.expand_type(i.span, ty) {
                             //        Ok(ty) => Some(ty),
@@ -159,19 +159,19 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                 span: c.span,
                 params: c
                     .params
-                    .into_iter()
+                    .iter()
                     .map(|v| match v {
                         PatOrTsParamProp::TsParamProp(TsParamProp {
                             param: TsParamPropParam::Ident(i),
                             ..
-                        }) => TsFnParam::Ident(i),
+                        }) => TsFnParam::Ident(i.clone()),
                         PatOrTsParamProp::TsParamProp(TsParamProp {
                             param: TsParamPropParam::Assign(AssignPat { left: box pat, .. }),
                             ..
                         })
-                        | PatOrTsParamProp::Pat(pat) => from_pat(pat),
+                        | PatOrTsParamProp::Pat(pat) => from_pat(pat.clone()),
                     })
-                    .map(|param| self.validate(&param))
+                    .map(|param| child.validate(&param))
                     .collect::<Result<_, _>>()?,
             })
         })

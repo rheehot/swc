@@ -28,7 +28,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
 
         let (lt, rt) = match (lt, rt) {
             (Some(l), Some(r)) => (l, r),
-            _ => Err(errors)?,
+            _ => return Err(Error::Errors { span, errors }),
         };
 
         macro_rules! no_unknown {

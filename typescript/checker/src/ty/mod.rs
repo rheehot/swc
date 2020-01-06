@@ -1,7 +1,7 @@
 use crate::{util::EqIgnoreNameAndSpan, Exports};
 use fxhash::FxHashMap;
 use std::{borrow::Cow, mem::transmute, sync::Arc};
-use swc_atoms::JsWord;
+use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
@@ -249,11 +249,11 @@ pub enum TypeElement {
 
 impl TypeElement {
     pub fn key(&self) -> Option<&Expr> {
+        static CONSTRUCTOR: Expr = { Expr::Ident(Ident::new(js_word!("constructor"), DUMMY_SP)) };
+
         match self {
             TypeElement::Call(..) => None,
-            TypeElement::Constructor(ref c) => {
-                Some(&Expr::Ident(Ident::new("constructor".into(), c.span)))
-            }
+            TypeElement::Constructor(..) => Some(&CONSTRUCTOR),
             TypeElement::Property(p) => Some(&p.key),
             TypeElement::Method(m) => Some(&m.key),
             TypeElement::Index(_) => None,

@@ -31,7 +31,7 @@ impl Validate<TsTypeParam> for Analyzer<'_, '_> {
     fn validate(&mut self, p: &TsTypeParam) -> Self::Output {
         Ok(TypeParam {
             span: p.span,
-            name: p.name.sym,
+            name: p.name.sym.clone(),
             constraint: try_opt!(self.validate(&p.constraint)).map(Box::new),
             default: try_opt!(self.validate(&p.default)).map(Box::new),
         })
@@ -65,7 +65,7 @@ impl Validate<TsInterfaceDecl> for Analyzer<'_, '_> {
     fn validate(&mut self, d: &TsInterfaceDecl) -> Self::Output {
         Ok(Interface {
             span: d.span,
-            name: d.id.sym,
+            name: d.id.sym.clone(),
             type_params: try_opt!(self.validate(&d.type_params)),
             extends: self.validate(&d.extends)?,
             body: self.validate(&d.body.body)?,
@@ -133,7 +133,7 @@ impl Validate<TsMethodSignature> for Analyzer<'_, '_> {
         Ok(MethodSignature {
             span: d.span,
             readonly: d.readonly,
-            key: d.key,
+            key: d.key.clone(),
             computed: d.computed,
             optional: d.optional,
             params: self.validate(&d.params)?,
@@ -163,7 +163,7 @@ impl Validate<TsPropertySignature> for Analyzer<'_, '_> {
         Ok(PropertySignature {
             span: d.span,
             computed: d.computed,
-            key: d.key,
+            key: d.key.clone(),
             optional: d.optional,
             params: self.validate(&d.params)?,
             readonly: d.readonly,
@@ -179,7 +179,7 @@ impl Validate<TsExprWithTypeArgs> for Analyzer<'_, '_> {
     fn validate(&mut self, e: &TsExprWithTypeArgs) -> Self::Output {
         Ok(TsExpr {
             span: e.span,
-            expr: e.expr,
+            expr: e.expr.clone(),
             type_args: try_opt!(e.type_args.validate_with(self)),
         })
     }
@@ -433,9 +433,9 @@ impl Validate<TsType> for Analyzer<'_, '_> {
         let span = ty.span();
 
         Ok(match ty {
-            TsType::TsThisType(this) => Type::This(*this),
-            TsType::TsLitType(ty) => Type::Lit(*ty),
-            TsType::TsKeywordType(ty) => Type::Keyword(*ty),
+            TsType::TsThisType(this) => Type::This(this.clone()),
+            TsType::TsLitType(ty) => Type::Lit(ty.clone()),
+            TsType::TsKeywordType(ty) => Type::Keyword(ty.clone()),
             TsType::TsTupleType(ty) => Type::Tuple(self.validate(ty)?),
             TsType::TsUnionOrIntersectionType(TsUnionOrIntersectionType::TsUnionType(u)) => {
                 Type::Union(self.validate(u)?)

@@ -474,9 +474,9 @@ impl Analyzer<'_, '_> {
             }};
         }
 
-        let obj = obj.generalize_lit();
+        let obj = obj.generalize_lit().into_owned();
 
-        match *obj.normalize() {
+        match obj {
             Type::Lit(..) => unreachable!(),
 
             Type::Enum(ref e) => {
@@ -724,7 +724,7 @@ impl Analyzer<'_, '_> {
                         });
                     }
 
-                    return Ok(types[v as usize]);
+                    return Ok(types[v as usize].clone());
                 }
                 _ => {
                     if types.is_empty() {
@@ -772,14 +772,8 @@ impl Analyzer<'_, '_> {
             },
 
             Type::This(..) => {
-                if let Some(ref this) = self.scope.this() {
-                    return self.access_property(
-                        span,
-                        this.into_owned(),
-                        prop,
-                        computed,
-                        type_mode,
-                    );
+                if let Some(this) = self.scope.this().map(|this| this.into_owned()) {
+                    return self.access_property(span, this, prop, computed, type_mode);
                 }
             }
 
@@ -856,7 +850,7 @@ impl Analyzer<'_, '_> {
 
         if let Some(ty) = self.find_var_type(&i.sym) {
             println!("({}) type_of({}): find_var_type", self.scope.depth(), i.sym);
-            return Ok(ty.clone().respan(span));
+            return Ok(ty.into_owned().respan(span));
         }
 
         if let Some(_var) = self.find_var(&i.sym) {
@@ -881,7 +875,7 @@ impl Analyzer<'_, '_> {
     }
 
     pub fn type_of_ts_entity_name(
-        &self,
+        &mut self,
         span: Span,
         n: &TsEntityName,
         type_args: Option<TypeParamInstantiation>,
