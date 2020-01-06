@@ -9,7 +9,7 @@ use crate::{
     errors::Error,
     swc_common::VisitWith,
     ty,
-    ty::Type,
+    ty::{FnParam, Type},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -183,7 +183,37 @@ impl Validate<TsFnParam> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 
     fn validate(&mut self, p: &TsFnParam) -> Self::Output {
-        unimplemented!("validate(TsFnParam)")
+        let span = p.span();
+
+        macro_rules! ty {
+            ($e:expr) => {{
+                let e: Option<_> = try_opt!($e.validate_with(self));
+                e.unwrap_or_else(|| Type::any(span))
+            }};
+        }
+
+        Ok(match p {
+            TsFnParam::Ident(i) => ty::FnParam {
+                span,
+                required: !i.optional,
+                ty: ty!(i.type_ann),
+            },
+            TsFnParam::Array(p) => FnParam {
+                span,
+                required: true,
+                ty: ty!(p.type_ann),
+            },
+            TsFnParam::Rest(p) => FnParam {
+                span,
+                required: false,
+                ty: ty!(p.type_ann),
+            },
+            TsFnParam::Object(p) => FnParam {
+                span,
+                required: true,
+                ty: ty!(p.type_ann),
+            },
+        })
     }
 }
 
