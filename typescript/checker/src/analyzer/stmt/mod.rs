@@ -4,6 +4,7 @@ use crate::{
     errors::Error,
     ty::Type,
     validator::{Validate, ValidateWith},
+    ValidationResult,
 };
 use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
@@ -61,4 +62,8 @@ impl Analyzer<'_, '_> {
             res.store(&mut self.info.errors);
         }
     }
+}
+
+struct ReturnTypeCollector<'a, A: Validate<Expr, Output = ValidationResult>> {
+    pub types: Vec<Type>,
 }
