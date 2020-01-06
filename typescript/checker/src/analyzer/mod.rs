@@ -140,10 +140,10 @@ struct NoopLoader;
 impl Load for NoopLoader {
     fn load(
         &self,
-        base: Arc<PathBuf>,
-        import: &ImportInfo,
+        _: Arc<PathBuf>,
+        _: &ImportInfo,
     ) -> Result<Exports<FxHashMap<JsWord, Arc<Type>>>, Error> {
-        unreachable!("builtin module should not import other moduel")
+        unreachable!("builtin module should not import other module")
     }
 }
 

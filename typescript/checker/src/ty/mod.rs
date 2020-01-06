@@ -1,6 +1,6 @@
 use crate::{util::EqIgnoreNameAndSpan, Exports};
 use fxhash::FxHashMap;
-use std::{mem::transmute, sync::Arc};
+use std::{borrow::Cow, mem::transmute, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -398,9 +398,11 @@ pub struct Constructor {
 }
 
 impl Type {
-    pub fn generalize_lit(self) -> Self {
-        match *self.normalize() {
-            Type::Lit(TsLitType { span, ref lit }) => {
+    pub fn generalize_lit(&self) -> Cow<Self> {
+        let span = self.span();
+
+        match self.normalize() {
+            Type::Lit(TsLitType { ref lit, .. }) => {
                 return Type::Keyword(TsKeywordType {
                     span,
                     kind: match *lit {
@@ -409,6 +411,7 @@ impl Type {
                         TsLit::Str(Str { .. }) => TsKeywordTypeKind::TsStringKeyword,
                     },
                 })
+                .into()
             }
             Type::Union(Union { ref types, .. }) => {
                 let mut tys: Vec<Type> = Vec::with_capacity(types.len());
@@ -421,12 +424,12 @@ impl Type {
                     }
                 }
 
-                return Type::union(tys);
+                return Type::union(tys).into();
             }
             _ => {}
         }
 
-        self
+        self.into()
     }
 
     pub fn union<I: IntoIterator<Item = Self>>(iter: I) -> Self {
