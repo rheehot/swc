@@ -289,7 +289,7 @@ impl Analyzer<'_, '_> {
                 }
 
                 // Handle member expression
-                let obj_type = self.validate(obj)?.generalize_lit();
+                let obj_type = self.validate(obj)?.generalize_lit().into_owned();
 
                 let obj_type = match *obj_type.normalize() {
                     Type::Keyword(TsKeywordType {
@@ -302,7 +302,7 @@ impl Analyzer<'_, '_> {
                         ..
                     }) => builtin_types::get_type(self.libs, span, &js_word!("String"))
                         .expect("Builtin type named 'String' should exist"),
-                    _ => obj_type.into_owned(),
+                    _ => obj_type,
                 };
 
                 match *obj_type.normalize() {
@@ -549,7 +549,7 @@ impl Analyzer<'_, '_> {
         args: &[ExprOrSpread],
     ) -> ValidationResult {
         // Validate arguments
-        for (i, p) in c.params.into_iter().enumerate() {
+        for (i, p) in c.params.iter().enumerate() {
             // TODO: Handle spread
             // TODO: Validate optional parameters
             if args.len() > i {
@@ -558,6 +558,6 @@ impl Analyzer<'_, '_> {
             }
         }
 
-        return Ok(c.ret_ty.unwrap_or_else(|| Type::any(span)));
+        return Ok(c.ret_ty.clone().unwrap_or_else(|| Type::any(span)));
     }
 }

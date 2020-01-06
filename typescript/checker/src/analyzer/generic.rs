@@ -61,12 +61,12 @@ impl Analyzer<'_, '_> {
                 return Ok(ty);
             }
 
-            Type::Operator(ref mut op) => {
+            Type::Operator(mut op) => {
                 let expanded = self.expand_type_params(i, decl, *op.ty)?;
 
                 op.ty = box expanded;
 
-                return Ok(ty);
+                return Ok(Type::Operator(op));
             }
 
             Type::Conditional(Conditional {

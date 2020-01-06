@@ -1,6 +1,10 @@
 use super::super::Analyzer;
 use crate::{
-    analyzer::util::ResultExt, errors::Error, ty::Type, validator::Validate, ValidationResult,
+    analyzer::util::ResultExt,
+    errors::Error,
+    ty::Type,
+    validator::{Validate, ValidateWith},
+    ValidationResult,
 };
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
@@ -16,12 +20,12 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
 
         let mut errors = vec![];
 
-        let arg = self.validate(&arg).store(&mut errors);
+        let arg = arg.validate_with(self).store(&mut errors);
 
         self.info.errors.extend(errors.drain(..));
 
-        if let Some(arg) = arg {
-            self.validate_unary_expr_inner(span, op, &arg);
+        if let Some(ref arg) = arg {
+            self.validate_unary_expr_inner(span, op, arg);
         }
 
         match op {

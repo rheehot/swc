@@ -42,7 +42,7 @@ impl Load for Checker<'_> {
 
                 if let Some(var) = module.1.exports.vars.get(&export.0) {
                     done = true;
-                    result.vars.insert(export.0, var.clone());
+                    result.vars.insert(export.0.clone(), var.clone());
                 }
 
                 if !done {

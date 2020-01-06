@@ -240,13 +240,13 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     fn validate_bin_inner(&mut self, span: Span, op: BinaryOp, lt: Option<Type>, rt: Option<Type>) {
+        let ls = lt.span();
+        let rs = rt.span();
+
         let mut errors = vec![];
 
         match op {
             op!("===") | op!("!==") => {
-                let ls = lt.span();
-                let rs = rt.span();
-
                 if lt.is_some() && rt.is_some() {
                     let lt = lt.unwrap();
                     let rt = rt.unwrap();
@@ -417,7 +417,7 @@ impl Analyzer<'_, '_> {
                         | Type::Enum(..)
                         | Type::EnumVariant(..) => {}
 
-                        _ => errors.push(Error::TS2360 { span: lt.span() }),
+                        _ => errors.push(Error::TS2360 { span: ls }),
                     }
                 }
 
@@ -443,7 +443,7 @@ impl Analyzer<'_, '_> {
                     }
 
                     if !is_ok(&rt.unwrap()) {
-                        errors.push(Error::TS2361 { span: rt.span() })
+                        errors.push(Error::TS2361 { span: rs })
                     }
                 }
             }
