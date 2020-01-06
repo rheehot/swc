@@ -1,0 +1,6 @@
+error: A 'set' accessor cannot have a return type annotation.
+ --> $DIR/tests/conformance/parser/ecmascript5/Accessors/parserSetAccessorWithTypeAnnotation1.ts:3:8
+  |
+3 |    set foo(v): number {
+  |        ^^^
+

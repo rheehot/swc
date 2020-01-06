@@ -255,6 +255,10 @@ pub enum Error {
         span: Span,
     },
 
+    TS1095 {
+        span: Span,
+    },
+
     TS1319 {
         span: Span,
     },
@@ -363,6 +367,9 @@ impl Error {
             }
             Error::TS2378 { .. } => h.struct_err("A 'get' accessor must return a value."),
             Error::TS1094 { span } => h.struct_err("An accessor cannot have type parameters"),
+            Error::TS1095 { span } => {
+                h.struct_err("A 'set' accessor cannot have a return type annotation.")
+            }
             _ => h.struct_err(&format!("{:#?}", self)),
         };
         err.set_span(span);

@@ -230,6 +230,10 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
                 c.key.visit_with(child);
                 // c.function.visit_children(child);
 
+                if c.kind == MethodKind::Setter && c.function.return_type.is_some() {
+                    child.info.errors.push(Error::TS1095 { span: key_span })
+                }
+
                 let declared_ret_ty = try_opt!(c.function.return_type.validate_with(child));
 
                 let inferred_ret_ty = match c
