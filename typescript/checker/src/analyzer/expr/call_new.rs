@@ -6,8 +6,8 @@ use crate::{
     errors::Error,
     ty,
     ty::{
-        CallSignature, ClassInstance, ConstructorSignature, Method, MethodSignature, Static, Type,
-        TypeElement,
+        CallSignature, ClassInstance, ConstructorSignature, Method, MethodSignature, QueryExpr,
+        QueryType, Static, Type, TypeElement,
     },
     util::EqIgnoreSpan,
     validator::{Validate, ValidateWith},
@@ -527,8 +527,8 @@ impl Analyzer<'_, '_> {
                 .into());
             }
 
-            Type::Query(TsTypeQuery {
-                expr_name: TsTypeQueryExpr::TsEntityName(TsEntityName::Ident(Ident { ref sym, .. })),
+            Type::Query(QueryType {
+                expr: QueryExpr::TsEntityName(TsEntityName::Ident(Ident { ref sym, .. })),
                 ..
             }) => {
                 //if self.scope.find_declaring_fn(sym) {

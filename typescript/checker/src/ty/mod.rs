@@ -11,8 +11,11 @@ pub mod merge;
 pub enum Type {
     This(TsThisType),
     Lit(TsLitType),
+    Query(QueryType),
+    Infer(InferType),
+    Import(ImportType),
+
     Ref(Ref),
-    Query(TsTypeQuery),
     TypeLit(TypeLit),
     Keyword(TsKeywordType),
     Conditional(Conditional),
@@ -70,6 +73,32 @@ pub enum Type {
 pub struct Ref {
     pub span: Span,
     pub type_name: TsEntityName,
+    pub type_params: Option<TypeParamInstantiation>,
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct InferType {
+    pub span: Span,
+    pub type_param: TypeParam,
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct QueryType {
+    pub span: Span,
+    pub expr: QueryExpr,
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned, FromVariant)]
+pub enum QueryExpr {
+    TsEntityName(TsEntityName),
+    Import(ImportType),
+}
+
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct ImportType {
+    pub span: Span,
+    pub arg: Str,
+    pub qualifier: Option<TsEntityName>,
     pub type_params: Option<TypeParamInstantiation>,
 }
 
@@ -610,7 +639,9 @@ impl Type {
 
             Type::Ref(ty) => Type::Ref(Ref { span, ..ty }),
 
-            Type::Query(ty) => Type::Query(TsTypeQuery { span, ..ty }),
+            Type::Query(ty) => Type::Query(QueryType { span, ..ty }),
+            Type::Infer(ty) => Type::Infer(InferType { span, ..ty }),
+            Type::Import(ty) => Type::Import(ImportType { span, ..ty }),
         }
     }
 }

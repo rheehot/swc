@@ -4,9 +4,9 @@ use crate::{
     ty,
     ty::{
         Alias, Array, CallSignature, Conditional, ConstructorSignature, Enum, EnumMember,
-        IndexSignature, Interface, Intersection, Mapped, MethodSignature, Operator,
-        PropertySignature, TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl,
-        TypeParamInstantiation, Union,
+        ImportType, IndexSignature, InferType, Interface, Intersection, Mapped, MethodSignature,
+        Operator, PropertySignature, QueryExpr, QueryType, TsExpr, Tuple, Type, TypeElement,
+        TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
     },
     validator::{Validate, ValidateWith},
     ValidationResult,
@@ -438,6 +438,54 @@ impl Validate<TsTypeRef> for Analyzer<'_, '_> {
     }
 }
 
+impl Validate<TsInferType> for Analyzer<'_, '_> {
+    type Output = ValidationResult<InferType>;
+
+    fn validate(&mut self, t: &TsInferType) -> Self::Output {
+        Ok(InferType {
+            span: t.span,
+            type_param: t.type_param.validate_with(self)?,
+        })
+    }
+}
+
+impl Validate<TsImportType> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ImportType>;
+
+    fn validate(&mut self, t: &TsImportType) -> Self::Output {
+        Ok(ImportType {
+            span: t.span,
+            arg: t.arg.clone(),
+            qualifier: t.qualifier.clone(),
+            type_params: try_opt!(t.type_params.validate_with(self)),
+        })
+    }
+}
+
+impl Validate<TsTypeQueryExpr> for Analyzer<'_, '_> {
+    type Output = ValidationResult<QueryExpr>;
+
+    fn validate(&mut self, t: &TsTypeQueryExpr) -> Self::Output {
+        let span = t.span();
+
+        Ok(match t {
+            TsTypeQueryExpr::TsEntityName(t) => t.clone().into(),
+            TsTypeQueryExpr::Import(i) => i.validate_with(self)?.into(),
+        })
+    }
+}
+
+impl Validate<TsTypeQuery> for Analyzer<'_, '_> {
+    type Output = ValidationResult<QueryType>;
+
+    fn validate(&mut self, t: &TsTypeQuery) -> Self::Output {
+        Ok(QueryType {
+            span: t.span,
+            expr: t.expr_name.validate_with(self)?,
+        })
+    }
+}
+
 impl Validate<TsType> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -468,10 +516,10 @@ impl Validate<TsType> for Analyzer<'_, '_> {
             TsType::TsTypeOperator(ty) => Type::Operator(self.validate(ty)?),
             TsType::TsParenthesizedType(ty) => self.validate(ty)?,
             TsType::TsTypeRef(ty) => Type::Ref(self.validate(ty)?),
-            TsType::TsTypeQuery(ty) => Type::Query(ty.clone()),
+            TsType::TsTypeQuery(ty) => Type::Query(ty.validate_with(self)?),
             TsType::TsOptionalType(ty) => unimplemented!("{:?}", ty),
             TsType::TsRestType(ty) => unimplemented!("{:?}", ty),
-            TsType::TsInferType(ty) => unimplemented!("{:?}", ty),
+            TsType::TsInferType(ty) => Type::Infer(ty.validate_with(self)?),
             TsType::TsIndexedAccessType(ty) => unimplemented!("{:?}", ty),
             TsType::TsTypePredicate(ty) => unimplemented!("{:?}", ty),
             TsType::TsImportType(ty) => unimplemented!("{:?}", ty),
