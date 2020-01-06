@@ -646,12 +646,6 @@ impl Type {
     }
 }
 
-fn map_types<'a, 'b, F>(types: Vec<Type>, map: F) -> Vec<Type>
-where
-    F: Fn(Type) -> Type,
-{
-    types.into_iter().map(map).collect()
-}
 //
 //impl Type {
 //    pub fn into_static(self) -> Type {
