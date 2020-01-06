@@ -1,8 +1,4 @@
-use super::super::{
-    pat::PatMode,
-    util::{PatExt, VarVisitor},
-    Analyzer, Ctx,
-};
+use super::super::{pat::PatMode, util::PatExt, Analyzer, Ctx};
 use crate::{
     analyzer::util::ResultExt,
     errors::Error,
@@ -72,7 +68,8 @@ impl Analyzer<'_, '_> {
 
                     let declared_ty = v.name.get_ty();
                     if declared_ty.is_some() {
-                        self.span_allowed_implicit_any = span;
+                        //TODO:
+                        // self.span_allowed_implicit_any = span;
                     }
 
                     debug_assert_eq!(self.ctx.allow_ref_declaring, true);
@@ -94,9 +91,15 @@ impl Analyzer<'_, '_> {
 
                     match declared_ty {
                         Some(ty) => {
-                            let ty = ty.validate_with(self);
+                            let ty = match ty.validate_with(self) {
+                                Ok(ty) => ty,
+                                Err(err) => {
+                                    self.info.errors.push(err);
+                                    remove_declaring!();
+                                    return;
+                                }
+                            };
                             let error = self.assign(&ty, &value_ty, v_span);
-                            let ty = ty;
                             match error {
                                 Ok(()) => {
                                     match self.scope.declare_complex_vars(kind, &v.name, ty) {

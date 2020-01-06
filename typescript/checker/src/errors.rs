@@ -1,10 +1,7 @@
 use crate::ty::{Type, TypeElement};
 use std::{ops::RangeInclusive, path::PathBuf};
 use swc_atoms::JsWord;
-use swc_common::{
-    errors::{DiagnosticId, Handler},
-    Span, Spanned, DUMMY_SP,
-};
+use swc_common::{errors::Handler, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::Expr;
 
 #[derive(Debug, Clone, PartialEq, Spanned)]

@@ -40,6 +40,13 @@ pub(crate) struct Scope<'a> {
 }
 
 impl<'a> Scope<'a> {
+    pub(super) fn depth(&self) -> usize {
+        match self.parent {
+            Some(ref p) => p.depth() + 1,
+            None => 0,
+        }
+    }
+
     pub(super) fn find_declaring_fn(&self, name: &JsWord) -> bool {
         if let Some(ref d_fn) = self.declaring_fn {
             if *d_fn == *name {
