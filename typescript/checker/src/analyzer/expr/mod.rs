@@ -211,6 +211,8 @@ impl Analyzer<'_, '_> {
             }) => Ok(Type::any(span)),
 
             Expr::Bin(e) => self.validate(e),
+            Expr::Cond(e) => self.validate(e),
+            Expr::Seq(e) => self.validate(e),
             Expr::Update(e) => self.validate(e),
             Expr::New(e) => self.validate(e),
             Expr::Call(e) => self.validate(e),
@@ -388,7 +390,7 @@ impl Analyzer<'_, '_> {
 
             Expr::Invalid(ref i) => return Ok(Type::any(i.span())),
 
-            _ => unimplemented!("typeof ({:#?})", e),
+            _ => unimplemented!("typeof ({:?})", e),
         }
     }
 
