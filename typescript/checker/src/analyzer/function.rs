@@ -82,7 +82,7 @@ impl Analyzer<'_, '_> {
             }
 
             if let Some(name) = name {
-                self.scope.declaring_fn = Some(name.sym.clone());
+                self.scope.declaring_fn = None;
             }
 
             fn_ty
