@@ -350,9 +350,12 @@ expressions/unaryOperators/typeofOperator/typeofOperatorInvalidOperations.ts
 expressions/unaryOperators/voidOperator/
 interfaces/interfaceDeclarations/asiPreventsParsingAsInterface01.ts
 interfaces/interfaceDeclarations/asiPreventsParsingAsInterface05.ts
+parser/ecmascript3/
 parser/ecmascript3/Accessors/parserES3Accessors1.ts
 parser/ecmascript3/Accessors/parserES3Accessors2.ts
 parser/ecmascript3/Accessors/parserES3Accessors3.ts
+parser/ecmascript5/
+parser/ecmascript5/Accessors
 parser/ecmascript5/Accessors/parserAccessors1.ts
 parser/ecmascript5/Accessors/parserAccessors2.ts
 parser/ecmascript5/Accessors/parserAccessors3.ts
