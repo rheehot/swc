@@ -1165,9 +1165,17 @@ impl Validate<Function> for Analyzer<'_, '_> {
 
         self.info.errors.extend(errors);
 
+        let params = {
+            let ctx = Ctx {
+                pat_mode: PatMode::Decl,
+                ..self.ctx
+            };
+            f.params.validate_with(&mut *self.with_ctx(ctx))?
+        };
+
         Ok(ty::Function {
             span: f.span,
-            params: f.params.validate_with(self)?,
+            params,
             type_params: try_opt!(f.type_params.validate_with(self)),
             ret_ty: box declared_ret_ty.unwrap_or_else(|| inferred_return_type),
         }
