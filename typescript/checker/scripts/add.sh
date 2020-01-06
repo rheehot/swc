@@ -12,7 +12,8 @@ bash ./scripts/sort.sh
 ./scripts/success.py
 
 # We are developing
-TEST="$1" cargo test --test tests -- conformance
+export TEST="$1"
+cargo test --test tests -- conformance | grep --color -E 'swc_ts_checker|$'
 
 echo "$1" >> ./tests/done.txt
 bash ./scripts/sort.sh
