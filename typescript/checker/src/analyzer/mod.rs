@@ -42,7 +42,7 @@ mod type_params;
 mod util;
 
 #[derive(Debug, Clone, Copy)]
-struct Ctx {
+pub(crate) struct Ctx {
     in_declare: bool,
     pat_mode: PatMode,
     computed_prop_mode: ComputedPropMode,
@@ -165,7 +165,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
     }
 }
 
-struct WithCtx<'a, 'b, 'c> {
+pub(super) struct WithCtx<'a, 'b, 'c> {
     analyzer: &'a mut Analyzer<'b, 'c>,
     orig_ctx: Ctx,
 }

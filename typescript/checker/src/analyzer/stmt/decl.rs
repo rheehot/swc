@@ -31,7 +31,6 @@ impl Analyzer<'_, '_> {
                 } else {
                     None
                 };
-                let mut names = vec![];
 
                 macro_rules! inject_any {
                     () => {
@@ -50,7 +49,6 @@ impl Analyzer<'_, '_> {
 
                 macro_rules! remove_declaring {
                     () => {{
-                        self.scope.remove_declaring(names);
                         debug_assert_eq!(Some(self.scope.declaring.clone()), debug_declaring);
                     }};
                 }
@@ -63,7 +61,7 @@ impl Analyzer<'_, '_> {
                     self.with_ctx(ctx).visit(&v.name);
                 }
 
-                if let Some(init) = v.init {
+                if let Some(ref init) = v.init {
                     let span = init.span();
 
                     let declared_ty = v.name.get_ty();
