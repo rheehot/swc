@@ -301,14 +301,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                     module
                 };
 
-                let mut libs = match target {
-                    JscTarget::Es3 | JscTarget::Es5 => vec![Lib::Es5],
-                    JscTarget::Es2015 => vec![Lib::Es5, Lib::Es2015],
-                    JscTarget::Es2016 => unimplemented!("es2016"),
-                    JscTarget::Es2017 => unimplemented!("es2017"),
-                    JscTarget::Es2018 => unimplemented!("es2018"),
-                    JscTarget::Es2019 => unimplemented!("es2019"),
-                };
+                let mut libs = vec![Lib::Es5];
                 let mut rule = Rule::default();
                 let ts_config = TsConfig::default();
 
@@ -336,6 +329,14 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                                     "es2019" => JscTarget::Es2019,
                                     "esnext" => JscTarget::Es2019,
                                     _ => unimplemented!("target: {:?}", s),
+                                };
+                                libs = match target {
+                                    JscTarget::Es3 | JscTarget::Es5 => vec![Lib::Es5],
+                                    JscTarget::Es2015 => Lib::load("es2015"),
+                                    JscTarget::Es2016 => unimplemented!("es2016"),
+                                    JscTarget::Es2017 => unimplemented!("es2017"),
+                                    JscTarget::Es2018 => unimplemented!("es2018"),
+                                    JscTarget::Es2019 => unimplemented!("es2019"),
                                 };
                             } else if s.starts_with("strict:") {
                                 let strict = s["strict:".len()..].trim().parse().unwrap();
