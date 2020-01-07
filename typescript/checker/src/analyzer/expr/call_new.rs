@@ -427,8 +427,10 @@ impl Analyzer<'_, '_> {
             Type::Function(ref f) if kind == ExtractKind::Call => self.get_return_type(
                 span,
                 f.type_params.as_ref().map(|v| &*v.params),
+                &f.params,
                 *f.ret_ty.clone(),
                 type_args,
+                args,
             ),
 
             // Type::Constructor(ty::Constructor {
@@ -519,14 +521,13 @@ impl Analyzer<'_, '_> {
                     ..
                 }) if kind == ExtractKind::Call => {
                     //
-                    match self.try_instantiate_simple(
+                    match self.get_return_type(
                         span,
-                        ty_span,
-                        &ret_ty.as_ref().unwrap_or(&Type::any(span)),
+                        type_params.as_ref().map(|v| &*v.params),
                         params,
-                        type_params.as_ref(),
-                        args,
+                        ret_ty.clone().unwrap_or(Type::any(span)),
                         type_args,
+                        args,
                     ) {
                         Ok(v) => return Ok(v),
                         Err(..) => {}
@@ -539,14 +540,13 @@ impl Analyzer<'_, '_> {
                     ref ret_ty,
                     ..
                 }) if kind == ExtractKind::New => {
-                    match self.try_instantiate_simple(
+                    match self.get_return_type(
                         span,
-                        ty_span,
-                        &ret_ty.as_ref().unwrap_or(&Type::any(span)),
+                        type_params.as_ref().map(|v| &*v.params),
                         params,
-                        type_params.as_ref(),
-                        args,
+                        ret_ty.clone().unwrap_or(Type::any(span)),
                         type_args,
+                        args,
                     ) {
                         Ok(v) => return Ok(v),
                         Err(..) => {
@@ -589,145 +589,32 @@ impl Analyzer<'_, '_> {
         return Ok(c.ret_ty.clone().unwrap_or_else(|| Type::any(span)));
     }
 
-    fn try_instantiate_simple(
-        &mut self,
-        span: Span,
-        callee_span: Span,
-        ret_type: &Type,
-        param_decls: &[FnParam],
-        decl: Option<&TypeParamDecl>,
-        args: &[ExprOrSpread],
-        _: Option<&TypeParamInstantiation>,
-    ) -> ValidationResult {
-        {
-            // let type_params_len = ty_params_decl.map(|decl|
-            // decl.params.len()).unwrap_or(0); let type_args_len = i.map(|v|
-            // v.params.len()).unwrap_or(0);
-
-            // // TODO: Handle multiple definitions
-            // let min = ty_params_decl
-            //     .map(|decl| decl.params.iter().filter(|p|
-            // p.default.is_none()).count())
-            //     .unwrap_or(type_params_len);
-
-            // let expected = min..=type_params_len;
-            // if !expected.contains(&type_args_len) {
-            //     return Err(Error::WrongTypeParams {
-            //         span,
-            //         callee: callee_span,
-            //         expected,
-            //         actual: type_args_len,
-            //     });
-            // }
-        }
-
-        {
-            // TODO: Handle default parameters
-            // TODO: Handle multiple definitions
-
-            let min = param_decls.iter().filter(|p| p.required).count();
-
-            let expected = min..=param_decls.len();
-            if !expected.contains(&args.len()) {
-                return Err(Error::WrongParams {
-                    span,
-                    callee: callee_span,
-                    expected,
-                    actual: args.len(),
-                });
-            }
-        }
-
-        if let Some(..) = decl {
-            unimplemented!(
-                "try_instantiate should be used instead of try_instantiate_simple as type \
-                 parameter is deefined on the function"
-            )
-        } else {
-            Ok(ret_type.clone())
-        }
-    }
-
     /// Returns the
     fn get_return_type(
         &mut self,
         span: Span,
         type_params: Option<&[Param]>,
+        params: &[FnParam],
         ret_ty: Type,
         type_args: Option<&TypeParamInstantiation>,
-    ) -> ValidationResult {
-        if let Some(params) = type_params {
-            if let Some(i) = type_args {
-                let mut v = GenericExpander { params, i };
-                return Ok(ret_ty.fold_with(&mut v));
-            }
-        }
-
-        Ok(ret_ty)
-    }
-
-    fn try_instantiate(
-        &mut self,
-        span: Span,
-        callee_span: Span,
-        fn_type: &ty::Function,
         args: &[ExprOrSpread],
-        i: Option<&TsTypeParamInstantiation>,
     ) -> ValidationResult {
-        let param_decls = &fn_type.params;
-        let decl = &fn_type.type_params;
-        let type_params = if let Some(ref type_params) = fn_type.type_params {
-            type_params
-        } else {
-            // TODO: Report an error if i is not None
-            return Ok((*fn_type.ret_ty).clone());
-        };
-
-        {
-            // TODO: Handle default parameters
-            // TODO: Handle multiple definitions
-
-            let min = param_decls.iter().filter(|p| p.required).count();
-
-            let expected = min..=param_decls.len();
-            if !expected.contains(&args.len()) {
-                return Err(Error::WrongParams {
-                    span,
-                    callee: callee_span,
-                    expected,
-                    actual: args.len(),
-                });
-            }
-        }
-
-        let v;
-
-        let i = match i {
-            Some(i) => i.validate_with(self)?,
-            None => {
-                v = self.infer_arg_types(args, &type_params, &fn_type.params)?;
-                v
-            }
-        };
-
-        if let Some(ref decl) = decl {
-            // To handle
-            //
-            // function foo<T extends "foo">(f: (x: T) => T) {
-            //     return f;
-            // }
-            //
-            // we should expand the whole function, because return type contains type
-            // parameter declared on the function.
-            let expanded_fn_type =
-                self.expand_type_params(&i, decl, Type::Function(fn_type.clone()))?;
-            let expanded_fn_type = match expanded_fn_type {
-                Type::Function(f) => f,
-                _ => unreachable!(),
+        if let Some(type_params) = type_params {
+            let inferred;
+            let i = match type_args {
+                Some(ty) => ty,
+                None => {
+                    inferred = self.infer_arg_types(type_params, params, args)?;
+                    &inferred
+                }
             };
-            Ok((*expanded_fn_type.ret_ty).clone())
-        } else {
-            Ok((*fn_type.ret_ty).clone())
+            let mut v = GenericExpander {
+                params: type_params,
+                i,
+            };
+            return Ok(ret_ty.clone().fold_with(&mut v));
         }
+
+        Ok(ret_ty.clone())
     }
 }

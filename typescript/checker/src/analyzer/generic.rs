@@ -13,9 +13,9 @@ use swc_ecma_ast::*;
 impl Analyzer<'_, '_> {
     pub(super) fn infer_arg_types(
         &mut self,
+        type_params: &[Param],
+        params: &[FnParam],
         args: &[ExprOrSpread],
-        _type_params: &TypeParamDecl,
-        _params: &[FnParam],
     ) -> ValidationResult<TypeParamInstantiation> {
         let mut arg_types = Vec::with_capacity(args.len());
 
