@@ -379,6 +379,15 @@ pub enum Error {
     /// `TS2358`
     InvalidLhsInInstanceOf {
         span: Span,
+        /// Type of the lhs
+        ty: Type,
+    },
+
+    /// `TS2359`
+    InvalidRhsInInstanceOf {
+        span: Span,
+        /// Type of the rhs
+        ty: Type,
     },
 }
 

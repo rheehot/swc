@@ -215,10 +215,13 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     Type::Param(..) => false,
                     _ => true,
                 } {
-                    self.info
-                        .errors
-                        .push(Error::InvalidLhsInInstanceOf { span: lt.span() })
+                    self.info.errors.push(Error::InvalidLhsInInstanceOf {
+                        ty: lt.clone(),
+                        span: lt.span(),
+                    })
                 }
+
+                if match rt {} {}
 
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
