@@ -27,6 +27,21 @@ impl Analyzer<'_, '_> {
     }
 
     fn assign_inner(&self, to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
+        match to {
+            Type::Ref(ref r) => panic!(
+                "lhs of assignment should be expanded before .assign() call\n{:?}",
+                r,
+            ),
+            _ => {}
+        }
+        match rhs {
+            Type::Ref(ref r) => panic!(
+                "rhs of assignment should be expanded before .assign() call:\n{:?}",
+                r,
+            ),
+            _ => {}
+        }
+
         macro_rules! fail {
             () => {{
                 return Err(Error::AssignFailed {

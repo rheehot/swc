@@ -90,6 +90,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                         return;
                                     }
                                 };
+                                let ty = a.expand(span, ty)?;
                                 let error = a.assign(&ty, &value_ty, v_span);
                                 match error {
                                     Ok(()) => {
