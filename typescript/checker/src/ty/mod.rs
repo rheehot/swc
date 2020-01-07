@@ -18,14 +18,14 @@ pub enum Type {
     Predicate(Predicate),
     IndexedAccessType(IndexedAccessType),
 
-    #[is(name = "ts_ref")]
+    #[is(name = "ref_type")]
     Ref(Ref),
     TypeLit(TypeLit),
     Keyword(TsKeywordType),
     Conditional(Conditional),
     Tuple(Tuple),
     Array(Array),
-    #[is(name = "ts_union")]
+    #[is(name = "union_type")]
     Union(Union),
     Intersection(Intersection),
     Function(Function),
@@ -39,7 +39,7 @@ pub enum Type {
     EnumVariant(EnumVariant),
 
     Interface(Interface),
-    #[is(name = "ts_enum")]
+    #[is(name = "enum_type")]
     Enum(Enum),
 
     Mapped(Mapped),
@@ -71,7 +71,7 @@ pub enum Type {
     /// Used for storing core types.
     ///
     /// Don't match on this directly. Instead, use `.normalize()`.
-    #[is(name = "ts_static")]
+    #[is(name = "static_type")]
     Static(Static),
 
     Arc(#[fold(ignore)] Arc<Type>),
