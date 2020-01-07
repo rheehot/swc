@@ -26,21 +26,31 @@ impl Analyzer<'_, '_> {
             })
     }
 
+    /// Verifies that `ty` is
+    ///
+    ///     - Not a reference
+    ///     - Not a type parameter declared on child scope.
+    fn verify_before_assign(&self, ty: &Type) {
+        match ty.normalize() {
+            Type::Ref(ref r) => {
+                panic!("Type should be expanded before calling .assign()\n{:?}", r,)
+            }
+
+            Type::Param(ref p) => {
+                if let None = self.find_type(&p.name) {
+                    panic!(
+                        "Type parameter should be handled by a function which declares it\n{:?}",
+                        p
+                    )
+                }
+            }
+            _ => {}
+        }
+    }
+
     fn assign_inner(&self, to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
-        match to {
-            Type::Ref(ref r) => panic!(
-                "lhs of assignment should be expanded before .assign() call\n{:?}",
-                r,
-            ),
-            _ => {}
-        }
-        match rhs {
-            Type::Ref(ref r) => panic!(
-                "rhs of assignment should be expanded before .assign() call:\n{:?}",
-                r,
-            ),
-            _ => {}
-        }
+        self.verify_before_assign(to);
+        self.verify_before_assign(rhs);
 
         macro_rules! fail {
             () => {{
