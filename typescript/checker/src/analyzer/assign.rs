@@ -959,10 +959,11 @@ impl Analyzer<'_, '_> {
 
 /// Returns true if l and r are lieteral and equal to each other.
 fn is_key_eq(l: &Expr, r: &Expr) -> bool {
-    match (l, r) {
-        (&Expr::Ident(..), &Expr::Ident(..)) => l.eq_ignore_span(r),
+    (match (l, r) {
+        (&Expr::Ident(..), &Expr::Ident(..)) => true,
+        (&Expr::Member(..), &Expr::Member(..)) => true,
         _ => false,
-    }
+    }) && l.eq_ignore_span(r)
 }
 
 fn count_required_params(v: &[FnParam]) -> usize {
