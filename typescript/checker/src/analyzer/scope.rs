@@ -686,6 +686,7 @@ impl Analyzer<'_, '_> {
         match *pat {
             Pat::Ident(ref i) => {
                 let ty = try_opt!(i.type_ann.validate_with(self));
+                let ty = try_opt!(ty.map(|ty| self.expand(pat.span(), ty)));
 
                 let name = i.sym.clone();
                 self.scope.declare_var(
