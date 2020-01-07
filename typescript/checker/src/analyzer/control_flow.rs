@@ -314,6 +314,7 @@ impl Analyzer<'_, '_> {
             match *lhs {
                 PatOrExpr::Expr(ref expr) | PatOrExpr::Pat(box Pat::Expr(ref expr)) => {
                     let lhs_ty = self.validate_expr(expr, TypeOfMode::LValue, None)?;
+                    let lhs_ty = self.expand(span, lhs_ty)?;
 
                     self.assign(&lhs_ty, &ty, span)?;
 
@@ -340,6 +341,8 @@ impl Analyzer<'_, '_> {
         // Update variable's type
         match *lhs {
             Pat::Ident(ref i) => {
+                println!("Symbol: {}", i.sym);
+
                 if let Some(ref var_info) = self.scope.get_var(&i.sym) {
                     if let Some(ref var_ty) = var_info.ty {
                         // let foo: string;
@@ -350,7 +353,7 @@ impl Analyzer<'_, '_> {
                 }
 
                 {
-                    if let Some(var_info) = self.scope.vars.get_mut(&i.sym) {
+                    if let Some(var_info) = self.scope.get_var_mut(&i.sym) {
                         let var_ty = ty;
 
                         if var_info.ty.is_none()
@@ -408,7 +411,7 @@ impl Analyzer<'_, '_> {
                             i.sym,
                             var_info
                         );
-                        self.scope.vars.insert(i.sym.clone(), var_info);
+                        self.scope.insert_var(i.sym.clone(), var_info);
 
                         return Ok(());
                     }

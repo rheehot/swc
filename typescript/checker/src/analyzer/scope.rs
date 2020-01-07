@@ -17,13 +17,22 @@ use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
+macro_rules! no_ref {
+    ($t:expr) => {{
+        match $t {
+            Some(Type::Ref(..)) => panic!("cannot store a variable with type `Ref`"),
+            _ => {}
+        }
+    }};
+}
+
 #[derive(Debug)]
 pub(crate) struct Scope<'a> {
     parent: Option<&'a Scope<'a>>,
     kind: ScopeKind,
     pub declaring: SmallVec<[JsWord; 8]>,
 
-    pub(super) vars: FxHashMap<JsWord, VarInfo>,
+    vars: FxHashMap<JsWord, VarInfo>,
     pub(super) types: FxHashMap<JsWord, Type>,
     pub(super) facts: CondFacts,
 
@@ -54,6 +63,17 @@ impl Scope<'_> {
                 .expect("failed to find inserted name");
             self.declaring.remove(idx);
         }
+    }
+
+    pub fn insert_var(&mut self, name: JsWord, v: VarInfo) {
+        no_ref!(v.ty);
+
+        self.vars.insert(name, v);
+    }
+
+    /// This method does **not** search for parent scope.
+    pub fn get_var_mut(&mut self, name: &JsWord) -> Option<&mut VarInfo> {
+        self.vars.get_mut(name)
     }
 
     /// # Interface
@@ -372,12 +392,7 @@ impl Scope<'_> {
             initialized,
         );
 
-        match ty {
-            Some(Type::Ref(..)) => {
-                // Expand type
-            }
-            _ => {}
-        }
+        no_ref!(ty);
 
         match self.vars.entry(name.clone()) {
             Entry::Occupied(e) => {
