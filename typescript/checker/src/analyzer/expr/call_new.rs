@@ -362,8 +362,6 @@ impl Analyzer<'_, '_> {
                 if computed {
                     unimplemented!("typeof(CallExpr): {:?}[{:?}]()", callee, prop)
                 } else {
-                    println!("extract_call_or_new_expr: \nobj_type: {:?}", obj_type,);
-
                     Err(if kind == ExtractKind::Call {
                         Error::NoCallSignature {
                             span,
@@ -462,11 +460,13 @@ impl Analyzer<'_, '_> {
 
             Type::Interface(ref i) => {
                 // Search for methods
-                self.search_members_for_extract(span, &ty, &i.body, kind, args, type_args)?;
-
-                // TODO: Check parent interface
-
-                ret_err!()
+                match self.search_members_for_extract(span, &ty, &i.body, kind, args, type_args) {
+                    Ok(ty) => return Ok(ty),
+                    Err(err) => {
+                        // TODO: Check parent interface
+                        Err(err)?
+                    }
+                }
             }
 
             Type::TypeLit(ref l) => {
