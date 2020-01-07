@@ -408,59 +408,6 @@ impl Analyzer<'_, '_> {
             }};
         }
 
-        /// Search for members and returns if there's a match
-        macro_rules! search_members {
-            ($members:expr) => {{
-                for member in &$members {
-                    match *member {
-                        TypeElement::Call(CallSignature {
-                            ref params,
-                            ref type_params,
-                            ref ret_ty,
-                            ..
-                        }) if kind == ExtractKind::Call => {
-                            //
-                            match self.try_instantiate_simple(
-                                span,
-                                ty.span(),
-                                &ret_ty.as_ref().unwrap_or(&Type::any(span)),
-                                params,
-                                type_params.as_ref(),
-                                args,
-                                type_args,
-                            ) {
-                                Ok(v) => return Ok(v),
-                                Err(..) => {}
-                            };
-                        }
-
-                        TypeElement::Constructor(ConstructorSignature {
-                            ref params,
-                            ref type_params,
-                            ref ret_ty,
-                            ..
-                        }) if kind == ExtractKind::New => {
-                            match self.try_instantiate_simple(
-                                span,
-                                ty.span(),
-                                &ret_ty.as_ref().unwrap_or(&Type::any(span)),
-                                params,
-                                type_params.as_ref(),
-                                args,
-                                type_args,
-                            ) {
-                                Ok(v) => return Ok(v),
-                                Err(..) => {
-                                    // TODO: Handle error
-                                }
-                            }
-                        }
-                        _ => {}
-                    }
-                }
-            }};
-        }
-
         match *ty.normalize() {
             Type::Static(..) => unreachable!("normalize should handle Type::Static"),
 
@@ -507,15 +454,16 @@ impl Analyzer<'_, '_> {
 
             Type::Interface(ref i) => {
                 // Search for methods
-                search_members!(i.body);
+                self.search_members_for_extract(span, &ty, &i.body, kind, args, type_args)?;
+
+                // TODO: Check parent interface
 
                 ret_err!()
             }
 
             Type::TypeLit(ref l) => {
-                search_members!(l.members);
-
-                ret_err!()
+                return self
+                    .search_members_for_extract(span, &ty, &l.members, kind, args, type_args);
             }
 
             Type::Class(ref cls) if kind == ExtractKind::New => {
@@ -540,6 +488,79 @@ impl Analyzer<'_, '_> {
             }
 
             _ => ret_err!(),
+        }
+    }
+
+    /// Search for members and returns if there's a match
+    #[inline(never)]
+    fn search_members_for_extract(
+        &mut self,
+        span: Span,
+        ty: &Type,
+        members: &[TypeElement],
+        kind: ExtractKind,
+        args: &[ExprOrSpread],
+        type_args: Option<&TsTypeParamInstantiation>,
+    ) -> ValidationResult {
+        let ty_span = ty.span();
+
+        for member in members {
+            match *member {
+                TypeElement::Call(CallSignature {
+                    ref params,
+                    ref type_params,
+                    ref ret_ty,
+                    ..
+                }) if kind == ExtractKind::Call => {
+                    //
+                    match self.try_instantiate_simple(
+                        span,
+                        ty_span,
+                        &ret_ty.as_ref().unwrap_or(&Type::any(span)),
+                        params,
+                        type_params.as_ref(),
+                        args,
+                        type_args,
+                    ) {
+                        Ok(v) => return Ok(v),
+                        Err(..) => {}
+                    };
+                }
+
+                TypeElement::Constructor(ConstructorSignature {
+                    ref params,
+                    ref type_params,
+                    ref ret_ty,
+                    ..
+                }) if kind == ExtractKind::New => {
+                    match self.try_instantiate_simple(
+                        span,
+                        ty_span,
+                        &ret_ty.as_ref().unwrap_or(&Type::any(span)),
+                        params,
+                        type_params.as_ref(),
+                        args,
+                        type_args,
+                    ) {
+                        Ok(v) => return Ok(v),
+                        Err(..) => {
+                            // TODO: Handle error
+                        }
+                    }
+                }
+                _ => {}
+            }
+        }
+
+        match kind {
+            ExtractKind::Call => Err(Error::NoCallSignature {
+                span,
+                callee: ty.clone(),
+            }),
+            ExtractKind::New => Err(Error::NoNewSignature {
+                span,
+                callee: ty.clone(),
+            }),
         }
     }
 
