@@ -377,6 +377,7 @@ impl Analyzer<'_, '_> {
             }
             _ => {
                 let ty = callee.validate_with(self)?;
+                let ty = self.expand(span, ty)?;
 
                 Ok(self.extract(span, ty, kind, args, type_args)?)
             }
