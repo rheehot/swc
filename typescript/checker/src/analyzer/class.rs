@@ -628,6 +628,15 @@ impl Analyzer<'_, '_> {
 
         match *ty.normalize() {
             Type::Lit(..) => {}
+            Type::Operator(Operator {
+                op: TsTypeOperatorOp::Unique,
+                ty:
+                    box Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsSymbolKeyword,
+                        ..
+                    }),
+                ..
+            }) => {}
             _ if is_symbol_access => {}
             _ => errors.push(Error::TS1166 { span }),
         }
