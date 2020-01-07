@@ -1,7 +1,7 @@
 use super::Analyzer;
 use crate::{
     ty::{
-        self, Conditional, FnParam, Mapped, Param, Ref, Tuple, Type, TypeParamDecl,
+        self, Conditional, FnParam, Mapped, Ref, Tuple, Type, TypeParam, TypeParamDecl,
         TypeParamInstantiation,
     },
     validator::ValidateWith,
@@ -13,11 +13,11 @@ use swc_ecma_ast::*;
 impl Analyzer<'_, '_> {
     pub(super) fn infer_arg_types(
         &mut self,
-        type_params: &[Param],
+        type_params: &[TypeParam],
         params: &[FnParam],
         args: &[ExprOrSpread],
     ) -> ValidationResult<TypeParamInstantiation> {
-        let mut arg_types = Vec::with_capacity(args.len());
+        let mut arg_types = vec![];
 
         for arg in args {
             match *arg {
@@ -87,8 +87,8 @@ impl Analyzer<'_, '_> {
 
                 //
                 unimplemented!(
-                    "expanding conditional type.\nParams: {:#?}\nParam decls: {:#?}\nCheck Type: \
-                     {:#?}\nextends_type: {:#?}\nTrue type: {:#?}\nFalse type: {:#?}",
+                    "expanding conditional type.\nParams: {:#?}\nTypeParam decls: {:#?}\nCheck \
+                     Type: {:#?}\nextends_type: {:#?}\nTrue type: {:#?}\nFalse type: {:#?}",
                     i,
                     decl,
                     check_type,
@@ -169,8 +169,8 @@ impl Analyzer<'_, '_> {
         &mut self,
         i: &TypeParamInstantiation,
         decl: &TypeParamDecl,
-        mut type_param: Param,
-    ) -> ValidationResult<Param> {
+        mut type_param: TypeParam,
+    ) -> ValidationResult<TypeParam> {
         if let Some(c) = type_param.constraint {
             let c = self.expand_type_params(i, decl, *c.clone())?;
 
@@ -192,7 +192,7 @@ impl Analyzer<'_, '_> {
 }
 
 pub(super) struct GenericExpander<'a> {
-    pub params: &'a [Param],
+    pub params: &'a [TypeParam],
     pub i: &'a TypeParamInstantiation,
 }
 

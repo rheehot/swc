@@ -3,7 +3,7 @@ use crate::{
     analyzer::{pat::PatMode, Ctx, ScopeKind},
     errors::Error,
     ty,
-    ty::{ClassInstance, Param, QueryType, Tuple, Type},
+    ty::{ClassInstance, QueryType, Tuple, Type, TypeParam},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -228,7 +228,7 @@ impl Visit<FnExpr> for Analyzer<'_, '_> {
 }
 
 struct TypeParamHandler<'a> {
-    params: Option<&'a [Param]>,
+    params: Option<&'a [TypeParam]>,
 }
 
 impl Fold<Type> for TypeParamHandler<'_> {

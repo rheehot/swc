@@ -3,7 +3,7 @@ use crate::{
     errors::Error,
     ty::{
         Array, Class, ClassInstance, ClassMember, Constructor, EnumVariant, FnParam, Function,
-        Interface, Intersection, Param, Tuple, Type, TypeElement, TypeLit, Union,
+        Interface, Intersection, Tuple, Type, TypeElement, TypeLit, TypeParam, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
     ValidationResult,
@@ -290,14 +290,14 @@ impl Analyzer<'_, '_> {
                 fail!();
             }
 
-            Type::Param(Param {
+            Type::Param(TypeParam {
                 ref name,
                 ref constraint,
                 ..
             }) => {
                 //
                 match to.normalize() {
-                    Type::Param(Param {
+                    Type::Param(TypeParam {
                         name: ref l_name, ..
                     }) => {
                         if name == l_name {
@@ -341,7 +341,7 @@ impl Analyzer<'_, '_> {
         }
 
         match *to.normalize() {
-            Type::Param(Param {
+            Type::Param(TypeParam {
                 constraint: Some(ref c),
                 ..
             }) => {

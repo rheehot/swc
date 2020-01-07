@@ -34,7 +34,8 @@ pub enum Type {
 
     Operator(Operator),
 
-    Param(Param),
+    #[is(name = "type_param")]
+    Param(TypeParam),
     EnumVariant(EnumVariant),
 
     Interface(Interface),
@@ -94,7 +95,7 @@ pub struct Ref {
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct InferType {
     pub span: Span,
-    pub type_param: Param,
+    pub type_param: TypeParam,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
@@ -198,7 +199,7 @@ pub struct Mapped {
     pub span: Span,
     pub readonly: Option<TruePlusMinus>,
     pub optional: Option<TruePlusMinus>,
-    pub type_param: Param,
+    pub type_param: TypeParam,
     pub ty: Option<Box<Type>>,
 }
 
@@ -256,7 +257,7 @@ pub struct TypeLit {
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct TypeParamDecl {
     pub span: Span,
-    pub params: Vec<Param>,
+    pub params: Vec<TypeParam>,
 }
 
 /// Typescript expression with type arguments
@@ -404,7 +405,7 @@ pub struct Intersection {
 
 /// A type parameter
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
-pub struct Param {
+pub struct TypeParam {
     pub span: Span,
     pub name: JsWord,
     pub constraint: Option<Box<Type>>,
@@ -644,7 +645,7 @@ impl Type {
 
             Type::ClassInstance(c) => Type::ClassInstance(ClassInstance { span, ..c }),
 
-            Type::Param(p) => Type::Param(Param { span, ..p }),
+            Type::Param(p) => Type::Param(TypeParam { span, ..p }),
 
             Type::Static(s) => Type::Static(Static { span, ..s }),
 
@@ -947,9 +948,9 @@ impl Type {
 //    }
 //}
 //
-//impl Param {
-//    pub fn into_static(self) -> Param<'static> {
-//        Param {
+//impl TypeParam {
+//    pub fn into_static(self) -> TypeParam<'static> {
+//        TypeParam {
 //            span: self.span,
 //            name: self.name,
 //            constraint: self.constraint.map(|v| box static_type(*v)),

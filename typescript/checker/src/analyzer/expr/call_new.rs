@@ -8,7 +8,7 @@ use crate::{
     ty,
     ty::{
         CallSignature, ClassInstance, ConstructorSignature, FnParam, Method, MethodSignature,
-        Param, QueryExpr, QueryType, Static, Type, TypeElement, TypeParamDecl,
+        QueryExpr, QueryType, Static, Type, TypeElement, TypeParam, TypeParamDecl,
         TypeParamInstantiation,
     },
     util::EqIgnoreSpan,
@@ -593,7 +593,7 @@ impl Analyzer<'_, '_> {
     fn get_return_type(
         &mut self,
         span: Span,
-        type_params: Option<&[Param]>,
+        type_params: Option<&[TypeParam]>,
         params: &[FnParam],
         ret_ty: Type,
         type_args: Option<&TypeParamInstantiation>,

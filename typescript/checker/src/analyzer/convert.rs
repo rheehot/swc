@@ -5,8 +5,8 @@ use crate::{
     ty::{
         Alias, Array, CallSignature, Conditional, ConstructorSignature, Enum, EnumMember,
         ImportType, IndexSignature, IndexedAccessType, InferType, Interface, Intersection, Mapped,
-        MethodSignature, Operator, Param, Predicate, PropertySignature, QueryExpr, QueryType, Ref,
-        TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParamDecl, TypeParamInstantiation, Union,
+        MethodSignature, Operator, Predicate, PropertySignature, QueryExpr, QueryType, Ref, TsExpr,
+        Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
     },
     validator::{Validate, ValidateWith},
     ValidationResult,
@@ -26,10 +26,10 @@ impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
 }
 
 impl Validate<TsTypeParam> for Analyzer<'_, '_> {
-    type Output = ValidationResult<Param>;
+    type Output = ValidationResult<TypeParam>;
 
     fn validate(&mut self, p: &TsTypeParam) -> Self::Output {
-        let param = Param {
+        let param = TypeParam {
             span: p.span,
             name: p.name.sym.clone(),
             constraint: try_opt!(self.validate(&p.constraint)).map(Box::new),

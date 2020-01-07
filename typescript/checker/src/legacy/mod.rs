@@ -4,7 +4,7 @@ use crate::{
     builtin_types::Lib,
     errors::Error,
     loader::Load,
-    ty::{self, Alias, ClassInstance, Param, Tuple, Type, TypeRefExt},
+    ty::{self, Alias, ClassInstance, Tuple, Type, TypeParam, TypeRefExt},
     util::{IntoCow, ModuleItemLike, StmtLike},
     Exports, Rule,
 };

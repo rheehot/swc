@@ -8,8 +8,8 @@ error: AssignFailed {
         ),
         ctxt: #0,
     },
-    left: Param(
-        Param {
+    left: TypeParam(
+        TypeParam {
             span: Span {
                 lo: BytePos(
                     126,
@@ -24,8 +24,8 @@ error: AssignFailed {
             default: None,
         },
     ),
-    right: Param(
-        Param {
+    right: TypeParam(
+        TypeParam {
             span: Span {
                 lo: BytePos(
                     155,
@@ -57,8 +57,8 @@ error: AssignFailed {
         ),
         ctxt: #0,
     },
-    left: Param(
-        Param {
+    left: TypeParam(
+        TypeParam {
             span: Span {
                 lo: BytePos(
                     129,
@@ -73,8 +73,8 @@ error: AssignFailed {
             default: None,
         },
     ),
-    right: Param(
-        Param {
+    right: TypeParam(
+        TypeParam {
             span: Span {
                 lo: BytePos(
                     176,
