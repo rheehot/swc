@@ -47,6 +47,8 @@ impl Validate<TsTypeAnn> for Analyzer<'_, '_> {
     }
 }
 
+prevent!(TsTypeAliasDecl);
+
 impl Validate<TsTypeAliasDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<Alias>;
 
