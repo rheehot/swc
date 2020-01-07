@@ -18,7 +18,7 @@ impl Analyzer<'_, '_> {
 
             if let Some(name) = name {
                 // We use `typeof function` to infer recursive function's return type.
-                match self.scope.declare_var(
+                match self.declare_var(
                     f.span,
                     VarDeclKind::Var,
                     name.sym.clone(),

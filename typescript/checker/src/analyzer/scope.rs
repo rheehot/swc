@@ -376,7 +376,7 @@ impl Scope<'_> {
         }
     }
 
-    pub fn declare_var(
+    fn declare_var(
         &mut self,
         span: Span,
         kind: VarDeclKind,

@@ -129,7 +129,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                             //    None => None,
                             //};
 
-                            match child.scope.declare_var(
+                            match child.declare_var(
                                 i.span,
                                 VarDeclKind::Let,
                                 i.sym.clone(),
@@ -797,7 +797,7 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
                     analyzer.validate_inherited_members(None, &c.class, false);
                     analyzer.validate_class_members(&c.class, false)?;
 
-                    match analyzer.scope.declare_var(
+                    match analyzer.declare_var(
                         ty.span(),
                         VarDeclKind::Var,
                         i.sym.clone(),
@@ -860,7 +860,7 @@ impl Visit<ClassDecl> for Analyzer<'_> {
         self.register_type(c.ident.sym.clone(), ty.clone().into())
             .store(&mut self.info.errors);
 
-        match self.scope.declare_var(
+        match self.declare_var(
             ty.span(),
             VarDeclKind::Var,
             c.ident.sym.clone(),

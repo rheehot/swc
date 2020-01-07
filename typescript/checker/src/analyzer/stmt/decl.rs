@@ -10,237 +10,235 @@ use swc_ecma_ast::*;
 
 impl Visit<VarDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, var: &VarDecl) {
+        let kind = var.kind;
+
         let ctx = Ctx {
             pat_mode: PatMode::Decl,
             in_declare: self.ctx.in_declare || var.declare,
             allow_ref_declaring: true,
             ..self.ctx
         };
-        self.with_ctx(ctx)
-            .validate_var_declarators(var.kind, &var.decls);
-    }
-}
+        self.with_ctx(ctx).with(|a| {
+            var.decls.iter().for_each(|mut v| {
+                let res: Result<_, _> = try {
+                    let v_span = v.span();
 
-impl Analyzer<'_, '_> {
-    fn validate_var_declarators(&mut self, kind: VarDeclKind, decls: &[VarDeclarator]) {
-        decls.iter().for_each(|mut v| {
-            let res: Result<_, _> = try {
-                let v_span = v.span();
-
-                let debug_declaring = if cfg!(debug_assertions) {
-                    Some(self.scope.declaring.clone())
-                } else {
-                    None
-                };
-
-                macro_rules! inject_any {
-                    () => {
-                        // Declare variable with type any
-                        match self
-                            .scope
-                            .declare_complex_vars(kind, &v.name, Type::any(v_span))
-                        {
-                            Ok(()) => {}
-                            Err(err) => {
-                                self.info.errors.push(err);
-                            }
-                        }
+                    let debug_declaring = if cfg!(debug_assertions) {
+                        Some(a.scope.declaring.clone())
+                    } else {
+                        None
                     };
-                }
 
-                macro_rules! remove_declaring {
-                    () => {{
-                        debug_assert_eq!(Some(self.scope.declaring.clone()), debug_declaring);
-                    }};
-                }
-
-                if v.init.is_some() {
-                    self.visit(&v.name);
-                }
-
-                if let Some(ref init) = v.init {
-                    let span = init.span();
-
-                    let declared_ty = v.name.get_ty();
-                    if declared_ty.is_some() {
-                        //TODO:
-                        // self.span_allowed_implicit_any = span;
+                    macro_rules! inject_any {
+                        () => {
+                            // Declare variable with type any
+                            match a
+                                .scope
+                                .declare_complex_vars(kind, &v.name, Type::any(v_span))
+                            {
+                                Ok(()) => {}
+                                Err(err) => {
+                                    a.info.errors.push(err);
+                                }
+                            }
+                        };
                     }
 
-                    debug_assert_eq!(self.ctx.allow_ref_declaring, true);
+                    macro_rules! remove_declaring {
+                        () => {{
+                            debug_assert_eq!(Some(a.scope.declaring.clone()), debug_declaring);
+                        }};
+                    }
 
-                    //  Check if v_ty is assignable to ty
-                    let value_ty = match init.validate_with(self) {
-                        Ok(ty) => {
-                            let ty = ty;
-                            self.check_rvalue(&ty);
-                            ty
-                        }
-                        Err(err) => {
-                            self.info.errors.push(err);
-                            inject_any!();
-                            remove_declaring!();
-                            return;
-                        }
-                    };
+                    if v.init.is_some() {
+                        a.visit(&v.name);
+                    }
 
-                    match declared_ty {
-                        Some(ty) => {
-                            let ty = match ty.validate_with(self) {
-                                Ok(ty) => ty,
-                                Err(err) => {
-                                    self.info.errors.push(err);
-                                    remove_declaring!();
-                                    return;
-                                }
-                            };
-                            let error = self.assign(&ty, &value_ty, v_span);
-                            match error {
-                                Ok(()) => {
-                                    match self.scope.declare_complex_vars(kind, &v.name, ty) {
-                                        Ok(()) => {}
-                                        Err(err) => {
-                                            self.info.errors.push(err);
-                                        }
-                                    }
-                                    remove_declaring!();
-                                    return;
-                                }
-                                Err(err) => {
-                                    self.info.errors.push(err);
-                                    Some(init)
-                                }
+                    if let Some(ref init) = v.init {
+                        let span = init.span();
+
+                        let declared_ty = v.name.get_ty();
+                        if declared_ty.is_some() {
+                            //TODO:
+                            // self.span_allowed_implicit_any = span;
+                        }
+
+                        debug_assert_eq!(a.ctx.allow_ref_declaring, true);
+
+                        //  Check if v_ty is assignable to ty
+                        let value_ty = match init.validate_with(a) {
+                            Ok(ty) => {
+                                let ty = ty;
+                                a.check_rvalue(&ty);
+                                ty
                             }
-                        }
-                        None => {
-                            // infer type from value.
-                            let mut ty = match value_ty {
-                                Type::EnumVariant(ref v) => {
-                                    if let Some(Type::Enum(ref e)) = self.find_type(&v.enum_name) {
-                                        Type::Enum(e.clone())
-                                    } else {
-                                        unreachable!()
-                                    }
-                                }
-                                ty => ty,
-                            };
-
-                            let mut type_errors = vec![];
-
-                            // Handle implicit any
-
-                            match ty {
-                                Type::Tuple(Tuple { ref mut types, .. }) => {
-                                    for (i, t) in types.iter_mut().enumerate() {
-                                        let span = t.span();
-
-                                        match *t.normalize() {
-                                            Type::Keyword(TsKeywordType {
-                                                kind: TsKeywordTypeKind::TsUndefinedKeyword,
-                                                ..
-                                            })
-                                            | Type::Keyword(TsKeywordType {
-                                                kind: TsKeywordTypeKind::TsNullKeyword,
-                                                ..
-                                            }) => {}
-                                            _ => {
-                                                continue;
-                                            }
-                                        }
-                                        // Widen tuple types
-                                        *t = Type::any(span);
-
-                                        if self.rule.no_implicit_any {
-                                            match v.name {
-                                                Pat::Ident(ref i) => {
-                                                    let span = i.span;
-                                                    type_errors.push(Error::ImplicitAny { span });
-                                                    break;
-                                                }
-                                                Pat::Array(ArrayPat { ref elems, .. }) => {
-                                                    let span = elems[i].span();
-                                                    type_errors.push(Error::ImplicitAny { span });
-                                                }
-                                                _ => {}
-                                            }
-                                        }
-                                    }
-                                }
-                                _ => {}
-                            }
-
-                            if !type_errors.is_empty() {
-                                self.info.errors.extend(type_errors);
+                            Err(err) => {
+                                a.info.errors.push(err);
+                                inject_any!();
                                 remove_declaring!();
                                 return;
                             }
+                        };
 
-                            self.scope
-                                .declare_complex_vars(kind, &v.name, ty)
-                                .store(&mut self.info.errors);
-                            remove_declaring!();
-                            return;
-                        }
-                    }
-                } else {
-                    match v.name {
-                        Pat::Ident(Ident {
-                            span,
-                            ref sym,
-                            ref type_ann,
-                            ..
-                        }) => {
-                            //
-                            let sym = sym.clone();
-                            let ty = try_opt!(type_ann.validate_with(self));
-
-                            match self.scope.declare_var(
-                                span,
-                                kind,
-                                sym,
-                                ty,
-                                // initialized
-                                false,
-                                // allow_multiple
-                                kind == VarDeclKind::Var,
-                            ) {
-                                Ok(()) => {}
-                                Err(err) => {
-                                    self.info.errors.push(err);
-                                }
-                            };
-                        }
-                        _ => {
-                            // assert!(
-                            //     var.declare,
-                            //     "complex pattern without initializer is invalid syntax and parser
-                            // \      should handle it"
-                            //  );
-
-                            if self.ctx.in_declare {
-                                match self.declare_vars(kind, &v.name) {
-                                    Ok(()) => {}
+                        match declared_ty {
+                            Some(ty) => {
+                                let ty = match ty.validate_with(a) {
+                                    Ok(ty) => ty,
                                     Err(err) => {
-                                        self.info.errors.push(err);
+                                        a.info.errors.push(err);
+                                        remove_declaring!();
+                                        return;
                                     }
                                 };
-                            } else {
-                                // This is parsing error
+                                let error = a.assign(&ty, &value_ty, v_span);
+                                match error {
+                                    Ok(()) => {
+                                        match a.scope.declare_complex_vars(kind, &v.name, ty) {
+                                            Ok(()) => {}
+                                            Err(err) => {
+                                                a.info.errors.push(err);
+                                            }
+                                        }
+                                        remove_declaring!();
+                                        return;
+                                    }
+                                    Err(err) => {
+                                        a.info.errors.push(err);
+                                        Some(init)
+                                    }
+                                }
+                            }
+                            None => {
+                                // infer type from value.
+                                let mut ty = match value_ty {
+                                    Type::EnumVariant(ref v) => {
+                                        if let Some(Type::Enum(ref e)) = a.find_type(&v.enum_name) {
+                                            Type::Enum(e.clone())
+                                        } else {
+                                            unreachable!()
+                                        }
+                                    }
+                                    ty => ty,
+                                };
+
+                                let mut type_errors = vec![];
+
+                                // Handle implicit any
+
+                                match ty {
+                                    Type::Tuple(Tuple { ref mut types, .. }) => {
+                                        for (i, t) in types.iter_mut().enumerate() {
+                                            let span = t.span();
+
+                                            match *t.normalize() {
+                                                Type::Keyword(TsKeywordType {
+                                                    kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                                                    ..
+                                                })
+                                                | Type::Keyword(TsKeywordType {
+                                                    kind: TsKeywordTypeKind::TsNullKeyword,
+                                                    ..
+                                                }) => {}
+                                                _ => {
+                                                    continue;
+                                                }
+                                            }
+                                            // Widen tuple types
+                                            *t = Type::any(span);
+
+                                            if a.rule.no_implicit_any {
+                                                match v.name {
+                                                    Pat::Ident(ref i) => {
+                                                        let span = i.span;
+                                                        type_errors
+                                                            .push(Error::ImplicitAny { span });
+                                                        break;
+                                                    }
+                                                    Pat::Array(ArrayPat { ref elems, .. }) => {
+                                                        let span = elems[i].span();
+                                                        type_errors
+                                                            .push(Error::ImplicitAny { span });
+                                                    }
+                                                    _ => {}
+                                                }
+                                            }
+                                        }
+                                    }
+                                    _ => {}
+                                }
+
+                                if !type_errors.is_empty() {
+                                    a.info.errors.extend(type_errors);
+                                    remove_declaring!();
+                                    return;
+                                }
+
+                                a.scope
+                                    .declare_complex_vars(kind, &v.name, ty)
+                                    .store(&mut a.info.errors);
+                                remove_declaring!();
+                                return;
                             }
                         }
+                    } else {
+                        match v.name {
+                            Pat::Ident(Ident {
+                                span,
+                                ref sym,
+                                ref type_ann,
+                                ..
+                            }) => {
+                                //
+                                let sym = sym.clone();
+                                let ty = try_opt!(type_ann.validate_with(a));
+
+                                match a.declare_var(
+                                    span,
+                                    kind,
+                                    sym,
+                                    ty,
+                                    // initialized
+                                    false,
+                                    // allow_multiple
+                                    kind == VarDeclKind::Var,
+                                ) {
+                                    Ok(()) => {}
+                                    Err(err) => {
+                                        a.info.errors.push(err);
+                                    }
+                                };
+                            }
+                            _ => {
+                                // assert!(
+                                //     var.declare,
+                                //     "complex pattern without initializer is invalid syntax and
+                                // parser \      should handle it"
+                                //  );
+
+                                if a.ctx.in_declare {
+                                    match a.declare_vars(kind, &v.name) {
+                                        Ok(()) => {}
+                                        Err(err) => {
+                                            a.info.errors.push(err);
+                                        }
+                                    };
+                                } else {
+                                    // This is parsing error
+                                }
+                            }
+                        };
+                        remove_declaring!();
+                        return;
                     };
+
+                    debug_assert_eq!(a.ctx.allow_ref_declaring, true);
+                    a.declare_vars(kind, &v.name).store(&mut a.info.errors);
+
                     remove_declaring!();
-                    return;
                 };
 
-                debug_assert_eq!(self.ctx.allow_ref_declaring, true);
-                self.declare_vars(kind, &v.name)
-                    .store(&mut self.info.errors);
-
-                remove_declaring!();
-            };
-
-            res.store(&mut self.info.errors);
+                res.store(&mut a.info.errors);
+            });
         });
     }
 }
