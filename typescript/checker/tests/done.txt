@@ -1,7 +1,15 @@
 classes/classExpression.ts
 constEnums/
 es6/Symbols/symbolDeclarationEmit1.ts
+es6/Symbols/symbolProperty1.ts
+es6/Symbols/symbolProperty2.ts
+es6/Symbols/symbolProperty3.ts
+es6/Symbols/symbolProperty4.ts
+es6/Symbols/symbolProperty5.ts
+es6/Symbols/symbolProperty6.ts
 es6/Symbols/symbolProperty60.ts
+es6/Symbols/symbolProperty7.ts
+es6/Symbols/symbolProperty8.ts
 parser/ecmascript3/
 scanner/ecmascript3/
 statements/breakStatements/

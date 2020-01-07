@@ -1,0 +1,295 @@
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            41,
+        ),
+        hi: BytePos(
+            49,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/es6/Symbols/symbolProperty52.ts:3:13
+  |
+3 |     [Symbol.nonsense]: 0
+  |             ^^^^^^^^
+
+error: AssignFailed {
+    span: Span {
+        lo: BytePos(
+            61,
+        ),
+        hi: BytePos(
+            64,
+        ),
+        ctxt: #0,
+    },
+    left: TypeLit(
+        TypeLit {
+            span: Span {
+                lo: BytePos(
+                    26,
+                ),
+                hi: BytePos(
+                    56,
+                ),
+                ctxt: #0,
+            },
+            members: [
+                Property(
+                    PropertySignature {
+                        span: Span {
+                            lo: BytePos(
+                                33,
+                            ),
+                            hi: BytePos(
+                                53,
+                            ),
+                            ctxt: #0,
+                        },
+                        readonly: false,
+                        key: Member(
+                            MemberExpr {
+                                span: Span {
+                                    lo: BytePos(
+                                        34,
+                                    ),
+                                    hi: BytePos(
+                                        49,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                obj: Expr(
+                                    Ident(
+                                        Ident {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    34,
+                                                ),
+                                                hi: BytePos(
+                                                    40,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            sym: Atom('Symbol' type=static),
+                                            type_ann: None,
+                                            optional: false,
+                                        },
+                                    ),
+                                ),
+                                prop: Ident(
+                                    Ident {
+                                        span: Span {
+                                            lo: BytePos(
+                                                41,
+                                            ),
+                                            hi: BytePos(
+                                                49,
+                                            ),
+                                            ctxt: #0,
+                                        },
+                                        sym: Atom('nonsense' type=dynamic),
+                                        type_ann: None,
+                                        optional: false,
+                                    },
+                                ),
+                                computed: false,
+                            },
+                        ),
+                        computed: false,
+                        optional: false,
+                        params: [],
+                        type_ann: Some(
+                            Lit(
+                                TsLitType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            52,
+                                        ),
+                                        hi: BytePos(
+                                            53,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    lit: Number(
+                                        Number {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    52,
+                                                ),
+                                                hi: BytePos(
+                                                    53,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            value: 0.0,
+                                        },
+                                    ),
+                                },
+                            ),
+                        ),
+                        type_params: None,
+                    },
+                ),
+            ],
+        },
+    ),
+    right: TypeLit(
+        TypeLit {
+            span: Span {
+                lo: BytePos(
+                    67,
+                ),
+                hi: BytePos(
+                    69,
+                ),
+                ctxt: #0,
+            },
+            members: [],
+        },
+    ),
+    cause: [
+        Errors {
+            span: Span {
+                lo: BytePos(
+                    61,
+                ),
+                hi: BytePos(
+                    64,
+                ),
+                ctxt: #0,
+            },
+            errors: [
+                MissingFields {
+                    span: Span {
+                        lo: BytePos(
+                            61,
+                        ),
+                        hi: BytePos(
+                            64,
+                        ),
+                        ctxt: #0,
+                    },
+                    fields: [
+                        Property(
+                            PropertySignature {
+                                span: Span {
+                                    lo: BytePos(
+                                        33,
+                                    ),
+                                    hi: BytePos(
+                                        53,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                readonly: false,
+                                key: Member(
+                                    MemberExpr {
+                                        span: Span {
+                                            lo: BytePos(
+                                                34,
+                                            ),
+                                            hi: BytePos(
+                                                49,
+                                            ),
+                                            ctxt: #0,
+                                        },
+                                        obj: Expr(
+                                            Ident(
+                                                Ident {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            34,
+                                                        ),
+                                                        hi: BytePos(
+                                                            40,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    sym: Atom('Symbol' type=static),
+                                                    type_ann: None,
+                                                    optional: false,
+                                                },
+                                            ),
+                                        ),
+                                        prop: Ident(
+                                            Ident {
+                                                span: Span {
+                                                    lo: BytePos(
+                                                        41,
+                                                    ),
+                                                    hi: BytePos(
+                                                        49,
+                                                    ),
+                                                    ctxt: #0,
+                                                },
+                                                sym: Atom('nonsense' type=dynamic),
+                                                type_ann: None,
+                                                optional: false,
+                                            },
+                                        ),
+                                        computed: false,
+                                    },
+                                ),
+                                computed: false,
+                                optional: false,
+                                params: [],
+                                type_ann: Some(
+                                    Lit(
+                                        TsLitType {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    52,
+                                                ),
+                                                hi: BytePos(
+                                                    53,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            lit: Number(
+                                                Number {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            52,
+                                                        ),
+                                                        hi: BytePos(
+                                                            53,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    value: 0.0,
+                                                },
+                                            ),
+                                        },
+                                    ),
+                                ),
+                                type_params: None,
+                            },
+                        ),
+                    ],
+                },
+            ],
+        },
+    ],
+}
+ --> $DIR/tests/conformance/es6/Symbols/symbolProperty52.ts:6:1
+  |
+6 | obj = {};
+  | ^^^
+
+error: UndefinedSymbol {
+    span: Span {
+        lo: BytePos(
+            85,
+        ),
+        hi: BytePos(
+            93,
+        ),
+        ctxt: #0,
+    },
+}
+ --> $DIR/tests/conformance/es6/Symbols/symbolProperty52.ts:8:12
+  |
+8 | obj[Symbol.nonsense];
+  |            ^^^^^^^^
+

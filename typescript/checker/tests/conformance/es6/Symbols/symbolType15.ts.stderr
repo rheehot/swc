@@ -150,6 +150,90 @@ error: AssignFailed {
                                 type_params: None,
                             },
                         ),
+                        Property(
+                            PropertySignature {
+                                span: Span {
+                                    lo: BytePos(
+                                        0,
+                                    ),
+                                    hi: BytePos(
+                                        0,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                readonly: true,
+                                key: Member(
+                                    MemberExpr {
+                                        span: Span {
+                                            lo: BytePos(
+                                                0,
+                                            ),
+                                            hi: BytePos(
+                                                0,
+                                            ),
+                                            ctxt: #0,
+                                        },
+                                        obj: Expr(
+                                            Lit(
+                                                Str(
+                                                    Str {
+                                                        span: Span {
+                                                            lo: BytePos(
+                                                                0,
+                                                            ),
+                                                            hi: BytePos(
+                                                                0,
+                                                            ),
+                                                            ctxt: #0,
+                                                        },
+                                                        value: Atom('Symbol' type=static),
+                                                        has_escape: false,
+                                                    },
+                                                ),
+                                            ),
+                                        ),
+                                        prop: Lit(
+                                            Str(
+                                                Str {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    value: Atom('toStringTag' type=dynamic),
+                                                    has_escape: false,
+                                                },
+                                            ),
+                                        ),
+                                        computed: false,
+                                    },
+                                ),
+                                computed: true,
+                                optional: false,
+                                params: [],
+                                type_ann: Some(
+                                    Keyword(
+                                        TsKeywordType {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            kind: TsStringKeyword,
+                                        },
+                                    ),
+                                ),
+                                type_params: None,
+                            },
+                        ),
                     ],
                 },
             ),
