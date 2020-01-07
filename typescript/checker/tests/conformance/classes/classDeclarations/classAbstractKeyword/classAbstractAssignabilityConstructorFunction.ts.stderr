@@ -19,42 +19,7 @@ error: AssignFailed {
                 ),
                 ctxt: #0,
             },
-            type_params: None,
             params: [],
-            ret_ty: Some(
-                Simple(
-                    TsTypeRef(
-                        TsTypeRef {
-                            span: Span {
-                                lo: BytePos(
-                                    64,
-                                ),
-                                hi: BytePos(
-                                    65,
-                                ),
-                                ctxt: #0,
-                            },
-                            type_name: Ident(
-                                Ident {
-                                    span: Span {
-                                        lo: BytePos(
-                                            64,
-                                        ),
-                                        hi: BytePos(
-                                            65,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    sym: Atom('A' type=inline),
-                                    type_ann: None,
-                                    optional: false,
-                                },
-                            ),
-                            type_params: None,
-                        },
-                    ),
-                ),
-            ),
         },
     ),
     right: Class(
@@ -105,42 +70,7 @@ error: AssignFailed {
                 ),
                 ctxt: #0,
             },
-            type_params: None,
             params: [],
-            ret_ty: Some(
-                Simple(
-                    TsTypeRef(
-                        TsTypeRef {
-                            span: Span {
-                                lo: BytePos(
-                                    64,
-                                ),
-                                hi: BytePos(
-                                    65,
-                                ),
-                                ctxt: #0,
-                            },
-                            type_name: Ident(
-                                Ident {
-                                    span: Span {
-                                        lo: BytePos(
-                                            64,
-                                        ),
-                                        hi: BytePos(
-                                            65,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    sym: Atom('A' type=inline),
-                                    type_ann: None,
-                                    optional: false,
-                                },
-                            ),
-                            type_params: None,
-                        },
-                    ),
-                ),
-            ),
         },
     ),
     right: Lit(
