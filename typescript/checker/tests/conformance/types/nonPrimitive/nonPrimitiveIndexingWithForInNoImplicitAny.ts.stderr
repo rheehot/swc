@@ -26,6 +26,22 @@ error: NoSuchProperty {
             },
         ),
     ),
+    prop_ty: Some(
+        Keyword(
+            TsKeywordType {
+                span: Span {
+                    lo: BytePos(
+                        79,
+                    ),
+                    hi: BytePos(
+                        82,
+                    ),
+                    ctxt: #0,
+                },
+                kind: TsAnyKeyword,
+            },
+        ),
+    ),
 }
  --> $DIR/tests/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInNoImplicitAny.ts:5:17
   |

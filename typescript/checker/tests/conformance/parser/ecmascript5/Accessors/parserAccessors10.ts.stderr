@@ -4,7 +4,7 @@ error: TS1042
 3 |   public get foo() { }
   |   ^^^^^^
 
-error: A 'get' accessor must return a value.
+error: A 'get' accessor must return a value
  --> $DIR/tests/conformance/parser/ecmascript5/Accessors/parserAccessors10.ts:3:14
   |
 3 |   public get foo() { }

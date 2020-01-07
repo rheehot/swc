@@ -1,4 +1,4 @@
-error: A 'get' accessor must return a value.
+error: A 'get' accessor must return a value
  --> $DIR/tests/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration1.ts:3:7
   |
 3 |   get a() { }

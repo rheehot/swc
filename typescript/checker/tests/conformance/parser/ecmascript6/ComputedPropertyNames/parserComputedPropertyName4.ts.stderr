@@ -1,4 +1,4 @@
-error: A 'get' accessor must return a value.
+error: A 'get' accessor must return a value
  --> $DIR/tests/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName4.ts:2:15
   |
 2 | var v = { get [e]() { } };

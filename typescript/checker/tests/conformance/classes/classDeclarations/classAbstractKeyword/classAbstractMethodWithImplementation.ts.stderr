@@ -1,0 +1,6 @@
+error: An abstract accessor cannot have an implementation
+ --> $DIR/tests/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMethodWithImplementation.ts:2:14
+  |
+2 |     abstract foo() {}
+  |              ^^^
+

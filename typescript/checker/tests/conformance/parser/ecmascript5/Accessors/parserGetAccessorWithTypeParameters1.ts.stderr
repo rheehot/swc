@@ -4,7 +4,7 @@ error: An accessor cannot have type parameters
 3 |   get foo<T>() { }
   |       ^^^
 
-error: A 'get' accessor must return a value.
+error: A 'get' accessor must return a value
  --> $DIR/tests/conformance/parser/ecmascript5/Accessors/parserGetAccessorWithTypeParameters1.ts:3:7
   |
 3 |   get foo<T>() { }

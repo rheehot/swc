@@ -22,8 +22,8 @@ error: AssignFailed {
             kind: TsSymbolKeyword,
         },
     ),
-    right: Interface(
-        Interface {
+    right: Static(
+        Static {
             span: Span {
                 lo: BytePos(
                     78,
@@ -33,113 +33,126 @@ error: AssignFailed {
                 ),
                 ctxt: #0,
             },
-            name: Atom('Symbol' type=static),
-            type_params: None,
-            extends: [],
-            body: [
-                Method(
-                    MethodSignature {
-                        span: Span {
-                            lo: BytePos(
-                                0,
-                            ),
-                            hi: BytePos(
-                                0,
-                            ),
-                            ctxt: #0,
-                        },
-                        readonly: false,
-                        key: Lit(
-                            Str(
-                                Str {
-                                    span: Span {
-                                        lo: BytePos(
-                                            0,
-                                        ),
-                                        hi: BytePos(
-                                            0,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    value: Atom('toString' type=static),
-                                    has_escape: false,
-                                },
-                            ),
+            ty: Interface(
+                Interface {
+                    span: Span {
+                        lo: BytePos(
+                            0,
                         ),
-                        computed: false,
-                        optional: false,
-                        params: [],
-                        ret_ty: Some(
-                            Keyword(
-                                TsKeywordType {
-                                    span: Span {
-                                        lo: BytePos(
-                                            0,
-                                        ),
-                                        hi: BytePos(
-                                            0,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    kind: TsStringKeyword,
-                                },
-                            ),
+                        hi: BytePos(
+                            0,
                         ),
-                        type_params: None,
+                        ctxt: #0,
                     },
-                ),
-                Method(
-                    MethodSignature {
-                        span: Span {
-                            lo: BytePos(
-                                0,
-                            ),
-                            hi: BytePos(
-                                0,
-                            ),
-                            ctxt: #0,
-                        },
-                        readonly: false,
-                        key: Lit(
-                            Str(
-                                Str {
-                                    span: Span {
-                                        lo: BytePos(
-                                            0,
-                                        ),
-                                        hi: BytePos(
-                                            0,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    value: Atom('valueOf' type=inline),
-                                    has_escape: false,
+                    name: Atom('Symbol' type=static),
+                    type_params: None,
+                    extends: [],
+                    body: [
+                        Method(
+                            MethodSignature {
+                                span: Span {
+                                    lo: BytePos(
+                                        0,
+                                    ),
+                                    hi: BytePos(
+                                        0,
+                                    ),
+                                    ctxt: #0,
                                 },
-                            ),
+                                readonly: false,
+                                key: Lit(
+                                    Str(
+                                        Str {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            value: Atom('toString' type=static),
+                                            has_escape: false,
+                                        },
+                                    ),
+                                ),
+                                computed: false,
+                                optional: false,
+                                params: [],
+                                ret_ty: Some(
+                                    Keyword(
+                                        TsKeywordType {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            kind: TsStringKeyword,
+                                        },
+                                    ),
+                                ),
+                                type_params: None,
+                            },
                         ),
-                        computed: false,
-                        optional: false,
-                        params: [],
-                        ret_ty: Some(
-                            Keyword(
-                                TsKeywordType {
-                                    span: Span {
-                                        lo: BytePos(
-                                            0,
-                                        ),
-                                        hi: BytePos(
-                                            0,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    kind: TsSymbolKeyword,
+                        Method(
+                            MethodSignature {
+                                span: Span {
+                                    lo: BytePos(
+                                        0,
+                                    ),
+                                    hi: BytePos(
+                                        0,
+                                    ),
+                                    ctxt: #0,
                                 },
-                            ),
+                                readonly: false,
+                                key: Lit(
+                                    Str(
+                                        Str {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            value: Atom('valueOf' type=inline),
+                                            has_escape: false,
+                                        },
+                                    ),
+                                ),
+                                computed: false,
+                                optional: false,
+                                params: [],
+                                ret_ty: Some(
+                                    Keyword(
+                                        TsKeywordType {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            kind: TsSymbolKeyword,
+                                        },
+                                    ),
+                                ),
+                                type_params: None,
+                            },
                         ),
-                        type_params: None,
-                    },
-                ),
-            ],
+                    ],
+                },
+            ),
         },
     ),
     cause: [],
