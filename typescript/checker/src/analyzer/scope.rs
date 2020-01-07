@@ -508,8 +508,10 @@ impl Analyzer<'_, '_> {
                                     ref ty,
                                     ..
                                 }) => {
+                                    let tps = tps.clone();
+                                    let ty = ty.clone();
                                     let ty = if let Some(i) = type_params {
-                                        self.expand_type_params(i, tps, *ty.clone())?
+                                        self.expand_type_params(i, &tps, *ty)?
                                     } else {
                                         *ty.clone()
                                     };
