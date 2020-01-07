@@ -40,14 +40,14 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
             self.validate_computed_prop_key(p.span, &p.key);
         }
 
-        //if let Some(ref ty) = p.type_ann {
-        //    let span = ty.span();
-        //
-        //    let ty: Type = ty.type_ann.clone().into();
-        //    self.expand_type(span, ty).store(&mut errors);
-        //}
+        let value = {
+            let ty = try_opt!(p.type_ann.validate_with(self));
+            let ty = try_opt!(ty.map(|ty| self.expand(p.span(), ty)));
+            let value_ty = try_opt!(self.validate(&p.value));
+            let value_ty = try_opt!(value_ty.map(|ty| self.expand(p.span(), ty)));
 
-        let value: Option<Type> = try_opt!(self.validate(&p.value));
+            ty.or_else(|| value_ty)
+        };
 
         Ok(ty::ClassProperty {
             span: p.span,
