@@ -7,7 +7,7 @@ use crate::{
     validator::ValidateWith,
     ValidationResult,
 };
-use swc_common::{Fold, FoldWith, Spanned};
+use swc_common::{Fold, FoldWith, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
@@ -17,7 +17,7 @@ impl Analyzer<'_, '_> {
         params: &[FnParam],
         args: &[ExprOrSpread],
     ) -> ValidationResult<TypeParamInstantiation> {
-        let mut arg_types = vec![];
+        let mut inferred = Vec::with_capacity(type_params.len());
 
         for arg in args {
             match *arg {
@@ -29,12 +29,23 @@ impl Analyzer<'_, '_> {
                     ref expr,
                     ..
                 } => {
-                    arg_types.push(expr.validate_with(self)?);
+                    inferred.push(expr.validate_with(self)?);
                 }
             }
         }
 
-        unimplemented!("infer_arg_types()")
+        assert_eq!(
+            inferred.len(),
+            type_params.len(),
+            "\nInferred: {:?}\nParams: {:?}",
+            inferred,
+            type_params
+        );
+
+        Ok(TypeParamInstantiation {
+            span: DUMMY_SP,
+            params: inferred,
+        })
     }
 
     pub(super) fn expand_type_params(
