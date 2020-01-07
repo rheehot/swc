@@ -2,6 +2,7 @@ classes/classExpression.ts
 constEnums/
 es6/Symbols/symbolDeclarationEmit1.ts
 es6/Symbols/symbolProperty1.ts
+es6/Symbols/symbolProperty10.ts
 es6/Symbols/symbolProperty2.ts
 es6/Symbols/symbolProperty3.ts
 es6/Symbols/symbolProperty4.ts
