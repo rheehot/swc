@@ -286,7 +286,11 @@ impl Scope<'_> {
                             }
                         }
 
-                        return Err(Error::NoSuchProperty { span, prop: None });
+                        return Err(Error::NoSuchProperty {
+                            span,
+                            prop: None,
+                            prop_ty: None,
+                        });
                     }};
                 }
 

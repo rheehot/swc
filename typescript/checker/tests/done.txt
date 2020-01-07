@@ -17,6 +17,7 @@ classes/classExpressions/classExpression1.ts
 classes/classExpressions/classExpression2.ts
 classes/classExpressions/classExpression3.ts
 constEnums
+constEnums/constEnumPropertyAccess1.ts
 controlFlow/controlFlowBinaryAndExpression.ts
 controlFlow/controlFlowBinaryOrExpression.ts
 controlFlow/controlFlowConditionalExpression.ts

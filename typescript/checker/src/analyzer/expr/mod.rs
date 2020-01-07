@@ -5,8 +5,8 @@ use crate::{
     errors::Error,
     ty,
     ty::{
-        Array, ClassInstance, EnumVariant, FnParam, Interface, Ref, Tuple, Type, TypeElement,
-        TypeLit, TypeParamDecl, TypeParamInstantiation, Union,
+        Array, ClassInstance, EnumVariant, FnParam, IndexSignature, Interface, Ref, Tuple, Type,
+        TypeElement, TypeLit, TypeParamDecl, TypeParamInstantiation, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, RemoveTypes},
     validator::{Validate, ValidateWith},
@@ -417,33 +417,26 @@ impl Analyzer<'_, '_> {
                 };
 
                 for el in $members.iter() {
-                    //match el {
-                    //    TypeElement::Index(IndexSignature {
-                    //        ref params,
-                    //        ref type_ann,
-                    //        ..
-                    //    }) => {
-                    //        if params.len() != 1 {
-                    //            unimplemented!("Index signature with multiple parameters")
-                    //        }
-                    //        match params[0] {
-                    //            FnParam::Ident(ref i) => {
-                    //                assert!(i.type_ann.is_some());
-                    //
-                    //                let index_ty =
-                    // Type::from(i.type_ann.as_ref().unwrap().clone());
-                    // if index_ty.eq_ignore_name_and_span(&prop_ty) {
-                    // if let Some(ref type_ann) = type_ann {
-                    // return Ok(type_ann.clone());                    }
-                    //                    return Ok(Type::any(span));
-                    //                }
-                    //            }
-                    //
-                    //            _ => unimplemented!("TsFnParam other than index in
-                    // IndexSignature"),        }
-                    //    }
-                    //    _ => {}
-                    //}
+                    match el {
+                        TypeElement::Index(IndexSignature {
+                            ref params,
+                            ref type_ann,
+                            ..
+                        }) => {
+                            if params.len() != 1 {
+                                unimplemented!("Index signature with multiple parameters")
+                            }
+
+                            let index_ty = &params[0].ty;
+                            if index_ty.eq_ignore_name_and_span(&prop_ty) {
+                                if let Some(ref type_ann) = type_ann {
+                                    return Ok(type_ann.clone());
+                                }
+                                return Ok(Type::any(span));
+                            }
+                        }
+                        _ => {}
+                    }
 
                     if let Some(key) = el.key() {
                         let is_el_computed = match *el {
@@ -677,19 +670,23 @@ impl Analyzer<'_, '_> {
                 handle_type_els!(body);
 
                 // TODO: Check parent interfaces
-
+                let prop_ty = Some(prop.validate_with(self)?);
                 return Err(Error::NoSuchProperty {
                     span,
                     prop: Some(prop.clone()),
+                    prop_ty,
                 });
             }
 
             Type::TypeLit(TypeLit { ref members, .. }) => {
                 handle_type_els!(members);
 
+                let prop_ty = Some(prop.validate_with(self)?);
+
                 return Err(Error::NoSuchProperty {
                     span,
                     prop: Some(prop.clone()),
+                    prop_ty,
                 });
             }
 

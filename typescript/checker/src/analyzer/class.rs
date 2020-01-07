@@ -5,7 +5,7 @@ use super::{
     Analyzer,
 };
 use crate::{
-    analyzer::{util::ResultExt, Ctx},
+    analyzer::{props::ComputedPropMode, util::ResultExt, Ctx},
     errors::Error,
     swc_common::VisitWith,
     ty,
@@ -713,6 +713,10 @@ impl Fold<Class> for Analyzer<'_> {
 impl Visit<Class> for Analyzer<'_> {
 impl Visit<Class> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &Class) {
+        self.ctx.computed_prop_mode = ComputedPropMode::Class {
+            has_body: !self.ctx.in_declare,
+        };
+
         c.visit_children(self);
 impl Visit<Class> for Analyzer<'_> {
     fn visit(&mut self, c: &Class) {
