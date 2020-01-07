@@ -325,7 +325,6 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
                             if s.starts_with("target:") || s.starts_with("Target:") {
                                 let s = s["target:".len()..].trim().to_lowercase();
-                                libs = Lib::load(&s);
                                 target = match &*s {
                                     "es3" => JscTarget::Es3,
                                     "es5" => JscTarget::Es5,
