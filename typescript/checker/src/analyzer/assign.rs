@@ -550,11 +550,11 @@ impl Analyzer<'_, '_> {
 
             // TODO: Handle extends
             Type::Interface(Interface { ref body, .. }) => {
-                self.assign_to_class(span, to.span(), &body, rhs)?
+                self.assign_to_type_elements(span, to.span(), &body, rhs)?
             }
 
             Type::TypeLit(TypeLit { ref members, .. }) => {
-                self.assign_to_class(span, to.span(), &members, rhs)?;
+                self.assign_to_type_elements(span, to.span(), &members, rhs)?;
             }
 
             Type::Lit(TsLitType { ref lit, .. }) => match *rhs {
@@ -720,7 +720,7 @@ impl Analyzer<'_, '_> {
     /// let a: A = foo;
     /// let b: { key: string } = foo;
     /// ```
-    fn assign_to_class(
+    fn assign_to_type_elements(
         &self,
         span: Span,
         lhs_span: Span,
