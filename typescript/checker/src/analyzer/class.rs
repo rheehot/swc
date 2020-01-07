@@ -9,7 +9,7 @@ use crate::{
     errors::Error,
     swc_common::VisitWith,
     ty,
-    ty::{FnParam, Type},
+    ty::{FnParam, Operator, Type},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };

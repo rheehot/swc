@@ -396,6 +396,8 @@ impl Analyzer<'_, '_> {
         computed: bool,
         type_mode: TypeOfMode,
     ) -> ValidationResult {
+        let obj = self.expand(span, obj)?;
+
         macro_rules! handle_type_els {
             ($members:expr) => {{
                 let prop_ty = if computed {

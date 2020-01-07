@@ -460,7 +460,7 @@ impl Analyzer<'_, '_> {
     /// Expands
     ///
     ///   - Type alias
-    pub(super) fn expand(&mut self, span: Span, ty: Type) -> ValidationResult {
+    pub(super) fn expand(&mut self, span: Span, ty: Type) -> ValidationResult<Type> {
         macro_rules! verify {
             ($ty:expr) => {{
                 if cfg!(debug_assertions) {
@@ -472,11 +472,11 @@ impl Analyzer<'_, '_> {
             }};
         }
 
-        match ty {
+        match ty.normalize() {
             Type::Ref(Ref {
-                span,
                 ref type_name,
                 ref type_params,
+                ..
             }) => {
                 match *type_name {
                     TsEntityName::Ident(ref i) => {

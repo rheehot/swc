@@ -354,6 +354,10 @@ pub enum Error {
         span: Span,
     },
 
+    TS2567 {
+        span: Span,
+    },
+
     TS2585 {
         span: Span,
     },
@@ -380,9 +384,12 @@ impl Error {
             Error::TS1318 { .. } => {
                 h.struct_err("An abstract accessor cannot have an implementation")
             }
-            Error::TS1095 { span } => {
+            Error::TS1095 { .. } => {
                 h.struct_err("A 'set' accessor cannot have a return type annotation")
             }
+            Error::TS2567 { .. } => h.struct_err(
+                "Enum declarations can only merge with namespace or other enum declarations",
+            ),
             _ => h.struct_err(&format!("{:#?}", self)),
         };
         err.set_span(span);
