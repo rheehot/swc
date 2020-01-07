@@ -17,3 +17,8 @@ parser/ecmascript3/
 scanner/ecmascript3/
 statements/breakStatements/
 statements/continueStatements/
+types/tuple/wideningTuples2.ts
+types/tuple/wideningTuples3.ts
+types/tuple/wideningTuples4.ts
+types/tuple/wideningTuples5.ts
+types/tuple/wideningTuples6.ts

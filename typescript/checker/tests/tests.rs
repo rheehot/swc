@@ -76,8 +76,9 @@ fn should_ignore(name: &str, content: &str) -> bool {
         "RealWorld",
         // Temporarily ignored - .d.ts tests are postponed.
         ".d.ts",
-        // Ignored - vscode does not match errors.json
+        // Ignored - Errors reported vscode / typescript playground does not match errors.json
         "parserStrictMode8.ts",
+        "wideningTuples7.ts",
         // Temporarily ignored - overloading is not implemented yet
         "parserParameterList15",
         "parserParameterList16",
