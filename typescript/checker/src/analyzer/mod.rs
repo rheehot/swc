@@ -20,6 +20,7 @@ use swc_common::Span;
 use swc_common::{SourceMap, Span};
 use swc_common::{Span, Visit};
 use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_common::{Span, Visit, VisitWith};
 use swc_ecma_ast::*;
 use swc_ts_builtin_types::Lib;
 

@@ -1,7 +1,7 @@
 use super::Analyzer;
 use crate::{
     ty::{
-        self, Conditional, FnParam, Mapped, Ref, Tuple, Type, TypeParam, TypeParamDecl,
+        self, Conditional, FnParam, Mapped, Param, Ref, Tuple, Type, TypeParamDecl,
         TypeParamInstantiation,
     },
     validator::ValidateWith,
@@ -166,8 +166,8 @@ impl Analyzer<'_, '_> {
         &mut self,
         i: &TypeParamInstantiation,
         decl: &TypeParamDecl,
-        mut type_param: TypeParam,
-    ) -> ValidationResult<TypeParam> {
+        mut type_param: Param,
+    ) -> ValidationResult<Param> {
         if let Some(c) = type_param.constraint {
             let c = self.expand_type_params(i, decl, *c.clone())?;
 

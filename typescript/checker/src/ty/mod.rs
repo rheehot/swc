@@ -94,7 +94,7 @@ pub struct Ref {
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct InferType {
     pub span: Span,
-    pub type_param: TypeParam,
+    pub type_param: Param,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
@@ -198,7 +198,7 @@ pub struct Mapped {
     pub span: Span,
     pub readonly: Option<TruePlusMinus>,
     pub optional: Option<TruePlusMinus>,
-    pub type_param: TypeParam,
+    pub type_param: Param,
     pub ty: Option<Box<Type>>,
 }
 
@@ -256,16 +256,7 @@ pub struct TypeLit {
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct TypeParamDecl {
     pub span: Span,
-    pub params: Vec<TypeParam>,
-}
-
-#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
-pub struct TypeParam {
-    pub span: Span,
-    pub name: JsWord,
-
-    pub constraint: Option<Box<Type>>,
-    pub default: Option<Box<Type>>,
+    pub params: Vec<Param>,
 }
 
 /// Typescript expression with type arguments
@@ -411,6 +402,7 @@ pub struct Intersection {
     pub types: Vec<Type>,
 }
 
+/// A type parameter
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct Param {
     pub span: Span,

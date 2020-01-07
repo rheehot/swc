@@ -5,8 +5,8 @@ use crate::{
     ty::{
         Alias, Array, CallSignature, Conditional, ConstructorSignature, Enum, EnumMember,
         ImportType, IndexSignature, IndexedAccessType, InferType, Interface, Intersection, Mapped,
-        MethodSignature, Operator, Predicate, PropertySignature, QueryExpr, QueryType, Ref, TsExpr,
-        Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
+        MethodSignature, Operator, Param, Predicate, PropertySignature, QueryExpr, QueryType, Ref,
+        TsExpr, Tuple, Type, TypeElement, TypeLit, TypeParamDecl, TypeParamInstantiation, Union,
     },
     validator::{Validate, ValidateWith},
     ValidationResult,
@@ -18,18 +18,24 @@ impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeParamDecl>;
 
     fn validate(&mut self, decl: &TsTypeParamDecl) -> Self::Output {
+        let params: Vec<Param> = self.validate(&decl.params)?;
+
+        for param in &params {
+            self.register_type(param.name.clone(), param.clone().into())?;
+        }
+
         Ok(TypeParamDecl {
             span: decl.span,
-            params: self.validate(&decl.params)?,
+            params,
         })
     }
 }
 
 impl Validate<TsTypeParam> for Analyzer<'_, '_> {
-    type Output = ValidationResult<TypeParam>;
+    type Output = ValidationResult<Param>;
 
     fn validate(&mut self, p: &TsTypeParam) -> Self::Output {
-        Ok(TypeParam {
+        Ok(Param {
             span: p.span,
             name: p.name.sym.clone(),
             constraint: try_opt!(self.validate(&p.constraint)).map(Box::new),
