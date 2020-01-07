@@ -487,9 +487,9 @@ impl Analyzer<'_, '_> {
             }};
         }
 
-        let obj = obj.generalize_lit().into_owned();
+        let obj = obj.generalize_lit();
 
-        match obj {
+        match obj.normalize() {
             Type::Lit(..) => unreachable!(),
 
             Type::Enum(ref e) => {
@@ -578,11 +578,11 @@ impl Analyzer<'_, '_> {
                     Type::Enum(ref e) => {
                         for v in e.members.iter() {
                             let new_obj_ty = Type::Lit(TsLitType {
-                                span,
+                                span: *span,
                                 lit: v.val.clone(),
                             });
                             return self
-                                .access_property(span, new_obj_ty, prop, computed, type_mode);
+                                .access_property(*span, new_obj_ty, prop, computed, type_mode);
                         }
                         unreachable!("Enum {} does not have a variant named {}", enum_name, name);
                     }
@@ -663,7 +663,7 @@ impl Analyzer<'_, '_> {
                         | Type::Lit(TsLitType {
                             lit: TsLit::Number(..),
                             ..
-                        }) => return Ok(*elem_type),
+                        }) => return Ok(*elem_type.clone()),
 
                         _ => {}
                     },
