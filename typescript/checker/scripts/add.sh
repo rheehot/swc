@@ -8,6 +8,11 @@ set -eu
 cargo fmt
 #cargo check
 
+if [[ $1 != *\.ts ]] && [[ $1 != *\.ts ]]; then
+  echo 'Wrong invokation. Argument must end with "/" or ".ts"'
+  exit 1
+fi
+
 bash ./scripts/sort.sh
 ./scripts/success.py
 
