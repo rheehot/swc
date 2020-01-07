@@ -191,6 +191,10 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 //
                                 let sym = sym.clone();
                                 let ty = try_opt!(type_ann.validate_with(a));
+                                let ty = match ty {
+                                    Some(ty) => Some(a.expand(span, ty)?),
+                                    None => None,
+                                };
 
                                 match a.declare_var(
                                     span,
