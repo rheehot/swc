@@ -215,6 +215,12 @@ impl Analyzer<'_, '_> {
 
                 return Err(Error::Errors { span, errors });
             }
+
+            Type::Class(..) => match rhs {
+                Type::Interface(..) | Type::TypeLit(..) | Type::Lit(..) => fail!(),
+                _ => {}
+            },
+
             _ => {}
         }
 
