@@ -68,61 +68,55 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
             pat_mode: PatMode::Assign,
             ..self.ctx
         };
-        self.with_ctx(ctx).validate_assign_expr(e)
-    }
-}
+        self.with_ctx(ctx).with(|a| {
+            let span = e.span();
 
-impl Analyzer<'_, '_> {
-    fn validate_assign_expr(&mut self, e: &AssignExpr) -> ValidationResult {
-        let span = e.span();
-
-        let any_span = match e.left {
-            PatOrExpr::Pat(box Pat::Ident(ref i)) | PatOrExpr::Expr(box Expr::Ident(ref i)) => {
-                // Type is any if self.declaring contains ident
-                if self.scope.declaring.contains(&i.sym) {
-                    Some(span)
-                } else {
-                    None
+            let any_span = match e.left {
+                PatOrExpr::Pat(box Pat::Ident(ref i)) | PatOrExpr::Expr(box Expr::Ident(ref i)) => {
+                    // Type is any if self.declaring contains ident
+                    if a.scope.declaring.contains(&i.sym) {
+                        Some(span)
+                    } else {
+                        None
+                    }
                 }
+
+                _ => None,
+            };
+
+            e.left.visit_with(a);
+
+            let mut errors = vec![];
+
+            let rhs_ty = match e.right.validate_with(a) {
+                Ok(rhs_ty) => {
+                    a.check_rvalue(&rhs_ty);
+
+                    Ok(rhs_ty)
+                }
+                Err(err) => {
+                    errors.push(err);
+                    Err(())
+                }
+            };
+
+            a.info.errors.extend(errors);
+
+            let rhs_ty = match rhs_ty {
+                Ok(v) => v,
+                Err(()) => Type::any(span),
+            };
+
+            if e.op == op!("=") {
+                a.try_assign(span, &e.left, &rhs_ty);
             }
 
-            _ => None,
-        };
-
-        e.left.visit_with(self);
-
-        let mut errors = vec![];
-
-        let rhs_ty = match e.right.validate_with(self) {
-            Ok(rhs_ty) => {
-                let rhs_ty = rhs_ty;
-
-                self.check_rvalue(&rhs_ty);
-
-                Ok(rhs_ty)
+            if let Some(span) = any_span {
+                return Ok(Type::any(span));
             }
-            Err(err) => {
-                errors.push(err);
-                Err(())
-            }
-        };
 
-        self.info.errors.extend(errors);
-
-        let rhs_ty = match rhs_ty {
-            Ok(v) => v,
-            Err(()) => Type::any(span),
-        };
-
-        if e.op == op!("=") {
-            self.try_assign(span, &e.left, &rhs_ty);
-        }
-
-        if let Some(span) = any_span {
-            return Ok(Type::any(span));
-        }
-
-        Ok(rhs_ty)
+            Ok(rhs_ty)
+        })
     }
 }
 

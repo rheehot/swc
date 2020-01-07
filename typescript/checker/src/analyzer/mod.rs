@@ -133,6 +133,14 @@ impl<'a, 'b> Analyzer<'a, 'b> {
         F: for<'any> FnOnce(&mut Analyzer<'any>) -> Ret,
         where
             F: for<'aa,'bb> FnOnce(&mut Analyzer<'aa,'bb>) -> Ret,
+    #[inline(always)]
+    pub(crate) fn with<F, Ret>(&mut self, op: F) -> Ret
+    where
+        F: for<'aa, 'bb> FnOnce(&mut Analyzer<'aa, 'bb>) -> Ret,
+    {
+        op(self)
+    }
+
     pub(crate) fn with_child<F, Ret>(&mut self, kind: ScopeKind, facts: CondFacts, op: F) -> Ret
     where
         F: for<'aa, 'bb> FnOnce(&mut Analyzer<'aa, 'bb>) -> Ret,
