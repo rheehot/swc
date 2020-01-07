@@ -229,6 +229,14 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
             Default::default(),
             |child| -> ValidationResult<_> {
                 {
+                    // It's error if abstract method has a body
+
+                    if c.is_abstract && c.function.body.is_some() {
+                        child.info.errors.push(Error::TS1318 { span: key_span });
+                    }
+                }
+
+                {
                     // Validate params
                     // TODO: Move this to parser
                     let mut has_optional = false;
