@@ -78,12 +78,12 @@ fn should_ignore(name: &str, content: &str) -> bool {
         ".d.ts",
         // Ignored - vscode does not match errors.json
         "parserStrictMode8.ts",
-        // Temporarily ignored - Setter property is not implemented yet
-        "parserStrictMode12.ts",
         // Temporarily ignored - overloading is not implemented yet
         "parserParameterList15",
         "parserParameterList16",
         "parserParameterList17",
+        // Temporarily ignored - scope analysis is not implemented yet
+        "symbolProperty11.ts",
     ];
 
     if postponed_tests.iter().any(|p| name.contains(p)) {
