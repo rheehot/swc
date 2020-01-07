@@ -13,7 +13,13 @@ es6/Symbols/symbolProperty60.ts
 es6/Symbols/symbolProperty7.ts
 es6/Symbols/symbolProperty8.ts
 es6/Symbols/symbolProperty9.ts
+es6/functionDeclarations/FunctionDeclaration1_es6.ts
+es6/functionDeclarations/FunctionDeclaration2_es6.ts
+es6/functionDeclarations/FunctionDeclaration3_es6.ts
+es6/functionDeclarations/FunctionDeclaration4_es6.ts
+es6/functionExpressions/
 parser/ecmascript3/
+parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName11.ts
 scanner/ecmascript3/
 statements/breakStatements/
 statements/continueStatements/

@@ -263,6 +263,11 @@ pub enum Error {
         span: Span,
     },
 
+    TS1168 {
+        /// Span of offending computed property.
+        span: Span,
+    },
+
     TS1183 {
         span: Span,
     },

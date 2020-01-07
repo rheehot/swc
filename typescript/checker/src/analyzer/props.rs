@@ -63,6 +63,26 @@ impl Analyzer<'_, '_> {
             }
         };
         if match self.computed_prop_mode {
+
+        match mode {
+            ComputedPropMode::Class { .. } => {
+                let ty = self
+                    .expand(node.span, ty.clone())
+                    .store(&mut self.info.errors);
+
+                if let Some(ref ty) = ty {
+                    match *ty {
+                        Type::Lit(..) => {}
+                        _ if ty.is_kwd(TsKeywordTypeKind::TsSymbolKeyword) => {}
+                        _ => errors.push(Error::TS1168 { span: node.span }),
+                    }
+                }
+            }
+
+            _ => {}
+        }
+
+        if match mode {
             ComputedPropMode::Class { has_body } => !has_body,
             ComputedPropMode::Object => errors.is_empty(),
         } {
