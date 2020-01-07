@@ -3,11 +3,11 @@ use crate::{
     analyzer::{pat::PatMode, Ctx, ScopeKind},
     errors::Error,
     ty,
-    ty::{ClassInstance, QueryType, Tuple, Type},
+    ty::{ClassInstance, Param, QueryType, Tuple, Type},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
-use swc_common::{Spanned, Visit};
+use swc_common::{Fold, FoldWith, Spanned, Visit};
 use swc_ecma_ast::*;
 
 impl Validate<Function> for Analyzer<'_, '_> {
@@ -144,11 +144,15 @@ impl Analyzer<'_, '_> {
                 self.scope.declaring_fn = Some(name.sym.clone());
             }
 
-            let mut fn_ty = f.validate_with(self)?;
+            let mut fn_ty: ty::Function = f.validate_with(self)?;
+            // Handle type parameters in return type.
+            fn_ty.ret_ty = fn_ty.ret_ty.fold_with(&mut TypeParamHandler {
+                params: fn_ty.type_params.as_ref().map(|v| &*v.params),
+            });
             match fn_ty {
-                // Handle tuple widening of the return type.
                 ty::Function { ref mut ret_ty, .. } => {
                     match **ret_ty {
+                        // Handle tuple widening of the return type.
                         Type::Tuple(Tuple { ref mut types, .. }) => {
                             for t in types.iter_mut() {
                                 let span = t.span();
@@ -220,5 +224,37 @@ impl Visit<FnExpr> for Analyzer<'_, '_> {
     /// NOTE: This method **should not call f.fold_children(self)**
     fn visit(&mut self, f: &FnExpr) {
         self.visit_fn(f.ident.as_ref(), &f.function);
+    }
+}
+
+struct TypeParamHandler<'a> {
+    params: Option<&'a [Param]>,
+}
+
+impl Fold<Type> for TypeParamHandler<'_> {
+    fn fold(&mut self, ty: Type) -> Type {
+        if let Some(params) = self.params {
+            let ty: Type = ty.fold_children(self);
+
+            match ty {
+                Type::Ref(ref r) if r.type_params.is_none() => match r.type_name {
+                    TsEntityName::Ident(ref i) => {
+                        //
+                        for param in params {
+                            if param.name == i.sym {
+                                return Type::Param(param.clone());
+                            }
+                        }
+                    }
+                    _ => {}
+                },
+
+                _ => {}
+            }
+
+            ty
+        } else {
+            ty
+        }
     }
 }
