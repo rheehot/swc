@@ -1,13 +1,10 @@
 use super::Analyzer;
 use crate::{
-    analyzer::{pat::PatMode, Ctx, ScopeKind},
-    errors::Error,
     ty,
-    ty::{Param, QueryType, Tuple, Type, TypeParamDecl},
+    ty::{QueryType, Tuple, Type},
     validator::ValidateWith,
-    ValidationResult,
 };
-use swc_common::{Spanned, Visit, VisitWith};
+use swc_common::{Spanned, Visit};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {

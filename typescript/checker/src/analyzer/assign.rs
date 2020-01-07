@@ -6,6 +6,7 @@ use crate::{
         Interface, Intersection, Param, Tuple, Type, TypeElement, TypeLit, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
+    ValidationResult,
 };
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
@@ -137,242 +138,6 @@ impl Analyzer<'_, '_> {
                     _ => {}
                 }
             }
-        }
-
-        // This macro is called when lhs of assignment is interface or type literal.
-        //
-        // ```js
-        // interface A {}
-        // let a: A = foo;
-        // let b: { key: string } = foo;
-        // ```
-        macro_rules! handle_type_lit {
-            ($members:expr) => {{
-                let mut errors = vec![];
-                let mut missing_fields = vec![];
-                'l: for m in $members {
-                    // Handle `toString()`
-                    match m {
-                        TypeElement::Method(ref m) => {
-                            //
-                            match *m.key {
-                                Expr::Ident(ref i) if i.sym == js_word!("toString") => continue,
-                                _ => {}
-                            }
-                        }
-                        _ => {}
-                    }
-
-                    // Handle optional
-                    match m {
-                        TypeElement::Method(ref m) if m.optional => continue,
-                        TypeElement::Property(ref m) if m.optional => continue,
-                        _ => {}
-                    }
-
-                    macro_rules! check_members {
-                        ($rhs_members:expr) => {{
-                            let rhs_members = $rhs_members;
-                            // Assign each property to corresponding property.
-
-                            if let Some(l_key) = m.key() {
-                                for rm in rhs_members {
-                                    if let Some(r_key) = rm.key() {
-                                        if l_key.eq_ignore_span(r_key) {
-                                            match m {
-                                                TypeElement::Property(ref el) => match rm {
-                                                    TypeElement::Property(ref r_el) => {
-                                                        self.assign_inner(
-                                                            el.type_ann
-                                                                .as_ref()
-                                                                .unwrap_or(&Type::any(span)),
-                                                            r_el.type_ann
-                                                                .as_ref()
-                                                                .unwrap_or(&Type::any(span)),
-                                                            span,
-                                                        )?;
-                                                        continue 'l;
-                                                    }
-                                                    _ => {}
-                                                },
-
-                                                // `foo(a: string) is assignable to foo(a: any)`
-                                                TypeElement::Method(ref lm) => match rm {
-                                                    TypeElement::Method(ref rm) => {
-                                                        //
-                                                        if count_required_params(&lm.params)
-                                                            > count_required_params(&rm.params)
-                                                        {
-                                                            unimplemented!(
-                                                                "assignment: method property in \
-                                             type literal"
-                                                            )
-                                                        }
-
-                                                        for (i, r) in rm.params.iter().enumerate() {
-                                                            if let Some(ref l) = lm.params.get(i) {
-                                                                let l_ty = &l.ty;
-                                                                let r_ty = &r.ty;
-
-                                                                match self.assign(l_ty, r_ty, span)
-                                                                {
-                                                                    Ok(()) => {}
-                                                                    Err(err) => errors.push(err),
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    _ => {}
-                                                },
-                                                _ => {}
-                                            }
-                                        }
-                                    }
-                                }
-
-                                // No property with `key` found.
-                                missing_fields.push(m.clone());
-                            } else {
-                                match m {
-                                    // TODO: Check type of the index.
-                                    TypeElement::Index(..) => {
-                                        continue 'l;
-                                    }
-                                    TypeElement::Call(..) => {
-                                        //
-                                        for rm in rhs_members {
-                                            match rm {
-                                                // TODO: Check type of parameters
-                                                // TODO: Check return type
-                                                TypeElement::Call(..) => continue 'l,
-                                                _ => {}
-                                            }
-                                        }
-
-                                        missing_fields.push(m.clone());
-                                    }
-                                    _ => {}
-                                }
-                            }
-                        }};
-                    }
-
-                    match *rhs.normalize() {
-                        Type::TypeLit(TypeLit {
-                            members: ref rhs_members,
-                            ..
-                        }) => check_members!(rhs_members),
-
-                        Type::Interface(Interface { ref body, .. }) => {
-                            // TODO: Type params
-                            check_members!(body)
-                            // TODO: Check parent interface
-                        }
-
-                        // Check class itself
-                        Type::Class(Class { ref body, .. }) => {
-                            match m {
-                                TypeElement::Call(_) => unimplemented!(
-                                    "assign: interface {{ () => ret; }} = class Foo {{}}"
-                                ),
-                                TypeElement::Constructor(_) => {
-                                    // TODO: Check # of parameters
-                                    for rm in body {
-                                        match rm {
-                                            ClassMember::Constructor(Constructor { .. }) => {
-                                                continue 'l
-                                            }
-                                            _ => {}
-                                        }
-                                    }
-
-                                    errors.push(Error::ConstructorRequired {
-                                        span,
-                                        lhs: to.span(),
-                                        rhs: rhs.span(),
-                                    });
-                                }
-                                TypeElement::Property(_) => unimplemented!(
-                                    "assign: interface {{ prop: string; }} = class Foo {{}}"
-                                ),
-                                TypeElement::Method(_) => unimplemented!(
-                                    "assign: interface {{ method() => ret; }} = class Foo {{}}"
-                                ),
-                                TypeElement::Index(_) => unimplemented!(
-                                    "assign: interface {{ [key: string]: Type; }} = class Foo {{}}"
-                                ),
-                            }
-
-                            // TODO: missing fields
-                        }
-
-                        // Check class members
-                        Type::ClassInstance(ClassInstance {
-                            cls: Class { ref body, .. },
-                            ..
-                        }) => {
-                            match m {
-                                TypeElement::Call(_) => {
-                                    unimplemented!("assign: interface {{ () => ret; }} = new Foo()")
-                                }
-                                TypeElement::Constructor(_) => unimplemented!(
-                                    "assign: interface {{ new () => ret; }} = new Foo()"
-                                ),
-                                TypeElement::Property(ref lp) => {
-                                    for rm in body {
-                                        match rm {
-                                            ClassMember::Property(ref rp) => {
-                                                if is_key_eq(&lp.key, &rp.key) {
-                                                    continue 'l;
-                                                }
-                                            }
-                                            _ => {}
-                                        }
-                                    }
-
-                                    unimplemented!(
-                                        "assign: interface {{ prop: string; }} = new Foo()"
-                                    )
-                                }
-                                TypeElement::Method(_) => unimplemented!(
-                                    "assign: interface {{ method() => ret; }} = new Foo()"
-                                ),
-                                TypeElement::Index(_) => unimplemented!(
-                                    "assign: interface {{ [key: string]: Type; }} = new Foo()"
-                                ),
-                            }
-                            // TOOD: missing fields
-                        }
-
-                        Type::Tuple(..)
-                        | Type::Array(..)
-                        | Type::Lit(..)
-                        | Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsUndefinedKeyword,
-                            ..
-                        })
-                        | Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsVoidKeyword,
-                            ..
-                        }) => fail!(),
-
-                        _ => {}
-                    }
-                }
-
-                if !missing_fields.is_empty() {
-                    errors.push(Error::MissingFields {
-                        span,
-                        fields: missing_fields,
-                    });
-                }
-
-                if errors.is_empty() {
-                    return Ok(());
-                }
-
-                return Err(Error::Errors { span, errors });
-            }};
         }
 
         match *to.normalize() {
@@ -784,9 +549,13 @@ impl Analyzer<'_, '_> {
             Type::This(TsThisType { span }) => return Err(Error::CannotAssingToThis { span }),
 
             // TODO: Handle extends
-            Type::Interface(Interface { ref body, .. }) => handle_type_lit!(body),
+            Type::Interface(Interface { ref body, .. }) => {
+                self.assign_to_class(span, to.span(), &body, rhs)?
+            }
 
-            Type::TypeLit(TypeLit { ref members, .. }) => handle_type_lit!(members),
+            Type::TypeLit(TypeLit { ref members, .. }) => {
+                self.assign_to_class(span, to.span(), &members, rhs)?;
+            }
 
             Type::Lit(TsLitType { ref lit, .. }) => match *rhs {
                 Type::Lit(TsLitType { lit: ref r_lit, .. }) => {
@@ -941,6 +710,250 @@ impl Analyzer<'_, '_> {
         //     msg: format!("Not implemented yet"),
         // })
         unimplemented!("assign: \nLeft: {:?}\nRight: {:?}", to, rhs)
+    }
+
+    /// This method is called when lhs of assignment is interface or type
+    /// literal.
+    ///
+    /// ```js
+    /// interface A {}
+    /// let a: A = foo;
+    /// let b: { key: string } = foo;
+    /// ```
+    fn assign_to_class(
+        &self,
+        span: Span,
+        lhs_span: Span,
+        lhs: &[TypeElement],
+        rhs: &Type,
+    ) -> ValidationResult<()> {
+        let mut errors = vec![];
+        let mut missing_fields = vec![];
+
+        'l: for m in lhs {
+            // Handle `toString()`
+            match m {
+                TypeElement::Method(ref m) => {
+                    //
+                    match *m.key {
+                        Expr::Ident(ref i) if i.sym == js_word!("toString") => continue,
+                        _ => {}
+                    }
+                }
+                _ => {}
+            }
+
+            // Handle optional
+            match m {
+                TypeElement::Method(ref m) if m.optional => continue,
+                TypeElement::Property(ref m) if m.optional => continue,
+                _ => {}
+            }
+
+            macro_rules! check_members {
+                ($rhs_members:expr) => {{
+                    let rhs_members = $rhs_members;
+                    // Assign each property to corresponding property.
+
+                    if let Some(l_key) = m.key() {
+                        for rm in rhs_members {
+                            if let Some(r_key) = rm.key() {
+                                if l_key.eq_ignore_span(r_key) {
+                                    match m {
+                                        TypeElement::Property(ref el) => match rm {
+                                            TypeElement::Property(ref r_el) => {
+                                                self.assign_inner(
+                                                    el.type_ann
+                                                        .as_ref()
+                                                        .unwrap_or(&Type::any(span)),
+                                                    r_el.type_ann
+                                                        .as_ref()
+                                                        .unwrap_or(&Type::any(span)),
+                                                    span,
+                                                )?;
+                                                continue 'l;
+                                            }
+                                            _ => {}
+                                        },
+
+                                        // `foo(a: string) is assignable to foo(a: any)`
+                                        TypeElement::Method(ref lm) => match rm {
+                                            TypeElement::Method(ref rm) => {
+                                                //
+                                                if count_required_params(&lm.params)
+                                                    > count_required_params(&rm.params)
+                                                {
+                                                    unimplemented!(
+                                                        "assignment: method property in type \
+                                             literal"
+                                                    )
+                                                }
+
+                                                for (i, r) in rm.params.iter().enumerate() {
+                                                    if let Some(ref l) = lm.params.get(i) {
+                                                        let l_ty = &l.ty;
+                                                        let r_ty = &r.ty;
+
+                                                        match self.assign(l_ty, r_ty, span) {
+                                                            Ok(()) => {}
+                                                            Err(err) => errors.push(err),
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            _ => {}
+                                        },
+                                        _ => {}
+                                    }
+                                }
+                            }
+                        }
+
+                        // No property with `key` found.
+                        missing_fields.push(m.clone());
+                    } else {
+                        match m {
+                            // TODO: Check type of the index.
+                            TypeElement::Index(..) => {
+                                continue 'l;
+                            }
+                            TypeElement::Call(..) => {
+                                //
+                                for rm in rhs_members {
+                                    match rm {
+                                        // TODO: Check type of parameters
+                                        // TODO: Check return type
+                                        TypeElement::Call(..) => continue 'l,
+                                        _ => {}
+                                    }
+                                }
+
+                                missing_fields.push(m.clone());
+                            }
+                            _ => {}
+                        }
+                    }
+                }};
+            }
+
+            match *rhs.normalize() {
+                Type::TypeLit(TypeLit {
+                    members: ref rhs_members,
+                    ..
+                }) => check_members!(rhs_members),
+
+                Type::Interface(Interface { ref body, .. }) => {
+                    // TODO: Type params
+                    check_members!(body)
+                    // TODO: Check parent interface
+                }
+
+                // Check class itself
+                Type::Class(Class { ref body, .. }) => {
+                    match m {
+                        TypeElement::Call(_) => {
+                            unimplemented!("assign: interface {{ () => ret; }} = class Foo {{}}")
+                        }
+                        TypeElement::Constructor(_) => {
+                            // TODO: Check # of parameters
+                            for rm in body {
+                                match rm {
+                                    ClassMember::Constructor(Constructor { .. }) => continue 'l,
+                                    _ => {}
+                                }
+                            }
+
+                            errors.push(Error::ConstructorRequired {
+                                span,
+                                lhs: lhs_span,
+                                rhs: rhs.span(),
+                            });
+                        }
+                        TypeElement::Property(p) => {
+                            //
+
+                            for rm in body {
+                                match rm {
+                                    ClassMember::Constructor(Constructor { .. }) => continue 'l,
+                                    _ => {}
+                                }
+                            }
+                        }
+                        TypeElement::Method(_) => unimplemented!(
+                            "assign: interface {{ method() => ret; }} = class Foo {{}}"
+                        ),
+                        TypeElement::Index(_) => unimplemented!(
+                            "assign: interface {{ [key: string]: Type; }} = class Foo {{}}"
+                        ),
+                    }
+
+                    // TODO: missing fields
+                }
+
+                // Check class members
+                Type::ClassInstance(ClassInstance {
+                    cls: Class { ref body, .. },
+                    ..
+                }) => {
+                    match m {
+                        TypeElement::Call(_) => {
+                            unimplemented!("assign: interface {{ () => ret; }} = new Foo()")
+                        }
+                        TypeElement::Constructor(_) => {
+                            unimplemented!("assign: interface {{ new () => ret; }} = new Foo()")
+                        }
+                        TypeElement::Property(ref lp) => {
+                            for rm in body {
+                                match rm {
+                                    ClassMember::Property(ref rp) => {
+                                        if is_key_eq(&lp.key, &rp.key) {
+                                            continue 'l;
+                                        }
+                                    }
+                                    _ => {}
+                                }
+                            }
+
+                            unimplemented!("assign: interface {{ prop: string; }} = new Foo()")
+                        }
+                        TypeElement::Method(_) => {
+                            unimplemented!("assign: interface {{ method() => ret; }} = new Foo()")
+                        }
+                        TypeElement::Index(_) => unimplemented!(
+                            "assign: interface {{ [key: string]: Type; }} = new Foo()"
+                        ),
+                    }
+                    // TOOD: missing fields
+                }
+
+                Type::Tuple(..)
+                | Type::Array(..)
+                | Type::Lit(..)
+                | Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsUndefinedKeyword,
+                    ..
+                })
+                | Type::Keyword(TsKeywordType {
+                    kind: TsKeywordTypeKind::TsVoidKeyword,
+                    ..
+                }) => return Err(vec![])?,
+
+                _ => {}
+            }
+        }
+
+        if !missing_fields.is_empty() {
+            errors.push(Error::MissingFields {
+                span,
+                fields: missing_fields,
+            });
+        }
+
+        if !errors.is_empty() {
+            return Err(Error::Errors { span, errors });
+        }
+
+        Ok(())
     }
 }
 

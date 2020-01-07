@@ -5,8 +5,8 @@ use crate::{
     errors::Error,
     loader::Load,
     ty,
-    ty::{Alias, Type},
-    validator::{Validate, ValidateWith},
+    ty::Type,
+    validator::Validate,
     Exports, ImportInfo, Rule,
 };
 use fxhash::{FxHashMap, FxHashSet};
