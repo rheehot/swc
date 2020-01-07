@@ -440,13 +440,11 @@ impl Validate<TsTypeRef> for Analyzer<'_, '_> {
     fn validate(&mut self, t: &TsTypeRef) -> Self::Output {
         let type_params = try_opt!(t.type_params.validate_with(self));
 
-        self.type_of_ts_entity_name(t.span, &t.type_name, type_params)
-
-        //        Ok(Ref {
-        //            span: t.span,
-        //            type_name: t.type_name.clone(),
-        //            type_params,
-        //        })
+        Ok(Ref {
+            span: t.span,
+            type_name: t.type_name.clone(),
+            type_params,
+        })
     }
 }
 
