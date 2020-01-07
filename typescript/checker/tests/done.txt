@@ -1,5 +1,6 @@
 classes/classExpression.ts
 constEnums/
+es6/Symbols/symbolDeclarationEmit1.ts
 es6/Symbols/symbolProperty60.ts
 parser/ecmascript3/
 scanner/ecmascript3/
