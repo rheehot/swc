@@ -214,9 +214,19 @@ impl Fold<Type> for GenericExpander<'_> {
                 }
 
                 // Normal type reference
-                ty
             }
-            _ => ty,
+
+            Type::Param(param) => {
+                for (idx, p) in self.params.iter().enumerate() {
+                    if p.name == param.name {
+                        return Type::from(self.i.params[idx].clone());
+                    }
+                }
+            }
+
+            _ => {}
         }
+
+        ty
     }
 }
