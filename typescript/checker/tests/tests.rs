@@ -90,7 +90,7 @@ fn should_ignore(name: &str, content: &str) -> bool {
         return true;
     }
 
-    if DONE.iter().any(|p| name.contains(p))
+    if DONE.iter().any(|p| name.starts_with(p))
         && env::var("RUST_BACKTRACE").unwrap_or("".into()) != "full"
     {
         return false;
@@ -102,7 +102,7 @@ fn should_ignore(name: &str, content: &str) -> bool {
         || content.contains("@filename")
         || content.contains("@Filename")
         || content.contains("@module")
-        || !name.contains(&env::var("TEST").ok().unwrap_or(String::from("")))
+        || !name.starts_with(&env::var("TEST").ok().unwrap_or(String::from("")))
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
