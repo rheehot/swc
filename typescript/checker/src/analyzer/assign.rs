@@ -548,13 +548,18 @@ impl Analyzer<'_, '_> {
 
             Type::This(TsThisType { span }) => return Err(Error::CannotAssingToThis { span }),
 
-            // TODO: Handle extends
             Type::Interface(Interface { ref body, .. }) => {
-                self.assign_to_type_elements(span, to.span(), &body, rhs)?
+                self.assign_to_type_elements(span, to.span(), &body, rhs)?;
+
+                // TODO: Handle extends
+
+                return Ok(());
             }
 
             Type::TypeLit(TypeLit { ref members, .. }) => {
                 self.assign_to_type_elements(span, to.span(), &members, rhs)?;
+
+                return Ok(());
             }
 
             Type::Lit(TsLitType { ref lit, .. }) => match *rhs {
