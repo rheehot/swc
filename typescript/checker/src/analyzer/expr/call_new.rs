@@ -7,7 +7,8 @@ use crate::{
     ty,
     ty::{
         CallSignature, ClassInstance, ConstructorSignature, FnParam, Method, MethodSignature,
-        QueryExpr, QueryType, Static, Type, TypeElement, TypeParamDecl,
+        Param, QueryExpr, QueryType, Static, Type, TypeElement, TypeParamDecl,
+        TypeParamInstantiation,
     },
     util::EqIgnoreSpan,
     validator::{Validate, ValidateWith},
@@ -125,7 +126,7 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    /// Calculates the return type of a new /call expression.
+    /// Calculates the return type of a new /c all expression.
     ///
     /// Called only from [type_of_expr]
     fn extract_call_new_expr_member(
@@ -378,8 +379,9 @@ impl Analyzer<'_, '_> {
             _ => {
                 let ty = callee.validate_with(self)?;
                 let ty = self.expand(span, ty)?;
+                let type_args = try_opt!(type_args.validate_with(self));
 
-                Ok(self.extract(span, ty, kind, args, type_args)?)
+                Ok(self.extract(span, ty, kind, args, type_args.as_ref())?)
             }
         }
     }
@@ -390,7 +392,7 @@ impl Analyzer<'_, '_> {
         ty: Type,
         kind: ExtractKind,
         args: &[ExprOrSpread],
-        type_args: Option<&TsTypeParamInstantiation>,
+        type_args: Option<&TypeParamInstantiation>,
     ) -> ValidationResult {
         if cfg!(debug_assertions) {
             match *ty.normalize() {
@@ -421,9 +423,14 @@ impl Analyzer<'_, '_> {
                 ..
             }) => return Err(Error::Unknown { span }),
 
-            Type::Function(ref f) if kind == ExtractKind::Call => {
-                self.try_instantiate(span, ty.span(), &*f, args, type_args)
-            }
+            Type::Function(ref f) if kind == ExtractKind::Call => self.get_return_type(
+                span,
+                f.type_params.as_ref().map(|v| &*v.params),
+                &f.params,
+                &f.ret_ty,
+                args,
+                type_args,
+            ),
 
             // Type::Constructor(ty::Constructor {
             //     ref params,
@@ -471,7 +478,7 @@ impl Analyzer<'_, '_> {
                 return Ok(ClassInstance {
                     span,
                     cls: cls.clone(),
-                    type_args: try_opt!(type_args.validate_with(self)),
+                    type_args: type_args.cloned(),
                 }
                 .into());
             }
@@ -500,7 +507,7 @@ impl Analyzer<'_, '_> {
         members: &[TypeElement],
         kind: ExtractKind,
         args: &[ExprOrSpread],
-        type_args: Option<&TsTypeParamInstantiation>,
+        type_args: Option<&TypeParamInstantiation>,
     ) -> ValidationResult {
         let ty_span = ty.span();
 
@@ -591,7 +598,7 @@ impl Analyzer<'_, '_> {
         param_decls: &[FnParam],
         decl: Option<&TypeParamDecl>,
         args: &[ExprOrSpread],
-        _: Option<&TsTypeParamInstantiation>,
+        _: Option<&TypeParamInstantiation>,
     ) -> ValidationResult {
         {
             // let type_params_len = ty_params_decl.map(|decl|
@@ -640,6 +647,18 @@ impl Analyzer<'_, '_> {
         } else {
             Ok(ret_type.clone())
         }
+    }
+
+    /// Returns the
+    fn get_return_type(
+        &mut self,
+        span: Span,
+        type_params: Option<&[Param]>,
+        params: &[FnParam],
+        ret_ty: &Type,
+        arg: &[ExprOrSpread],
+        type_args: Option<&TypeParamInstantiation>,
+    ) -> ValidationResult {
     }
 
     fn try_instantiate(
