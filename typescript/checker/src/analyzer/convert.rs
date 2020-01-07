@@ -5,7 +5,7 @@ use crate::{
     ty::{
         Alias, Array, CallSignature, Conditional, ConstructorSignature, Enum, EnumMember,
         ImportType, IndexSignature, IndexedAccessType, InferType, Interface, Intersection, Mapped,
-        MethodSignature, Operator, Predicate, PropertySignature, QueryExpr, QueryType, TsExpr,
+        MethodSignature, Operator, Predicate, PropertySignature, QueryExpr, QueryType, Ref, TsExpr,
         Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
     },
     validator::{Validate, ValidateWith},
@@ -435,10 +435,10 @@ impl Validate<TsParenthesizedType> for Analyzer<'_, '_> {
 }
 
 impl Validate<TsTypeRef> for Analyzer<'_, '_> {
-    type Output = ValidationResult<ty::Ref>;
+    type Output = ValidationResult<Ref>;
 
     fn validate(&mut self, t: &TsTypeRef) -> Self::Output {
-        Ok(ty::Ref {
+        Ok(Ref {
             span: t.span,
             type_name: t.type_name.clone(),
             type_params: try_opt!(t.type_params.validate_with(self)),
