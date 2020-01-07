@@ -932,6 +932,14 @@ impl Analyzer<'_, '_> {
                             for rm in body {
                                 match rm {
                                     ClassMember::Property(ref rp) => {
+                                        match rp.accessibility {
+                                            Some(Accessibility::Private)
+                                            | Some(Accessibility::Protected) => {
+                                                errors.push(Error::AccessibilityDiffers { span });
+                                            }
+                                            _ => {}
+                                        }
+
                                         if is_key_eq(&lp.key, &rp.key) {
                                             continue 'l;
                                         }

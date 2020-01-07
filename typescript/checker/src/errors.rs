@@ -27,6 +27,11 @@ pub enum Error {
         span: Span,
     },
 
+    /// TS2322
+    AccessibilityDiffers {
+        span: Span,
+    },
+
     /// TS2474
     InvalidInitInConstEnum {
         span: Span,
