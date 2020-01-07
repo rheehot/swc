@@ -41,7 +41,6 @@ mod props;
 mod scope;
 mod stmt;
 mod type_facts;
-mod type_params;
 mod util;
 
 #[derive(Debug, Clone, Copy)]

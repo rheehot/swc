@@ -195,6 +195,8 @@ impl Validate<TsExprWithTypeArgs> for Analyzer<'_, '_> {
     }
 }
 
+prevent!(TsTypeParamInstantiation);
+
 impl Validate<TsTypeParamInstantiation> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeParamInstantiation>;
 
@@ -205,6 +207,8 @@ impl Validate<TsTypeParamInstantiation> for Analyzer<'_, '_> {
         })
     }
 }
+
+prevent!(TsTupleType);
 
 impl Validate<TsTupleType> for Analyzer<'_, '_> {
     type Output = ValidationResult<Tuple>;
