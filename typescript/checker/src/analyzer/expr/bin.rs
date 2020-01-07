@@ -26,7 +26,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
 
         self.validate_bin_inner(span, op, lt.as_ref(), rt.as_ref());
 
-        let (lt, rt) = match (lt, rt) {
+        let (lt, rt): (Type, Type) = match (lt, rt) {
             (Some(l), Some(r)) => (l, r),
             _ => return Err(Error::Errors { span, errors }),
         };
@@ -209,7 +209,24 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                 }));
             }
 
-            op!("<=") | op!("<") | op!(">=") | op!(">") | op!("in") | op!("instanceof") => {
+            op!("instanceof") => {
+                if match lt {
+                    ref ty if ty.is_any() || ty.is_kwd(TsKeywordTypeKind::TsObjectKeyword) => false,
+                    Type::Param(..) => false,
+                    _ => true,
+                } {
+                    self.info
+                        .errors
+                        .push(Error::InvalidLhsInInstanceOf { span: lt.span() })
+                }
+
+                return Ok(Type::Keyword(TsKeywordType {
+                    span,
+                    kind: TsKeywordTypeKind::TsBooleanKeyword,
+                }));
+            }
+
+            op!("<=") | op!("<") | op!(">=") | op!(">") | op!("in") => {
                 no_unknown!();
 
                 return Ok(Type::Keyword(TsKeywordType {

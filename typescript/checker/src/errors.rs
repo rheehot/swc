@@ -375,6 +375,11 @@ pub enum Error {
     TS2704 {
         span: Span,
     },
+
+    /// `TS2358`
+    InvalidLhsInInstanceOf {
+        span: Span,
+    },
 }
 
 impl Error {
