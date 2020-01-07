@@ -166,6 +166,8 @@ impl Validate<TsIndexSignature> for Analyzer<'_, '_> {
     }
 }
 
+prevent!(TsPropertySignature);
+
 impl Validate<TsPropertySignature> for Analyzer<'_, '_> {
     type Output = ValidationResult<PropertySignature>;
 

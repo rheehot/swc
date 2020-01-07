@@ -10,6 +10,7 @@ es6/Symbols/symbolProperty6.ts
 es6/Symbols/symbolProperty60.ts
 es6/Symbols/symbolProperty7.ts
 es6/Symbols/symbolProperty8.ts
+es6/Symbols/symbolProperty9.ts
 parser/ecmascript3/
 scanner/ecmascript3/
 statements/breakStatements/
