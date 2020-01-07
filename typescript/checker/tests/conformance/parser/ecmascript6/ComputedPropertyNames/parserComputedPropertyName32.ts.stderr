@@ -1,4 +1,4 @@
-error: TS2464 {
+error: TS1168 {
     span: Span {
         lo: BytePos(
             39,

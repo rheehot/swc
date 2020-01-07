@@ -1,10 +1,10 @@
-error: NameNotFound {
+error: ReturnRequired {
     span: Span {
         lo: BytePos(
             141,
         ),
         hi: BytePos(
-            152,
+            158,
         ),
         ctxt: #0,
     },
@@ -12,5 +12,5 @@ error: NameNotFound {
  --> $DIR/tests/conformance/async/es6/asyncQualifiedReturnType_es6.ts:8:21
   |
 8 | async function f(): X.MyPromise<void> {
-  |                     ^^^^^^^^^^^
+  |                     ^^^^^^^^^^^^^^^^^
 

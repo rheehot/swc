@@ -1,4 +1,4 @@
-error: NoSuchProperty {
+error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
             198,
@@ -8,24 +8,6 @@ error: NoSuchProperty {
         ),
         ctxt: #0,
     },
-    prop: Some(
-        Ident(
-            Ident {
-                span: Span {
-                    lo: BytePos(
-                        198,
-                    ),
-                    hi: BytePos(
-                        199,
-                    ),
-                    ctxt: #0,
-                },
-                sym: Atom('m' type=inline),
-                type_ann: None,
-                optional: false,
-            },
-        ),
-    ),
 }
  --> $DIR/tests/conformance/expressions/asOperator/asOperatorAmbiguity.ts:7:14
   |
