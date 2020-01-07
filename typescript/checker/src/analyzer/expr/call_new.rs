@@ -1,9 +1,10 @@
 //! Handles new expressions and call expressions.
 use super::super::Analyzer;
 use crate::{
-    analyzer::props::prop_name_to_expr,
+    analyzer::{generic::GenericExpander, props::prop_name_to_expr},
     builtin_types,
     errors::Error,
+    swc_common::FoldWith,
     ty,
     ty::{
         CallSignature, ClassInstance, ConstructorSignature, FnParam, Method, MethodSignature,
@@ -426,9 +427,7 @@ impl Analyzer<'_, '_> {
             Type::Function(ref f) if kind == ExtractKind::Call => self.get_return_type(
                 span,
                 f.type_params.as_ref().map(|v| &*v.params),
-                &f.params,
-                &f.ret_ty,
-                args,
+                *f.ret_ty.clone(),
                 type_args,
             ),
 
@@ -654,11 +653,17 @@ impl Analyzer<'_, '_> {
         &mut self,
         span: Span,
         type_params: Option<&[Param]>,
-        params: &[FnParam],
-        ret_ty: &Type,
-        arg: &[ExprOrSpread],
+        ret_ty: Type,
         type_args: Option<&TypeParamInstantiation>,
     ) -> ValidationResult {
+        if let Some(params) = type_params {
+            if let Some(i) = type_args {
+                let mut v = GenericExpander { params, i };
+                return Ok(ret_ty.fold_with(&mut v));
+            }
+        }
+
+        Ok(ret_ty)
     }
 
     fn try_instantiate(

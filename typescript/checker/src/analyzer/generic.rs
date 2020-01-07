@@ -139,7 +139,10 @@ impl Analyzer<'_, '_> {
                 ..
             }) => {
                 // assert_eq!(type_params.as_ref(), Some(decl));
-                let mut v = GenericExpander { decl, i };
+                let mut v = GenericExpander {
+                    params: &decl.params,
+                    i,
+                };
                 let ret_ty = ret_ty.clone().fold_with(&mut v);
                 let params = params.clone().fold_with(&mut v);
                 let type_params = type_params.clone().fold_with(&mut v);
@@ -188,9 +191,9 @@ impl Analyzer<'_, '_> {
     }
 }
 
-struct GenericExpander<'a> {
-    decl: &'a TypeParamDecl,
-    i: &'a TypeParamInstantiation,
+pub(super) struct GenericExpander<'a> {
+    pub params: &'a [Param],
+    pub i: &'a TypeParamInstantiation,
 }
 
 impl Fold<Type> for GenericExpander<'_> {
@@ -204,7 +207,7 @@ impl Fold<Type> for GenericExpander<'_> {
                 ..
             }) => {
                 // Handle references to type parameters
-                for (idx, p) in self.decl.params.iter().enumerate() {
+                for (idx, p) in self.params.iter().enumerate() {
                     if p.name == *sym {
                         return Type::from(self.i.params[idx].clone());
                     }
