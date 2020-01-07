@@ -18,15 +18,9 @@ impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeParamDecl>;
 
     fn validate(&mut self, decl: &TsTypeParamDecl) -> Self::Output {
-        let params: Vec<Param> = self.validate(&decl.params)?;
-
-        for param in &params {
-            self.register_type(param.name.clone(), param.clone().into())?;
-        }
-
         Ok(TypeParamDecl {
             span: decl.span,
-            params,
+            params: self.validate(&decl.params)?,
         })
     }
 }
@@ -35,12 +29,15 @@ impl Validate<TsTypeParam> for Analyzer<'_, '_> {
     type Output = ValidationResult<Param>;
 
     fn validate(&mut self, p: &TsTypeParam) -> Self::Output {
-        Ok(Param {
+        let param = Param {
             span: p.span,
             name: p.name.sym.clone(),
             constraint: try_opt!(self.validate(&p.constraint)).map(Box::new),
             default: try_opt!(self.validate(&p.default)).map(Box::new),
-        })
+        };
+        self.register_type(param.name.clone(), param.clone().into())?;
+
+        Ok(param)
     }
 }
 
