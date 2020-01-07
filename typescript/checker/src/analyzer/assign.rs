@@ -226,8 +226,9 @@ impl Analyzer<'_, '_> {
                 return Err(Error::Errors { span, errors });
             }
 
-            Type::Class(..) => match rhs {
+            Type::Class(ref l) => match rhs.normalize() {
                 Type::Interface(..) | Type::TypeLit(..) | Type::Lit(..) => fail!(),
+                Type::ClassInstance(r) => return self.assign_class(span, l, &r.cls),
                 _ => {}
             },
 
@@ -690,40 +691,14 @@ impl Analyzer<'_, '_> {
             //},
 
             // TODO: Check type arguments
-            Type::ClassInstance(ClassInstance { cls: ref l_cls, .. }) => {
-                // Assignment to class itself. (not an instance)
-                match *rhs.normalize() {
-                    Type::Keyword(..) | Type::TypeLit(..) | Type::Lit(..) => fail!(),
+            Type::ClassInstance(ClassInstance { cls: ref l_cls, .. }) => match *rhs.normalize() {
+                Type::Keyword(..) | Type::TypeLit(..) | Type::Lit(..) => fail!(),
 
-                    Type::ClassInstance(ClassInstance { ref cls, .. }) => {
-                        if l_cls.eq_ignore_span(cls) {
-                            return Ok(());
-                        }
-
-                        let mut parent = &cls.super_class;
-
-                        // class Child extends Parent
-                        // let c: Child;
-                        // let p: Parent;
-                        // `p = c` is valid
-                        while let Some(ref p) = parent {
-                            match p.normalize() {
-                                Type::Class(ref p_cls) => {
-                                    if l_cls.eq_ignore_span(p_cls) {
-                                        return Ok(());
-                                    }
-
-                                    parent = &p_cls.super_class;
-                                }
-                                _ => fail!(),
-                            }
-                        }
-
-                        fail!()
-                    }
-                    _ => {}
+                Type::ClassInstance(ClassInstance { ref cls, .. }) => {
+                    return self.assign_class(span, l_cls, cls)
                 }
-            }
+                _ => {}
+            },
 
             Type::Constructor(ref lc) => match *rhs.normalize() {
                 Type::Lit(..)
@@ -746,6 +721,33 @@ impl Analyzer<'_, '_> {
         //     msg: format!("Not implemented yet"),
         // })
         unimplemented!("assign: \nLeft: {:?}\nRight: {:?}", to, rhs)
+    }
+
+    fn assign_class(&self, span: Span, l: &Class, r: &Class) -> ValidationResult<()> {
+        if l.eq_ignore_span(r) {
+            return Ok(());
+        }
+
+        let mut parent = &r.super_class;
+
+        // class Child extends Parent
+        // let c: Child;
+        // let p: Parent;
+        // `p = c` is valid
+        while let Some(ref p) = parent {
+            match p.normalize() {
+                Type::Class(ref p_cls) => {
+                    if l.eq_ignore_span(p_cls) {
+                        return Ok(());
+                    }
+
+                    parent = &p_cls.super_class;
+                }
+                _ => Err(vec![])?,
+            }
+        }
+
+        Err(vec![])?
     }
 
     /// This method is called when lhs of assignment is interface or type
