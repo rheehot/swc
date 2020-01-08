@@ -275,8 +275,6 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     _ => {}
                 }
 
-                // TODO: use as_bool from swc_ecma_transforms
-
                 match op {
                     op!("||") => {
                         if let Known(v) = lt.as_bool() {
