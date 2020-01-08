@@ -84,7 +84,7 @@ impl Info {
             _ => {}
         }
 
-        self.errors.push_error(err);
+        self.errors.push(err);
     }
 
     pub(crate) fn push_errors<I>(&mut self, i: I)
@@ -93,17 +93,11 @@ impl Info {
         I::IntoIter: ExactSizeIterator,
     {
         let i = i.into_iter();
+        self.errors.reserve(i.len());
 
-        if err.span().is_dummy() {
-            panic!("Error with a dummy span found")
+        for err in i {
+            self.push_error(err);
         }
-
-        match err {
-            Error::UndefinedSymbol { .. } => panic!(),
-            _ => {}
-        }
-
-        self.errors.push_error(err);
     }
 }
 
