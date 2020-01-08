@@ -143,6 +143,10 @@ impl Validate<TsMethodSignature> for Analyzer<'_, '_> {
     type Output = ValidationResult<MethodSignature>;
 
     fn validate(&mut self, d: &TsMethodSignature) -> Self::Output {
+        if d.computed {
+            self.validate_computed_prop_key(d.span(), &d.key);
+        }
+
         Ok(MethodSignature {
             span: d.span,
             readonly: d.readonly,
