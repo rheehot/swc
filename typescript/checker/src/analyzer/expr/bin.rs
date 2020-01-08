@@ -210,14 +210,27 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
             }
 
             op!("instanceof") => {
-                if match lt {
-                    ref ty if ty.is_any() || ty.is_kwd(TsKeywordTypeKind::TsObjectKeyword) => false,
+                if match lt.normalize() {
+                    ty if ty.is_any() || ty.is_kwd(TsKeywordTypeKind::TsObjectKeyword) => false,
                     Type::Param(..) => false,
                     _ => true,
                 } {
                     self.info.errors.push(Error::InvalidLhsInInstanceOf {
                         ty: lt.clone(),
                         span: lt.span(),
+                    })
+                }
+
+                // The right-hand side of an 'instanceof' expression must be of type 'any' or of
+                // a type assignable to the 'Function' interface type.ts(2359)
+                if match rt.normalize() {
+                    ty if ty.is_any() => false,
+                    Type::Param(..) | Type::Ref(..) | Type::Infer(..) => true,
+                    _ => false,
+                } {
+                    self.info.errors.push(Error::InvalidRhsInInstanceOf {
+                        span: rt.span(),
+                        ty: rt.clone(),
                     })
                 }
 
