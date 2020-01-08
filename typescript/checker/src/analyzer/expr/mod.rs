@@ -213,6 +213,7 @@ impl Analyzer<'_, '_> {
             Expr::TsAs(e) => self.validate(e),
             Expr::TsTypeAssertion(e) => self.validate(e),
             Expr::Assign(e) => e.validate_with(self),
+            Expr::Unary(e) => e.validate_with(self),
 
             Expr::This(ThisExpr { span }) => {
                 let span = *span;
