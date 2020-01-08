@@ -985,7 +985,7 @@ impl Validate<ArrowExpr> for Analyzer<'_, '_> {
         let declared_ret_ty = match f.return_type.validate_with(self) {
             Some(Ok(ty)) => Some(ty),
             Some(Err(err)) => {
-                self.info.errors.push(err);
+                self.info.push_error(err);
                 Some(Type::any(f.span))
             }
             None => None,

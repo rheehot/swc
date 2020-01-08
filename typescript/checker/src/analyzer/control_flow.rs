@@ -195,7 +195,7 @@ impl Visit<IfStmt> for Analyzer<'_, '_> {
         match self.detect_facts(&stmt.test, &mut facts) {
             Ok(()) => (),
             Err(err) => {
-                self.info.errors.push(err);
+                self.info.push_error(err);
                 return;
             }
         };
@@ -281,7 +281,7 @@ impl Visit<SwitchStmt> for Analyzer<'_> {
                     ) {
                         Ok(()) => {}
                         Err(err) => {
-                            self.info.errors.push(err);
+                            self.info.push_error(err);
                             errored = true;
                             continue;
                         }
@@ -333,7 +333,7 @@ impl Analyzer<'_, '_> {
 
         match res {
             Ok(()) => {}
-            Err(err) => self.info.errors.push(err),
+            Err(err) => self.info.push_error(err),
         }
     }
 

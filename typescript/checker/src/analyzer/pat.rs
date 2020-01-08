@@ -41,7 +41,7 @@ impl Validate<Pat> for Analyzer<'_, '_> {
                 match self.declare_vars(VarDeclKind::Let, p) {
                     Ok(()) => {}
                     Err(err) => {
-                        self.info.errors.push(err);
+                        self.info.push_error(err);
                     }
                 }
 
@@ -145,7 +145,7 @@ impl Visit<AssignPat> for Analyzer<'_, '_> {
                                         }
                                     }
 
-                                    self.info.errors.push(Error::TS2353 { span: prop.span() })
+                                    self.info.push_error(Error::TS2353 { span: prop.span() })
                                 }
                                 _ => {}
                             }

@@ -215,7 +215,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     Type::Param(..) => false,
                     _ => true,
                 } {
-                    self.info.errors.push(Error::InvalidLhsInInstanceOf {
+                    self.info.push_error(Error::InvalidLhsInInstanceOf {
                         ty: lt.clone(),
                         span: lt.span(),
                     })
@@ -228,7 +228,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     Type::Param(..) | Type::Ref(..) | Type::Infer(..) => true,
                     _ => false,
                 } {
-                    self.info.errors.push(Error::InvalidRhsInInstanceOf {
+                    self.info.push_error(Error::InvalidRhsInInstanceOf {
                         span: rt.span(),
                         ty: rt.clone(),
                     })

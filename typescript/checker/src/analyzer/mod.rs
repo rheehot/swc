@@ -81,6 +81,12 @@ pub struct Info {
 }
 
 impl Analyzer<'_> {
+impl Info {
+    pub(crate) fn push_error(&mut self, err: Error) {
+        self.errors.push(err);
+    }
+}
+
 fn _assert_types() {
     fn is_sync<T: Sync>() {}
     fn is_send<T: Send>() {}
@@ -225,7 +231,7 @@ impl Visit<TsImportEqualsDecl> for Analyzer<'_, '_> {
             TsModuleRef::TsEntityName(ref e) => {
                 match self.type_of_ts_entity_name(node.span, e, None) {
                     Ok(..) => {}
-                    Err(err) => self.info.errors.push(err),
+                    Err(err) => self.info.push_error(err),
                 }
             }
             _ => {}
