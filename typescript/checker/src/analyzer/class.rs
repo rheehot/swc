@@ -15,11 +15,8 @@ use crate::{
 };
 use std::mem::replace;
 use swc_atoms::js_word;
-use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, DUMMY_SP};
-use swc_common::{util::move_map::MoveMap, Span, Spanned, Visit, DUMMY_SP};
 use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, Visit, DUMMY_SP};
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
@@ -151,11 +148,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
             }
 
             child.inferred_return_types.get_mut().insert(c_span, vec![]);
-            let c = Constructor { params, ..c }.fold_children(child);
-            let c = Constructor { params, ..c }.visit_children(child);
 
-            Ok(())
-            Ok(ty::Constructor {})
             Ok(ty::Constructor {
                 span: c.span,
                 params: c
@@ -721,17 +714,6 @@ impl Analyzer<'_, '_> {
 /// # Validations
 ///
 ///  - TS2515: Validate that class implements all methods.
-impl Fold<Class> for Analyzer<'_> {
-    fn fold(&mut self, c: Class) -> Class {
-        let c = c.fold_children(self);
-impl Visit<Class> for Analyzer<'_> {
-impl Visit<Class> for Analyzer<'_, '_> {
-    fn visit(&mut self, c: &Class) {
-        self.ctx.computed_prop_mode = ComputedPropMode::Class {
-            has_body: !self.ctx.in_declare,
-        };
-
-        c.visit_children(self);
 impl Visit<Class> for Analyzer<'_> {
     fn visit(&mut self, c: &Class) {
         let c = c.visit_children(self);
@@ -838,10 +820,6 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
     }
 }
 
-impl Fold<ClassDecl> for Analyzer<'_> {
-    fn fold(&mut self, c: ClassDecl) -> ClassDecl {
-        let c: ClassDecl = c.fold_children(self);
-impl Visit<ClassDecl> for Analyzer<'_> {
 impl Visit<ClassDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassDecl) {
         let ctx = Ctx { ..self.ctx };
@@ -849,9 +827,6 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
     }
 }
 
-impl Analyzer<'_, '_> {
-    fn visit_class_decl(&mut self, c: &ClassDecl) {
-        c.visit_children(self);
 impl Visit<ClassDecl> for Analyzer<'_> {
     fn visit(&mut self, c: &ClassDecl) {
         let c: ClassDecl = c.visit_children(self);

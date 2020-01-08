@@ -583,6 +583,7 @@ fn quote_param(param: &Pat) -> syn::Expr {
                 },
                 {
                     Pat::Rest(RestPat {
+                        span: DUMMY_SP,
                         dot3_token: DUMMY_SP,
                         arg: box arg_v,
                         type_ann: type_ann_v,
@@ -1395,6 +1396,7 @@ fn quote_ts_fn_params(param: &[TsFnParam]) -> Punctuated<syn::Expr, Token![,]> {
                     },
                     {
                         TsFnParam::Rest(RestPat {
+                            span: DUMMY_SP,
                             dot3_token: DUMMY_SP,
                             arg: box arg_v,
                             type_ann: type_ann_v,

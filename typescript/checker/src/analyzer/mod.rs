@@ -55,8 +55,6 @@ pub(crate) struct Ctx {
 
 /// Note: All methods named `validate_*` return [Err] iff it's not recoverable.
 #[derive(Debug)]
-pub(crate) struct Analyzer<'a> {
-pub struct Analyzer<'a,'b> {
 pub struct Analyzer<'a, 'b> {
     pub info: Info,
 
@@ -81,7 +79,6 @@ pub struct Info {
     pub exports: Exports<FxHashMap<JsWord, Type>>,
 }
 
-impl Analyzer<'_> {
 impl Info {
     pub(crate) fn push_error(&mut self, err: Error) {
         if err.span().is_dummy() {
