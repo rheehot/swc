@@ -897,21 +897,12 @@ impl Analyzer<'_, '_> {
             return Ok(Type::any(span));
         }
 
-        println!("checking for builtin: {}", i.sym);
-
-        if let Ok(ty) = builtin_types::get_var(self.libs, span, &i.sym) {
-            return Ok(ty);
+        if !self.is_builtin {
+            if let Ok(ty) = builtin_types::get_var(self.libs, span, &i.sym) {
+                return Ok(ty);
+            }
         }
 
-        println!(
-            "({}) type_of(): undefined symbol: {}",
-            self.scope.depth(),
-            i.sym,
-        );
-
-        //        self.info
-        //            .errors
-        //            .push(Error::UndefinedSymbol { span: i.span });
         Ok(Type::Ref(Ref {
             span,
             type_name: TsEntityName::Ident(i.clone()),
