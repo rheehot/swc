@@ -2,7 +2,7 @@ use crate::ty::{Type, TypeElement};
 use std::{ops::RangeInclusive, path::PathBuf};
 use swc_atoms::JsWord;
 use swc_common::{errors::Handler, Span, Spanned, DUMMY_SP};
-use swc_ecma_ast::{Expr, UnaryOp};
+use swc_ecma_ast::{Expr, UnaryOp, UpdateOp};
 
 #[derive(Debug, Clone, PartialEq, Spanned)]
 pub enum Error {
@@ -395,6 +395,13 @@ pub enum Error {
         /// Span of the argument.
         span: Span,
         op: UnaryOp,
+    },
+
+    /// `TS2469`
+    UpdateOpToSymbol {
+        /// Span of the argument.
+        span: Span,
+        op: UpdateOp,
     },
 }
 

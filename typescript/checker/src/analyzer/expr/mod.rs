@@ -128,7 +128,7 @@ impl Validate<UpdateExpr> for Analyzer<'_, '_> {
     fn validate(&mut self, e: &UpdateExpr) -> Self::Output {
         let span = e.span;
 
-        let res = self
+        let ty = self
             .validate_expr(&e.arg, TypeOfMode::LValue, None)
             .and_then(|ty| match *ty.normalize() {
                 Type::Keyword(TsKeywordType {
@@ -141,9 +141,18 @@ impl Validate<UpdateExpr> for Analyzer<'_, '_> {
                 })
                 | Type::Array(..) => Err(Error::TS2356 { span: e.arg.span() }),
 
-                _ => Ok(()),
+                _ => Ok(ty),
             })
             .store(&mut self.info.errors);
+
+        if let Some(ty) = ty {
+            if ty.is_kwd(TsKeywordTypeKind::TsSymbolKeyword) {
+                self.info.errors.push(Error::UpdateOpToSymbol {
+                    span: e.arg.span(),
+                    op: e.op,
+                })
+            }
+        }
 
         Ok(Type::Keyword(TsKeywordType {
             kind: TsKeywordTypeKind::TsNumberKeyword,

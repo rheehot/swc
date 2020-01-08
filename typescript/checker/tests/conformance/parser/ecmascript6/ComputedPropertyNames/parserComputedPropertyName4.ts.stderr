@@ -7,10 +7,10 @@ error: A 'get' accessor must return a value
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            31,
+            30,
         ),
         hi: BytePos(
-            32,
+            31,
         ),
         ctxt: #0,
     },
