@@ -212,7 +212,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
             op!("instanceof") => {
                 if match lt.normalize() {
                     ty if ty.is_any() || ty.is_kwd(TsKeywordTypeKind::TsObjectKeyword) => false,
-                    Type::Param(..) => false,
+                    Type::Param(..) | Type::Ref(..) => false,
                     _ => true,
                 } {
                     self.info.push_error(Error::InvalidLhsInInstanceOf {
@@ -224,8 +224,9 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                 // The right-hand side of an 'instanceof' expression must be of type 'any' or of
                 // a type assignable to the 'Function' interface type.ts(2359)
                 if match rt.normalize() {
+                    Type::Param(..) | Type::Infer(..) => true,
                     ty if ty.is_any() => false,
-                    Type::Param(..) | Type::Ref(..) | Type::Infer(..) => true,
+                    ty if ty.is_kwd(TsKeywordTypeKind::TsSymbolKeyword) => true,
                     _ => false,
                 } {
                     self.info.push_error(Error::InvalidRhsInInstanceOf {
