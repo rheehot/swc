@@ -75,7 +75,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                 let mut has_optional = false;
                 for p in params {
                     if has_optional {
-                        child.info.push_error(Error::TS1016 { span: p.span() });
+                        child.info.errors.push(Error::TS1016 { span: p.span() });
                     }
 
                     match *p {
@@ -103,7 +103,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                         match child.declare_vars(VarDeclKind::Let, pat) {
                             Ok(()) => {}
                             Err(err) => {
-                                child.info.push_error(err);
+                                child.info.errors.push(err);
                             }
                         }
                     }
@@ -118,7 +118,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                             //    Some(ty) => match child.expand_type(i.span, ty) {
                             //        Ok(ty) => Some(ty),
                             //        Err(err) => {
-                            //            child.info.push_error(err);
+                            //            child.info.errors.push(err);
                             //            Some(Type::any(i.span))
                             //        }
                             //    },
@@ -135,7 +135,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                             ) {
                                 Ok(()) => {}
                                 Err(err) => {
-                                    child.info.push_error(err);
+                                    child.info.errors.push(err);
                                 }
                             }
                         }
@@ -222,7 +222,7 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
                     // It's error if abstract method has a body
 
                     if c.is_abstract && c.function.body.is_some() {
-                        child.info.push_error(Error::TS1318 { span: key_span });
+                        child.info.errors.push(Error::TS1318 { span: key_span });
                     }
                 }
 
@@ -232,7 +232,7 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
                     let mut has_optional = false;
                     for p in &c.function.params {
                         if has_optional {
-                            child.info.push_error(Error::TS1016 { span: p.span() });
+                            child.info.errors.push(Error::TS1016 { span: p.span() });
                         }
 
                         match *p {
@@ -252,18 +252,18 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
                 if (c.kind == MethodKind::Getter || c.kind == MethodKind::Setter)
                     && type_params.is_some()
                 {
-                    child.info.push_error(Error::TS1094 { span: key_span })
+                    child.info.errors.push(Error::TS1094 { span: key_span })
                 }
 
                 c.key.visit_with(child);
                 // c.function.visit_children(child);
 
                 if child.ctx.in_declare && c.function.body.is_some() {
-                    child.info.push_error(Error::TS1183 { span: key_span })
+                    child.info.errors.push(Error::TS1183 { span: key_span })
                 }
 
                 if c.kind == MethodKind::Setter && c.function.return_type.is_some() {
-                    child.info.push_error(Error::TS1095 { span: key_span })
+                    child.info.errors.push(Error::TS1095 { span: key_span })
                 }
 
                 let declared_ret_ty = try_opt!(c.function.return_type.validate_with(child));
@@ -293,7 +293,7 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
 
             // getter property must have return statements.
             if let None = inferred_ret_ty {
-                self.info.push_error(Error::TS2378 { span: key_span });
+                self.info.errors.push(Error::TS2378 { span: key_span });
             }
         }
 
@@ -562,7 +562,7 @@ impl Analyzer<'_, '_> {
             }
         }
 
-        self.info.push_errors(errors);
+        self.info.errors.extend(errors);
 
         Ok(vec![])
     }
@@ -684,7 +684,7 @@ impl Analyzer<'_, '_> {
             errors.push(err);
         }
 
-        self.info.push_errors(errors);
+        self.info.errors.extend(errors);
     }
 }
 
@@ -712,7 +712,7 @@ impl Visit<Class> for Analyzer<'_, '_> {
                         for p in &cons.params {
                             match *p {
                                 PatOrTsParamProp::TsParamProp(..) => {
-                                    self.info.push_error(Error::TS2369 { span: p.span() })
+                                    self.info.errors.push(Error::TS2369 { span: p.span() })
                                 }
                                 _ => {}
                             }
@@ -735,7 +735,7 @@ impl Visit<Class> for Analyzer<'_, '_> {
                         match constructor_required_param_count {
                             Some(v) if required_param_count != v => {
                                 for span in constructor_spans.drain(..) {
-                                    self.info.push_error(Error::TS2394 { span })
+                                    self.info.errors.push(Error::TS2394 { span })
                                 }
                             }
 
@@ -758,7 +758,7 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
         let ty = match self.validate_type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {
             Ok(ty) => ty.into(),
             Err(err) => {
-                self.info.push_error(err);
+                self.info.errors.push(err);
                 Type::any(c.span())
             }
         };
@@ -786,7 +786,7 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
                     ) {
                         Ok(()) => {}
                         Err(err) => {
-                            analyzer.info.push_error(err);
+                            analyzer.info.errors.push(err);
                         }
                     }
                 }
@@ -819,7 +819,7 @@ impl Analyzer<'_, '_> {
         let ty = match self.validate_type_of_class(Some(c.ident.sym.clone()), &c.class) {
             Ok(ty) => ty.into(),
             Err(err) => {
-                self.info.push_error(err);
+                self.info.errors.push(err);
                 Type::any(c.span())
             }
         };
@@ -842,7 +842,7 @@ impl Analyzer<'_, '_> {
         ) {
             Ok(()) => {}
             Err(err) => {
-                self.info.push_error(err);
+                self.info.errors.push(err);
             }
         }
 

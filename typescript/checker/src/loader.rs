@@ -54,7 +54,7 @@ impl Load for Checker<'_> {
         if !module.1.errors.is_empty() {
             return Err(Error::ModuleLoadFailed {
                 span: import.span,
-                errors: module.1.errors.iter().cloned().collect(),
+                errors: module.1.errors.clone().into(),
             });
         }
 

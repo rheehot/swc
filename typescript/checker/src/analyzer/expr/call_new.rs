@@ -48,7 +48,7 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
             };
 
             if let Err(err) = res {
-                self.info.push_error(err);
+                self.info.errors.push(err);
             }
         }
 
@@ -58,7 +58,7 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
             Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsAnyKeyword,
                 ..
-            }) if e.type_args.is_some() => self.info.push_error(Error::TS2347 { span: e.span }),
+            }) if e.type_args.is_some() => self.info.errors.push(Error::TS2347 { span: e.span }),
             _ => {}
         }
 
@@ -89,7 +89,7 @@ impl Validate<NewExpr> for Analyzer<'_, '_> {
                 };
 
                 if let Err(err) = res {
-                    self.info.push_error(err);
+                    self.info.errors.push(err);
                 }
             }
         }

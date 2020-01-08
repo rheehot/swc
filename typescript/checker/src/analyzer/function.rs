@@ -23,7 +23,7 @@ impl Validate<Function> for Analyzer<'_, '_> {
                 let mut has_optional = false;
                 for p in &f.params {
                     if has_optional {
-                        child.info.push_error(Error::TS1016 { span: p.span() });
+                        child.info.errors.push(Error::TS1016 { span: p.span() });
                     }
 
                     match *p {
@@ -98,7 +98,7 @@ impl Validate<Function> for Analyzer<'_, '_> {
                 None => Type::any(f.span),
             };
 
-            child.info.push_errors(errors);
+            child.info.errors.extend(errors);
 
             Ok(ty::Function {
                 span: f.span,
@@ -134,7 +134,7 @@ impl Analyzer<'_, '_> {
                 ) {
                     Ok(()) => {}
                     Err(err) => {
-                        self.info.push_error(err);
+                        self.info.errors.push(err);
                     }
                 }
             }
@@ -172,7 +172,7 @@ impl Analyzer<'_, '_> {
                                 //if child.rule.no_implicit_any
                                 //    && child.span_allowed_implicit_any != f.span
                                 //{
-                                //    child.info.push_error(Error::ImplicitAny {
+                                //    child.info.errors.push(Error::ImplicitAny {
                                 //        span: no_implicit_any_span.unwrap_or(span),
                                 //    });
                                 //}
@@ -196,7 +196,7 @@ impl Analyzer<'_, '_> {
         match fn_ty {
             Ok(ty) => ty.into(),
             Err(err) => {
-                self.info.push_error(err);
+                self.info.errors.push(err);
                 Type::any(f.span)
             }
         }
@@ -214,7 +214,7 @@ impl Visit<FnDecl> for Analyzer<'_, '_> {
         {
             Ok(()) => {}
             Err(err) => {
-                self.info.push_error(err);
+                self.info.errors.push(err);
             }
         }
     }

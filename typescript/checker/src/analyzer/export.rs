@@ -48,7 +48,7 @@ impl Analyzer<'_, '_> {
                 None => match expr.validate_with(self) {
                     Ok(ty) => ty,
                     Err(err) => {
-                        self.info.push_error(err);
+                        self.info.errors.push(err);
                         return;
                     }
                 },
@@ -81,7 +81,7 @@ impl Analyzer<'_, '_> {
                     }
                     _ => {}
                 }
-                self.info.push_error(err);
+                self.info.errors.push(err);
                 return;
             }
         };
@@ -106,7 +106,7 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
                     let res = self.declare_vars_inner(var.kind, &decl.name, true);
                     match res {
                         Ok(..) => {}
-                        Err(err) => self.info.push_error(err),
+                        Err(err) => self.info.errors.push(err),
                     }
                 }
             }
@@ -155,7 +155,7 @@ impl Visit<ExportDefaultDecl> for Analyzer<'_, '_> {
                 let fn_ty = match f.function.validate_with(self) {
                     Ok(ty) => ty,
                     Err(err) => {
-                        self.info.push_error(err);
+                        self.info.errors.push(err);
                         return;
                     }
                 };
@@ -181,7 +181,7 @@ impl Analyzer<'_, '_> {
         let ty = match self.scope.find_type(&from) {
             Some(ty) => ty,
             None => {
-                self.info.push_error(Error::UndefinedSymbol { span });
+                self.info.errors.push(Error::UndefinedSymbol { span });
                 return;
             }
         };

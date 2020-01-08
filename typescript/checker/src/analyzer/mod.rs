@@ -2,7 +2,7 @@ pub(crate) use self::scope::ScopeKind;
 use self::{control_flow::CondFacts, scope::Scope, util::ResultExt};
 use crate::{
     analyzer::{pat::PatMode, props::ComputedPropMode},
-    errors::Error,
+    errors::{Error, Errors},
     loader::Load,
     ty,
     ty::Type,
@@ -69,36 +69,8 @@ pub struct Analyzer<'a, 'b> {
 
 #[derive(Debug, Clone, Default)]
 pub struct Info {
-    pub errors: Vec<Error>,
+    pub errors: Errors,
     pub exports: Exports<FxHashMap<JsWord, Type>>,
-}
-
-impl Info {
-    pub(crate) fn push_error(&mut self, err: Error) {
-        if err.span().is_dummy() {
-            panic!("Error with a dummy span found")
-        }
-
-        match err {
-            Error::UndefinedSymbol { .. } => panic!(),
-            _ => {}
-        }
-
-        self.errors.push(err);
-    }
-
-    pub(crate) fn push_errors<I>(&mut self, i: I)
-    where
-        I: IntoIterator<Item = Error>,
-        I::IntoIter: ExactSizeIterator,
-    {
-        let i = i.into_iter();
-        self.errors.reserve(i.len());
-
-        for err in i {
-            self.push_error(err);
-        }
-    }
 }
 
 fn _assert_types() {
@@ -170,7 +142,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             (ret, child.info)
         };
 
-        self.info.push_errors(info.errors);
+        self.info.errors.extend(info.errors);
         assert!(info.exports.types.is_empty(), "child cannot export a type");
         assert!(
             info.exports.vars.is_empty(),
@@ -239,7 +211,7 @@ impl Visit<TsImportEqualsDecl> for Analyzer<'_, '_> {
             TsModuleRef::TsEntityName(ref e) => {
                 match self.type_of_ts_entity_name(node.span, e, None) {
                     Ok(..) => {}
-                    Err(err) => self.info.push_error(err),
+                    Err(err) => self.info.errors.push(err),
                 }
             }
             _ => {}
@@ -255,7 +227,7 @@ impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
         new.ctx.in_declare = decl.declare;
 
         decl.visit_children(&mut new);
-        self.info.errors.append(&mut new.info.errors);
+        self.info.errors.append_errors(&mut new.info.errors);
 
         self.register_type(
             match decl.id {

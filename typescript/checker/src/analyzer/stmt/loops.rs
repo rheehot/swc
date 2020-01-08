@@ -57,7 +57,7 @@ impl Analyzer<'_, '_> {
                     lhs.span(),
                 ) {
                     Ok(..) => {}
-                    Err(err) => self.info.push_error(err),
+                    Err(err) => self.info.errors.push(err),
                 }
             }
             _ => {}

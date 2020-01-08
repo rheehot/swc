@@ -38,7 +38,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                             {
                                 Ok(()) => {}
                                 Err(err) => {
-                                    a.info.push_error(err);
+                                    a.info.errors.push(err);
                                 }
                             }
                         };
@@ -73,7 +73,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 ty
                             }
                             Err(err) => {
-                                a.info.push_error(err);
+                                a.info.errors.push(err);
                                 inject_any!();
                                 remove_declaring!();
                                 return;
@@ -85,7 +85,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 let ty = match ty.validate_with(a) {
                                     Ok(ty) => ty,
                                     Err(err) => {
-                                        a.info.push_error(err);
+                                        a.info.errors.push(err);
                                         remove_declaring!();
                                         return;
                                     }
@@ -97,14 +97,14 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                         match a.scope.declare_complex_vars(kind, &v.name, ty) {
                                             Ok(()) => {}
                                             Err(err) => {
-                                                a.info.push_error(err);
+                                                a.info.errors.push(err);
                                             }
                                         }
                                         remove_declaring!();
                                         return;
                                     }
                                     Err(err) => {
-                                        a.info.push_error(err);
+                                        a.info.errors.push(err);
                                         Some(init)
                                     }
                                 }
@@ -169,7 +169,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 }
 
                                 if !type_errors.is_empty() {
-                                    a.info.push_errors(type_errors);
+                                    a.info.errors.extend(type_errors);
                                     remove_declaring!();
                                     return;
                                 }
@@ -209,7 +209,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 ) {
                                     Ok(()) => {}
                                     Err(err) => {
-                                        a.info.push_error(err);
+                                        a.info.errors.push(err);
                                     }
                                 };
                             }
@@ -224,7 +224,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                     match a.declare_vars(kind, &v.name) {
                                         Ok(()) => {}
                                         Err(err) => {
-                                            a.info.push_error(err);
+                                            a.info.errors.push(err);
                                         }
                                     };
                                 } else {

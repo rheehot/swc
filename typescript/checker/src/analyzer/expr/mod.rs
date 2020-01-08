@@ -100,7 +100,7 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
                 }
             };
 
-            a.info.push_errors(errors);
+            a.info.errors.extend(errors);
 
             let rhs_ty = match rhs_ty {
                 Ok(v) => v,
@@ -985,7 +985,7 @@ impl Validate<ArrowExpr> for Analyzer<'_, '_> {
         let declared_ret_ty = match f.return_type.validate_with(self) {
             Some(Ok(ty)) => Some(ty),
             Some(Err(err)) => {
-                self.info.push_error(err);
+                self.info.errors.push(err);
                 Some(Type::any(f.span))
             }
             None => None,

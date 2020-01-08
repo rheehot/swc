@@ -14,7 +14,7 @@ impl Analyzer<'_, '_> {
     //        match res {
     //            Ok(v) => Some(v),
     //            Err(err) => {
-    //                self.info.push_error(err);
+    //                self.info.errors.push(err);
     //                None
     //            }
     //        }

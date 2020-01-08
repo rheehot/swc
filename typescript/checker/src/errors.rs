@@ -441,10 +441,106 @@ impl Error {
 }
 
 impl From<Vec<Error>> for Error {
+    #[inline(always)]
     fn from(errors: Vec<Error>) -> Self {
         Error::Errors {
             span: DUMMY_SP,
             errors,
+        }
+    }
+}
+
+impl From<Errors> for Error {
+    #[inline(always)]
+    fn from(errors: Errors) -> Self {
+        errors.0.into()
+    }
+}
+
+/// A utility type to track
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct Errors(Vec<Error>);
+
+impl From<Errors> for Vec<Error> {
+    #[inline(always)]
+    fn from(e: Errors) -> Self {
+        e.0
+    }
+}
+
+impl IntoIterator for Errors {
+    type Item = Error;
+    type IntoIter = <Vec<Error> as IntoIterator>::IntoIter;
+
+    #[inline(always)]
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
+    }
+}
+
+impl Errors {
+    /// This is used for debugging (by calling [pacic]).
+    fn validate(&self, err: &Error) {
+        if err.span().is_dummy() {
+            panic!("Error with a dummy span found")
+        }
+        match err {
+            //            Error::UndefinedSymbol { .. } => panic!(),
+            Error::Errors { ref errors, .. } => {
+                for err in errors {
+                    self.validate(err)
+                }
+            }
+            _ => {}
+        }
+    }
+
+    #[inline(always)]
+    pub fn is_empty(&self) -> bool {
+        self.0.is_empty()
+    }
+
+    #[inline(always)]
+    pub fn len(&self) -> usize {
+        self.0.len()
+    }
+
+    #[inline(always)]
+    pub fn push(&mut self, err: Error) {
+        self.validate(&err);
+
+        self.0.push(err);
+    }
+
+    #[inline(always)]
+    pub fn reserve(&mut self, v: usize) {
+        self.0.reserve(v)
+    }
+
+    #[inline(always)]
+    pub fn append(&mut self, other: &mut Vec<Error>) {
+        for err in &*other {
+            self.validate(err)
+        }
+
+        self.0.append(other)
+    }
+
+    #[inline(always)]
+    pub fn append_errors(&mut self, other: &mut Self) {
+        self.append(&mut other.0)
+    }
+}
+
+impl Extend<Error> for Errors {
+    #[inline(always)]
+    fn extend<T: IntoIterator<Item = Error>>(&mut self, iter: T) {
+        if cfg!(debug_assertions) {
+            for err in iter {
+                self.push(err)
+            }
+        } else {
+            self.0.extend(iter)
         }
     }
 }

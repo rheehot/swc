@@ -15,7 +15,7 @@ extern crate swc_common;
 pub use self::builtin_types::Lib;
 use crate::{
     analyzer::{Analyzer, Info},
-    errors::Error,
+    errors::{Error, Errors},
     resolver::Resolver,
     swc_common::VisitWith,
     ty::Type,
@@ -158,11 +158,11 @@ impl Checker<'_> {
     /// Returns empty vector if no error is found.
     pub fn check(&self, entry: PathBuf) -> Vec<Error> {
         self.run(|| {
-            let mut errors = vec![];
+            let mut errors = Errors::default();
 
-            let module = self.load_module(entry.clone());
+            let mut module = self.load_module(entry.clone());
 
-            errors.extend_from_slice(&module.1.errors);
+            errors.append_errors(&mut module.1.errors);
 
             // let (tasks, receiver) = channel::unbounded();
             // let (result_sender, result_receiver) = channel::unbounded();
@@ -185,7 +185,7 @@ impl Checker<'_> {
             //     .unwrap();
             // }
 
-            errors
+            errors.into()
         })
     }
 

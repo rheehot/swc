@@ -215,7 +215,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     Type::Param(..) | Type::Ref(..) => false,
                     _ => true,
                 } {
-                    self.info.push_error(Error::InvalidLhsInInstanceOf {
+                    self.info.errors.push(Error::InvalidLhsInInstanceOf {
                         ty: lt.clone(),
                         span: left.span(),
                     })
@@ -229,7 +229,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     ty if ty.is_kwd(TsKeywordTypeKind::TsSymbolKeyword) => true,
                     _ => false,
                 } {
-                    self.info.push_error(Error::InvalidRhsInInstanceOf {
+                    self.info.errors.push(Error::InvalidRhsInInstanceOf {
                         span: right.span(),
                         ty: rt.clone(),
                     })
@@ -499,6 +499,6 @@ impl Analyzer<'_, '_> {
             _ => {}
         }
 
-        self.info.push_errors(errors);
+        self.info.errors.extend(errors);
     }
 }

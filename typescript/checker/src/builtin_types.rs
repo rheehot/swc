@@ -1,6 +1,6 @@
 use crate::{
     analyzer::{Analyzer, ScopeKind},
-    errors::Error,
+    errors::{Error, Errors},
     loader::Load,
     ty::{self, Class, Module, Static},
     validator::{Validate, ValidateWith},
@@ -208,7 +208,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
             }
         }
 
-        assert_eq!(analyzer.info.errors, vec![]);
+        assert_eq!(analyzer.info.errors, Errors::default());
 
         Some(Box::leak(merged))
     });
