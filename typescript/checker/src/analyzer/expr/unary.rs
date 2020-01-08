@@ -1,7 +1,7 @@
 use super::super::Analyzer;
 use crate::{
     analyzer::util::ResultExt,
-    errors::Error,
+    errors::{Error, Errors},
     ty::Type,
     validator::{Validate, ValidateWith},
     ValidationResult,
@@ -18,14 +18,28 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
     fn validate(&mut self, e: &UnaryExpr) -> Self::Output {
         let UnaryExpr { span, op, ref arg } = *e;
 
-        let mut errors = vec![];
-
-        let arg = arg.validate_with(self).store(&mut errors);
-
-        self.info.errors.extend(errors.drain(..));
+        let arg: Option<Type> = arg
+            .validate_with(self)
+            .store(&mut self.info.errors)
+            .map(|ty| ty.respan(arg.span()));
 
         if let Some(ref arg) = arg {
             self.validate_unary_expr_inner(span, op, arg);
+        }
+
+        match op {
+            op!(unary, "+") | op!(unary, "-") | op!("~") => {
+                if let Some(arg) = &arg {
+                    if arg.is_kwd(TsKeywordTypeKind::TsSymbolKeyword) {
+                        self.info.errors.push(Error::NumericUnaryOpToSymbol {
+                            span: arg.span(),
+                            op,
+                        })
+                    }
+                }
+            }
+
+            _ => {}
         }
 
         match op {
