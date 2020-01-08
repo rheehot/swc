@@ -4,7 +4,7 @@ error: Expected one variable binding
 1 | for (var a: number = 1, b: string = "" in X) {
   |                         ^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             42,

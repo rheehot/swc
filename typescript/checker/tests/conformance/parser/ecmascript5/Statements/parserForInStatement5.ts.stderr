@@ -4,7 +4,7 @@ error: TS2483
 1 | for (var a: number in X) {
   |          ^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             22,

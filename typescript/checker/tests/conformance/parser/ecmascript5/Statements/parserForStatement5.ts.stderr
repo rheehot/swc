@@ -4,7 +4,7 @@ error: TS2491
 1 | for ({} in b) {
   |      ^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             11,

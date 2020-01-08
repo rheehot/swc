@@ -20,7 +20,7 @@ error: TS1005
 1 | a = () => { } || a
   |               ^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             17,

@@ -14,7 +14,7 @@ error: TS1166 {
 3 |    [e] = 1
   |    ^^^^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             29,

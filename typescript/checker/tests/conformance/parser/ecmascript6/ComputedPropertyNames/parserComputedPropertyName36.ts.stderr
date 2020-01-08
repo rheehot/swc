@@ -20,7 +20,7 @@ error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'pu
 3 |     [public ]: string;
   |      ^^^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             30,

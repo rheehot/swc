@@ -1,4 +1,4 @@
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             620,

@@ -4,7 +4,7 @@ error: TS2406
 1 | for (new foo() in b) {
   |      ^^^^^^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             9,
@@ -20,7 +20,7 @@ error: UndefinedSymbol {
 1 | for (new foo() in b) {
   |          ^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             18,

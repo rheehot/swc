@@ -14,7 +14,7 @@ error: TS1166 {
 4 |     [e]: number
   |     ^^^^^^^^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             45,
@@ -46,7 +46,7 @@ error: TS1166 {
 5 |     [e2]: number
   |     ^^^^^^^^^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             61,
