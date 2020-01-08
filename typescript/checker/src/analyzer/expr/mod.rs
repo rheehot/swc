@@ -397,6 +397,8 @@ impl Analyzer<'_, '_> {
         computed: bool,
         type_mode: TypeOfMode,
     ) -> ValidationResult {
+        debug_assert!(!span.is_dummy());
+
         let obj = self.expand(span, obj)?;
 
         macro_rules! handle_type_els {
