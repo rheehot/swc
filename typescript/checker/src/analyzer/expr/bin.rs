@@ -217,7 +217,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                 } {
                     self.info.push_error(Error::InvalidLhsInInstanceOf {
                         ty: lt.clone(),
-                        span: lt.span(),
+                        span: left.span(),
                     })
                 }
 
@@ -229,7 +229,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     _ => false,
                 } {
                     self.info.push_error(Error::InvalidRhsInInstanceOf {
-                        span: rt.span(),
+                        span: right.span(),
                         ty: rt.clone(),
                     })
                 }

@@ -21,6 +21,7 @@ use swc_common::{SourceMap, Span};
 use swc_common::{Span, Visit};
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_common::{Span, Visit, VisitWith};
+use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 use swc_ts_builtin_types::Lib;
 
@@ -83,6 +84,10 @@ pub struct Info {
 impl Analyzer<'_> {
 impl Info {
     pub(crate) fn push_error(&mut self, err: Error) {
+        if err.span().is_dummy() {
+            panic!("Error with a dummy span found")
+        }
+
         self.errors.push(err);
     }
 }
