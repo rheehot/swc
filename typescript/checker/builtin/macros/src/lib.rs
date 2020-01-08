@@ -86,25 +86,24 @@ pub fn builtin(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
                 })
                 .expect("failed to parse module");
 
-            let cmts = comments.leading_comments(script.span.lo());
+            let (leading, trailing) = comments.take_all();
+
             let mut ds = vec![];
-            match cmts {
-                Some(ref cmts) => {
-                    for cmt in cmts.iter() {
-                        if !cmt.text.starts_with("/ <reference lib=")
-                            && !cmt.text.starts_with("/<reference lib=")
-                        {
-                            continue;
-                        }
-                        let dep = cmt
-                            .text
-                            .replace("/ <reference lib=\"", "")
-                            .replace(" />", "");
-                        ds.push(name_for(&dep));
+            for (_, cmts) in leading.into_iter().chain(trailing) {
+                for cmt in cmts {
+                    if !cmt.text.starts_with("/ <reference lib=")
+                        && !cmt.text.starts_with("/<reference lib=")
+                    {
+                        continue;
                     }
+                    let dep = cmt
+                        .text
+                        .replace("/ <reference lib=\"", "")
+                        .replace(" />", "");
+                    ds.push(name_for(&dep));
                 }
-                None => {}
             }
+            println!("{}: {:?}", file_name, ds);
             deps.insert(name_for(&file_name), ds);
 
             println!("\tParsed",);
