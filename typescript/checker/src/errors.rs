@@ -482,7 +482,7 @@ impl Errors {
     /// This is used for debugging (by calling [pacic]).
     fn validate(&self, err: &Error) {
         if err.span().is_dummy() {
-            panic!("Error with a dummy span found")
+            panic!("Error with a dummy span found: {:?}", err)
         }
         match err {
             // Error::UndefinedSymbol { .. } => panic!(),
