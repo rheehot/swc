@@ -46,6 +46,7 @@ fn should_ignore(name: &str, content: &str) -> bool {
         "assignFromBooleanInterface2.ts",
         "assignFromNumberInterface2.ts",
         "assignFromStringInterface2.ts",
+        "symbolType16.ts",
         // Ignored as this requires **using** eval.
         "scannerS7.2_A1.5_T2.ts",
         // Ignored just because it requires lots of work while being not important

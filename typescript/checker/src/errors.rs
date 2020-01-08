@@ -485,7 +485,7 @@ impl Errors {
             panic!("Error with a dummy span found")
         }
         match err {
-            //            Error::UndefinedSymbol { .. } => panic!(),
+            // Error::UndefinedSymbol { .. } => panic!(),
             Error::Errors { ref errors, .. } => {
                 for err in errors {
                     self.validate(err)
