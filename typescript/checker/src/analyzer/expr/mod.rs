@@ -827,7 +827,7 @@ impl Analyzer<'_, '_> {
 
         match i.sym {
             js_word!("arguments") => return Ok(Type::any(span)),
-            js_word!("Symbol") => {
+            js_word!("Symbol") if !self.is_builtin => {
                 return Ok(builtin_types::get_var(
                     self.libs,
                     i.span,
