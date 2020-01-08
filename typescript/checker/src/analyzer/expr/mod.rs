@@ -678,24 +678,39 @@ impl Analyzer<'_, '_> {
                 handle_type_els!(body);
 
                 // TODO: Check parent interfaces
-                let prop_ty = Some(prop.validate_with(self)?);
-                return Err(Error::NoSuchProperty {
-                    span,
-                    prop: Some(prop.clone()),
-                    prop_ty,
-                });
+                if computed {
+                    let prop_ty = Some(prop.validate_with(self)?);
+                    return Err(Error::NoSuchProperty {
+                        span,
+                        prop: Some(prop.clone()),
+                        prop_ty,
+                    });
+                } else {
+                    return Err(Error::NoSuchProperty {
+                        span,
+                        prop: Some(prop.clone()),
+                        prop_ty: None,
+                    });
+                };
             }
 
             Type::TypeLit(TypeLit { ref members, .. }) => {
                 handle_type_els!(members);
 
-                let prop_ty = Some(prop.validate_with(self)?);
-
-                return Err(Error::NoSuchProperty {
-                    span,
-                    prop: Some(prop.clone()),
-                    prop_ty,
-                });
+                if computed {
+                    let prop_ty = Some(prop.validate_with(self)?);
+                    return Err(Error::NoSuchProperty {
+                        span,
+                        prop: Some(prop.clone()),
+                        prop_ty,
+                    });
+                } else {
+                    return Err(Error::NoSuchProperty {
+                        span,
+                        prop: Some(prop.clone()),
+                        prop_ty: None,
+                    });
+                };
             }
 
             Type::Union(ty::Union { ref types, .. }) => {
