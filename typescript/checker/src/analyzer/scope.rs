@@ -481,9 +481,11 @@ impl Analyzer<'_, '_> {
                 match *type_name {
                     TsEntityName::Ident(ref i) => {
                         // Check for builtin types
-                        if let Ok(ty) = builtin_types::get_type(self.libs, span, &i.sym) {
-                            verify!(ty);
-                            return self.expand(span, ty);
+                        if !self.is_builtin {
+                            if let Ok(ty) = builtin_types::get_type(self.libs, span, &i.sym) {
+                                verify!(ty);
+                                return self.expand(span, ty);
+                            }
                         }
 
                         // Handle enum
