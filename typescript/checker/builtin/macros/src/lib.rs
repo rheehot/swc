@@ -448,7 +448,7 @@ fn quote_class(c: &Class) -> syn::Expr {
     q().quote_with(smart_quote!(
         Vars {
             body_v: quote_class_members(&c.body),
-            super_class_v: quote_option(c.super_class.as_ref(), |expr| quote_expr(expr)),
+            super_class_v: quote_option(c.super_class.as_ref(), |expr| quote_expr(expr, true)),
             is_abstract_v: c.is_abstract,
             type_params_v: quote_type_params(c.type_params.as_ref()),
             super_type_params_v: quote_type_params_instantiation(c.super_type_params.as_ref()),
@@ -521,8 +521,8 @@ fn quote_class_member(ms: &ClassMember) -> syn::Expr {
         }) => q()
             .quote_with(smart_quote!(
                 Vars {
-                    key_v: quote_expr(key),
-                    value_v: quote_option(value.as_ref(), |expr| quote_expr(expr)),
+                    key_v: quote_expr(key, true),
+                    value_v: quote_option(value.as_ref(), |expr| quote_expr(expr, true)),
                     accessibility_v: quote_accessibility(accessibility.clone()),
                     computed_v: computed,
                     is_optional_v: is_optional,
@@ -1212,10 +1212,10 @@ fn quote_type_element(e: &TsTypeElement) -> syn::Expr {
             q().quote_with(smart_quote!(
                 Vars {
                     readonly_v: readonly,
-                    key_v: quote_expr(&key),
+                    key_v: quote_expr(&key, false),
                     computed_v: computed,
                     optional_v: optional,
-                    init_v: quote_option(init.as_ref(), |expr| quote_expr(expr)),
+                    init_v: quote_option(init.as_ref(), |expr| quote_expr(expr, true)),
                     params_v: quote_ts_fn_params(&params),
                     type_ann_v: quote_opt_type_ann(type_ann.as_ref()),
                     type_params_v: quote_type_params(type_params.as_ref())
@@ -1246,11 +1246,16 @@ fn quote_type_element(e: &TsTypeElement) -> syn::Expr {
             ref type_ann,
             ..
         }) => {
-            //
+            match **key {
+                Expr::Ident(ref i) if i.sym == *"compare" => {
+                    println!("{:?} = {:?}", key, computed);
+                }
+                _ => {}
+            }
             q().quote_with(smart_quote!(
                 Vars {
                     readonly_v: readonly,
-                    key_v: quote_expr(&key),
+                    key_v: quote_expr(&key, false),
                     computed_v: computed,
                     optional_v: optional,
                     params_v: quote_ts_fn_params(&params),
@@ -1491,15 +1496,26 @@ fn quote_module_block(stmts: &[Stmt]) -> syn::Expr {
     .parse()
 }
 
-fn quote_expr(e: &Expr) -> syn::Expr {
+fn quote_expr(e: &Expr, as_str: bool) -> syn::Expr {
     match *e {
-        Expr::Ident(ref i) => q()
+        Expr::Ident(ref i) if as_str => q()
             .quote_with(smart_quote!(Vars { v: id_to_str(i) }, {
                 Expr::Lit(Lit::Str(Str {
                     span: DUMMY_SP,
                     has_escape: false,
                     value: v.into(),
                 }))
+            }))
+            .parse(),
+
+        Expr::Ident(ref i) => q()
+            .quote_with(smart_quote!(Vars { v: id_to_str(i) }, {
+                Expr::Ident(Ident {
+                    span: DUMMY_SP,
+                    sym: v.into(),
+                    optional: false,
+                    type_ann: None,
+                })
             }))
             .parse(),
 
@@ -1521,8 +1537,8 @@ fn quote_expr(e: &Expr) -> syn::Expr {
         }) => q()
             .quote_with(smart_quote!(
                 Vars {
-                    obj_v: quote_expr(&obj),
-                    prop_v: quote_expr(prop),
+                    obj_v: quote_expr(&obj, true),
+                    prop_v: quote_expr(prop, true),
                     computed_v: computed,
                 },
                 {
@@ -1582,7 +1598,7 @@ fn quote_object_pat_prop(p: &ObjectPatProp) -> syn::Expr {
             .quote_with(smart_quote!(
                 Vars {
                     key_v: quote_ident(key),
-                    value_v: quote_option(value.as_ref(), |expr| quote_expr(&expr))
+                    value_v: quote_option(value.as_ref(), |expr| quote_expr(&expr, true))
                 },
                 {
                     ObjectPatProp::Assign(AssignPatProp {
