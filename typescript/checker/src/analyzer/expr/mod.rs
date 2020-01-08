@@ -890,7 +890,10 @@ impl Analyzer<'_, '_> {
             i.sym,
         );
 
-        return Err(Error::UndefinedSymbol { span: i.span });
+        self.info
+            .errors
+            .push(Error::UndefinedSymbol { span: i.span });
+        Ok(Type::any(span))
     }
 
     pub fn type_of_ts_entity_name(
