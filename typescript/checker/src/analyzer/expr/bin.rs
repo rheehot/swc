@@ -11,6 +11,7 @@ use crate::{
 };
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
+use swc_ecma_utils::{ExprExt, Value::Known};
 
 prevent!(BinExpr);
 
@@ -277,13 +278,28 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                 // TODO: use as_bool from swc_ecma_transforms
 
                 match op {
-                    op!("||") => return Ok(Type::union(vec![lt, rt])),
+                    op!("||") => {
+                        if let Known(v) = lt.as_bool() {
+                            return Ok(if v { lt } else { rt });
+                        }
 
-                    op!("&&") => {}
+                        if let (_, Known(v)) = left.as_bool() {
+                            return Ok(if v { lt } else { rt });
+                        }
+                    }
+
+                    op!("&&") => {
+                        if let Known(v) = lt.as_bool() {
+                            return Ok(if v { rt } else { lt });
+                        }
+
+                        if let (_, Known(v)) = left.as_bool() {
+                            return Ok(if v { rt } else { lt });
+                        }
+                    }
 
                     _ => unreachable!(),
                 }
-
                 return Ok(rt);
             }
 

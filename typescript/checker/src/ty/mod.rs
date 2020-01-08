@@ -5,6 +5,10 @@ use std::{borrow::Cow, mem::transmute, sync::Arc};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
+use swc_ecma_utils::{
+    Purity, Value,
+    Value::{Known, Unknown},
+};
 
 pub mod merge;
 
@@ -1069,6 +1073,38 @@ impl Type {
         match self {
             Self::Static(..) | Self::Arc(..) => self,
             _ => Type::Arc(Arc::new(self)),
+        }
+    }
+
+    pub fn as_bool(&self) -> Value<bool> {
+        match self {
+            Type::Static(ty) => ty.ty.as_bool(),
+            Type::Arc(ref ty) => ty.as_bool(),
+
+            Type::Class(_) | Type::TypeLit(_) => Known(true),
+
+            Type::Lit(ty) => Known(match &ty.lit {
+                TsLit::Number(v) => v.value != 0.0,
+                TsLit::Str(v) => v.value != *"",
+                TsLit::Bool(v) => v.value,
+            }),
+            Type::Keyword(TsKeywordType { kind, .. }) => Known(match kind {
+                TsKeywordTypeKind::TsNeverKeyword
+                | TsKeywordTypeKind::TsStringKeyword
+                | TsKeywordTypeKind::TsNumberKeyword
+                | TsKeywordTypeKind::TsUnknownKeyword
+                | TsKeywordTypeKind::TsBooleanKeyword
+                | TsKeywordTypeKind::TsAnyKeyword => return Unknown,
+                TsKeywordTypeKind::TsSymbolKeyword
+                | TsKeywordTypeKind::TsBigIntKeyword
+                | TsKeywordTypeKind::TsObjectKeyword => true,
+
+                TsKeywordTypeKind::TsUndefinedKeyword
+                | TsKeywordTypeKind::TsNullKeyword
+                | TsKeywordTypeKind::TsVoidKeyword => false,
+            }),
+
+            _ => Unknown,
         }
     }
 }
