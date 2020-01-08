@@ -6,7 +6,7 @@ use super::{
 };
 use crate::{
     analyzer::{props::ComputedPropMode, util::ResultExt, Ctx},
-    errors::Error,
+    errors::{Error, Errors},
     swc_common::VisitWith,
     ty,
     ty::{FnParam, Operator, Type},
@@ -569,7 +569,12 @@ impl Analyzer<'_, '_> {
 
     #[validator]
     pub(super) fn validate_computed_prop_key(&mut self, span: Span, key: &Expr) {
-        let mut errors = vec![];
+        if self.is_builtin {
+            // We don't need to validate builtins
+            return;
+        }
+
+        let mut errors = Errors::default();
         let is_symbol_access = match *key {
             Expr::Member(MemberExpr {
                 obj:
@@ -582,7 +587,7 @@ impl Analyzer<'_, '_> {
             _ => false,
         };
 
-        let ty = match self.validate(&key) {
+        let ty = match self.validate(&key).map(|ty| ty.respan(span)) {
             Ok(ty) => ty,
             Err(err) => {
                 match err {
@@ -612,7 +617,10 @@ impl Analyzer<'_, '_> {
         }
 
         if !errors.is_empty() {
-            Err(Error::Errors { span, errors })?
+            Err(Error::Errors {
+                span,
+                errors: errors.into(),
+            })?
         }
     }
 
