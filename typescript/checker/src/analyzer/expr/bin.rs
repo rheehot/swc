@@ -2,7 +2,13 @@ use super::super::{
     util::{Comparator, ResultExt},
     Analyzer,
 };
-use crate::{errors::Error, ty::Type, util::EqIgnoreSpan, validator::Validate, ValidationResult};
+use crate::{
+    errors::{Error, Errors},
+    ty::Type,
+    util::EqIgnoreSpan,
+    validator::Validate,
+    ValidationResult,
+};
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
@@ -21,8 +27,14 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
 
         let mut errors = vec![];
 
-        let lt = self.validate(&left).store(&mut errors);
-        let rt = self.validate(&right).store(&mut errors);
+        let lt = self
+            .validate(&left)
+            .store(&mut errors)
+            .map(|ty| ty.respan(left.span()));
+        let rt = self
+            .validate(&right)
+            .store(&mut errors)
+            .map(|ty| ty.respan(right.span()));
 
         self.validate_bin_inner(span, op, lt.as_ref(), rt.as_ref());
 
@@ -291,7 +303,7 @@ impl Analyzer<'_, '_> {
         let ls = lt.span();
         let rs = rt.span();
 
-        let mut errors = vec![];
+        let mut errors = Errors::default();
 
         match op {
             op!("===") | op!("!==") => {
@@ -452,6 +464,10 @@ impl Analyzer<'_, '_> {
                         })
                         | Type::Keyword(TsKeywordType {
                             kind: TsKeywordTypeKind::TsBigIntKeyword,
+                            ..
+                        })
+                        | Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsSymbolKeyword,
                             ..
                         })
                         | Type::Lit(TsLitType {
