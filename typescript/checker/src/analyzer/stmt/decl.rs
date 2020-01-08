@@ -50,10 +50,6 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                         }};
                     }
 
-                    if v.init.is_some() {
-                        a.visit(&v.name);
-                    }
-
                     if let Some(ref init) = v.init {
                         let span = init.span();
 
