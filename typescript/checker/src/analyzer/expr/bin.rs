@@ -499,6 +499,6 @@ impl Analyzer<'_, '_> {
             _ => {}
         }
 
-        self.info.errors.extend(errors);
+        self.info.push_errors(errors);
     }
 }

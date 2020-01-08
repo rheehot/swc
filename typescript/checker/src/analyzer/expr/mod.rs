@@ -100,7 +100,7 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
                 }
             };
 
-            a.info.errors.extend(errors);
+            a.info.push_errors(errors);
 
             let rhs_ty = match rhs_ty {
                 Ok(v) => v,

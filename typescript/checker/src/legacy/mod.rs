@@ -85,7 +85,7 @@ where
                                 .map(|&Specifier { ref local, .. }| local.0.clone()),
                         );
 
-                        self.info.errors.push(err);
+                        self.info.push_error(err);
                     }
                 }
             }
@@ -99,7 +99,7 @@ where
                         self.export_equals_span = decl.span;
                     }
                     if has_normal_export {
-                        self.info.errors.push(Error::TS2309 { span: decl.span });
+                        self.info.push_error(Error::TS2309 { span: decl.span });
                     }
 
                     //
@@ -117,7 +117,7 @@ where
                         | ModuleDecl::TsNamespaceExport(..) => {
                             has_normal_export = true;
                             if !self.export_equals_span.is_dummy() {
-                                self.info.errors.push(Error::TS2309 {
+                                self.info.push_error(Error::TS2309 {
                                     span: self.export_equals_span,
                                 });
                             }
@@ -143,7 +143,7 @@ where
             items.visit_with(&mut visitor);
 
             if visitor.last_ambient_name.is_some() {
-                visitor.errors.push(Error::TS2391 {
+                visitor.push_error(Error::TS2391 {
                     span: visitor.last_ambient_name.unwrap().span,
                 })
             }

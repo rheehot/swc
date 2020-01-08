@@ -562,7 +562,7 @@ impl Analyzer<'_, '_> {
             }
         }
 
-        self.info.errors.extend(errors);
+        self.info.push_errors(errors);
 
         Ok(vec![])
     }
@@ -684,7 +684,7 @@ impl Analyzer<'_, '_> {
             errors.push(err);
         }
 
-        self.info.errors.extend(errors);
+        self.info.push_errors(errors);
     }
 }
 

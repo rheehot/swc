@@ -98,7 +98,7 @@ impl Validate<Function> for Analyzer<'_, '_> {
                 None => Type::any(f.span),
             };
 
-            child.info.errors.extend(errors);
+            child.info.push_errors(errors);
 
             Ok(ty::Function {
                 span: f.span,

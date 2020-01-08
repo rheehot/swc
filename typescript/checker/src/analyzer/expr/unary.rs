@@ -22,7 +22,7 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
 
         let arg = arg.validate_with(self).store(&mut errors);
 
-        self.info.errors.extend(errors.drain(..));
+        self.info.push_errors(errors.drain(..));
 
         if let Some(ref arg) = arg {
             self.validate_unary_expr_inner(span, op, arg);
@@ -121,7 +121,7 @@ impl Analyzer<'_, '_> {
             _ => {}
         }
 
-        self.info.errors.extend(errors);
+        self.info.push_errors(errors);
     }
 }
 

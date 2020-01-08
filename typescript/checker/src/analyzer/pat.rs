@@ -95,7 +95,7 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
             res.store(&mut errors);
         }
 
-        self.info.errors.extend(errors);
+        self.info.push_errors(errors);
     }
 }
 

@@ -79,7 +79,31 @@ impl Info {
             panic!("Error with a dummy span found")
         }
 
-        self.errors.push(err);
+        match err {
+            Error::UndefinedSymbol { .. } => panic!(),
+            _ => {}
+        }
+
+        self.errors.push_error(err);
+    }
+
+    pub(crate) fn push_errors<I>(&mut self, i: I)
+    where
+        I: IntoIterator<Item = Error>,
+        I::IntoIter: ExactSizeIterator,
+    {
+        let i = i.into_iter();
+
+        if err.span().is_dummy() {
+            panic!("Error with a dummy span found")
+        }
+
+        match err {
+            Error::UndefinedSymbol { .. } => panic!(),
+            _ => {}
+        }
+
+        self.errors.push_error(err);
     }
 }
 
@@ -152,7 +176,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             (ret, child.info)
         };
 
-        self.info.errors.extend(info.errors);
+        self.info.push_errors(info.errors);
         assert!(info.exports.types.is_empty(), "child cannot export a type");
         assert!(
             info.exports.vars.is_empty(),

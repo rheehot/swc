@@ -169,7 +169,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 }
 
                                 if !type_errors.is_empty() {
-                                    a.info.errors.extend(type_errors);
+                                    a.info.push_errors(type_errors);
                                     remove_declaring!();
                                     return;
                                 }
