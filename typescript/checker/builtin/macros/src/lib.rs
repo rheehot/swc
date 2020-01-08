@@ -248,12 +248,13 @@ pub fn builtin(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
 
                     fn load_deps(self) -> Vec<Self> {
                         use std::collections::HashSet;
-                        let mut libs = HashSet::<Self>::default();
-                        libs.insert(self);
+                        let mut libs = indexmap::IndexSet::<Self>::default();
 
                         for d in self.deps() {
                             libs.extend(d.load_deps());
                         }
+
+                        libs.insert(self);
 
                         libs.into_iter().collect()
                     }
