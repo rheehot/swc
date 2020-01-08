@@ -406,7 +406,9 @@ impl Analyzer<'_, '_> {
         computed: bool,
         type_mode: TypeOfMode,
     ) -> ValidationResult {
-        debug_assert!(!span.is_dummy());
+        if !self.is_builtin {
+            debug_assert!(!span.is_dummy());
+        }
 
         let obj = self.expand(span, obj)?;
 
