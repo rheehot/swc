@@ -640,7 +640,7 @@ impl Analyzer<'_, '_> {
                 ..
             }) => return Err(Error::Unknown { span: obj.span() }),
 
-            Type::Keyword(TsKeywordType { kind, .. }) => {
+            Type::Keyword(TsKeywordType { kind, .. }) if !self.is_builtin => {
                 let word = match kind {
                     TsKeywordTypeKind::TsStringKeyword => js_word!("String"),
                     TsKeywordTypeKind::TsNumberKeyword => js_word!("Number"),
@@ -897,6 +897,8 @@ impl Analyzer<'_, '_> {
             return Ok(Type::any(span));
         }
 
+        println!("checking for builtin: {}", i.sym);
+
         if let Ok(ty) = builtin_types::get_var(self.libs, span, &i.sym) {
             return Ok(ty);
         }
@@ -907,10 +909,14 @@ impl Analyzer<'_, '_> {
             i.sym,
         );
 
-        self.info
-            .errors
-            .push(Error::UndefinedSymbol { span: i.span });
-        Ok(Type::any(span))
+        //        self.info
+        //            .errors
+        //            .push(Error::UndefinedSymbol { span: i.span });
+        Ok(Type::Ref(Ref {
+            span,
+            type_name: TsEntityName::Ident(i.clone()),
+            type_params: None,
+        }))
     }
 
     pub fn type_of_ts_entity_name(
