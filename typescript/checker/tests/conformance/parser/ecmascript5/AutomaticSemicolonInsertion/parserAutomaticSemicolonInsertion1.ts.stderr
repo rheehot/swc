@@ -1,10 +1,10 @@
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            71,
+            64,
         ),
         hi: BytePos(
-            72,
+            65,
         ),
         ctxt: #0,
     },
@@ -15,7 +15,7 @@ error: AssignFailed {
                     0,
                 ),
                 hi: BytePos(
-                    31,
+                    29,
                 ),
                 ctxt: #0,
             },
@@ -27,10 +27,10 @@ error: AssignFailed {
                     CallSignature {
                         span: Span {
                             lo: BytePos(
-                                19,
+                                18,
                             ),
                             hi: BytePos(
-                                28,
+                                27,
                             ),
                             ctxt: #0,
                         },
@@ -41,10 +41,10 @@ error: AssignFailed {
                                 TsKeywordType {
                                     span: Span {
                                         lo: BytePos(
-                                            23,
+                                            22,
                                         ),
                                         hi: BytePos(
-                                            27,
+                                            26,
                                         ),
                                         ctxt: #0,
                                     },
@@ -61,10 +61,10 @@ error: AssignFailed {
         Static {
             span: Span {
                 lo: BytePos(
-                    75,
+                    68,
                 ),
                 hi: BytePos(
-                    76,
+                    69,
                 ),
                 ctxt: #0,
             },
@@ -610,10 +610,10 @@ error: AssignFailed {
         Errors {
             span: Span {
                 lo: BytePos(
-                    71,
+                    64,
                 ),
                 hi: BytePos(
-                    72,
+                    65,
                 ),
                 ctxt: #0,
             },
@@ -621,10 +621,10 @@ error: AssignFailed {
                 MissingFields {
                     span: Span {
                         lo: BytePos(
-                            71,
+                            64,
                         ),
                         hi: BytePos(
-                            72,
+                            65,
                         ),
                         ctxt: #0,
                     },
@@ -633,10 +633,10 @@ error: AssignFailed {
                             CallSignature {
                                 span: Span {
                                     lo: BytePos(
-                                        19,
+                                        18,
                                     ),
                                     hi: BytePos(
-                                        28,
+                                        27,
                                     ),
                                     ctxt: #0,
                                 },
@@ -647,10 +647,10 @@ error: AssignFailed {
                                         TsKeywordType {
                                             span: Span {
                                                 lo: BytePos(
-                                                    23,
+                                                    22,
                                                 ),
                                                 hi: BytePos(
-                                                    27,
+                                                    26,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -674,10 +674,10 @@ error: AssignFailed {
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            117,
+            104,
         ),
         hi: BytePos(
-            118,
+            105,
         ),
         ctxt: #0,
     },
@@ -685,10 +685,10 @@ error: AssignFailed {
         TypeLit {
             span: Span {
                 lo: BytePos(
-                    89,
+                    80,
                 ),
                 hi: BytePos(
-                    107,
+                    96,
                 ),
                 ctxt: #0,
             },
@@ -697,10 +697,10 @@ error: AssignFailed {
                     CallSignature {
                         span: Span {
                             lo: BytePos(
-                                96,
+                                86,
                             ),
                             hi: BytePos(
-                                104,
+                                94,
                             ),
                             ctxt: #0,
                         },
@@ -711,10 +711,10 @@ error: AssignFailed {
                                 TsKeywordType {
                                     span: Span {
                                         lo: BytePos(
-                                            100,
+                                            90,
                                         ),
                                         hi: BytePos(
-                                            104,
+                                            94,
                                         ),
                                         ctxt: #0,
                                     },
@@ -731,10 +731,10 @@ error: AssignFailed {
         Static {
             span: Span {
                 lo: BytePos(
-                    121,
+                    108,
                 ),
                 hi: BytePos(
-                    122,
+                    109,
                 ),
                 ctxt: #0,
             },
@@ -1280,10 +1280,10 @@ error: AssignFailed {
         Errors {
             span: Span {
                 lo: BytePos(
-                    117,
+                    104,
                 ),
                 hi: BytePos(
-                    118,
+                    105,
                 ),
                 ctxt: #0,
             },
@@ -1291,10 +1291,10 @@ error: AssignFailed {
                 MissingFields {
                     span: Span {
                         lo: BytePos(
-                            117,
+                            104,
                         ),
                         hi: BytePos(
-                            118,
+                            105,
                         ),
                         ctxt: #0,
                     },
@@ -1303,10 +1303,10 @@ error: AssignFailed {
                             CallSignature {
                                 span: Span {
                                     lo: BytePos(
-                                        96,
+                                        86,
                                     ),
                                     hi: BytePos(
-                                        104,
+                                        94,
                                     ),
                                     ctxt: #0,
                                 },
@@ -1317,10 +1317,10 @@ error: AssignFailed {
                                         TsKeywordType {
                                             span: Span {
                                                 lo: BytePos(
-                                                    100,
+                                                    90,
                                                 ),
                                                 hi: BytePos(
-                                                    104,
+                                                    94,
                                                 ),
                                                 ctxt: #0,
                                             },

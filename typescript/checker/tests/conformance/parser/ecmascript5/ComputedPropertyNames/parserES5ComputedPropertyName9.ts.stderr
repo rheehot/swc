@@ -1,10 +1,10 @@
 error: TS1166 {
     span: Span {
         lo: BytePos(
-            30,
+            28,
         ),
         hi: BytePos(
-            39,
+            37,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: TS1166 {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            31,
+            29,
         ),
         hi: BytePos(
-            32,
+            30,
         ),
         ctxt: #0,
     },
@@ -33,10 +33,10 @@ error: UndefinedSymbol {
 error: NameNotFound {
     span: Span {
         lo: BytePos(
-            35,
+            33,
         ),
         hi: BytePos(
-            39,
+            37,
         ),
         ctxt: #0,
     },

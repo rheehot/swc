@@ -1,10 +1,10 @@
 error: InvalidInitInConstEnum {
     span: Span {
         lo: BytePos(
-            422,
+            411,
         ),
         hi: BytePos(
-            460,
+            449,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: InvalidInitInConstEnum {
 error: InvalidInitInConstEnum {
     span: Span {
         lo: BytePos(
-            471,
+            459,
         ),
         hi: BytePos(
-            512,
+            500,
         ),
         ctxt: #0,
     },
@@ -39,10 +39,10 @@ error: Expected Comma, got Some(Word(g))
 error: InvalidInitInConstEnum {
     span: Span {
         lo: BytePos(
-            522,
+            509,
         ),
         hi: BytePos(
-            527,
+            514,
         ),
         ctxt: #0,
     },

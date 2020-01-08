@@ -1,10 +1,10 @@
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            21,
+            20,
         ),
         hi: BytePos(
-            22,
+            21,
         ),
         ctxt: #0,
     },
@@ -12,10 +12,10 @@ error: AssignFailed {
         TsKeywordType {
             span: Span {
                 lo: BytePos(
-                    26,
+                    25,
                 ),
                 hi: BytePos(
-                    32,
+                    31,
                 ),
                 ctxt: #0,
             },
@@ -26,10 +26,10 @@ error: AssignFailed {
         TsLitType {
             span: Span {
                 lo: BytePos(
-                    21,
+                    20,
                 ),
                 hi: BytePos(
-                    22,
+                    21,
                 ),
                 ctxt: #0,
             },

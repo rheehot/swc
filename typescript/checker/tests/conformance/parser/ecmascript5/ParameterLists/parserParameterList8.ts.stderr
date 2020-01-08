@@ -1,10 +1,10 @@
 error: TS2369 {
     span: Span {
         lo: BytePos(
-            33,
+            32,
         ),
         hi: BytePos(
-            39,
+            38,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: TS2369 {
 error: TS2369 {
     span: Span {
         lo: BytePos(
-            75,
+            73,
         ),
         hi: BytePos(
-            82,
+            80,
         ),
         ctxt: #0,
     },
@@ -33,10 +33,10 @@ error: TS2369 {
 error: TS2369 {
     span: Span {
         lo: BytePos(
-            118,
+            115,
         ),
         hi: BytePos(
-            124,
+            121,
         ),
         ctxt: #0,
     },

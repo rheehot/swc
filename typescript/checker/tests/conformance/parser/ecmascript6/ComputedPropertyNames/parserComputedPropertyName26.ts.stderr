@@ -7,10 +7,10 @@ error: TS1164
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            59,
+            55,
         ),
         hi: BytePos(
-            61,
+            57,
         ),
         ctxt: #0,
     },

@@ -1,10 +1,10 @@
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            30,
+            29,
         ),
         hi: BytePos(
-            31,
+            30,
         ),
         ctxt: #0,
     },

@@ -13,10 +13,10 @@ error: With statement are not allowed in strict mode
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            21,
+            20,
         ),
         hi: BytePos(
-            22,
+            21,
         ),
         ctxt: #0,
     },

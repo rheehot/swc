@@ -13,10 +13,10 @@ error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'pu
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            432,
+            422,
         ),
         hi: BytePos(
-            433,
+            423,
         ),
         ctxt: #0,
     },

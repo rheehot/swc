@@ -7,10 +7,10 @@ error: Unexpected initializer in for in/of loop
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            34,
+            33,
         ),
         hi: BytePos(
-            35,
+            34,
         ),
         ctxt: #0,
     },

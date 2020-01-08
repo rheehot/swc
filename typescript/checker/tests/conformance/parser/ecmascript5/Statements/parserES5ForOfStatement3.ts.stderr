@@ -7,10 +7,10 @@ error: Expected one variable binding
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            33,
+            32,
         ),
         hi: BytePos(
-            34,
+            33,
         ),
         ctxt: #0,
     },

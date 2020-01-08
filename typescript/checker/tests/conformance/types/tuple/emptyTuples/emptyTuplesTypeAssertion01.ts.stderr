@@ -1,10 +1,10 @@
 error: TupleIndexError {
     span: Span {
         lo: BytePos(
-            52,
+            49,
         ),
         hi: BytePos(
-            53,
+            50,
         ),
         ctxt: #0,
     },

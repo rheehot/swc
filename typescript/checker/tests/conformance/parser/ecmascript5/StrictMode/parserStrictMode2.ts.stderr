@@ -1,10 +1,10 @@
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            15,
+            14,
         ),
         hi: BytePos(
-            19,
+            18,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            24,
+            22,
         ),
         hi: BytePos(
-            28,
+            26,
         ),
         ctxt: #0,
     },
@@ -33,10 +33,10 @@ error: UndefinedSymbol {
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            33,
+            30,
         ),
         hi: BytePos(
-            37,
+            34,
         ),
         ctxt: #0,
     },
@@ -55,10 +55,10 @@ error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'pu
 error: UndefinedSymbol {
     span: Span {
         lo: BytePos(
-            42,
+            38,
         ),
         hi: BytePos(
-            48,
+            44,
         ),
         ctxt: #0,
     },

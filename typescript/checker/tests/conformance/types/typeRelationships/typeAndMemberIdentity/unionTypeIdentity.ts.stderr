@@ -1,10 +1,10 @@
-error: RedclaredVarWithDifferentType {
+error: RedeclaredVarWithDifferentType {
     span: Span {
         lo: BytePos(
-            227,
+            222,
         ),
         hi: BytePos(
-            235,
+            230,
         ),
         ctxt: #0,
     },
@@ -14,13 +14,13 @@ error: RedclaredVarWithDifferentType {
 6 | var strOrNum: string; // error
   |     ^^^^^^^^
 
-error: RedclaredVarWithDifferentType {
+error: RedeclaredVarWithDifferentType {
     span: Span {
         lo: BytePos(
-            259,
+            253,
         ),
         hi: BytePos(
-            267,
+            261,
         ),
         ctxt: #0,
     },
@@ -30,13 +30,13 @@ error: RedclaredVarWithDifferentType {
 7 | var strOrNum: boolean; // error
   |     ^^^^^^^^
 
-error: RedclaredVarWithDifferentType {
+error: RedeclaredVarWithDifferentType {
     span: Span {
         lo: BytePos(
-            292,
+            285,
         ),
         hi: BytePos(
-            300,
+            293,
         ),
         ctxt: #0,
     },

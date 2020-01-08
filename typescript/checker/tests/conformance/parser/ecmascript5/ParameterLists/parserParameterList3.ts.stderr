@@ -1,10 +1,10 @@
 error: TS1016 {
     span: Span {
         lo: BytePos(
-            19,
+            18,
         ),
         hi: BytePos(
-            20,
+            19,
         ),
         ctxt: #0,
     },

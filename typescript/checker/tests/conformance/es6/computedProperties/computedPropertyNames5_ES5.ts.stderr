@@ -1,10 +1,10 @@
 error: TS2464 {
     span: Span {
         lo: BytePos(
-            49,
+            46,
         ),
         hi: BytePos(
-            52,
+            49,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: TS2464 {
 error: TS2464 {
     span: Span {
         lo: BytePos(
-            62,
+            58,
         ),
         hi: BytePos(
-            68,
+            64,
         ),
         ctxt: #0,
     },
@@ -33,10 +33,10 @@ error: TS2464 {
 error: TS2464 {
     span: Span {
         lo: BytePos(
-            78,
+            73,
         ),
         hi: BytePos(
-            82,
+            77,
         ),
         ctxt: #0,
     },
@@ -49,10 +49,10 @@ error: TS2464 {
 error: TS2464 {
     span: Span {
         lo: BytePos(
-            92,
+            86,
         ),
         hi: BytePos(
-            96,
+            90,
         ),
         ctxt: #0,
     },
@@ -65,10 +65,10 @@ error: TS2464 {
 error: TS2464 {
     span: Span {
         lo: BytePos(
-            106,
+            99,
         ),
         hi: BytePos(
-            117,
+            110,
         ),
         ctxt: #0,
     },
@@ -81,10 +81,10 @@ error: TS2464 {
 error: TS2464 {
     span: Span {
         lo: BytePos(
-            135,
+            127,
         ),
         hi: BytePos(
-            141,
+            133,
         ),
         ctxt: #0,
     },

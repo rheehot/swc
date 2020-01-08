@@ -1,10 +1,10 @@
 error: TS1345 {
     span: Span {
         lo: BytePos(
-            845,
+            798,
         ),
         hi: BytePos(
-            851,
+            804,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: TS1345 {
 error: TS1345 {
     span: Span {
         lo: BytePos(
-            865,
+            817,
         ),
         hi: BytePos(
-            871,
+            823,
         ),
         ctxt: #0,
     },
@@ -33,10 +33,10 @@ error: TS1345 {
 error: TS1345 {
     span: Span {
         lo: BytePos(
-            885,
+            836,
         ),
         hi: BytePos(
-            891,
+            842,
         ),
         ctxt: #0,
     },
@@ -49,10 +49,10 @@ error: TS1345 {
 error: TS1345 {
     span: Span {
         lo: BytePos(
-            905,
+            855,
         ),
         hi: BytePos(
-            911,
+            861,
         ),
         ctxt: #0,
     },
@@ -65,10 +65,10 @@ error: TS1345 {
 error: TS1345 {
     span: Span {
         lo: BytePos(
-            925,
+            874,
         ),
         hi: BytePos(
-            931,
+            880,
         ),
         ctxt: #0,
     },
@@ -81,10 +81,10 @@ error: TS1345 {
 error: TS1345 {
     span: Span {
         lo: BytePos(
-            945,
+            893,
         ),
         hi: BytePos(
-            951,
+            899,
         ),
         ctxt: #0,
     },
@@ -97,10 +97,10 @@ error: TS1345 {
 error: TS1345 {
     span: Span {
         lo: BytePos(
-            965,
+            912,
         ),
         hi: BytePos(
-            971,
+            918,
         ),
         ctxt: #0,
     },
@@ -113,10 +113,10 @@ error: TS1345 {
 error: TS1345 {
     span: Span {
         lo: BytePos(
-            985,
+            931,
         ),
         hi: BytePos(
-            991,
+            937,
         ),
         ctxt: #0,
     },

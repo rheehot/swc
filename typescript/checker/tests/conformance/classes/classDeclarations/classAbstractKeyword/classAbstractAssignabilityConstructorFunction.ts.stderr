@@ -1,10 +1,10 @@
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            90,
+            84,
         ),
         hi: BytePos(
-            93,
+            87,
         ),
         ctxt: #0,
     },
@@ -12,10 +12,10 @@ error: AssignFailed {
         Constructor {
             span: Span {
                 lo: BytePos(
-                    55,
+                    52,
                 ),
                 hi: BytePos(
-                    65,
+                    62,
                 ),
                 ctxt: #0,
             },
@@ -26,10 +26,10 @@ error: AssignFailed {
         Class {
             span: Span {
                 lo: BytePos(
-                    96,
+                    90,
                 ),
                 hi: BytePos(
-                    97,
+                    91,
                 ),
                 ctxt: #0,
             },
@@ -52,10 +52,10 @@ error: AssignFailed {
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            111,
+            104,
         ),
         hi: BytePos(
-            114,
+            107,
         ),
         ctxt: #0,
     },
@@ -63,10 +63,10 @@ error: AssignFailed {
         Constructor {
             span: Span {
                 lo: BytePos(
-                    55,
+                    52,
                 ),
                 hi: BytePos(
-                    65,
+                    62,
                 ),
                 ctxt: #0,
             },
@@ -77,10 +77,10 @@ error: AssignFailed {
         TsLitType {
             span: Span {
                 lo: BytePos(
-                    117,
+                    110,
                 ),
                 hi: BytePos(
-                    123,
+                    116,
                 ),
                 ctxt: #0,
             },
@@ -88,10 +88,10 @@ error: AssignFailed {
                 Str {
                     span: Span {
                         lo: BytePos(
-                            117,
+                            110,
                         ),
                         hi: BytePos(
-                            123,
+                            116,
                         ),
                         ctxt: #0,
                     },

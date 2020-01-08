@@ -1,10 +1,10 @@
 error: ImplicitAny {
     span: Span {
         lo: BytePos(
-            29,
+            28,
         ),
         hi: BytePos(
-            30,
+            29,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: ImplicitAny {
 error: ImplicitAny {
     span: Span {
         lo: BytePos(
-            32,
+            31,
         ),
         hi: BytePos(
-            33,
+            32,
         ),
         ctxt: #0,
     },

@@ -1,10 +1,10 @@
 error: TS1166 {
     span: Span {
         lo: BytePos(
-            31,
+            29,
         ),
         hi: BytePos(
-            46,
+            44,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: TS1166 {
 error: TS1166 {
     span: Span {
         lo: BytePos(
-            52,
+            49,
         ),
         hi: BytePos(
-            71,
+            68,
         ),
         ctxt: #0,
     },

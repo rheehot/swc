@@ -1,10 +1,10 @@
 error: TS2363 {
     span: Span {
         lo: BytePos(
-            29,
+            28,
         ),
         hi: BytePos(
-            43,
+            42,
         ),
         ctxt: #0,
     },

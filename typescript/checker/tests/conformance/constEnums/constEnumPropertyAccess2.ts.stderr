@@ -1,10 +1,10 @@
 error: ConstEnumUsedAsVar {
     span: Span {
         lo: BytePos(
-            421,
+            407,
         ),
         hi: BytePos(
-            422,
+            408,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: ConstEnumUsedAsVar {
 error: ConstEnumNonIndexAccess {
     span: Span {
         lo: BytePos(
-            436,
+            421,
         ),
         hi: BytePos(
-            439,
+            424,
         ),
         ctxt: #0,
     },
@@ -33,10 +33,10 @@ error: ConstEnumNonIndexAccess {
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            454,
+            437,
         ),
         hi: BytePos(
-            455,
+            438,
         ),
         ctxt: #0,
     },
@@ -44,10 +44,10 @@ error: AssignFailed {
         Enum {
             span: Span {
                 lo: BytePos(
-                    254,
+                    248,
                 ),
                 hi: BytePos(
-                    326,
+                    315,
                 ),
                 ctxt: #0,
             },
@@ -56,10 +56,10 @@ error: AssignFailed {
             id: Ident {
                 span: Span {
                     lo: BytePos(
-                        265,
+                        259,
                     ),
                     hi: BytePos(
-                        266,
+                        260,
                     ),
                     ctxt: #0,
                 },
@@ -71,10 +71,10 @@ error: AssignFailed {
                 EnumMember {
                     span: Span {
                         lo: BytePos(
-                            274,
+                            267,
                         ),
                         hi: BytePos(
-                            279,
+                            272,
                         ),
                         ctxt: #0,
                     },
@@ -82,10 +82,10 @@ error: AssignFailed {
                         Ident {
                             span: Span {
                                 lo: BytePos(
-                                    274,
+                                    267,
                                 ),
                                 hi: BytePos(
-                                    275,
+                                    268,
                                 ),
                                 ctxt: #0,
                             },
@@ -98,10 +98,10 @@ error: AssignFailed {
                         Number {
                             span: Span {
                                 lo: BytePos(
-                                    278,
+                                    271,
                                 ),
                                 hi: BytePos(
-                                    279,
+                                    272,
                                 ),
                                 ctxt: #0,
                             },
@@ -112,10 +112,10 @@ error: AssignFailed {
                 EnumMember {
                     span: Span {
                         lo: BytePos(
-                            286,
+                            278,
                         ),
                         hi: BytePos(
-                            291,
+                            283,
                         ),
                         ctxt: #0,
                     },
@@ -123,10 +123,10 @@ error: AssignFailed {
                         Ident {
                             span: Span {
                                 lo: BytePos(
-                                    286,
+                                    278,
                                 ),
                                 hi: BytePos(
-                                    287,
+                                    279,
                                 ),
                                 ctxt: #0,
                             },
@@ -139,10 +139,10 @@ error: AssignFailed {
                         Number {
                             span: Span {
                                 lo: BytePos(
-                                    290,
+                                    282,
                                 ),
                                 hi: BytePos(
-                                    291,
+                                    283,
                                 ),
                                 ctxt: #0,
                             },
@@ -153,10 +153,10 @@ error: AssignFailed {
                 EnumMember {
                     span: Span {
                         lo: BytePos(
-                            298,
+                            289,
                         ),
                         hi: BytePos(
-                            307,
+                            298,
                         ),
                         ctxt: #0,
                     },
@@ -164,10 +164,10 @@ error: AssignFailed {
                         Ident {
                             span: Span {
                                 lo: BytePos(
-                                    298,
+                                    289,
                                 ),
                                 hi: BytePos(
-                                    299,
+                                    290,
                                 ),
                                 ctxt: #0,
                             },
@@ -180,10 +180,10 @@ error: AssignFailed {
                         Number {
                             span: Span {
                                 lo: BytePos(
-                                    302,
+                                    293,
                                 ),
                                 hi: BytePos(
-                                    307,
+                                    298,
                                 ),
                                 ctxt: #0,
                             },
@@ -194,10 +194,10 @@ error: AssignFailed {
                 EnumMember {
                     span: Span {
                         lo: BytePos(
-                            314,
+                            304,
                         ),
                         hi: BytePos(
-                            323,
+                            313,
                         ),
                         ctxt: #0,
                     },
@@ -205,10 +205,10 @@ error: AssignFailed {
                         Ident {
                             span: Span {
                                 lo: BytePos(
-                                    314,
+                                    304,
                                 ),
                                 hi: BytePos(
-                                    315,
+                                    305,
                                 ),
                                 ctxt: #0,
                             },
@@ -221,10 +221,10 @@ error: AssignFailed {
                         Number {
                             span: Span {
                                 lo: BytePos(
-                                    318,
+                                    308,
                                 ),
                                 hi: BytePos(
-                                    323,
+                                    313,
                                 ),
                                 ctxt: #0,
                             },
@@ -241,10 +241,10 @@ error: AssignFailed {
         TsLitType {
             span: Span {
                 lo: BytePos(
-                    458,
+                    441,
                 ),
                 hi: BytePos(
-                    466,
+                    449,
                 ),
                 ctxt: #0,
             },
@@ -252,10 +252,10 @@ error: AssignFailed {
                 Str {
                     span: Span {
                         lo: BytePos(
-                            458,
+                            441,
                         ),
                         hi: BytePos(
-                            466,
+                            449,
                         ),
                         ctxt: #0,
                     },
@@ -275,10 +275,10 @@ error: AssignFailed {
 error: InvalidLValue {
     span: Span {
         lo: BytePos(
-            495,
+            476,
         ),
         hi: BytePos(
-            496,
+            477,
         ),
         ctxt: #0,
     },

@@ -1,10 +1,10 @@
 error: TS2464 {
     span: Span {
         lo: BytePos(
-            48,
+            45,
         ),
         hi: BytePos(
-            51,
+            48,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: TS2464 {
 error: TS2464 {
     span: Span {
         lo: BytePos(
-            61,
+            57,
         ),
         hi: BytePos(
-            64,
+            60,
         ),
         ctxt: #0,
     },
@@ -33,10 +33,10 @@ error: TS2464 {
 error: TS2464 {
     span: Span {
         lo: BytePos(
-            81,
+            76,
         ),
         hi: BytePos(
-            84,
+            79,
         ),
         ctxt: #0,
     },

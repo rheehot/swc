@@ -7,10 +7,10 @@ error: TS1100
 error: CannotAssignToNonVariable {
     span: Span {
         lo: BytePos(
-            17,
+            16,
         ),
         hi: BytePos(
-            21,
+            20,
         ),
         ctxt: #0,
     },

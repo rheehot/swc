@@ -1,10 +1,10 @@
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            72,
+            67,
         ),
         hi: BytePos(
-            75,
+            70,
         ),
         ctxt: #0,
     },
@@ -12,10 +12,10 @@ error: AssignFailed {
         TsKeywordType {
             span: Span {
                 lo: BytePos(
-                    25,
+                    24,
                 ),
                 hi: BytePos(
-                    31,
+                    30,
                 ),
                 ctxt: #0,
             },
@@ -26,10 +26,10 @@ error: AssignFailed {
         Static {
             span: Span {
                 lo: BytePos(
-                    78,
+                    73,
                 ),
                 hi: BytePos(
-                    84,
+                    79,
                 ),
                 ctxt: #0,
             },
@@ -48,90 +48,6 @@ error: AssignFailed {
                     type_params: None,
                     extends: [],
                     body: [
-                        Property(
-                            PropertySignature {
-                                span: Span {
-                                    lo: BytePos(
-                                        0,
-                                    ),
-                                    hi: BytePos(
-                                        0,
-                                    ),
-                                    ctxt: #0,
-                                },
-                                readonly: true,
-                                key: Member(
-                                    MemberExpr {
-                                        span: Span {
-                                            lo: BytePos(
-                                                0,
-                                            ),
-                                            hi: BytePos(
-                                                0,
-                                            ),
-                                            ctxt: #0,
-                                        },
-                                        obj: Expr(
-                                            Lit(
-                                                Str(
-                                                    Str {
-                                                        span: Span {
-                                                            lo: BytePos(
-                                                                0,
-                                                            ),
-                                                            hi: BytePos(
-                                                                0,
-                                                            ),
-                                                            ctxt: #0,
-                                                        },
-                                                        value: Atom('Symbol' type=static),
-                                                        has_escape: false,
-                                                    },
-                                                ),
-                                            ),
-                                        ),
-                                        prop: Lit(
-                                            Str(
-                                                Str {
-                                                    span: Span {
-                                                        lo: BytePos(
-                                                            0,
-                                                        ),
-                                                        hi: BytePos(
-                                                            0,
-                                                        ),
-                                                        ctxt: #0,
-                                                    },
-                                                    value: Atom('toStringTag' type=dynamic),
-                                                    has_escape: false,
-                                                },
-                                            ),
-                                        ),
-                                        computed: false,
-                                    },
-                                ),
-                                computed: true,
-                                optional: false,
-                                params: [],
-                                type_ann: Some(
-                                    Keyword(
-                                        TsKeywordType {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    0,
-                                                ),
-                                                hi: BytePos(
-                                                    0,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            kind: TsStringKeyword,
-                                        },
-                                    ),
-                                ),
-                                type_params: None,
-                            },
-                        ),
                         Method(
                             MethodSignature {
                                 span: Span {
@@ -228,6 +144,90 @@ error: AssignFailed {
                                                 ctxt: #0,
                                             },
                                             kind: TsSymbolKeyword,
+                                        },
+                                    ),
+                                ),
+                                type_params: None,
+                            },
+                        ),
+                        Property(
+                            PropertySignature {
+                                span: Span {
+                                    lo: BytePos(
+                                        0,
+                                    ),
+                                    hi: BytePos(
+                                        0,
+                                    ),
+                                    ctxt: #0,
+                                },
+                                readonly: true,
+                                key: Member(
+                                    MemberExpr {
+                                        span: Span {
+                                            lo: BytePos(
+                                                0,
+                                            ),
+                                            hi: BytePos(
+                                                0,
+                                            ),
+                                            ctxt: #0,
+                                        },
+                                        obj: Expr(
+                                            Lit(
+                                                Str(
+                                                    Str {
+                                                        span: Span {
+                                                            lo: BytePos(
+                                                                0,
+                                                            ),
+                                                            hi: BytePos(
+                                                                0,
+                                                            ),
+                                                            ctxt: #0,
+                                                        },
+                                                        value: Atom('Symbol' type=static),
+                                                        has_escape: false,
+                                                    },
+                                                ),
+                                            ),
+                                        ),
+                                        prop: Lit(
+                                            Str(
+                                                Str {
+                                                    span: Span {
+                                                        lo: BytePos(
+                                                            0,
+                                                        ),
+                                                        hi: BytePos(
+                                                            0,
+                                                        ),
+                                                        ctxt: #0,
+                                                    },
+                                                    value: Atom('toStringTag' type=dynamic),
+                                                    has_escape: false,
+                                                },
+                                            ),
+                                        ),
+                                        computed: false,
+                                    },
+                                ),
+                                computed: true,
+                                optional: false,
+                                params: [],
+                                type_ann: Some(
+                                    Keyword(
+                                        TsKeywordType {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    0,
+                                                ),
+                                                hi: BytePos(
+                                                    0,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            kind: TsStringKeyword,
                                         },
                                     ),
                                 ),

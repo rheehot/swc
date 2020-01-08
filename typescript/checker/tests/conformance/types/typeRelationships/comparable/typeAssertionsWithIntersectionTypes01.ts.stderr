@@ -1,10 +1,10 @@
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            208,
+            192,
         ),
         hi: BytePos(
-            218,
+            202,
         ),
         ctxt: #0,
     },
@@ -12,10 +12,10 @@ error: AssignFailed {
         Intersection {
             span: Span {
                 lo: BytePos(
-                    209,
+                    193,
                 ),
                 hi: BytePos(
-                    216,
+                    200,
                 ),
                 ctxt: #0,
             },
@@ -27,7 +27,7 @@ error: AssignFailed {
                                 0,
                             ),
                             hi: BytePos(
-                                33,
+                                31,
                             ),
                             ctxt: #0,
                         },
@@ -39,10 +39,10 @@ error: AssignFailed {
                                 PropertySignature {
                                     span: Span {
                                         lo: BytePos(
-                                            20,
+                                            19,
                                         ),
                                         hi: BytePos(
-                                            30,
+                                            29,
                                         ),
                                         ctxt: #0,
                                     },
@@ -51,10 +51,10 @@ error: AssignFailed {
                                         Ident {
                                             span: Span {
                                                 lo: BytePos(
-                                                    20,
+                                                    19,
                                                 ),
                                                 hi: BytePos(
-                                                    22,
+                                                    21,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -71,10 +71,10 @@ error: AssignFailed {
                                             TsKeywordType {
                                                 span: Span {
                                                     lo: BytePos(
-                                                        24,
+                                                        23,
                                                     ),
                                                     hi: BytePos(
-                                                        30,
+                                                        29,
                                                     ),
                                                     ctxt: #0,
                                                 },
@@ -92,10 +92,10 @@ error: AssignFailed {
                     Interface {
                         span: Span {
                             lo: BytePos(
-                                86,
+                                78,
                             ),
                             hi: BytePos(
-                                120,
+                                110,
                             ),
                             ctxt: #0,
                         },
@@ -107,10 +107,10 @@ error: AssignFailed {
                                 PropertySignature {
                                     span: Span {
                                         lo: BytePos(
-                                            106,
+                                            97,
                                         ),
                                         hi: BytePos(
-                                            117,
+                                            108,
                                         ),
                                         ctxt: #0,
                                     },
@@ -119,10 +119,10 @@ error: AssignFailed {
                                         Ident {
                                             span: Span {
                                                 lo: BytePos(
-                                                    106,
+                                                    97,
                                                 ),
                                                 hi: BytePos(
-                                                    108,
+                                                    99,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -139,10 +139,10 @@ error: AssignFailed {
                                             TsKeywordType {
                                                 span: Span {
                                                     lo: BytePos(
-                                                        110,
+                                                        101,
                                                     ),
                                                     hi: BytePos(
-                                                        116,
+                                                        107,
                                                     ),
                                                     ctxt: #0,
                                                 },
@@ -163,10 +163,10 @@ error: AssignFailed {
         Interface {
             span: Span {
                 lo: BytePos(
-                    217,
+                    201,
                 ),
                 hi: BytePos(
-                    218,
+                    202,
                 ),
                 ctxt: #0,
             },
@@ -176,10 +176,10 @@ error: AssignFailed {
                 TsExpr {
                     span: Span {
                         lo: BytePos(
-                            58,
+                            54,
                         ),
                         hi: BytePos(
-                            60,
+                            56,
                         ),
                         ctxt: #0,
                     },
@@ -187,10 +187,10 @@ error: AssignFailed {
                         Ident {
                             span: Span {
                                 lo: BytePos(
-                                    58,
+                                    54,
                                 ),
                                 hi: BytePos(
-                                    60,
+                                    56,
                                 ),
                                 ctxt: #0,
                             },
@@ -207,10 +207,10 @@ error: AssignFailed {
                     PropertySignature {
                         span: Span {
                             lo: BytePos(
-                                68,
+                                63,
                             ),
                             hi: BytePos(
-                                79,
+                                74,
                             ),
                             ctxt: #0,
                         },
@@ -219,10 +219,10 @@ error: AssignFailed {
                             Ident {
                                 span: Span {
                                     lo: BytePos(
-                                        68,
+                                        63,
                                     ),
                                     hi: BytePos(
-                                        70,
+                                        65,
                                     ),
                                     ctxt: #0,
                                 },
@@ -239,10 +239,10 @@ error: AssignFailed {
                                 TsKeywordType {
                                     span: Span {
                                         lo: BytePos(
-                                            72,
+                                            67,
                                         ),
                                         hi: BytePos(
-                                            78,
+                                            73,
                                         ),
                                         ctxt: #0,
                                     },
@@ -260,10 +260,10 @@ error: AssignFailed {
         Errors {
             span: Span {
                 lo: BytePos(
-                    208,
+                    192,
                 ),
                 hi: BytePos(
-                    218,
+                    202,
                 ),
                 ctxt: #0,
             },
@@ -271,10 +271,10 @@ error: AssignFailed {
                 Errors {
                     span: Span {
                         lo: BytePos(
-                            208,
+                            192,
                         ),
                         hi: BytePos(
-                            218,
+                            202,
                         ),
                         ctxt: #0,
                     },
@@ -282,10 +282,10 @@ error: AssignFailed {
                         MissingFields {
                             span: Span {
                                 lo: BytePos(
-                                    208,
+                                    192,
                                 ),
                                 hi: BytePos(
-                                    218,
+                                    202,
                                 ),
                                 ctxt: #0,
                             },
@@ -294,10 +294,10 @@ error: AssignFailed {
                                     PropertySignature {
                                         span: Span {
                                             lo: BytePos(
-                                                20,
+                                                19,
                                             ),
                                             hi: BytePos(
-                                                30,
+                                                29,
                                             ),
                                             ctxt: #0,
                                         },
@@ -306,10 +306,10 @@ error: AssignFailed {
                                             Ident {
                                                 span: Span {
                                                     lo: BytePos(
-                                                        20,
+                                                        19,
                                                     ),
                                                     hi: BytePos(
-                                                        22,
+                                                        21,
                                                     ),
                                                     ctxt: #0,
                                                 },
@@ -326,10 +326,10 @@ error: AssignFailed {
                                                 TsKeywordType {
                                                     span: Span {
                                                         lo: BytePos(
-                                                            24,
+                                                            23,
                                                         ),
                                                         hi: BytePos(
-                                                            30,
+                                                            29,
                                                         ),
                                                         ctxt: #0,
                                                     },
@@ -347,10 +347,10 @@ error: AssignFailed {
                 Errors {
                     span: Span {
                         lo: BytePos(
-                            208,
+                            192,
                         ),
                         hi: BytePos(
-                            218,
+                            202,
                         ),
                         ctxt: #0,
                     },
@@ -358,10 +358,10 @@ error: AssignFailed {
                         MissingFields {
                             span: Span {
                                 lo: BytePos(
-                                    208,
+                                    192,
                                 ),
                                 hi: BytePos(
-                                    218,
+                                    202,
                                 ),
                                 ctxt: #0,
                             },
@@ -370,10 +370,10 @@ error: AssignFailed {
                                     PropertySignature {
                                         span: Span {
                                             lo: BytePos(
-                                                106,
+                                                97,
                                             ),
                                             hi: BytePos(
-                                                117,
+                                                108,
                                             ),
                                             ctxt: #0,
                                         },
@@ -382,10 +382,10 @@ error: AssignFailed {
                                             Ident {
                                                 span: Span {
                                                     lo: BytePos(
-                                                        106,
+                                                        97,
                                                     ),
                                                     hi: BytePos(
-                                                        108,
+                                                        99,
                                                     ),
                                                     ctxt: #0,
                                                 },
@@ -402,10 +402,10 @@ error: AssignFailed {
                                                 TsKeywordType {
                                                     span: Span {
                                                         lo: BytePos(
-                                                            110,
+                                                            101,
                                                         ),
                                                         hi: BytePos(
-                                                            116,
+                                                            107,
                                                         ),
                                                         ctxt: #0,
                                                     },
@@ -432,10 +432,10 @@ error: AssignFailed {
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            229,
+            212,
         ),
         hi: BytePos(
-            234,
+            217,
         ),
         ctxt: #0,
     },
@@ -443,10 +443,10 @@ error: AssignFailed {
         Interface {
             span: Span {
                 lo: BytePos(
-                    86,
+                    78,
                 ),
                 hi: BytePos(
-                    120,
+                    110,
                 ),
                 ctxt: #0,
             },
@@ -458,10 +458,10 @@ error: AssignFailed {
                     PropertySignature {
                         span: Span {
                             lo: BytePos(
-                                106,
+                                97,
                             ),
                             hi: BytePos(
-                                117,
+                                108,
                             ),
                             ctxt: #0,
                         },
@@ -470,10 +470,10 @@ error: AssignFailed {
                             Ident {
                                 span: Span {
                                     lo: BytePos(
-                                        106,
+                                        97,
                                     ),
                                     hi: BytePos(
-                                        108,
+                                        99,
                                     ),
                                     ctxt: #0,
                                 },
@@ -490,10 +490,10 @@ error: AssignFailed {
                                 TsKeywordType {
                                     span: Span {
                                         lo: BytePos(
-                                            110,
+                                            101,
                                         ),
                                         hi: BytePos(
-                                            116,
+                                            107,
                                         ),
                                         ctxt: #0,
                                     },
@@ -511,10 +511,10 @@ error: AssignFailed {
         Interface {
             span: Span {
                 lo: BytePos(
-                    233,
+                    216,
                 ),
                 hi: BytePos(
-                    234,
+                    217,
                 ),
                 ctxt: #0,
             },
@@ -524,10 +524,10 @@ error: AssignFailed {
                 TsExpr {
                     span: Span {
                         lo: BytePos(
-                            58,
+                            54,
                         ),
                         hi: BytePos(
-                            60,
+                            56,
                         ),
                         ctxt: #0,
                     },
@@ -535,10 +535,10 @@ error: AssignFailed {
                         Ident {
                             span: Span {
                                 lo: BytePos(
-                                    58,
+                                    54,
                                 ),
                                 hi: BytePos(
-                                    60,
+                                    56,
                                 ),
                                 ctxt: #0,
                             },
@@ -555,10 +555,10 @@ error: AssignFailed {
                     PropertySignature {
                         span: Span {
                             lo: BytePos(
-                                68,
+                                63,
                             ),
                             hi: BytePos(
-                                79,
+                                74,
                             ),
                             ctxt: #0,
                         },
@@ -567,10 +567,10 @@ error: AssignFailed {
                             Ident {
                                 span: Span {
                                     lo: BytePos(
-                                        68,
+                                        63,
                                     ),
                                     hi: BytePos(
-                                        70,
+                                        65,
                                     ),
                                     ctxt: #0,
                                 },
@@ -587,10 +587,10 @@ error: AssignFailed {
                                 TsKeywordType {
                                     span: Span {
                                         lo: BytePos(
-                                            72,
+                                            67,
                                         ),
                                         hi: BytePos(
-                                            78,
+                                            73,
                                         ),
                                         ctxt: #0,
                                     },
@@ -608,10 +608,10 @@ error: AssignFailed {
         Errors {
             span: Span {
                 lo: BytePos(
-                    229,
+                    212,
                 ),
                 hi: BytePos(
-                    234,
+                    217,
                 ),
                 ctxt: #0,
             },
@@ -619,10 +619,10 @@ error: AssignFailed {
                 MissingFields {
                     span: Span {
                         lo: BytePos(
-                            229,
+                            212,
                         ),
                         hi: BytePos(
-                            234,
+                            217,
                         ),
                         ctxt: #0,
                     },
@@ -631,10 +631,10 @@ error: AssignFailed {
                             PropertySignature {
                                 span: Span {
                                     lo: BytePos(
-                                        106,
+                                        97,
                                     ),
                                     hi: BytePos(
-                                        117,
+                                        108,
                                     ),
                                     ctxt: #0,
                                 },
@@ -643,10 +643,10 @@ error: AssignFailed {
                                     Ident {
                                         span: Span {
                                             lo: BytePos(
-                                                106,
+                                                97,
                                             ),
                                             hi: BytePos(
-                                                108,
+                                                99,
                                             ),
                                             ctxt: #0,
                                         },
@@ -663,10 +663,10 @@ error: AssignFailed {
                                         TsKeywordType {
                                             span: Span {
                                                 lo: BytePos(
-                                                    110,
+                                                    101,
                                                 ),
                                                 hi: BytePos(
-                                                    116,
+                                                    107,
                                                 ),
                                                 ctxt: #0,
                                             },

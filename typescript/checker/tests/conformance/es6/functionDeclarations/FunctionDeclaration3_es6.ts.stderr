@@ -1,10 +1,10 @@
 error: ReferencedInInit {
     span: Span {
         lo: BytePos(
-            36,
+            35,
         ),
         hi: BytePos(
-            41,
+            40,
         ),
         ctxt: #0,
     },

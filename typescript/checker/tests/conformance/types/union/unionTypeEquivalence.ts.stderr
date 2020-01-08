@@ -1,10 +1,10 @@
-error: RedclaredVarWithDifferentType {
+error: RedeclaredVarWithDifferentType {
     span: Span {
         lo: BytePos(
-            113,
+            109,
         ),
         hi: BytePos(
-            114,
+            110,
         ),
         ctxt: #0,
     },

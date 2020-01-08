@@ -1,10 +1,10 @@
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            131,
+            122,
         ),
         hi: BytePos(
-            132,
+            123,
         ),
         ctxt: #0,
     },
@@ -12,10 +12,10 @@ error: AssignFailed {
         Interface {
             span: Span {
                 lo: BytePos(
-                    69,
+                    65,
                 ),
                 hi: BytePos(
-                    116,
+                    110,
                 ),
                 ctxt: #0,
             },
@@ -27,10 +27,10 @@ error: AssignFailed {
                     PropertySignature {
                         span: Span {
                             lo: BytePos(
-                                88,
+                                83,
                             ),
                             hi: BytePos(
-                                113,
+                                108,
                             ),
                             ctxt: #0,
                         },
@@ -39,10 +39,10 @@ error: AssignFailed {
                             MemberExpr {
                                 span: Span {
                                     lo: BytePos(
-                                        89,
+                                        84,
                                     ),
                                     hi: BytePos(
-                                        104,
+                                        99,
                                     ),
                                     ctxt: #0,
                                 },
@@ -51,10 +51,10 @@ error: AssignFailed {
                                         Ident {
                                             span: Span {
                                                 lo: BytePos(
-                                                    89,
+                                                    84,
                                                 ),
                                                 hi: BytePos(
-                                                    95,
+                                                    90,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -68,10 +68,10 @@ error: AssignFailed {
                                     Ident {
                                         span: Span {
                                             lo: BytePos(
-                                                96,
+                                                91,
                                             ),
                                             hi: BytePos(
-                                                104,
+                                                99,
                                             ),
                                             ctxt: #0,
                                         },
@@ -91,10 +91,10 @@ error: AssignFailed {
                                 TypeLit {
                                     span: Span {
                                         lo: BytePos(
-                                            107,
+                                            102,
                                         ),
                                         hi: BytePos(
-                                            112,
+                                            107,
                                         ),
                                         ctxt: #0,
                                     },
@@ -103,10 +103,10 @@ error: AssignFailed {
                                             PropertySignature {
                                                 span: Span {
                                                     lo: BytePos(
-                                                        109,
+                                                        104,
                                                     ),
                                                     hi: BytePos(
-                                                        110,
+                                                        105,
                                                     ),
                                                     ctxt: #0,
                                                 },
@@ -115,10 +115,10 @@ error: AssignFailed {
                                                     Ident {
                                                         span: Span {
                                                             lo: BytePos(
-                                                                109,
+                                                                104,
                                                             ),
                                                             hi: BytePos(
-                                                                110,
+                                                                105,
                                                             ),
                                                             ctxt: #0,
                                                         },
@@ -148,20 +148,20 @@ error: AssignFailed {
         ClassInstance {
             span: Span {
                 lo: BytePos(
-                    139,
+                    130,
                 ),
                 hi: BytePos(
-                    140,
+                    131,
                 ),
                 ctxt: #0,
             },
             cls: Class {
                 span: Span {
                     lo: BytePos(
-                        139,
+                        130,
                     ),
                     hi: BytePos(
-                        140,
+                        131,
                     ),
                     ctxt: #0,
                 },
@@ -175,10 +175,10 @@ error: AssignFailed {
                         ClassProperty {
                             span: Span {
                                 lo: BytePos(
-                                    39,
+                                    37,
                                 ),
                                 hi: BytePos(
-                                    64,
+                                    62,
                                 ),
                                 ctxt: #0,
                             },
@@ -186,10 +186,10 @@ error: AssignFailed {
                                 MemberExpr {
                                     span: Span {
                                         lo: BytePos(
-                                            40,
+                                            38,
                                         ),
                                         hi: BytePos(
-                                            55,
+                                            53,
                                         ),
                                         ctxt: #0,
                                     },
@@ -198,10 +198,10 @@ error: AssignFailed {
                                             Ident {
                                                 span: Span {
                                                     lo: BytePos(
-                                                        40,
+                                                        38,
                                                     ),
                                                     hi: BytePos(
-                                                        46,
+                                                        44,
                                                     ),
                                                     ctxt: #0,
                                                 },
@@ -215,10 +215,10 @@ error: AssignFailed {
                                         Ident {
                                             span: Span {
                                                 lo: BytePos(
-                                                    47,
+                                                    45,
                                                 ),
                                                 hi: BytePos(
-                                                    55,
+                                                    53,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -235,10 +235,10 @@ error: AssignFailed {
                                     TypeLit {
                                         span: Span {
                                             lo: BytePos(
-                                                58,
+                                                56,
                                             ),
                                             hi: BytePos(
-                                                63,
+                                                61,
                                             ),
                                             ctxt: #0,
                                         },
@@ -247,10 +247,10 @@ error: AssignFailed {
                                                 PropertySignature {
                                                     span: Span {
                                                         lo: BytePos(
-                                                            60,
+                                                            58,
                                                         ),
                                                         hi: BytePos(
-                                                            61,
+                                                            59,
                                                         ),
                                                         ctxt: #0,
                                                     },
@@ -259,10 +259,10 @@ error: AssignFailed {
                                                         Ident {
                                                             span: Span {
                                                                 lo: BytePos(
-                                                                    60,
+                                                                    58,
                                                                 ),
                                                                 hi: BytePos(
-                                                                    61,
+                                                                    59,
                                                                 ),
                                                                 ctxt: #0,
                                                             },
@@ -303,10 +303,10 @@ error: AssignFailed {
         Errors {
             span: Span {
                 lo: BytePos(
-                    131,
+                    122,
                 ),
                 hi: BytePos(
-                    132,
+                    123,
                 ),
                 ctxt: #0,
             },
@@ -314,10 +314,10 @@ error: AssignFailed {
                 AccessibilityDiffers {
                     span: Span {
                         lo: BytePos(
-                            131,
+                            122,
                         ),
                         hi: BytePos(
-                            132,
+                            123,
                         ),
                         ctxt: #0,
                     },
@@ -334,10 +334,10 @@ error: AssignFailed {
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            147,
+            137,
         ),
         hi: BytePos(
-            155,
+            145,
         ),
         ctxt: #0,
     },
@@ -345,10 +345,10 @@ error: AssignFailed {
         Class {
             span: Span {
                 lo: BytePos(
-                    16,
+                    15,
                 ),
                 hi: BytePos(
-                    67,
+                    64,
                 ),
                 ctxt: #0,
             },
@@ -362,10 +362,10 @@ error: AssignFailed {
                     ClassProperty {
                         span: Span {
                             lo: BytePos(
-                                39,
+                                37,
                             ),
                             hi: BytePos(
-                                64,
+                                62,
                             ),
                             ctxt: #0,
                         },
@@ -373,10 +373,10 @@ error: AssignFailed {
                             MemberExpr {
                                 span: Span {
                                     lo: BytePos(
-                                        40,
+                                        38,
                                     ),
                                     hi: BytePos(
-                                        55,
+                                        53,
                                     ),
                                     ctxt: #0,
                                 },
@@ -385,10 +385,10 @@ error: AssignFailed {
                                         Ident {
                                             span: Span {
                                                 lo: BytePos(
-                                                    40,
+                                                    38,
                                                 ),
                                                 hi: BytePos(
-                                                    46,
+                                                    44,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -402,10 +402,10 @@ error: AssignFailed {
                                     Ident {
                                         span: Span {
                                             lo: BytePos(
-                                                47,
+                                                45,
                                             ),
                                             hi: BytePos(
-                                                55,
+                                                53,
                                             ),
                                             ctxt: #0,
                                         },
@@ -422,10 +422,10 @@ error: AssignFailed {
                                 TypeLit {
                                     span: Span {
                                         lo: BytePos(
-                                            58,
+                                            56,
                                         ),
                                         hi: BytePos(
-                                            63,
+                                            61,
                                         ),
                                         ctxt: #0,
                                     },
@@ -434,10 +434,10 @@ error: AssignFailed {
                                             PropertySignature {
                                                 span: Span {
                                                     lo: BytePos(
-                                                        60,
+                                                        58,
                                                     ),
                                                     hi: BytePos(
-                                                        61,
+                                                        59,
                                                     ),
                                                     ctxt: #0,
                                                 },
@@ -446,10 +446,10 @@ error: AssignFailed {
                                                     Ident {
                                                         span: Span {
                                                             lo: BytePos(
-                                                                60,
+                                                                58,
                                                             ),
                                                             hi: BytePos(
-                                                                61,
+                                                                59,
                                                             ),
                                                             ctxt: #0,
                                                         },
@@ -488,10 +488,10 @@ error: AssignFailed {
         Interface {
             span: Span {
                 lo: BytePos(
-                    154,
+                    144,
                 ),
                 hi: BytePos(
-                    155,
+                    145,
                 ),
                 ctxt: #0,
             },
@@ -503,10 +503,10 @@ error: AssignFailed {
                     PropertySignature {
                         span: Span {
                             lo: BytePos(
-                                88,
+                                83,
                             ),
                             hi: BytePos(
-                                113,
+                                108,
                             ),
                             ctxt: #0,
                         },
@@ -515,10 +515,10 @@ error: AssignFailed {
                             MemberExpr {
                                 span: Span {
                                     lo: BytePos(
-                                        89,
+                                        84,
                                     ),
                                     hi: BytePos(
-                                        104,
+                                        99,
                                     ),
                                     ctxt: #0,
                                 },
@@ -527,10 +527,10 @@ error: AssignFailed {
                                         Ident {
                                             span: Span {
                                                 lo: BytePos(
-                                                    89,
+                                                    84,
                                                 ),
                                                 hi: BytePos(
-                                                    95,
+                                                    90,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -544,10 +544,10 @@ error: AssignFailed {
                                     Ident {
                                         span: Span {
                                             lo: BytePos(
-                                                96,
+                                                91,
                                             ),
                                             hi: BytePos(
-                                                104,
+                                                99,
                                             ),
                                             ctxt: #0,
                                         },
@@ -567,10 +567,10 @@ error: AssignFailed {
                                 TypeLit {
                                     span: Span {
                                         lo: BytePos(
-                                            107,
+                                            102,
                                         ),
                                         hi: BytePos(
-                                            112,
+                                            107,
                                         ),
                                         ctxt: #0,
                                     },
@@ -579,10 +579,10 @@ error: AssignFailed {
                                             PropertySignature {
                                                 span: Span {
                                                     lo: BytePos(
-                                                        109,
+                                                        104,
                                                     ),
                                                     hi: BytePos(
-                                                        110,
+                                                        105,
                                                     ),
                                                     ctxt: #0,
                                                 },
@@ -591,10 +591,10 @@ error: AssignFailed {
                                                     Ident {
                                                         span: Span {
                                                             lo: BytePos(
-                                                                109,
+                                                                104,
                                                             ),
                                                             hi: BytePos(
-                                                                110,
+                                                                105,
                                                             ),
                                                             ctxt: #0,
                                                         },
