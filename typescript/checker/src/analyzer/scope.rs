@@ -421,7 +421,7 @@ impl Scope<'_> {
                                 if !ty.eq_ignore_name_and_span(&generalized_var_ty) {
                                     v.ty = Some(var_ty);
                                     restore!();
-                                    return Err(Error::RedclaredVarWithDifferentType { span });
+                                    return Err(Error::RedeclaredVarWithDifferentType { span });
                                 }
                             }
                         }

@@ -65,7 +65,7 @@ pub enum Error {
         errors: Vec<Error>,
     },
 
-    RedclaredVarWithDifferentType {
+    RedeclaredVarWithDifferentType {
         span: Span,
     },
 
