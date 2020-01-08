@@ -12,7 +12,7 @@ error: AssignFailed {
         Interface {
             span: Span {
                 lo: BytePos(
-                    79,
+                    69,
                 ),
                 hi: BytePos(
                     116,

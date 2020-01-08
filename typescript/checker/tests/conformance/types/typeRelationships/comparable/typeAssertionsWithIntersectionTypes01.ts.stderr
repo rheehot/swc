@@ -24,7 +24,7 @@ error: AssignFailed {
                     Interface {
                         span: Span {
                             lo: BytePos(
-                                10,
+                                0,
                             ),
                             hi: BytePos(
                                 33,
@@ -92,7 +92,7 @@ error: AssignFailed {
                     Interface {
                         span: Span {
                             lo: BytePos(
-                                96,
+                                86,
                             ),
                             hi: BytePos(
                                 120,
@@ -199,7 +199,7 @@ error: AssignFailed {
                             optional: false,
                         },
                     ),
-                    type_params: None,
+                    type_args: None,
                 },
             ],
             body: [
@@ -443,7 +443,7 @@ error: AssignFailed {
         Interface {
             span: Span {
                 lo: BytePos(
-                    96,
+                    86,
                 ),
                 hi: BytePos(
                     120,
@@ -547,7 +547,7 @@ error: AssignFailed {
                             optional: false,
                         },
                     ),
-                    type_params: None,
+                    type_args: None,
                 },
             ],
             body: [
