@@ -73,22 +73,21 @@ error: AssignFailed {
                                     ctxt: #0,
                                 },
                                 readonly: false,
-                                key: Lit(
-                                    Str(
-                                        Str {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    0,
-                                                ),
-                                                hi: BytePos(
-                                                    0,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            value: Atom('toString' type=static),
-                                            has_escape: false,
+                                key: Ident(
+                                    Ident {
+                                        span: Span {
+                                            lo: BytePos(
+                                                0,
+                                            ),
+                                            hi: BytePos(
+                                                0,
+                                            ),
+                                            ctxt: #0,
                                         },
-                                    ),
+                                        sym: Atom('toString' type=static),
+                                        type_ann: None,
+                                        optional: false,
+                                    },
                                 ),
                                 computed: false,
                                 optional: false,
@@ -151,22 +150,21 @@ error: AssignFailed {
                                     ctxt: #0,
                                 },
                                 readonly: false,
-                                key: Lit(
-                                    Str(
-                                        Str {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    0,
-                                                ),
-                                                hi: BytePos(
-                                                    0,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            value: Atom('toFixed' type=inline),
-                                            has_escape: false,
+                                key: Ident(
+                                    Ident {
+                                        span: Span {
+                                            lo: BytePos(
+                                                0,
+                                            ),
+                                            hi: BytePos(
+                                                0,
+                                            ),
+                                            ctxt: #0,
                                         },
-                                    ),
+                                        sym: Atom('toFixed' type=inline),
+                                        type_ann: None,
+                                        optional: false,
+                                    },
                                 ),
                                 computed: false,
                                 optional: false,
@@ -229,22 +227,21 @@ error: AssignFailed {
                                     ctxt: #0,
                                 },
                                 readonly: false,
-                                key: Lit(
-                                    Str(
-                                        Str {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    0,
-                                                ),
-                                                hi: BytePos(
-                                                    0,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            value: Atom('toExponential' type=dynamic),
-                                            has_escape: false,
+                                key: Ident(
+                                    Ident {
+                                        span: Span {
+                                            lo: BytePos(
+                                                0,
+                                            ),
+                                            hi: BytePos(
+                                                0,
+                                            ),
+                                            ctxt: #0,
                                         },
-                                    ),
+                                        sym: Atom('toExponential' type=dynamic),
+                                        type_ann: None,
+                                        optional: false,
+                                    },
                                 ),
                                 computed: false,
                                 optional: false,
@@ -307,22 +304,21 @@ error: AssignFailed {
                                     ctxt: #0,
                                 },
                                 readonly: false,
-                                key: Lit(
-                                    Str(
-                                        Str {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    0,
-                                                ),
-                                                hi: BytePos(
-                                                    0,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            value: Atom('toPrecision' type=dynamic),
-                                            has_escape: false,
+                                key: Ident(
+                                    Ident {
+                                        span: Span {
+                                            lo: BytePos(
+                                                0,
+                                            ),
+                                            hi: BytePos(
+                                                0,
+                                            ),
+                                            ctxt: #0,
                                         },
-                                    ),
+                                        sym: Atom('toPrecision' type=dynamic),
+                                        type_ann: None,
+                                        optional: false,
+                                    },
                                 ),
                                 computed: false,
                                 optional: false,
@@ -385,22 +381,21 @@ error: AssignFailed {
                                     ctxt: #0,
                                 },
                                 readonly: false,
-                                key: Lit(
-                                    Str(
-                                        Str {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    0,
-                                                ),
-                                                hi: BytePos(
-                                                    0,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            value: Atom('valueOf' type=inline),
-                                            has_escape: false,
+                                key: Ident(
+                                    Ident {
+                                        span: Span {
+                                            lo: BytePos(
+                                                0,
+                                            ),
+                                            hi: BytePos(
+                                                0,
+                                            ),
+                                            ctxt: #0,
                                         },
-                                    ),
+                                        sym: Atom('valueOf' type=inline),
+                                        type_ann: None,
+                                        optional: false,
+                                    },
                                 ),
                                 computed: false,
                                 optional: false,
@@ -436,22 +431,21 @@ error: AssignFailed {
                                     ctxt: #0,
                                 },
                                 readonly: false,
-                                key: Lit(
-                                    Str(
-                                        Str {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    0,
-                                                ),
-                                                hi: BytePos(
-                                                    0,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            value: Atom('toLocaleString' type=dynamic),
-                                            has_escape: false,
+                                key: Ident(
+                                    Ident {
+                                        span: Span {
+                                            lo: BytePos(
+                                                0,
+                                            ),
+                                            hi: BytePos(
+                                                0,
+                                            ),
+                                            ctxt: #0,
                                         },
-                                    ),
+                                        sym: Atom('toLocaleString' type=dynamic),
+                                        type_ann: None,
+                                        optional: false,
+                                    },
                                 ),
                                 computed: false,
                                 optional: false,

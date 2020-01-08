@@ -229,16 +229,6 @@ impl Visit<GetterProp> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<TsMethodSignature> for Analyzer<'_, '_> {
-    fn visit(&mut self, node: &TsMethodSignature) {
-        node.visit_children(self);
-
-        if node.computed {
-            self.validate_computed_prop_key(node.span(), &node.key);
-        }
-    }
-}
-
 fn prop_key_to_expr(p: &Prop) -> Box<Expr> {
     match *p {
         Prop::Shorthand(ref i) => box Expr::Ident(i.clone()),

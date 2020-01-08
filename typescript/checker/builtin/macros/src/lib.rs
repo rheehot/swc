@@ -1497,7 +1497,9 @@ fn quote_module_block(stmts: &[Stmt]) -> syn::Expr {
     .parse()
 }
 
-fn quote_expr(e: &Expr, as_str: bool) -> syn::Expr {
+fn quote_expr(e: &Expr, _as_str: bool) -> syn::Expr {
+    let as_str = false;
+
     match *e {
         Expr::Ident(ref i) if as_str => q()
             .quote_with(smart_quote!(Vars { v: id_to_str(i) }, {

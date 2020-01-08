@@ -28,25 +28,6 @@ impl Visit<BlockStmt> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<TsInterfaceDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, decl: &TsInterfaceDecl) {
-        decl.visit_children(self);
-
-        let ty = self
-            .validate(decl)
-            .store(&mut self.info.errors)
-            .map(Type::from);
-
-        self.register_type(
-            decl.id.sym.clone(),
-            ty.unwrap_or_else(|| Type::any(decl.span)),
-        )
-        .store(&mut self.info.errors);
-
-        self.resolve_parent_interfaces(&decl.extends);
-    }
-}
-
 impl Analyzer<'_, '_> {
     pub fn visit_stmts_for_return(&mut self, stmts: &[Stmt]) -> Result<Option<Type>, Error> {
         let types = {
