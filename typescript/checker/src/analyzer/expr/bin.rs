@@ -221,8 +221,6 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     })
                 }
 
-                if match rt {} {}
-
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsBooleanKeyword,
