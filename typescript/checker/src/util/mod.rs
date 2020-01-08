@@ -221,6 +221,18 @@ where
     }
 }
 
+pub(crate) fn pat_to_ts_fn_param(p: Pat) -> TsFnParam {
+    match p {
+        Pat::Ident(i) => TsFnParam::Ident(i),
+        Pat::Rest(rest) => TsFnParam::Rest(rest),
+        Pat::Array(arr) => TsFnParam::Array(arr),
+        Pat::Object(obj) => TsFnParam::Object(obj),
+        // TODO: Pat::Assign()
+        Pat::Assign(assign) => pat_to_ts_fn_param(*assign.left),
+        _ => unreachable!("pat_to_ts_fn_param: Pat: {:?}", p),
+    }
+}
+
 pub(crate) trait RemoveTypes {
     /// Removes falsy values from `self`.
     fn remove_falsy(self) -> Type;
@@ -235,20 +247,6 @@ impl RemoveTypes for Type {
             Type::Keyword(TsKeywordType { kind, span }) => match kind {
                 TsKeywordTypeKind::TsUndefinedKeyword | TsKeywordTypeKind::TsNullKeyword => {
                     return Type::never(span);
-pub(crate) trait RemoveTypes<'a> {
-    /// Removes falsy values from `self`.
-    fn remove_falsy(self) -> Type;
-
-    /// Removes truthy values from `self`.
-    fn remove_truthy(self) -> Type;
-}
-
-impl RemoveTypes for Type {
-    fn remove_falsy(self) -> Type {
-        match self {
-            Type::Keyword(TsKeywordType { kind, span }) => match kind {
-                TsKeywordTypeKind::TsUndefinedKeyword | TsKeywordTypeKind::TsNullKeyword => {
-                    return Type::never(span).into_cow();
                 }
                 _ => {}
             },
@@ -259,7 +257,6 @@ impl RemoveTypes for Type {
                     }),
                 ..
             }) => return Type::never(span),
-            }) => return Type::never(span).into_cow(),
 
             Type::Union(u) => return u.remove_falsy(),
             Type::Intersection(i) => return i.remove_falsy(),
@@ -270,7 +267,6 @@ impl RemoveTypes for Type {
     }
 
     fn remove_truthy(self) -> Type {
-    fn remove_truthy(self) -> TypeRef<'a> {
         match self {
             Type::Lit(TsLitType {
                 lit: TsLit::Bool(Bool {
@@ -278,7 +274,6 @@ impl RemoveTypes for Type {
                 }),
                 ..
             }) => return Type::never(span),
-            }) => return Type::never(span).into_cow(),
 
             Type::Union(u) => u.remove_truthy(),
             Type::Intersection(i) => i.remove_truthy(),
@@ -289,8 +284,6 @@ impl RemoveTypes for Type {
 
 impl RemoveTypes for Intersection {
     fn remove_falsy(self) -> Type {
-impl<'a> RemoveTypes<'a> for Intersection<'a> {
-    fn remove_falsy(self) -> Type {
         let types = self
             .types
             .into_iter()
@@ -298,7 +291,6 @@ impl<'a> RemoveTypes<'a> for Intersection<'a> {
             .collect::<Vec<_>>();
         if types.iter().any(|ty| ty.is_never()) {
             return Type::never(self.span);
-            return Type::never(self.span).into_cow();
         }
 
         Intersection {
@@ -306,10 +298,6 @@ impl<'a> RemoveTypes<'a> for Intersection<'a> {
             types,
         }
         .into()
-    }
-
-    fn remove_truthy(self) -> Type {
-        .into_cow()
     }
 
     fn remove_truthy(self) -> Type {
@@ -320,7 +308,6 @@ impl<'a> RemoveTypes<'a> for Intersection<'a> {
             .collect::<Vec<_>>();
         if types.iter().any(|ty| ty.is_never()) {
             return Type::never(self.span);
-            return Type::never(self.span).into_cow();
         }
 
         Intersection {
@@ -328,12 +315,6 @@ impl<'a> RemoveTypes<'a> for Intersection<'a> {
             types,
         }
         .into()
-    }
-}
-
-impl RemoveTypes for Union {
-    fn remove_falsy(self) -> Type {
-        .into_cow()
     }
 }
 
@@ -353,10 +334,6 @@ impl RemoveTypes for Union {
     }
 
     fn remove_truthy(self) -> Type {
-        .into_cow()
-    }
-
-    fn remove_truthy(self) -> Type {
         let types = self
             .types
             .into_iter()
@@ -368,19 +345,6 @@ impl RemoveTypes for Union {
             types,
         }
         .into()
-    }
-}
-
-impl<'a, T> RemoveTypes for Box<T>
-where
-    T: RemoveTypes,
-{
-    fn remove_falsy(self) -> Type {
-        (*self).remove_falsy()
-    }
-
-    fn remove_truthy(self) -> Type {
-        .into_cow()
     }
 }
 
@@ -398,7 +362,6 @@ where
 }
 
 pub(crate) trait EndsWithRet {
-trait EndsWithRet {
     /// Returns true if the statement ends with return, break, continue;
     fn ends_with_ret(&self) -> bool;
 }

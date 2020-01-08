@@ -7,12 +7,9 @@ use crate::{
     ValidationResult,
 };
 use swc_atoms::js_word;
-use swc_common::{Fold, FoldWith, Spanned};
 use swc_common::{Spanned, Visit, VisitWith};
-use swc_common::{Visit, VisitWith};
-use swc_common::{Spanned, Visit, VisitWith};
-use swc_common::{Fold, FoldWith, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
+use swc_ts_checker_macros::validator;
 
 #[derive(Debug, Clone, Copy)]
 pub(super) enum ComputedPropMode {
@@ -24,10 +21,6 @@ pub(super) enum ComputedPropMode {
 }
 
 impl Visit<ComputedPropName> for Analyzer<'_, '_> {
-    fn visit(&mut self, node: &ComputedPropName) {
-prevent!(ComputedPropName);
-
-impl Analyzer<'_, '_> {
     #[validator]
     fn visit(&mut self, node: &ComputedPropName) {
         node.visit_children(self);
@@ -62,7 +55,6 @@ impl Analyzer<'_, '_> {
                 Type::unknown(span)
             }
         };
-        if match self.computed_prop_mode {
 
         match mode {
             ComputedPropMode::Class { .. } => {
@@ -219,30 +211,6 @@ impl Analyzer<'_, '_> {
 
 impl Visit<GetterProp> for Analyzer<'_, '_> {
     fn visit(&mut self, n: &GetterProp) {
-        let (entry, n) = {
-            self.with_child(ScopeKind::Fn, Default::default(), |child| {
-                child.return_type_span = n.span();
-
-                child
-                    .inferred_return_types
-                    .get_mut()
-                    .insert(n.span(), Default::default());
-
-                let n = n.visit_children(child);
-
-                (
-                    child
-                        .inferred_return_types
-                        .get_mut()
-                        .remove_entry(&n.span())
-                        .unwrap_or_default(),
-                    n,
-                )
-                n.visit_children(child);
-            })
-        };
-impl Visit<GetterProp> for Analyzer<'_> {
-    fn visit(&mut self, n: &GetterProp) {
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
             n.key.visit_with(child);
 
@@ -261,29 +229,9 @@ impl Visit<GetterProp> for Analyzer<'_> {
     }
 }
 
-impl Analyzer<'_, '_> {
-    fn validate_ts_method_signature(&mut self, node: TsMethodSignature) -> TsMethodSignature {
-        let node = node.fold_children(self);
 impl Visit<TsMethodSignature> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &TsMethodSignature) {
         node.visit_children(self);
-        let node = node.visit_children(self);
-
-        if node.computed {
-            self.validate_computed_prop_key(node.span(), &node.key);
-        }
-    }
-}
-
-    fn validate_ts_property_signature(
-        &mut self,
-        node: TsPropertySignature,
-    ) -> Result<TsPropertySignature, Error> {
-        let node = node.fold_children(self);
-impl Visit<TsPropertySignature> for Analyzer<'_, '_> {
-    fn visit(&mut self, node: &TsPropertySignature) {
-        node.visit_children(self);
-        let node = node.visit_children(self);
 
         if node.computed {
             self.validate_computed_prop_key(node.span(), &node.key);

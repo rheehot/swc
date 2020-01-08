@@ -15,7 +15,7 @@ use crate::{
 };
 use std::mem::replace;
 use swc_atoms::{js_word, JsWord};
-use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, Visit, DUMMY_SP};
+use swc_common::{Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
@@ -145,8 +145,6 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
 
                 child.scope.remove_declaring(names);
             }
-
-            child.inferred_return_types.get_mut().insert(c_span, vec![]);
 
             Ok(ty::Constructor {
                 span: c.span,
@@ -283,17 +281,6 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
 
                 let ret_ty = declared_ret_ty
                     .unwrap_or_else(|| inferred_ret_ty.unwrap_or_else(|| Type::any(c_span)));
-
-                child.inferred_return_types.get_mut().insert(c.span, vec![]);
-                c.key = c.key.fold_with(child);
-                c.function = c.function.fold_children(child);
-                c.key.visit_with(child);
-                c.function.visit_children(child);
-                c.key = c.key.visit_with(child);
-                c.function = c.function.visit_children(child);
-
-                debug_assert_eq!(child.allow_ref_declaring, false);
-                child.allow_ref_declaring = old;
 
                 Ok((params, type_params, ret_ty))
             },
@@ -704,9 +691,13 @@ impl Analyzer<'_, '_> {
 /// # Validations
 ///
 ///  - TS2515: Validate that class implements all methods.
-impl Visit<Class> for Analyzer<'_> {
+impl Visit<Class> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &Class) {
-        let c = c.visit_children(self);
+        self.ctx.computed_prop_mode = ComputedPropMode::Class {
+            has_body: !self.ctx.in_declare,
+        };
+
+        c.visit_children(self);
 
         self.resolve_parent_interfaces(&c.implements);
 
@@ -817,9 +808,9 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<ClassDecl> for Analyzer<'_> {
-    fn visit(&mut self, c: &ClassDecl) {
-        let c: ClassDecl = c.visit_children(self);
+impl Analyzer<'_, '_> {
+    fn visit_class_decl(&mut self, c: &ClassDecl) {
+        c.visit_children(self);
 
         self.validate_inherited_members(Some(&c.ident), &c.class, c.declare);
         self.validate_class_members(&c.class, c.declare)

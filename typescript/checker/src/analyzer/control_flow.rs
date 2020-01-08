@@ -227,20 +227,6 @@ impl Visit<SwitchStmt> for Analyzer<'_, '_> {
         stmt.visit_children(self);
 
         self.check_switch_discriminant(&stmt);
-impl Visit<SwitchStmt> for Analyzer<'_> {
-    fn visit(&mut self, stmt: &SwitchStmt) {
-        let stmt = stmt.visit_children(self);
-
-        analyze!(self, {
-            let discriminant_ty = self.type_of(&stmt.discriminant)?;
-            for case in &stmt.cases {
-                if let Some(ref test) = case.test {
-                    let case_ty = self.type_of(&test)?;
-                    let case_ty = self.expand_type(case.span(), case_ty)?;
-                    self.assign(&case_ty, &discriminant_ty, test.span())?
-                }
-            }
-        });
 
         let mut false_facts = CondFacts::default();
         let mut true_facts = CondFacts::default();

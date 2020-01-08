@@ -11,10 +11,6 @@ use crate::{
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
-impl Analyzer<'_> {
-    fn visit_rest_pat(&mut self, p: &RestPat) {
-        let p = p.fold_children(self);
-impl Visit<RestPat> for Analyzer<'_> {
 #[derive(Debug, Clone, Copy)]
 pub(super) enum PatMode {
     /// Used for assignment expressions
@@ -67,7 +63,6 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
         p.visit_children(self);
 
         let mut errors = vec![];
-        let p = p.visit_children(self);
 
         if let Pat::Assign(AssignPat { ref right, .. }) = *p.arg {
             let res: Result<_, _> = try {
@@ -104,10 +99,6 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
     }
 }
 
-impl Analyzer<'_> {
-    fn visit_assign_pat(&mut self, p: &AssignPat) {
-        let p = p.fold_children(self);
-impl Visit<AssignPat> for Analyzer<'_> {
 impl Visit<AssignPat> for Analyzer<'_, '_> {
     fn visit(&mut self, p: &AssignPat) {
         p.visit_children(self);

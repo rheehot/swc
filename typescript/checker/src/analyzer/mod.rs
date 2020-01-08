@@ -16,11 +16,6 @@ use std::{
     sync::Arc,
 };
 use swc_atoms::JsWord;
-use swc_common::Span;
-use swc_common::{SourceMap, Span};
-use swc_common::{Span, Visit};
-use swc_common::{Span, Spanned, Visit, VisitWith};
-use swc_common::{Span, Visit, VisitWith};
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 use swc_ts_builtin_types::Lib;
@@ -54,7 +49,6 @@ pub(crate) struct Ctx {
 }
 
 /// Note: All methods named `validate_*` return [Err] iff it's not recoverable.
-#[derive(Debug)]
 pub struct Analyzer<'a, 'b> {
     pub info: Info,
 
@@ -135,12 +129,6 @@ impl<'a, 'b> Analyzer<'a, 'b> {
         }
     }
 
-    fn with_child<F, Ret>(&mut self, kind: ScopeKind, facts: CondFacts, op: F) -> Ret
-    pub(super) fn with_child<F, Ret>(&mut self, kind: ScopeKind, facts: CondFacts, op: F) -> Ret
-    where
-        F: for<'any> FnOnce(&mut Analyzer<'any>) -> Ret,
-        where
-            F: for<'aa,'bb> FnOnce(&mut Analyzer<'aa,'bb>) -> Ret,
     #[inline(always)]
     pub(crate) fn with<F, Ret>(&mut self, op: F) -> Ret
     where

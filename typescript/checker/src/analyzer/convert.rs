@@ -478,7 +478,7 @@ impl Validate<TsImportType> for Analyzer<'_, '_> {
             span: t.span,
             arg: t.arg.clone(),
             qualifier: t.qualifier.clone(),
-            type_params: try_opt!(t.type_params.validate_with(self)),
+            type_params: try_opt!(t.type_args.validate_with(self)),
         })
     }
 }

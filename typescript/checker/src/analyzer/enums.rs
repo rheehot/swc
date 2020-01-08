@@ -56,9 +56,7 @@ impl Visit<TsEnumDecl> for Analyzer<'_, '_> {
                 }
             }
         } else {
-            e.members = e.members.fold_children(self);
             e.members.visit_children(self);
-            e.members = e.members.visit_children(self);
         }
     }
 }
