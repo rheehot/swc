@@ -263,7 +263,6 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                 }
 
                 // TODO: use as_bool from swc_ecma_transforms
-                // TODO: extract utils from swc_ecma_transforms to swc_ecma_utils
 
                 match op {
                     op!("||") => return Ok(Type::union(vec![lt, rt])),

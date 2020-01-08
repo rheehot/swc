@@ -1,4 +1,4 @@
-﻿//@target: ES6
+﻿﻿//@target: ES6
 class StringIterator {
     next() {
         return {
@@ -6,9 +6,9 @@ class StringIterator {
             value: ""
         }
     }
-    
+
     return = 0;
-    
+
     [Symbol.iterator]() {
         return this;
     }
