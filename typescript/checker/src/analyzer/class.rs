@@ -14,9 +14,8 @@ use crate::{
     ValidationResult,
 };
 use std::mem::replace;
-use swc_atoms::js_word;
-use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, Visit, DUMMY_SP};
 use swc_atoms::{js_word, JsWord};
+use swc_common::{util::move_map::MoveMap, Fold, Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_checker_macros::validator;
 
@@ -285,26 +284,17 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
                 let ret_ty = declared_ret_ty
                     .unwrap_or_else(|| inferred_ret_ty.unwrap_or_else(|| Type::any(c_span)));
 
-            child.inferred_return_types.get_mut().insert(c.span, vec![]);
-            c.key = c.key.fold_with(child);
-            c.function = c.function.fold_children(child);
-            c.key.visit_with(child);
-            c.function.visit_children(child);
-            c.key = c.key.visit_with(child);
-            c.function = c.function.visit_children(child);
+                child.inferred_return_types.get_mut().insert(c.span, vec![]);
+                c.key = c.key.fold_with(child);
+                c.function = c.function.fold_children(child);
+                c.key.visit_with(child);
+                c.function.visit_children(child);
+                c.key = c.key.visit_with(child);
+                c.function = c.function.visit_children(child);
 
-            debug_assert_eq!(child.allow_ref_declaring, false);
-            child.allow_ref_declaring = old;
+                debug_assert_eq!(child.allow_ref_declaring, false);
+                child.allow_ref_declaring = old;
 
-            (
-                child
-                    .inferred_return_types
-                    .get_mut()
-                    .remove_entry(&c_span)
-                    .unwrap_or_default(),
-                c,
-            )
-        });
                 Ok((params, type_params, ret_ty))
             },
         )?;
