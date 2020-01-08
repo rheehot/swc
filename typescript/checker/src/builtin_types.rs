@@ -29,6 +29,8 @@ fn merge(ls: &[Lib]) -> &'static Merged {
         static ref CACHE: CHashMap<Vec<Lib>, &'static Merged> = Default::default();
     }
 
+    assert_ne!(ls, &[], "libs cannot be empty");
+
     let mut libs = ls.to_vec();
     if libs.is_empty() {
         libs.push(Lib::Es5);
@@ -215,7 +217,9 @@ fn merge(ls: &[Lib]) -> &'static Merged {
 
     println!("----- loaded builtin -----\n\n\n\n\n");
 
-    return &*CACHE.get(ls).unwrap();
+    return &*CACHE
+        .get(ls)
+        .unwrap_or_else(|| unreachable!("Failed to load libs: {:?}", ls));
 }
 
 pub fn get_var(libs: &[Lib], span: Span, name: &JsWord) -> Result<Type, Error> {
