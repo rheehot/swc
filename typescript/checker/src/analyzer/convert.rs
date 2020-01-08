@@ -1,5 +1,6 @@
 use super::Analyzer;
 use crate::{
+    analyzer::util::ResultExt,
     errors::Error,
     ty,
     ty::{
@@ -72,19 +73,30 @@ impl Validate<TsTypeAliasDecl> for Analyzer<'_, '_> {
     }
 }
 
+prevent!(TsInterfaceDecl);
+
 impl Validate<TsInterfaceDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<Interface>;
 
     fn validate(&mut self, d: &TsInterfaceDecl) -> Self::Output {
-        Ok(Interface {
+        let ty = Interface {
             span: d.span,
             name: d.id.sym.clone(),
             type_params: try_opt!(self.validate(&d.type_params)),
             extends: self.validate(&d.extends)?,
             body: self.validate(&d.body.body)?,
-        })
+        };
+
+        self.register_type(d.id.sym.clone(), ty.clone().into())
+            .store(&mut self.info.errors);
+
+        self.resolve_parent_interfaces(&d.extends);
+
+        Ok(ty)
     }
 }
+
+prevent!(TsTypeLit);
 
 impl Validate<TsTypeLit> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeLit>;
