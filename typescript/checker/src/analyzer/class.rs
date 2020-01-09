@@ -13,11 +13,11 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
+use macros::validator_method;
 use std::mem::replace;
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
-use swc_ts_checker_macros::validator_method;
 
 prevent!(ClassProp);
 prevent!(Constructor);

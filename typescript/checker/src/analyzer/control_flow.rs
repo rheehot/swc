@@ -14,6 +14,7 @@ use crate::{
     ValidationResult,
 };
 use fxhash::FxHashMap;
+use macros::validator_method;
 use std::{
     collections::hash_map::Entry,
     convert::TryFrom,
@@ -25,7 +26,6 @@ use std::{
 use swc_atoms::JsWord;
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
-use swc_ts_checker_macros::validator_method;
 
 /// Conditional facts
 #[derive(Debug, Clone, Default)]

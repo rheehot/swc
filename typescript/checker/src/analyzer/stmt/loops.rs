@@ -5,9 +5,9 @@ use crate::{
     ty::{Array, Type},
     validator::Validate,
 };
+use macros::validator_method;
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
-use swc_ts_checker_macros::validator_method;
 
 impl Analyzer<'_, '_> {
     #[validator_method]

@@ -6,10 +6,10 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
+use macros::validator_method;
 use swc_atoms::js_word;
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
-use swc_ts_checker_macros::validator_method;
 
 #[derive(Debug, Clone, Copy)]
 pub(super) enum ComputedPropMode {
