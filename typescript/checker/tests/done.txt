@@ -238,6 +238,7 @@ es6/variableDeclarations/VariableDeclaration5_es6.ts
 es6/variableDeclarations/VariableDeclaration7_es6.ts
 es6/variableDeclarations/VariableDeclaration8_es6.ts
 es6/variableDeclarations/VariableDeclaration9_es6.ts
+expressions/arrayLiterals/arrayLiterals.ts
 expressions/asOperator/asOpEmitParens.ts
 expressions/asOperator/asOperator1.ts
 expressions/asOperator/asOperator2.ts

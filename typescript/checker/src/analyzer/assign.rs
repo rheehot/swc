@@ -842,15 +842,19 @@ impl Analyzer<'_, '_> {
         {
             macro_rules! handle_type_elements {
                 ($rhs:expr) => {{
-                    let mut handled_rhs = Vec::with_capacity($rhs.len());
+                    let mut unhandled_rhs = Vec::with_capacity($rhs.len());
+                    for r in $rhs {
+                        unhandled_rhs.push(r.span());
+                    }
 
-                    for m in lhs {
+                    for (i, m) in lhs.into_iter().enumerate() {
                         let res = self.assign_type_elements_to_type_element(
                             span,
                             &mut missing_fields,
                             m,
                             $rhs,
                         );
+
                         let success = match res {
                             Ok(()) => true,
                             Err(Error::Errors { ref errors, .. }) if errors.is_empty() => true,
@@ -860,17 +864,27 @@ impl Analyzer<'_, '_> {
                             }
                         };
                         if success {
-                            // TODO: Use type element
-                            handled_rhs.push(());
+                            unhandled_rhs
+                                .remove_item(&$rhs[i].span())
+                                .expect("it should be removable");
                         }
                     }
 
-                    if $rhs.len() != handled_rhs.len() {
+                    if !unhandled_rhs.is_empty() {
                         // The code below is invalid as c is not defined in type.
                         //
                         //      var c { [n: number]: { a: string; b: number; }; } = [{ a:
                         // '', b: 0, c: '' }];
-                        return Err(Error::UnknownPropertyInObjectLiteralAssignment { span });
+
+                        return Err(Error::Errors {
+                            span,
+                            errors: unhandled_rhs
+                                .into_iter()
+                                .map(|span| Error::UnknownPropertyInObjectLiteralAssignment {
+                                    span,
+                                })
+                                .collect(),
+                        });
                     }
                 }};
             }
@@ -880,11 +894,11 @@ impl Analyzer<'_, '_> {
                     members: ref rhs_members,
                     ..
                 }) => {
-                    handle_type_elements!(&rhs_members);
+                    handle_type_elements!(&*rhs_members);
                 }
 
                 Type::Interface(Interface { ref body, .. }) => {
-                    handle_type_elements!(&body);
+                    handle_type_elements!(&*body);
                     // TODO: Check parent interface
                 }
 
