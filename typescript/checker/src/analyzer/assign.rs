@@ -44,7 +44,7 @@ impl Analyzer<'_, '_> {
     fn verify_before_assign(&self, ty: &Type) {
         match ty.normalize() {
             Type::Ref(ref r) => panic!(
-                "A type should be expanded before calling .assign()\n{:?}",
+                "A reference type should be expanded before calling .assign()\n{:?}",
                 r,
             ),
 
@@ -56,6 +56,7 @@ impl Analyzer<'_, '_> {
                     )
                 }
             }
+
             _ => {}
         }
     }
