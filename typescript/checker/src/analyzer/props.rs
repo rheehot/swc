@@ -146,7 +146,7 @@ impl Analyzer<'_, '_> {
         match prop {
             Prop::Shorthand(ref i) => {
                 // TODO: Check if RValue is correct
-                self.type_of_ident(&i, TypeOfMode::RValue)
+                self.type_of_ident(&i, TypeOfMode::RValue, None)
                     .store(&mut self.info.errors);
             }
             _ => {}

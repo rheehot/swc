@@ -42,14 +42,15 @@ impl Analyzer<'_, '_> {
     ///     - Not a type parameter declared on child scope.
     fn verify_before_assign(&self, ty: &Type) {
         match ty.normalize() {
-            Type::Ref(ref r) => {
-                panic!("Type should be expanded before calling .assign()\n{:?}", r,)
-            }
+            Type::Ref(ref r) => panic!(
+                "A type should be expanded before calling .assign()\n{:?}",
+                r,
+            ),
 
             Type::Param(ref p) => {
                 if let None = self.find_type(&p.name) {
                     panic!(
-                        "Type parameter should be handled by a function which declares it\n{:?}",
+                        "A type parameter should be handled by a function which declares it\n{:?}",
                         p
                     )
                 }

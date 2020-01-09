@@ -268,7 +268,7 @@ impl Analyzer<'_, '_> {
                 return Ok(Type::from(TsThisType { span }));
             }
 
-            Expr::Ident(ref i) => self.type_of_ident(i, mode),
+            Expr::Ident(ref i) => self.type_of_ident(i, mode, type_args),
 
             Expr::Array(ArrayLit { ref elems, .. }) => {
                 let mut types: Vec<Type> = Vec::with_capacity(elems.len());
@@ -884,7 +884,12 @@ impl Analyzer<'_, '_> {
         );
     }
 
-    pub fn type_of_ident(&mut self, i: &Ident, type_mode: TypeOfMode) -> ValidationResult {
+    pub fn type_of_ident(
+        &mut self,
+        i: &Ident,
+        type_mode: TypeOfMode,
+        type_args: Option<TypeParamInstantiation>,
+    ) -> ValidationResult {
         let span = i.span();
 
         match i.sym {
@@ -986,7 +991,7 @@ impl Analyzer<'_, '_> {
         type_args: Option<TypeParamInstantiation>,
     ) -> ValidationResult {
         match *n {
-            TsEntityName::Ident(ref i) => self.type_of_ident(i, TypeOfMode::RValue),
+            TsEntityName::Ident(ref i) => self.type_of_ident(i, TypeOfMode::RValue, type_args),
             TsEntityName::TsQualifiedName(ref qname) => {
                 let obj_ty = self.type_of_ts_entity_name(span, &qname.left, None)?;
 
