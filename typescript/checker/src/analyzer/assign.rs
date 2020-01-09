@@ -68,7 +68,7 @@ impl Analyzer<'_, '_> {
     }
 
     fn assign_inner(&self, to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
-        debug_assert!(!span.is_dummy());
+        debug_assert!(!span.is_dummy(), "\n\t{:?}\n<-\n\t{:?}", to, rhs);
 
         self.verify_before_assign(to);
         self.verify_before_assign(rhs);
