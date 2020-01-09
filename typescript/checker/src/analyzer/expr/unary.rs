@@ -104,7 +104,18 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
             }
         }
 
-        unimplemented!("validate(UnaryExpr)")
+        match op {
+            op!("!") => {
+                return Ok(Type::Keyword(TsKeywordType {
+                    span,
+                    kind: TsKeywordTypeKind::TsBooleanKeyword,
+                }))
+            }
+
+            _ => {}
+        }
+
+        unimplemented!("validate(UnaryExpr)\n{:?}", e)
     }
 }
 
