@@ -628,7 +628,7 @@ impl Analyzer<'_, '_> {
                             _ => {
                                 let generalized_var_ty = var_ty.generalize_lit();
 
-                                let res = self.assign(&generalized_var_ty, &ty, span);
+                                let res = self.assign(&ty, &generalized_var_ty, span);
 
                                 if res.is_err() {
                                     v.ty = Some(var_ty);
