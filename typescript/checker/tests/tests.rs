@@ -88,6 +88,10 @@ fn should_ignore(name: &str, content: &str) -> bool {
         "symbolProperty11.ts",
         // Temporarily ignored - libraries for es2019 is not included yet (to reduce compile time)
         "parserArrowFunctionExpression7.ts",
+        // Temporarily ignored - we need to determine enum handling logic.
+        "negateOperatorWithEnumType.ts",
+        "bitwiseNotOperatorWithEnumType.ts",
+        "deleteOperatorWithEnumType.ts",
     ];
 
     if postponed_tests.iter().any(|p| name.contains(p)) {

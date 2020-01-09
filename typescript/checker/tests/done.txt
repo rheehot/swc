@@ -237,8 +237,11 @@ expressions/asOperator/asOpEmitParens.ts
 expressions/asOperator/asOperator1.ts
 expressions/asOperator/asOperator2.ts
 expressions/asOperator/asOperatorNames.ts
+expressions/unaryOperators/bitwiseNotOperator/
+expressions/unaryOperators/deleteOperator/
 expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts
 expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithStringType.ts
+expressions/unaryOperators/negateOperator/
 expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts
 parser/ecmascript3/
 parser/ecmascript5/Accessors/
