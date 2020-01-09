@@ -384,7 +384,10 @@ impl Analyzer<'_, '_> {
                                 Ok(())
                             } else {
                                 // undefined symbol
-                                Err(Error::UndefinedSymbol { span: i.span })
+                                Err(Error::UndefinedSymbol {
+                                    sym: i.sym.clone(),
+                                    span: i.span,
+                                })
                             };
                         };
 

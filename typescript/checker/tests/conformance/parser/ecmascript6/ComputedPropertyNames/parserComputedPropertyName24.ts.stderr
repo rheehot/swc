@@ -1,10 +1,10 @@
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
-            36,
+            34,
         ),
         hi: BytePos(
-            37,
+            35,
         ),
         ctxt: #0,
     },

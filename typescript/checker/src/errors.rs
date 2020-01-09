@@ -201,6 +201,7 @@ pub enum Error {
     },
 
     UndefinedSymbol {
+        sym: JsWord,
         span: Span,
     },
 

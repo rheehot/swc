@@ -1,4 +1,4 @@
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             0,
@@ -14,7 +14,7 @@ error: UndefinedSymbol {
 1 | foo1();
   | ^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             8,
@@ -30,7 +30,7 @@ error: UndefinedSymbol {
 2 | foo1();
   | ^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             16,
@@ -46,7 +46,7 @@ error: UndefinedSymbol {
 3 | foo1();
   | ^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             24,

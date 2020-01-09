@@ -4,7 +4,7 @@ error: TS2406
 1 | ++ delete foo.bar
   |    ^^^^^^^^^^^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             10,

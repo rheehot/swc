@@ -1,4 +1,4 @@
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             0,
@@ -14,7 +14,7 @@ error: UndefinedSymbol {
 1 | m.index+1+m[0].length;
   | ^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             10,

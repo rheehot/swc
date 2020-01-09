@@ -1,19 +1,19 @@
 error: NotVariable {
     span: Span {
         lo: BytePos(
-            453,
+            413,
         ),
         hi: BytePos(
-            454,
+            414,
         ),
         ctxt: #0,
     },
     left: Span {
         lo: BytePos(
-            453,
+            413,
         ),
         hi: BytePos(
-            454,
+            414,
         ),
         ctxt: #0,
     },

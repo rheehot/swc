@@ -181,7 +181,10 @@ impl Analyzer<'_, '_> {
         let ty = match self.scope.find_type(&from) {
             Some(ty) => ty,
             None => {
-                self.info.errors.push(Error::UndefinedSymbol { span });
+                self.info.errors.push(Error::UndefinedSymbol {
+                    sym: name.clone(),
+                    span,
+                });
                 return;
             }
         };

@@ -1,4 +1,4 @@
-error: UndefinedSymbol {
+error: TS2363 {
     span: Span {
         lo: BytePos(
             5,
@@ -14,7 +14,7 @@ error: UndefinedSymbol {
 1 | (1) /notregexp/a.foo();
   |      ^^^^^^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             15,

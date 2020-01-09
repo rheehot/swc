@@ -1,4 +1,4 @@
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             14,
@@ -14,7 +14,7 @@ error: UndefinedSymbol {
 2 | foo1();
   | ^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             22,
@@ -30,7 +30,7 @@ error: UndefinedSymbol {
 3 | foo1();
   | ^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             30,
@@ -52,7 +52,7 @@ error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'pu
 5 | static();
   | ^^^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
             38,

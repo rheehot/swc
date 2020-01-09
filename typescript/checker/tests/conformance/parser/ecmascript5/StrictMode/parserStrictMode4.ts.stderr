@@ -5,12 +5,13 @@ error: TS1100
   | ^^^^^^^^^
 
 error: UndefinedSymbol {
+    sym: Atom('arguments' type=static),
     span: Span {
         lo: BytePos(
-            15,
+            14,
         ),
         hi: BytePos(
-            24,
+            23,
         ),
         ctxt: #0,
     },

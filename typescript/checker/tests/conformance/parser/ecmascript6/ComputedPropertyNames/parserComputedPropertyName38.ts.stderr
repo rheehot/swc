@@ -4,13 +4,13 @@ error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'pu
 3 |     [public]() { }
   |      ^^^^^^
 
-error: UndefinedSymbol {
+error: NameNotFound {
     span: Span {
         lo: BytePos(
-            32,
+            30,
         ),
         hi: BytePos(
-            38,
+            36,
         ),
         ctxt: #0,
     },

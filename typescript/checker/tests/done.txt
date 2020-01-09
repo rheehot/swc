@@ -20,6 +20,8 @@ es6/Symbols/symbolProperty7.ts
 es6/Symbols/symbolProperty8.ts
 es6/Symbols/symbolProperty9.ts
 es6/Symbols/symbolType2.ts
+es6/Symbols/symbolType4.ts
+es6/Symbols/symbolType5.ts
 es6/computedProperties/computedPropertyNames18_ES5.ts
 es6/computedProperties/computedPropertyNames18_ES6.ts
 es6/computedProperties/computedPropertyNames22_ES5.ts
