@@ -208,10 +208,7 @@ impl Visit<FnDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, f: &FnDecl) {
         let fn_ty = self.visit_fn(Some(&f.ident), &f.function);
 
-        match self
-            .scope
-            .override_var(VarDeclKind::Var, f.ident.sym.clone(), fn_ty)
-        {
+        match self.override_var(VarDeclKind::Var, f.ident.sym.clone(), fn_ty) {
             Ok(()) => {}
             Err(err) => {
                 self.info.errors.push(err);

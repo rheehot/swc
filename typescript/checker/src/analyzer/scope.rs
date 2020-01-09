@@ -44,13 +44,6 @@ pub(crate) struct Scope<'a> {
 }
 
 impl Scope<'_> {
-    /// Overrides a variable. Used for removing lazily-typed stuffs.
-    pub fn override_var(&mut self, kind: VarDeclKind, name: JsWord, ty: Type) -> Result<(), Error> {
-        self.declare_var(ty.span(), kind, name, Some(ty), true, true)?;
-
-        Ok(())
-    }
-
     pub fn remove_declaring<I>(&mut self, names: impl IntoIterator<IntoIter = I, Item = JsWord>)
     where
         I: Iterator<Item = JsWord> + DoubleEndedIterator,
@@ -160,303 +153,21 @@ impl Scope<'_> {
 
         None
     }
-
-    pub fn declare_complex_vars(
-        &mut self,
-        kind: VarDeclKind,
-        pat: &Pat,
-        ty: Type,
-    ) -> ValidationResult<()> {
-        let span = pat.span();
-
-        match *pat {
-            Pat::Ident(ref i) => {
-                println!("declare_complex_vars: declaring {}", i.sym);
-                self.declare_var(
-                    span,
-                    kind,
-                    i.sym.clone(),
-                    Some(ty),
-                    // initialized
-                    true,
-                    // let/const declarations does not allow multiple declarations with
-                    // same name
-                    kind == VarDeclKind::Var,
-                )?;
-                Ok(())
-            }
-
-            Pat::Array(ArrayPat { ref elems, .. }) => {
-                // Handle tuple
-                //
-                //      const [a , setA] = useState();
-                //
-
-                // TODO: Normalize static
-                match ty {
-                    Type::Tuple(Tuple { types, .. }) => {
-                        if types.len() < elems.len() {
-                            return Err(Error::TooManyTupleElements { span });
-                        }
-
-                        for (elem, ty) in elems.into_iter().zip(types) {
-                            match *elem {
-                                Some(ref elem) => {
-                                    self.declare_complex_vars(kind, elem, ty)?;
-                                }
-                                None => {
-                                    // Skip
-                                }
-                            }
-                        }
-
-                        return Ok(());
-                    }
-
-                    // [a, b] | [c, d] => [a | c, b | d]
-                    Type::Union(Union { types, .. }) => {
-                        let mut errors = vec![];
-                        let mut buf = vec![];
-                        for ty in types.iter() {
-                            match *ty.normalize() {
-                                Type::Tuple(Tuple {
-                                    types: ref elem_types,
-                                    ..
-                                }) => {
-                                    buf.push(elem_types);
-                                }
-                                _ => {
-                                    errors.push(Error::NotTuple { span: ty.span() });
-                                }
-                            }
-                        }
-                        if !errors.is_empty() {
-                            return Err(Error::UnionError { span, errors });
-                        }
-
-                        for (elem, types) in elems
-                            .into_iter()
-                            .zip(buf.into_iter().chain(repeat(&vec![Type::undefined(span)])))
-                        {
-                            match *elem {
-                                Some(ref elem) => {
-                                    let ty = Union {
-                                        span,
-                                        types: types.into_iter().cloned().collect(),
-                                    }
-                                    .into();
-                                    self.declare_complex_vars(kind, elem, ty)?;
-                                }
-                                None => {}
-                            }
-                        }
-
-                        return Ok(());
-                    }
-
-                    _ => unimplemented!("declare_complex_vars(pat={:?}\nty={:?}\n)", pat, ty),
-                }
-            }
-
-            Pat::Object(ObjectPat { ref props, .. }) => {
-                fn find<'a>(members: &[TypeElement], key: &PropName) -> Option<Type> {
-                    let mut index_el = None;
-                    // First, we search for Property
-                    for m in members {
-                        match *m {
-                            TypeElement::Property(PropertySignature { ref type_ann, .. }) => {
-                                return match *type_ann {
-                                    Some(ref ty) => Some(ty.clone()),
-                                    None => Some(Type::any(key.span())),
-                                }
-                            }
-
-                            TypeElement::Index(IndexSignature { ref type_ann, .. }) => {
-                                index_el = Some(match *type_ann {
-                                    Some(ref ty) => ty.clone(),
-                                    None => Type::any(key.span()),
-                                });
-                            }
-                            _ => {}
-                        }
-                    }
-
-                    return index_el;
-                }
-
-                /// Handle TypeElements.
-                ///
-                /// Used for interfaces and type literals.
-                macro_rules! handle_elems {
-                    ($members:expr) => {{
-                        for p in props.iter() {
-                            match *p {
-                                ObjectPatProp::KeyValue(KeyValuePatProp {
-                                    ref key,
-                                    ref value,
-                                    ..
-                                }) => {
-                                    if let Some(ty) = find(&$members, key) {
-                                        self.declare_complex_vars(kind, value, ty)?;
-                                        return Ok(());
-                                    }
-                                }
-
-                                _ => unimplemented!("handle_elems({:#?})", p),
-                            }
-                        }
-
-                        return Err(Error::NoSuchProperty {
-                            span,
-                            prop: None,
-                            prop_ty: None,
-                        });
-                    }};
-                }
-
-                // TODO: Normalize static
-                match ty {
-                    Type::TypeLit(TypeLit { members, .. }) => {
-                        handle_elems!(members);
-                    }
-
-                    // TODO: Handle extends
-                    Type::Interface(Interface { body, .. }) => {
-                        handle_elems!(body);
-                    }
-
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsAnyKeyword,
-                        ..
-                    }) => {
-                        for p in props.iter() {
-                            match *p {
-                                ObjectPatProp::KeyValue(ref kv) => {
-                                    self.declare_complex_vars(
-                                        kind,
-                                        &kv.value,
-                                        Type::any(kv.span()),
-                                    )?;
-                                }
-
-                                _ => unimplemented!("handle_elems({:#?})", p),
-                            }
-                        }
-
-                        return Ok(());
-                    }
-
-                    Type::Keyword(TsKeywordType {
-                        kind: TsKeywordTypeKind::TsUnknownKeyword,
-                        ..
-                    }) => {
-                        // TODO: Somehow get precise logic of determining span.
-                        //
-                        // let { ...a } = x;
-                        //          ^
-                        //
-
-                        // WTF...
-                        for p in props.iter().rev() {
-                            let span = match p {
-                                ObjectPatProp::Rest(RestPat { ref arg, .. }) => arg.span(),
-                                _ => p.span(),
-                            };
-                            return Err(Error::Unknown { span });
-                        }
-
-                        return Err(Error::Unknown { span });
-                    }
-
-                    _ => unimplemented!("declare_complex_vars({:#?}, {:#?})", pat, ty),
-                }
-            }
-
-            _ => unimplemented!("declare_complex_vars({:#?}, {:#?})", pat, ty),
-        }
-    }
-
-    fn declare_var(
-        &mut self,
-        span: Span,
-        kind: VarDeclKind,
-        name: JsWord,
-        ty: Option<Type>,
-        initialized: bool,
-        allow_multiple: bool,
-    ) -> Result<(), Error> {
-        //println!(
-        //    "({}) declare_var({}, initialized = {:?})",
-        //    self.depth(),
-        //    name,
-        //    initialized,
-        //);
-
-        no_ref!(ty);
-
-        match self.vars.entry(name.clone()) {
-            Entry::Occupied(e) => {
-                if !allow_multiple {
-                    return Err(Error::DuplicateName { name, span });
-                }
-                //println!("\tdeclare_var: found entry");
-                let (k, mut v) = e.remove_entry();
-
-                macro_rules! restore {
-                    () => {{
-                        self.vars.insert(k, v);
-                    }};
-                }
-
-                v.ty = if let Some(ty) = ty {
-                    let ty = ty.generalize_lit().into_owned();
-
-                    Some(if let Some(var_ty) = v.ty {
-                        let var_ty = var_ty.generalize_lit().into_owned();
-
-                        match ty {
-                            Type::Function(..) => {}
-                            _ => {
-                                let generalized_var_ty = var_ty.generalize_lit();
-                                if !ty.eq_ignore_name_and_span(&generalized_var_ty) {
-                                    v.ty = Some(var_ty);
-                                    restore!();
-                                    return Err(Error::RedeclaredVarWithDifferentType { span });
-                                }
-                            }
-                        }
-                        Type::union(vec![ty, var_ty])
-                    } else {
-                        ty
-                    })
-                } else {
-                    if let Some(var_ty) = v.ty {
-                        Some(var_ty)
-                    } else {
-                        None
-                    }
-                };
-
-                self.vars.insert(k, v);
-            }
-            Entry::Vacant(e) => {
-                //println!("\tdeclare_var: no entry");
-
-                let info = VarInfo {
-                    kind,
-                    ty,
-                    initialized,
-                    copied: false,
-                };
-                e.insert(info);
-            }
-        }
-
-        Ok(())
-    }
 }
 
 impl Analyzer<'_, '_> {
+    /// Overrides a variable. Used for removing lazily-typed stuffs.
+    pub(super) fn override_var(
+        &mut self,
+        kind: VarDeclKind,
+        name: JsWord,
+        ty: Type,
+    ) -> Result<(), Error> {
+        self.declare_var(ty.span(), kind, name, Some(ty), true, true)?;
+
+        Ok(())
+    }
+
     /// Expands
     ///
     ///   - Type alias
@@ -691,7 +402,7 @@ impl Analyzer<'_, '_> {
                 let ty = try_opt!(ty.map(|ty| self.expand(pat.span(), ty)));
 
                 let name = i.sym.clone();
-                self.scope.declare_var(
+                self.declare_var(
                     ty.span(),
                     kind,
                     name.clone(),
@@ -883,8 +594,77 @@ impl Analyzer<'_, '_> {
         initialized: bool,
         allow_multiple: bool,
     ) -> Result<(), Error> {
-        self.scope
-            .declare_var(span, kind, name, ty, initialized, allow_multiple)
+        //println!(
+        //    "({}) declare_var({}, initialized = {:?})",
+        //    self.depth(),
+        //    name,
+        //    initialized,
+        //);
+
+        no_ref!(ty);
+
+        match self.scope.vars.entry(name.clone()) {
+            Entry::Occupied(e) => {
+                if !allow_multiple {
+                    return Err(Error::DuplicateName { name, span });
+                }
+                //println!("\tdeclare_var: found entry");
+                let (k, mut v) = e.remove_entry();
+
+                macro_rules! restore {
+                    () => {{
+                        self.scope.vars.insert(k, v);
+                    }};
+                }
+
+                v.ty = if let Some(ty) = ty {
+                    let ty = ty.generalize_lit().into_owned();
+
+                    Some(if let Some(var_ty) = v.ty {
+                        let var_ty = var_ty.generalize_lit().into_owned();
+
+                        match ty {
+                            Type::Function(..) => {}
+                            _ => {
+                                let generalized_var_ty = var_ty.generalize_lit();
+
+                                let res = self.assign(&generalized_var_ty, &ty, span);
+
+                                if res.is_err() {
+                                    v.ty = Some(var_ty);
+                                    restore!();
+                                    return Err(Error::RedeclaredVarWithDifferentType { span });
+                                }
+                            }
+                        }
+                        Type::union(vec![ty, var_ty])
+                    } else {
+                        ty
+                    })
+                } else {
+                    if let Some(var_ty) = v.ty {
+                        Some(var_ty)
+                    } else {
+                        None
+                    }
+                };
+
+                self.scope.vars.insert(k, v);
+            }
+            Entry::Vacant(e) => {
+                //println!("\tdeclare_var: no entry");
+
+                let info = VarInfo {
+                    kind,
+                    ty,
+                    initialized,
+                    copied: false,
+                };
+                e.insert(info);
+            }
+        }
+
+        Ok(())
     }
 
     pub fn declare_complex_vars(
@@ -892,8 +672,214 @@ impl Analyzer<'_, '_> {
         kind: VarDeclKind,
         pat: &Pat,
         ty: Type,
-    ) -> Result<(), Error> {
-        self.scope.declare_complex_vars(kind, pat, ty)
+    ) -> ValidationResult<()> {
+        let span = pat.span();
+
+        match *pat {
+            Pat::Ident(ref i) => {
+                println!("declare_complex_vars: declaring {}", i.sym);
+                self.declare_var(
+                    span,
+                    kind,
+                    i.sym.clone(),
+                    Some(ty),
+                    // initialized
+                    true,
+                    // let/const declarations does not allow multiple declarations with
+                    // same name
+                    kind == VarDeclKind::Var,
+                )?;
+                Ok(())
+            }
+
+            Pat::Array(ArrayPat { ref elems, .. }) => {
+                // Handle tuple
+                //
+                //      const [a , setA] = useState();
+                //
+
+                // TODO: Normalize static
+                match ty {
+                    Type::Tuple(Tuple { types, .. }) => {
+                        if types.len() < elems.len() {
+                            return Err(Error::TooManyTupleElements { span });
+                        }
+
+                        for (elem, ty) in elems.into_iter().zip(types) {
+                            match *elem {
+                                Some(ref elem) => {
+                                    self.declare_complex_vars(kind, elem, ty)?;
+                                }
+                                None => {
+                                    // Skip
+                                }
+                            }
+                        }
+
+                        return Ok(());
+                    }
+
+                    // [a, b] | [c, d] => [a | c, b | d]
+                    Type::Union(Union { types, .. }) => {
+                        let mut errors = vec![];
+                        let mut buf = vec![];
+                        for ty in types.iter() {
+                            match *ty.normalize() {
+                                Type::Tuple(Tuple {
+                                    types: ref elem_types,
+                                    ..
+                                }) => {
+                                    buf.push(elem_types);
+                                }
+                                _ => {
+                                    errors.push(Error::NotTuple { span: ty.span() });
+                                }
+                            }
+                        }
+                        if !errors.is_empty() {
+                            return Err(Error::UnionError { span, errors });
+                        }
+
+                        for (elem, types) in elems
+                            .into_iter()
+                            .zip(buf.into_iter().chain(repeat(&vec![Type::undefined(span)])))
+                        {
+                            match *elem {
+                                Some(ref elem) => {
+                                    let ty = Union {
+                                        span,
+                                        types: types.into_iter().cloned().collect(),
+                                    }
+                                    .into();
+                                    self.declare_complex_vars(kind, elem, ty)?;
+                                }
+                                None => {}
+                            }
+                        }
+
+                        return Ok(());
+                    }
+
+                    _ => unimplemented!("declare_complex_vars(pat={:?}\nty={:?}\n)", pat, ty),
+                }
+            }
+
+            Pat::Object(ObjectPat { ref props, .. }) => {
+                fn find<'a>(members: &[TypeElement], key: &PropName) -> Option<Type> {
+                    let mut index_el = None;
+                    // First, we search for Property
+                    for m in members {
+                        match *m {
+                            TypeElement::Property(PropertySignature { ref type_ann, .. }) => {
+                                return match *type_ann {
+                                    Some(ref ty) => Some(ty.clone()),
+                                    None => Some(Type::any(key.span())),
+                                }
+                            }
+
+                            TypeElement::Index(IndexSignature { ref type_ann, .. }) => {
+                                index_el = Some(match *type_ann {
+                                    Some(ref ty) => ty.clone(),
+                                    None => Type::any(key.span()),
+                                });
+                            }
+                            _ => {}
+                        }
+                    }
+
+                    return index_el;
+                }
+
+                /// Handle TypeElements.
+                ///
+                /// Used for interfaces and type literals.
+                macro_rules! handle_elems {
+                    ($members:expr) => {{
+                        for p in props.iter() {
+                            match *p {
+                                ObjectPatProp::KeyValue(KeyValuePatProp {
+                                    ref key,
+                                    ref value,
+                                    ..
+                                }) => {
+                                    if let Some(ty) = find(&$members, key) {
+                                        self.declare_complex_vars(kind, value, ty)?;
+                                        return Ok(());
+                                    }
+                                }
+
+                                _ => unimplemented!("handle_elems({:#?})", p),
+                            }
+                        }
+
+                        return Err(Error::NoSuchProperty {
+                            span,
+                            prop: None,
+                            prop_ty: None,
+                        });
+                    }};
+                }
+
+                // TODO: Normalize static
+                match ty {
+                    Type::TypeLit(TypeLit { members, .. }) => {
+                        handle_elems!(members);
+                    }
+
+                    // TODO: Handle extends
+                    Type::Interface(Interface { body, .. }) => {
+                        handle_elems!(body);
+                    }
+
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsAnyKeyword,
+                        ..
+                    }) => {
+                        for p in props.iter() {
+                            match *p {
+                                ObjectPatProp::KeyValue(ref kv) => {
+                                    self.declare_complex_vars(
+                                        kind,
+                                        &kv.value,
+                                        Type::any(kv.span()),
+                                    )?;
+                                }
+
+                                _ => unimplemented!("handle_elems({:#?})", p),
+                            }
+                        }
+
+                        return Ok(());
+                    }
+
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsUnknownKeyword,
+                        ..
+                    }) => {
+                        // TODO: Somehow get precise logic of determining span.
+                        //
+                        // let { ...a } = x;
+                        //          ^
+                        //
+
+                        // WTF...
+                        for p in props.iter().rev() {
+                            let span = match p {
+                                ObjectPatProp::Rest(RestPat { ref arg, .. }) => arg.span(),
+                                _ => p.span(),
+                            };
+                            return Err(Error::Unknown { span });
+                        }
+
+                        return Err(Error::Unknown { span });
+                    }
+
+                    _ => unimplemented!("declare_complex_vars({:#?}, {:#?})", pat, ty),
+                }
+            }
+
+            _ => unimplemented!("declare_complex_vars({:#?}, {:#?})", pat, ty),
+        }
     }
 }
 

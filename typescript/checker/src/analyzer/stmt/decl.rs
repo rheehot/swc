@@ -35,10 +35,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                     macro_rules! inject_any {
                         () => {
                             // Declare variable with type any
-                            match a
-                                .scope
-                                .declare_complex_vars(kind, &v.name, Type::any(v_span))
-                            {
+                            match a.declare_complex_vars(kind, &v.name, Type::any(v_span)) {
                                 Ok(()) => {}
                                 Err(err) => {
                                     a.info.errors.push(err);
@@ -96,7 +93,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 let ty = a.expand(span, ty)?;
                                 match a.assign(&ty, &value_ty, v_span) {
                                     Ok(()) => {
-                                        match a.scope.declare_complex_vars(kind, &v.name, ty) {
+                                        match a.declare_complex_vars(kind, &v.name, ty) {
                                             Ok(()) => {}
                                             Err(err) => {
                                                 a.info.errors.push(err);
@@ -176,8 +173,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                     return;
                                 }
 
-                                a.scope
-                                    .declare_complex_vars(kind, &v.name, ty)
+                                a.declare_complex_vars(kind, &v.name, ty)
                                     .store(&mut a.info.errors);
                                 remove_declaring!();
                                 return;
