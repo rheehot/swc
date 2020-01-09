@@ -770,6 +770,8 @@ impl Analyzer<'_, '_> {
                 return self.declare_vars_inner(kind, &arg, export);
             }
 
+            Pat::Invalid(..) | Pat::Expr(box Expr::Invalid(..)) => Ok(()),
+
             _ => unimplemented!("declare_vars for patterns other than ident: {:#?}", pat),
         }
     }
