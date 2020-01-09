@@ -98,14 +98,15 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
             match op {
                 op!("!") => return Ok(negate(arg)),
 
-                op!("typeof") | op!("delete") | op!("void") => unreachable!(),
+                op!("typeof") | op!("void") => unreachable!(),
 
                 _ => {}
             }
         }
 
+        // This is a worst case. We only return the type without good error reporting.
         match op {
-            op!("!") => {
+            op!("!") | op!("delete") => {
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsBooleanKeyword,
