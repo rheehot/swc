@@ -199,8 +199,9 @@ impl Validate<SeqExpr> for Analyzer<'_, '_> {
                         ..
                     })
                     | Expr::Unary(UnaryExpr { op: op!("!"), .. })
-                        if !self.rule.allow_unreachable_code =>
-                    {
+                    | Expr::Unary(UnaryExpr {
+                        op: op!("typeof"), ..
+                    }) if !self.rule.allow_unreachable_code => {
                         self.info.errors.push(Error::UselessSeqExpr {
                             span: span.with_lo(first_span.lo()),
                         });
