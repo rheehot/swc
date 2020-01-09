@@ -14,6 +14,11 @@ use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
     pub fn assign(&self, left: &Type, right: &Type, span: Span) -> Result<(), Error> {
+        if self.is_builtin {
+            panic!("Why does assign is called while loading builtin?")
+        }
+        debug_assert!(!span.is_dummy());
+
         self.assign_inner(left, right, span)
             .map_err(|err| match err {
                 Error::AssignFailed { .. } => err,
