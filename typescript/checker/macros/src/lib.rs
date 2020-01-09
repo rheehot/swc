@@ -46,7 +46,7 @@ use syn::{ExprTryBlock, ImplItemMethod, ReturnType};
 /// }
 /// ```
 #[proc_macro_attribute]
-pub fn validator(
+pub fn validator_method(
     _: proc_macro::TokenStream,
     item: proc_macro::TokenStream,
 ) -> proc_macro::TokenStream {

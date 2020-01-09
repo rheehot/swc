@@ -25,7 +25,7 @@ use std::{
 use swc_atoms::JsWord;
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
-use swc_ts_checker_macros::validator;
+use swc_ts_checker_macros::validator_method;
 
 /// Conditional facts
 #[derive(Debug, Clone, Default)]
@@ -210,7 +210,7 @@ impl Visit<IfStmt> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    #[validator]
+    #[validator_method]
     fn check_switch_discriminant(&mut self, s: &SwitchStmt) {
         let discriminant_ty = self.validate(&s.discriminant)?;
         for case in &s.cases {

@@ -18,7 +18,7 @@ use crate::{
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
-use swc_ts_checker_macros::validator;
+use swc_ts_checker_macros::validator_method;
 
 prevent!(CallExpr);
 prevent!(NewExpr);
@@ -110,7 +110,7 @@ enum ExtractKind {
 }
 
 impl Analyzer<'_, '_> {
-    #[validator]
+    #[validator_method]
     fn check_callee(
         &mut self,
         span: Span,

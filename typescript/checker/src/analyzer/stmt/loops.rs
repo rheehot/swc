@@ -7,10 +7,10 @@ use crate::{
 };
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
-use swc_ts_checker_macros::validator;
+use swc_ts_checker_macros::validator_method;
 
 impl Analyzer<'_, '_> {
-    #[validator]
+    #[validator_method]
     fn check_lhs_of_for_loop(&mut self, e: &VarDeclOrPat) {
         // Check iterable
         match *e {
@@ -28,7 +28,7 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    #[validator]
+    #[validator_method]
     fn check_rhs_of_for_loop(&mut self, e: &Expr) {
         // Check iterable
         self.validate(e)?;
