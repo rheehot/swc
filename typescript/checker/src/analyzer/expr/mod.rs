@@ -1085,48 +1085,54 @@ impl Validate<ArrowExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Function>;
 
     fn validate(&mut self, f: &ArrowExpr) -> Self::Output {
-        let declared_ret_ty = match f.return_type.validate_with(self) {
-            Some(Ok(ty)) => Some(ty),
-            Some(Err(err)) => {
-                self.info.errors.push(err);
-                Some(Type::any(f.span))
-            }
-            None => None,
-        };
-        let declared_ret_ty = match declared_ret_ty {
-            Some(ty) => {
-                let span = ty.span();
-                Some(match ty {
-                    Type::Class(cls) => Type::ClassInstance(ClassInstance {
-                        span,
-                        cls,
-                        type_args: None,
-                    }),
-                    _ => ty,
-                })
-            }
-            None => None,
-        };
+        self.with_child(ScopeKind::ArrowFn, Default::default(), |child| {
+            let type_params = try_opt!(f.type_params.validate_with(child));
 
-        let inferred_return_type = {
-            match f.body {
-                BlockStmtOrExpr::Expr(ref e) => Some(e.validate_with(self)?),
-                BlockStmtOrExpr::BlockStmt(ref s) => self.visit_stmts_for_return(&s.stmts)?,
-            }
-        };
-        if let Some(ref declared) = declared_ret_ty {
-            let span = inferred_return_type.span();
-            if let Some(ref inferred) = inferred_return_type {
-                self.assign(declared, inferred, span)?;
-            }
-        }
+            let params = f.params.validate_with(child)?;
 
-        Ok(ty::Function {
-            span: f.span,
-            params: f.params.validate_with(self)?,
-            type_params: try_opt!(f.type_params.validate_with(self)),
-            ret_ty: box declared_ret_ty
-                .unwrap_or_else(|| inferred_return_type.unwrap_or_else(|| Type::any(f.span))),
+            let declared_ret_ty = match f.return_type.validate_with(child) {
+                Some(Ok(ty)) => Some(ty),
+                Some(Err(err)) => {
+                    child.info.errors.push(err);
+                    Some(Type::any(f.span))
+                }
+                None => None,
+            };
+            let declared_ret_ty = match declared_ret_ty {
+                Some(ty) => {
+                    let span = ty.span();
+                    Some(match ty {
+                        Type::Class(cls) => Type::ClassInstance(ClassInstance {
+                            span,
+                            cls,
+                            type_args: None,
+                        }),
+                        _ => ty,
+                    })
+                }
+                None => None,
+            };
+
+            let inferred_return_type = {
+                match f.body {
+                    BlockStmtOrExpr::Expr(ref e) => Some(e.validate_with(child)?),
+                    BlockStmtOrExpr::BlockStmt(ref s) => child.visit_stmts_for_return(&s.stmts)?,
+                }
+            };
+            if let Some(ref declared) = declared_ret_ty {
+                let span = inferred_return_type.span();
+                if let Some(ref inferred) = inferred_return_type {
+                    child.assign(declared, inferred, span)?;
+                }
+            }
+
+            Ok(ty::Function {
+                span: f.span,
+                params,
+                type_params,
+                ret_ty: box declared_ret_ty
+                    .unwrap_or_else(|| inferred_return_type.unwrap_or_else(|| Type::any(f.span))),
+            })
         })
     }
 }
