@@ -12,7 +12,7 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
-use swc_common::Spanned;
+use swc_common::{Spanned, VisitWith};
 use swc_ecma_ast::*;
 
 impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
@@ -191,6 +191,10 @@ impl Validate<TsPropertySignature> for Analyzer<'_, '_> {
     type Output = ValidationResult<PropertySignature>;
 
     fn validate(&mut self, d: &TsPropertySignature) -> Self::Output {
+        if !self.is_builtin && d.computed {
+            d.key.visit_with(self);
+        }
+
         Ok(PropertySignature {
             span: d.span,
             computed: d.computed,
