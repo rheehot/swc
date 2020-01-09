@@ -385,12 +385,12 @@ impl Scope<'_> {
         initialized: bool,
         allow_multiple: bool,
     ) -> Result<(), Error> {
-        println!(
-            "({}) declare_var({}, initialized = {:?})",
-            self.depth(),
-            name,
-            initialized,
-        );
+        //println!(
+        //    "({}) declare_var({}, initialized = {:?})",
+        //    self.depth(),
+        //    name,
+        //    initialized,
+        //);
 
         no_ref!(ty);
 
@@ -399,7 +399,7 @@ impl Scope<'_> {
                 if !allow_multiple {
                     return Err(Error::DuplicateName { name, span });
                 }
-                println!("\tdeclare_var: found entry");
+                //println!("\tdeclare_var: found entry");
                 let (k, mut v) = e.remove_entry();
 
                 macro_rules! restore {
@@ -440,7 +440,7 @@ impl Scope<'_> {
                 self.vars.insert(k, v);
             }
             Entry::Vacant(e) => {
-                println!("\tdeclare_var: no entry");
+                //println!("\tdeclare_var: no entry");
 
                 let info = VarInfo {
                     kind,
