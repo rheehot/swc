@@ -14,7 +14,7 @@ use crate::{
     ValidationResult,
 };
 use fxhash::FxHashMap;
-use macros::validator_method;
+use macros::{validator, validator_method};
 use std::{
     collections::hash_map::Entry,
     convert::TryFrom,
@@ -650,8 +650,7 @@ impl Analyzer<'_, '_> {
     }
 }
 
-prevent!(CondExpr);
-
+#[validator]
 impl Validate<CondExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 

@@ -53,6 +53,7 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<Constructor> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Constructor>;
 
@@ -163,6 +164,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<TsFnParam> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 
@@ -201,6 +203,7 @@ impl Validate<TsFnParam> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<ClassMethod> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Method>;
 
@@ -302,6 +305,7 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<ClassMember> for Analyzer<'_, '_> {
     type Output = ValidationResult<Option<ty::ClassMember>>;
 

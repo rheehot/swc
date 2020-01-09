@@ -12,6 +12,7 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
+use macros::validator;
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
@@ -38,15 +39,7 @@ pub enum TypeOfMode {
     RValue,
 }
 
-/// Delegates to Validate.
-impl Visit<Expr> for Analyzer<'_, '_> {
-    fn visit(&mut self, n: &Expr) {
-        self.validate(n)
-            .and_then(|ty| self.expand(n.span(), ty))
-            .store(&mut self.info.errors);
-    }
-}
-
+#[validator]
 impl Validate<Expr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -55,8 +48,7 @@ impl Validate<Expr> for Analyzer<'_, '_> {
     }
 }
 
-prevent!(ParenExpr);
-
+#[validator]
 impl Validate<ParenExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -65,8 +57,7 @@ impl Validate<ParenExpr> for Analyzer<'_, '_> {
     }
 }
 
-prevent!(AssignExpr);
-
+#[validator]
 impl Validate<AssignExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -127,8 +118,7 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
     }
 }
 
-prevent!(UpdateExpr);
-
+#[validator]
 impl Validate<UpdateExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -168,8 +158,7 @@ impl Validate<UpdateExpr> for Analyzer<'_, '_> {
     }
 }
 
-prevent!(SeqExpr);
-
+#[validator]
 impl Validate<SeqExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -1082,6 +1071,7 @@ impl Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<ArrowExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Function>;
 

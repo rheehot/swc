@@ -8,6 +8,7 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
+use macros::validator;
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -20,6 +21,7 @@ pub(super) enum PatMode {
     Decl,
 }
 
+#[validator]
 impl Validate<Pat> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 

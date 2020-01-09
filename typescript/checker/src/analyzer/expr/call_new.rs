@@ -15,14 +15,12 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
-use macros::validator_method;
+use macros::{validator, validator_method};
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
-prevent!(CallExpr);
-prevent!(NewExpr);
-
+#[validator]
 impl Validate<CallExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -66,6 +64,7 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<NewExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 

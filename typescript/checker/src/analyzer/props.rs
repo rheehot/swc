@@ -6,7 +6,7 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
-use macros::validator_method;
+use macros::{validator, validator_method};
 use swc_atoms::js_word;
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
@@ -127,6 +127,7 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<Prop> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeElement>;
 
