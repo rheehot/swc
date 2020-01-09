@@ -13,7 +13,7 @@ use crate::{
     ValidationResult,
 };
 use swc_atoms::js_word;
-use swc_common::{Span, Spanned, VisitWith};
+use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 mod bin;
@@ -38,7 +38,14 @@ pub enum TypeOfMode {
     RValue,
 }
 
-prevent!(Expr);
+/// Delegates to Validate.
+impl Visit<Expr> for Analyzer<'_, '_> {
+    fn visit(&mut self, n: &Expr) {
+        self.validate(n)
+            .and_then(|ty| self.expand(n.span(), ty))
+            .store(&mut self.info.errors);
+    }
+}
 
 impl Validate<Expr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
@@ -406,91 +413,108 @@ impl Analyzer<'_, '_> {
         computed: bool,
         type_mode: TypeOfMode,
     ) -> ValidationResult {
+        #[inline(never)]
+        fn handle_type_elements(
+            a: &mut Analyzer,
+            span: Span,
+            obj: &Type,
+            prop: &Expr,
+            computed: bool,
+            type_mode: TypeOfMode,
+            members: &[TypeElement],
+        ) -> ValidationResult<Option<Type>> {
+            let prop_ty = if computed {
+                prop.validate_with(a)?.generalize_lit().into_owned()
+            } else {
+                match prop {
+                    Expr::Ident(..) => Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsStringKeyword,
+                        span,
+                    }),
+                    _ => unreachable!(),
+                }
+            };
+
+            for el in members.iter() {
+                match el {
+                    TypeElement::Index(IndexSignature {
+                        ref params,
+                        ref type_ann,
+                        ..
+                    }) => {
+                        if params.len() != 1 {
+                            unimplemented!("Index signature with multiple parameters")
+                        }
+
+                        let index_ty = &params[0].ty;
+                        if index_ty.eq_ignore_name_and_span(&prop_ty) {
+                            if let Some(ref type_ann) = type_ann {
+                                return Ok(Some(type_ann.clone()));
+                            }
+                            return Ok(Some(Type::any(span)));
+                        }
+                    }
+                    _ => {}
+                }
+
+                if let Some(key) = el.key() {
+                    let is_el_computed = match *el {
+                        TypeElement::Property(ref p) => p.computed,
+                        _ => false,
+                    };
+                    let is_eq = is_el_computed == computed
+                        && match prop {
+                            Expr::Ident(Ident { sym: ref value, .. })
+                            | Expr::Lit(Lit::Str(Str { ref value, .. })) => match key {
+                                Expr::Ident(Ident {
+                                    sym: ref r_value, ..
+                                })
+                                | Expr::Lit(Lit::Str(Str {
+                                    value: ref r_value, ..
+                                })) => value == r_value,
+                                _ => false,
+                            },
+                            _ => false,
+                        };
+                    if is_eq || key.eq_ignore_span(prop) {
+                        match el {
+                            TypeElement::Property(ref p) => {
+                                if type_mode == TypeOfMode::LValue && p.readonly {
+                                    return Err(Error::ReadOnly { span });
+                                }
+
+                                if let Some(ref type_ann) = p.type_ann {
+                                    return Ok(Some(type_ann.clone()));
+                                }
+
+                                // TODO: no implicit any?
+                                return Ok(Some(Type::any(span)));
+                            }
+
+                            TypeElement::Method(ref m) => {
+                                //
+                                return Ok(Some(Type::Function(ty::Function {
+                                    span,
+                                    type_params: m.type_params.clone(),
+                                    params: m.params.clone(),
+                                    ret_ty: box m.ret_ty.clone().unwrap_or_else(|| Type::any(span)),
+                                })));
+                            }
+
+                            _ => unimplemented!("TypeElement {:?}", el),
+                        }
+                    }
+                }
+            }
+
+            Ok(None)
+        }
+
         if !self.is_builtin {
             debug_assert!(!span.is_dummy());
         }
 
-        let obj = self.expand(span, obj)?;
-
-        macro_rules! handle_type_els {
-            ($members:expr) => {{
-                let prop_ty = if computed {
-                    prop.validate_with(self)?.generalize_lit().into_owned()
-                } else {
-                    match prop {
-                        Expr::Ident(..) => Type::Keyword(TsKeywordType {
-                            kind: TsKeywordTypeKind::TsStringKeyword,
-                            span,
-                        }),
-                        _ => unreachable!(),
-                    }
-                };
-
-                for el in $members.iter() {
-                    match el {
-                        TypeElement::Index(IndexSignature {
-                            ref params,
-                            ref type_ann,
-                            ..
-                        }) => {
-                            if params.len() != 1 {
-                                unimplemented!("Index signature with multiple parameters")
-                            }
-
-                            let index_ty = &params[0].ty;
-                            if index_ty.eq_ignore_name_and_span(&prop_ty) {
-                                if let Some(ref type_ann) = type_ann {
-                                    return Ok(type_ann.clone());
-                                }
-                                return Ok(Type::any(span));
-                            }
-                        }
-                        _ => {}
-                    }
-
-                    if let Some(key) = el.key() {
-                        let is_el_computed = match *el {
-                            TypeElement::Property(ref p) => p.computed,
-                            _ => false,
-                        };
-                        let is_eq = is_el_computed == computed
-                            && match prop {
-                                Expr::Ident(Ident { sym: ref value, .. })
-                                | Expr::Lit(Lit::Str(Str { ref value, .. })) => match key {
-                                    Expr::Ident(Ident {
-                                        sym: ref r_value, ..
-                                    })
-                                    | Expr::Lit(Lit::Str(Str {
-                                        value: ref r_value, ..
-                                    })) => value == r_value,
-                                    _ => false,
-                                },
-                                _ => false,
-                            };
-                        if is_eq || key.eq_ignore_span(prop) {
-                            match el {
-                                TypeElement::Property(ref p) => {
-                                    if type_mode == TypeOfMode::LValue && p.readonly {
-                                        return Err(Error::ReadOnly { span });
-                                    }
-
-                                    if let Some(ref type_ann) = p.type_ann {
-                                        return Ok(type_ann.clone());
-                                    }
-
-                                    // TODO: no implicit any?
-                                    return Ok(Type::any(span));
-                                }
-
-                                _ => {}
-                            }
-                        }
-                    }
-                }
-            }};
-        }
-
-        let obj = obj.generalize_lit();
+        let obj: Type = self.expand(span, obj)?.generalize_lit().into_owned();
 
         match obj.normalize() {
             Type::Lit(..) => unreachable!(),
@@ -677,9 +701,14 @@ impl Analyzer<'_, '_> {
             }
 
             Type::Interface(Interface { ref body, .. }) => {
-                handle_type_els!(body);
+                if let Some(v) =
+                    handle_type_elements(self, span, &obj, prop, computed, type_mode, body)?
+                {
+                    return Ok(v);
+                }
 
                 // TODO: Check parent interfaces
+
                 if computed {
                     let prop_ty = Some(prop.validate_with(self)?);
                     return Err(Error::NoSuchProperty {
@@ -697,7 +726,11 @@ impl Analyzer<'_, '_> {
             }
 
             Type::TypeLit(TypeLit { ref members, .. }) => {
-                handle_type_els!(members);
+                if let Some(v) =
+                    handle_type_elements(self, span, &obj, prop, computed, type_mode, members)?
+                {
+                    return Ok(v);
+                }
 
                 if computed {
                     let prop_ty = Some(prop.validate_with(self)?);
@@ -911,8 +944,8 @@ impl Analyzer<'_, '_> {
             }))
         } else {
             Err(Error::UndefinedSymbol {
+                span,
                 sym: i.sym.clone(),
-                span: i.span,
             })
         }
     }
