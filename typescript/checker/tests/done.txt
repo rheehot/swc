@@ -24,14 +24,8 @@ es6/Symbols/symbolType2.ts
 es6/Symbols/symbolType3.ts
 es6/Symbols/symbolType4.ts
 es6/Symbols/symbolType5.ts
-es6/computedProperties/computedPropertyNames18_ES5.ts
-es6/computedProperties/computedPropertyNames18_ES6.ts
-es6/computedProperties/computedPropertyNames22_ES5.ts
-es6/computedProperties/computedPropertyNames22_ES6.ts
 es6/computedProperties/computedPropertyNames28_ES5.ts
 es6/computedProperties/computedPropertyNames28_ES6.ts
-es6/computedProperties/computedPropertyNames29_ES5.ts
-es6/computedProperties/computedPropertyNames29_ES6.ts
 es6/computedProperties/computedPropertyNames2_ES5.ts
 es6/computedProperties/computedPropertyNames2_ES6.ts
 es6/computedProperties/computedPropertyNames33_ES5.ts
@@ -243,6 +237,7 @@ expressions/asOperator/asOpEmitParens.ts
 expressions/asOperator/asOperator1.ts
 expressions/asOperator/asOperator2.ts
 expressions/asOperator/asOperatorNames.ts
+expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithStringType.ts
 parser/ecmascript3/
 parser/ecmascript5/Accessors/
 parser/ecmascript5/Accessors/parserAccessors1.ts
@@ -525,7 +520,6 @@ types/tuple/tupleElementTypes1.ts
 types/tuple/tupleElementTypes2.ts
 types/tuple/tupleElementTypes3.ts
 types/tuple/tupleElementTypes4.ts
-types/tuple/wideningTuples2.ts
 types/tuple/wideningTuples3.ts
 types/tuple/wideningTuples4.ts
 types/tuple/wideningTuples5.ts

@@ -69,15 +69,26 @@ impl Analyzer<'_, '_> {
 
 struct ReturnTypeCollector<'a, A>
 where
-    A: Validate<Expr, Output = ValidationResult>,
+    A: Visit<Stmt> + Validate<Expr, Output = ValidationResult>,
 {
     pub analyzer: &'a mut A,
     pub types: Vec<Result<Type, Error>>,
 }
 
+impl<A> Visit<Stmt> for ReturnTypeCollector<'_, A>
+where
+    A: Visit<Stmt> + Validate<Expr, Output = ValidationResult>,
+{
+    fn visit(&mut self, stmt: &Stmt) {
+        self.analyzer.visit(stmt);
+
+        stmt.visit_children(self);
+    }
+}
+
 impl<A> Visit<ReturnStmt> for ReturnTypeCollector<'_, A>
 where
-    A: Validate<Expr, Output = ValidationResult>,
+    A: Visit<Stmt> + Validate<Expr, Output = ValidationResult>,
 {
     fn visit(&mut self, s: &ReturnStmt) {
         if let Some(ty) = s.arg.validate_with(self.analyzer) {
@@ -90,7 +101,7 @@ macro_rules! noop {
     ($T:ty) => {
         impl<A> Visit<$T> for ReturnTypeCollector<'_, A>
         where
-            A: Validate<Expr, Output = ValidationResult>,
+            A: Visit<Stmt> + Validate<Expr, Output = ValidationResult>,
         {
             #[inline(always)]
             fn visit(&mut self, _: &$T) {}

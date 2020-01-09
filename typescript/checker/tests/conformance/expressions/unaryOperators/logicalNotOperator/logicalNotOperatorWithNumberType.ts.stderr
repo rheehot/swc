@@ -4,7 +4,7 @@ error: UselessSeqExpr {
             901,
         ),
         hi: BytePos(
-            908,
+            913,
         ),
         ctxt: #0,
     },
@@ -12,5 +12,5 @@ error: UselessSeqExpr {
   --> $DIR/tests/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithNumberType.ts:45:1
    |
 45 | !objA.a, M.n;
-   | ^^^^^^^
+   | ^^^^^^^^^^^^
 
