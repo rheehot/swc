@@ -411,6 +411,10 @@ pub enum Error {
         span: Span,
         op: UpdateOp,
     },
+
+    UnknownPropertyInObjectLiteralAssignment {
+        span: Span,
+    },
 }
 
 impl Error {

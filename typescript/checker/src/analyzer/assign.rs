@@ -789,6 +789,59 @@ impl Analyzer<'_, '_> {
         let mut errors = Errors::default();
         let mut missing_fields = vec![];
 
+        {
+            macro_rules! handle_type_elements {
+                ($rhs:expr) => {{
+                    let mut handled_rhs = Vec::with_capacity($rhs.len());
+
+                    for m in lhs {
+                        let res = self.assign_type_elements_to_type_element(
+                            span,
+                            &mut missing_fields,
+                            m,
+                            $rhs,
+                        );
+                        let success = match res {
+                            Ok(()) => true,
+                            Err(Error::Errors { ref errors, .. }) if errors.is_empty() => true,
+                            Err(err) => {
+                                errors.push(err);
+                                false
+                            }
+                        };
+                        if success {
+                            // TODO: Use type element
+                            handled_rhs.push(());
+                        }
+                    }
+
+                    if $rhs.len() != handled_rhs.len() {
+                        // The code below is invalid as c is not defined in type.
+                        //
+                        //      var c { [n: number]: { a: string; b: number; }; } = [{ a:
+                        // '', b: 0, c: '' }];
+                        return Err(Error::UnknownPropertyInObjectLiteralAssignment { span });
+                    }
+                }};
+            }
+
+            match *rhs.normalize() {
+                Type::TypeLit(TypeLit {
+                    members: ref rhs_members,
+                    ..
+                }) => {
+                    handle_type_elements!(&rhs_members);
+                }
+
+                Type::Interface(Interface { ref body, .. }) => {
+                    handle_type_elements!(&body);
+                    // TODO: Check parent interface
+                }
+
+                _ => {}
+            }
+        }
+
         'l: for m in lhs {
             // Handle `toString()`
             match m {
@@ -809,37 +862,7 @@ impl Analyzer<'_, '_> {
                 _ => {}
             }
 
-            macro_rules! handle_error {
-                ($res:expr) => {{
-                    let res = $res;
-                    match res {
-                        Ok(()) => {}
-                        Err(Error::Errors { ref errors, .. }) if errors.is_empty() => {}
-                        Err(err) => errors.push(err),
-                    }
-                }};
-            }
-
             match *rhs.normalize() {
-                Type::TypeLit(TypeLit {
-                    members: ref rhs_members,
-                    ..
-                }) => handle_error!(self.assign_type_elements_to_type_element(
-                    span,
-                    &mut missing_fields,
-                    m,
-                    &rhs_members,
-                )),
-                Type::Interface(Interface { ref body, .. }) => {
-                    handle_error!(self.assign_type_elements_to_type_element(
-                        span,
-                        &mut missing_fields,
-                        m,
-                        &body
-                    ));
-                    // TODO: Check parent interface
-                }
-
                 // Check class itself
                 Type::Class(Class { ref body, .. }) => {
                     match m {
@@ -968,7 +991,6 @@ impl Analyzer<'_, '_> {
         rhs_members: &[TypeElement],
     ) -> ValidationResult<()> {
         // We need this to show error if not all of rhs_member is matched
-        let mut rhs_members = rhs_members.iter().collect::<Vec<_>>();
 
         if let Some(l_key) = m.key() {
             for rm in rhs_members {
@@ -1035,7 +1057,7 @@ impl Analyzer<'_, '_> {
 
                     missing_fields.push(m.clone());
                 }
-                _ => {}
+                _ => unreachable!(),
             }
         }
 
