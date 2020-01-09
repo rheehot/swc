@@ -789,7 +789,32 @@ impl Analyzer<'_, '_> {
         let mut errors = Errors::default();
         let mut missing_fields = vec![];
 
-        // TODO: [n:number] type <- [배열]
+        let numeric_keyed_ty = lhs
+            .iter()
+            .filter_map(|e| match e {
+                TypeElement::Index(ref i)
+                    if i.params.len() == 1
+                        && i.params[0].ty.is_kwd(TsKeywordTypeKind::TsNumberKeyword) =>
+                {
+                    Some(i.type_ann.as_ref())
+                }
+
+                _ => None,
+            })
+            .next();
+
+        if let Some(numeric_keyed_ty) = numeric_keyed_ty {
+            let any = Type::any(span);
+            let numeric_keyed_ty = numeric_keyed_ty.unwrap_or(&any);
+
+            match *rhs.normalize() {
+                Type::Array(Array { ref elem_type, .. }) => {
+                    return self.assign_inner(numeric_keyed_ty, elem_type, span)
+                }
+
+                _ => {}
+            }
+        }
 
         {
             macro_rules! handle_type_elements {

@@ -600,7 +600,7 @@ error: AssignFailed {
         },
     ),
     cause: [
-        Errors {
+        UnknownPropertyInObjectLiteralAssignment {
             span: Span {
                 lo: BytePos(
                     64,
@@ -610,52 +610,6 @@ error: AssignFailed {
                 ),
                 ctxt: #0,
             },
-            errors: [
-                MissingFields {
-                    span: Span {
-                        lo: BytePos(
-                            64,
-                        ),
-                        hi: BytePos(
-                            65,
-                        ),
-                        ctxt: #0,
-                    },
-                    fields: [
-                        Call(
-                            CallSignature {
-                                span: Span {
-                                    lo: BytePos(
-                                        18,
-                                    ),
-                                    hi: BytePos(
-                                        27,
-                                    ),
-                                    ctxt: #0,
-                                },
-                                params: [],
-                                type_params: None,
-                                ret_ty: Some(
-                                    Keyword(
-                                        TsKeywordType {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    22,
-                                                ),
-                                                hi: BytePos(
-                                                    26,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            kind: TsVoidKeyword,
-                                        },
-                                    ),
-                                ),
-                            },
-                        ),
-                    ],
-                },
-            ],
         },
     ],
 }
@@ -1263,7 +1217,7 @@ error: AssignFailed {
         },
     ),
     cause: [
-        Errors {
+        UnknownPropertyInObjectLiteralAssignment {
             span: Span {
                 lo: BytePos(
                     104,
@@ -1273,52 +1227,6 @@ error: AssignFailed {
                 ),
                 ctxt: #0,
             },
-            errors: [
-                MissingFields {
-                    span: Span {
-                        lo: BytePos(
-                            104,
-                        ),
-                        hi: BytePos(
-                            105,
-                        ),
-                        ctxt: #0,
-                    },
-                    fields: [
-                        Call(
-                            CallSignature {
-                                span: Span {
-                                    lo: BytePos(
-                                        86,
-                                    ),
-                                    hi: BytePos(
-                                        94,
-                                    ),
-                                    ctxt: #0,
-                                },
-                                params: [],
-                                type_params: None,
-                                ret_ty: Some(
-                                    Keyword(
-                                        TsKeywordType {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    90,
-                                                ),
-                                                hi: BytePos(
-                                                    94,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            kind: TsVoidKeyword,
-                                        },
-                                    ),
-                                ),
-                            },
-                        ),
-                    ],
-                },
-            ],
         },
     ],
 }

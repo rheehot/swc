@@ -1,10 +1,10 @@
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            68,
+            63,
         ),
         hi: BytePos(
-            115,
+            107,
         ),
         ctxt: #0,
     },
@@ -12,71 +12,56 @@ error: AssignFailed {
         Interface {
             span: Span {
                 lo: BytePos(
-                    27,
+                    16,
                 ),
                 hi: BytePos(
-                    60,
+                    57,
                 ),
                 ctxt: #0,
             },
+            name: Atom('I' type=inline),
             type_params: None,
             extends: [],
             body: [
                 Index(
                     IndexSignature {
                         params: [
-                            Ident(
-                                Ident {
-                                    span: Span {
-                                        lo: BytePos(
-                                            37,
-                                        ),
-                                        hi: BytePos(
-                                            38,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    sym: Atom('s' type=inline),
-                                    type_ann: Some(
-                                        TsTypeAnn {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    40,
-                                                ),
-                                                hi: BytePos(
-                                                    46,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            type_ann: TsKeywordType(
-                                                TsKeywordType {
-                                                    span: Span {
-                                                        lo: BytePos(
-                                                            40,
-                                                        ),
-                                                        hi: BytePos(
-                                                            46,
-                                                        ),
-                                                        ctxt: #0,
-                                                    },
-                                                    kind: TsNumberKeyword,
-                                                },
-                                            ),
-                                        },
+                            FnParam {
+                                span: Span {
+                                    lo: BytePos(
+                                        35,
                                     ),
-                                    optional: false,
+                                    hi: BytePos(
+                                        36,
+                                    ),
+                                    ctxt: #0,
                                 },
-                            ),
+                                required: true,
+                                ty: Keyword(
+                                    TsKeywordType {
+                                        span: Span {
+                                            lo: BytePos(
+                                                38,
+                                            ),
+                                            hi: BytePos(
+                                                44,
+                                            ),
+                                            ctxt: #0,
+                                        },
+                                        kind: TsNumberKeyword,
+                                    },
+                                ),
+                            },
                         ],
                         type_ann: Some(
                             Keyword(
                                 TsKeywordType {
                                     span: Span {
                                         lo: BytePos(
-                                            49,
+                                            47,
                                         ),
                                         hi: BytePos(
-                                            56,
+                                            54,
                                         ),
                                         ctxt: #0,
                                     },
@@ -87,10 +72,10 @@ error: AssignFailed {
                         readonly: false,
                         span: Span {
                             lo: BytePos(
-                                36,
+                                34,
                             ),
                             hi: BytePos(
-                                57,
+                                55,
                             ),
                             ctxt: #0,
                         },
@@ -103,10 +88,10 @@ error: AssignFailed {
         TypeLit {
             span: Span {
                 lo: BytePos(
-                    75,
+                    70,
                 ),
                 hi: BytePos(
-                    115,
+                    107,
                 ),
                 ctxt: #0,
             },
@@ -115,10 +100,10 @@ error: AssignFailed {
                     PropertySignature {
                         span: Span {
                             lo: BytePos(
-                                83,
+                                76,
                             ),
                             hi: BytePos(
-                                94,
+                                88,
                             ),
                             ctxt: #0,
                         },
@@ -127,10 +112,10 @@ error: AssignFailed {
                             UnaryExpr {
                                 span: Span {
                                     lo: BytePos(
-                                        83,
+                                        77,
                                     ),
                                     hi: BytePos(
-                                        89,
+                                        83,
                                     ),
                                     ctxt: #0,
                                 },
@@ -140,10 +125,10 @@ error: AssignFailed {
                                         Str {
                                             span: Span {
                                                 lo: BytePos(
-                                                    84,
+                                                    78,
                                                 ),
                                                 hi: BytePos(
-                                                    89,
+                                                    83,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -157,7 +142,36 @@ error: AssignFailed {
                         computed: false,
                         optional: false,
                         params: [],
-                        type_ann: None,
+                        type_ann: Some(
+                            Lit(
+                                TsLitType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            86,
+                                        ),
+                                        hi: BytePos(
+                                            88,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    lit: Str(
+                                        Str {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    86,
+                                                ),
+                                                hi: BytePos(
+                                                    88,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            value: Atom('' type=static),
+                                            has_escape: false,
+                                        },
+                                    ),
+                                },
+                            ),
+                        ),
                         type_params: None,
                     },
                 ),
@@ -165,10 +179,10 @@ error: AssignFailed {
                     PropertySignature {
                         span: Span {
                             lo: BytePos(
-                                102,
+                                94,
                             ),
                             hi: BytePos(
-                                112,
+                                105,
                             ),
                             ctxt: #0,
                         },
@@ -177,10 +191,10 @@ error: AssignFailed {
                             UnaryExpr {
                                 span: Span {
                                     lo: BytePos(
-                                        102,
+                                        95,
                                     ),
                                     hi: BytePos(
-                                        108,
+                                        101,
                                     ),
                                     ctxt: #0,
                                 },
@@ -190,10 +204,10 @@ error: AssignFailed {
                                         Str {
                                             span: Span {
                                                 lo: BytePos(
-                                                    103,
+                                                    96,
                                                 ),
                                                 hi: BytePos(
-                                                    108,
+                                                    101,
                                                 ),
                                                 ctxt: #0,
                                             },
@@ -207,7 +221,35 @@ error: AssignFailed {
                         computed: false,
                         optional: false,
                         params: [],
-                        type_ann: None,
+                        type_ann: Some(
+                            Lit(
+                                TsLitType {
+                                    span: Span {
+                                        lo: BytePos(
+                                            104,
+                                        ),
+                                        hi: BytePos(
+                                            105,
+                                        ),
+                                        ctxt: #0,
+                                    },
+                                    lit: Number(
+                                        Number {
+                                            span: Span {
+                                                lo: BytePos(
+                                                    104,
+                                                ),
+                                                hi: BytePos(
+                                                    105,
+                                                ),
+                                                ctxt: #0,
+                                            },
+                                            value: 0.0,
+                                        },
+                                    ),
+                                },
+                            ),
+                        ),
                         type_params: None,
                     },
                 ),
@@ -215,105 +257,16 @@ error: AssignFailed {
         },
     ),
     cause: [
-        Errors {
+        UnknownPropertyInObjectLiteralAssignment {
             span: Span {
                 lo: BytePos(
-                    68,
+                    63,
                 ),
                 hi: BytePos(
-                    115,
+                    107,
                 ),
                 ctxt: #0,
             },
-            errors: [
-                MissingFields {
-                    span: Span {
-                        lo: BytePos(
-                            68,
-                        ),
-                        hi: BytePos(
-                            115,
-                        ),
-                        ctxt: #0,
-                    },
-                    fields: [
-                        Index(
-                            IndexSignature {
-                                params: [
-                                    Ident(
-                                        Ident {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    37,
-                                                ),
-                                                hi: BytePos(
-                                                    38,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            sym: Atom('s' type=inline),
-                                            type_ann: Some(
-                                                TsTypeAnn {
-                                                    span: Span {
-                                                        lo: BytePos(
-                                                            40,
-                                                        ),
-                                                        hi: BytePos(
-                                                            46,
-                                                        ),
-                                                        ctxt: #0,
-                                                    },
-                                                    type_ann: TsKeywordType(
-                                                        TsKeywordType {
-                                                            span: Span {
-                                                                lo: BytePos(
-                                                                    40,
-                                                                ),
-                                                                hi: BytePos(
-                                                                    46,
-                                                                ),
-                                                                ctxt: #0,
-                                                            },
-                                                            kind: TsNumberKeyword,
-                                                        },
-                                                    ),
-                                                },
-                                            ),
-                                            optional: false,
-                                        },
-                                    ),
-                                ],
-                                type_ann: Some(
-                                    Keyword(
-                                        TsKeywordType {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    49,
-                                                ),
-                                                hi: BytePos(
-                                                    56,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            kind: TsBooleanKeyword,
-                                        },
-                                    ),
-                                ),
-                                readonly: false,
-                                span: Span {
-                                    lo: BytePos(
-                                        36,
-                                    ),
-                                    hi: BytePos(
-                                        57,
-                                    ),
-                                    ctxt: #0,
-                                },
-                            },
-                        ),
-                    ],
-                },
-            ],
         },
     ],
 }
