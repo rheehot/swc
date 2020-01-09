@@ -1,6 +1,6 @@
 use super::Analyzer;
 use crate::{
-    errors::Error,
+    errors::{Error, Errors},
     ty::{
         Array, Class, ClassInstance, ClassMember, Constructor, EnumVariant, FnParam, Function,
         Interface, Intersection, Tuple, Type, TypeElement, TypeLit, TypeParam, Union,
@@ -19,16 +19,21 @@ impl Analyzer<'_, '_> {
         }
         debug_assert!(!span.is_dummy());
 
-        self.assign_inner(left, right, span)
-            .map_err(|err| match err {
-                Error::AssignFailed { .. } => err,
-                _ => Error::AssignFailed {
-                    span: err.span(),
-                    left: left.clone(),
-                    right: right.clone(),
-                    cause: vec![err],
-                },
-            })
+        let res = self.assign_inner(left, right, span);
+        match res {
+            Err(Error::Errors { errors, .. }) if errors.is_empty() => return Ok(()),
+            _ => {}
+        }
+
+        res.map_err(|err| match err {
+            Error::AssignFailed { .. } => err,
+            _ => Error::AssignFailed {
+                span: err.span(),
+                left: left.clone(),
+                right: right.clone(),
+                cause: vec![err],
+            },
+        })
     }
 
     /// Verifies that `ty` is
@@ -54,6 +59,8 @@ impl Analyzer<'_, '_> {
     }
 
     fn assign_inner(&self, to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
+        debug_assert!(!span.is_dummy());
+
         self.verify_before_assign(to);
         self.verify_before_assign(rhs);
 
@@ -215,7 +222,7 @@ impl Analyzer<'_, '_> {
             }
 
             Type::Intersection(ref i) => {
-                let mut errors = vec![];
+                let mut errors = Errors::default();
 
                 for ty in &i.types {
                     match self.assign_inner(&ty, rhs, span) {
@@ -228,7 +235,10 @@ impl Analyzer<'_, '_> {
                     return Ok(());
                 }
 
-                return Err(Error::Errors { span, errors });
+                return Err(Error::Errors {
+                    span,
+                    errors: errors.into(),
+                });
             }
 
             Type::Class(ref l) => match rhs.normalize() {
@@ -729,6 +739,8 @@ impl Analyzer<'_, '_> {
     }
 
     fn assign_class(&self, span: Span, l: &Class, r: &Class) -> ValidationResult<()> {
+        debug_assert!(!span.is_dummy());
+
         if l.eq_ignore_span(r) {
             return Ok(());
         }
@@ -770,6 +782,8 @@ impl Analyzer<'_, '_> {
         lhs: &[TypeElement],
         rhs: &Type,
     ) -> ValidationResult<()> {
+        debug_assert!(!span.is_dummy());
+
         let mut errors = vec![];
         let mut missing_fields = vec![];
 
