@@ -64,7 +64,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                         //  Check if v_ty is assignable to ty
                         let value_ty = match init.validate_with(a) {
                             Ok(ty) => {
-                                let ty = ty;
+                                let ty = a.expand(span, ty)?;
                                 a.check_rvalue(&ty);
                                 ty
                             }
