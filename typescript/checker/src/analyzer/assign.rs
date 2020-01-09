@@ -1,5 +1,6 @@
 use super::Analyzer;
 use crate::{
+    analyzer::util::ResultExt,
     errors::{Error, Errors},
     ty::{
         Array, Class, ClassInstance, ClassMember, Constructor, EnumVariant, FnParam, Function,
@@ -785,7 +786,7 @@ impl Analyzer<'_, '_> {
     ) -> ValidationResult<()> {
         debug_assert!(!span.is_dummy());
 
-        let mut errors = vec![];
+        let mut errors = Errors::default();
         let mut missing_fields = vec![];
 
         'l: for m in lhs {
@@ -808,88 +809,13 @@ impl Analyzer<'_, '_> {
                 _ => {}
             }
 
-            macro_rules! check_members {
-                ($rhs_members:expr) => {{
-                    let rhs_members = $rhs_members;
-                    // Assign each property to corresponding property.
-
-                    if let Some(l_key) = m.key() {
-                        for rm in rhs_members {
-                            if let Some(r_key) = rm.key() {
-                                if l_key.eq_ignore_span(r_key) {
-                                    match m {
-                                        TypeElement::Property(ref el) => match rm {
-                                            TypeElement::Property(ref r_el) => {
-                                                self.assign_inner(
-                                                    el.type_ann
-                                                        .as_ref()
-                                                        .unwrap_or(&Type::any(span)),
-                                                    r_el.type_ann
-                                                        .as_ref()
-                                                        .unwrap_or(&Type::any(span)),
-                                                    span,
-                                                )?;
-                                                continue 'l;
-                                            }
-                                            _ => {}
-                                        },
-
-                                        // `foo(a: string) is assignable to foo(a: any)`
-                                        TypeElement::Method(ref lm) => match rm {
-                                            TypeElement::Method(ref rm) => {
-                                                //
-                                                if count_required_params(&lm.params)
-                                                    > count_required_params(&rm.params)
-                                                {
-                                                    unimplemented!(
-                                                        "assignment: method property in type \
-                                             literal"
-                                                    )
-                                                }
-
-                                                for (i, r) in rm.params.iter().enumerate() {
-                                                    if let Some(ref l) = lm.params.get(i) {
-                                                        let l_ty = &l.ty;
-                                                        let r_ty = &r.ty;
-
-                                                        match self.assign(l_ty, r_ty, span) {
-                                                            Ok(()) => {}
-                                                            Err(err) => errors.push(err),
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            _ => {}
-                                        },
-                                        _ => {}
-                                    }
-                                }
-                            }
-                        }
-
-                        // No property with `key` found.
-                        missing_fields.push(m.clone());
-                    } else {
-                        match m {
-                            // TODO: Check type of the index.
-                            TypeElement::Index(..) => {
-                                continue 'l;
-                            }
-                            TypeElement::Call(..) => {
-                                //
-                                for rm in rhs_members {
-                                    match rm {
-                                        // TODO: Check type of parameters
-                                        // TODO: Check return type
-                                        TypeElement::Call(..) => continue 'l,
-                                        _ => {}
-                                    }
-                                }
-
-                                missing_fields.push(m.clone());
-                            }
-                            _ => {}
-                        }
+            macro_rules! handle_error {
+                ($res:expr) => {{
+                    let res = $res;
+                    match res {
+                        Ok(()) => {}
+                        Err(Error::Errors { ref errors, .. }) if errors.is_empty() => {}
+                        Err(err) => errors.push(err),
                     }
                 }};
             }
@@ -898,11 +824,19 @@ impl Analyzer<'_, '_> {
                 Type::TypeLit(TypeLit {
                     members: ref rhs_members,
                     ..
-                }) => check_members!(rhs_members),
-
+                }) => handle_error!(self.assign_type_elements_to_type_element(
+                    span,
+                    &mut missing_fields,
+                    m,
+                    &rhs_members,
+                )),
                 Type::Interface(Interface { ref body, .. }) => {
-                    // TODO: Type params
-                    check_members!(body)
+                    handle_error!(self.assign_type_elements_to_type_element(
+                        span,
+                        &mut missing_fields,
+                        m,
+                        &body
+                    ));
                     // TODO: Check parent interface
                 }
 
@@ -1016,10 +950,96 @@ impl Analyzer<'_, '_> {
         }
 
         if !errors.is_empty() {
-            return Err(Error::Errors { span, errors });
+            return Err(Error::Errors {
+                span,
+                errors: errors.into(),
+            });
         }
 
         Ok(())
+    }
+
+    /// This method assigns each property to corresponding property.
+    fn assign_type_elements_to_type_element(
+        &self,
+        span: Span,
+        missing_fields: &mut Vec<TypeElement>,
+        m: &TypeElement,
+        rhs_members: &[TypeElement],
+    ) -> ValidationResult<()> {
+        // We need this to show error if not all of rhs_member is matched
+        let mut rhs_members = rhs_members.iter().collect::<Vec<_>>();
+
+        if let Some(l_key) = m.key() {
+            for rm in rhs_members {
+                if let Some(r_key) = rm.key() {
+                    if l_key.eq_ignore_span(r_key) {
+                        match m {
+                            TypeElement::Property(ref el) => match rm {
+                                TypeElement::Property(ref r_el) => {
+                                    self.assign_inner(
+                                        el.type_ann.as_ref().unwrap_or(&Type::any(span)),
+                                        r_el.type_ann.as_ref().unwrap_or(&Type::any(span)),
+                                        span,
+                                    )?;
+                                    return Ok(());
+                                }
+                                _ => {}
+                            },
+
+                            // `foo(a: string) is assignable to foo(a: any)`
+                            TypeElement::Method(ref lm) => match rm {
+                                TypeElement::Method(ref rm) => {
+                                    //
+                                    if count_required_params(&lm.params)
+                                        > count_required_params(&rm.params)
+                                    {
+                                        unimplemented!(
+                                            "assignment: method property in type literal"
+                                        )
+                                    }
+
+                                    for (i, r) in rm.params.iter().enumerate() {
+                                        if let Some(ref l) = lm.params.get(i) {
+                                            let l_ty = &l.ty;
+                                            let r_ty = &r.ty;
+
+                                            self.assign(l_ty, r_ty, span)?;
+                                        }
+                                    }
+                                }
+                                _ => {}
+                            },
+                            _ => {}
+                        }
+                    }
+                }
+            }
+
+            // No property with `key` found.
+            missing_fields.push(m.clone());
+        } else {
+            match m {
+                // TODO: Check type of the index.
+                TypeElement::Index(..) => return Ok(()),
+                TypeElement::Call(..) => {
+                    //
+                    for rm in rhs_members {
+                        match rm {
+                            // TODO: Check type of parameters
+                            // TODO: Check return type
+                            TypeElement::Call(..) => return Ok(()),
+                            _ => {}
+                        }
+                    }
+
+                    missing_fields.push(m.clone());
+                }
+                _ => {}
+            }
+        }
+
+        Err(vec![])?
     }
 }
 
