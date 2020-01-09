@@ -57,6 +57,11 @@ impl Analyzer<'_, '_> {
                 }
             }
 
+            Type::Query(ref query) => panic!(
+                "A query type should be expanded before calling .assign()\n{:?}",
+                query,
+            ),
+
             _ => {}
         }
     }

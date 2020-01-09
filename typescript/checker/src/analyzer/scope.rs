@@ -624,7 +624,7 @@ impl Analyzer<'_, '_> {
                         let var_ty = var_ty.generalize_lit().into_owned();
 
                         match ty {
-                            Type::Function(..) => {}
+                            Type::Query(..) | Type::Function(..) => {}
                             _ => {
                                 let generalized_var_ty = var_ty.generalize_lit();
 
