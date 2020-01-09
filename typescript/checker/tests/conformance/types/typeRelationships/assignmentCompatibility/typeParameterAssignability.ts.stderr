@@ -1,21 +1,21 @@
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            151,
+            148,
         ),
         hi: BytePos(
-            152,
+            149,
         ),
         ctxt: #0,
     },
-    left: TypeParam(
+    left: Param(
         TypeParam {
             span: Span {
                 lo: BytePos(
-                    126,
+                    124,
                 ),
                 hi: BytePos(
-                    127,
+                    125,
                 ),
                 ctxt: #0,
             },
@@ -24,14 +24,14 @@ error: AssignFailed {
             default: None,
         },
     ),
-    right: TypeParam(
+    right: Param(
         TypeParam {
             span: Span {
                 lo: BytePos(
-                    155,
+                    152,
                 ),
                 hi: BytePos(
-                    156,
+                    153,
                 ),
                 ctxt: #0,
             },
@@ -50,21 +50,21 @@ error: AssignFailed {
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            172,
+            168,
         ),
         hi: BytePos(
-            173,
+            169,
         ),
         ctxt: #0,
     },
-    left: TypeParam(
+    left: Param(
         TypeParam {
             span: Span {
                 lo: BytePos(
-                    129,
+                    127,
                 ),
                 hi: BytePos(
-                    130,
+                    128,
                 ),
                 ctxt: #0,
             },
@@ -73,14 +73,14 @@ error: AssignFailed {
             default: None,
         },
     ),
-    right: TypeParam(
+    right: Param(
         TypeParam {
             span: Span {
                 lo: BytePos(
-                    176,
+                    172,
                 ),
                 hi: BytePos(
-                    177,
+                    173,
                 ),
                 ctxt: #0,
             },

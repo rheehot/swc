@@ -1,10 +1,11 @@
 error: UndefinedSymbol {
+    sym: Atom('return' type=static),
     span: Span {
         lo: BytePos(
-            30,
+            28,
         ),
         hi: BytePos(
-            36,
+            34,
         ),
         ctxt: #0,
     },
