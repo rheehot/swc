@@ -1,6 +1,6 @@
 use super::super::Analyzer;
 use crate::{
-    analyzer::util::ResultExt,
+    analyzer::{expr::TypeOfMode, util::ResultExt},
     errors::{Error, Errors},
     ty::Type,
     validator::{Validate, ValidateWith},
@@ -17,6 +17,24 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
 
     fn validate(&mut self, e: &UnaryExpr) -> Self::Output {
         let UnaryExpr { span, op, ref arg } = *e;
+
+        if let op!("delete") = op {
+            // `delete foo` returns bool
+
+            match *e.arg {
+                Expr::Member(ref e) => {
+                    self.type_of_member_expr(e, TypeOfMode::LValue)
+                        .store(&mut self.info.errors);
+
+                    return Ok(Type::Keyword(TsKeywordType {
+                        span,
+                        kind: TsKeywordTypeKind::TsBooleanKeyword,
+                    }));
+                }
+
+                _ => {}
+            }
+        }
 
         let arg: Option<Type> = arg
             .validate_with(self)
@@ -47,14 +65,6 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
                 return Ok(Type::Keyword(TsKeywordType {
                     span,
                     kind: TsKeywordTypeKind::TsStringKeyword,
-                }));
-            }
-
-            // `delete foo` returns bool
-            op!("delete") => {
-                return Ok(Type::Keyword(TsKeywordType {
-                    span,
-                    kind: TsKeywordTypeKind::TsBooleanKeyword,
                 }));
             }
 
