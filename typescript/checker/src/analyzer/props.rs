@@ -18,6 +18,8 @@ pub(super) enum ComputedPropMode {
     },
     /// Object literal
     Object,
+
+    Interface,
 }
 
 impl Visit<ComputedPropName> for Analyzer<'_, '_> {
@@ -57,7 +59,7 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
         };
 
         match mode {
-            ComputedPropMode::Class { .. } => {
+            ComputedPropMode::Class { .. } | ComputedPropMode::Interface => {
                 let ty = self
                     .expand(node.span, ty.clone())
                     .store(&mut self.info.errors);
@@ -66,7 +68,15 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
                     match *ty {
                         Type::Lit(..) => {}
                         _ if ty.is_kwd(TsKeywordTypeKind::TsSymbolKeyword) => {}
-                        _ => errors.push(Error::TS1168 { span: node.span }),
+                        _ => match mode {
+                            ComputedPropMode::Class { .. } => {
+                                errors.push(Error::TS1168 { span: node.span })
+                            }
+                            ComputedPropMode::Interface => {
+                                errors.push(Error::TS1169 { span: node.span })
+                            }
+                            _ => {}
+                        },
                     }
                 }
             }
@@ -77,6 +87,8 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
         if match mode {
             ComputedPropMode::Class { has_body } => !has_body,
             ComputedPropMode::Object => errors.is_empty(),
+            // TODO:
+            ComputedPropMode::Interface => errors.is_empty(),
         } {
             let ty = ty.generalize_lit();
             match *ty.normalize() {

@@ -269,6 +269,13 @@ pub enum Error {
         span: Span,
     },
 
+    /// A computed property name in an interface must refer to an expression
+    /// whose type is a literal type or a 'unique symbol' type.
+    TS1169 {
+        /// Span of offending computed property.
+        span: Span,
+    },
+
     TS1183 {
         span: Span,
     },
