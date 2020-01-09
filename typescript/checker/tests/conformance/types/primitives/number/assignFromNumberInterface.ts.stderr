@@ -574,7 +574,7 @@ error: AssignFailed {
                                                         },
                                                     },
                                                 ),
-                                                type_params: None,
+                                                type_args: None,
                                             },
                                         ),
                                     },
