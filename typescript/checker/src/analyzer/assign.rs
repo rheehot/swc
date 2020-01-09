@@ -28,6 +28,7 @@ impl Analyzer<'_, '_> {
 
         res.map_err(|err| match err {
             Error::AssignFailed { .. } => err,
+            Error::Errors { .. } => err,
             _ => Error::AssignFailed {
                 span: err.span(),
                 left: left.clone(),
@@ -795,7 +796,7 @@ impl Analyzer<'_, '_> {
         let mut errors = Errors::default();
         let mut missing_fields = vec![];
 
-        let numeric_keyed_ty = lhs
+        let numeric_keyed_ty: Option<Option<&Type>> = lhs
             .iter()
             .filter_map(|e| match e {
                 TypeElement::Index(ref i)
@@ -816,6 +817,22 @@ impl Analyzer<'_, '_> {
             match *rhs.normalize() {
                 Type::Array(Array { ref elem_type, .. }) => {
                     return self.assign_inner(numeric_keyed_ty, elem_type, span)
+                }
+
+                Type::Tuple(Tuple { ref types, .. }) => {
+                    let mut errors = Errors::default();
+                    for ty in types {
+                        self.assign_inner(numeric_keyed_ty, ty, ty.span())
+                            .store(&mut errors);
+                    }
+                    return if errors.is_empty() {
+                        Ok(())
+                    } else {
+                        Err(Error::Errors {
+                            span,
+                            errors: errors.into(),
+                        })
+                    };
                 }
 
                 _ => {}
@@ -1059,7 +1076,7 @@ impl Analyzer<'_, '_> {
                                             let l_ty = &l.ty;
                                             let r_ty = &r.ty;
 
-                                            self.assign(l_ty, r_ty, span)?;
+                                            self.assign_inner(l_ty, r_ty, span)?;
                                         }
                                     }
                                 }
