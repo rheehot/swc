@@ -485,8 +485,13 @@ impl Type {
         let mut tys = vec![];
 
         for ty in iter {
-            if span.is_dummy() {
-                span = ty.span();
+            let sp = ty.span();
+
+            if sp.lo() < span.lo() {
+                span = span.with_lo(sp.lo());
+            }
+            if sp.hi() > span.hi() {
+                span = span.with_hi(sp.hi());
             }
 
             match ty {
