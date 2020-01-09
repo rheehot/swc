@@ -18,8 +18,9 @@ bash ./scripts/sort.sh
 
 
 # Verify tests mark as done
-TEST="NO_TEST_WILL_MATCH_THIS" RUST_BACTRACE=0 cargo test --test tests -- conformance
-
+TEST="NO_TEST_WILL_MATCH_THIS" RUST_BACKTRACE=0 cargo test --test tests -- conformance
+reset
+echo "Tests marked as done are verified"
 
 # We are developing
 export TEST="$1"
