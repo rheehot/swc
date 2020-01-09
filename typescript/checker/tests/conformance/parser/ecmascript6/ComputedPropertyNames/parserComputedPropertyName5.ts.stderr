@@ -11,6 +11,7 @@ error: A 'get' accessor must return a value
   |                      ^^^
 
 error: UndefinedSymbol {
+    sym: Atom('e' type=inline),
     span: Span {
         lo: BytePos(
             37,

@@ -14,7 +14,8 @@ error: TS1166 {
 4 |     [e]: number
   |     ^^^^^^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('e' type=inline),
     span: Span {
         lo: BytePos(
             45,
@@ -46,7 +47,8 @@ error: TS1166 {
 5 |     [e2]: number
   |     ^^^^^^^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('e2' type=inline),
     span: Span {
         lo: BytePos(
             61,

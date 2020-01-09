@@ -4,7 +4,8 @@ error: Expected one variable binding
 1 | for (var a = 1, b = 2 in X) {
   |                 ^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('X' type=inline),
     span: Span {
         lo: BytePos(
             25,

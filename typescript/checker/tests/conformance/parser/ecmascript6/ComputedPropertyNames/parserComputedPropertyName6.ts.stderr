@@ -1,4 +1,5 @@
 error: UndefinedSymbol {
+    sym: Atom('e' type=inline),
     span: Span {
         lo: BytePos(
             26,
@@ -15,6 +16,7 @@ error: UndefinedSymbol {
   |            ^
 
 error: UndefinedSymbol {
+    sym: Atom('e' type=inline),
     span: Span {
         lo: BytePos(
             34,
@@ -31,6 +33,7 @@ error: UndefinedSymbol {
   |                    ^
 
 error: UndefinedSymbol {
+    sym: Atom('e' type=inline),
     span: Span {
         lo: BytePos(
             38,

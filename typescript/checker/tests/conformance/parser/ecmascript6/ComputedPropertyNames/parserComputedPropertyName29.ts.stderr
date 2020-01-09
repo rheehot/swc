@@ -15,6 +15,7 @@ error: TS1166 {
   |     ^^^^^^^^^^
 
 error: UndefinedSymbol {
+    sym: Atom('e' type=inline),
     span: Span {
         lo: BytePos(
             45,
@@ -31,6 +32,7 @@ error: UndefinedSymbol {
   |      ^
 
 error: UndefinedSymbol {
+    sym: Atom('id' type=inline),
     span: Span {
         lo: BytePos(
             50,
@@ -63,6 +65,7 @@ error: TS1166 {
   |     ^^^^^^^^^^^^
 
 error: UndefinedSymbol {
+    sym: Atom('e2' type=inline),
     span: Span {
         lo: BytePos(
             60,

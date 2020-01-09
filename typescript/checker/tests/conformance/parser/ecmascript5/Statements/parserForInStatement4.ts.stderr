@@ -4,7 +4,8 @@ error: Unexpected initializer in for in/of loop
 1 | for (var a = 1 in X) {
   |          ^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('X' type=inline),
     span: Span {
         lo: BytePos(
             18,

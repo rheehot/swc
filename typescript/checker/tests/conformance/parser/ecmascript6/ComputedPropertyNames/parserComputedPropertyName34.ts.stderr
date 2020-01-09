@@ -5,6 +5,7 @@ error: TS1164
   |     ^^
 
 error: UndefinedSymbol {
+    sym: Atom('id' type=inline),
     span: Span {
         lo: BytePos(
             64,

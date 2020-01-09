@@ -1,4 +1,5 @@
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('something' type=dynamic),
     span: Span {
         lo: BytePos(
             14,

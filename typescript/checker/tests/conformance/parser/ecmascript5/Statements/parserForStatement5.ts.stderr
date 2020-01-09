@@ -4,7 +4,8 @@ error: TS2491
 1 | for ({} in b) {
   |      ^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('b' type=inline),
     span: Span {
         lo: BytePos(
             11,

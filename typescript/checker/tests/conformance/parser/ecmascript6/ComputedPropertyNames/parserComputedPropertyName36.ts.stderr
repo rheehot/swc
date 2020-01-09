@@ -20,7 +20,8 @@ error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'pu
 3 |     [public ]: string;
   |      ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('public' type=static),
     span: Span {
         lo: BytePos(
             30,

@@ -1,5 +1,5 @@
 error: UndefinedSymbol {
-    symbol: Atom('a' type=inline),
+    sym: Atom('a' type=inline),
     span: Span {
         lo: BytePos(
             0,
@@ -21,7 +21,8 @@ error: TS1005
 1 | a = (() => { } || a)
   |                ^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('a' type=inline),
     span: Span {
         lo: BytePos(
             18,

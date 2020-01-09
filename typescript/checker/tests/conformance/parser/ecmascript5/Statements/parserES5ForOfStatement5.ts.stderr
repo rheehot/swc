@@ -4,7 +4,8 @@ error: TS2483
 2 | for (var a: number of X) {
   |          ^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('X' type=inline),
     span: Span {
         lo: BytePos(
             37,
