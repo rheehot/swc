@@ -52,7 +52,7 @@ error: UselessSeqExpr {
             1179,
         ),
         hi: BytePos(
-            1183,
+            1189,
         ),
         ctxt: #0,
     },
@@ -60,5 +60,5 @@ error: UselessSeqExpr {
   --> $DIR/tests/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType.ts:57:1
    |
 57 | !ANY, ANY1;
-   | ^^^^
+   | ^^^^^^^^^^
 
