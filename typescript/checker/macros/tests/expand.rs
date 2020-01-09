@@ -13,7 +13,9 @@ struct Analyzer<'a, 'b> {
 
 #[validator]
 impl Validate<Expr> for Analyzer<'_, '_> {
-    type Output = ValidationResult;
+    type Output = Result<(), Error>;
 
-    fn validate(&mut self, e: &Expr) -> ValidationResult {}
+    fn validate(&mut self, _: &Expr) -> ValidationResult {
+        Err(Error)
+    }
 }

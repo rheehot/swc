@@ -9,15 +9,14 @@ extern crate proc_macro;
 use pmutil::{Quote, ToTokensExt};
 use swc_macros_common::prelude::*;
 use syn::{
-    ExprTryBlock, GenericArgument, Ident, ImplItemMethod, Item, ItemImpl, Path, PathArguments,
-    PathSegment, ReturnType, Type,
+    fold::Fold, ExprTryBlock, GenericArgument, Ident, ImplItemMethod, Item, ItemImpl,
+    PathArguments, PathSegment, ReturnType,
 };
 
-/// Macros which should be attached to every `Validate<T>` impls.
+/// Macros which should be attached to `Validate<T>` impls.
 ///
-/// This macro does two thing. implementing `Visit<T>` for the
-/// type, to prevent mistakenly implementing `Visit<T>` in a wrong way. Second
-/// one one is injecting span validator (using debug assertion).
+/// This macro implements `Visit<T>` for the type, to prevent mistakenly
+/// implementing `Visit<T>` in a wrong way.
 #[proc_macro_attribute]
 pub fn validator(
     _: proc_macro::TokenStream,
@@ -61,6 +60,7 @@ pub fn validator(
                     },
                     {
                         #[automatically_derived]
+                        /// Delegates to `Validate<T>`.
                         impl ::swc_common::Visit<T> for Folder {
                             fn visit(&mut self, node: &T) {
                                 let res: ::std::result::Result<_, crate::Error> =
@@ -78,6 +78,7 @@ pub fn validator(
                 .with_generics(item.generics.clone()),
         ));
 
+        items.push(item.clone().into());
         items
     }
 
