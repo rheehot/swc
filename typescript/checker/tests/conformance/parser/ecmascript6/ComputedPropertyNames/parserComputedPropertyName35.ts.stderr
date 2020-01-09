@@ -7,10 +7,10 @@ error: TS1171
 error: UselessSeqExpr {
     span: Span {
         lo: BytePos(
-            32,
+            30,
         ),
         hi: BytePos(
-            33,
+            34,
         ),
         ctxt: #0,
     },
@@ -18,5 +18,5 @@ error: UselessSeqExpr {
  --> $DIR/tests/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName35.ts:3:6
   |
 3 |     [0, 1]: { }
-  |      ^
+  |      ^^^^
 

@@ -1,10 +1,11 @@
 error: UndefinedSymbol {
+    sym: Atom('b' type=inline),
     span: Span {
         lo: BytePos(
-            368,
+            348,
         ),
         hi: BytePos(
-            369,
+            349,
         ),
         ctxt: #0,
     },
@@ -15,12 +16,13 @@ error: UndefinedSymbol {
    |                         ^
 
 error: UndefinedSymbol {
+    sym: Atom('b' type=inline),
     span: Span {
         lo: BytePos(
-            397,
+            376,
         ),
         hi: BytePos(
-            398,
+            377,
         ),
         ctxt: #0,
     },

@@ -4,7 +4,7 @@ error: UselessSeqExpr {
             649,
         ),
         hi: BytePos(
-            654,
+            661,
         ),
         ctxt: #0,
     },
@@ -12,5 +12,5 @@ error: UselessSeqExpr {
   --> $DIR/tests/conformance/expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithBooleanType.ts:36:1
    |
 36 | !true, false;
-   | ^^^^^
+   | ^^^^^^^^^^^^
 
