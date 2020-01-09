@@ -29,6 +29,22 @@ use swc_ecma_parser::{
     lexer::Lexer, JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig,
 };
 
+#[macro_use]
+mod debug;
+pub mod analyzer;
+mod builtin_types;
+pub mod errors;
+pub mod validator;
+//mod legacy;
+pub mod loader;
+pub mod resolver;
+pub mod ty;
+mod util;
+
+pub type Result<T> = std::result::Result<T, Error>;
+
+pub type ValidationResult<T = Type> = Result<T>;
+
 #[derive(Debug, PartialEq, Eq)]
 pub struct ImportInfo {
     pub span: Span,
@@ -44,20 +60,6 @@ pub struct Specifier {
     pub local: Id,
     pub export: Id,
 }
-
-pub mod analyzer;
-mod builtin_types;
-pub mod errors;
-pub mod validator;
-//mod legacy;
-pub mod loader;
-pub mod resolver;
-pub mod ty;
-mod util;
-
-pub type Result<T> = std::result::Result<T, Error>;
-
-pub type ValidationResult<T = Type> = Result<T>;
 
 #[derive(Debug)]
 pub struct Config {
