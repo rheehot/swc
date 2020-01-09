@@ -19,7 +19,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
             ..self.ctx
         };
         self.with_ctx(ctx).with(|a| {
-            var.decls.iter().for_each(|mut v| {
+            var.decls.iter().for_each(|v| {
                 let res: Result<_, _> = try {
                     let v_span = v.span();
                     if !a.is_builtin {
