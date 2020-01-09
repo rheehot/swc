@@ -29,8 +29,6 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::ClassProperty>;
 
     fn validate(&mut self, p: &ClassProp) -> Self::Output {
-        p.validate_children(self);
-
         // Verify key if key is computed
         if p.computed {
             self.validate_computed_prop_key(p.span, &p.key);
