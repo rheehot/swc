@@ -454,6 +454,7 @@ impl Analyzer<'_, '_> {
             | Expr::Lit(Lit::Str(..))
             | Expr::Lit(Lit::Null(..))
             | Expr::Lit(Lit::Num(..))
+            | Expr::Lit(Lit::Regex(..))
             | Expr::MetaProp(..)
             | Expr::JSXFragment(..)
             | Expr::JSXNamespacedName(..)
