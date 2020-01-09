@@ -789,6 +789,8 @@ impl Analyzer<'_, '_> {
         let mut errors = Errors::default();
         let mut missing_fields = vec![];
 
+        // TODO: [n:number] type <- [배열]
+
         {
             macro_rules! handle_type_elements {
                 ($rhs:expr) => {{
