@@ -1,4 +1,5 @@
 error: UndefinedSymbol {
+    sym: Atom('yield' type=static),
     span: Span {
         lo: BytePos(
             16,

@@ -16,6 +16,11 @@ fi
 bash ./scripts/sort.sh
 ./scripts/success.py
 
+
+# Verify tests mark as done
+TEST="NO_TEST_WILL_MATCH_THIS" RUST_BACTRACE=0 cargo test --test tests -- conformance
+
+
 # We are developing
 export TEST="$1"
 if [[ -z $1 ]]; then

@@ -1,4 +1,5 @@
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             320,
@@ -14,7 +15,8 @@ error: NameNotFound {
 14 |   $ERROR('#А');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             371,
@@ -30,7 +32,8 @@ error: NameNotFound {
 18 |   $ERROR('#Б');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             422,
@@ -46,7 +49,8 @@ error: NameNotFound {
 22 |   $ERROR('#В');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             473,
@@ -62,7 +66,8 @@ error: NameNotFound {
 26 |   $ERROR('#Г');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             524,
@@ -78,7 +83,8 @@ error: NameNotFound {
 30 |   $ERROR('#Д');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             575,
@@ -94,7 +100,8 @@ error: NameNotFound {
 34 |   $ERROR('#Е');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             626,
@@ -110,7 +117,8 @@ error: NameNotFound {
 38 |   $ERROR('#Ж');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             677,
@@ -126,7 +134,8 @@ error: NameNotFound {
 42 |   $ERROR('#З');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             728,
@@ -142,7 +151,8 @@ error: NameNotFound {
 46 |   $ERROR('#И');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             779,
@@ -158,7 +168,8 @@ error: NameNotFound {
 50 |   $ERROR('#Й');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             830,
@@ -174,7 +185,8 @@ error: NameNotFound {
 54 |   $ERROR('#К');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             881,
@@ -190,7 +202,8 @@ error: NameNotFound {
 58 |   $ERROR('#Л');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             932,
@@ -206,7 +219,8 @@ error: NameNotFound {
 62 |   $ERROR('#М');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             983,
@@ -222,7 +236,8 @@ error: NameNotFound {
 66 |   $ERROR('#Н');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1034,
@@ -238,7 +253,8 @@ error: NameNotFound {
 70 |   $ERROR('#О');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1085,
@@ -254,7 +270,8 @@ error: NameNotFound {
 74 |   $ERROR('#П');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1136,
@@ -270,7 +287,8 @@ error: NameNotFound {
 78 |   $ERROR('#Р');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1187,
@@ -286,7 +304,8 @@ error: NameNotFound {
 82 |   $ERROR('#С');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1238,
@@ -302,7 +321,8 @@ error: NameNotFound {
 86 |   $ERROR('#Т');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1289,
@@ -318,7 +338,8 @@ error: NameNotFound {
 90 |   $ERROR('#У');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1340,
@@ -334,7 +355,8 @@ error: NameNotFound {
 94 |   $ERROR('#Ф');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1391,
@@ -350,7 +372,8 @@ error: NameNotFound {
 98 |   $ERROR('#Х');
    |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1442,
@@ -366,7 +389,8 @@ error: NameNotFound {
 102 |   $ERROR('#Ц');
     |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1493,
@@ -382,7 +406,8 @@ error: NameNotFound {
 106 |   $ERROR('#Ч');
     |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1544,
@@ -398,7 +423,8 @@ error: NameNotFound {
 110 |   $ERROR('#Ш');
     |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1595,
@@ -414,7 +440,8 @@ error: NameNotFound {
 114 |   $ERROR('#Щ');
     |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1646,
@@ -430,7 +457,8 @@ error: NameNotFound {
 118 |   $ERROR('#Ъ');
     |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1697,
@@ -446,7 +474,8 @@ error: NameNotFound {
 122 |   $ERROR('#Ы');
     |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1748,
@@ -462,7 +491,8 @@ error: NameNotFound {
 126 |   $ERROR('#Ь');
     |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1799,
@@ -478,7 +508,8 @@ error: NameNotFound {
 130 |   $ERROR('#Э');
     |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1850,
@@ -494,7 +525,8 @@ error: NameNotFound {
 134 |   $ERROR('#Ю');
     |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1901,
@@ -510,7 +542,8 @@ error: NameNotFound {
 138 |   $ERROR('#Я');
     |   ^^^^^^
 
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('$ERROR' type=inline),
     span: Span {
         lo: BytePos(
             1952,

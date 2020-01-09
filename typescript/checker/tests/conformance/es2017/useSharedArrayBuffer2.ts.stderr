@@ -1,4 +1,5 @@
-error: NameNotFound {
+error: UndefinedSymbol {
+    sym: Atom('SharedArrayBuffer' type=static),
     span: Span {
         lo: BytePos(
             45,

@@ -5,12 +5,13 @@ error: 'implements', 'interface', 'let', 'package', 'private', 'protected',  'pu
   | ^^^^^
 
 error: UndefinedSymbol {
+    sym: Atom('yield' type=static),
     span: Span {
         lo: BytePos(
-            32,
+            30,
         ),
         hi: BytePos(
-            37,
+            35,
         ),
         ctxt: #0,
     },
@@ -21,12 +22,13 @@ error: UndefinedSymbol {
   | ^^^^^
 
 error: UndefinedSymbol {
+    sym: Atom('foo' type=inline),
     span: Span {
         lo: BytePos(
-            38,
+            36,
         ),
         hi: BytePos(
-            41,
+            39,
         ),
         ctxt: #0,
     },

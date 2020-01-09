@@ -5,6 +5,7 @@ error: TS1109
   |     ^
 
 error: UndefinedSymbol {
+    sym: Atom('T' type=inline),
     span: Span {
         lo: BytePos(
             5,
@@ -21,6 +22,7 @@ error: UndefinedSymbol {
   |      ^
 
 error: UndefinedSymbol {
+    sym: Atom('Foo' type=inline),
     span: Span {
         lo: BytePos(
             7,

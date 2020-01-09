@@ -11,6 +11,7 @@ error: With statement are not allowed in strict mode
   | ^^^^
 
 error: UndefinedSymbol {
+    sym: Atom('a' type=inline),
     span: Span {
         lo: BytePos(
             20,

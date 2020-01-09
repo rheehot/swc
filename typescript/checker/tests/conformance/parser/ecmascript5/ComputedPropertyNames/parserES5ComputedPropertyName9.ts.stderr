@@ -15,6 +15,7 @@ error: TS1166 {
   |    ^^^^^^^^^
 
 error: UndefinedSymbol {
+    sym: Atom('e' type=inline),
     span: Span {
         lo: BytePos(
             29,
