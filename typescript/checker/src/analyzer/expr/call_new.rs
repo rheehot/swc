@@ -362,16 +362,17 @@ impl Analyzer<'_, '_> {
                 if computed {
                     unimplemented!("typeof(CallExpr): {:?}[{:?}]()", callee, prop)
                 } else {
+                    let callee = self.validate(callee)?;
+
+                    match callee {
+                        Type::Function(f) => return Ok(*f.ret_ty),
+                        _ => {}
+                    }
+
                     Err(if kind == ExtractKind::Call {
-                        Error::NoCallSignature {
-                            span,
-                            callee: self.validate(callee)?,
-                        }
+                        Error::NoCallSignature { span, callee }
                     } else {
-                        Error::NoNewSignature {
-                            span,
-                            callee: self.validate(callee)?,
-                        }
+                        Error::NoNewSignature { span, callee }
                     })
                 }
             }
