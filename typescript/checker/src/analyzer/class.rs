@@ -114,6 +114,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                             ..
                         }) => {
                             let ty = try_opt!(child.validate(&i.type_ann));
+                            let ty = try_opt!(ty.map(|ty| child.expand(ty.span(), ty)));
                             //let ty = match ty {
                             //    Some(ty) => match child.expand_type(i.span, ty) {
                             //        Ok(ty) => Some(ty),
