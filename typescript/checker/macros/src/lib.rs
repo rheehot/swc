@@ -7,8 +7,88 @@ extern crate pmutil;
 extern crate proc_macro;
 
 use pmutil::{Quote, ToTokensExt};
-use swc_macros_common::{call_site, print};
-use syn::{ExprTryBlock, ImplItemMethod, ReturnType};
+use swc_macros_common::prelude::*;
+use syn::{
+    ExprTryBlock, GenericArgument, Ident, ImplItemMethod, Item, ItemImpl, Path, PathArguments,
+    PathSegment, ReturnType, Type,
+};
+
+/// Macros which should be attached to every `Validate<T>` impls.
+///
+/// This macro does two thing. implementing `Visit<T>` for the
+/// type, to prevent mistakenly implementing `Visit<T>` in a wrong way. Second
+/// one one is injecting span validator (using debug assertion).
+#[proc_macro_attribute]
+pub fn validator(
+    _: proc_macro::TokenStream,
+    item: proc_macro::TokenStream,
+) -> proc_macro::TokenStream {
+    fn expand(item: ItemImpl) -> Vec<Item> {
+        let mut items = vec![];
+
+        // Validated type
+        let ty = {
+            let (_, path, _) = item
+                .trait_
+                .clone()
+                .expect("#[validator] should be applied to Validate<T>");
+
+            let mut segments = path.segments;
+
+            segments[0] = PathSegment {
+                ident: Ident::new("Visit", call_site()),
+                arguments: segments[0].arguments.clone(),
+            };
+
+            let arg = match segments[0].arguments {
+                PathArguments::AngleBracketed(ref args) => args.args[0].clone(),
+                _ => unimplemented!("error reporting for invalid implementation of Validator<T>"),
+            };
+            let ty = match arg {
+                GenericArgument::Type(ty) => ty,
+                _ => unimplemented!("error reporting for invalid implementation of Validator<T>"),
+            };
+
+            ty
+        };
+
+        items.push(Item::Impl(
+            Quote::new_call_site()
+                .quote_with(smart_quote!(
+                    Vars {
+                        T: &ty,
+                        Folder: &item.self_ty
+                    },
+                    {
+                        #[automatically_derived]
+                        impl ::swc_common::Visit<T> for Folder {
+                            fn visit(&mut self, node: &T) {
+                                let res: ::std::result::Result<_, crate::Error> =
+                                    self.validate(node);
+
+                                match res {
+                                    Ok(..) => {}
+                                    Err(err) => self.info.errors.push(err),
+                                }
+                            }
+                        }
+                    }
+                ))
+                .parse::<ItemImpl>()
+                .with_generics(item.generics.clone()),
+        ));
+
+        items
+    }
+
+    let item = syn::parse(item).expect("failed to parse input as an item");
+    let items = expand(item);
+    let mut buf = Quote::new_call_site();
+    for item in items {
+        buf.push_tokens(&item)
+    }
+    print("validator", buf.dump())
+}
 
 /// This macro converts
 ///
@@ -110,5 +190,5 @@ pub fn validator_method(
 
     let item = syn::parse(item).expect("failed to parse input as an item");
     let item = expand_validator_method(item);
-    print("validator", item.dump())
+    print("validator_method", item.dump())
 }

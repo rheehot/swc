@@ -13,18 +13,13 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
-use macros::validator_method;
+use macros::{validator, validator_method};
 use std::mem::replace;
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 
-prevent!(ClassProp);
-prevent!(Constructor);
-prevent!(ClassMethod);
-prevent!(TsFnParam);
-prevent!(TsIndexSignature);
-
+#[validator]
 impl Validate<ClassProp> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::ClassProperty>;
 
