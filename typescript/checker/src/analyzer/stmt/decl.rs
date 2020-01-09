@@ -22,6 +22,9 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
             var.decls.iter().for_each(|mut v| {
                 let res: Result<_, _> = try {
                     let v_span = v.span();
+                    if !a.is_builtin {
+                        debug_assert!(!v_span.is_dummy());
+                    }
 
                     let debug_declaring = if cfg!(debug_assertions) {
                         Some(a.scope.declaring.clone())
@@ -69,7 +72,11 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                 ty
                             }
                             Err(err) => {
-                                a.info.errors.push(err);
+                                if a.is_builtin {
+                                    unreachable!("failed to assign builtin: \nError: {:?}", err)
+                                } else {
+                                    a.info.errors.push(err);
+                                }
                                 inject_any!();
                                 remove_declaring!();
                                 return;
@@ -87,8 +94,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                                     }
                                 };
                                 let ty = a.expand(span, ty)?;
-                                let error = a.assign(&ty, &value_ty, v_span);
-                                match error {
+                                match a.assign(&ty, &value_ty, v_span) {
                                     Ok(()) => {
                                         match a.scope.declare_complex_vars(kind, &v.name, ty) {
                                             Ok(()) => {}
