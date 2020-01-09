@@ -178,8 +178,37 @@ impl Validate<SeqExpr> for Analyzer<'_, '_> {
 
         assert!(exprs.len() >= 1);
 
+        let first_span = e.exprs[0].span();
+        let len = e.exprs.len();
+
         let mut is_any = false;
-        for e in exprs.iter() {
+        for (i, e) in exprs.iter().enumerate() {
+            let is_last = i == len - 1;
+
+            if !is_last {
+                match **e {
+                    Expr::Ident(..)
+                    | Expr::Lit(..)
+                    | Expr::Arrow(..)
+                    | Expr::Unary(UnaryExpr {
+                        op: op!(unary, "-"),
+                        ..
+                    })
+                    | Expr::Unary(UnaryExpr {
+                        op: op!(unary, "+"),
+                        ..
+                    })
+                    | Expr::Unary(UnaryExpr { op: op!("!"), .. })
+                        if !self.rule.allow_unreachable_code =>
+                    {
+                        self.info.errors.push(Error::UselessSeqExpr {
+                            span: span.with_lo(first_span.lo()),
+                        });
+                    }
+
+                    _ => {}
+                }
+            }
             match **e {
                 Expr::Ident(ref i) => {
                     if self.scope.declaring.contains(&i.sym) {
