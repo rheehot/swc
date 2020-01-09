@@ -241,6 +241,7 @@ expressions/asOperator/asOperator1.ts
 expressions/asOperator/asOperator2.ts
 expressions/asOperator/asOperatorNames.ts
 parser/ecmascript3/
+parser/ecmascript5/Accessors/
 parser/ecmascript5/Accessors/parserAccessors1.ts
 parser/ecmascript5/Accessors/parserAccessors10.ts
 parser/ecmascript5/Accessors/parserAccessors2.ts
@@ -249,6 +250,7 @@ parser/ecmascript5/Accessors/parserAccessors4.ts
 parser/ecmascript5/Accessors/parserAccessors5.ts
 parser/ecmascript5/Accessors/parserAccessors6.ts
 parser/ecmascript5/Accessors/parserAccessors7.ts
+parser/ecmascript5/Accessors/parserAccessors8.ts
 parser/ecmascript5/Accessors/parserAccessors9.ts
 parser/ecmascript5/Accessors/parserGetAccessorWithTypeParameters1.ts
 parser/ecmascript5/Accessors/parserSetAccessorWithTypeAnnotation1.ts

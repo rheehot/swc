@@ -1,4 +1,5 @@
 use super::Analyzer;
+use crate::ty::Type;
 use std::iter::once;
 use swc_atoms::JsWord;
 use swc_common::{Spanned, Visit};
@@ -116,7 +117,15 @@ impl PatExt for Pat {
             | Pat::Object(ObjectPat { ref type_ann, .. })
             | Pat::Rest(RestPat { ref type_ann, .. }) => type_ann.as_ref().map(|ty| &*ty.type_ann),
 
-            _ => unreachable!("Cannot get type from {:?}", self),
+            Pat::Invalid(..) | Pat::Expr(box Expr::Invalid(..)) => {
+                //Some(TsType::TsKeywordType(TsKeywordType {
+                //    span: self.span(),
+                //    kind: TsKeywordTypeKind::TsAnyKeyword,
+                //}))
+                None
+            }
+
+            _ => unimplemented!("Cannot get type from {:?}", self),
         }
     }
 
