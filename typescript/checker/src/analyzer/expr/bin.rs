@@ -332,7 +332,7 @@ impl Analyzer<'_, '_> {
                         };
 
                         // Check if type overlaps.
-                        match c.take(|l, r| {
+                        c.take(|l, r| {
                             // Returns Some(()) if r may be assignable to l
                             match l {
                                 Type::Lit(ref l_lit) => {
@@ -350,15 +350,18 @@ impl Analyzer<'_, '_> {
                                 }
                                 Type::Union(ref u) => {
                                     // Check if u contains r
+                                    for ty in &u.types {
+                                        if ty.eq_ignore_span(r) {
+                                            return Some(());
+                                        }
+                                    }
 
                                     Some(())
                                 }
                                 _ => None,
                             }
-                        }) {
-                            Some(()) => true,
-                            None => false,
-                        }
+                        })
+                        .is_some()
                     };
 
                     if !has_overlap {
