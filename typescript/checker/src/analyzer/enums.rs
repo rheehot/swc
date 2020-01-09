@@ -7,7 +7,7 @@ use crate::{
     ValidationResult,
 };
 use macros::validator;
-use swc_common::{Spanned, Visit, VisitWith};
+use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 
 /// We don't visit enum variants to allow
@@ -95,22 +95,27 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
 
 /// Called only for enums.
 fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error> {
-    fn arithmetic_opt(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<f64, Error> {
+    fn arithmetic_opt(
+        e: &TsEnumDecl,
+        span: Span,
+        i: usize,
+        expr: Option<&Expr>,
+    ) -> Result<f64, Error> {
         if let Some(ref expr) = expr {
-            return arithmetic(e, expr);
+            return arithmetic(e, span, expr);
         }
 
         return Ok(i as f64);
     }
 
-    fn arithmetic(e: &TsEnumDecl, expr: &Expr) -> Result<f64, Error> {
+    fn arithmetic(e: &TsEnumDecl, span: Span, expr: &Expr) -> Result<f64, Error> {
         Ok(match *expr {
             Expr::Lit(ref lit) => match *lit {
                 Lit::Num(ref v) => v.value,
                 _ => unreachable!("arithmetic({:?})", lit),
             },
-            Expr::Bin(ref bin) => arithmetic_bin(e, &bin)?,
-            Expr::Paren(ref paren) => return arithmetic(e, &paren.expr),
+            Expr::Bin(ref bin) => arithmetic_bin(e, span, &bin)?,
+            Expr::Paren(ref paren) => return arithmetic(e, span, &paren.expr),
 
             Expr::Ident(ref id) => {
                 //
@@ -119,22 +124,31 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
                         TsEnumMemberId::Str(Str { value: ref sym, .. })
                         | TsEnumMemberId::Ident(Ident { ref sym, .. }) => {
                             if *sym == id.sym {
-                                return arithmetic_opt(e, i, m.init.as_ref().map(|v| &**v));
+                                return arithmetic_opt(e, span, i, m.init.as_ref().map(|v| &**v));
                             }
                         }
                     }
                 }
-
-                return Err(Error::InvalidEnumInit { span: expr.span() });
+                return Err(Error::InvalidEnumInit { span });
             }
-            Expr::Unary(..) => unimplemented!("compute(unary, {:?})", expr),
-            _ => return Err(Error::InvalidEnumInit { span: expr.span() }),
+            Expr::Unary(ref expr) => {
+                let v = arithmetic(e, span, &expr.arg)?;
+
+                match expr.op {
+                    op!(unary, "+") => return Ok(v),
+                    op!(unary, "-") => return Ok(-v),
+                    op!("!") => return Ok(if v == 0.0f64 { 0.0 } else { 1.0 }),
+                    op!("~") => return Ok((!(v as u32)) as f64),
+                    _ => return Err(Error::InvalidEnumInit { span }),
+                };
+            }
+            _ => Err(Error::InvalidEnumInit { span })?,
         })
     }
 
-    fn arithmetic_bin(e: &TsEnumDecl, expr: &BinExpr) -> Result<f64, Error> {
-        let l = arithmetic(e, &expr.left)?;
-        let r = arithmetic(e, &expr.right)?;
+    fn arithmetic_bin(e: &TsEnumDecl, span: Span, expr: &BinExpr) -> Result<f64, Error> {
+        let l = arithmetic(e, span, &expr.left)?;
+        let r = arithmetic(e, span, &expr.right)?;
 
         Ok(match expr.op {
             op!(bin, "+") => l + r,
@@ -149,6 +163,8 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
 
             op!("<<") => ((l.round() as i64) << (r.round() as i64)) as _,
             op!(">>") => ((l.round() as i64) >> (r.round() as i64)) as _,
+            // TODO: Verify this
+            op!(">>>") => ((l.round() as u64) >> (r.round() as u64)) as _,
             _ => unimplemented!("arithmetic_bin({:?})", expr.op),
         })
     }
@@ -168,7 +184,7 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
 
     Ok(Number {
         span: expr.span(),
-        value: arithmetic_opt(e, i, expr)?,
+        value: arithmetic_opt(e, e.span, i, expr)?,
     }
     .into())
 }

@@ -5,6 +5,8 @@ classes/classDeclarations/classAbstractKeyword/classAbstractConstructor.ts
 classes/classDeclarations/classAbstractKeyword/classAbstractExtends.ts
 classes/classDeclarations/classAbstractKeyword/classAbstractWithInterface.ts
 classes/classExpression.ts
+constEnums/constEnum3.ts
+constEnums/constEnum4.ts
 es6/Symbols/symbolProperty1.ts
 es6/Symbols/symbolProperty10.ts
 es6/Symbols/symbolProperty11.ts
