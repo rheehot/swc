@@ -4,7 +4,7 @@ error: UselessSeqExpr {
             786,
         ),
         hi: BytePos(
-            793,
+            798,
         ),
         ctxt: #0,
     },
@@ -12,5 +12,5 @@ error: UselessSeqExpr {
   --> $DIR/tests/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithNumberType.ts:41:1
    |
 41 | +objA.a, M.n;
-   | ^^^^^^^
+   | ^^^^^^^^^^^^
 

@@ -4,7 +4,7 @@ error: UselessSeqExpr {
             829,
         ),
         hi: BytePos(
-            836,
+            840,
         ),
         ctxt: #0,
     },
@@ -12,5 +12,5 @@ error: UselessSeqExpr {
   --> $DIR/tests/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithStringType.ts:40:1
    |
 40 | -objA.a,M.n;
-   | ^^^^^^^
+   | ^^^^^^^^^^^
 

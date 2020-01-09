@@ -36,7 +36,7 @@ error: UselessSeqExpr {
             940,
         ),
         hi: BytePos(
-            944,
+            950,
         ),
         ctxt: #0,
     },
@@ -44,5 +44,5 @@ error: UselessSeqExpr {
   --> $DIR/tests/conformance/expressions/unaryOperators/negateOperator/negateOperatorWithAnyOtherType.ts:51:1
    |
 51 | -ANY, ANY1;
-   | ^^^^
+   | ^^^^^^^^^^
 

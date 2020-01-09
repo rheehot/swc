@@ -84,7 +84,7 @@ error: UselessSeqExpr {
             1088,
         ),
         hi: BytePos(
-            1092,
+            1098,
         ),
         ctxt: #0,
     },
@@ -92,5 +92,5 @@ error: UselessSeqExpr {
   --> $DIR/tests/conformance/expressions/unaryOperators/plusOperator/plusOperatorWithAnyOtherType.ts:54:1
    |
 54 | +ANY, ANY1;
-   | ^^^^
+   | ^^^^^^^^^^
 
