@@ -192,7 +192,11 @@ impl Validate<TsPropertySignature> for Analyzer<'_, '_> {
 
     fn validate(&mut self, d: &TsPropertySignature) -> Self::Output {
         if !self.is_builtin && d.computed {
-            d.key.visit_with(self);
+            ComputedPropName {
+                span: d.key.span(),
+                expr: d.key.clone(),
+            }
+            .visit_with(self);
         }
 
         Ok(PropertySignature {

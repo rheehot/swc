@@ -2,7 +2,7 @@ use super::{scope::ScopeKind, Analyzer};
 use crate::{
     analyzer::{expr::TypeOfMode, util::ResultExt, Ctx},
     errors::Error,
-    ty::{MethodSignature, PropertySignature, Type, TypeElement},
+    ty::{MethodSignature, Operator, PropertySignature, Type, TypeElement},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -106,6 +106,15 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
                 })
                 | Type::Keyword(TsKeywordType {
                     kind: TsKeywordTypeKind::TsSymbolKeyword,
+                    ..
+                })
+                | Type::Operator(Operator {
+                    op: TsTypeOperatorOp::Unique,
+                    ty:
+                        box Type::Keyword(TsKeywordType {
+                            kind: TsKeywordTypeKind::TsSymbolKeyword,
+                            ..
+                        }),
                     ..
                 }) => {}
                 _ if is_symbol_access => {}
