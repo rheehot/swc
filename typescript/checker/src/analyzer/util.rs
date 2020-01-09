@@ -125,7 +125,7 @@ impl PatExt for Pat {
                 None
             }
 
-            _ => unimplemented!("Cannot get type from {:?}", self),
+            _ => None,
         }
     }
 
