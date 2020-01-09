@@ -234,7 +234,7 @@ impl Fold<Type> for TypeParamHandler<'_> {
             let ty: Type = ty.fold_children(self);
 
             match ty {
-                Type::Ref(ref r) if r.type_params.is_none() => match r.type_name {
+                Type::Ref(ref r) if r.type_args.is_none() => match r.type_name {
                     TsEntityName::Ident(ref i) => {
                         //
                         for param in params {

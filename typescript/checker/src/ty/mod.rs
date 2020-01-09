@@ -93,7 +93,7 @@ pub struct IndexedAccessType {
 pub struct Ref {
     pub span: Span,
     pub type_name: TsEntityName,
-    pub type_params: Option<TypeParamInstantiation>,
+    pub type_args: Option<TypeParamInstantiation>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]

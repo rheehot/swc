@@ -12,6 +12,7 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
+use swc_atoms::{js_word, JsWord};
 use swc_common::{Spanned, VisitWith};
 use swc_ecma_ast::*;
 
@@ -470,16 +471,30 @@ impl Validate<TsParenthesizedType> for Analyzer<'_, '_> {
 }
 
 impl Validate<TsTypeRef> for Analyzer<'_, '_> {
-    type Output = ValidationResult<Ref>;
+    type Output = ValidationResult<Type>;
 
     fn validate(&mut self, t: &TsTypeRef) -> Self::Output {
-        let type_params = try_opt!(t.type_params.validate_with(self));
+        let type_args = try_opt!(t.type_params.validate_with(self));
+
+        match t.type_name {
+            TsEntityName::Ident(ref i) if i.sym == js_word!("Array") && type_args.is_some() => {
+                if type_args.as_ref().unwrap().params.len() == 1 {
+                    return Ok(Type::Array(Array {
+                        span: t.span,
+                        elem_type: box type_args.unwrap().params.into_iter().next().unwrap(),
+                    }));
+                }
+            }
+
+            _ => {}
+        }
 
         Ok(Ref {
             span: t.span,
             type_name: t.type_name.clone(),
-            type_params,
-        })
+            type_args,
+        }
+        .into())
     }
 }
 
@@ -585,7 +600,7 @@ impl Validate<TsType> for Analyzer<'_, '_> {
             TsType::TsMappedType(ty) => Type::Mapped(self.validate(ty)?),
             TsType::TsTypeOperator(ty) => Type::Operator(self.validate(ty)?),
             TsType::TsParenthesizedType(ty) => self.validate(ty)?,
-            TsType::TsTypeRef(ty) => Type::Ref(self.validate(ty)?),
+            TsType::TsTypeRef(ty) => self.validate(ty)?,
             TsType::TsTypeQuery(ty) => Type::Query(ty.validate_with(self)?),
             TsType::TsOptionalType(ty) => unimplemented!("{:?}", ty),
             TsType::TsRestType(ty) => unimplemented!("{:?}", ty),

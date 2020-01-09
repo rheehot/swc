@@ -214,7 +214,7 @@ impl Fold<Type> for GenericExpander<'_> {
         match ty.normalize() {
             Type::Ref(Ref {
                 type_name: TsEntityName::Ident(Ident { ref sym, .. }),
-                type_params: None,
+                type_args: None,
                 ..
             }) => {
                 // Handle references to type parameters

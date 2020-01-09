@@ -329,7 +329,7 @@ impl Analyzer<'_, '_> {
                         optional: false,
                         type_ann: None,
                     }),
-                    type_params: None,
+                    type_args: None,
                 }));
             }
 
@@ -974,7 +974,7 @@ impl Analyzer<'_, '_> {
             Ok(Type::Ref(Ref {
                 span,
                 type_name: TsEntityName::Ident(i.clone()),
-                type_params: None,
+                type_args: None,
             }))
         } else {
             Err(Error::UndefinedSymbol {

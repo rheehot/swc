@@ -122,7 +122,7 @@ impl Scope<'_> {
             return Some(Cow::Owned(Type::Ref(Ref {
                 span: DUMMY_SP,
                 type_name: TsEntityName::Ident(Ident::new(this.clone().into(), DUMMY_SP)),
-                type_params: None,
+                type_args: None,
             })));
         }
 
@@ -186,7 +186,7 @@ impl Analyzer<'_, '_> {
         match ty.normalize() {
             Type::Ref(Ref {
                 ref type_name,
-                ref type_params,
+                ref type_args,
                 ..
             }) => {
                 match *type_name {
@@ -203,7 +203,7 @@ impl Analyzer<'_, '_> {
                         if let Some(ty) = self.find_type(&i.sym) {
                             match ty.normalize() {
                                 Type::Enum(..) => {
-                                    if let Some(..) = *type_params {
+                                    if let Some(..) = *type_args {
                                         return Err(Error::NotGeneric { span });
                                     }
                                     verify!(ty);
@@ -211,7 +211,7 @@ impl Analyzer<'_, '_> {
                                 }
 
                                 Type::Param(..) => {
-                                    if let Some(..) = *type_params {
+                                    if let Some(..) = *type_args {
                                         return Err(Error::NotGeneric { span });
                                     }
 
@@ -242,7 +242,7 @@ impl Analyzer<'_, '_> {
                                 }) => {
                                     let tps = tps.clone();
                                     let ty = ty.clone();
-                                    let ty = if let Some(i) = type_params {
+                                    let ty = if let Some(i) = type_args {
                                         self.expand_type_params(i, &tps, *ty)?
                                     } else {
                                         *ty.clone()
