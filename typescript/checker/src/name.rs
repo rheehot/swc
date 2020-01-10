@@ -1,12 +1,33 @@
 use smallvec::{smallvec, SmallVec};
-use std::convert::TryFrom;
+use std::{
+    convert::TryFrom,
+    fmt::{self, Debug, Formatter},
+};
 use swc_atoms::{js_word, JsWord};
+use swc_common::iter::IdentifyLast;
 use swc_ecma_ast::*;
 
 type Inner = SmallVec<[JsWord; 4]>;
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Name(Inner);
+
+impl Debug for Name {
+    #[cold]
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), fmt::Error> {
+        let mut buf = String::new();
+        for (last, s) in self.0.iter().identify_last() {
+            buf.push_str(&s);
+            if !last {
+                buf.push('.');
+            }
+        }
+
+        write!(f, "{}", buf)?;
+
+        Ok(())
+    }
+}
 
 impl From<&'_ Ident> for Name {
     #[inline]

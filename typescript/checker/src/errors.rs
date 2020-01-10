@@ -1,8 +1,11 @@
-use crate::ty::{Type, TypeElement};
+use crate::{
+    name::Name,
+    ty::{Type, TypeElement},
+};
 use std::{ops::RangeInclusive, path::PathBuf};
 use swc_atoms::JsWord;
 use swc_common::{errors::Handler, Span, Spanned, DUMMY_SP};
-use swc_ecma_ast::{Expr, TsEntityName, UnaryOp, UpdateOp};
+use swc_ecma_ast::{Expr, UnaryOp, UpdateOp};
 
 impl Errors {
     /// This is used for debugging (by calling [pacic]).
@@ -148,7 +151,7 @@ pub enum Error {
 
     /// TS2304
     NameNotFound {
-        sym: TsEntityName,
+        name: Name,
         span: Span,
     },
 

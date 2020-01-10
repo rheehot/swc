@@ -1,20 +1,5 @@
 error: NameNotFound {
-    sym: Ident(
-        Ident {
-            span: Span {
-                lo: BytePos(
-                    7,
-                ),
-                hi: BytePos(
-                    11,
-                ),
-                ctxt: #0,
-            },
-            sym: Atom('Null' type=inline),
-            type_ann: None,
-            optional: false,
-        },
-    ),
+    name: Null,
     span: Span {
         lo: BytePos(
             7,
