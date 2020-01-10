@@ -356,53 +356,7 @@ impl Analyzer<'_, '_> {
             }
         }
 
-        self.calc_type_of_class(c)
-    }
-
-    fn calc_type_of_class(&mut self, c: &swc_ecma_ast::Class) -> ValidationResult<ty::Class> {
-        let name = self.scope.this_class_name.take();
-
-        // Scope is required because of type parameters.
-        self.with_child(ScopeKind::Class, Default::default(), |child| {
-            // We handle type parameters first.
-            let type_params = try_opt!(c.type_params.validate_with(child));
-
-            let super_class = {
-                // Then, we can expand super class
-
-                let super_type_params = try_opt!(c.super_type_params.validate_with(child));
-                match &c.super_class {
-                    Some(box expr) => Some(box child.validate_expr(
-                        expr,
-                        TypeOfMode::RValue,
-                        super_type_params,
-                    )?),
-
-                    _ => None,
-                }
-            };
-
-            // TODO: Check for implements
-
-            let body = c
-                .body
-                .iter()
-                .filter_map(|m| match child.validate(m) {
-                    Ok(Some(v)) => Some(Ok(v)),
-                    Ok(None) => None,
-                    Err(err) => Some(Err(err)),
-                })
-                .collect::<Result<_, _>>()?;
-
-            Ok(ty::Class {
-                span: c.span,
-                name,
-                is_abstract: c.is_abstract,
-                super_class,
-                type_params,
-                body,
-            })
-        })
+        c.validate_with(self)
     }
 
     fn validate_class_members(
@@ -622,6 +576,56 @@ impl Analyzer<'_, '_> {
         }
 
         self.info.errors.extend(errors);
+    }
+}
+
+impl Validate<Class> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::Class>;
+
+    fn validate(&mut self, c: &Class) -> Self::Output {
+        let name = self.scope.this_class_name.take();
+
+        // Scope is required because of type parameters.
+        self.with_child(ScopeKind::Class, Default::default(), |child| {
+            // We handle type parameters first.
+            let type_params = try_opt!(c.type_params.validate_with(child));
+
+            let super_class = {
+                // Then, we can expand super class
+
+                let super_type_params = try_opt!(c.super_type_params.validate_with(child));
+                match &c.super_class {
+                    Some(box expr) => Some(box child.validate_expr(
+                        expr,
+                        TypeOfMode::RValue,
+                        super_type_params,
+                    )?),
+
+                    _ => None,
+                }
+            };
+
+            // TODO: Check for implements
+
+            let body = c
+                .body
+                .iter()
+                .filter_map(|m| match child.validate(m) {
+                    Ok(Some(v)) => Some(Ok(v)),
+                    Ok(None) => None,
+                    Err(err) => Some(Err(err)),
+                })
+                .collect::<Result<_, _>>()?;
+
+            Ok(ty::Class {
+                span: c.span,
+                name,
+                is_abstract: c.is_abstract,
+                super_class,
+                type_params,
+                body,
+            })
+        })
     }
 }
 
