@@ -320,6 +320,7 @@ impl Analyzer<'_, '_> {
                 }
 
                 return Err(Error::NameNotFound {
+                    sym: type_name.clone(),
                     span: type_name.span(),
                 });
             }

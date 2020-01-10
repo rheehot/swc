@@ -2,7 +2,7 @@ use crate::ty::{Type, TypeElement};
 use std::{ops::RangeInclusive, path::PathBuf};
 use swc_atoms::JsWord;
 use swc_common::{errors::Handler, Span, Spanned, DUMMY_SP};
-use swc_ecma_ast::{Expr, UnaryOp, UpdateOp};
+use swc_ecma_ast::{Expr, TsEntityName, UnaryOp, UpdateOp};
 
 #[derive(Debug, Clone, PartialEq, Spanned)]
 pub enum Error {
@@ -130,6 +130,7 @@ pub enum Error {
 
     /// TS2304
     NameNotFound {
+        sym: TsEntityName,
         span: Span,
     },
 
