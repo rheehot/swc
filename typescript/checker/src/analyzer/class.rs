@@ -31,9 +31,7 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
 
         let value = {
             let ty = try_opt!(p.type_ann.validate_with(self));
-            let ty = try_opt!(ty.map(|ty| self.expand(p.span(), ty)));
             let value_ty = try_opt!(self.validate(&p.value));
-            let value_ty = try_opt!(value_ty.map(|ty| self.expand(p.span(), ty)));
 
             ty.or_else(|| value_ty)
         };
