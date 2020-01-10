@@ -4,6 +4,24 @@ use swc_atoms::JsWord;
 use swc_common::{errors::Handler, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::{Expr, TsEntityName, UnaryOp, UpdateOp};
 
+impl Errors {
+    /// This is used for debugging (by calling [pacic]).
+    fn validate(&self, err: &Error) {
+        if err.span().is_dummy() {
+            panic!("Error with a dummy span found: {:?}", err)
+        }
+        match err {
+            // Error::UndefinedSymbol { .. } => panic!(),
+            Error::Errors { ref errors, .. } => {
+                for err in errors {
+                    self.validate(err)
+                }
+            }
+            _ => {}
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Spanned)]
 pub enum Error {
     NoSuchPropertyInModule {
@@ -510,22 +528,6 @@ impl IntoIterator for Errors {
 }
 
 impl Errors {
-    /// This is used for debugging (by calling [pacic]).
-    fn validate(&self, err: &Error) {
-        if err.span().is_dummy() {
-            panic!("Error with a dummy span found: {:?}", err)
-        }
-        match err {
-            // Error::UndefinedSymbol { .. } => panic!(),
-            Error::Errors { ref errors, .. } => {
-                for err in errors {
-                    self.validate(err)
-                }
-            }
-            _ => {}
-        }
-    }
-
     #[inline(always)]
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
