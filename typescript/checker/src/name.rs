@@ -3,8 +3,10 @@ use std::convert::TryFrom;
 use swc_atoms::{js_word, JsWord};
 use swc_ecma_ast::*;
 
+type Inner = SmallVec<[JsWord; 4]>;
+
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Name(SmallVec<[JsWord; 4]>);
+pub struct Name(Inner);
 
 impl From<&'_ Ident> for Name {
     #[inline]
@@ -31,6 +33,25 @@ impl From<JsWord> for Name {
     #[inline]
     fn from(v: JsWord) -> Name {
         Name(smallvec![v])
+    }
+}
+
+impl From<TsEntityName> for Name {
+    fn from(n: TsEntityName) -> Self {
+        fn expand(buf: &mut Inner, n: TsEntityName) {
+            match n {
+                TsEntityName::Ident(i) => buf.push(i.sym),
+
+                TsEntityName::TsQualifiedName(box q) => {
+                    expand(buf, q.left);
+                    buf.push(q.right.sym);
+                }
+            }
+        }
+
+        let mut buf = Inner::default();
+        expand(&mut buf, n);
+        Self(buf)
     }
 }
 
