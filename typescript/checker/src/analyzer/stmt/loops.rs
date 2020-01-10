@@ -67,8 +67,6 @@ impl Analyzer<'_, '_> {
 
 impl Visit<ForInStmt> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &ForInStmt) {
-        s.visit_children(self);
-
         self.check_lhs_of_for_loop(&s.left);
         if match s.left {
             VarDeclOrPat::VarDecl(VarDecl { ref decls, .. }) => !decls.is_empty(),
@@ -83,8 +81,6 @@ impl Visit<ForInStmt> for Analyzer<'_, '_> {
 
 impl Visit<ForOfStmt> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &ForOfStmt) {
-        s.visit_children(self);
-
         self.check_lhs_of_for_loop(&s.left);
         if match s.left {
             VarDeclOrPat::VarDecl(VarDecl { ref decls, .. }) => !decls.is_empty(),
