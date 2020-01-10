@@ -1113,3 +1113,14 @@ impl Type {
         }
     }
 }
+
+/// Creates a reference
+impl From<Ident> for Type {
+    fn from(i: Ident) -> Self {
+        Type::Ref(Ref {
+            span: i.span,
+            type_name: TsEntityName::Ident(i),
+            type_args: None,
+        })
+    }
+}
