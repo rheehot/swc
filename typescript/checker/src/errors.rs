@@ -1,6 +1,6 @@
 use crate::{
     name::Name,
-    ty::{Type, TypeElement},
+    ty::{Type, TypeElement, TypeParamInstantiation},
 };
 use std::{ops::RangeInclusive, path::PathBuf};
 use swc_atoms::JsWord;
@@ -152,6 +152,7 @@ pub enum Error {
     /// TS2304
     NameNotFound {
         name: Name,
+        type_args: Option<TypeParamInstantiation>,
         span: Span,
     },
 
