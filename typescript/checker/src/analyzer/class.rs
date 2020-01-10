@@ -332,7 +332,7 @@ impl Validate<ClassMember> for Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     /// In almost case, this method returns `Ok`.
-    pub(super) fn validate_type_of_class(
+    pub(super) fn type_of_class(
         &mut self,
         name: Option<JsWord>,
         c: &swc_ecma_ast::Class,
@@ -360,10 +360,10 @@ impl Analyzer<'_, '_> {
             }
         }
 
-        self.type_of_class(name, c)
+        self.calc_type_of_class(name, c)
     }
 
-    pub(super) fn type_of_class(
+    fn calc_type_of_class(
         &mut self,
         name: Option<JsWord>,
         c: &swc_ecma_ast::Class,
@@ -761,7 +761,7 @@ impl Visit<Class> for Analyzer<'_, '_> {
 
 impl Visit<ClassExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassExpr) {
-        let ty = match self.validate_type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {
+        let ty = match self.type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {
             Ok(ty) => ty.into(),
             Err(err) => {
                 self.info.errors.push(err);
@@ -822,7 +822,7 @@ impl Analyzer<'_, '_> {
         self.validate_class_members(&c.class, c.declare)
             .store(&mut self.info.errors);
 
-        let ty = match self.validate_type_of_class(Some(c.ident.sym.clone()), &c.class) {
+        let ty = match self.type_of_class(Some(c.ident.sym.clone()), &c.class) {
             Ok(ty) => ty.into(),
             Err(err) => {
                 self.info.errors.push(err);
