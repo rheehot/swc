@@ -616,6 +616,9 @@ impl Validate<Class> for Analyzer<'_, '_> {
 
             // TODO: Check for implements
 
+            // Register the class.
+            child.scope.this_class_name = name.clone();
+
             let body = c
                 .body
                 .iter()

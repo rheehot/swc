@@ -894,6 +894,16 @@ impl Analyzer<'_, '_> {
     ) -> ValidationResult {
         let span = i.span();
 
+        if let Some(ref cls_name) = self.scope.this_class_name {
+            if *cls_name == i.sym {
+                return Ok(Type::Ref(Ref {
+                    span,
+                    type_name: TsEntityName::Ident(i.clone()),
+                    type_args: None,
+                }));
+            }
+        }
+
         match i.sym {
             js_word!("arguments") => return Ok(Type::any(span)),
             js_word!("Symbol") if !self.is_builtin => {
