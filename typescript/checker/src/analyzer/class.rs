@@ -5,11 +5,11 @@ use super::{
     Analyzer,
 };
 use crate::{
-    analyzer::{props::ComputedPropMode, util::ResultExt, Ctx},
+    analyzer::{props::ComputedPropMode, scope::Scope, util::ResultExt, Ctx},
     errors::{Error, Errors},
     swc_common::VisitWith,
     ty,
-    ty::{FnParam, Operator, Type},
+    ty::{FnParam, Operator, Type, TypeParamDecl},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -368,109 +368,46 @@ impl Analyzer<'_, '_> {
         name: Option<JsWord>,
         c: &swc_ecma_ast::Class,
     ) -> ValidationResult<ty::Class> {
-        // let mut type_props = vec![];
-        // for member in &c.body {
-        //     let span = member.span();
-        //     let any = any(span);
+        // Scope is required because of type parameters.
+        self.with_child(ScopeKind::Class, Default::default(), |child| {
+            // We handle type parameters first.
+            let type_params = try_opt!(c.type_params.validate_with(child));
 
-        //     match member {
-        //         ClassMember::ClassProp(ref p) => {
-        //             let ty = match p.type_ann.as_ref().map(|ty|
-        // Type::from(&*ty.type_ann)) {                 Some(ty) => ty,
-        //                 None => match p.value {
-        //                     Some(ref e) => self.type_of(&e)?,
-        //                     None => any,
-        //                 },
-        //             };
+            let super_class = {
+                // Then, we can expand super class
 
-        //
-        // type_props.push(TypeElement::TsPropertySignature(TsPropertySignature {
-        //                 span,
-        //                 key: p.key.clone(),
-        //                 optional: p.is_optional,
-        //                 readonly: p.readonly,
-        //                 init: p.value.clone(),
-        //                 type_ann: Some(TsTypeAnn {
-        //                     span: ty.span(),
-        //                     type_ann: box ty,
-        //                 }),
+                let super_type_params = try_opt!(c.super_type_params.validate_with(child));
+                match &c.super_class {
+                    Some(box expr) => Some(box child.validate_expr(
+                        expr,
+                        TypeOfMode::RValue,
+                        super_type_params,
+                    )?),
 
-        //                 // TODO:
-        //                 computed: false,
+                    _ => None,
+                }
+            };
 
-        //                 // TODO:
-        //                 params: Default::default(),
+            // TODO: Check for implements
 
-        //                 // TODO:
-        //                 type_params: Default::default(),
-        //             }));
-        //         }
-
-        //         // TODO:
-        //         ClassMember::Constructor(ref c) => {
-        //             type_props.push(TypeElement::TsConstructSignatureDecl(
-        //                 TsConstructSignatureDecl {
-        //                     span,
-
-        //                     // TODO:
-        //                     type_ann: None,
-
-        //                     params: c
-        //                         .params
-        //                         .iter()
-        //                         .map(|param| match *param {
-        //                             PatOrTsParamProp::Pat(ref pat) => {
-        //                                 pat_to_ts_fn_param(pat.clone())
-        //                             }
-        //                             PatOrTsParamProp::TsParamProp(ref prop) => match
-        // prop.param {
-        // TsParamPropParam::Ident(ref i) => {
-        // TsFnParam::Ident(i.clone())                                 }
-        //                                 TsParamPropParam::Assign(AssignPat {
-        //                                     ref left, ..
-        //                                 }) => pat_to_ts_fn_param(*left.clone()),
-        //                             },
-        //                         })
-        //                         .collect(),
-
-        //                     // TODO:
-        //                     type_params: Default::default(),
-        //                 },
-        //             ));
-        //         }
-
-        //         // TODO:
-        //         ClassMember::Method(..) => {}
-
-        //         // TODO:
-        //         ClassMember::TsIndexSignature(..) => {}
-
-        //         ClassMember::PrivateMethod(..) | ClassMember::PrivateProp(..) => {}
-        //     }
-        // }
-
-        let super_class = match c.super_class {
-            Some(ref expr) => Some(box self.validate(&expr)?),
-            None => None,
-        };
-
-        // TODO: Check for implements
-
-        Ok(ty::Class {
-            span: c.span,
-            name,
-            is_abstract: c.is_abstract,
-            super_class,
-            type_params: try_opt!(self.validate(&c.type_params)),
-            body: c
+            let body = c
                 .body
                 .iter()
-                .filter_map(|m| match self.validate(m) {
+                .filter_map(|m| match child.validate(m) {
                     Ok(Some(v)) => Some(Ok(v)),
                     Ok(None) => None,
                     Err(err) => Some(Err(err)),
                 })
-                .collect::<Result<_, _>>()?,
+                .collect::<Result<_, _>>()?;
+
+            Ok(ty::Class {
+                span: c.span,
+                name,
+                is_abstract: c.is_abstract,
+                super_class,
+                type_params,
+                body,
+            })
         })
     }
 

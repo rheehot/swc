@@ -982,6 +982,7 @@ pub(crate) enum ScopeKind {
     Block,
     Fn,
     ArrowFn,
+    Class,
     /// If statement, conditional expression, switch case
     Flow,
 }
