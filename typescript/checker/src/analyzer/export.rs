@@ -5,6 +5,7 @@ use crate::{
     ty::Type,
     validator::{Validate, ValidateWith},
 };
+use macros::validator_method;
 use std::mem::replace;
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, Visit, VisitWith};
@@ -175,18 +176,16 @@ impl Analyzer<'_, '_> {
     /// Exports a type.
     ///
     /// `scope.regsiter_type` should be called before calling this method.
+    #[validator_method]
     fn export(&mut self, span: Span, name: JsWord, from: Option<JsWord>) {
         let from = from.unwrap_or_else(|| name.clone());
 
         let ty = match self.scope.find_type(&from) {
             Some(ty) => ty,
-            None => {
-                self.info.errors.push(Error::UndefinedSymbol {
-                    sym: name.clone(),
-                    span,
-                });
-                return;
-            }
+            None => Err(Error::UndefinedSymbol {
+                sym: name.clone(),
+                span,
+            })?,
         };
 
         // TODO: Change this to error.
