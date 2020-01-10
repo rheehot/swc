@@ -4,13 +4,14 @@ use std::{
     fmt::{self, Debug, Formatter},
 };
 use swc_atoms::{js_word, JsWord};
-use swc_common::iter::IdentifyLast;
+use swc_common::{iter::IdentifyLast, Fold};
 use swc_ecma_ast::*;
 
 type Inner = SmallVec<[JsWord; 4]>;
 
-#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Name(Inner);
+/// Efficient alternative for [TsEntityName].
+#[derive(Clone, Fold, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct Name(#[fold(ignore)] Inner);
 
 impl Debug for Name {
     #[cold]
@@ -66,6 +67,25 @@ impl From<TsEntityName> for Name {
                 TsEntityName::TsQualifiedName(box q) => {
                     expand(buf, q.left);
                     buf.push(q.right.sym);
+                }
+            }
+        }
+
+        let mut buf = Inner::default();
+        expand(&mut buf, n);
+        Self(buf)
+    }
+}
+
+impl From<&'_ TsEntityName> for Name {
+    fn from(n: &TsEntityName) -> Self {
+        fn expand(buf: &mut Inner, n: &TsEntityName) {
+            match n {
+                TsEntityName::Ident(i) => buf.push(i.sym.clone()),
+
+                TsEntityName::TsQualifiedName(box q) => {
+                    expand(buf, &q.left);
+                    buf.push(q.right.sym.clone());
                 }
             }
         }
