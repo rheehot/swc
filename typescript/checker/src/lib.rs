@@ -34,6 +34,7 @@ mod debug;
 pub mod analyzer;
 mod builtin_types;
 pub mod errors;
+pub mod name;
 pub mod validator;
 //mod legacy;
 pub mod loader;

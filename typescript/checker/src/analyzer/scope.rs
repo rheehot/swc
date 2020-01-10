@@ -1,7 +1,8 @@
-use super::{control_flow::CondFacts, name::Name, Analyzer};
+use super::{control_flow::CondFacts, Analyzer};
 use crate::{
     builtin_types,
     errors::Error,
+    name::Name,
     ty::{
         self, Alias, Array, EnumVariant, IndexSignature, Interface, Intersection,
         PropertySignature, QueryExpr, QueryType, Ref, Tuple, Type, TypeElement, TypeLit, Union,

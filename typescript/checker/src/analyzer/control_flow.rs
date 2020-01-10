@@ -1,6 +1,5 @@
 use super::{
     expr::TypeOfMode,
-    name::Name,
     scope::{ScopeKind, VarInfo},
     type_facts::TypeFacts,
     util::Comparator,
@@ -8,6 +7,7 @@ use super::{
 };
 use crate::{
     errors::Error,
+    name::Name,
     ty::{Tuple, Type},
     util::EndsWithRet,
     validator::Validate,

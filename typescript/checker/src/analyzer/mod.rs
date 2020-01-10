@@ -32,7 +32,6 @@ mod expr;
 mod function;
 mod generic;
 mod import;
-mod name;
 mod pat;
 mod props;
 mod scope;
