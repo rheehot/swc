@@ -65,26 +65,9 @@ impl Analyzer<'_, '_> {
             _ => {}
         }
     }
-}
 
-impl Visit<ForInStmt> for Analyzer<'_, '_> {
-    fn visit(&mut self, s: &ForInStmt) {
-        self.with_child(ScopeKind::Flow, Default::default(), |child| {
-            self.check_lhs_of_for_loop(&s.left);
-            if match s.left {
-                VarDeclOrPat::VarDecl(VarDecl { ref decls, .. }) => !decls.is_empty(),
-                _ => true,
-            } {
-                self.check_rhs_of_for_loop(&s.right);
-            }
-
-            self.validate_for_loop(s.span, &s.left, &s.right);
-        })
-    }
-}
-
-impl Visit<ForOfStmt> for Analyzer<'_, '_> {
-    fn visit(&mut self, s: &ForOfStmt) {
+    #[validator_method]
+    fn check_for_of_in_loop(&mut self, lhs: &VarDeclOrPat, rhs: &Expr) {
         self.with_child(ScopeKind::Flow, Default::default(), |child| {
             child.check_lhs_of_for_loop(&s.left);
             if match s.left {
@@ -95,6 +78,18 @@ impl Visit<ForOfStmt> for Analyzer<'_, '_> {
             }
 
             child.validate_for_loop(s.span, &s.left, &s.right);
-        })
+        })?;
+    }
+}
+
+impl Visit<ForInStmt> for Analyzer<'_, '_> {
+    fn visit(&mut self, s: &ForInStmt) {
+        self.check_for_of_in_loop(&s.left, &s.right)
+    }
+}
+
+impl Visit<ForOfStmt> for Analyzer<'_, '_> {
+    fn visit(&mut self, s: &ForOfStmt) {
+        self.check_for_of_in_loop(&s.left, &s.right)
     }
 }
