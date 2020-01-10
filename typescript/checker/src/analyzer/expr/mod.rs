@@ -849,14 +849,21 @@ impl Analyzer<'_, '_> {
                 }
             }
 
-            Type::Module(ty::Module { ref exports, .. }) => match prop {
-                Expr::Ident(Ident { ref sym, .. }) => {
-                    if let Some(item) = exports.vars.get(sym) {
-                        return Ok(item.clone().freeze());
+            Type::Module(ty::Module { ref exports, .. }) => {
+                match prop {
+                    Expr::Ident(Ident { ref sym, .. }) => {
+                        if let Some(item) = exports.vars.get(sym) {
+                            return Ok(item.clone());
+                        }
+                        if let Some(item) = exports.types.get(sym) {
+                            return Ok(item.clone());
+                        }
                     }
+                    _ => {}
                 }
-                _ => {}
-            },
+                // No property found
+                return Err(Error::NoSuchPropertyInModule { span });
+            }
 
             Type::This(..) => {
                 if let Some(this) = self.scope.this().map(|this| this.into_owned()) {
