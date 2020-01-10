@@ -332,11 +332,7 @@ impl Validate<ClassMember> for Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     /// In almost case, this method returns `Ok`.
-    pub(super) fn type_of_class(
-        &mut self,
-        name: Option<JsWord>,
-        c: &swc_ecma_ast::Class,
-    ) -> ValidationResult<ty::Class> {
+    pub(super) fn type_of_class(&mut self, c: &swc_ecma_ast::Class) -> ValidationResult<ty::Class> {
         for m in c.body.iter() {
             match *m {
                 swc_ecma_ast::ClassMember::ClassProp(ref prop) => match prop.type_ann {
@@ -360,14 +356,12 @@ impl Analyzer<'_, '_> {
             }
         }
 
-        self.calc_type_of_class(name, c)
+        self.calc_type_of_class(c)
     }
 
-    fn calc_type_of_class(
-        &mut self,
-        name: Option<JsWord>,
-        c: &swc_ecma_ast::Class,
-    ) -> ValidationResult<ty::Class> {
+    fn calc_type_of_class(&mut self, c: &swc_ecma_ast::Class) -> ValidationResult<ty::Class> {
+        let name = self.scope.this_class_name.take();
+
         // Scope is required because of type parameters.
         self.with_child(ScopeKind::Class, Default::default(), |child| {
             // We handle type parameters first.
@@ -698,7 +692,8 @@ impl Visit<Class> for Analyzer<'_, '_> {
 
 impl Visit<ClassExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassExpr) {
-        let ty = match self.type_of_class(c.ident.clone().map(|v| v.sym), &c.class) {
+        self.scope.this_class_name = c.ident.as_ref().map(|v| v.sym.clone());
+        let ty = match self.type_of_class(&c.class) {
             Ok(ty) => ty.into(),
             Err(err) => {
                 self.info.errors.push(err);
@@ -759,7 +754,8 @@ impl Analyzer<'_, '_> {
         self.validate_class_members(&c.class, c.declare)
             .store(&mut self.info.errors);
 
-        let ty = match self.type_of_class(Some(c.ident.sym.clone()), &c.class) {
+        self.scope.this_class_name = Some(c.ident.sym.clone());
+        let ty = match self.type_of_class(&c.class) {
             Ok(ty) => ty.into(),
             Err(err) => {
                 self.info.errors.push(err);

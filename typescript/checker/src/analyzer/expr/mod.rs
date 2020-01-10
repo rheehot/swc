@@ -402,8 +402,13 @@ impl Analyzer<'_, '_> {
 
             Expr::Await(AwaitExpr { .. }) => unimplemented!("typeof(AwaitExpr)"),
 
-            Expr::Class(ClassExpr { ref class, .. }) => {
-                return Ok(self.type_of_class(None, class)?.into());
+            Expr::Class(ClassExpr {
+                ref ident,
+                ref class,
+                ..
+            }) => {
+                self.scope.this_class_name = ident.as_ref().map(|i| i.sym.clone());
+                return Ok(self.type_of_class(class)?.into());
             }
 
             Expr::Arrow(ref e) => return Ok(e.validate_with(self)?.into()),

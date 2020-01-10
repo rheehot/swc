@@ -42,6 +42,7 @@ pub(crate) struct Scope<'a> {
     pub(super) declaring_prop: Option<JsWord>,
 
     pub(super) this: Option<JsWord>,
+    pub(super) this_class_name: Option<JsWord>,
 }
 
 impl Scope<'_> {
@@ -56,6 +57,7 @@ impl Scope<'_> {
             declaring_fn: self.declaring_fn,
             declaring_prop: self.declaring_prop,
             this: self.this,
+            this_class_name: self.this_class_name,
         }
     }
 
@@ -949,6 +951,7 @@ impl<'a> Scope<'a> {
             this: None,
             declaring_prop: None,
             declaring_fn: None,
+            this_class_name: None,
         }
     }
 
