@@ -44,6 +44,34 @@ pub(crate) struct Scope<'a> {
 }
 
 impl Scope<'_> {
+    pub fn remove_parent(self) -> Scope<'static> {
+        Scope {
+            parent: None,
+            kind: self.kind,
+            declaring: self.declaring,
+            vars: self.vars,
+            types: self.types,
+            facts: self.facts,
+            declaring_fn: self.declaring_fn,
+            declaring_prop: self.declaring_prop,
+            this: self.this,
+        }
+    }
+
+    pub fn copy_hoisted_vars_from(&mut self, from: &mut Scope) {
+        match from.kind {
+            // We don't copy variable information from nested function.
+            ScopeKind::Fn | ScopeKind::ArrowFn => return,
+            _ => {}
+        }
+
+        for (name, var) in from.vars.drain() {
+            if var.kind == VarDeclKind::Var {
+                self.vars.insert(name, var);
+            }
+        }
+    }
+
     pub fn remove_declaring<I>(&mut self, names: impl IntoIterator<IntoIter = I, Item = JsWord>)
     where
         I: Iterator<Item = JsWord> + DoubleEndedIterator,
