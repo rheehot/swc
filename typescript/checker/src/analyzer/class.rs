@@ -638,9 +638,12 @@ impl Visit<Class> for Analyzer<'_, '_> {
             has_body: !self.ctx.in_declare,
         };
 
-        c.visit_children(self);
+        c.decorators.visit_with(self);
+        c.implements.visit_with(self);
 
         self.resolve_parent_interfaces(&c.implements);
+
+        c.validate_with(self).store(&mut self.info.errors);
 
         let mut constructor_spans = vec![];
         let mut constructor_required_param_count = None;
