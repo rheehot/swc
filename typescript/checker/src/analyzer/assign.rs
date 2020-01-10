@@ -504,7 +504,7 @@ impl Analyzer<'_, '_> {
                         Type::EnumVariant(ref v) => {
                             // Allow assigning enum with numeric values to
                             // number.
-                            if let Some(ty) = self.scope.find_type(&v.name) {
+                            if let Some(ty) = self.find_type(&v.name) {
                                 match *ty.normalize() {
                                     Type::Enum(ref e) => {
                                         let is_num = !e.has_str;

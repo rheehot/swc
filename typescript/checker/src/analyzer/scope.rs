@@ -128,7 +128,7 @@ impl Scope<'_> {
 
         match self.types.entry(name) {
             Entry::Occupied(mut e) => {
-                println!("({}) register_type({}): duplicate", depth, e.key());
+                //println!("({}) register_type({}): duplicate", depth, e.key());
 
                 // TODO: Match -> .map
                 match (e.get_mut(), ty) {
@@ -143,7 +143,7 @@ impl Scope<'_> {
                 }
             }
             Entry::Vacant(e) => {
-                println!("({}) register_type({})", depth, e.key());
+                //println!("({}) register_type({})", depth, e.key());
                 e.insert(ty);
             }
         }
@@ -964,7 +964,7 @@ impl<'a> Scope<'a> {
     }
 
     /// This method does **not** handle imported types.
-    pub(super) fn find_type(&self, name: &JsWord) -> Option<&Type> {
+    fn find_type(&self, name: &JsWord) -> Option<&Type> {
         if let Some(ty) = self.facts.types.get(name) {
             println!("({}) find_type({}): Found (cond facts)", self.depth(), name);
             return Some(&ty);
@@ -974,6 +974,10 @@ impl<'a> Scope<'a> {
             println!("({}) find_type({}): Found", self.depth(), name);
 
             return Some(&ty);
+        }
+
+        if let Some(v) = self.get_var(name) {
+            return v.ty.as_ref();
         }
 
         match self.parent {

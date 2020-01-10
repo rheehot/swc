@@ -371,7 +371,7 @@ impl Analyzer<'_, '_> {
                                 ..var_info.clone()
                             }
                         } else {
-                            if let Some(Type::Module(..)) = self.scope.find_type(&i.sym) {
+                            if let Some(Type::Module(..)) = self.find_type(&i.sym) {
                                 return Err(Error::NotVariable {
                                     span: i.span,
                                     left: lhs.span(),

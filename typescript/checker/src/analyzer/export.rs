@@ -180,7 +180,7 @@ impl Analyzer<'_, '_> {
     fn export(&mut self, span: Span, name: JsWord, from: Option<JsWord>) {
         let from = from.unwrap_or_else(|| name.clone());
 
-        let ty = match self.scope.find_type(&from) {
+        let ty = match self.find_type(&from) {
             Some(ty) => ty,
             None => Err(Error::UndefinedSymbol {
                 sym: name.clone(),
@@ -188,9 +188,11 @@ impl Analyzer<'_, '_> {
             })?,
         };
 
+        let ty = ty.clone().freeze();
+
         // TODO: Change this to error.
         assert_eq!(self.info.exports.types.get(&name), None);
-        self.info.exports.types.insert(name, ty.clone().freeze());
+        self.info.exports.types.insert(name, ty);
     }
 
     /// Exports a varaible.
