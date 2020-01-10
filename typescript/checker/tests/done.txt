@@ -486,6 +486,7 @@ statements/for-ofStatements/ES5For-of3.ts
 statements/for-ofStatements/ES5For-of4.ts
 statements/for-ofStatements/ES5For-of5.ts
 statements/for-ofStatements/ES5For-of6.ts
+statements/throwStatements/throwStatements.ts
 types/primitives/boolean/assignFromBooleanInterface.ts
 types/primitives/null/directReferenceToNull.ts
 types/primitives/number/assignFromNumberInterface.ts

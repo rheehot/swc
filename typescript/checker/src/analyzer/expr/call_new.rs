@@ -366,11 +366,19 @@ impl Analyzer<'_, '_> {
                 } else {
                     let callee = self.validate(callee)?;
 
-                    match callee {
-                        Type::Function(f) => return Ok(*f.ret_ty),
+                    let type_args = try_opt!(type_args.validate_with(self));
+
+                    match callee.normalize() {
+                        Type::Function(ref f) => return Ok(*f.ret_ty.clone()),
+                        Type::Class(ref cls) if kind == ExtractKind::New => {
+                            return Ok(Type::ClassInstance(ClassInstance {
+                                span,
+                                cls: cls.clone(),
+                                type_args,
+                            }))
+                        }
                         _ => {}
                     }
-
                     Err(if kind == ExtractKind::Call {
                         Error::NoCallSignature { span, callee }
                     } else {
@@ -403,8 +411,25 @@ impl Analyzer<'_, '_> {
             }
         }
 
+        match kind {
+            ExtractKind::New => match ty.normalize() {
+                Type::Class(ref cls) => {
+                    //
+                    return Ok(Type::ClassInstance(ClassInstance {
+                        span,
+                        cls: cls.clone(),
+                        type_args: type_args.cloned(),
+                    }));
+                }
+
+                _ => {}
+            },
+            _ => {}
+        }
+
         macro_rules! ret_err {
             () => {{
+                dbg!();
                 match kind {
                     ExtractKind::Call => return Err(Error::NoCallSignature { span, callee: ty }),
                     ExtractKind::New => return Err(Error::NoNewSignature { span, callee: ty }),
@@ -560,6 +585,8 @@ impl Analyzer<'_, '_> {
                 _ => {}
             }
         }
+
+        dbg!();
 
         match kind {
             ExtractKind::Call => Err(Error::NoCallSignature {
