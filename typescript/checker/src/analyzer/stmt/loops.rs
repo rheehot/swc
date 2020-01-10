@@ -4,6 +4,7 @@ use crate::{
     errors::Error,
     ty::{Array, Type},
     validator::Validate,
+    ValidationResult,
 };
 use macros::validator_method;
 use swc_common::{Span, Spanned, Visit, VisitWith};
@@ -67,29 +68,35 @@ impl Analyzer<'_, '_> {
     }
 
     #[validator_method]
-    fn check_for_of_in_loop(&mut self, lhs: &VarDeclOrPat, rhs: &Expr) {
-        self.with_child(ScopeKind::Flow, Default::default(), |child| {
-            child.check_lhs_of_for_loop(&s.left);
-            if match s.left {
-                VarDeclOrPat::VarDecl(VarDecl { ref decls, .. }) => !decls.is_empty(),
-                _ => true,
-            } {
-                child.check_rhs_of_for_loop(&s.right);
-            }
+    fn check_for_of_in_loop(&mut self, span: Span, left: &VarDeclOrPat, rhs: &Expr) {
+        self.with_child(
+            ScopeKind::Flow,
+            Default::default(),
+            |child| -> ValidationResult<()> {
+                child.check_lhs_of_for_loop(left);
+                if match left {
+                    VarDeclOrPat::VarDecl(VarDecl { ref decls, .. }) => !decls.is_empty(),
+                    _ => true,
+                } {
+                    child.check_rhs_of_for_loop(&rhs);
+                }
 
-            child.validate_for_loop(s.span, &s.left, &s.right);
-        })?;
+                child.validate_for_loop(span, &left, &rhs);
+
+                Ok(())
+            },
+        )?;
     }
 }
 
 impl Visit<ForInStmt> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &ForInStmt) {
-        self.check_for_of_in_loop(&s.left, &s.right)
+        self.check_for_of_in_loop(s.span, &s.left, &s.right)
     }
 }
 
 impl Visit<ForOfStmt> for Analyzer<'_, '_> {
     fn visit(&mut self, s: &ForOfStmt) {
-        self.check_for_of_in_loop(&s.left, &s.right)
+        self.check_for_of_in_loop(s.span, &s.left, &s.right)
     }
 }
