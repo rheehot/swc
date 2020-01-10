@@ -583,6 +583,12 @@ impl Validate<Class> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Class>;
 
     fn validate(&mut self, c: &Class) -> Self::Output {
+        self.ctx.computed_prop_mode = ComputedPropMode::Class {
+            has_body: !self.ctx.in_declare,
+        };
+
+        c.decorators.visit_with(self);
+        self.resolve_parent_interfaces(&c.implements);
         let name = self.scope.this_class_name.take();
 
         // Scope is required because of type parameters.
@@ -604,6 +610,8 @@ impl Validate<Class> for Analyzer<'_, '_> {
                     _ => None,
                 }
             };
+
+            c.implements.visit_with(child);
 
             // TODO: Check for implements
 
@@ -634,15 +642,6 @@ impl Validate<Class> for Analyzer<'_, '_> {
 ///  - TS2515: Validate that class implements all methods.
 impl Visit<Class> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &Class) {
-        self.ctx.computed_prop_mode = ComputedPropMode::Class {
-            has_body: !self.ctx.in_declare,
-        };
-
-        c.decorators.visit_with(self);
-        c.implements.visit_with(self);
-
-        self.resolve_parent_interfaces(&c.implements);
-
         c.validate_with(self).store(&mut self.info.errors);
 
         let mut constructor_spans = vec![];
