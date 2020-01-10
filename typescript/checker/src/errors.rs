@@ -6,6 +6,10 @@ use swc_ecma_ast::{Expr, UnaryOp, UpdateOp};
 
 #[derive(Debug, Clone, PartialEq, Spanned)]
 pub enum Error {
+    NoSuchPropertyInModule {
+        span: Span,
+    },
+
     ReturnRequired {
         /// Span of the return type.
         span: Span,
