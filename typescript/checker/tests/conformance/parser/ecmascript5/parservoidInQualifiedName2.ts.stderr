@@ -1,4 +1,6 @@
 error: NameNotFound {
+    name: x.void,
+    type_args: None,
     span: Span {
         lo: BytePos(
             8,
