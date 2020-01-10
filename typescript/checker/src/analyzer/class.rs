@@ -579,6 +579,7 @@ impl Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<Class> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Class>;
 
@@ -625,6 +626,63 @@ impl Validate<Class> for Analyzer<'_, '_> {
                 })
                 .collect::<Result<_, _>>()?;
 
+            {
+                // Validate constructors
+                let mut constructor_spans = vec![];
+                let mut constructor_required_param_count = None;
+
+                for m in &c.body {
+                    match *m {
+                        ClassMember::Constructor(ref cons) => {
+                            //
+                            if cons.body.is_none() {
+                                for p in &cons.params {
+                                    match *p {
+                                        PatOrTsParamProp::TsParamProp(..) => {
+                                            child.info.errors.push(Error::TS2369 { span: p.span() })
+                                        }
+                                        _ => {}
+                                    }
+                                }
+                            }
+
+                            {
+                                // Check parameter count
+                                let required_param_count = cons
+                                    .params
+                                    .iter()
+                                    .filter(|p| match p {
+                                        PatOrTsParamProp::Pat(Pat::Ident(Ident {
+                                            optional: true,
+                                            ..
+                                        })) => false,
+                                        _ => true,
+                                    })
+                                    .count();
+
+                                match constructor_required_param_count {
+                                    Some(v) if required_param_count != v => {
+                                        for span in constructor_spans.drain(..) {
+                                            child.info.errors.push(Error::TS2394 { span })
+                                        }
+                                    }
+
+                                    None => {
+                                        constructor_required_param_count =
+                                            Some(required_param_count)
+                                    }
+                                    _ => {}
+                                }
+                            }
+
+                            constructor_spans.push(cons.span);
+                        }
+
+                        _ => {}
+                    }
+                }
+            }
+
             Ok(ty::Class {
                 span: c.span,
                 name,
@@ -634,65 +692,6 @@ impl Validate<Class> for Analyzer<'_, '_> {
                 body,
             })
         })
-    }
-}
-
-/// # Validations
-///
-///  - TS2515: Validate that class implements all methods.
-impl Visit<Class> for Analyzer<'_, '_> {
-    fn visit(&mut self, c: &Class) {
-        c.validate_with(self).store(&mut self.info.errors);
-
-        let mut constructor_spans = vec![];
-        let mut constructor_required_param_count = None;
-
-        for m in &c.body {
-            match *m {
-                ClassMember::Constructor(ref cons) => {
-                    //
-                    if cons.body.is_none() {
-                        for p in &cons.params {
-                            match *p {
-                                PatOrTsParamProp::TsParamProp(..) => {
-                                    self.info.errors.push(Error::TS2369 { span: p.span() })
-                                }
-                                _ => {}
-                            }
-                        }
-                    }
-
-                    {
-                        // Check parameter count
-                        let required_param_count = cons
-                            .params
-                            .iter()
-                            .filter(|p| match p {
-                                PatOrTsParamProp::Pat(Pat::Ident(Ident {
-                                    optional: true, ..
-                                })) => false,
-                                _ => true,
-                            })
-                            .count();
-
-                        match constructor_required_param_count {
-                            Some(v) if required_param_count != v => {
-                                for span in constructor_spans.drain(..) {
-                                    self.info.errors.push(Error::TS2394 { span })
-                                }
-                            }
-
-                            None => constructor_required_param_count = Some(required_param_count),
-                            _ => {}
-                        }
-                    }
-
-                    constructor_spans.push(cons.span);
-                }
-
-                _ => {}
-            }
-        }
     }
 }
 
