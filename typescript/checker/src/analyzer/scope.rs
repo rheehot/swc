@@ -6,7 +6,7 @@ use crate::{
         self, Alias, Array, EnumVariant, IndexSignature, Interface, Intersection,
         PropertySignature, QueryExpr, QueryType, Ref, Tuple, Type, TypeElement, TypeLit, Union,
     },
-    util::EqIgnoreNameAndSpan,
+    util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -16,7 +16,6 @@ use std::{borrow::Cow, collections::hash_map::Entry, iter::repeat};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
-use crate::util::EqIgnoreSpan;
 
 macro_rules! no_ref {
     ($t:expr) => {{
@@ -136,7 +135,7 @@ impl Scope<'_> {
                         // https://www.typescriptlang.org/docs/handbook/declaration-merging.html#merging-interfaces
                         orig.body.append(&mut i.body);
                     }
-                    (lty,rty)if lty.eq_ignore_span()
+                    (lty, rty) if lty.eq_ignore_span(&rty) => {}
                     ref ty => unreachable!("{:?} cannot be merged with {:?}", ty.0, ty.1),
                 }
             }
