@@ -841,12 +841,30 @@ impl Analyzer<'_, '_> {
                     match *m {
                         ty::ClassMember::Property(ref p) => {
                             // TODO: normalized string / ident
-                            if (&*p.key).eq_ignore_name_and_span(&prop) {
+                            if (&*p.key).eq_ignore_span(&prop) {
                                 if let Some(ref ty) = p.value {
                                     return Ok(ty.clone());
                                 }
 
                                 return Ok(Type::any(p.key.span()));
+                            }
+                        }
+
+                        ty::ClassMember::Method(ref m) => {
+                            // TODO: normalized string / ident
+                            match m.key {
+                                PropName::Computed(ComputedPropName { ref expr, .. }) => {
+                                    if (&**expr).eq_ignore_span(&prop) {
+                                        return Ok(Type::Function(ty::Function {
+                                            span,
+                                            type_params: m.type_params.clone(),
+                                            params: m.params.clone(),
+                                            ret_ty: m.ret_ty.clone(),
+                                        }));
+                                    }
+                                }
+
+                                _ => {}
                             }
                         }
                         _ => {}
@@ -906,13 +924,6 @@ impl Analyzer<'_, '_> {
 
         match i.sym {
             js_word!("arguments") => return Ok(Type::any(span)),
-            js_word!("Symbol") if !self.is_builtin => {
-                return Ok(builtin_types::get_var(
-                    self.libs,
-                    i.span,
-                    &js_word!("Symbol"),
-                )?);
-            }
             js_word!("undefined") => return Ok(Type::undefined(span)),
             js_word!("void") => return Ok(Type::any(span)),
             js_word!("eval") => match type_mode {
@@ -980,6 +991,14 @@ impl Analyzer<'_, '_> {
             if let Ok(ty) = builtin_types::get_var(self.libs, span, &i.sym) {
                 return Ok(ty);
             }
+        }
+
+        if i.sym == js_word!("Symbol") && !self.is_builtin {
+            return Ok(builtin_types::get_var(
+                self.libs,
+                i.span,
+                &js_word!("Symbol"),
+            )?);
         }
 
         if self.is_builtin {
