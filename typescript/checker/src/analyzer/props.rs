@@ -1,7 +1,7 @@
 use super::{scope::ScopeKind, Analyzer};
 use crate::{
     analyzer::{expr::TypeOfMode, util::ResultExt, Ctx},
-    errors::Error,
+    errors::{Error, Errors},
     ty::{MethodSignature, Operator, PropertySignature, Type, TypeElement},
     validator::{Validate, ValidateWith},
     ValidationResult,
@@ -43,7 +43,7 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
             _ => false,
         };
 
-        let mut errors = vec![];
+        let mut errors = Errors::default();
         let ty = match self.validate(&node.expr) {
             Ok(ty) => ty,
             Err(err) => {
@@ -68,6 +68,11 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
                     match *ty {
                         Type::Lit(..) => {}
                         _ if ty.is_kwd(TsKeywordTypeKind::TsSymbolKeyword) => {}
+                        _ if is_symbol_access => {
+                            errors.push(Error::NonSymbolTypedFieldFromSymbol {
+                                span: node.expr.span(),
+                            })
+                        }
                         _ => match mode {
                             ComputedPropMode::Class { .. } => {
                                 errors.push(Error::TS1168 { span: node.span })
@@ -122,7 +127,10 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
             }
         }
         if !errors.is_empty() {
-            Err(Error::Errors { span, errors })?
+            Err(Error::Errors {
+                span,
+                errors: errors.into(),
+            })?
         }
     }
 }
