@@ -141,6 +141,8 @@ impl Validate<Prop> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeElement>;
 
     fn validate(&mut self, prop: &Prop) -> Self::Output {
+        self.record(prop);
+
         let ctx = Ctx {
             computed_prop_mode: ComputedPropMode::Object,
             ..self.ctx
@@ -151,7 +153,7 @@ impl Validate<Prop> for Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     fn validate_prop(&mut self, prop: &Prop) -> ValidationResult<TypeElement> {
-        prop.visit_children(self);
+        // TODO: Validate prop key
 
         match prop {
             Prop::Shorthand(ref i) => {
