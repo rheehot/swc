@@ -1,14 +1,4 @@
-error: TS1166 {
-    span: Span {
-        lo: BytePos(
-            35,
-        ),
-        hi: BytePos(
-            38,
-        ),
-        ctxt: #0,
-    },
-}
+error: A computed property name in a class property declaration must refer to an expression whose type is a literal type or a 'unique symbol' type.
  --> $DIR/tests/conformance/parser/ecmascript6/ComputedPropertyNames/parserComputedPropertyName8.ts:3:11
   |
 3 |    public [e]

@@ -459,6 +459,10 @@ impl Error {
             }
             Error::TS2378 { .. } => h.struct_err("A 'get' accessor must return a value"),
             Error::TS1094 { .. } => h.struct_err("An accessor cannot have type parameters"),
+            Error::TS1166 { .. } => h.struct_err(
+                "A computed property name in a class property declaration must refer to an \
+                 expression whose type is a literal type or a 'unique symbol' type.",
+            ),
             Error::TS1183 { .. } => {
                 h.struct_err("An implementation cannot be declared in ambient contexts")
             }
@@ -471,6 +475,7 @@ impl Error {
             Error::TS2567 { .. } => h.struct_err(
                 "Enum declarations can only merge with namespace or other enum declarations",
             ),
+
             _ => h.struct_err(&format!("{:#?}", self)),
         };
         err.set_span(span);
