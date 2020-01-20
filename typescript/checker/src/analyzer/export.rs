@@ -54,7 +54,7 @@ impl Analyzer<'_, '_> {
                     }
                 },
             };
-            self.info.exports.vars.insert(sym, ty.freeze());
+            self.info.exports.vars.insert(sym, ty);
         }
 
         assert_eq!(self.pending_exports, vec![]);
@@ -86,10 +86,7 @@ impl Analyzer<'_, '_> {
                 return;
             }
         };
-        self.info
-            .exports
-            .vars
-            .insert(js_word!("default"), ty.freeze());
+        self.info.exports.vars.insert(js_word!("default"), ty);
     }
 }
 
@@ -120,14 +117,10 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
                     .store(&mut self.info.errors)
                     .map(Type::from);
 
-                self.info.exports.types.insert(
-                    e.id.sym.clone(),
-                    {
-                        let span = e.span();
-                        ty.unwrap_or_else(|| Type::any(span))
-                    }
-                    .freeze(),
-                );
+                self.info.exports.types.insert(e.id.sym.clone(), {
+                    let span = e.span();
+                    ty.unwrap_or_else(|| Type::any(span))
+                });
             }
             Decl::TsModule(..) => unimplemented!("export module "),
             Decl::TsTypeAlias(ref decl) => {

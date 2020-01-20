@@ -285,15 +285,16 @@ impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
         decl.visit_children(&mut new);
         self.info.errors.append_errors(&mut new.info.errors);
 
+        let module = self.finalize(ty::Module {
+            span,
+            exports: new.info.exports,
+        });
         self.register_type(
             match decl.id {
                 TsModuleName::Ident(ref i) => i.sym.clone(),
                 TsModuleName::Str(ref s) => s.value.clone(),
             },
-            Type::Module(ty::Module {
-                span,
-                exports: new.info.exports,
-            }),
+            Type::Module(module),
         )
         .store(&mut self.info.errors);
     }
