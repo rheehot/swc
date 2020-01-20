@@ -239,6 +239,7 @@ expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithAnyOtherType
 expressions/unaryOperators/logicalNotOperator/logicalNotOperatorWithStringType.ts
 expressions/unaryOperators/negateOperator/
 expressions/unaryOperators/typeofOperator/typeofOperatorWithAnyOtherType.ts
+parser/ecmascript3/
 parser/ecmascript5/Accessors/parserAccessors1.ts
 parser/ecmascript5/Accessors/parserAccessors10.ts
 parser/ecmascript5/Accessors/parserAccessors2.ts
