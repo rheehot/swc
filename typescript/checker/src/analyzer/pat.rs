@@ -26,6 +26,8 @@ impl Validate<Pat> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 
     fn validate(&mut self, p: &Pat) -> Self::Output {
+        self.record(p);
+
         match self.ctx.pat_mode {
             PatMode::Decl => {
                 let mut names = vec![];

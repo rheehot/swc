@@ -16,6 +16,8 @@ impl Validate<Function> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Function>;
 
     fn validate(&mut self, f: &Function) -> Self::Output {
+        self.record(f);
+
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
             let mut errors = vec![];
 

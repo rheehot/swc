@@ -214,13 +214,18 @@ impl<'a, 'b> Analyzer<'a, 'b> {
     {
         let ctx = self.ctx;
         let child_scope = Scope::new(&self.scope, kind, facts);
-        let (ret, info, mut child_scope) = {
+        let (ret, info, mut child_scope, dup) = {
             let mut child = self.new(child_scope);
             child.ctx = ctx;
 
             let ret = op(&mut child);
 
-            (ret, child.info, child.scope.remove_parent())
+            (
+                ret,
+                child.info,
+                child.scope.remove_parent(),
+                child.duplicated_tracker,
+            )
         };
 
         self.info.errors.extend(info.errors);
@@ -230,6 +235,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             "child cannot export a variable"
         );
 
+        self.duplicated_tracker.record_all(dup);
         self.scope.copy_hoisted_vars_from(&mut child_scope);
 
         ret

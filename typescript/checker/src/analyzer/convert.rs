@@ -22,6 +22,8 @@ impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeParamDecl>;
 
     fn validate(&mut self, decl: &TsTypeParamDecl) -> Self::Output {
+        self.record(decl);
+
         Ok(TypeParamDecl {
             span: decl.span,
             params: self.validate(&decl.params)?,
@@ -34,6 +36,8 @@ impl Validate<TsTypeParam> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeParam>;
 
     fn validate(&mut self, p: &TsTypeParam) -> Self::Output {
+        self.record(p);
+
         let param = TypeParam {
             span: p.span,
             name: p.name.sym.clone(),
@@ -52,6 +56,8 @@ impl Validate<TsTypeAnn> for Analyzer<'_, '_> {
 
     #[inline]
     fn validate(&mut self, ann: &TsTypeAnn) -> Self::Output {
+        self.record(ann);
+
         self.validate(&ann.type_ann)
     }
 }
@@ -61,6 +67,8 @@ impl Validate<TsTypeAliasDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<Alias>;
 
     fn validate(&mut self, d: &TsTypeAliasDecl) -> Self::Output {
+        self.record(d);
+
         let alias = {
             let ty: Type = d.type_ann.validate_with(self)?;
             let type_params = try_opt!(d.type_params.validate_with(self));
@@ -388,6 +396,8 @@ impl Validate<TsTypeRef> for Analyzer<'_, '_> {
     type Output = ValidationResult<Type>;
 
     fn validate(&mut self, t: &TsTypeRef) -> Self::Output {
+        self.record(t);
+
         let type_args = try_opt!(t.type_params.validate_with(self));
 
         match t.type_name {
@@ -417,6 +427,8 @@ impl Validate<TsInferType> for Analyzer<'_, '_> {
     type Output = ValidationResult<InferType>;
 
     fn validate(&mut self, t: &TsInferType) -> Self::Output {
+        self.record(t);
+
         Ok(InferType {
             span: t.span,
             type_param: t.type_param.validate_with(self)?,
@@ -429,6 +441,8 @@ impl Validate<TsImportType> for Analyzer<'_, '_> {
     type Output = ValidationResult<ImportType>;
 
     fn validate(&mut self, t: &TsImportType) -> Self::Output {
+        self.record(t);
+
         Ok(ImportType {
             span: t.span,
             arg: t.arg.clone(),
@@ -443,6 +457,8 @@ impl Validate<TsTypeQueryExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult<QueryExpr>;
 
     fn validate(&mut self, t: &TsTypeQueryExpr) -> Self::Output {
+        self.record(t);
+
         let span = t.span();
 
         Ok(match t {
@@ -457,6 +473,8 @@ impl Validate<TsTypeQuery> for Analyzer<'_, '_> {
     type Output = ValidationResult<QueryType>;
 
     fn validate(&mut self, t: &TsTypeQuery) -> Self::Output {
+        self.record(t);
+
         Ok(QueryType {
             span: t.span,
             expr: t.expr_name.validate_with(self)?,
@@ -469,6 +487,8 @@ impl Validate<TsTypePredicate> for Analyzer<'_, '_> {
     type Output = ValidationResult<Predicate>;
 
     fn validate(&mut self, t: &TsTypePredicate) -> Self::Output {
+        self.record(t);
+
         Ok(Predicate {
             span: t.span,
             param_name: t.param_name.clone(),
@@ -482,6 +502,8 @@ impl Validate<TsIndexedAccessType> for Analyzer<'_, '_> {
     type Output = ValidationResult<IndexedAccessType>;
 
     fn validate(&mut self, t: &TsIndexedAccessType) -> Self::Output {
+        self.record(t);
+
         Ok(IndexedAccessType {
             span: t.span,
             readonly: t.readonly,
@@ -496,6 +518,8 @@ impl Validate<TsType> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
     fn validate(&mut self, ty: &TsType) -> Self::Output {
+        self.record(ty);
+
         let span = ty.span();
 
         Ok(match ty {
