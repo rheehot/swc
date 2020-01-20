@@ -1,6 +1,6 @@
 use super::Analyzer;
 use crate::{
-    analyzer::util::ResultExt,
+    analyzer::{props::ComputedPropMode, util::ResultExt, Ctx},
     errors::Error,
     ty,
     ty::{
@@ -87,7 +87,7 @@ impl Validate<TsInterfaceDecl> for Analyzer<'_, '_> {
             name: d.id.sym.clone(),
             type_params: try_opt!(self.validate(&d.type_params)),
             extends: self.validate(&d.extends)?,
-            body: self.validate(&d.body.body)?,
+            body: self.validate(&d.body)?,
         };
 
         self.register_type(d.id.sym.clone(), ty.clone().into())
@@ -96,6 +96,20 @@ impl Validate<TsInterfaceDecl> for Analyzer<'_, '_> {
         self.resolve_parent_interfaces(&d.extends);
 
         Ok(ty)
+    }
+}
+
+#[validator]
+impl Validate<TsInterfaceBody> for Analyzer<'_, '_> {
+    type Output = ValidationResult<Vec<TypeElement>>;
+
+    fn validate(&mut self, node: &TsInterfaceBody) -> Self::Output {
+        let ctx = Ctx {
+            computed_prop_mode: ComputedPropMode::Interface,
+            ..self.ctx
+        };
+
+        Ok(node.body.validate_with(&mut *self.with_ctx(ctx))?)
     }
 }
 
