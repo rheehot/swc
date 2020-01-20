@@ -560,32 +560,6 @@ impl Validate<Class> for Analyzer<'_, '_> {
     fn validate(&mut self, c: &Class) -> Self::Output {
         self.record(c);
 
-        {
-            for m in c.body.iter() {
-                match *m {
-                    swc_ecma_ast::ClassMember::ClassProp(ref prop) => match prop.type_ann {
-                        Some(ref ty) => {
-                            let ty = self.validate(ty)?;
-                            if ty.is_any() || ty.is_unknown() {
-                            } else {
-                                if prop.value.is_none() {
-                                    // TODO: Uncomment this after implementing a
-                                    //      constructor checker.
-                                    // self.info
-                                    //     .errors
-                                    //     .push(Error::
-                                    // ClassPropertyInitRequired {
-                                    // span })
-                                }
-                            }
-                        }
-                        None => {}
-                    },
-                    _ => {}
-                }
-            }
-        }
-
         self.ctx.computed_prop_mode = ComputedPropMode::Class {
             has_body: !self.ctx.in_declare,
         };
