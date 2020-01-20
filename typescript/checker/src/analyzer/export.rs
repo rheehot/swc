@@ -181,6 +181,8 @@ impl Analyzer<'_, '_> {
             })?,
         };
 
+        // TODO(kdy1): Remove freeze. This is wrong because it may prevent proper
+        //  finalization.
         let ty = ty.clone().freeze();
 
         // TODO: Change this to error.
