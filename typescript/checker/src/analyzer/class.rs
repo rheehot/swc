@@ -329,36 +329,6 @@ impl Validate<ClassMember> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    /// In almost case, this method returns `Ok`.
-    pub(super) fn type_of_class(&mut self, c: &swc_ecma_ast::Class) -> ValidationResult<ty::Class> {
-        self.record(c);
-
-        for m in c.body.iter() {
-            match *m {
-                swc_ecma_ast::ClassMember::ClassProp(ref prop) => match prop.type_ann {
-                    Some(ref ty) => {
-                        let ty = self.validate(ty)?;
-                        if ty.is_any() || ty.is_unknown() {
-                        } else {
-                            if prop.value.is_none() {
-                                // TODO: Uncomment this after implementing a
-                                // constructor checker.
-                                // self.info
-                                //     .errors
-                                //     .push(Error::ClassPropertyInitRequired {
-                                // span })
-                            }
-                        }
-                    }
-                    None => {}
-                },
-                _ => {}
-            }
-        }
-
-        c.validate_with(self)
-    }
-
     fn validate_class_members(
         &mut self,
         c: &Class,
@@ -586,6 +556,32 @@ impl Validate<Class> for Analyzer<'_, '_> {
     fn validate(&mut self, c: &Class) -> Self::Output {
         self.record(c);
 
+        {
+            for m in c.body.iter() {
+                match *m {
+                    swc_ecma_ast::ClassMember::ClassProp(ref prop) => match prop.type_ann {
+                        Some(ref ty) => {
+                            let ty = self.validate(ty)?;
+                            if ty.is_any() || ty.is_unknown() {
+                            } else {
+                                if prop.value.is_none() {
+                                    // TODO: Uncomment this after implementing a
+                                    //      constructor checker.
+                                    // self.info
+                                    //     .errors
+                                    //     .push(Error::
+                                    // ClassPropertyInitRequired {
+                                    // span })
+                                }
+                            }
+                        }
+                        None => {}
+                    },
+                    _ => {}
+                }
+            }
+        }
+
         self.ctx.computed_prop_mode = ComputedPropMode::Class {
             has_body: !self.ctx.in_declare,
         };
@@ -703,7 +699,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
 impl Visit<ClassExpr> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassExpr) {
         self.scope.this_class_name = c.ident.as_ref().map(|v| v.sym.clone());
-        let ty = match self.type_of_class(&c.class) {
+        let ty = match c.class.validate_with(self) {
             Ok(ty) => ty.into(),
             Err(err) => {
                 self.info.errors.push(err);
@@ -760,14 +756,14 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     fn visit_class_decl(&mut self, c: &ClassDecl) {
-        c.visit_children(self);
+        c.ident.visit_with(self);
 
         self.validate_inherited_members(Some(&c.ident), &c.class, c.declare);
         self.validate_class_members(&c.class, c.declare)
             .store(&mut self.info.errors);
 
         self.scope.this_class_name = Some(c.ident.sym.clone());
-        let ty = match self.type_of_class(&c.class) {
+        let ty = match c.class.validate_with(self) {
             Ok(ty) => ty.into(),
             Err(err) => {
                 self.info.errors.push(err);
