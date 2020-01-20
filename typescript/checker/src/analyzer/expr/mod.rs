@@ -1008,6 +1008,7 @@ impl Analyzer<'_, '_> {
                 type_args: None,
             }))
         } else {
+            panic_if_required!();
             Err(Error::UndefinedSymbol {
                 span,
                 sym: i.sym.clone(),

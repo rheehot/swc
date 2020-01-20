@@ -429,7 +429,6 @@ impl Analyzer<'_, '_> {
 
         macro_rules! ret_err {
             () => {{
-                dbg!();
                 match kind {
                     ExtractKind::Call => return Err(Error::NoCallSignature { span, callee: ty }),
                     ExtractKind::New => return Err(Error::NoNewSignature { span, callee: ty }),
@@ -585,8 +584,6 @@ impl Analyzer<'_, '_> {
                 _ => {}
             }
         }
-
-        dbg!();
 
         match kind {
             ExtractKind::Call => Err(Error::NoCallSignature {
