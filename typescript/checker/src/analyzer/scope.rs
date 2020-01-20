@@ -451,7 +451,7 @@ impl Analyzer<'_, '_> {
                         .info
                         .exports
                         .vars
-                        .insert(name, ty.unwrap_or(Type::any(i.span)).freeze())
+                        .insert(name, ty.unwrap_or(Type::any(i.span)))
                     {
                         unimplemented!("multiple exported variables with same name")
                     }
