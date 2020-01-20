@@ -63,7 +63,12 @@ fn filter(mut bt: Backtrace) -> Backtrace {
 
             if let Some(filename) = symbol.filename() {
                 let s = filename.to_string_lossy();
-                if s.contains("fold.rs") || s.contains("validator.rs") || s.contains("vec.rs") {
+                if s.contains("fold.rs")
+                    || s.contains("validator.rs")
+                    || s.contains("vec.rs")
+                    || s.contains("/backtrace")
+                    || s.contains("libcore")
+                {
                     return false;
                 }
             }
@@ -72,19 +77,6 @@ fn filter(mut bt: Backtrace) -> Backtrace {
                 done = true;
                 // Last one
                 return true;
-            }
-
-            if name.contains("core")
-                || name.contains("backtrace")
-                || name.contains("scoped_tls")
-                || name.contains("testing")
-                || name.contains("Box")
-                || name.contains("IMPL_FOLD_FOR_")
-                || name.contains("[T]")
-                || name.contains("with_child")
-                || name.contains("<F as swc_common::fold::Visit<T>>")
-            {
-                return false;
             }
         }
 
