@@ -18,7 +18,7 @@ impl DuplicateTracker {
         }
 
         let key = format!("{:?}", node);
-        let bt = backtrace::Backtrace::new();
+        let bt = Backtrace::new_unresolved();
 
         self.insert(format!("{:?}", key), bt)
     }
@@ -43,7 +43,8 @@ impl DuplicateTracker {
     }
 }
 
-fn filter(bt: Backtrace) -> Backtrace {
+fn filter(mut bt: Backtrace) -> Backtrace {
+    bt.resolve();
     let mut frames: Vec<_> = bt.into();
 
     frames.retain(|frame| {
