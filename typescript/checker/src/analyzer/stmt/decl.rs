@@ -10,6 +10,8 @@ use swc_ecma_ast::*;
 
 impl Visit<VarDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, var: &VarDecl) {
+        self.record(var);
+
         let kind = var.kind;
 
         let ctx = Ctx {
@@ -20,6 +22,8 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
         };
         self.with_ctx(ctx).with(|a| {
             var.decls.iter().for_each(|v| {
+                a.record(v);
+
                 let res: Result<_, _> = try {
                     let v_span = v.span();
                     if !a.is_builtin {

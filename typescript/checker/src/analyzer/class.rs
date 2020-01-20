@@ -331,6 +331,8 @@ impl Validate<ClassMember> for Analyzer<'_, '_> {
 impl Analyzer<'_, '_> {
     /// In almost case, this method returns `Ok`.
     pub(super) fn type_of_class(&mut self, c: &swc_ecma_ast::Class) -> ValidationResult<ty::Class> {
+        self.record(c);
+
         for m in c.body.iter() {
             match *m {
                 swc_ecma_ast::ClassMember::ClassProp(ref prop) => match prop.type_ann {
@@ -582,6 +584,8 @@ impl Validate<Class> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Class>;
 
     fn validate(&mut self, c: &Class) -> Self::Output {
+        self.record(c);
+
         self.ctx.computed_prop_mode = ComputedPropMode::Class {
             has_body: !self.ctx.in_declare,
         };
@@ -747,6 +751,8 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
 
 impl Visit<ClassDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, c: &ClassDecl) {
+        self.record(c);
+
         let ctx = Ctx { ..self.ctx };
         self.with_ctx(ctx).visit_class_decl(c);
     }

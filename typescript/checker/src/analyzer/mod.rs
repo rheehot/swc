@@ -96,7 +96,10 @@ pub struct Analyzer<'a, 'b> {
 
 impl Analyzer<'_, '_> {
     /// Mark node as visited. This method panics if Analyzer had visited node.
-    fn record(&mut self, node: &dyn Debug) {
+    fn record<N>(&mut self, node: &N)
+    where
+        N: Debug + Spanned,
+    {
         self.duplicated_tracker.record(node)
     }
 }

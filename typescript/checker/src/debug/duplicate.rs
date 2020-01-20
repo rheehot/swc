@@ -1,6 +1,7 @@
 use backtrace::Backtrace;
 use fxhash::FxHashMap;
 use std::fmt::Debug;
+use swc_common::Spanned;
 
 #[derive(Debug, Default)]
 pub(crate) struct DuplicateTracker {
@@ -8,7 +9,14 @@ pub(crate) struct DuplicateTracker {
 }
 
 impl DuplicateTracker {
-    pub fn record(&mut self, node: &dyn Debug) {
+    pub fn record<N>(&mut self, node: &N)
+    where
+        N: Debug + Spanned,
+    {
+        if node.span().is_dummy() {
+            return;
+        }
+
         let key = format!("{:?}", node);
         let bt = backtrace::Backtrace::new();
 
@@ -17,7 +25,7 @@ impl DuplicateTracker {
 
     fn insert(&mut self, key: String, bt: Backtrace) {
         if let Some(bt1) = self.visited.get(&*key) {
-            panic!("Duplicated detected:\n{:?}\n{:?}", bt1, bt)
+            panic!("Duplicated detected:\n{}\n{:?}\n{:?}", key, bt1, bt)
         }
 
         self.visited.insert(key, bt);
