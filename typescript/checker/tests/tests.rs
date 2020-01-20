@@ -93,6 +93,9 @@ fn should_ignore(name: &str, content: &str) -> bool {
         "negateOperatorWithEnumType.ts",
         "bitwiseNotOperatorWithEnumType.ts",
         "deleteOperatorWithEnumType.ts",
+        // Temporarily ignored - needs changing ast types
+        // See: https://github.com/swc-project/swc/issues/597
+        "parserES5ComputedPropertyName5.ts",
     ];
 
     if postponed_tests.iter().any(|p| name.contains(p)) {
