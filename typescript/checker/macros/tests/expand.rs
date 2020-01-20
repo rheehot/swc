@@ -10,12 +10,3 @@ struct Error;
 struct Analyzer<'a, 'b> {
     phantom: PhantomData<&'a &'b ()>,
 }
-
-#[validator]
-impl Validate<Expr> for Analyzer<'_, '_> {
-    type Output = Result<(), Error>;
-
-    fn validate(&mut self, _: &Expr) -> ValidationResult {
-        Err(Error)
-    }
-}

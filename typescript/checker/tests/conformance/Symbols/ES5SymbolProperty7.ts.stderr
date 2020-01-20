@@ -1,17 +1,16 @@
-error: NoSuchVar {
+error: NonSymbolTypedFieldFromSymbol {
     span: Span {
         lo: BytePos(
-            66,
+            62,
         ),
         hi: BytePos(
-            72,
+            77,
         ),
         ctxt: #0,
     },
-    name: Atom('Symbol' type=static),
 }
  --> $DIR/tests/conformance/Symbols/ES5SymbolProperty7.ts:5:6
   |
 5 |     [Symbol.iterator]() { }
-  |      ^^^^^^
+  |      ^^^^^^^^^^^^^^^
 

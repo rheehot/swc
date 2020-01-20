@@ -442,6 +442,10 @@ pub enum Error {
     UnknownPropertyInObjectLiteralAssignment {
         span: Span,
     },
+
+    NonSymbolTypedFieldFromSymbol {
+        span: Span,
+    },
 }
 
 impl Error {
