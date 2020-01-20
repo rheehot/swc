@@ -103,12 +103,6 @@ fn should_ignore(name: &str, content: &str) -> bool {
         return true;
     }
 
-    if DONE.iter().any(|p| name.starts_with(p))
-        && env::var("RUST_BACKTRACE").unwrap_or("".into()) != "full"
-    {
-        return false;
-    }
-
     name.contains("circular")
         || name.contains(".d.ts")
         || content.contains("<reference path")
