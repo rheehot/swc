@@ -24,7 +24,7 @@ impl Fold<Type> for ExpandAll<'_, '_, '_> {
                 .expand(ty.span(), ty.clone())
                 .store(&mut self.analyzer.info.errors)
                 .unwrap_or(ty),
-            _ => ty,
+            _ => ty.freeze(),
         }
     }
 }
