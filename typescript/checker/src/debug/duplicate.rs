@@ -24,8 +24,13 @@ impl DuplicateTracker {
     }
 
     fn insert(&mut self, key: String, bt: Backtrace) {
-        if let Some(bt1) = self.visited.get(&*key) {
-            panic!("Duplicated detected:\n{}\n{:?}\n{:?}", key, bt1, bt)
+        if let Some(bt1) = self.visited.remove(&*key) {
+            panic!(
+                "Duplicated detected:\n{}\n{:?}\n{:?}",
+                key,
+                filter(bt1),
+                filter(bt)
+            )
         }
 
         self.visited.insert(key, bt);
@@ -36,4 +41,33 @@ impl DuplicateTracker {
             self.insert(k, v);
         }
     }
+}
+
+fn filter(bt: Backtrace) -> Backtrace {
+    let mut frames: Vec<_> = bt.into();
+
+    frames.retain(|frame| {
+        //
+        for symbol in frame.symbols() {
+            let name = if let Some(name) = symbol.name().and_then(|s| s.as_str()) {
+                name
+            } else {
+                return false;
+            };
+
+            if name.contains("core")
+                || name.contains("backtrace")
+                || name.contains("scoped_tls")
+                || name.contains("testing")
+                || name.contains("Box")
+                || name.contains("IMPL_FOLD_FOR_")
+            {
+                return false;
+            }
+        }
+
+        true
+    });
+
+    frames.into()
 }
