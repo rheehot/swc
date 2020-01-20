@@ -2,6 +2,7 @@ pub(crate) use self::scope::ScopeKind;
 use self::{control_flow::CondFacts, scope::Scope, util::ResultExt};
 use crate::{
     analyzer::{pat::PatMode, props::ComputedPropMode},
+    debug::duplicate::DuplicateTracker,
     errors::{Error, Errors},
     loader::Load,
     ty,
@@ -12,6 +13,7 @@ use crate::{
 use fxhash::{FxHashMap, FxHashSet};
 use macros::{validator, validator_method};
 use std::{
+    fmt::Debug,
     ops::{Deref, DerefMut},
     path::PathBuf,
     sync::Arc,
@@ -37,6 +39,12 @@ macro_rules! panic_if_required {
             panic!($($t)*);
         }
     }};
+}
+
+fn print_backtrace() {
+    use backtrace::Backtrace;
+    let bt = Backtrace::new();
+    println!("{:?}", bt)
 }
 
 mod assign;
@@ -82,6 +90,15 @@ pub struct Analyzer<'a, 'b> {
     loader: &'b dyn Load,
 
     is_builtin: bool,
+
+    duplicated_tracker: DuplicateTracker,
+}
+
+impl Analyzer<'_, '_> {
+    /// Mark node as visited. This method panics if Analyzer had visited node.
+    fn record(&mut self, node: &dyn Debug) {
+        self.duplicated_tracker.record(node)
+    }
 }
 
 #[derive(Debug, Clone, Default)]
@@ -179,6 +196,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             },
             loader,
             is_builtin,
+            duplicated_tracker: Default::default(),
         }
     }
 
@@ -272,6 +290,8 @@ impl Visit<Decorator> for Analyzer<'_, '_> {
 
 impl Visit<TsImportEqualsDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &TsImportEqualsDecl) {
+        self.record(node);
+
         match node.module_ref {
             TsModuleRef::TsEntityName(ref e) => {
                 match self.type_of_ts_entity_name(node.span, e, None) {

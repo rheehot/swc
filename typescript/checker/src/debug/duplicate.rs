@@ -2,7 +2,7 @@ use backtrace::Backtrace;
 use fxhash::FxHashMap;
 use std::fmt::Debug;
 
-#[derive()]
+#[derive(Debug, Default)]
 pub(crate) struct DuplicateTracker {
     visited: FxHashMap<String, Backtrace>,
 }
