@@ -46,8 +46,13 @@ impl DuplicateTracker {
 fn filter(mut bt: Backtrace) -> Backtrace {
     bt.resolve();
     let mut frames: Vec<_> = bt.into();
+    let mut done = false;
 
     frames.retain(|frame| {
+        if done {
+            return false;
+        }
+
         //
         for symbol in frame.symbols() {
             let name = if let Some(name) = symbol.name().and_then(|s| s.as_str()) {
@@ -61,6 +66,12 @@ fn filter(mut bt: Backtrace) -> Backtrace {
                 if s.contains("fold.rs") || s.contains("validator.rs") {
                     return false;
                 }
+            }
+
+            if name.contains("Module") {
+                done = true;
+                // Last one
+                return true;
             }
 
             if name.contains("core")
