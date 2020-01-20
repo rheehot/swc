@@ -25,12 +25,8 @@ impl DuplicateTracker {
 
     fn insert(&mut self, key: String, bt: Backtrace) {
         if let Some(bt1) = self.visited.remove(&*key) {
-            panic!(
-                "Duplicated detected:\n{}\n{:?}\n{:?}",
-                key,
-                filter(bt1),
-                filter(bt)
-            )
+            let (l, r) = remove_common(bt1, bt);
+            panic!("Duplicated detected:\n{}\n{:?}\n{:?}", key, l, r)
         }
 
         self.visited.insert(key, bt);
@@ -41,6 +37,28 @@ impl DuplicateTracker {
             self.insert(k, v);
         }
     }
+}
+
+fn remove_common(l: Backtrace, r: Backtrace) -> (Backtrace, Backtrace) {
+    let (l, r) = (filter(l), filter(r));
+    let (mut l, mut r): (Vec<_>, Vec<_>) = (l.into(), r.into());
+
+    // Remove common parts
+    let common_cnt = l
+        .iter()
+        .rev()
+        .zip(r.iter().rev())
+        .position(|(l, r)| l.symbol_address() as usize == r.symbol_address() as usize);
+
+    println!("COMMON: {:?}", common_cnt);
+    if let Some(common_cnt) = common_cnt {
+        for _ in 0..common_cnt {
+            l.pop();
+            r.pop();
+        }
+    }
+
+    (l.into(), r.into())
 }
 
 fn filter(mut bt: Backtrace) -> Backtrace {
