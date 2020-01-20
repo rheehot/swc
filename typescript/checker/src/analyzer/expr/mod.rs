@@ -230,6 +230,8 @@ impl Analyzer<'_, '_> {
         mode: TypeOfMode,
         type_args: Option<TypeParamInstantiation>,
     ) -> ValidationResult<Type> {
+        self.record(e);
+
         let span = e.span();
 
         match e {

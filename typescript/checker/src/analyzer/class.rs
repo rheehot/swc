@@ -24,6 +24,8 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::ClassProperty>;
 
     fn validate(&mut self, p: &ClassProp) -> Self::Output {
+        self.record(p);
+
         // Verify key if key is computed
         if p.computed {
             self.validate_computed_prop_key(p.span, &p.key);
@@ -56,6 +58,8 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Constructor>;
 
     fn validate(&mut self, c: &Constructor) -> Self::Output {
+        self.record(c);
+
         let c_span = c.span();
 
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
