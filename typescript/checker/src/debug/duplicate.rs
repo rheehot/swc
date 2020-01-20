@@ -62,6 +62,8 @@ fn filter(mut bt: Backtrace) -> Backtrace {
                 || name.contains("testing")
                 || name.contains("Box")
                 || name.contains("IMPL_FOLD_FOR_")
+                || name.contains("[T]")
+                || name.contains("<F as swc_common::fold::Visit<T>>")
             {
                 return false;
             }
