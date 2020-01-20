@@ -75,17 +75,6 @@ where
     pub types: Vec<Result<Type, Error>>,
 }
 
-impl<A> Visit<Stmt> for ReturnTypeCollector<'_, A>
-where
-    A: Visit<Stmt> + Validate<Expr, Output = ValidationResult>,
-{
-    fn visit(&mut self, stmt: &Stmt) {
-        self.analyzer.visit(stmt);
-
-        stmt.visit_children(self);
-    }
-}
-
 impl<A> Visit<ReturnStmt> for ReturnTypeCollector<'_, A>
 where
     A: Visit<Stmt> + Validate<Expr, Output = ValidationResult>,
