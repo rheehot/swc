@@ -56,6 +56,13 @@ fn filter(mut bt: Backtrace) -> Backtrace {
                 return false;
             };
 
+            if let Some(filename) = symbol.filename() {
+                let s = filename.to_string_lossy();
+                if s.contains("fold.rs") || s.contains("validator.rs") {
+                    return false;
+                }
+            }
+
             if name.contains("core")
                 || name.contains("backtrace")
                 || name.contains("scoped_tls")
