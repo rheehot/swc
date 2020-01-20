@@ -1,16 +1,17 @@
-error: RedclaredVarWithDifferentType {
+error: UndefinedSymbol {
+    sym: Atom('as1' type=inline),
     span: Span {
         lo: BytePos(
-            25,
+            11,
         ),
         hi: BytePos(
-            28,
+            14,
         ),
         ctxt: #0,
     },
 }
- --> $DIR/tests/errors/copied/var-assignment/index.ts:2:5
+ --> $DIR/tests/errors/copied/var-assignment/index.ts:1:12
   |
-2 | var as1: number;
-  |     ^^^
+1 | var as1 = (as1 = 2);
+  |            ^^^
 

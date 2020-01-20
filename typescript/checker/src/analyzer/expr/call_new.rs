@@ -78,8 +78,6 @@ impl Validate<NewExpr> for Analyzer<'_, '_> {
 
         // TODO: e.visit_children
 
-        self.check_callee(e.span, &e.callee, e.type_args.as_ref());
-
         // Check arguments
         if let Some(ref args) = e.args {
             for arg in args {
@@ -109,23 +107,6 @@ enum ExtractKind {
 }
 
 impl Analyzer<'_, '_> {
-    #[validator_method]
-    fn check_callee(
-        &mut self,
-        span: Span,
-        callee: &Expr,
-        type_args: Option<&TsTypeParamInstantiation>,
-    ) {
-        let callee_ty = self.validate(callee)?;
-        match *callee_ty.normalize() {
-            Type::Keyword(TsKeywordType {
-                kind: TsKeywordTypeKind::TsAnyKeyword,
-                ..
-            }) if type_args.is_some() => Err(Error::TS2347 { span })?,
-            _ => {}
-        }
-    }
-
     /// Calculates the return type of a new /c all expression.
     ///
     /// Called only from [type_of_expr]
@@ -137,6 +118,19 @@ impl Analyzer<'_, '_> {
         type_args: Option<&TsTypeParamInstantiation>,
     ) -> ValidationResult {
         let span = callee.span();
+
+        // TODO:
+        //        let callee_ty = {
+        //            let callee_ty = callee.validate_with(self)?;
+        //            match *callee_ty.normalize() {
+        //                Type::Keyword(TsKeywordType {
+        //                    kind: TsKeywordTypeKind::TsAnyKeyword,
+        //                    ..
+        //                }) if type_args.is_some() =>
+        //              self.info.errors.push(Error::TS2347 { span }),                _
+        //                  => {}            }
+        //            callee_ty
+        //        };
 
         match *callee {
             Expr::Ident(ref i) if i.sym == js_word!("require") => {

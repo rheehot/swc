@@ -1,176 +1,18 @@
-error: AssignFailed {
+error: NameNotFound {
+    name: Foo,
+    type_args: None,
     span: Span {
         lo: BytePos(
-            34,
+            37,
         ),
         hi: BytePos(
-            45,
+            40,
         ),
         ctxt: #0,
     },
-    left: Interface(
-        Interface {
-            span: Span {
-                lo: BytePos(
-                    65,
-                ),
-                hi: BytePos(
-                    88,
-                ),
-                ctxt: #0,
-            },
-            name: Atom('Foo' type=inline),
-            type_params: None,
-            extends: [],
-            body: [
-                Property(
-                    PropertySignature {
-                        span: Span {
-                            lo: BytePos(
-                                73,
-                            ),
-                            hi: BytePos(
-                                86,
-                            ),
-                            ctxt: #0,
-                        },
-                        readonly: false,
-                        key: Ident(
-                            Ident {
-                                span: Span {
-                                    lo: BytePos(
-                                        73,
-                                    ),
-                                    hi: BytePos(
-                                        77,
-                                    ),
-                                    ctxt: #0,
-                                },
-                                sym: Atom('name' type=inline),
-                                type_ann: None,
-                                optional: false,
-                            },
-                        ),
-                        computed: false,
-                        optional: false,
-                        params: [],
-                        type_ann: Some(
-                            Keyword(
-                                TsKeywordType {
-                                    span: Span {
-                                        lo: BytePos(
-                                            79,
-                                        ),
-                                        hi: BytePos(
-                                            85,
-                                        ),
-                                        ctxt: #0,
-                                    },
-                                    kind: TsStringKeyword,
-                                },
-                            ),
-                        ),
-                        type_params: None,
-                    },
-                ),
-            ],
-        },
-    ),
-    right: TypeLit(
-        TypeLit {
-            span: Span {
-                lo: BytePos(
-                    43,
-                ),
-                hi: BytePos(
-                    45,
-                ),
-                ctxt: #0,
-            },
-            members: [],
-        },
-    ),
-    cause: [
-        Errors {
-            span: Span {
-                lo: BytePos(
-                    34,
-                ),
-                hi: BytePos(
-                    45,
-                ),
-                ctxt: #0,
-            },
-            errors: [
-                MissingFields {
-                    span: Span {
-                        lo: BytePos(
-                            34,
-                        ),
-                        hi: BytePos(
-                            45,
-                        ),
-                        ctxt: #0,
-                    },
-                    fields: [
-                        Property(
-                            PropertySignature {
-                                span: Span {
-                                    lo: BytePos(
-                                        73,
-                                    ),
-                                    hi: BytePos(
-                                        86,
-                                    ),
-                                    ctxt: #0,
-                                },
-                                readonly: false,
-                                key: Ident(
-                                    Ident {
-                                        span: Span {
-                                            lo: BytePos(
-                                                73,
-                                            ),
-                                            hi: BytePos(
-                                                77,
-                                            ),
-                                            ctxt: #0,
-                                        },
-                                        sym: Atom('name' type=inline),
-                                        type_ann: None,
-                                        optional: false,
-                                    },
-                                ),
-                                computed: false,
-                                optional: false,
-                                params: [],
-                                type_ann: Some(
-                                    Keyword(
-                                        TsKeywordType {
-                                            span: Span {
-                                                lo: BytePos(
-                                                    79,
-                                                ),
-                                                hi: BytePos(
-                                                    85,
-                                                ),
-                                                ctxt: #0,
-                                            },
-                                            kind: TsStringKeyword,
-                                        },
-                                    ),
-                                ),
-                                type_params: None,
-                            },
-                        ),
-                    ],
-                },
-            ],
-        },
-    ],
 }
- --> $DIR/tests/errors/types/interface/import-wrong/index.ts:3:5
+ --> $DIR/tests/errors/types/interface/import-wrong/index.ts:3:8
   |
 3 | let a: Foo = {};
-  |     ^^^^^^^^^^^
+  |        ^^^
 
