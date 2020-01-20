@@ -6,10 +6,11 @@ use crate::{
     loader::Load,
     ty,
     ty::Type,
-    validator::Validate,
-    Exports, ImportInfo, Rule,
+    validator::{Validate, ValidateWith},
+    Exports, ImportInfo, Rule, ValidationResult,
 };
 use fxhash::{FxHashMap, FxHashSet};
+use macros::{validator, validator_method};
 use std::{
     ops::{Deref, DerefMut},
     path::PathBuf,
@@ -20,8 +21,15 @@ use swc_common::{Span, Spanned, Visit, VisitWith};
 use swc_ecma_ast::*;
 use swc_ts_builtin_types::Lib;
 
-#[macro_use]
-mod macros;
+macro_rules! try_opt {
+    ($e:expr) => {{
+        match $e {
+            Some(v) => Some(v?),
+            None => None,
+        }
+    }};
+}
+
 mod assign;
 mod class;
 mod control_flow;
@@ -29,6 +37,7 @@ mod convert;
 mod enums;
 mod export;
 mod expr;
+mod finalizer;
 mod function;
 mod generic;
 mod import;
@@ -70,6 +79,52 @@ pub struct Analyzer<'a, 'b> {
 pub struct Info {
     pub errors: Errors,
     pub exports: Exports<FxHashMap<JsWord, Type>>,
+}
+
+#[validator]
+impl Validate<Program> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::Module>;
+
+    fn validate(&mut self, node: &Program) -> Self::Output {
+        match node {
+            Program::Module(m) => m.validate_with(self),
+            Program::Script(s) => s.validate_with(self),
+        }
+    }
+}
+
+fn make_module_ty(span: Span, exports: Exports<FxHashMap<JsWord, Type>>) -> ty::Module {
+    ty::Module { span, exports }
+}
+
+#[validator]
+impl Validate<Module> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::Module>;
+
+    fn validate(&mut self, node: &Module) -> Self::Output {
+        let span = node.span;
+
+        let mut new = self.new(Scope::root());
+        node.visit_children(&mut new);
+        self.info.errors.append_errors(&mut new.info.errors);
+
+        Ok(self.finalize(make_module_ty(span, new.info.exports)))
+    }
+}
+
+#[validator]
+impl Validate<Script> for Analyzer<'_, '_> {
+    type Output = ValidationResult<ty::Module>;
+
+    fn validate(&mut self, node: &Script) -> Self::Output {
+        let span = node.span;
+
+        let mut new = self.new(Scope::root());
+        node.visit_children(&mut new);
+        self.info.errors.append_errors(&mut new.info.errors);
+
+        Ok(self.finalize(make_module_ty(span, new.info.exports)))
+    }
 }
 
 fn _assert_types() {
