@@ -572,6 +572,17 @@ impl Type {
         }
     }
 
+    pub fn is_unique_symbol(&self) -> bool {
+        match *self {
+            Type::Operator(Operator {
+                op: TsTypeOperatorOp::Unique,
+                ref ty,
+                ..
+            }) => ty.is_kwd(TsKeywordTypeKind::TsSymbolKeyword),
+            _ => false,
+        }
+    }
+
     pub fn is_never(&self) -> bool {
         self.is_kwd(TsKeywordTypeKind::TsNeverKeyword)
     }
