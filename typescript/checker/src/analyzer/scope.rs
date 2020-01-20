@@ -417,24 +417,40 @@ impl Analyzer<'_, '_> {
     }
 
     pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) -> Result<(), Error> {
-        self.declare_vars_inner(kind, pat, false)
+        self.declare_vars_inner_with_ty(kind, pat, false, None)
     }
 
-    /// Updates variable list.
-    ///
-    /// This method should be called for function parameters including error
-    /// variable from a catch clause.
+    pub fn declare_vars_with_ty(
+        &mut self,
+        kind: VarDeclKind,
+        pat: &Pat,
+        ty: Option<Type>,
+    ) -> Result<(), Error> {
+        self.declare_vars_inner_with_ty(kind, pat, false, ty)
+    }
+
     pub(super) fn declare_vars_inner(
         &mut self,
         kind: VarDeclKind,
         pat: &Pat,
         export: bool,
     ) -> Result<(), Error> {
+        self.declare_vars_inner_with_ty(kind, pat, export, None)
+    }
+
+    /// Updates variable list.
+    ///
+    /// This method should be called for function parameters including error
+    /// variable from a catch clause.
+    fn declare_vars_inner_with_ty(
+        &mut self,
+        kind: VarDeclKind,
+        pat: &Pat,
+        export: bool,
+        ty: Option<Type>,
+    ) -> Result<(), Error> {
         match *pat {
             Pat::Ident(ref i) => {
-                let ty = try_opt!(i.type_ann.validate_with(self));
-                let ty = try_opt!(ty.map(|ty| self.expand(pat.span(), ty)));
-
                 let name = i.sym.clone();
                 self.declare_var(
                     ty.span(),

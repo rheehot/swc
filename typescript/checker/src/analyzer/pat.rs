@@ -28,6 +28,8 @@ impl Validate<Pat> for Analyzer<'_, '_> {
     fn validate(&mut self, p: &Pat) -> Self::Output {
         self.record(p);
 
+        let ty = try_opt!(p.get_ty().validate_with(self));
+
         match self.ctx.pat_mode {
             PatMode::Decl => {
                 let mut names = vec![];
@@ -38,7 +40,7 @@ impl Validate<Pat> for Analyzer<'_, '_> {
 
                 self.scope.declaring.extend(names.clone());
 
-                match self.declare_vars(VarDeclKind::Let, p) {
+                match self.declare_vars_with_ty(VarDeclKind::Let, p, ty.clone()) {
                     Ok(()) => {}
                     Err(err) => {
                         self.info.errors.push(err);
@@ -57,7 +59,7 @@ impl Validate<Pat> for Analyzer<'_, '_> {
                 Pat::Ident(i) => !i.optional,
                 _ => true,
             },
-            ty: try_opt!(p.get_ty().validate_with(self)).unwrap_or_else(|| Type::any(p.span())),
+            ty: ty.unwrap_or_else(|| Type::any(p.span())),
         })
     }
 }
