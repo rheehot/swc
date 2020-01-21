@@ -481,7 +481,16 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    fn validate_inherited_members(&mut self, name: Option<&Ident>, c: &Class, declare: bool) {
+    /// FIXME: Change this to one of the below
+    ///
+    /// - return super type (and use it at below)
+    /// - accepts super type instead validating super class exrpression
+    fn validate_inherited_members(
+        &mut self,
+        name: Option<&Ident>,
+        c: &Class,
+        declare: bool,
+    ) -> Option<Type> {
         if c.is_abstract || declare {
             return;
         }
