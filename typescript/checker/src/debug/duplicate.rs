@@ -91,8 +91,9 @@ fn filter(mut bt: Backtrace) -> Backtrace {
         //            return false;
         //        }
 
-        //
-        for symbol in frame.symbols() {
+        let symbols = frame.symbols();
+        let len = symbols.len();
+        for symbol in symbols {
             let name = if let Some(name) = symbol.name().and_then(|s| s.as_str()) {
                 name
             } else {
@@ -104,6 +105,17 @@ fn filter(mut bt: Backtrace) -> Backtrace {
                 if s.contains("backtrace") || s.contains("libcore") || s.contains("/rustc/") {
                     return false;
                 }
+
+                if len == 1 {
+                    if s.contains("swc_common") && s.ends_with("/fold.rs") {
+                        return false;
+                    }
+                    if s.contains("/ast/") {
+                        return false;
+                    }
+                }
+
+                println!("({}) Filename: {}", len, s);
             }
 
             if name.contains("Module") {
