@@ -50,7 +50,6 @@ fn remove_common(l: Backtrace, r: Backtrace) -> (Backtrace, Backtrace) {
         .zip(r.iter().rev())
         .position(|(l, r)| l.symbol_address() as usize == r.symbol_address() as usize);
 
-    println!("COMMON: {:?}", common_cnt);
     if let Some(common_cnt) = common_cnt {
         for _ in 0..common_cnt {
             l.pop();
