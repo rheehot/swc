@@ -62,7 +62,13 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
             _ => {}
         }
 
-        self.extract_call_new_expr_member(callee, ExtractKind::Call, args, type_args.as_ref())
+        self.extract_call_new_expr_member(
+            callee,
+            Some(callee_ty),
+            ExtractKind::Call,
+            args,
+            type_args.as_ref(),
+        )
     }
 }
 
@@ -97,6 +103,7 @@ impl Validate<NewExpr> for Analyzer<'_, '_> {
 
         self.extract_call_new_expr_member(
             callee,
+            None,
             ExtractKind::New,
             args.as_ref().map(|v| &**v).unwrap_or_else(|| &[]),
             type_args.as_ref(),
@@ -117,6 +124,7 @@ impl Analyzer<'_, '_> {
     fn extract_call_new_expr_member(
         &mut self,
         callee: &Expr,
+        mut callee_ty: Option<Type>,
         kind: ExtractKind,
         args: &[ExprOrSpread],
         type_args: Option<&TsTypeParamInstantiation>,
@@ -362,7 +370,10 @@ impl Analyzer<'_, '_> {
                 if computed {
                     unimplemented!("typeof(CallExpr): {:?}[{:?}]()", callee, prop)
                 } else {
-                    let callee = self.validate(callee)?;
+                    let callee = match callee_ty {
+                        Some(v) => v,
+                        None => callee.validate_with(self)?,
+                    };
 
                     let type_args = try_opt!(type_args.validate_with(self));
 
@@ -385,7 +396,10 @@ impl Analyzer<'_, '_> {
                 }
             }
             _ => {
-                let ty = callee.validate_with(self)?;
+                let ty = match callee_ty {
+                    Some(v) => v,
+                    None => callee.validate_with(self)?,
+                };
                 let ty = self.expand(span, ty)?;
                 let type_args = try_opt!(type_args.validate_with(self));
 
