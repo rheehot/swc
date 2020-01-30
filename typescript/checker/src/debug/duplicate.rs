@@ -48,22 +48,22 @@ fn remove_common(mut l: Backtrace, mut r: Backtrace) -> (Backtrace, Backtrace) {
     //        let (lf, rf) = (&l[i], &r[i]);
     //        let (ls, rs) = (lf.symbols(), rf.symbols());
     //
-    //        let mut all_ok = true;
+    //        let mut eq = true;
     //
     //        for j in 0..min(ls.len(), rs.len()) {
     //            let (ls, rs) = (&ls[j], &rs[j]);
     //
-    //            if ls.filename().is_some()
-    //                && rs.filename().is_some()
-    //                && ls.filename() == rs.filename()
-    //                && ls.lineno() == rs.lineno()
+    //            if ls.filename().is_none()
+    //                || rs.filename().is_none()
+    //                    && ls.filename() != rs.filename()
+    //                    && ls.lineno() != rs.lineno()
     //            {
-    //                all_ok = false;
+    //                eq = false;
     //                break;
     //            }
     //        }
     //
-    //        if all_ok {
+    //        if eq {
     //            start = i
     //        }
     //    }
@@ -81,9 +81,9 @@ fn filter(mut bt: Backtrace) -> Backtrace {
     let mut done = false;
 
     frames.retain(|frame| {
-        if done {
-            return false;
-        }
+        //        if done {
+        //            return false;
+        //        }
 
         //
         for symbol in frame.symbols() {
@@ -93,18 +93,12 @@ fn filter(mut bt: Backtrace) -> Backtrace {
                 return true;
             };
 
-            //            if let Some(filename) = symbol.filename() {
-            //                let s = filename.to_string_lossy();
-            //                if s.contains("fold.rs")
-            //                    || s.contains("validator.rs")
-            //                    || s.contains("vec.rs")
-            //                    || s.contains("/backtrace")
-            //                    || s.contains("/ast/")
-            //                    || s.contains("libcore")
-            //                {
-            //                    return false;
-            //                }
-            //            }
+            if let Some(filename) = symbol.filename() {
+                let s = filename.to_string_lossy();
+                if s.contains("backtrace") || s.contains("libcore") {
+                    return false;
+                }
+            }
 
             if name.contains("Module") {
                 done = true;
