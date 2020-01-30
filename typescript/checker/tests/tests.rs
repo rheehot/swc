@@ -103,7 +103,7 @@ fn should_ignore(name: &str, content: &str) -> bool {
         return true;
     }
 
-    if DONE.contains(&&*name) {
+    if env::var("TEST").ok() == Some(String::from("DONE")) && DONE.contains(&&*name) {
         return false;
     }
 
