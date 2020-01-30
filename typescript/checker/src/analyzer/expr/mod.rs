@@ -5,8 +5,8 @@ use crate::{
     errors::Error,
     ty,
     ty::{
-        Array, ClassInstance, EnumVariant, FnParam, IndexSignature, Interface, Ref, Tuple, Type,
-        TypeElement, TypeLit, TypeParamDecl, TypeParamInstantiation, Union,
+        Array, ClassInstance, EnumVariant, IndexSignature, Interface, Ref, Tuple, Type,
+        TypeElement, TypeLit, TypeParamInstantiation, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan, RemoveTypes},
     validator::{Validate, ValidateWith},
@@ -14,7 +14,7 @@ use crate::{
 };
 use macros::validator;
 use swc_atoms::js_word;
-use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_common::{Span, Spanned, VisitWith};
 use swc_ecma_ast::*;
 
 mod bin;

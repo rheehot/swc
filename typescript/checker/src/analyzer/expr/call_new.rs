@@ -8,14 +8,13 @@ use crate::{
     ty,
     ty::{
         CallSignature, ClassInstance, ConstructorSignature, FnParam, Method, MethodSignature,
-        QueryExpr, QueryType, Static, Type, TypeElement, TypeParam, TypeParamDecl,
-        TypeParamInstantiation,
+        QueryExpr, QueryType, Static, Type, TypeElement, TypeParam, TypeParamInstantiation,
     },
     util::EqIgnoreSpan,
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
-use macros::{validator, validator_method};
+use macros::validator;
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;

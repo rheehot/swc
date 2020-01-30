@@ -11,7 +11,7 @@ use crate::{
     Exports, ImportInfo, Rule, ValidationResult,
 };
 use fxhash::{FxHashMap, FxHashSet};
-use macros::{validator, validator_method};
+use macros::validator;
 use std::{
     fmt::Debug,
     ops::{Deref, DerefMut},
@@ -30,21 +30,6 @@ macro_rules! try_opt {
             None => None,
         }
     }};
-}
-
-macro_rules! panic_if_required {
-    ($($t:tt)*) => {{
-        let var = ::std::env::var("RUST_BACKTRACE").unwrap_or(String::new());
-        if var == "1" || var.eq_ignore_ascii_case("full") {
-            panic!($($t)*);
-        }
-    }};
-}
-
-fn print_backtrace() {
-    use backtrace::Backtrace;
-    let bt = Backtrace::new();
-    println!("{:?}", bt)
 }
 
 mod assign;

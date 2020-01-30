@@ -1,7 +1,6 @@
 use super::Analyzer;
 use crate::{analyzer::util::ResultExt, ty, ty::Type};
 use swc_common::{Fold, FoldWith, Spanned};
-use swc_ecma_ast::Program;
 
 impl Analyzer<'_, '_> {
     pub(super) fn finalize(&mut self, module: ty::Module) -> ty::Module {

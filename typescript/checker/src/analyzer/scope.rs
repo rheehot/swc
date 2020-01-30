@@ -8,7 +8,7 @@ use crate::{
         PropertySignature, QueryExpr, QueryType, Ref, Tuple, Type, TypeElement, TypeLit, Union,
     },
     util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
-    validator::{Validate, ValidateWith},
+    validator::Validate,
     ValidationResult,
 };
 use fxhash::FxHashMap;

@@ -1,19 +1,18 @@
 use super::Analyzer;
 use crate::{
     analyzer::{props::ComputedPropMode, util::ResultExt, Ctx},
-    errors::Error,
     ty,
     ty::{
-        Alias, Array, CallSignature, Conditional, ConstructorSignature, Enum, EnumMember,
-        ImportType, IndexSignature, IndexedAccessType, InferType, Interface, Intersection, Mapped,
-        MethodSignature, Operator, Predicate, PropertySignature, QueryExpr, QueryType, Ref, TsExpr,
-        Tuple, Type, TypeElement, TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
+        Alias, Array, CallSignature, Conditional, ConstructorSignature, ImportType, IndexSignature,
+        IndexedAccessType, InferType, Interface, Intersection, Mapped, MethodSignature, Operator,
+        Predicate, PropertySignature, QueryExpr, QueryType, Ref, TsExpr, Tuple, Type, TypeElement,
+        TypeLit, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
     },
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
 use macros::validator;
-use swc_atoms::{js_word, JsWord};
+use swc_atoms::js_word;
 use swc_common::{Spanned, VisitWith};
 use swc_ecma_ast::*;
 

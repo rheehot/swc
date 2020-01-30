@@ -5,17 +5,17 @@ use super::{
     Analyzer,
 };
 use crate::{
-    analyzer::{props::ComputedPropMode, scope::Scope, util::ResultExt, Ctx},
+    analyzer::{props::ComputedPropMode, util::ResultExt, Ctx},
     errors::{Error, Errors},
     swc_common::VisitWith,
     ty,
-    ty::{FnParam, Operator, Type, TypeParamDecl},
+    ty::{FnParam, Operator, Type},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
 use macros::{validator, validator_method};
 use std::mem::replace;
-use swc_atoms::{js_word, JsWord};
+use swc_atoms::js_word;
 use swc_common::{Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 

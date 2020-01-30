@@ -15,7 +15,7 @@ use crate::{
     ValidationResult,
 };
 use fxhash::FxHashMap;
-use macros::{validator, validator_method};
+use macros::validator;
 use std::{
     collections::hash_map::Entry,
     convert::TryFrom,

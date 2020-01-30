@@ -256,8 +256,8 @@ struct Noop;
 impl Load for Noop {
     fn load(
         &self,
-        base: Arc<PathBuf>,
-        import: &ImportInfo,
+        _: Arc<PathBuf>,
+        _: &ImportInfo,
     ) -> Result<Exports<FxHashMap<JsWord, Type>>, Error> {
         unimplemented!()
     }

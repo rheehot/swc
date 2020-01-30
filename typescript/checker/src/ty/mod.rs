@@ -6,7 +6,7 @@ use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ecma_utils::{
-    Purity, Value,
+    Value,
     Value::{Known, Unknown},
 };
 

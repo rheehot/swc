@@ -1,7 +1,7 @@
 use super::super::Analyzer;
 use crate::{
     analyzer::{expr::TypeOfMode, util::ResultExt},
-    errors::{Error, Errors},
+    errors::Error,
     ty::Type,
     validator::{Validate, ValidateWith},
     ValidationResult,

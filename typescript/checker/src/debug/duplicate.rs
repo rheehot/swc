@@ -1,6 +1,6 @@
 use backtrace::Backtrace;
 use fxhash::FxHashMap;
-use std::{cmp::min, fmt::Debug};
+use std::fmt::Debug;
 use swc_common::Spanned;
 
 #[derive(Debug, Default)]
