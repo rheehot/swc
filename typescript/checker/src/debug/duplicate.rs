@@ -67,6 +67,7 @@ fn remove_common(l: Backtrace, r: Backtrace) -> (Backtrace, Backtrace) {
             start = i
         }
     }
+    start -= 1;
 
     l.drain(..start);
     r.drain(..start);
