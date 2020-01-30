@@ -102,15 +102,23 @@ fn filter(mut bt: Backtrace) -> Backtrace {
 
             if let Some(filename) = symbol.filename() {
                 let s = filename.to_string_lossy();
-                if s.contains("backtrace") || s.contains("libcore") || s.contains("/rustc/") {
+
+                if s.contains("backtrace")
+                    || s.contains("libcore")
+                    || s.contains("libstd")
+                    || s.contains("/libtest/")
+                    || s.contains("/rustc/")
+                    || s.contains("libpanic_unwind/")
+                {
                     return false;
                 }
 
                 if len == 1 {
-                    if s.contains("swc_common") && s.ends_with("/fold.rs") {
+                    if s.contains("/ast/") {
                         return false;
                     }
-                    if s.contains("/ast/") {
+
+                    if s.contains("common") && s.ends_with("/fold.rs") {
                         return false;
                     }
                 }
