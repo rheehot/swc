@@ -291,6 +291,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 let session = Session { handler: &handler };
 
                 let fm = cm.load_file(file_name).expect("failed to read file");
+                println!("--------------------\n{}\n--------------------", fm.src);
                 let comments = Comments::default();
 
                 let mut parser = Parser::new(
