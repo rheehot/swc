@@ -62,6 +62,8 @@ pub fn validator(
                         #[automatically_derived]
                         /// Delegates to `Validate<T>`.
                         impl ::swc_common::Visit<T> for Folder {
+                            // inline(always) is used to remove from stack trace
+                            #[inline(always)]
                             fn visit(&mut self, node: &T) {
                                 let res: ::std::result::Result<_, crate::Error> =
                                     self.validate(node);
