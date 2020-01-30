@@ -25,6 +25,8 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
     fn validate(&mut self, e: &CallExpr) -> ValidationResult {
+        self.record(e);
+
         let CallExpr {
             span,
             ref callee,
@@ -69,6 +71,8 @@ impl Validate<NewExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
     fn validate(&mut self, e: &NewExpr) -> ValidationResult {
+        self.record(e);
+
         let NewExpr {
             span,
             ref callee,
