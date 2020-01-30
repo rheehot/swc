@@ -1,7 +1,7 @@
 //! Handles new expressions and call expressions.
 use super::super::Analyzer;
 use crate::{
-    analyzer::{generic::GenericExpander, props::prop_name_to_expr},
+    analyzer::{expr::TypeOfMode, generic::GenericExpander, props::prop_name_to_expr},
     builtin_types,
     errors::Error,
     swc_common::FoldWith,
@@ -353,7 +353,8 @@ impl Analyzer<'_, '_> {
                 if computed {
                     unimplemented!("typeof(CallExpr): {:?}[{:?}]()", callee, prop)
                 } else {
-                    let callee = callee_ty!();
+                    let callee =
+                        self.access_property(span, obj_type, prop, computed, TypeOfMode::RValue)?;
 
                     let type_args = try_opt!(type_args.validate_with(self));
 

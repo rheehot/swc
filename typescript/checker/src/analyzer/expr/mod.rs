@@ -432,7 +432,7 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    fn access_property(
+    pub(super) fn access_property(
         &mut self,
         span: Span,
         obj: Type,
