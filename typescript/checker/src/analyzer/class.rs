@@ -481,78 +481,59 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    /// FIXME: Change this to one of the below
-    ///
-    /// - return super type (and use it at below)
-    /// - accepts super type instead validating super class exrpression
+    /// Should be called only from `Validate<Class>`.
     fn validate_inherited_members(
         &mut self,
-        name: Option<&Ident>,
-        class: &Type,
-        super_class: &Expr,
-        super_class_type_args: Option<&Type>,
-        declare: bool,
+        name: Option<Span>,
+        class: &ty::Class,
+        super_ty: &Type,
     ) {
-        if c.is_abstract || declare {
+        if class.is_abstract || self.ctx.in_declare {
             return;
         }
 
-        let name_span = name.map(|v| v.span).unwrap_or_else(|| {
+        let name_span = name.unwrap_or_else(|| {
             // TODD: c.span().lo() + BytePos(5) (aka class token)
-            c.span
+            class.span
         });
         let mut errors = vec![];
 
         let res: Result<_, Error> = try {
-            if let Some(super_class) = &c.super_class {
-                let type_args = c.super_type_params.as_ref().map(|i| i.validate_with(self));
-                let super_ty =
-                    self.validate_expr(&super_class, TypeOfMode::RValue, try_opt!(type_args))?;
-
-                match super_ty.normalize() {
-                    Type::Class(sc) => {
-                        'outer: for sm in &sc.body {
-                            match sm {
-                                ty::ClassMember::Method(sm) => {
-                                    for m in &c.body {
-                                        match m {
-                                            ClassMember::Method(ref m) => {
-                                                if !is_prop_name_eq(&m.key, &sm.key) {
-                                                    continue;
-                                                }
-
-                                                if m.kind != MethodKind::Method {
-                                                    unimplemented!(
-                                                        "method property is overriden by \
-                                                         non-methof property: {:?}",
-                                                        m
-                                                    )
-                                                }
-
-                                                // TODO: Validate parameters
-
-                                                // TODO: Validate return type
-                                                continue 'outer;
+            match super_ty.normalize() {
+                Type::Class(sc) => {
+                    'outer: for sm in &sc.body {
+                        match sm {
+                            ty::ClassMember::Method(sm) => {
+                                for m in &class.body {
+                                    match m {
+                                        ty::ClassMember::Method(ref m) => {
+                                            if !is_prop_name_eq(&m.key, &sm.key) {
+                                                continue;
                                             }
-                                            _ => {}
+
+                                            // TODO: Validate parameters
+
+                                            // TODO: Validate return type
+                                            continue 'outer;
                                         }
+                                        _ => {}
                                     }
                                 }
-                                _ => {
-                                    // TODO: Verify
-                                    continue 'outer;
-                                }
                             }
-
-                            errors.push(Error::TS2515 { span: name_span });
-
-                            if sc.is_abstract {
-                                // TODO: Check super class of super class
+                            _ => {
+                                // TODO: Verify
+                                continue 'outer;
                             }
                         }
+
+                        errors.push(Error::TS2515 { span: name_span });
+
+                        if sc.is_abstract {
+                            // TODO: Check super class of super class
+                        }
                     }
-                    _ => {}
                 }
+                _ => {}
             }
         };
 
@@ -673,14 +654,20 @@ impl Validate<Class> for Analyzer<'_, '_> {
                 }
             }
 
-            Ok(ty::Class {
+            let class = ty::Class {
                 span: c.span,
                 name,
                 is_abstract: c.is_abstract,
                 super_class,
                 type_params,
                 body,
-            })
+            };
+
+            if let Some(ref super_class) = super_class {
+                self.validate_inherited_members(None, &class, super_class);
+            }
+
+            Ok(class)
         })
     }
 }
@@ -704,7 +691,6 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
                 if let Some(ref i) = c.ident {
                     analyzer.register_type(i.sym.clone(), ty.clone())?;
 
-                    analyzer.validate_inherited_members(None, &c.class, false);
                     analyzer.validate_class_members(&c.class, false)?;
 
                     match analyzer.declare_var(
@@ -747,7 +733,6 @@ impl Analyzer<'_, '_> {
     fn visit_class_decl(&mut self, c: &ClassDecl) {
         c.ident.visit_with(self);
 
-        self.validate_inherited_members(Some(&c.ident), &c.class, c.declare);
         self.validate_class_members(&c.class, c.declare)
             .store(&mut self.info.errors);
 
