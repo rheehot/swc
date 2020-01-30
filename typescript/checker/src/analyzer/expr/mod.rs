@@ -208,12 +208,15 @@ impl Validate<SeqExpr> for Analyzer<'_, '_> {
                 }
                 _ => {}
             }
-            match self.validate(e) {
-                Ok(..) => {}
-                Err(Error::ReferencedInInit { .. }) => {
-                    is_any = true;
+
+            if !is_last {
+                match self.validate(e) {
+                    Ok(..) => {}
+                    Err(Error::ReferencedInInit { .. }) => {
+                        is_any = true;
+                    }
+                    Err(..) => {}
                 }
-                Err(..) => {}
             }
         }
         if is_any {
