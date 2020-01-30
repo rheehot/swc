@@ -347,8 +347,6 @@ impl<'a, I: Tokens> Parser<'a, I> {
                 expect!("=>");
                 let body = self.parse_fn_body(true, false)?;
 
-                dbg!();
-
                 return Ok(Box::new(Expr::Arrow(ArrowExpr {
                     span: span!(start),
                     body,
@@ -361,8 +359,6 @@ impl<'a, I: Tokens> Parser<'a, I> {
             } else if can_be_arrow && !self.input.had_line_break_before_cur() && eat!("=>") {
                 let params = vec![id.into()];
                 let body = self.parse_fn_body(false, false)?;
-
-                dbg!();
 
                 return Ok(Box::new(Expr::Arrow(ArrowExpr {
                     span: span!(start),
