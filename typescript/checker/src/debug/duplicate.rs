@@ -58,8 +58,6 @@ fn remove_common(l: Backtrace, r: Backtrace) -> (Backtrace, Backtrace) {
                 && ls.filename() == rs.filename()
                 && ls.lineno() == rs.lineno()
             {
-                println!("Stack {}", ls.filename().unwrap().display());
-
                 all_ok = false;
                 break;
             }
