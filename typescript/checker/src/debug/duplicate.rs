@@ -84,6 +84,7 @@ fn filter(mut bt: Backtrace) -> Backtrace {
                     || s.contains("validator.rs")
                     || s.contains("vec.rs")
                     || s.contains("/backtrace")
+                    || s.contains("/ast/")
                     || s.contains("libcore")
                 {
                     return false;
