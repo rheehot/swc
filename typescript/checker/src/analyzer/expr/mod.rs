@@ -43,7 +43,7 @@ pub enum TypeOfMode {
 impl Validate<Expr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    #[inline(always)]
+    #[inline]
     fn validate(&mut self, e: &Expr) -> Self::Output {
         self.validate_expr(e, TypeOfMode::RValue, None)
     }

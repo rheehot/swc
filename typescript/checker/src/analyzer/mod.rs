@@ -203,7 +203,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
         }
     }
 
-    #[inline(always)]
+    #[inline]
     pub(crate) fn with<F, Ret>(&mut self, op: F) -> Ret
     where
         F: for<'aa, 'bb> FnOnce(&mut Analyzer<'aa, 'bb>) -> Ret,

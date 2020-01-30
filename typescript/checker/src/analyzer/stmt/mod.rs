@@ -92,7 +92,7 @@ macro_rules! noop {
         where
             A: Visit<Stmt> + Validate<Expr, Output = ValidationResult>,
         {
-            #[inline(always)]
+            #[inline]
             fn visit(&mut self, _: &$T) {}
         }
     };

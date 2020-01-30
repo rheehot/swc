@@ -503,7 +503,7 @@ impl Error {
 }
 
 impl From<Vec<Error>> for Error {
-    #[inline(always)]
+    #[inline]
     fn from(errors: Vec<Error>) -> Self {
         Error::Errors {
             span: DUMMY_SP,
@@ -513,7 +513,7 @@ impl From<Vec<Error>> for Error {
 }
 
 impl From<Errors> for Error {
-    #[inline(always)]
+    #[inline]
     fn from(errors: Errors) -> Self {
         errors.0.into()
     }
@@ -524,7 +524,7 @@ impl From<Errors> for Error {
 pub struct Errors(Vec<Error>);
 
 impl From<Errors> for Vec<Error> {
-    #[inline(always)]
+    #[inline]
     fn from(e: Errors) -> Self {
         e.0
     }
@@ -534,36 +534,36 @@ impl IntoIterator for Errors {
     type Item = Error;
     type IntoIter = <Vec<Error> as IntoIterator>::IntoIter;
 
-    #[inline(always)]
+    #[inline]
     fn into_iter(self) -> Self::IntoIter {
         self.0.into_iter()
     }
 }
 
 impl Errors {
-    #[inline(always)]
+    #[inline]
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
     }
 
-    #[inline(always)]
+    #[inline]
     pub fn len(&self) -> usize {
         self.0.len()
     }
 
-    #[inline(always)]
+    #[inline]
     pub fn push(&mut self, err: Error) {
         self.validate(&err);
 
         self.0.push(err);
     }
 
-    #[inline(always)]
+    #[inline]
     pub fn reserve(&mut self, v: usize) {
         self.0.reserve(v)
     }
 
-    #[inline(always)]
+    #[inline]
     pub fn append(&mut self, other: &mut Vec<Error>) {
         for err in &*other {
             self.validate(err)
@@ -572,14 +572,14 @@ impl Errors {
         self.0.append(other)
     }
 
-    #[inline(always)]
+    #[inline]
     pub fn append_errors(&mut self, other: &mut Self) {
         self.append(&mut other.0)
     }
 }
 
 impl Extend<Error> for Errors {
-    #[inline(always)]
+    #[inline]
     fn extend<T: IntoIterator<Item = Error>>(&mut self, iter: T) {
         if cfg!(debug_assertions) {
             for err in iter {
