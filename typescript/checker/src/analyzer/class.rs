@@ -488,9 +488,11 @@ impl Analyzer<'_, '_> {
     fn validate_inherited_members(
         &mut self,
         name: Option<&Ident>,
-        c: &Class,
+        class: &Type,
+        super_class: &Expr,
+        super_class_type_args: Option<&Type>,
         declare: bool,
-    ) -> Option<Type> {
+    ) {
         if c.is_abstract || declare {
             return;
         }
