@@ -215,7 +215,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
         let ignore = should_ignore(&file_name, &input);
 
         let dir = dir.clone();
-        let name = format!("tsc::{}::{}", test_kind, file_name);
+        let name = format!("tsc::{}::{}", test_kind, file_name.replace("/", "::"));
         add_test(tests, name, ignore, move || {
             if mode == Mode::Error || mode == Mode::Conformance {
                 eprintln!(
