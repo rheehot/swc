@@ -52,23 +52,7 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
             }
         }
 
-        // Check callee
-        let callee_ty = self.validate(&callee)?;
-        match *callee_ty.normalize() {
-            Type::Keyword(TsKeywordType {
-                kind: TsKeywordTypeKind::TsAnyKeyword,
-                ..
-            }) if e.type_args.is_some() => self.info.errors.push(Error::TS2347 { span: e.span }),
-            _ => {}
-        }
-
-        self.extract_call_new_expr_member(
-            callee,
-            Some(callee_ty),
-            ExtractKind::Call,
-            args,
-            type_args.as_ref(),
-        )
+        self.extract_call_new_expr_member(callee, ExtractKind::Call, args, type_args.as_ref())
     }
 }
 
@@ -103,7 +87,6 @@ impl Validate<NewExpr> for Analyzer<'_, '_> {
 
         self.extract_call_new_expr_member(
             callee,
-            None,
             ExtractKind::New,
             args.as_ref().map(|v| &**v).unwrap_or_else(|| &[]),
             type_args.as_ref(),
@@ -124,25 +107,25 @@ impl Analyzer<'_, '_> {
     fn extract_call_new_expr_member(
         &mut self,
         callee: &Expr,
-        mut callee_ty: Option<Type>,
         kind: ExtractKind,
         args: &[ExprOrSpread],
         type_args: Option<&TsTypeParamInstantiation>,
     ) -> ValidationResult {
         let span = callee.span();
 
-        // TODO:
-        //        let callee_ty = {
-        //            let callee_ty = callee.validate_with(self)?;
-        //            match *callee_ty.normalize() {
-        //                Type::Keyword(TsKeywordType {
-        //                    kind: TsKeywordTypeKind::TsAnyKeyword,
-        //                    ..
-        //                }) if type_args.is_some() =>
-        //              self.info.errors.push(Error::TS2347 { span }),                _
-        //                  => {}            }
-        //            callee_ty
-        //        };
+        macro_rules! callee_ty {
+            () => {{
+                let callee_ty = callee.validate_with(self)?;
+                match *callee_ty.normalize() {
+                    Type::Keyword(TsKeywordType {
+                        kind: TsKeywordTypeKind::TsAnyKeyword,
+                        ..
+                    }) if type_args.is_some() => self.info.errors.push(Error::TS2347 { span }),
+                    _ => {}
+                }
+                callee_ty
+            }};
+        }
 
         match *callee {
             Expr::Ident(ref i) if i.sym == js_word!("require") => {
@@ -370,10 +353,7 @@ impl Analyzer<'_, '_> {
                 if computed {
                     unimplemented!("typeof(CallExpr): {:?}[{:?}]()", callee, prop)
                 } else {
-                    let callee = match callee_ty {
-                        Some(v) => v,
-                        None => callee.validate_with(self)?,
-                    };
+                    let callee = callee_ty!();
 
                     let type_args = try_opt!(type_args.validate_with(self));
 
@@ -396,10 +376,7 @@ impl Analyzer<'_, '_> {
                 }
             }
             _ => {
-                let ty = match callee_ty {
-                    Some(v) => v,
-                    None => callee.validate_with(self)?,
-                };
+                let ty = callee_ty!();
                 let ty = self.expand(span, ty)?;
                 let type_args = try_opt!(type_args.validate_with(self));
 
