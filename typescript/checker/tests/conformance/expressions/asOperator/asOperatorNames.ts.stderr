@@ -1,10 +1,10 @@
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            20,
+            21,
         ),
         hi: BytePos(
-            21,
+            32,
         ),
         ctxt: #0,
     },
@@ -12,10 +12,10 @@ error: AssignFailed {
         TsKeywordType {
             span: Span {
                 lo: BytePos(
-                    25,
+                    26,
                 ),
                 hi: BytePos(
-                    31,
+                    32,
                 ),
                 ctxt: #0,
             },
@@ -26,10 +26,10 @@ error: AssignFailed {
         TsLitType {
             span: Span {
                 lo: BytePos(
-                    20,
+                    21,
                 ),
                 hi: BytePos(
-                    21,
+                    22,
                 ),
                 ctxt: #0,
             },
@@ -54,5 +54,5 @@ error: AssignFailed {
  --> $DIR/tests/conformance/expressions/asOperator/asOperatorNames.ts:2:9
   |
 2 | var b = a as string;
-  |         ^
+  |         ^^^^^^^^^^^
 

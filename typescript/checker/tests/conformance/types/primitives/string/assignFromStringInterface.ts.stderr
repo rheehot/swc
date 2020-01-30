@@ -1,10 +1,10 @@
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            27,
+            29,
         ),
         hi: BytePos(
-            28,
+            30,
         ),
         ctxt: #0,
     },
@@ -40,10 +40,10 @@ error: AssignFailed {
         Static {
             span: Span {
                 lo: BytePos(
-                    31,
+                    33,
                 ),
                 hi: BytePos(
-                    32,
+                    34,
                 ),
                 ctxt: #0,
             },

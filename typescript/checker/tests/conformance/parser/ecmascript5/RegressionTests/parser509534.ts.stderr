@@ -2,10 +2,10 @@ error: UndefinedSymbol {
     sym: Atom('require' type=static),
     span: Span {
         lo: BytePos(
-            27,
+            28,
         ),
         hi: BytePos(
-            34,
+            35,
         ),
         ctxt: #0,
     },
@@ -19,10 +19,10 @@ error: UndefinedSymbol {
     sym: Atom('module' type=static),
     span: Span {
         lo: BytePos(
-            49,
+            51,
         ),
         hi: BytePos(
-            55,
+            57,
         ),
         ctxt: #0,
     },

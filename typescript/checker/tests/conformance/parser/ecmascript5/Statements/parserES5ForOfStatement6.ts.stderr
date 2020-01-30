@@ -8,10 +8,10 @@ error: UndefinedSymbol {
     sym: Atom('X' type=inline),
     span: Span {
         lo: BytePos(
-            40,
+            41,
         ),
         hi: BytePos(
-            41,
+            42,
         ),
         ctxt: #0,
     },

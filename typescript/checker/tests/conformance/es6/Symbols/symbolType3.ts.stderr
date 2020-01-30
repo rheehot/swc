@@ -1,10 +1,10 @@
 error: ReadOnly {
     span: Span {
         lo: BytePos(
-            40,
+            42,
         ),
         hi: BytePos(
-            55,
+            57,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: ReadOnly {
 error: UpdateOpToSymbol {
     span: Span {
         lo: BytePos(
-            111,
+            116,
         ),
         hi: BytePos(
-            112,
+            117,
         ),
         ctxt: #0,
     },
@@ -34,10 +34,10 @@ error: UpdateOpToSymbol {
 error: UpdateOpToSymbol {
     span: Span {
         lo: BytePos(
-            116,
+            122,
         ),
         hi: BytePos(
-            117,
+            123,
         ),
         ctxt: #0,
     },
@@ -51,10 +51,10 @@ error: UpdateOpToSymbol {
 error: NumericUnaryOpToSymbol {
     span: Span {
         lo: BytePos(
-            121,
+            128,
         ),
         hi: BytePos(
-            129,
+            136,
         ),
         ctxt: #0,
     },
@@ -68,10 +68,10 @@ error: NumericUnaryOpToSymbol {
 error: NumericUnaryOpToSymbol {
     span: Span {
         lo: BytePos(
-            133,
+            141,
         ),
         hi: BytePos(
-            141,
+            149,
         ),
         ctxt: #0,
     },
@@ -85,10 +85,10 @@ error: NumericUnaryOpToSymbol {
 error: NumericUnaryOpToSymbol {
     span: Span {
         lo: BytePos(
-            145,
+            154,
         ),
         hi: BytePos(
-            153,
+            162,
         ),
         ctxt: #0,
     },
@@ -102,10 +102,10 @@ error: NumericUnaryOpToSymbol {
 error: NumericUnaryOpToSymbol {
     span: Span {
         lo: BytePos(
-            169,
+            181,
         ),
         hi: BytePos(
-            184,
+            196,
         ),
         ctxt: #0,
     },

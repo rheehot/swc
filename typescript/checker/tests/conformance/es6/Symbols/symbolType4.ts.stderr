@@ -1,10 +1,10 @@
 error: UpdateOpToSymbol {
     span: Span {
         lo: BytePos(
-            46,
+            48,
         ),
         hi: BytePos(
-            47,
+            49,
         ),
         ctxt: #0,
     },
@@ -18,10 +18,10 @@ error: UpdateOpToSymbol {
 error: UpdateOpToSymbol {
     span: Span {
         lo: BytePos(
-            51,
+            54,
         ),
         hi: BytePos(
-            52,
+            55,
         ),
         ctxt: #0,
     },

@@ -1,10 +1,10 @@
 error: TS1168 {
     span: Span {
         lo: BytePos(
-            37,
+            39,
         ),
         hi: BytePos(
-            40,
+            42,
         ),
         ctxt: #0,
     },
@@ -18,10 +18,10 @@ error: UndefinedSymbol {
     sym: Atom('e' type=inline),
     span: Span {
         lo: BytePos(
-            38,
+            40,
         ),
         hi: BytePos(
-            39,
+            41,
         ),
         ctxt: #0,
     },

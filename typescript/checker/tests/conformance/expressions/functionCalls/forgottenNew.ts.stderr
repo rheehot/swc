@@ -1,10 +1,10 @@
 error: NoCallSignature {
     span: Span {
         lo: BytePos(
-            63,
+            67,
         ),
         hi: BytePos(
-            79,
+            83,
         ),
         ctxt: #0,
     },
@@ -13,10 +13,10 @@ error: NoCallSignature {
             Class {
                 span: Span {
                     lo: BytePos(
-                        26,
+                        27,
                     ),
                     hi: BytePos(
-                        46,
+                        47,
                     ),
                     ctxt: #0,
                 },

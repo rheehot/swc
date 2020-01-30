@@ -1,10 +1,10 @@
 error: NoNewSignature {
     span: Span {
         lo: BytePos(
-            28,
+            29,
         ),
         hi: BytePos(
-            42,
+            43,
         ),
         ctxt: #0,
     },
@@ -12,10 +12,10 @@ error: NoNewSignature {
         TsKeywordType {
             span: Span {
                 lo: BytePos(
-                    28,
+                    29,
                 ),
                 hi: BytePos(
-                    42,
+                    43,
                 ),
                 ctxt: #0,
             },

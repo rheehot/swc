@@ -8,10 +8,10 @@ error: UndefinedSymbol {
     sym: Atom('e' type=inline),
     span: Span {
         lo: BytePos(
-            45,
+            48,
         ),
         hi: BytePos(
-            46,
+            49,
         ),
         ctxt: #0,
     },
@@ -31,10 +31,10 @@ error: UndefinedSymbol {
     sym: Atom('e2' type=inline),
     span: Span {
         lo: BytePos(
-            61,
+            65,
         ),
         hi: BytePos(
-            63,
+            67,
         ),
         ctxt: #0,
     },

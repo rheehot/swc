@@ -1,10 +1,10 @@
 error: NoSuchVar {
     span: Span {
         lo: BytePos(
-            34,
+            36,
         ),
         hi: BytePos(
-            40,
+            42,
         ),
         ctxt: #0,
     },

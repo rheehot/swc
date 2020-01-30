@@ -1,10 +1,10 @@
 error: ReturnRequired {
     span: Span {
         lo: BytePos(
-            134,
+            141,
         ),
         hi: BytePos(
-            151,
+            158,
         ),
         ctxt: #0,
     },

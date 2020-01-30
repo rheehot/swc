@@ -1,10 +1,10 @@
 error: ImplicitAny {
     span: Span {
         lo: BytePos(
-            42,
+            45,
         ),
         hi: BytePos(
-            43,
+            46,
         ),
         ctxt: #0,
     },
@@ -17,10 +17,10 @@ error: ImplicitAny {
 error: AssignFailed {
     span: Span {
         lo: BytePos(
-            46,
+            49,
         ),
         hi: BytePos(
-            47,
+            50,
         ),
         ctxt: #0,
     },
@@ -28,10 +28,10 @@ error: AssignFailed {
         Tuple {
             span: Span {
                 lo: BytePos(
-                    30,
+                    31,
                 ),
                 hi: BytePos(
-                    35,
+                    36,
                 ),
                 ctxt: #0,
             },
@@ -40,10 +40,10 @@ error: AssignFailed {
                     TsKeywordType {
                         span: Span {
                             lo: BytePos(
-                                31,
+                                32,
                             ),
                             hi: BytePos(
-                                34,
+                                35,
                             ),
                             ctxt: #0,
                         },
@@ -57,10 +57,10 @@ error: AssignFailed {
         Tuple {
             span: Span {
                 lo: BytePos(
-                    50,
+                    53,
                 ),
                 hi: BytePos(
-                    67,
+                    70,
                 ),
                 ctxt: #0,
             },
@@ -69,10 +69,10 @@ error: AssignFailed {
                     TsKeywordType {
                         span: Span {
                             lo: BytePos(
-                                51,
+                                54,
                             ),
                             hi: BytePos(
-                                60,
+                                63,
                             ),
                             ctxt: #0,
                         },
@@ -83,10 +83,10 @@ error: AssignFailed {
                     TsKeywordType {
                         span: Span {
                             lo: BytePos(
-                                62,
+                                65,
                             ),
                             hi: BytePos(
-                                66,
+                                69,
                             ),
                             ctxt: #0,
                         },

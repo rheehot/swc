@@ -886,6 +886,7 @@ fn quote_ty(ty: &TsType) -> syn::Expr {
                 {
                     TsType::TsTypePredicate(TsTypePredicate {
                         span: DUMMY_SP,
+                        asserts: false,
                         param_name: param_name_v,
                         type_ann: type_ann_v,
                     })

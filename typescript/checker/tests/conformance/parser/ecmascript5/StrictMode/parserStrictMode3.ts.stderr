@@ -8,10 +8,10 @@ error: UndefinedSymbol {
     sym: Atom('eval' type=static),
     span: Span {
         lo: BytePos(
-            14,
+            15,
         ),
         hi: BytePos(
-            18,
+            19,
         ),
         ctxt: #0,
     },

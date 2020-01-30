@@ -1,10 +1,10 @@
 error: NonSymbolTypedFieldFromSymbol {
     span: Span {
         lo: BytePos(
-            48,
+            52,
         ),
         hi: BytePos(
-            63,
+            67,
         ),
         ctxt: #0,
     },

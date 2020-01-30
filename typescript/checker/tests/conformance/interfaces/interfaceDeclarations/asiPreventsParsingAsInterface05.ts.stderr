@@ -14,10 +14,10 @@ error: UndefinedSymbol {
     sym: Atom('I' type=inline),
     span: Span {
         lo: BytePos(
-            422,
+            432,
         ),
         hi: BytePos(
-            423,
+            433,
         ),
         ctxt: #0,
     },

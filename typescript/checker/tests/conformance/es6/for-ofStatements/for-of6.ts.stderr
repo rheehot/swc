@@ -2,10 +2,10 @@ error: UndefinedSymbol {
     sym: Atom('v' type=inline),
     span: Span {
         lo: BytePos(
-            20,
+            21,
         ),
         hi: BytePos(
-            21,
+            22,
         ),
         ctxt: #0,
     },

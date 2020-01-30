@@ -2,10 +2,10 @@ error: UndefinedSymbol {
     sym: Atom('SharedArrayBuffer' type=static),
     span: Span {
         lo: BytePos(
-            32,
+            34,
         ),
         hi: BytePos(
-            49,
+            51,
         ),
         ctxt: #0,
     },

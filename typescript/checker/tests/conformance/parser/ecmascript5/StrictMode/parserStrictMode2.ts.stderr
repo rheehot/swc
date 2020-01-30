@@ -2,10 +2,10 @@ error: UndefinedSymbol {
     sym: Atom('foo1' type=inline),
     span: Span {
         lo: BytePos(
-            14,
+            15,
         ),
         hi: BytePos(
-            18,
+            19,
         ),
         ctxt: #0,
     },
@@ -19,10 +19,10 @@ error: UndefinedSymbol {
     sym: Atom('foo1' type=inline),
     span: Span {
         lo: BytePos(
-            22,
+            24,
         ),
         hi: BytePos(
-            26,
+            28,
         ),
         ctxt: #0,
     },
@@ -36,10 +36,10 @@ error: UndefinedSymbol {
     sym: Atom('foo1' type=inline),
     span: Span {
         lo: BytePos(
-            30,
+            33,
         ),
         hi: BytePos(
-            34,
+            37,
         ),
         ctxt: #0,
     },
@@ -59,10 +59,10 @@ error: UndefinedSymbol {
     sym: Atom('static' type=static),
     span: Span {
         lo: BytePos(
-            38,
+            42,
         ),
         hi: BytePos(
-            44,
+            48,
         ),
         ctxt: #0,
     },

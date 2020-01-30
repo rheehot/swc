@@ -2,10 +2,10 @@ error: UndefinedSymbol {
     sym: Atom('NotEarlyError' type=dynamic),
     span: Span {
         lo: BytePos(
-            652,
+            669,
         ),
         hi: BytePos(
-            665,
+            682,
         ),
         ctxt: #0,
     },

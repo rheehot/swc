@@ -2,10 +2,10 @@ error: UndefinedSymbol {
     sym: Atom('yield' type=static),
     span: Span {
         lo: BytePos(
-            16,
+            17,
         ),
         hi: BytePos(
-            21,
+            22,
         ),
         ctxt: #0,
     },
