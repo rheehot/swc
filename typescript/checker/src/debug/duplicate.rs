@@ -81,9 +81,9 @@ fn filter(mut bt: Backtrace) -> Backtrace {
     let mut done = false;
 
     frames.retain(|frame| {
-        //        if done {
-        //            return false;
-        //        }
+        if done {
+            return false;
+        }
 
         //
         for symbol in frame.symbols() {
@@ -95,7 +95,7 @@ fn filter(mut bt: Backtrace) -> Backtrace {
 
             if let Some(filename) = symbol.filename() {
                 let s = filename.to_string_lossy();
-                if s.contains("backtrace") || s.contains("libcore") {
+                if s.contains("backtrace") || s.contains("libcore") || s.contains("/rustc/") {
                     return false;
                 }
             }
