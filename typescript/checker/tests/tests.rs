@@ -103,6 +103,10 @@ fn should_ignore(name: &str, content: &str) -> bool {
         return true;
     }
 
+    if DONE.contains(&&*name) {
+        return false;
+    }
+
     name.contains("circular")
         || name.contains(".d.ts")
         || content.contains("<reference path")
@@ -128,7 +132,7 @@ enum Mode {
 
 // We are done and I don't want regression.
 lazy_static! {
-    static ref DONE: Vec<String> = {
+    static ref DONE: Vec<&'static str> = {
         let mut f = File::open(&format!("{}/tests/done.txt", env!("CARGO_MANIFEST_DIR")))
             .expect("failed to open file");
         let mut s = String::new();
@@ -136,6 +140,7 @@ lazy_static! {
         s.lines()
             .filter(|s| *s != "")
             .map(String::from)
+            .map(|s| &*Box::leak(s.into_boxed_str()))
             .collect::<Vec<_>>()
     };
 }
@@ -212,10 +217,11 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>, mode: Mode) -> Result<(), io::Error
             buf
         };
 
-        let ignore = should_ignore(&file_name, &input);
+        let test_name = file_name.replace("/", "::");
+        let ignore = should_ignore(&test_name, &input);
 
         let dir = dir.clone();
-        let name = format!("tsc::{}::{}", test_kind, file_name.replace("/", "::"));
+        let name = format!("tsc::{}::{}", test_kind, test_name);
         add_test(tests, name, ignore, move || {
             if mode == Mode::Error || mode == Mode::Conformance {
                 eprintln!(
