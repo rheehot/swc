@@ -96,12 +96,12 @@ where
 {
     type Output = V::Output;
 
-    #[inline(always)]
+    #[inline]
     fn validate_with(&self, v: &mut V) -> Self::Output {
         v.validate(self)
     }
 
-    #[inline(always)]
+    #[inline]
     fn validate_children(&self, v: &mut V) {
         self.visit_children(v);
     }

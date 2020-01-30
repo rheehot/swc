@@ -87,9 +87,9 @@ fn filter(mut bt: Backtrace) -> Backtrace {
     let mut done = false;
 
     frames.retain(|frame| {
-        //        if done {
-        //            return false;
-        //        }
+        if done {
+            return false;
+        }
 
         let symbols = frame.symbols();
         let len = symbols.len();
@@ -114,11 +114,17 @@ fn filter(mut bt: Backtrace) -> Backtrace {
                 }
 
                 if len == 1 {
+                    if s.contains("scoped-tls") {}
+
                     if s.contains("/ast/") {
                         return false;
                     }
 
                     if s.contains("common") && s.ends_with("/fold.rs") {
+                        return false;
+                    }
+
+                    if s.contains("checker") && s.ends_with("/validator.rs") {
                         return false;
                     }
                 }
