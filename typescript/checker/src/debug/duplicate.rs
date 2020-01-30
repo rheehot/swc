@@ -1,6 +1,6 @@
 use backtrace::Backtrace;
 use fxhash::FxHashMap;
-use std::fmt::Debug;
+use std::{cmp::min, fmt::Debug};
 use swc_common::Spanned;
 
 #[derive(Debug, Default)]
@@ -43,19 +43,35 @@ fn remove_common(l: Backtrace, r: Backtrace) -> (Backtrace, Backtrace) {
     let (l, r) = (filter(l), filter(r));
     let (mut l, mut r): (Vec<_>, Vec<_>) = (l.into(), r.into());
 
-    // Remove common parts
-    let common_cnt = l
-        .iter()
-        .rev()
-        .zip(r.iter().rev())
-        .position(|(l, r)| l.symbol_address() as usize == r.symbol_address() as usize);
+    let mut start = 0;
+    for i in 0..min(l.len(), r.len()) {
+        let (lf, rf) = (&l[i], &r[i]);
+        let (ls, rs) = (lf.symbols(), rf.symbols());
 
-    if let Some(common_cnt) = common_cnt {
-        for _ in 0..common_cnt {
-            l.pop();
-            r.pop();
+        let mut all_ok = true;
+
+        for j in 0..min(ls.len(), rs.len()) {
+            let (ls, rs) = (&ls[j], &rs[j]);
+
+            if ls.filename().is_some()
+                && rs.filename().is_some()
+                && ls.filename() == rs.filename()
+                && ls.lineno() == rs.lineno()
+            {
+                println!("Stack {}", ls.filename().unwrap().display());
+
+                all_ok = false;
+                break;
+            }
+        }
+
+        if all_ok {
+            start = i
         }
     }
+
+    l.drain(..start);
+    r.drain(..start);
 
     (l.into(), r.into())
 }
