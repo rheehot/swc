@@ -22,9 +22,19 @@ pub(super) enum ComputedPropMode {
     Interface,
 }
 
+impl Visit<PropName> for Analyzer<'_, '_> {
+    fn visit(&mut self, node: &PropName) {
+        self.record(node);
+
+        node.visit_children(self);
+    }
+}
+
 impl Visit<ComputedPropName> for Analyzer<'_, '_> {
     #[validator_method]
     fn visit(&mut self, node: &ComputedPropName) {
+        self.record(node);
+
         node.visit_children(self);
 
         let mode = self.ctx.computed_prop_mode;
