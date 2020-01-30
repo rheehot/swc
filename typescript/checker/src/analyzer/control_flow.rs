@@ -6,6 +6,7 @@ use super::{
     Analyzer,
 };
 use crate::{
+    analyzer::util::ResultExt,
     errors::Error,
     name::Name,
     ty::{Tuple, Type},
@@ -217,8 +218,7 @@ impl Visit<IfStmt> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    #[validator_method]
-    fn check_switch_discriminant(&mut self, s: &SwitchStmt) {
+    fn check_switch_discriminant(&mut self, s: &SwitchStmt) -> ValidationResult {
         let discriminant_ty = self.validate(&s.discriminant)?;
         for case in &s.cases {
             if let Some(ref test) = case.test {
@@ -226,14 +226,16 @@ impl Analyzer<'_, '_> {
                 self.assign(&case_ty, &discriminant_ty, test.span())?
             }
         }
+
+        Ok(discriminant_ty)
     }
 }
 
 impl Visit<SwitchStmt> for Analyzer<'_, '_> {
     fn visit(&mut self, stmt: &SwitchStmt) {
-        stmt.visit_children(self);
-
-        self.check_switch_discriminant(&stmt);
+        let discriminant_ty = self
+            .check_switch_discriminant(&stmt)
+            .store(&mut self.info.errors);
 
         let mut false_facts = CondFacts::default();
         let mut true_facts = CondFacts::default();
