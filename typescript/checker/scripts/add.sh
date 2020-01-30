@@ -8,8 +8,8 @@ set -eu
 cargo fmt
 #cargo check
 
-if [[ $1 != */ ]] && [[ $1 != *\.ts ]] && [[ ! -z $1 ]]; then
-  echo 'Wrong invokation. Argument must empty or end with "/" or ".ts"'
+if [[ $1 != *:: ]] && [[ $1 != *\.ts ]] && [[ ! -z $1 ]]; then
+  echo 'Wrong invokation. Argument must empty or end with "::" or ".ts"'
   exit 1
 fi
 
