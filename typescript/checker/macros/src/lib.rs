@@ -9,8 +9,8 @@ extern crate proc_macro;
 use pmutil::{Quote, ToTokensExt};
 use swc_macros_common::prelude::*;
 use syn::{
-    fold::Fold, ExprTryBlock, GenericArgument, Ident, ImplItemMethod, Item, ItemImpl,
-    PathArguments, PathSegment, ReturnType,
+    ExprTryBlock, GenericArgument, Ident, ImplItemMethod, Item, ItemImpl, PathArguments,
+    PathSegment, ReturnType,
 };
 
 /// Macros which should be attached to `Validate<T>` impls.
