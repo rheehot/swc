@@ -31,18 +31,12 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    #[validator_method]
-    fn check_rhs_of_for_loop(&mut self, e: &Expr) {
+    fn check_rhs_of_for_loop(&mut self, e: &Expr) -> ValidationResult {
         // Check iterable
-        self.validate(e)?;
+        self.validate(e)
     }
 
-    fn validate_for_loop(&mut self, span: Span, lhs: &VarDeclOrPat, rhs: &Expr) {
-        let rty = match self.validate(rhs) {
-            Ok(ty) => ty,
-            Err(..) => return,
-        };
-
+    fn validate_for_loop(&mut self, span: Span, lhs: &VarDeclOrPat, rty: Type) {
         match lhs {
             VarDeclOrPat::Pat(Pat::Expr(ref l)) => {
                 let lty = match self.validate_expr(&**l, TypeOfMode::LValue, None) {
@@ -74,14 +68,16 @@ impl Analyzer<'_, '_> {
             Default::default(),
             |child| -> ValidationResult<()> {
                 child.check_lhs_of_for_loop(left);
-                if match left {
+                let rty = if match left {
                     VarDeclOrPat::VarDecl(VarDecl { ref decls, .. }) => !decls.is_empty(),
                     _ => true,
                 } {
-                    child.check_rhs_of_for_loop(&rhs);
-                }
+                    child.check_rhs_of_for_loop(&rhs)?
+                } else {
+                    return Ok(());
+                };
 
-                child.validate_for_loop(span, &left, &rhs);
+                child.validate_for_loop(span, &left, rty);
 
                 Ok(())
             },
