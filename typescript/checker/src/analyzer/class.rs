@@ -210,6 +210,8 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Method>;
 
     fn validate(&mut self, c: &ClassMethod) -> Self::Output {
+        self.record(c);
+
         let c_span = c.span();
         let key_span = c.key.span();
 
