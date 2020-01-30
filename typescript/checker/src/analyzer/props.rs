@@ -35,8 +35,6 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
     fn visit(&mut self, node: &ComputedPropName) {
         self.record(node);
 
-        node.visit_children(self);
-
         let mode = self.ctx.computed_prop_mode;
 
         let span = node.span;
