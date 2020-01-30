@@ -10,7 +10,7 @@ use crate::{
     name::Name,
     ty::{Tuple, Type},
     util::EndsWithRet,
-    validator::Validate,
+    validator::{Validate, ValidateWith},
     ValidationResult,
 };
 use fxhash::FxHashMap;
@@ -200,9 +200,16 @@ impl Visit<IfStmt> for Analyzer<'_, '_> {
             }
         };
         let ends_with_ret = stmt.cons.ends_with_ret();
-        let stmt = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
-            stmt.visit_children(child)
+        self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
+            stmt.cons.validate_with(child);
         });
+
+        if let Some(ref alt) = stmt.alt {
+            self.with_child(ScopeKind::Flow, facts.false_facts.clone(), |child| {
+                alt.validate_with(child);
+            });
+        }
+
         if ends_with_ret {
             self.scope.facts.extend(facts.false_facts);
         }
