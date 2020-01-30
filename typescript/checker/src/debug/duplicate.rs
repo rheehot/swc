@@ -39,7 +39,7 @@ impl DuplicateTracker {
     }
 }
 
-fn remove_common(mut l: Backtrace, mut r: Backtrace) -> (Backtrace, Backtrace) {
+fn remove_common(l: Backtrace, r: Backtrace) -> (Backtrace, Backtrace) {
     let (l, r) = (filter(l), filter(r));
     let (mut l, mut r): (Vec<_>, Vec<_>) = (l.into(), r.into());
 
@@ -50,17 +50,23 @@ fn remove_common(mut l: Backtrace, mut r: Backtrace) -> (Backtrace, Backtrace) {
     //
     //        let mut eq = true;
     //
-    //        for j in 0..min(ls.len(), rs.len()) {
-    //            let (ls, rs) = (&ls[j], &rs[j]);
+    //        if ls.len() == rs.len() {
+    //            for j in 0..ls.len() {
+    //                let (ls, rs) = (&ls[j], &rs[j]);
     //
-    //            if ls.filename().is_none()
-    //                || rs.filename().is_none()
-    //                    && ls.filename() != rs.filename()
-    //                    && ls.lineno() != rs.lineno()
-    //            {
-    //                eq = false;
-    //                break;
+    //                if ls.filename().is_none()
+    //                    || rs.filename().is_none()
+    //                    || ls.lineno().is_none()
+    //                    || rs.lineno().is_none()
+    //                    || ls.filename() != rs.filename()
+    //                    || ls.lineno() != rs.lineno()
+    //                {
+    //                    eq = false;
+    //                    break;
+    //                }
     //            }
+    //        } else {
+    //            eq = false;
     //        }
     //
     //        if eq {
@@ -68,7 +74,7 @@ fn remove_common(mut l: Backtrace, mut r: Backtrace) -> (Backtrace, Backtrace) {
     //        }
     //    }
     //    start -= 1;
-    //
+
     //    l.drain(..start);
     //    r.drain(..start);
 
@@ -81,16 +87,16 @@ fn filter(mut bt: Backtrace) -> Backtrace {
     let mut done = false;
 
     frames.retain(|frame| {
-        if done {
-            return false;
-        }
+        //        if done {
+        //            return false;
+        //        }
 
         //
         for symbol in frame.symbols() {
             let name = if let Some(name) = symbol.name().and_then(|s| s.as_str()) {
                 name
             } else {
-                return true;
+                return false;
             };
 
             if let Some(filename) = symbol.filename() {
