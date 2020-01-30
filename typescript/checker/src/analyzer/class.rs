@@ -482,12 +482,7 @@ impl Analyzer<'_, '_> {
     }
 
     /// Should be called only from `Validate<Class>`.
-    fn validate_inherited_members(
-        &mut self,
-        name: Option<Span>,
-        class: &ty::Class,
-        super_ty: &Type,
-    ) {
+    fn validate_inherited_members(&mut self, name: Option<Span>, class: &ty::Class) {
         if class.is_abstract || self.ctx.in_declare {
             return;
         }
@@ -499,41 +494,43 @@ impl Analyzer<'_, '_> {
         let mut errors = vec![];
 
         let res: Result<_, Error> = try {
-            match super_ty.normalize() {
-                Type::Class(sc) => {
-                    'outer: for sm in &sc.body {
-                        match sm {
-                            ty::ClassMember::Method(sm) => {
-                                for m in &class.body {
-                                    match m {
-                                        ty::ClassMember::Method(ref m) => {
-                                            if !is_prop_name_eq(&m.key, &sm.key) {
-                                                continue;
+            if let Some(ref super_ty) = class.super_class {
+                match super_ty.normalize() {
+                    Type::Class(sc) => {
+                        'outer: for sm in &sc.body {
+                            match sm {
+                                ty::ClassMember::Method(sm) => {
+                                    for m in &class.body {
+                                        match m {
+                                            ty::ClassMember::Method(ref m) => {
+                                                if !is_prop_name_eq(&m.key, &sm.key) {
+                                                    continue;
+                                                }
+
+                                                // TODO: Validate parameters
+
+                                                // TODO: Validate return type
+                                                continue 'outer;
                                             }
-
-                                            // TODO: Validate parameters
-
-                                            // TODO: Validate return type
-                                            continue 'outer;
+                                            _ => {}
                                         }
-                                        _ => {}
                                     }
                                 }
+                                _ => {
+                                    // TODO: Verify
+                                    continue 'outer;
+                                }
                             }
-                            _ => {
-                                // TODO: Verify
-                                continue 'outer;
+
+                            errors.push(Error::TS2515 { span: name_span });
+
+                            if sc.is_abstract {
+                                // TODO: Check super class of super class
                             }
-                        }
-
-                        errors.push(Error::TS2515 { span: name_span });
-
-                        if sc.is_abstract {
-                            // TODO: Check super class of super class
                         }
                     }
+                    _ => {}
                 }
-                _ => {}
             }
         };
 
@@ -663,9 +660,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
                 body,
             };
 
-            if let Some(ref super_class) = super_class {
-                self.validate_inherited_members(None, &class, super_class);
-            }
+            child.validate_inherited_members(None, &class);
 
             Ok(class)
         })
