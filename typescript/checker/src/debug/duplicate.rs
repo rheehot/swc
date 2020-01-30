@@ -41,7 +41,7 @@ impl DuplicateTracker {
 
 fn remove_common(l: Backtrace, r: Backtrace) -> (Backtrace, Backtrace) {
     let (l, r) = (filter(l), filter(r));
-    let (mut l, mut r): (Vec<_>, Vec<_>) = (l.into(), r.into());
+    let (l, r): (Vec<_>, Vec<_>) = (l.into(), r.into());
 
     //    let mut start = 0;
     //    for i in 0..min(l.len(), r.len()) {
