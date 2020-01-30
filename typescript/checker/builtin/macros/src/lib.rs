@@ -1246,14 +1246,8 @@ fn quote_type_element(e: &TsTypeElement) -> syn::Expr {
             ref type_params,
             ref type_ann,
             ..
-        }) => {
-            match **key {
-                Expr::Ident(ref i) if i.sym == *"compare" => {
-                    println!("{:?} = {:?}", key, computed);
-                }
-                _ => {}
-            }
-            q().quote_with(smart_quote!(
+        }) => q()
+            .quote_with(smart_quote!(
                 Vars {
                     readonly_v: readonly,
                     key_v: quote_expr(&key, false),
@@ -1276,8 +1270,7 @@ fn quote_type_element(e: &TsTypeElement) -> syn::Expr {
                     })
                 }
             ))
-            .parse()
-        }
+            .parse(),
 
         TsTypeElement::TsIndexSignature(TsIndexSignature {
             readonly,
