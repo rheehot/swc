@@ -39,38 +39,38 @@ impl DuplicateTracker {
     }
 }
 
-fn remove_common(l: Backtrace, r: Backtrace) -> (Backtrace, Backtrace) {
+fn remove_common(mut l: Backtrace, mut r: Backtrace) -> (Backtrace, Backtrace) {
     let (l, r) = (filter(l), filter(r));
     let (mut l, mut r): (Vec<_>, Vec<_>) = (l.into(), r.into());
 
-    let mut start = 0;
-    for i in 0..min(l.len(), r.len()) {
-        let (lf, rf) = (&l[i], &r[i]);
-        let (ls, rs) = (lf.symbols(), rf.symbols());
-
-        let mut all_ok = true;
-
-        for j in 0..min(ls.len(), rs.len()) {
-            let (ls, rs) = (&ls[j], &rs[j]);
-
-            if ls.filename().is_some()
-                && rs.filename().is_some()
-                && ls.filename() == rs.filename()
-                && ls.lineno() == rs.lineno()
-            {
-                all_ok = false;
-                break;
-            }
-        }
-
-        if all_ok {
-            start = i
-        }
-    }
-    start -= 1;
-
-    l.drain(..start);
-    r.drain(..start);
+    //    let mut start = 0;
+    //    for i in 0..min(l.len(), r.len()) {
+    //        let (lf, rf) = (&l[i], &r[i]);
+    //        let (ls, rs) = (lf.symbols(), rf.symbols());
+    //
+    //        let mut all_ok = true;
+    //
+    //        for j in 0..min(ls.len(), rs.len()) {
+    //            let (ls, rs) = (&ls[j], &rs[j]);
+    //
+    //            if ls.filename().is_some()
+    //                && rs.filename().is_some()
+    //                && ls.filename() == rs.filename()
+    //                && ls.lineno() == rs.lineno()
+    //            {
+    //                all_ok = false;
+    //                break;
+    //            }
+    //        }
+    //
+    //        if all_ok {
+    //            start = i
+    //        }
+    //    }
+    //    start -= 1;
+    //
+    //    l.drain(..start);
+    //    r.drain(..start);
 
     (l.into(), r.into())
 }
@@ -90,21 +90,21 @@ fn filter(mut bt: Backtrace) -> Backtrace {
             let name = if let Some(name) = symbol.name().and_then(|s| s.as_str()) {
                 name
             } else {
-                return false;
+                return true;
             };
 
-            if let Some(filename) = symbol.filename() {
-                let s = filename.to_string_lossy();
-                if s.contains("fold.rs")
-                    || s.contains("validator.rs")
-                    || s.contains("vec.rs")
-                    || s.contains("/backtrace")
-                    || s.contains("/ast/")
-                    || s.contains("libcore")
-                {
-                    return false;
-                }
-            }
+            //            if let Some(filename) = symbol.filename() {
+            //                let s = filename.to_string_lossy();
+            //                if s.contains("fold.rs")
+            //                    || s.contains("validator.rs")
+            //                    || s.contains("vec.rs")
+            //                    || s.contains("/backtrace")
+            //                    || s.contains("/ast/")
+            //                    || s.contains("libcore")
+            //                {
+            //                    return false;
+            //                }
+            //            }
 
             if name.contains("Module") {
                 done = true;
