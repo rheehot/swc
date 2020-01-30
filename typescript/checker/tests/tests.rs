@@ -276,7 +276,10 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
     let full_ref_errors = ref_errors.clone();
     let full_ref_err_cnt = full_ref_errors.as_ref().map(Vec::len).unwrap_or(0);
 
+    let mut fm = None;
     let (libs, rule, ts_config, target) = ::testing::run_test(treat_error_as_bug, |cm, handler| {
+        fm = Some(cm.load_file(file_name).expect("failed to read file"));
+
         Ok(match mode {
             Mode::Pass | Mode::Error => (
                 vec![Lib::Es5],
@@ -290,10 +293,9 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
                 let session = Session { handler: &handler };
 
-                let fm = cm.load_file(file_name).expect("failed to read file");
-                println!("--------------------\n{}\n--------------------", fm.src);
                 let comments = Comments::default();
 
+                let fm = fm.clone().unwrap().clone();
                 let mut parser = Parser::new(
                     session,
                     Syntax::Typescript(TsConfig {
@@ -577,10 +579,12 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
             if !success {
                 panic!(
-                    "\n============================================================\n{:?}
+                    "\n============================================================\n{}\\
+                     n============================================================\n{:?}
 ============================================================\n{} unmatched errors out of {} \
                      errors. Got {} extra errors.\nWanted: {:?}\nUnwanted: {:?}\n\nAll required \
                      errors: {:?}\nAll actual errors: {:?}",
+                    fm.unwrap().src,
                     err,
                     ref_errors.len(),
                     full_ref_err_cnt,
