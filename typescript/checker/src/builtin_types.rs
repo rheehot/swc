@@ -6,9 +6,9 @@ use crate::{
     validator::{Validate, ValidateWith},
     Exports, ImportInfo,
 };
-use chashmap::CHashMap;
+use dashmap::DashMap;
 use fxhash::FxHashMap;
-use lazy_static::lazy_static;
+use once_cell::sync::Lazy;
 use std::{collections::hash_map::Entry, path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{Span, VisitWith, DUMMY_SP};
@@ -25,9 +25,8 @@ struct Merged {
 }
 
 fn merge(ls: &[Lib]) -> &'static Merged {
-    lazy_static! {
-        static ref CACHE: CHashMap<Vec<Lib>, &'static Merged> = Default::default();
-    }
+    static CACHE: Lazy<DashMap<Vec<Lib>, &'static Merged>> =
+        Lazy::new(|| DashMap::with_hasher(Default::default()));
 
     assert_ne!(ls, &[], "libs cannot be empty");
 
@@ -43,11 +42,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
     println!("\n\n\n\n\n----- loading builtin: {:?} -----", libs);
 
     // We hold write lock (thus block readers) while merging.
-    CACHE.alter(libs, |v| {
-        if let Some(v) = v {
-            return Some(v);
-        }
-
+    CACHE.entry(libs).or_insert_with(|| {
         let mut merged = box Merged::default();
         let mut analyzer = Analyzer::for_builtin();
         let modules = load(ls);
@@ -215,7 +210,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
 
         assert_eq!(analyzer.info.errors, Errors::default());
 
-        Some(Box::leak(merged))
+        Box::leak(merged)
     });
 
     println!("----- loaded builtin -----\n\n\n\n\n");

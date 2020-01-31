@@ -2,7 +2,6 @@ use crate::{
     name::Name,
     ty::{Type, TypeElement, TypeParamInstantiation},
 };
-use derive_more::Display;
 use std::{ops::RangeInclusive, path::PathBuf};
 use swc_atoms::JsWord;
 use swc_common::{errors::Handler, Span, Spanned, DUMMY_SP};
@@ -26,20 +25,17 @@ impl Errors {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Spanned, Display)]
+#[derive(Debug, Clone, PartialEq, Spanned)]
 pub enum Error {
-    #[display(fmt = "Module does not have such property")]
     NoSuchPropertyInModule {
         span: Span,
     },
 
-    #[display(fmt = "Return statement is required")]
     ReturnRequired {
         /// Span of the return type.
         span: Span,
     },
 
-    #[display(fmt = "Constructor is required")]
     ConstructorRequired {
         span: Span,
         lhs: Span,

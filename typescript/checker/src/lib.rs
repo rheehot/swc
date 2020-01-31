@@ -20,7 +20,7 @@ use crate::{
     swc_common::VisitWith,
     ty::Type,
 };
-use chashmap::CHashMap;
+use dashmap::DashMap;
 use std::{path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{errors::Handler, Globals, SourceMap, Span};
@@ -115,9 +115,9 @@ pub struct Checker<'a> {
     ts_config: TsConfig,
     target: JscTarget,
     /// Cache
-    modules: Arc<CHashMap<PathBuf, (Module, Info)>>,
+    modules: Arc<DashMap<PathBuf, (Module, Info)>>,
     resolver: Resolver,
-    current: Arc<CHashMap<PathBuf, ()>>,
+    current: Arc<DashMap<PathBuf, ()>>,
     libs: Vec<Lib>,
     rule: Rule,
 }
