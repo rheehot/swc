@@ -191,6 +191,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             loader,
             is_builtin,
             duplicated_tracker: Default::default(),
+            facts_buf: None,
         }
     }
 

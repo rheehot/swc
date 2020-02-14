@@ -34,13 +34,12 @@ mod debug;
 pub mod analyzer;
 mod builtin_types;
 pub mod errors;
-pub mod name;
-pub mod validator;
-//mod legacy;
 pub mod loader;
+pub mod name;
 pub mod resolver;
 pub mod ty;
 mod util;
+pub mod validator;
 
 pub type Result<T> = std::result::Result<T, Error>;
 

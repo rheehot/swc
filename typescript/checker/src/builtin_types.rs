@@ -2,7 +2,7 @@ use crate::{
     analyzer::{Analyzer, ScopeKind},
     errors::{Error, Errors},
     loader::Load,
-    ty::{self, Class, Module, Static},
+    ty::{self, Class, Module, Static, Type},
     validator::{Validate, ValidateWith},
     Exports, ImportInfo,
 };
@@ -15,8 +15,6 @@ use swc_common::{Span, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_builtin_types::load;
 pub use swc_ts_builtin_types::Lib;
-
-type Type = ty::Type;
 
 #[derive(Debug, Default)]
 struct Merged {
