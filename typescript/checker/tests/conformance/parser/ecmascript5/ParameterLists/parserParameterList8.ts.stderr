@@ -4,7 +4,7 @@ error: TS2369 {
             32,
         ),
         hi: BytePos(
-            38,
+            48,
         ),
         ctxt: #0,
     },
@@ -12,7 +12,7 @@ error: TS2369 {
  --> $DIR/tests/conformance/parser/ecmascript5/ParameterLists/parserParameterList8.ts:2:14
   |
 2 |  constructor(public p1:string); // ERROR
-  |              ^^^^^^
+  |              ^^^^^^^^^^^^^^^^
 
 error: TS2369 {
     span: Span {
@@ -20,7 +20,7 @@ error: TS2369 {
             73,
         ),
         hi: BytePos(
-            80,
+            90,
         ),
         ctxt: #0,
     },
@@ -28,7 +28,7 @@ error: TS2369 {
  --> $DIR/tests/conformance/parser/ecmascript5/ParameterLists/parserParameterList8.ts:3:14
   |
 3 |  constructor(private p2:number); // ERROR
-  |              ^^^^^^^
+  |              ^^^^^^^^^^^^^^^^^
 
 error: TS2369 {
     span: Span {
@@ -36,7 +36,7 @@ error: TS2369 {
             115,
         ),
         hi: BytePos(
-            121,
+            128,
         ),
         ctxt: #0,
     },
@@ -44,5 +44,5 @@ error: TS2369 {
  --> $DIR/tests/conformance/parser/ecmascript5/ParameterLists/parserParameterList8.ts:4:14
   |
 4 |  constructor(public p3:any); // ERROR
-  |              ^^^^^^
+  |              ^^^^^^^^^^^^^
 
