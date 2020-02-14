@@ -666,6 +666,8 @@ impl Validate<CondExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
     fn validate(&mut self, e: &CondExpr) -> Self::Output {
+        self.record(e);
+
         let CondExpr {
             span,
             test,
