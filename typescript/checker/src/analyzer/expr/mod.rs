@@ -1123,6 +1123,8 @@ impl Validate<ArrowExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Function>;
 
     fn validate(&mut self, f: &ArrowExpr) -> Self::Output {
+        self.record(f);
+
         self.with_child(ScopeKind::ArrowFn, Default::default(), |child| {
             let type_params = try_opt!(f.type_params.validate_with(child));
 
