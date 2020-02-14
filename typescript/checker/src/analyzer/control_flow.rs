@@ -233,6 +233,8 @@ impl Analyzer<'_, '_> {
 
 impl Visit<SwitchStmt> for Analyzer<'_, '_> {
     fn visit(&mut self, stmt: &SwitchStmt) {
+        self.record(stmt);
+
         let discriminant_ty = self
             .check_switch_discriminant(&stmt)
             .store(&mut self.info.errors);
