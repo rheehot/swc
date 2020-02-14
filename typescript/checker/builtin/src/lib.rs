@@ -17,5 +17,7 @@ builtin!();
 
 /// Merge definitions
 pub fn load(libs: &[Lib]) -> Vec<&'static TsNamespaceDecl> {
-    libs.iter().map(|lib| lib.body()).collect()
+    //    libs.iter().map(|lib| lib.body()).collect()
+    unimplemented!()
 }
+fn parse_namespace<T>(n: T) {}
