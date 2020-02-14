@@ -2,8 +2,6 @@
 
 use backtrace::Backtrace;
 
-#[macro_use]
-pub mod validation;
 pub mod duplicate;
 
 pub fn print_backtrace() {
