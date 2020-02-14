@@ -34,6 +34,7 @@ pub fn builtin(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
 
         let session = Session { handler: &handler };
         let mut deps = HashMap::<String, Vec<String>>::default();
+        let mut contents = HashMap::<String, String>::default();
 
         let dir_str =
             ::std::env::var("CARGO_MANIFEST_DIR").expect("failed to read CARGO_MANIFEST_DIR");
@@ -59,13 +60,15 @@ pub fn builtin(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
         let mut names = vec![];
 
         for (path, file_name) in files.clone() {
-            println!("Processing file: {}", file_name);
+            //            println!("Processing file: {}", file_name);
             let name = syn::Ident::new(&name_for(&file_name), Span::call_site());
             names.push(name.clone());
 
             let comments = Comments::default();
 
             let fm = cm.load_file(&path).expect("failed to load file");
+
+            contents.insert(name.to_string(), (*fm.src).clone());
 
             let mut parser = Parser::new(
                 session,
@@ -75,7 +78,7 @@ pub fn builtin(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
             );
 
             // We cannot use parse_module because of `eval`
-            let script = parser
+            let _ = parser
                 .parse_script()
                 .map_err(|mut e| {
                     e.emit();
@@ -101,10 +104,10 @@ pub fn builtin(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
                     ds.push(name_for(&dep));
                 }
             }
-            println!("{}: {:?}", file_name, ds);
+            //            println!("{}: {:?}", file_name, ds);
             deps.insert(name_for(&file_name), ds);
 
-            println!("\tParsed",);
+            //            println!("\tParsed",);
 
             //            let tts = if file_name.contains("generated") {
             //                q().quote_with(smart_quote!(Vars { s: &*fm.src },
@@ -178,13 +181,16 @@ pub fn builtin(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
             brace_token: call_site(),
             arms: names
                 .iter()
-                .map(|name| q!(Vars { name }, { Lib::name => include_str!(file_name) }).parse())
+                .map(|name| {
+                    let content = &*contents[&name.to_string()];
+                    q!(Vars { name, content }, { Lib::name => content }).parse()
+                })
                 .collect(),
         };
         tokens = tokens.quote_with(smart_quote!(Vars { match_expr }, {
             impl Lib {
-                pub fn body(self) -> &'static TsNamespaceDecl {
-                    parse(match_expr)
+                fn content(self) -> &'static str {
+                    match_expr
                 }
             }
         }));
@@ -199,7 +205,7 @@ pub fn builtin(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
                     arms: deps
                         .into_iter()
                         .map(|(name, deps)| {
-                            println!("{}: {:?}", name, deps);
+                            //                            println!("{}: {:?}", name, deps);
                             let deps = deps
                                 .into_iter()
                                 .map(|v| {
