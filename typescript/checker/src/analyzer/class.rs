@@ -85,6 +85,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                 }
             }
 
+            let mut ps = Vec::with_capacity(params.len());
             for param in params {
                 let mut names = vec![];
 
@@ -93,6 +94,19 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                 param.visit_with(&mut visitor);
 
                 child.scope.declaring.extend(names.clone());
+
+                let p = match &param {
+                    PatOrTsParamProp::TsParamProp(TsParamProp {
+                        param: TsParamPropParam::Ident(i),
+                        ..
+                    }) => TsFnParam::Ident(i.clone()),
+                    PatOrTsParamProp::TsParamProp(TsParamProp {
+                        param: TsParamPropParam::Assign(AssignPat { left: box pat, .. }),
+                        ..
+                    })
+                    | PatOrTsParamProp::Pat(pat) => from_pat(pat.clone()),
+                };
+                let p: ty::FnParam = child.validate(&p)?;
 
                 match param {
                     PatOrTsParamProp::Pat(ref pat) => {
@@ -109,24 +123,11 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                             left: box Pat::Ident(ref i),
                             ..
                         }) => {
-                            let ty = try_opt!(child.validate(&i.type_ann));
-                            let ty = try_opt!(ty.map(|ty| child.expand(ty.span(), ty)));
-                            //let ty = match ty {
-                            //    Some(ty) => match child.expand_type(i.span, ty) {
-                            //        Ok(ty) => Some(ty),
-                            //        Err(err) => {
-                            //            child.info.errors.push(err);
-                            //            Some(Type::any(i.span))
-                            //        }
-                            //    },
-                            //    None => None,
-                            //};
-
                             match child.declare_var(
                                 i.span,
                                 VarDeclKind::Let,
                                 i.sym.clone(),
-                                ty,
+                                Some(p.ty.clone()),
                                 true,
                                 false,
                             ) {
@@ -140,27 +141,14 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                     },
                 }
 
+                ps.push(p);
+
                 child.scope.remove_declaring(names);
             }
 
             Ok(ty::Constructor {
                 span: c.span,
-                params: c
-                    .params
-                    .iter()
-                    .map(|v| match v {
-                        PatOrTsParamProp::TsParamProp(TsParamProp {
-                            param: TsParamPropParam::Ident(i),
-                            ..
-                        }) => TsFnParam::Ident(i.clone()),
-                        PatOrTsParamProp::TsParamProp(TsParamProp {
-                            param: TsParamPropParam::Assign(AssignPat { left: box pat, .. }),
-                            ..
-                        })
-                        | PatOrTsParamProp::Pat(pat) => from_pat(pat.clone()),
-                    })
-                    .map(|param| child.validate(&param))
-                    .collect::<Result<_, _>>()?,
+                params: ps,
             })
         })
     }
@@ -171,6 +159,8 @@ impl Validate<TsFnParam> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 
     fn validate(&mut self, p: &TsFnParam) -> Self::Output {
+        self.record(p);
+
         let span = p.span();
 
         macro_rules! ty {
