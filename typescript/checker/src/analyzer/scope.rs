@@ -644,15 +644,6 @@ impl Analyzer<'_, '_> {
         initialized: bool,
         allow_multiple: bool,
     ) -> Result<(), Error> {
-        //println!(
-        //    "({}) declare_var({}, initialized = {:?})",
-        //    self.depth(),
-        //    name,
-        //    initialized,
-        //);
-
-        no_ref!(ty);
-
         match self.scope.vars.entry(name.clone()) {
             Entry::Occupied(e) => {
                 if !allow_multiple {

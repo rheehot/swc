@@ -65,7 +65,7 @@ fn parse(content: &str) -> TsNamespaceDecl {
     );
 
     // We cannot use parse_module because of `eval`
-    let mut script = parser
+    let script = parser
         .parse_script()
         .map_err(|mut e| {
             e.emit();
