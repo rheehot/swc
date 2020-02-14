@@ -1,14 +1,17 @@
 //! Handles new expressions and call expressions.
 use super::super::Analyzer;
 use crate::{
-    analyzer::{expr::TypeOfMode, generic::GenericExpander, props::prop_name_to_expr},
+    analyzer::{
+        expr::TypeOfMode, generic::GenericExpander, props::prop_name_to_expr, util::ResultExt,
+    },
     builtin_types,
     errors::Error,
     swc_common::FoldWith,
     ty,
     ty::{
         CallSignature, ClassInstance, ConstructorSignature, FnParam, Method, MethodSignature,
-        QueryExpr, QueryType, Static, Type, TypeElement, TypeParam, TypeParamInstantiation,
+        QueryExpr, QueryType, Static, Type, TypeElement, TypeOrSpread, TypeParam,
+        TypeParamInstantiation,
     },
     util::EqIgnoreSpan,
     validator::{Validate, ValidateWith},
@@ -18,6 +21,20 @@ use macros::validator;
 use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
+
+#[validator]
+impl Validate<ExprOrSpread> for Analyzer<'_, '_> {
+    type Output = ValidationResult<TypeOrSpread>;
+
+    fn validate(&mut self, node: &ExprOrSpread) -> Self::Output {
+        let span = node.span();
+        Ok(TypeOrSpread {
+            span,
+            spread: node.spread,
+            ty: node.expr.validate_with(self)?,
+        })
+    }
+}
 
 #[validator]
 impl Validate<CallExpr> for Analyzer<'_, '_> {
@@ -40,17 +57,6 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
 
         // TODO: validate children
 
-        // Check arguments
-        for arg in &e.args {
-            let res: Result<(), Error> = try {
-                self.validate(&arg.expr)?;
-            };
-
-            if let Err(err) = res {
-                self.info.errors.push(err);
-            }
-        }
-
         self.extract_call_new_expr_member(callee, ExtractKind::Call, args, type_args.as_ref())
     }
 }
@@ -71,19 +77,6 @@ impl Validate<NewExpr> for Analyzer<'_, '_> {
 
         // TODO: e.visit_children
 
-        // Check arguments
-        if let Some(ref args) = e.args {
-            for arg in args {
-                let res: Result<(), Error> = try {
-                    self.validate(&arg.expr)?;
-                };
-
-                if let Err(err) = res {
-                    self.info.errors.push(err);
-                }
-            }
-        }
-
         self.extract_call_new_expr_member(
             callee,
             ExtractKind::New,
@@ -100,7 +93,9 @@ enum ExtractKind {
 }
 
 impl Analyzer<'_, '_> {
-    /// Calculates the return type of a new /c all expression.
+    /// Calculates the return type of a new /call expression.
+    ///
+    /// This method check arguments
     ///
     /// Called only from [type_of_expr]
     fn extract_call_new_expr_member(
@@ -157,9 +152,26 @@ impl Analyzer<'_, '_> {
                 Err(Error::UndefinedSymbol {
                     sym: i.sym.clone(),
                     span: i.span(),
-                })
+                })?
             }
 
+            _ => {}
+        }
+
+        let args: Vec<_> = args
+            .into_iter()
+            .map(|arg| {
+                self.validate(arg)
+                    .store(&mut self.info.errors)
+                    .unwrap_or_else(|| TypeOrSpread {
+                        span: arg.span(),
+                        spread: arg.spread,
+                        ty: Type::any(arg.expr.span()),
+                    })
+            })
+            .collect();
+
+        match *callee {
             Expr::Member(MemberExpr {
                 obj: ExprOrSuper::Expr(ref obj),
                 ref prop,
@@ -237,14 +249,14 @@ impl Analyzer<'_, '_> {
                                 return self.check_method_call(
                                     span,
                                     &candidates.into_iter().next().unwrap(),
-                                    args,
+                                    &args,
                                 );
                             }
                             _ => {
                                 //
                                 for c in candidates {
                                     if c.params.len() == args.len() {
-                                        return self.check_method_call(span, &c, args);
+                                        return self.check_method_call(span, &c, &args);
                                     }
                                 }
 
@@ -380,7 +392,7 @@ impl Analyzer<'_, '_> {
                 let ty = self.expand(span, ty)?;
                 let type_args = try_opt!(type_args.validate_with(self));
 
-                Ok(self.extract(span, ty, kind, args, type_args.as_ref())?)
+                Ok(self.extract(span, ty, kind, &args, type_args.as_ref())?)
             }
         }
     }
@@ -390,7 +402,7 @@ impl Analyzer<'_, '_> {
         span: Span,
         ty: Type,
         kind: ExtractKind,
-        args: &[ExprOrSpread],
+        args: &[TypeOrSpread],
         type_args: Option<&TypeParamInstantiation>,
     ) -> ValidationResult {
         if cfg!(debug_assertions) {
@@ -523,7 +535,7 @@ impl Analyzer<'_, '_> {
         ty: &Type,
         members: &[TypeElement],
         kind: ExtractKind,
-        args: &[ExprOrSpread],
+        args: &[TypeOrSpread],
         type_args: Option<&TypeParamInstantiation>,
     ) -> ValidationResult {
         let ty_span = ty.span();
@@ -590,14 +602,14 @@ impl Analyzer<'_, '_> {
         &mut self,
         span: Span,
         c: &MethodSignature,
-        args: &[ExprOrSpread],
+        args: &[TypeOrSpread],
     ) -> ValidationResult {
         // Validate arguments
         for (i, p) in c.params.iter().enumerate() {
             // TODO: Handle spread
             // TODO: Validate optional parameters
             if args.len() > i {
-                let args_ty = args[i].expr.validate_with(self)?;
+                let args_ty = &args[i].ty;
                 self.assign(&p.ty, &args_ty, args[i].span())?;
             }
         }
@@ -613,7 +625,7 @@ impl Analyzer<'_, '_> {
         params: &[FnParam],
         ret_ty: Type,
         type_args: Option<&TypeParamInstantiation>,
-        args: &[ExprOrSpread],
+        args: &[TypeOrSpread],
     ) -> ValidationResult {
         if let Some(type_params) = type_params {
             let inferred;

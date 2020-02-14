@@ -1,8 +1,8 @@
 use super::Analyzer;
 use crate::{
     ty::{
-        self, Conditional, FnParam, Mapped, Ref, Tuple, Type, TypeParam, TypeParamDecl,
-        TypeParamInstantiation,
+        self, Conditional, FnParam, Mapped, Ref, Tuple, Type, TypeOrSpread, TypeParam,
+        TypeParamDecl, TypeParamInstantiation,
     },
     validator::ValidateWith,
     ValidationResult,
@@ -15,37 +15,9 @@ impl Analyzer<'_, '_> {
         &mut self,
         type_params: &[TypeParam],
         params: &[FnParam],
-        args: &[ExprOrSpread],
+        args: &[TypeOrSpread],
     ) -> ValidationResult<TypeParamInstantiation> {
-        let mut inferred = Vec::with_capacity(type_params.len());
-
-        for arg in args {
-            match *arg {
-                ExprOrSpread {
-                    spread: Some(..), ..
-                } => unimplemented!("type parameter inference with spread element"),
-                ExprOrSpread {
-                    spread: None,
-                    ref expr,
-                    ..
-                } => {
-                    inferred.push(expr.validate_with(self)?);
-                }
-            }
-        }
-
-        assert_eq!(
-            inferred.len(),
-            type_params.len(),
-            "\nInferred: {:?}\nParams: {:?}",
-            inferred,
-            type_params
-        );
-
-        Ok(TypeParamInstantiation {
-            span: DUMMY_SP,
-            params: inferred,
-        })
+        unimplemented!("type parameter inference")
     }
 
     pub(super) fn expand_type_params(

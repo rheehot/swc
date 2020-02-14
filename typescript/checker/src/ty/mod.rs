@@ -445,6 +445,13 @@ pub struct Predicate {
     pub ty: Box<Type>,
 }
 
+#[derive(Debug, Fold, Clone, PartialEq, Spanned)]
+pub struct TypeOrSpread {
+    pub span: Span,
+    pub spread: Option<Span>,
+    pub ty: Type,
+}
+
 impl Type {
     pub fn generalize_lit(&self) -> Cow<Self> {
         let span = self.span();
