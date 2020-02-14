@@ -1,9 +1,10 @@
 #![feature(box_syntax)]
 #![feature(specialization)]
 
-use dashmap::DashMap;
+use fxhash::FxHashMap;
 use once_cell::sync::Lazy;
-use std::sync::Arc;
+use std::sync::{Arc, RwLock};
+use swc_atoms::js_word;
 use swc_common::{
     errors::{ColorConfig, Handler},
     fold::FoldWith,
@@ -18,17 +19,28 @@ builtin!();
 
 impl Lib {
     fn body(self) -> &'static TsNamespaceDecl {
-        static CACHE: Lazy<DashMap<Lib, &'static TsNamespaceDecl>> = Lazy::new(Default::default);
+        static CACHE: Lazy<RwLock<FxHashMap<Lib, &'static TsNamespaceDecl>>> =
+            Lazy::new(Default::default);
 
-        if let Some(v) = CACHE.get(&self) {
-            return &**v.value();
+        {
+            let read = CACHE.read().expect("no panic is expected");
+            if let Some(v) = read.get(&self) {
+                return v;
+            }
         }
 
-        let ns = Box::leak(box parse(self.content()));
+        let mut write = CACHE.write().expect("no panic is expect4ed");
 
-        CACHE.insert(self, &*ns);
+        {
+            if let Some(v) = write.get(&self) {
+                return v;
+            }
+        }
 
-        &*ns
+        let v = Box::leak(box parse(self.content()));
+        assert_eq!(write.insert(self, v), None);
+
+        v
     }
 }
 
@@ -61,13 +73,20 @@ fn parse(content: &str) -> TsNamespaceDecl {
         })
         .expect("failed to parse module");
 
-    assert_eq!(script.body.len(), 1);
-    match script.body.pop().unwrap() {
-        Stmt::Decl(Decl::TsModule(m)) => match m.body.unwrap() {
-            TsNamespaceBody::TsModuleBlock(_) => unreachable!(),
-            TsNamespaceBody::TsNamespaceDecl(d) => d.fold_with(&mut DropSpan),
-        },
-        _ => unreachable!(),
+    TsNamespaceDecl {
+        span: DUMMY_SP,
+        declare: true,
+        global: true,
+        id: Ident::new(js_word!(""), DUMMY_SP),
+        body: box TsNamespaceBody::TsModuleBlock(TsModuleBlock {
+            span: DUMMY_SP,
+            body: script
+                .body
+                .fold_with(&mut DropSpan)
+                .into_iter()
+                .map(ModuleItem::Stmt)
+                .collect(),
+        }),
     }
 }
 
