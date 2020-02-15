@@ -1,4 +1,4 @@
-use crate::errors::Error;
+use crate::errors::{Error, Errors};
 use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
 
@@ -11,8 +11,8 @@ use swc_ecma_ast::*;
 /// bar() {}
 /// ```
 pub(crate) struct AmbientFunctionHandler<'a> {
-    last_ambient_name: Option<Ident>,
-    errors: &'a mut Vec<Error>,
+    pub last_ambient_name: Option<Ident>,
+    pub errors: &'a mut Errors,
 }
 
 impl Visit<Stmt> for AmbientFunctionHandler<'_> {

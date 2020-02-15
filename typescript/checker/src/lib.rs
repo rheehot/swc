@@ -21,7 +21,10 @@ use crate::{
     ty::Type,
 };
 use dashmap::DashMap;
-use std::{path::PathBuf, sync::Arc};
+use std::{
+    path::{Path, PathBuf},
+    sync::Arc,
+};
 use swc_atoms::JsWord;
 use swc_common::{errors::Handler, Globals, SourceMap, Span};
 use swc_ecma_ast::Module;
@@ -114,9 +117,9 @@ pub struct Checker<'a> {
     ts_config: TsConfig,
     target: JscTarget,
     /// Cache
-    modules: Arc<DashMap<PathBuf, (Module, Info)>>,
+    modules: Arc<DashMap<Arc<PathBuf>, (Module, Info)>>,
     resolver: Resolver,
-    current: Arc<DashMap<PathBuf, ()>>,
+    current: Arc<DashMap<Arc<PathBuf>, ()>>,
     libs: Vec<Lib>,
     rule: Rule,
 }
@@ -158,7 +161,7 @@ impl<'a> Checker<'a> {
 
 impl Checker<'_> {
     /// Returns empty vector if no error is found.
-    pub fn check(&self, entry: PathBuf) -> Vec<Error> {
+    pub fn check(&self, entry: Arc<PathBuf>) -> Vec<Error> {
         self.run(|| {
             let mut errors = Errors::default();
 
@@ -191,7 +194,7 @@ impl Checker<'_> {
         })
     }
 
-    fn load_module(&self, path: PathBuf) -> (Module, Info) {
+    fn load_module(&self, path: &Path) -> (Module, Info) {
         let cached = self.modules.get(&path);
 
         if let Some(cached) = cached {
@@ -232,7 +235,7 @@ impl Checker<'_> {
                     }
                 })
         });
-        let mut a = Analyzer::root(&self.libs, self.rule, self);
+        let mut a = Analyzer::root(path.clone(), &self.libs, self.rule, self);
         module.visit_with(&mut a);
 
         let info = a.info;

@@ -1,3 +1,4 @@
+pub(super) use self::ambient_decl::AmbientFunctionHandler;
 use super::Analyzer;
 use crate::{
     analyzer::{scope::ScopeKind, util::ResultExt},
