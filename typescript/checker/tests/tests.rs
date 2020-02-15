@@ -95,7 +95,7 @@ fn should_ignore(name: &str, content: &str) -> bool {
         return true;
     }
 
-    if IGNORED.iter().any(|p| p == name) {
+    if IGNORED.iter().any(|p| *p == name) {
         return true;
     }
 
