@@ -884,9 +884,10 @@ impl Analyzer<'_, '_> {
                         if let Some(item) = exports.vars.get(sym) {
                             return Ok(item.clone());
                         }
-                        if let Some(item) = exports.types.get(sym) {
-                            return Ok(item.clone());
-                        }
+                        //                        if let Some(item) =
+                        // exports.types.get(sym) {
+                        //                            return Ok(item.clone());
+                        //                        }
                     }
                     _ => {}
                 }

@@ -75,7 +75,7 @@ pub struct Analyzer<'a, 'b> {
     export_equals_span: Span,
     in_declare: bool,
 
-    resolved_import_types: FxHashMap<JsWord, Type>,
+    resolved_import_types: FxHashMap<JsWord, Vec<Type>>,
     resolved_import_vars: FxHashMap<JsWord, Type>,
     errored_imports: FxHashSet<JsWord>,
     pending_exports: Vec<((JsWord, Span), Expr)>,

@@ -109,18 +109,19 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
                 }
             }
             Decl::TsEnum(ref e) => {
-                // TODO: Allow multiple exports with same name.
-                debug_assert_eq!(self.info.exports.types.get(&e.id.sym), None);
+                let span = e.span();
 
                 let ty = e
                     .validate_with(self)
                     .store(&mut self.info.errors)
                     .map(Type::from);
 
-                self.info.exports.types.insert(e.id.sym.clone(), {
-                    let span = e.span();
-                    ty.unwrap_or_else(|| Type::any(span))
-                });
+                self.info
+                    .exports
+                    .types
+                    .entry(e.id.sym.clone())
+                    .or_default()
+                    .push(ty.unwrap_or_else(|| Type::any(span)));
             }
             Decl::TsModule(..) => unimplemented!("export module "),
             Decl::TsTypeAlias(ref decl) => {
@@ -187,7 +188,7 @@ impl Analyzer<'_, '_> {
 
         // TODO: Change this to error.
         assert_eq!(self.info.exports.types.get(&name), None);
-        self.info.exports.types.insert(name, ty);
+        self.info.exports.types.entry(name).or_default().push(ty);
     }
 
     /// Exports a varaible.

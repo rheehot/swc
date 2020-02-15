@@ -389,7 +389,12 @@ impl Analyzer<'_, '_> {
 
     pub(super) fn register_type(&mut self, name: JsWord, ty: Type) -> Result<(), Error> {
         if self.is_builtin {
-            self.info.exports.types.insert(name, ty.freeze());
+            self.info
+                .exports
+                .types
+                .entry(name)
+                .or_default()
+                .push(ty.freeze());
         } else {
             self.scope.register_type(name, ty);
         }
@@ -605,9 +610,10 @@ impl Analyzer<'_, '_> {
             return Some(&ANY);
         }
 
-        if let Some(ty) = self.resolved_import_types.get(name) {
-            return Some(ty);
-        }
+        // TODO:
+        //        if let Some(ty) = self.resolved_import_types.get(name) {
+        //            return Some(ty);
+        //        }
 
         if let Some(ty) = self.scope.find_type(name) {
             return Some(ty);

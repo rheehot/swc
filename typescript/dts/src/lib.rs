@@ -1,10 +1,14 @@
+#![feature(box_syntax)]
+#![feature(box_patterns)]
+#![feature(specialization)]
+
 use swc_common::Fold;
 use swc_ecma_ast::*;
 use swc_ts_checker::{Checker, ModuleTypeInfo};
 
 #[derive(Debug)]
-struct TypeResolver<'a> {
-    checker: Checker<'a>,
+struct TypeResolver {
+    checker: Checker,
     types: ModuleTypeInfo,
 }
 

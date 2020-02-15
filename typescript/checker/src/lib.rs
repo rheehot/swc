@@ -111,7 +111,7 @@ pub struct Rule {
 
 /// Onc instance per swc::Compiler
 pub struct Checker {
-    globals: swc_common::Globals,
+    globals: Arc<swc_common::Globals>,
     cm: Arc<SourceMap>,
     handler: Arc<Handler>,
     ts_config: TsConfig,
@@ -126,6 +126,7 @@ pub struct Checker {
 
 impl Checker {
     pub fn new(
+        globals: Arc<Globals>,
         cm: Arc<SourceMap>,
         handler: Arc<Handler>,
         libs: Vec<Lib>,
@@ -134,7 +135,7 @@ impl Checker {
         target: JscTarget,
     ) -> Self {
         Checker {
-            globals: Globals::new(),
+            globals,
             cm,
             handler,
             modules: Default::default(),
@@ -154,7 +155,7 @@ impl Checker {
         ::swc_common::GLOBALS.set(&self.globals, || op())
     }
 
-    pub const fn globals(&self) -> &swc_common::Globals {
+    pub fn globals(&self) -> &swc_common::Globals {
         &self.globals
     }
 }
@@ -189,6 +190,19 @@ impl Checker {
             //     })
             //     .unwrap();
             // }
+
+            errors.into()
+        })
+    }
+
+    /// Returns empty vector if no error is found.
+    pub fn check_loaded(&self, entry: Arc<PathBuf>, module: &swc_ecma_ast::Module) -> Vec<Error> {
+        self.run(|| {
+            let mut errors = Errors::default();
+
+            let mut module = self.load_module(entry.clone());
+
+            errors.append_errors(&mut module.1.errors);
 
             errors.into()
         })
