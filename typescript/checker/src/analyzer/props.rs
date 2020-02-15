@@ -9,6 +9,7 @@ use crate::{
 use macros::{validator, validator_method};
 use swc_atoms::js_word;
 use swc_common::{Spanned, Visit, VisitWith};
+use swc_common::{Spanned, VisitMut, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy)]

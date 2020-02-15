@@ -491,7 +491,7 @@ impl Validate<TsTypePredicate> for Analyzer<'_, '_> {
         Ok(Predicate {
             span: t.span,
             param_name: t.param_name.clone(),
-            ty: box t.type_ann.validate_with(self)?,
+            ty: try_opt!(t.type_ann.validate_with(self).map(|res| res.map(Box::new))),
         })
     }
 }

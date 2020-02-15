@@ -641,6 +641,52 @@ impl Validate<Class> for Analyzer<'_, '_> {
                 }
             }
 
+            {
+                // Change types of getter and setter
+
+                let mut prop_types = PropertyMap::default();
+
+                for m in body.iter_mut() {
+                    match m {
+                        ty::ClassMember::IndexSignature(_) | ty::ClassMember::Constructor(_) => {
+                            continue
+                        }
+
+                        ty::ClassMember::Method(m) => match m.kind {
+                            MethodKind::Getter => {
+                                prop_types.insert(m.key, m.ret_ty.clone());
+                            }
+                            _ => {}
+                        },
+
+                        ty::ClassMember::Property(_) => {}
+                    }
+                }
+
+                for m in body.iter_mut() {
+                    match m {
+                        ty::ClassMember::IndexSignature(_) | ty::ClassMember::Constructor(_) => {
+                            continue
+                        }
+
+                        ty::ClassMember::Method(m) => match m.kind {
+                            MethodKind::Setter => {
+                                if let Some(param) = m.params.first_mut() {
+                                    if param.ty.is_any() {
+                                        if let Some(ty) = prop_types.get_prop_anme(&m.key) {
+                                            param.ty = *ty.clone();
+                                        }
+                                    }
+                                }
+                            }
+                            _ => {}
+                        },
+
+                        ty::ClassMember::Property(_) => {}
+                    }
+                }
+            }
+
             let class = ty::Class {
                 span: c.span,
                 name,
