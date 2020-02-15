@@ -141,8 +141,11 @@ static DONE: Lazy<Vec<&'static str>> = Lazy::new(|| {
 
 /// We are done and I don't want regression.
 static IGNORED: Lazy<Vec<&'static str>> = Lazy::new(|| {
-    let mut f = File::open(&format!("{}/tests/ignore.txt", env!("CARGO_MANIFEST_DIR")))
-        .expect("failed to open file");
+    let mut f = File::open(&format!(
+        "{}/tests/ignored-parser-recovery-tests.txt",
+        env!("CARGO_MANIFEST_DIR")
+    ))
+    .expect("failed to open file");
     let mut s = String::new();
     f.read_to_string(&mut s).expect("failed to read file");
     s.lines()

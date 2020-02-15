@@ -7,7 +7,7 @@ do
   export TEST="$line"
   output=$(cargo test --test tests -- conformance || true)
   if [[ $output == *'Parser.parse_module'* ]]; then
-    echo $line >> ./tests/ignore.txt
+    echo $line >> ./tests/ignored-parser-recovery-tests.txt
     echo "It's there!"
   fi
   # Check for Parser.parse_module returned Err()
