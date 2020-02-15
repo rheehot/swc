@@ -23,7 +23,8 @@ impl Load for Checker<'_> {
 
         let path = self
             .resolver
-            .resolve((*base).clone(), import.span, &import.src)?;
+            .resolve((*base).clone(), import.span, &import.src)
+            .map(Arc::new)?;
         let module = self.load_module(path);
 
         if import.all {

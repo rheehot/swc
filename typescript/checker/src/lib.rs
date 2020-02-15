@@ -194,7 +194,7 @@ impl Checker<'_> {
         })
     }
 
-    fn load_module(&self, path: &Path) -> (Module, Info) {
+    fn load_module(&self, path: Arc<PathBuf>) -> (Module, Info) {
         let cached = self.modules.get(&path);
 
         if let Some(cached) = cached {

@@ -25,7 +25,9 @@ use std::{
     sync::Arc,
 };
 use swc_atoms::JsWord;
-use swc_common::{util::move_map::MoveMap, Fold, FoldWith, Span, Spanned, Visit, VisitWith};
+use swc_common::{
+    util::move_map::MoveMap, Fold, FoldWith, Span, Spanned, Visit, VisitWith, DUMMY_SP,
+};
 use swc_ecma_ast::*;
 use swc_ecma_utils::{ModuleItemLike, StmtLike};
 use swc_ts_builtin_types::Lib;
@@ -70,6 +72,8 @@ pub struct Analyzer<'a, 'b> {
     pub info: Info,
 
     path: Arc<PathBuf>,
+    export_equals_span: Span,
+    in_declare: bool,
 
     resolved_imports: FxHashMap<JsWord, Type>,
     errored_imports: FxHashSet<JsWord>,
@@ -202,6 +206,8 @@ impl<'a, 'b> Analyzer<'a, 'b> {
         Self {
             info: Default::default(),
             path,
+            export_equals_span: DUMMY_SP,
+            in_declare: false,
             resolved_imports: Default::default(),
             errored_imports: Default::default(),
             pending_exports: Default::default(),
