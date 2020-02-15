@@ -22,10 +22,7 @@ use crate::{
 };
 use dashmap::DashMap;
 use fxhash::FxHashMap;
-use std::{
-    path::{Path, PathBuf},
-    sync::Arc,
-};
+use std::{path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{errors::Handler, Globals, SourceMap, Span};
 use swc_ecma_ast::Module;
@@ -189,19 +186,6 @@ impl Checker {
             //     })
             //     .unwrap();
             // }
-
-            errors.into()
-        })
-    }
-
-    /// Returns empty vector if no error is found.
-    pub fn check_loaded(&self, entry: Arc<PathBuf>, module: &swc_ecma_ast::Module) -> Vec<Error> {
-        self.run(|| {
-            let mut errors = Errors::default();
-
-            let mut module = self.load_module(entry.clone());
-
-            errors.append_errors(&mut module.1.errors);
 
             errors.into()
         })

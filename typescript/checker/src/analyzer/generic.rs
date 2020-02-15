@@ -4,10 +4,9 @@ use crate::{
         self, Conditional, FnParam, Mapped, Ref, Tuple, Type, TypeOrSpread, TypeParam,
         TypeParamDecl, TypeParamInstantiation,
     },
-    validator::ValidateWith,
     ValidationResult,
 };
-use swc_common::{Fold, FoldWith, Spanned, DUMMY_SP};
+use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {

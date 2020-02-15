@@ -4,7 +4,7 @@
 
 use swc_common::Fold;
 use swc_ecma_ast::*;
-use swc_ts_checker::{Checker, ModuleTypeInfo};
+use swc_ts_checker::ModuleTypeInfo;
 
 #[derive(Debug)]
 pub struct TypeResolver {
@@ -12,5 +12,7 @@ pub struct TypeResolver {
 }
 
 impl Fold<Module> for TypeResolver {
-    fn fold(&mut self, node: Module) -> Module {}
+    fn fold(&mut self, node: Module) -> Module {
+        unimplemented!()
+    }
 }

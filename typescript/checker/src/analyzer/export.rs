@@ -192,7 +192,7 @@ impl Analyzer<'_, '_> {
     }
 
     /// Exports a varaible.
-    fn export_expr(&mut self, name: JsWord, e: &Expr) {
+    fn export_expr(&mut self, _: JsWord, e: &Expr) {
         unimplemented!("export_expr")
     }
 }

@@ -519,8 +519,6 @@ impl Validate<TsType> for Analyzer<'_, '_> {
     fn validate(&mut self, ty: &TsType) -> Self::Output {
         self.record(ty);
 
-        let span = ty.span();
-
         Ok(match ty {
             TsType::TsThisType(this) => Type::This(this.clone()),
             TsType::TsLitType(ty) => Type::Lit(ty.clone()),

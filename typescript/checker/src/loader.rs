@@ -1,8 +1,6 @@
 use super::Checker;
-use crate::{errors::Error, resolver::Resolve, ty::Type, ImportInfo, ModuleTypeInfo, Specifier};
-use fxhash::FxHashMap;
+use crate::{errors::Error, resolver::Resolve, ImportInfo, ModuleTypeInfo, Specifier};
 use std::{path::PathBuf, sync::Arc};
-use swc_atoms::JsWord;
 
 pub trait Load: Send + Sync {
     fn load(&self, base: Arc<PathBuf>, import: &ImportInfo) -> Result<ModuleTypeInfo, Error>;

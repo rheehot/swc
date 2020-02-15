@@ -21,7 +21,7 @@ use rayon::prelude::*;
 use std::{
     fmt::Debug,
     ops::{Deref, DerefMut},
-    path::{Path, PathBuf},
+    path::PathBuf,
     sync::Arc,
 };
 use swc_atoms::JsWord;
