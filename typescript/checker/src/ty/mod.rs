@@ -442,7 +442,7 @@ pub struct Constructor {
 pub struct Predicate {
     pub span: Span,
     pub param_name: TsThisTypeOrIdent,
-    pub ty: Box<Type>,
+    pub ty: Option<Box<Type>>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
