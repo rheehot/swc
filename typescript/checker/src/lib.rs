@@ -80,7 +80,7 @@ pub struct Config {
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct ModuleTypeInfo {
     pub vars: FxHashMap<JsWord, Type>,
-    pub types: FxHashMap<JsWord, Type>,
+    pub types: FxHashMap<JsWord, Vec<Type>>,
 }
 
 impl ModuleTypeInfo {
