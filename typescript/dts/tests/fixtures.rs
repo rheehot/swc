@@ -7,7 +7,7 @@
 
 extern crate test;
 
-use anyhow::{Error, Context};
+use anyhow::{Context, Error};
 use std::{
     collections::HashSet,
     env,
@@ -93,38 +93,40 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
 fn do_test(file_name: &Path) -> Result<(), StdErr> {
     let fname = file_name.display().to_string();
 
-    ::testing::Tester::new().print_errors(|cm, handler| {
-        let handler = Arc::new(handler);
+    let file = ::testing::Tester::new()
+        .print_errors(|cm, handler| {
+            let handler = Arc::new(handler);
 
-        let checker = swc_ts_checker::Checker::new(
-            Default::default(),
-            cm.clone(),
-            handler.clone(),
-            Default::default(),
-            Default::default(),
-            TsConfig {
-                tsx: fname.contains("tsx"),
-                ..Default::default()
-            },
-            JscTarget::Es5,
-        );
+            let checker = swc_ts_checker::Checker::new(
+                Default::default(),
+                cm.clone(),
+                handler.clone(),
+                Default::default(),
+                Default::default(),
+                TsConfig {
+                    tsx: fname.contains("tsx"),
+                    ..Default::default()
+                },
+                JscTarget::Es5,
+            );
 
-        let errors =
-            ::swc_ts_checker::errors::Error::flatten(checker.check(Arc::new(file_name.into())));
+            let errors =
+                ::swc_ts_checker::errors::Error::flatten(checker.check(Arc::new(file_name.into())));
 
-        let has_errors = !errors.is_empty();
-        checker.run(|| {
-            for e in errors {
-                e.emit(&handler);
+            let has_errors = !errors.is_empty();
+            checker.run(|| {
+                for e in errors {
+                    e.emit(&handler);
+                }
+            });
+
+            if has_errors {
+                Err(())
+            } else {
+                Ok(())
             }
-        });
-
-        if has_errors {
-            Err(())
-        } else {
-            Ok(())
-        }
-    });
+        })
+        .expect("failed to check");
 
     Ok(())
 }
