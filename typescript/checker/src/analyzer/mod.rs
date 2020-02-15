@@ -2,29 +2,34 @@ pub(crate) use self::scope::ScopeKind;
 use self::{
     control_flow::{CondFacts, Facts},
     scope::Scope,
+    stmt::AmbientFunctionHandler,
     util::ResultExt,
 };
 use crate::{
-    analyzer::{pat::PatMode, props::ComputedPropMode},
+    analyzer::{import::ImportFinder, pat::PatMode, props::ComputedPropMode},
     debug::duplicate::DuplicateTracker,
     errors::{Error, Errors},
     loader::Load,
     ty,
     ty::Type,
     validator::{Validate, ValidateWith},
-    Exports, ImportInfo, Rule, ValidationResult,
+    Exports, ImportInfo, Rule, Specifier, ValidationResult,
 };
 use fxhash::{FxHashMap, FxHashSet};
 use macros::validator;
+use rayon::prelude::*;
 use std::{
     fmt::Debug,
     ops::{Deref, DerefMut},
-    path::PathBuf,
+    path::{Path, PathBuf},
     sync::Arc,
 };
 use swc_atoms::JsWord;
-use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_common::{
+    util::move_map::MoveMap, Fold, FoldWith, Span, Spanned, Visit, VisitWith, DUMMY_SP,
+};
 use swc_ecma_ast::*;
+use swc_ecma_utils::{ModuleItemLike, StmtLike};
 use swc_ts_builtin_types::Lib;
 
 macro_rules! try_opt {
@@ -65,6 +70,10 @@ pub(crate) struct Ctx {
 /// Note: All methods named `validate_*` return [Err] iff it's not recoverable.
 pub struct Analyzer<'a, 'b> {
     pub info: Info,
+
+    path: Arc<PathBuf>,
+    export_equals_span: Span,
+    in_declare: bool,
 
     resolved_imports: FxHashMap<JsWord, Type>,
     errored_imports: FxHashSet<JsWord>,
@@ -160,19 +169,34 @@ fn _assert_types() {
 }
 
 impl<'a, 'b> Analyzer<'a, 'b> {
-    pub fn root(libs: &'b [Lib], rule: Rule, loader: &'b dyn Load) -> Self {
-        Self::new_inner(libs, rule, loader, Scope::root(), false)
+    pub fn root(path: Arc<PathBuf>, libs: &'b [Lib], rule: Rule, loader: &'b dyn Load) -> Self {
+        Self::new_inner(path, libs, rule, loader, Scope::root(), false)
     }
 
     pub(crate) fn for_builtin() -> Self {
-        Self::new_inner(&[], Default::default(), &NoopLoader, Scope::root(), true)
+        Self::new_inner(
+            Arc::new(PathBuf::from("")),
+            &[],
+            Default::default(),
+            &NoopLoader,
+            Scope::root(),
+            true,
+        )
     }
 
     fn new(&self, scope: Scope<'a>) -> Self {
-        Self::new_inner(self.libs, self.rule, self.loader, scope, false)
+        Self::new_inner(
+            self.path.clone(),
+            self.libs,
+            self.rule,
+            self.loader,
+            scope,
+            false,
+        )
     }
 
     fn new_inner(
+        path: Arc<PathBuf>,
         libs: &'b [Lib],
         rule: Rule,
         loader: &'b dyn Load,
@@ -181,6 +205,9 @@ impl<'a, 'b> Analyzer<'a, 'b> {
     ) -> Self {
         Self {
             info: Default::default(),
+            path,
+            export_equals_span: DUMMY_SP,
+            in_declare: false,
             resolved_imports: Default::default(),
             errored_imports: Default::default(),
             pending_exports: Default::default(),
@@ -284,6 +311,123 @@ impl Load for NoopLoader {
         _: &ImportInfo,
     ) -> Result<Exports<FxHashMap<JsWord, Type>>, Error> {
         unreachable!("builtin module should not import other module")
+    }
+}
+
+impl<T> Fold<Vec<T>> for Analyzer<'_, '_>
+where
+    T: FoldWith<Self> + Send + Sync + StmtLike + ModuleItemLike,
+    Vec<T>: FoldWith<Self>
+        + for<'any> VisitWith<AmbientFunctionHandler<'any>>
+        + for<'any> VisitWith<ImportFinder<'any>>,
+{
+    fn fold(&mut self, mut items: Vec<T>) -> Vec<T> {
+        {
+            // We first load imports.
+            let mut imports: Vec<ImportInfo> = vec![];
+
+            // Extract imports
+            items.visit_with(&mut ImportFinder { to: &mut imports });
+
+            let loader = self.loader;
+            let path = self.path.clone();
+            let import_results = imports
+                .par_iter()
+                .map(|import| {
+                    loader.load(path.clone(), &*import).map_err(|err| {
+                        //
+                        (import, err)
+                    })
+                })
+                .collect::<Vec<_>>();
+
+            for res in import_results {
+                match res {
+                    Ok(import) => {
+                        self.resolved_imports.extend(import);
+                    }
+                    Err((import, mut err)) => {
+                        match err {
+                            Error::ModuleLoadFailed { ref mut errors, .. } => {
+                                self.info.errors.append(errors);
+                            }
+                            _ => {}
+                        }
+                        // Mark errored imported types as any to prevent useless errors
+                        self.errored_imports.extend(
+                            import
+                                .items
+                                .iter()
+                                .map(|&Specifier { ref local, .. }| local.0.clone()),
+                        );
+
+                        self.info.errors.push(err);
+                    }
+                }
+            }
+        }
+
+        let mut has_normal_export = false;
+        items = items.move_map(|item| match item.try_into_module_decl() {
+            Ok(ModuleDecl::TsExportAssignment(decl)) => {
+                if self.export_equals_span.is_dummy() {
+                    self.export_equals_span = decl.span;
+                }
+                if has_normal_export {
+                    self.info.errors.push(Error::TS2309 { span: decl.span });
+                }
+
+                //
+                match T::try_from_module_decl(ModuleDecl::TsExportAssignment(decl)) {
+                    Ok(v) => v,
+                    _ => unreachable!(),
+                }
+            }
+            Ok(item) => {
+                match item {
+                    ModuleDecl::ExportDecl(..)
+                    | ModuleDecl::ExportAll(..)
+                    | ModuleDecl::ExportDefaultDecl(..)
+                    | ModuleDecl::ExportDefaultExpr(..)
+                    | ModuleDecl::TsNamespaceExport(..) => {
+                        has_normal_export = true;
+                        if !self.export_equals_span.is_dummy() {
+                            self.info.errors.push(Error::TS2309 {
+                                span: self.export_equals_span,
+                            });
+                        }
+                    }
+                    _ => {}
+                }
+
+                match T::try_from_module_decl(item) {
+                    Ok(v) => v,
+                    _ => unreachable!(),
+                }
+            }
+            Err(item) => item,
+        });
+
+        if !self.in_declare {
+            let mut visitor = AmbientFunctionHandler {
+                last_ambient_name: None,
+                errors: &mut self.info.errors,
+            };
+
+            items.visit_with(&mut visitor);
+
+            if visitor.last_ambient_name.is_some() {
+                visitor.errors.push(Error::TS2391 {
+                    span: visitor.last_ambient_name.unwrap().span,
+                })
+            }
+        }
+
+        let items = items.fold_children(self);
+
+        self.handle_pending_exports();
+
+        items
     }
 }
 
