@@ -15,6 +15,7 @@ use std::{
     fs::File,
     io::{self, Read},
     path::Path,
+    sync::Arc,
 };
 use swc_common::{
     comments::Comments, errors::DiagnosticBuilder, FileName, Fold, FoldWith, Span, Spanned,
@@ -425,8 +426,9 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                     target,
                 );
 
-                let errors =
-                    ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
+                let errors = ::swc_ts_checker::errors::Error::flatten(
+                    checker.check(Arc::new(file_name.into())),
+                );
 
                 checker.run(|| {
                     for e in errors {
@@ -463,8 +465,9 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                     target,
                 );
 
-                let errors =
-                    ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
+                let errors = ::swc_ts_checker::errors::Error::flatten(
+                    checker.check(Arc::new(file_name.into())),
+                );
 
                 checker.run(|| {
                     for e in errors {
@@ -504,8 +507,9 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                         target,
                     );
 
-                    let errors =
-                        ::swc_ts_checker::errors::Error::flatten(checker.check(file_name.into()));
+                    let errors = ::swc_ts_checker::errors::Error::flatten(
+                        checker.check(Arc::new(file_name.into())),
+                    );
 
                     checker.run(|| {
                         for e in errors {
