@@ -7,7 +7,7 @@
 
 extern crate test;
 
-use anyhow::Error;
+use anyhow::{Error, Context};
 use std::{
     collections::HashSet,
     env,
@@ -50,7 +50,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
         .hidden(true)
         .build()
     {
-        let entry = entry?;
+        let entry = entry.context("entry?")?;
         match entry.path().file_stem() {
             Some(ext) if ext.to_string_lossy() == "index" => {}
             _ => {
@@ -106,7 +106,7 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
                 tsx: fname.contains("tsx"),
                 ..Default::default()
             },
-            JscTarget::Es5k,
+            JscTarget::Es5,
         );
 
         let errors =
@@ -145,150 +145,4 @@ fn add_test<F: FnOnce() + Send + 'static>(
         },
         testfn: DynTestFn(box f),
     });
-}
-
-fn make_test(c: &Comments, module: Module) -> Module {
-    let mut m = TestMaker {
-        c,
-        stmts: Default::default(),
-    };
-
-    module.fold_with(&mut m)
-}
-
-struct TestMaker<'a> {
-    c: &'a Comments,
-    stmts: Vec<Stmt>,
-}
-
-impl Fold<Vec<ModuleItem>> for TestMaker<'_> {
-    fn fold(&mut self, stmts: Vec<ModuleItem>) -> Vec<ModuleItem> {
-        let mut ss = vec![];
-        for stmt in stmts {
-            let stmt = stmt.fold_with(self);
-            ss.push(stmt);
-            ss.extend(self.stmts.drain(..).map(ModuleItem::Stmt));
-        }
-
-        ss
-    }
-}
-
-impl Fold<Vec<Stmt>> for TestMaker<'_> {
-    fn fold(&mut self, stmts: Vec<Stmt>) -> Vec<Stmt> {
-        let mut ss = vec![];
-        for stmt in stmts {
-            let stmt = stmt.fold_with(self);
-            ss.push(stmt);
-            ss.extend(self.stmts.drain(..));
-        }
-
-        ss
-    }
-}
-
-impl Fold<TsTypeAliasDecl> for TestMaker<'_> {
-    fn fold(&mut self, decl: TsTypeAliasDecl) -> TsTypeAliasDecl {
-        let cmts = self.c.trailing_comments(decl.span.hi());
-
-        match cmts {
-            Some(cmts) => {
-                assert!(cmts.len() == 1);
-                let cmt = cmts.iter().next().unwrap();
-                let t = cmt.text.trim().replace("\n", "").replace("\r", "");
-
-                let cmt_type = match parse_type(cmt.span, &t) {
-                    Some(ty) => ty,
-                    None => return decl,
-                };
-
-                //  {
-                //      let _value: ty = (Object as any as Alias)
-                //  }
-                //
-                //
-                let span = decl.span();
-                self.stmts.push(Stmt::Block(BlockStmt {
-                    span,
-                    stmts: vec![Stmt::Decl(Decl::Var(VarDecl {
-                        span,
-                        decls: vec![VarDeclarator {
-                            span,
-                            name: Pat::Ident(Ident {
-                                span,
-                                sym: "_value".into(),
-                                type_ann: Some(TsTypeAnn {
-                                    span,
-                                    type_ann: box cmt_type,
-                                }),
-                                optional: false,
-                            }),
-                            init: Some(box Expr::TsAs(TsAsExpr {
-                                span,
-                                expr: box Expr::TsAs(TsAsExpr {
-                                    span,
-                                    expr: box Expr::Ident(Ident::new("Object".into(), span)),
-                                    type_ann: box TsType::TsKeywordType(TsKeywordType {
-                                        span,
-                                        kind: TsKeywordTypeKind::TsAnyKeyword,
-                                    }),
-                                }),
-                                type_ann: box TsType::TsTypeRef(TsTypeRef {
-                                    span,
-                                    type_name: TsEntityName::Ident(decl.id.clone()),
-                                    type_params: None,
-                                }),
-                            })),
-                            definite: false,
-                        }],
-                        kind: VarDeclKind::Const,
-                        declare: false,
-                    }))],
-                }));
-            }
-            None => {}
-        }
-
-        decl
-    }
-}
-
-fn parse_type(span: Span, s: &str) -> Option<TsType> {
-    let s = s.trim();
-
-    if s.starts_with("error") || s.starts_with("Error") {
-        return None;
-    }
-
-    let ty = ::testing::run_test(true, |cm, handler| {
-        let session = Session { handler: &handler };
-
-        let fm = cm.new_source_file(FileName::Anon, s.into());
-
-        let mut parser = Parser::new(
-            session,
-            Syntax::Typescript(Default::default()),
-            SourceFileInput::from(&*fm),
-            None,
-        );
-        let ty = match parser.parse_type() {
-            Ok(v) => v,
-            Err(..) => return Err(()),
-        };
-        Ok(ty)
-    });
-
-    let mut spanner = Spanner { span };
-
-    Some(*ty.ok()?.fold_with(&mut spanner))
-}
-
-struct Spanner {
-    span: Span,
-}
-
-impl Fold<Span> for Spanner {
-    fn fold(&mut self, _: Span) -> Span {
-        self.span
-    }
 }
