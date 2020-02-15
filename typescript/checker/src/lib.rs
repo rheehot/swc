@@ -109,10 +109,11 @@ pub struct Rule {
     pub no_unused_parameters: bool,
 }
 
-pub struct Checker<'a> {
+/// Onc instance per swc::Compiler
+pub struct Checker {
     globals: swc_common::Globals,
     cm: Arc<SourceMap>,
-    handler: &'a Handler,
+    handler: Arc<Handler>,
     ts_config: TsConfig,
     target: JscTarget,
     /// Cache
@@ -123,10 +124,10 @@ pub struct Checker<'a> {
     rule: Rule,
 }
 
-impl<'a> Checker<'a> {
+impl Checker {
     pub fn new(
         cm: Arc<SourceMap>,
-        handler: &'a Handler,
+        handler: Arc<Handler>,
         libs: Vec<Lib>,
         rule: Rule,
         parser_config: TsConfig,
@@ -158,7 +159,7 @@ impl<'a> Checker<'a> {
     }
 }
 
-impl Checker<'_> {
+impl Checker {
     /// Returns empty vector if no error is found.
     pub fn check(&self, entry: Arc<PathBuf>) -> Vec<Error> {
         self.run(|| {

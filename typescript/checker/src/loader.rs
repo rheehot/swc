@@ -8,7 +8,7 @@ pub trait Load: Send + Sync {
     fn load(&self, base: Arc<PathBuf>, import: &ImportInfo) -> Result<ModuleTypeInfo, Error>;
 }
 
-impl Load for Checker<'_> {
+impl Load for Checker {
     fn load(&self, base: Arc<PathBuf>, import: &ImportInfo) -> Result<ModuleTypeInfo, Error> {
         let mut result = ModuleTypeInfo::default();
         let mut errors = vec![];

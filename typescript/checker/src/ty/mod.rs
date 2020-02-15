@@ -1,5 +1,4 @@
 use crate::{util::EqIgnoreNameAndSpan, ModuleTypeInfo};
-use fxhash::FxHashMap;
 use is_macro::Is;
 use std::{borrow::Cow, mem::transmute, sync::Arc};
 use swc_atoms::{js_word, JsWord};
