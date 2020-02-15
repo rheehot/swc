@@ -85,13 +85,18 @@ pub struct Analyzer<'a, 'b> {
     facts_buf: Option<Facts>,
 }
 
+/// TODO
+const NO_DUP: bool = false;
+
 impl Analyzer<'_, '_> {
     /// Mark node as visited. This method panics if Analyzer had visited node.
     fn record<N>(&mut self, node: &N)
     where
         N: Debug + Spanned,
     {
-        self.duplicated_tracker.record(node)
+        if cfg!(debug_assertions) && NO_DUP {
+            self.duplicated_tracker.record(node)
+        }
     }
 }
 
