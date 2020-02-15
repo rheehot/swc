@@ -1,24 +1,16 @@
 use super::Checker;
-use crate::{errors::Error, resolver::Resolve, ty::Type, Exports, ImportInfo, Specifier};
+use crate::{errors::Error, resolver::Resolve, ty::Type, ImportInfo, ModuleTypeInfo, Specifier};
 use fxhash::FxHashMap;
 use std::{path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
 
 pub trait Load: Send + Sync {
-    fn load(
-        &self,
-        base: Arc<PathBuf>,
-        import: &ImportInfo,
-    ) -> Result<Exports<FxHashMap<JsWord, Type>>, Error>;
+    fn load(&self, base: Arc<PathBuf>, import: &ImportInfo) -> Result<ModuleTypeInfo, Error>;
 }
 
 impl Load for Checker<'_> {
-    fn load(
-        &self,
-        base: Arc<PathBuf>,
-        import: &ImportInfo,
-    ) -> Result<Exports<FxHashMap<JsWord, Type>>, Error> {
-        let mut result = Exports::default();
+    fn load(&self, base: Arc<PathBuf>, import: &ImportInfo) -> Result<ModuleTypeInfo, Error> {
+        let mut result = ModuleTypeInfo::default();
         let mut errors = vec![];
 
         let path = self
@@ -74,11 +66,7 @@ impl<'a, T> Load for &'a T
 where
     T: ?Sized + Load,
 {
-    fn load(
-        &self,
-        base: Arc<PathBuf>,
-        import: &ImportInfo,
-    ) -> Result<Exports<FxHashMap<JsWord, Type>>, Error> {
+    fn load(&self, base: Arc<PathBuf>, import: &ImportInfo) -> Result<ModuleTypeInfo, Error> {
         (**self).load(base, import)
     }
 }

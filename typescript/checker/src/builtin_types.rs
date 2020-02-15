@@ -4,7 +4,7 @@ use crate::{
     loader::Load,
     ty::{self, Class, Module, Static, Type},
     validator::{Validate, ValidateWith},
-    Exports, ImportInfo,
+    ImportInfo, ModuleTypeInfo,
 };
 use dashmap::DashMap;
 use fxhash::FxHashMap;
@@ -247,11 +247,7 @@ pub fn get_type(libs: &[Lib], span: Span, name: &JsWord) -> Result<Type, Error> 
 struct Noop;
 
 impl Load for Noop {
-    fn load(
-        &self,
-        _: Arc<PathBuf>,
-        _: &ImportInfo,
-    ) -> Result<Exports<FxHashMap<JsWord, Type>>, Error> {
+    fn load(&self, _: Arc<PathBuf>, _: &ImportInfo) -> Result<ModuleTypeInfo, Error> {
         unimplemented!()
     }
 }

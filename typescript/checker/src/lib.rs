@@ -49,8 +49,6 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 pub type ValidationResult<T = Type> = Result<T>;
 
-pub type ModuleTypeInfo = Exports<FxHashMap<JsWord, Type>>;
-
 #[derive(Debug, PartialEq, Eq)]
 pub struct ImportInfo {
     pub span: Span,
@@ -78,19 +76,16 @@ pub struct Config {
     pub libs: Vec<Lib>,
 }
 
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
-pub struct Exports<T> {
-    pub vars: T,
-    pub types: T,
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct ModuleTypeInfo {
+    pub vars: FxHashMap<JsWord, Type>,
+    pub types: FxHashMap<JsWord, Type>,
 }
 
-impl<T, E> Exports<T>
-where
-    T: Extend<E> + IntoIterator<Item = E>,
-{
+impl ModuleTypeInfo {
     pub fn extend(&mut self, other: Self) {
-        self.vars.extend(other.vars);
         self.types.extend(other.types);
+        self.vars.extend(other.vars);
     }
 }
 

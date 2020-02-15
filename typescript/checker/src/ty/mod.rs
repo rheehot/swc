@@ -1,4 +1,4 @@
-use crate::{util::EqIgnoreNameAndSpan, Exports};
+use crate::{util::EqIgnoreNameAndSpan, ModuleTypeInfo};
 use fxhash::FxHashMap;
 use is_macro::Is;
 use std::{borrow::Cow, mem::transmute, sync::Arc};
@@ -126,7 +126,7 @@ pub struct ImportType {
 pub struct Module {
     pub span: Span,
     #[fold(ignore)]
-    pub exports: Exports<FxHashMap<JsWord, Type>>,
+    pub exports: ModuleTypeInfo,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]

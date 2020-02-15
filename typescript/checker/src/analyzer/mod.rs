@@ -13,7 +13,7 @@ use crate::{
     ty,
     ty::Type,
     validator::{Validate, ValidateWith},
-    Exports, ImportInfo, ModuleTypeInfo, Rule, Specifier, ValidationResult,
+    ImportInfo, ModuleTypeInfo, Rule, Specifier, ValidationResult,
 };
 use fxhash::{FxHashMap, FxHashSet};
 use macros::validator;
@@ -113,7 +113,7 @@ impl Analyzer<'_, '_> {
 #[derive(Debug, Clone, Default)]
 pub struct Info {
     pub errors: Errors,
-    pub exports: Exports<FxHashMap<JsWord, Type>>,
+    pub exports: ModuleTypeInfo,
 }
 
 #[validator]
@@ -128,7 +128,7 @@ impl Validate<Program> for Analyzer<'_, '_> {
     }
 }
 
-fn make_module_ty(span: Span, exports: Exports<FxHashMap<JsWord, Type>>) -> ty::Module {
+fn make_module_ty(span: Span, exports: ModuleTypeInfo) -> ty::Module {
     ty::Module { span, exports }
 }
 
@@ -307,11 +307,7 @@ impl<'b, 'c> DerefMut for WithCtx<'_, 'b, 'c> {
 
 struct NoopLoader;
 impl Load for NoopLoader {
-    fn load(
-        &self,
-        _: Arc<PathBuf>,
-        _: &ImportInfo,
-    ) -> Result<Exports<FxHashMap<JsWord, Type>>, Error> {
+    fn load(&self, _: Arc<PathBuf>, _: &ImportInfo) -> Result<ModuleTypeInfo, Error> {
         unreachable!("builtin module should not import other module")
     }
 }
