@@ -950,7 +950,7 @@ impl Analyzer<'_, '_> {
             unreachable!("typeof(require('...'))");
         }
 
-        if let Some(ty) = self.resolved_imports.get(&i.sym) {
+        if let Some(ty) = self.resolved_import_vars.get(&i.sym) {
             assert!(ty.is_arc());
             println!(
                 "({}) type_of({}): resolved import",
