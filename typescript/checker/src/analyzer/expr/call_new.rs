@@ -123,7 +123,7 @@ impl Analyzer<'_, '_> {
 
         match *callee {
             Expr::Ident(ref i) if i.sym == js_word!("require") => {
-                if let Some(dep) = self.resolved_imports.get(
+                if let Some(dep) = self.resolved_import_vars.get(
                     &args
                         .iter()
                         .cloned()

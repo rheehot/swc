@@ -13,7 +13,7 @@ use crate::{
     ty,
     ty::Type,
     validator::{Validate, ValidateWith},
-    Exports, ImportInfo, Rule, Specifier, ValidationResult,
+    Exports, ImportInfo, ModuleTypeInfo, Rule, Specifier, ValidationResult,
 };
 use fxhash::{FxHashMap, FxHashSet};
 use macros::validator;
@@ -75,7 +75,8 @@ pub struct Analyzer<'a, 'b> {
     export_equals_span: Span,
     in_declare: bool,
 
-    resolved_imports: FxHashMap<JsWord, Type>,
+    resolved_import_types: FxHashMap<JsWord, Type>,
+    resolved_import_vars: FxHashMap<JsWord, Type>,
     errored_imports: FxHashSet<JsWord>,
     pending_exports: Vec<((JsWord, Span), Expr)>,
 
@@ -208,7 +209,8 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             path,
             export_equals_span: DUMMY_SP,
             in_declare: false,
-            resolved_imports: Default::default(),
+            resolved_import_types: Default::default(),
+            resolved_import_vars: Default::default(),
             errored_imports: Default::default(),
             pending_exports: Default::default(),
             rule,
@@ -331,7 +333,7 @@ where
 
             let loader = self.loader;
             let path = self.path.clone();
-            let import_results = imports
+            let import_results: Vec<Result<ModuleTypeInfo, _>> = imports
                 .par_iter()
                 .map(|import| {
                     loader.load(path.clone(), &*import).map_err(|err| {
@@ -339,12 +341,13 @@ where
                         (import, err)
                     })
                 })
-                .collect::<Vec<_>>();
+                .collect();
 
             for res in import_results {
                 match res {
                     Ok(import) => {
-                        self.resolved_imports.extend(import);
+                        self.resolved_import_types.extend(import.types);
+                        self.resolved_import_vars.extend(import.vars);
                     }
                     Err((import, mut err)) => {
                         match err {

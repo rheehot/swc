@@ -605,7 +605,7 @@ impl Analyzer<'_, '_> {
             return Some(&ANY);
         }
 
-        if let Some(ty) = self.resolved_imports.get(name) {
+        if let Some(ty) = self.resolved_import_types.get(name) {
             return Some(ty);
         }
 

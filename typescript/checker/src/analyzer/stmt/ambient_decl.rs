@@ -10,7 +10,7 @@ use swc_ecma_ast::*;
 /// bar();
 /// bar() {}
 /// ```
-pub(crate) struct AmbientFunctionHandler<'a> {
+pub struct AmbientFunctionHandler<'a> {
     pub last_ambient_name: Option<Ident>,
     pub errors: &'a mut Errors,
 }

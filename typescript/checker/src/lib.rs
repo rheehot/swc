@@ -21,6 +21,7 @@ use crate::{
     ty::Type,
 };
 use dashmap::DashMap;
+use fxhash::FxHashMap;
 use std::{
     path::{Path, PathBuf},
     sync::Arc,
@@ -47,6 +48,8 @@ pub mod validator;
 pub type Result<T> = std::result::Result<T, Error>;
 
 pub type ValidationResult<T = Type> = Result<T>;
+
+pub type ModuleTypeInfo = Exports<FxHashMap<JsWord, Type>>;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct ImportInfo {

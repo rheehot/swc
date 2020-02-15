@@ -4,8 +4,8 @@ use swc_common::{Spanned, Visit};
 use swc_ecma_ast::*;
 
 #[derive(Debug)]
-pub(crate) struct ImportFinder<'a> {
-    to: &'a mut Vec<ImportInfo>,
+pub struct ImportFinder<'a> {
+    pub(crate) to: &'a mut Vec<ImportInfo>,
 }
 
 /// Extracts require('foo')
