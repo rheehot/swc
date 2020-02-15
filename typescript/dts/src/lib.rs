@@ -7,9 +7,8 @@ use swc_ecma_ast::*;
 use swc_ts_checker::{Checker, ModuleTypeInfo};
 
 #[derive(Debug)]
-struct TypeResolver {
-    checker: Checker,
-    types: ModuleTypeInfo,
+pub struct TypeResolver {
+    pub types: ModuleTypeInfo,
 }
 
 impl Fold<Module> for TypeResolver {
