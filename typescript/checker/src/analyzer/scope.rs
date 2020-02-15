@@ -107,25 +107,6 @@ impl Scope<'_> {
     fn register_type(&mut self, name: JsWord, ty: Type) {
         let depth = self.depth();
 
-        if cfg!(debug_assertions) {
-            match ty.normalize() {
-                Type::Alias(ref alias) => {
-                    //
-                    if alias.type_params.is_none() {
-                        match *alias.ty {
-                            Type::Ref(ref r) => panic!(
-                                "Type alias without type parameters should be expanded before \
-                                 .register_type()\nRef: {:?}",
-                                r
-                            ),
-                            _ => {}
-                        }
-                    }
-                }
-                _ => {}
-            }
-        }
-
         match self.types.entry(name) {
             Entry::Occupied(mut e) => {
                 //println!("({}) register_type({}): duplicate", depth, e.key());
