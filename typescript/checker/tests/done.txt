@@ -291,7 +291,6 @@ parser::ecmascript5::ConstructorDeclarations::parserConstructorDeclaration2.ts
 parser::ecmascript5::ConstructorDeclarations::parserConstructorDeclaration4.ts
 parser::ecmascript5::ConstructorDeclarations::parserConstructorDeclaration5.ts
 parser::ecmascript5::ConstructorDeclarations::parserConstructorDeclaration9.ts
-parser::ecmascript5::EnumDeclarations::parserEnum4.ts
 parser::ecmascript5::EnumDeclarations::parserEnum5.ts
 parser::ecmascript5::EnumDeclarations::parserEnum6.ts
 parser::ecmascript5::EnumDeclarations::parserEnum7.ts
