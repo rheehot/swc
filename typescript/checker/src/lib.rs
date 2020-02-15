@@ -37,7 +37,6 @@ use swc_ecma_parser::{
 mod debug;
 pub mod analyzer;
 mod builtin_types;
-pub mod dts;
 pub mod errors;
 pub mod loader;
 pub mod name;
