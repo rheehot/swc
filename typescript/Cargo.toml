@@ -7,3 +7,4 @@ publish = false
 
 [dependencies]
 swc_ts_checker = { path = "./checker" }
+swc_ts_dts = { path = "./dts" }
