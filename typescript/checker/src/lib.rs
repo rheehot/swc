@@ -41,6 +41,7 @@ pub mod errors;
 pub mod loader;
 pub mod name;
 pub mod resolver;
+pub mod store;
 pub mod ty;
 mod util;
 pub mod validator;
