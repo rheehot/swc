@@ -433,10 +433,12 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
 
     match mode {
         Mode::Error => {
-            let res = ::testing::run_test(false, |cm, handler| {
+            let res = ::testing::run_test2(false, |cm, handler| {
+                let handler = Arc::new(handler);
                 let checker = swc_ts_checker::Checker::new(
+                    Default::default(),
                     cm.clone(),
-                    handler,
+                    handler.clone(),
                     libs,
                     rule,
                     TsConfig {
@@ -472,10 +474,12 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
             }
         }
         Mode::Pass => {
-            let res = ::testing::run_test(false, |cm, handler| {
+            let res = ::testing::run_test2(false, |cm, handler| {
+                let handler = Arc::new(handler);
                 let checker = swc_ts_checker::Checker::new(
+                    Default::default(),
                     cm.clone(),
-                    handler,
+                    handler.clone(),
                     libs,
                     rule,
                     TsConfig {
@@ -515,9 +519,11 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
             let tester = Tester::new();
             let diagnostics = tester
                 .errors(|cm, handler| {
+                    let handler = Arc::new(handler);
                     let checker = swc_ts_checker::Checker::new(
+                        Default::default(),
                         cm.clone(),
-                        &handler,
+                        handler.clone(),
                         libs,
                         rule,
                         TsConfig {
