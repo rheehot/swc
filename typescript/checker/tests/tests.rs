@@ -359,10 +359,10 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                                 libs = match target {
                                     JscTarget::Es3 | JscTarget::Es5 => vec![Lib::Es5],
                                     JscTarget::Es2015 => Lib::load("es2015"),
-                                    JscTarget::Es2016 => unimplemented!("es2016"),
-                                    JscTarget::Es2017 => unimplemented!("es2017"),
-                                    JscTarget::Es2018 => unimplemented!("es2018"),
-                                    JscTarget::Es2019 => unimplemented!("es2019"),
+                                    JscTarget::Es2016 => Lib::load("es2016"),
+                                    JscTarget::Es2017 => Lib::load("es2017"),
+                                    JscTarget::Es2018 => Lib::load("es2018"),
+                                    JscTarget::Es2019 => Lib::load("es2019"),
                                 };
                             } else if s.starts_with("strict:") {
                                 let strict = s["strict:".len()..].trim().parse().unwrap();
