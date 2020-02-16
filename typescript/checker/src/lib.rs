@@ -15,7 +15,7 @@ extern crate swc_common;
 pub use self::builtin_types::Lib;
 use crate::{
     analyzer::{Analyzer, Info},
-    errors::{Error, Errors},
+    errors::Error,
     resolver::Resolver,
     swc_common::VisitWith,
     ty::Type,

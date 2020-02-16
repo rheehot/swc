@@ -95,7 +95,7 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
 fn do_test(file_name: &Path) -> Result<(), StdErr> {
     let fname = file_name.display().to_string();
 
-    let file = ::testing::Tester::new()
+    testing::Tester::new()
         .print_errors(|cm, handler| {
             let handler = Arc::new(handler);
 
@@ -140,7 +140,7 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
                         handlers,
                     };
 
-                    emitter.emit_module(&dts).context("failed to emit module");
+                    emitter.emit_module(&dts).context("failed to emit module").unwrap();
                 }
                 String::from_utf8(buf).unwrap()
             };
