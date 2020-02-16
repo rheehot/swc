@@ -25,3 +25,9 @@ impl Fold<VarDecl> for TypeResolver {
         }
     }
 }
+
+impl Fold<VarDeclarator> for TypeResolver {
+    fn fold(&mut self, node: VarDeclarator) -> VarDeclarator {
+        VarDeclarator { init: None, ..node }
+    }
+}
