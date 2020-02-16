@@ -20,6 +20,7 @@ use swc_common::{
     comments::Comments, errors::DiagnosticBuilder, FileName, Fold, FoldWith, Span, Spanned,
 };
 use swc_ecma_ast::{Module, *};
+use swc_ecma_codegen::{text_writer::JsWriter, Emitter};
 use swc_ecma_parser::{JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig};
 use swc_ts_checker::{Lib, Rule};
 use swc_ts_dts::generate_dts;
@@ -127,6 +128,27 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
 
             let dts = generate_dts(info.0, info.1.exports);
 
+            let generated = {
+                let mut buf = vec![];
+                {
+                    let handlers = box MyHandlers;
+                    let mut emitter = Emitter {
+                        cfg: Default::default(),
+                        comments: None,
+                        cm: cm.clone(),
+                        wr: box JsWriter::new(cm.clone(), "\n", &mut buf, None),
+                        handlers,
+                    };
+
+                    emitter.emit_module(&dts).context("failed to emit module");
+                }
+                String::from_utf8(buf).unwrap()
+            };
+
+            StdErr::from(generated)
+                .compare_to_file(file_name.parent().unwrap().join("index.d.ts"))
+                .unwrap();
+
             Ok(())
         })
         .expect("failed to check");
@@ -151,3 +173,7 @@ fn add_test<F: FnOnce() + Send + 'static>(
         testfn: DynTestFn(box f),
     });
 }
+
+struct MyHandlers;
+
+impl swc_ecma_codegen::Handlers for MyHandlers {}
