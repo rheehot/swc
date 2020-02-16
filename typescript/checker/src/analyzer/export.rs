@@ -182,16 +182,15 @@ impl Analyzer<'_, '_> {
             })?,
         };
 
-        // TODO(kdy1): Remove freeze. This is wrong because it may prevent proper
-        //  finalization.
-        let ty = ty.clone().freeze();
+        // We don't freeze it at here because doing so may prevent proper finalization.
+        let ty = ty.clone();
 
         // TODO: Change this to error.
         assert_eq!(self.info.exports.types.get(&name), None);
         self.info.exports.types.entry(name).or_default().push(ty);
     }
 
-    /// Exports a varaible.
+    /// Exports a variable.
     fn export_expr(&mut self, _: JsWord, e: &Expr) {
         unimplemented!("export_expr")
     }
