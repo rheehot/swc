@@ -449,7 +449,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 );
 
                 let errors = ::swc_ts_checker::errors::Error::flatten(
-                    checker.check(Arc::new(file_name.into())),
+                    checker.check(Arc::new(file_name.into())).1.errors.into(),
                 );
 
                 checker.run(|| {
@@ -490,7 +490,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                 );
 
                 let errors = ::swc_ts_checker::errors::Error::flatten(
-                    checker.check(Arc::new(file_name.into())),
+                    checker.check(Arc::new(file_name.into())).1.errors.into(),
                 );
 
                 checker.run(|| {
@@ -534,7 +534,7 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                     );
 
                     let errors = ::swc_ts_checker::errors::Error::flatten(
-                        checker.check(Arc::new(file_name.into())),
+                        checker.check(Arc::new(file_name.into())).1.errors.into(),
                     );
 
                     checker.run(|| {
