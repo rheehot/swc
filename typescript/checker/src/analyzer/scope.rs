@@ -435,11 +435,18 @@ impl Analyzer<'_, '_> {
         export: bool,
         ty: Option<Type>,
     ) -> Result<(), Error> {
+        let span = ty
+            .as_ref()
+            .map(|v| v.span())
+            .and_then(|span| if span.is_dummy() { None } else { Some(span) })
+            .unwrap_or_else(|| pat.span());
+        assert_ne!(span, DUMMY_SP);
+
         match *pat {
             Pat::Ident(ref i) => {
                 let name = i.sym.clone();
                 self.declare_var(
-                    ty.as_ref().map(|v| v.span()).unwrap_or_else(|| pat.span()),
+                    span,
                     kind,
                     name.clone(),
                     ty.clone(),
