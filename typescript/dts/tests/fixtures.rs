@@ -12,7 +12,7 @@ use pretty_assertions::assert_eq;
 use std::{
     collections::HashSet,
     env,
-    fs::File,
+    fs::{canonicalize, File},
     io::{self, Read},
     path::Path,
     process::Command,
@@ -152,6 +152,12 @@ fn add_fixture_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
         let input = {
             let mut buf = String::new();
             File::open(entry.path())?.read_to_string(&mut buf)?;
+
+            // Disable tests for dynamic import
+            if buf.contains("import(") {
+                continue;
+            }
+
             buf
         };
 
@@ -168,7 +174,9 @@ fn add_fixture_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
 }
 
 fn do_test(file_name: &Path) -> Result<(), StdErr> {
+    let file_name = canonicalize(file_name).unwrap();
     let fname = file_name.display().to_string();
+    let (expected_code, expected) = get_correct_dts(&file_name);
 
     testing::Tester::new()
         .print_errors(|cm, handler| {
@@ -202,7 +210,6 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
             }
 
             let dts = generate_dts(info.0, info.1.exports);
-            let (expected_code, expected) = get_correct_dts(file_name);
             if dts.clone().fold_with(&mut DropSpan) == expected.clone().fold_with(&mut DropSpan) {
                 return Ok(());
             }
@@ -238,14 +245,16 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
 
 fn get_correct_dts(path: &Path) -> (Arc<String>, Module) {
     testing::run_test2(false, |cm, handler| {
-        let mut c = Command::new("npx");
-        let output = c
-            .arg("tsc")
-            .arg(path)
-            .arg("-d")
-            .arg("--emitDeclarationOnly")
-            .output()
-            .unwrap();
+        let mut c = Command::new(
+            Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("node_modules")
+                .join(".bin")
+                .join("tsc"),
+        );
+        c.arg(path).arg("-d").arg("--emitDeclarationOnly");
+        println!("Command {:?}", c);
+
+        let output = c.output().unwrap();
 
         if !output.status.success() {
             panic!(
