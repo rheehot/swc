@@ -25,6 +25,11 @@ impl<'a> Emitter<'a> {
     pub fn emit_class_decl(&mut self, node: &ClassDecl) -> Result {
         self.emit_leading_comments_of_pos(node.span().lo())?;
 
+        if node.declare {
+            keyword!("declare");
+            space!();
+        }
+
         for dec in &node.class.decorators {
             emit!(dec);
         }
@@ -38,6 +43,11 @@ impl<'a> Emitter<'a> {
     #[emitter]
     pub fn emit_fn_decl(&mut self, node: &FnDecl) -> Result {
         self.emit_leading_comments_of_pos(node.span().lo())?;
+
+        if node.declare {
+            keyword!("declare");
+            space!();
+        }
 
         if node.function.is_async {
             keyword!("async");
@@ -58,6 +68,11 @@ impl<'a> Emitter<'a> {
     #[emitter]
     pub fn emit_var_decl(&mut self, node: &VarDecl) -> Result {
         self.emit_leading_comments_of_pos(node.span.lo())?;
+
+        if node.declare {
+            keyword!("declare");
+            space!();
+        }
 
         keyword!(node.kind.as_str());
         space!();
