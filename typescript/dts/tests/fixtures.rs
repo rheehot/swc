@@ -14,6 +14,7 @@ use std::{
     fs::File,
     io::{self, Read},
     path::Path,
+    process::Command,
     sync::Arc,
 };
 use swc_common::{
@@ -140,7 +141,10 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
                         handlers,
                     };
 
-                    emitter.emit_module(&dts).context("failed to emit module").unwrap();
+                    emitter
+                        .emit_module(&dts)
+                        .context("failed to emit module")
+                        .unwrap();
                 }
                 String::from_utf8(buf).unwrap()
             };
@@ -154,6 +158,20 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
         .expect("failed to check");
 
     Ok(())
+}
+
+fn get_correct_dts(path: &Path) -> Module {
+    testing::run_test2(false, |cm, handler| {
+        let mut c = Command::new("tsc")
+            .arg(path)
+            .arg("-d")
+            .arg("--emitDeclarationOnly")
+            .output()
+            .unwrap();
+
+        Ok(())
+    })
+    .unwrap()
 }
 
 fn add_test<F: FnOnce() + Send + 'static>(
