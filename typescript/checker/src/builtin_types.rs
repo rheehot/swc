@@ -34,7 +34,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
     }
     let libs = libs;
 
-    let cache = CACHE.entry(libs);
+    let cache = CACHE.entry(libs).or_default();
     return &*cache.get_or_init(|| {
         let mut merged = box Merged::default();
         let mut analyzer = Analyzer::for_builtin();
