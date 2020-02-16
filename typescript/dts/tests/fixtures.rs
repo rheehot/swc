@@ -30,14 +30,83 @@ use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestN
 use testing::{DropSpan, StdErr, Tester};
 
 #[test]
-fn fixtures() {
+fn conformance() {
     let args: Vec<_> = env::args().collect();
     let mut tests = Vec::new();
-    add_tests(&mut tests).unwrap();
+    add_conformance_tests(&mut tests).unwrap();
     test_main(&args, tests, Default::default());
 }
 
-fn add_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
+fn add_conformance_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("..")
+        .join("checker")
+        .join("tests")
+        .join("conformance");
+
+    for entry in ignore::WalkBuilder::new(&root)
+        .ignore(false)
+        .git_exclude(false)
+        .git_global(false)
+        .git_ignore(false)
+        .hidden(true)
+        .build()
+    {
+        let entry = entry.context("entry?")?;
+
+        let is_ts = entry.file_name().to_string_lossy().ends_with(".ts")
+            || entry.file_name().to_string_lossy().ends_with(".tsx");
+        if entry.file_type().unwrap().is_dir() || !is_ts {
+            continue;
+        }
+
+        let errors_json_path = format!("{}.errors.json", entry.path().display());
+
+        {
+            // We are only interested in a test which does not contain errors.
+
+            let mut buf = String::new();
+            if Path::new(&errors_json_path).exists() {
+                File::open(&errors_json_path)
+                    .context("failed to open errors.json")?
+                    .read_to_string(&mut buf)
+                    .context("failed to read errors.json")?;
+
+                if buf != "[]" {
+                    continue;
+                }
+            }
+        }
+
+        let file_name = entry
+            .path()
+            .strip_prefix(&root)
+            .expect("failed to strip prefix")
+            .to_str()
+            .unwrap()
+            .to_string();
+
+        let test_name = format!("conformance::{}", file_name.replace("/", "::"));
+        let ignore = false;
+
+        let name = test_name.to_string();
+        add_test(tests, name, ignore, move || {
+            do_test(entry.path()).unwrap();
+        });
+    }
+
+    Ok(())
+}
+
+#[test]
+fn fixtures() {
+    let args: Vec<_> = env::args().collect();
+    let mut tests = Vec::new();
+    add_fixture_tests(&mut tests).unwrap();
+    test_main(&args, tests, Default::default());
+}
+
+fn add_fixture_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
     let root = {
         let mut root = Path::new(env!("CARGO_MANIFEST_DIR")).to_path_buf();
         root.push("tests");
@@ -60,6 +129,10 @@ fn add_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
             _ => {
                 continue;
             }
+        }
+
+        if entry.file_name().to_string_lossy().ends_with(".d.ts") {
+            continue;
         }
 
         let is_ts = entry.file_name().to_string_lossy().ends_with(".ts")
