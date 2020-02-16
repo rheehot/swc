@@ -34,7 +34,7 @@ pub(crate) struct Scope<'a> {
     pub declaring: SmallVec<[JsWord; 8]>,
 
     vars: FxHashMap<JsWord, VarInfo>,
-    pub(super) types: FxHashMap<JsWord, Type>,
+    pub(super) types: FxHashMap<JsWord, Vec<Type>>,
     pub(super) facts: CondFacts,
 
     pub(super) declaring_fn: Option<JsWord>,
@@ -105,8 +105,6 @@ impl Scope<'_> {
     /// Registers an interface, and merges it with previous interface
     /// declaration if required.
     fn register_type(&mut self, name: JsWord, ty: Type) {
-        let depth = self.depth();
-
         match self.types.entry(name) {
             Entry::Occupied(mut e) => {
                 //println!("({}) register_type({}): duplicate", depth, e.key());
@@ -967,16 +965,16 @@ impl<'a> Scope<'a> {
     }
 
     /// This method does **not** handle imported types.
-    fn find_type(&self, name: &JsWord) -> Option<&Type> {
+    fn find_type(&self, name: &JsWord) -> Option<ItemRef<Type>> {
         if let Some(ty) = self.facts.types.get(name) {
             println!("({}) find_type({}): Found (cond facts)", self.depth(), name);
-            return Some(&ty);
+            return Some(ItemRef::Single(&ty));
         }
 
         if let Some(ty) = self.types.get(name) {
             println!("({}) find_type({}): Found", self.depth(), name);
 
-            return Some(&ty);
+            return Some(ItemRef::Multi(&ty));
         }
 
         if let Some(v) = self.get_var(name) {
@@ -988,6 +986,11 @@ impl<'a> Scope<'a> {
             None => None,
         }
     }
+}
+
+pub enum ItemRef<'a, T> {
+    Single(&'a T),
+    Multi(&'a [T]),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
