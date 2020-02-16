@@ -245,29 +245,35 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
 
 fn get_correct_dts(path: &Path) -> (Arc<String>, Module) {
     testing::run_test2(false, |cm, handler| {
-        let mut c = Command::new(
-            Path::new(env!("CARGO_MANIFEST_DIR"))
-                .join("node_modules")
-                .join(".bin")
-                .join("tsc"),
-        );
-        c.arg(path).arg("-d").arg("--emitDeclarationOnly");
-        println!("Command {:?}", c);
-
-        let output = c.output().unwrap();
-
-        if !output.status.success() {
-            panic!(
-                "Failed to get correct dts file\n{}\n{}",
-                String::from_utf8_lossy(&output.stdout),
-                String::from_utf8_lossy(&output.stderr),
-            );
-        }
-
         let dts_file = path.parent().unwrap().join(format!(
             "{}.d.ts",
             path.file_stem().unwrap().to_string_lossy()
         ));
+
+        if !dts_file.exists() {
+            let mut c = Command::new(
+                Path::new(env!("CARGO_MANIFEST_DIR"))
+                    .join("node_modules")
+                    .join(".bin")
+                    .join("tsc"),
+            );
+            c.arg(path)
+                .arg("-d")
+                .arg("--emitDeclarationOnly")
+                .arg("--lib")
+                .arg("es2019");
+            println!("Command {:?}", c);
+
+            let output = c.output().unwrap();
+
+            if !output.status.success() {
+                panic!(
+                    "Failed to get correct dts file\n{}\n{}",
+                    String::from_utf8_lossy(&output.stdout),
+                    String::from_utf8_lossy(&output.stderr),
+                );
+            }
+        }
 
         let fm = cm.load_file(&dts_file).unwrap();
 
