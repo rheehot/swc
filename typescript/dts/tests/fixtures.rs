@@ -54,6 +54,10 @@ fn add_conformance_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
     {
         let entry = entry.context("entry?")?;
 
+        if entry.file_name().to_string_lossy().ends_with(".d.ts") {
+            continue;
+        }
+
         let is_ts = entry.file_name().to_string_lossy().ends_with(".ts")
             || entry.file_name().to_string_lossy().ends_with(".tsx");
         if entry.file_type().unwrap().is_dir() || !is_ts {
@@ -262,8 +266,6 @@ fn get_correct_dts(path: &Path) -> (Arc<String>, Module) {
                 .arg("--emitDeclarationOnly")
                 .arg("--lib")
                 .arg("es2019");
-            println!("Command {:?}", c);
-
             let output = c.output().unwrap();
 
             if !output.status.success() {
