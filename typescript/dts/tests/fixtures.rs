@@ -8,6 +8,7 @@
 extern crate test;
 
 use anyhow::{Context, Error};
+use pretty_assertions::assert_eq;
 use std::{
     collections::HashSet,
     env,
@@ -26,7 +27,7 @@ use swc_ecma_parser::{JscTarget, Parser, Session, SourceFileInput, Syntax, TsCon
 use swc_ts_checker::{Lib, Rule};
 use swc_ts_dts::generate_dts;
 use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestName, TestType};
-use testing::{StdErr, Tester};
+use testing::{DropSpan, StdErr, Tester};
 
 #[test]
 fn fixtures() {
@@ -113,7 +114,7 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
                 JscTarget::Es5,
             );
 
-            let info = checker.check(Arc::new(file_name.into()));
+            let info = checker.check(Arc::new(file_name.clone().into()));
             let errors = ::swc_ts_checker::errors::Error::flatten(info.1.errors.into());
 
             let has_errors = !errors.is_empty();
@@ -128,6 +129,11 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
             }
 
             let dts = generate_dts(info.0, info.1.exports);
+            let expected = get_correct_dts(file_name);
+            assert_eq!(
+                dts.clone().fold_with(&mut DropSpan),
+                expected.clone().fold_with(&mut DropSpan),
+            );
 
             let generated = {
                 let mut buf = vec![];
@@ -149,10 +155,6 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
                 String::from_utf8(buf).unwrap()
             };
 
-            StdErr::from(generated)
-                .compare_to_file(file_name.parent().unwrap().join("index.d.ts"))
-                .unwrap();
-
             Ok(())
         })
         .expect("failed to check");
@@ -162,14 +164,39 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
 
 fn get_correct_dts(path: &Path) -> Module {
     testing::run_test2(false, |cm, handler| {
-        let mut c = Command::new("tsc")
+        let mut c = Command::new("npx");
+        let output = c
+            .arg("tsc")
             .arg(path)
             .arg("-d")
             .arg("--emitDeclarationOnly")
             .output()
             .unwrap();
 
-        Ok(())
+        if !output.status.success() {
+            panic!(
+                "Failed to get correct dts file\n{}\n{}",
+                String::from_utf8_lossy(&output.stdout),
+                String::from_utf8_lossy(&output.stderr),
+            );
+        }
+
+        let dts_file = path.parent().unwrap().join(format!(
+            "{}.d.ts",
+            path.file_stem().unwrap().to_string_lossy()
+        ));
+
+        let fm = cm.load_file(&dts_file).unwrap();
+
+        let mut p = Parser::new(
+            Session { handler: &handler },
+            Syntax::Typescript(Default::default()),
+            SourceFileInput::from(&*fm),
+            None,
+        );
+
+        let m = p.parse_typescript_module().unwrap();
+        Ok(m)
     })
     .unwrap()
 }
