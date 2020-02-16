@@ -129,11 +129,10 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
             }
 
             let dts = generate_dts(info.0, info.1.exports);
-            let expected = get_correct_dts(file_name);
-            assert_eq!(
-                dts.clone().fold_with(&mut DropSpan),
-                expected.clone().fold_with(&mut DropSpan),
-            );
+            let (expected_code, expected) = get_correct_dts(file_name);
+            if dts.clone().fold_with(&mut DropSpan) == expected.clone().fold_with(&mut DropSpan) {
+                return Ok(());
+            }
 
             let generated = {
                 let mut buf = vec![];
@@ -155,6 +154,8 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
                 String::from_utf8(buf).unwrap()
             };
 
+            assert_eq!(generated, *expected_code);
+
             Ok(())
         })
         .expect("failed to check");
@@ -162,7 +163,7 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
     Ok(())
 }
 
-fn get_correct_dts(path: &Path) -> Module {
+fn get_correct_dts(path: &Path) -> (Arc<String>, Module) {
     testing::run_test2(false, |cm, handler| {
         let mut c = Command::new("npx");
         let output = c
@@ -196,7 +197,7 @@ fn get_correct_dts(path: &Path) -> Module {
         );
 
         let m = p.parse_typescript_module().unwrap();
-        Ok(m)
+        Ok((fm.src.clone(), m))
     })
     .unwrap()
 }
