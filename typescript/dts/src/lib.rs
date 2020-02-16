@@ -29,10 +29,8 @@ impl Fold<VarDecl> for TypeResolver {
 impl Fold<VarDeclarator> for TypeResolver {
     fn fold(&mut self, node: VarDeclarator) -> VarDeclarator {
         let init = match node.init {
-            Some(box Expr::Lit(..)) => {
-                node.init
-            }
-            _ => { None }
+            Some(box Expr::Lit(..)) => node.init,
+            _ => None,
         };
 
         VarDeclarator { init, ..node }
