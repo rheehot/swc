@@ -158,13 +158,9 @@ impl Checker {
 
 impl Checker {
     /// Returns empty vector if no error is found.
-    pub fn check(&self, entry: Arc<PathBuf>) -> Vec<Error> {
+    pub fn check(&self, entry: Arc<PathBuf>) -> (Module, Info) {
         self.run(|| {
-            let mut errors = Errors::default();
-
             let mut module = self.load_module(entry.clone());
-
-            errors.append_errors(&mut module.1.errors);
 
             // let (tasks, receiver) = channel::unbounded();
             // let (result_sender, result_receiver) = channel::unbounded();
@@ -187,7 +183,7 @@ impl Checker {
             //     .unwrap();
             // }
 
-            errors.into()
+            module
         })
     }
 

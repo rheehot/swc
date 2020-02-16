@@ -22,6 +22,7 @@ use swc_common::{
 use swc_ecma_ast::{Module, *};
 use swc_ecma_parser::{JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig};
 use swc_ts_checker::{Lib, Rule};
+use swc_ts_dts::generate_dts;
 use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestName, TestType};
 use testing::{StdErr, Tester};
 
@@ -110,8 +111,8 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
                 JscTarget::Es5,
             );
 
-            let errors =
-                ::swc_ts_checker::errors::Error::flatten(checker.check(Arc::new(file_name.into())));
+            let info = checker.check(Arc::new(file_name.into()));
+            let errors = ::swc_ts_checker::errors::Error::flatten(info.1.errors.into());
 
             let has_errors = !errors.is_empty();
             checker.run(|| {
@@ -121,10 +122,12 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
             });
 
             if has_errors {
-                Err(())
-            } else {
-                Ok(())
+                return Err(());
             }
+
+            let dts = generate_dts(info.0, info.1.exports);
+
+            Ok(())
         })
         .expect("failed to check");
 

@@ -6,9 +6,13 @@ use swc_common::{Fold, FoldWith};
 use swc_ecma_ast::*;
 use swc_ts_checker::ModuleTypeInfo;
 
+pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
+    module.fold_with(&mut TypeResolver { types: info })
+}
+
 #[derive(Debug)]
-pub struct TypeResolver {
-    pub types: ModuleTypeInfo,
+struct TypeResolver {
+    types: ModuleTypeInfo,
 }
 
 impl Fold<VarDecl> for TypeResolver {
