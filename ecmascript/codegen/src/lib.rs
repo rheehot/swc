@@ -897,6 +897,12 @@ impl<'a> Emitter<'a> {
         self.emit_list(node.span, Some(&node.params), ListFormat::CommaListElements)?;
         punct!(")");
 
+        if let Some(ty) = &node.return_type {
+            punct!(":");
+            formatting_space!();
+            emit!(ty);
+        }
+
         formatting_space!();
         emit!(node.body);
     }
