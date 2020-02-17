@@ -382,11 +382,18 @@ impl Analyzer<'_, '_> {
                                 ..var_info.clone()
                             }
                         } else {
-                            if let Some(Type::Module(..)) = self.find_type(&i.sym) {
-                                return Err(Error::NotVariable {
-                                    span: i.span,
-                                    left: lhs.span(),
-                                });
+                            if let Some(types) = self.find_type(&i.sym) {
+                                for ty in types {
+                                    match ty {
+                                        Type::Module(..) => {
+                                            return Err(Error::NotVariable {
+                                                span: i.span,
+                                                left: lhs.span(),
+                                            });
+                                        }
+                                        _ => {}
+                                    }
+                                }
                             }
 
                             return if self.ctx.allow_ref_declaring

@@ -11,9 +11,14 @@ use crate::{
     validator::Validate,
     ValidationResult,
 };
+use either::Either;
 use fxhash::FxHashMap;
 use smallvec::SmallVec;
-use std::{borrow::Cow, collections::hash_map::Entry, iter::repeat};
+use std::{
+    borrow::Cow,
+    collections::hash_map::Entry,
+    iter::{once, repeat},
+};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -100,32 +105,9 @@ impl Scope<'_> {
         self.vars.get_mut(name)
     }
 
-    /// # Interface
-    ///
-    /// Registers an interface, and merges it with previous interface
-    /// declaration if required.
+    /// Add a type to the scope.
     fn register_type(&mut self, name: JsWord, ty: Type) {
-        match self.types.entry(name) {
-            Entry::Occupied(mut e) => {
-                //println!("({}) register_type({}): duplicate", depth, e.key());
-
-                // TODO: Match -> .map
-                match (e.get_mut(), ty) {
-                    (&mut Type::Interface(ref mut orig), Type::Interface(ref mut i)) => {
-                        // TODO: Check fields' type
-                        // TODO: Sort function members like
-                        // https://www.typescriptlang.org/docs/handbook/declaration-merging.html#merging-interfaces
-                        orig.body.append(&mut i.body);
-                    }
-                    (lty, rty) if lty.eq_ignore_span(&rty) => {}
-                    ref ty => unreachable!("{:?} cannot be merged with {:?}", ty.0, ty.1),
-                }
-            }
-            Entry::Vacant(e) => {
-                //println!("({}) register_type({})", depth, e.key());
-                e.insert(ty);
-            }
-        }
+        self.types.entry(name).or_default().push(ty);
     }
 
     pub fn this(&self) -> Option<Cow<Type>> {
@@ -211,60 +193,65 @@ impl Analyzer<'_, '_> {
                         }
 
                         // Handle enum
-                        if let Some(ty) = self.find_type(&i.sym) {
-                            match ty.normalize() {
-                                Type::Enum(..) => {
-                                    if let Some(..) = *type_args {
-                                        return Err(Error::NotGeneric { span });
-                                    }
-                                    verify!(ty);
-                                    return Ok(ty.clone());
-                                }
-
-                                Type::Param(..) => {
-                                    if let Some(..) = *type_args {
-                                        return Err(Error::NotGeneric { span });
+                        if let Some(types) = self.find_type(&i.sym) {
+                            for ty in types {
+                                match ty.normalize() {
+                                    Type::Enum(..) => {
+                                        if let Some(..) = *type_args {
+                                            return Err(Error::NotGeneric { span });
+                                        }
+                                        verify!(ty);
+                                        return Ok(ty.clone());
                                     }
 
-                                    verify!(ty);
-                                    return Ok(ty.clone());
+                                    Type::Param(..) => {
+                                        if let Some(..) = *type_args {
+                                            return Err(Error::NotGeneric { span });
+                                        }
+
+                                        verify!(ty);
+                                        return Ok(ty.clone());
+                                    }
+
+                                    Type::Interface(..) | Type::Class(..) => {
+                                        // TODO: Handle type parameters
+                                        verify!(ty);
+                                        return Ok(ty.clone());
+                                    }
+
+                                    Type::Alias(Alias {
+                                        type_params: None,
+                                        ref ty,
+                                        ..
+                                    }) => {
+                                        verify!(ty);
+                                        return Ok(*ty.clone());
+                                    }
+
+                                    // Expand type parameters.
+                                    Type::Alias(Alias {
+                                        type_params: Some(ref tps),
+                                        ref ty,
+                                        ..
+                                    }) => {
+                                        let tps = tps.clone();
+                                        let ty = ty.clone();
+                                        let ty = if let Some(i) = type_args {
+                                            self.expand_type_params(i, &tps, *ty)?
+                                        } else {
+                                            *ty.clone()
+                                        };
+                                        let ty = self.expand(span, ty)?;
+
+                                        verify!(ty);
+                                        return Ok(ty.clone());
+                                    }
+
+                                    _ => unimplemented!(
+                                        "Handling result of find_type() -> {:#?}",
+                                        ty
+                                    ),
                                 }
-
-                                Type::Interface(..) | Type::Class(..) => {
-                                    // TODO: Handle type parameters
-                                    verify!(ty);
-                                    return Ok(ty.clone());
-                                }
-
-                                Type::Alias(Alias {
-                                    type_params: None,
-                                    ref ty,
-                                    ..
-                                }) => {
-                                    verify!(ty);
-                                    return Ok(*ty.clone());
-                                }
-
-                                // Expand type parameters.
-                                Type::Alias(Alias {
-                                    type_params: Some(ref tps),
-                                    ref ty,
-                                    ..
-                                }) => {
-                                    let tps = tps.clone();
-                                    let ty = ty.clone();
-                                    let ty = if let Some(i) = type_args {
-                                        self.expand_type_params(i, &tps, *ty)?
-                                    } else {
-                                        *ty.clone()
-                                    };
-                                    let ty = self.expand(span, ty)?;
-
-                                    verify!(ty);
-                                    return Ok(ty.clone());
-                                }
-
-                                _ => unimplemented!("Handling result of find_type() -> {:#?}", ty),
                             }
                         } else {
                             println!("Failed to find type: {}", i.sym)
@@ -282,17 +269,19 @@ impl Analyzer<'_, '_> {
                             return Ok(Type::any(span));
                         }
 
-                        if let Some(ref ty) = self.scope.find_type(&left.sym) {
-                            match *ty {
-                                Type::Enum(..) => {
-                                    return Ok(EnumVariant {
-                                        span,
-                                        enum_name: left.sym.clone(),
-                                        name: right.sym.clone(),
+                        if let Some(types) = self.scope.find_type(&left.sym) {
+                            for ty in types {
+                                match *ty {
+                                    Type::Enum(..) => {
+                                        return Ok(EnumVariant {
+                                            span,
+                                            enum_name: left.sym.clone(),
+                                            name: right.sym.clone(),
+                                        }
+                                        .into());
                                     }
-                                    .into());
+                                    _ => {}
                                 }
-                                _ => {}
                             }
                         }
                     }
@@ -607,12 +596,12 @@ impl Analyzer<'_, '_> {
     }
 
     #[inline(never)]
-    pub(super) fn find_type(&self, name: &JsWord) -> Option<&Type> {
+    pub(super) fn find_type(&self, name: &JsWord) -> Option<ItemRef<Type>> {
         #[allow(dead_code)]
         static ANY: Type = Type::any(DUMMY_SP);
 
         if self.errored_imports.get(name).is_some() {
-            return Some(&ANY);
+            return Some(ItemRef::Single(&ANY));
         }
 
         // TODO:
@@ -978,7 +967,7 @@ impl<'a> Scope<'a> {
         }
 
         if let Some(v) = self.get_var(name) {
-            return v.ty.as_ref();
+            return v.ty.as_ref().map(ItemRef::Single);
         }
 
         match self.parent {
@@ -991,6 +980,18 @@ impl<'a> Scope<'a> {
 pub enum ItemRef<'a, T> {
     Single(&'a T),
     Multi(&'a [T]),
+}
+
+impl<'a, T> IntoIterator for ItemRef<'a, T> {
+    type Item = &'a T;
+    type IntoIter = Either<std::iter::Once<&'a T>, std::slice::Iter<'a, T>>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        match self {
+            ItemRef::Single(s) => Either::Left(once(s)),
+            ItemRef::Multi(s) => Either::Right(s.into_iter()),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

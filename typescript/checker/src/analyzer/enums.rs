@@ -205,17 +205,19 @@ impl Analyzer<'_, '_> {
     pub(super) fn expand_enum_variant(&self, ty: Type) -> Result<Type, Error> {
         match ty.normalize() {
             Type::EnumVariant(ref v) => {
-                if let Some(Type::Enum(Enum { ref members, .. })) =
-                    self.scope.types.get(&v.enum_name)
-                {
-                    if let Some(v) = members.iter().find(|m| match m.id {
-                        TsEnumMemberId::Ident(Ident { ref sym, .. })
-                        | TsEnumMemberId::Str(Str { value: ref sym, .. }) => *sym == v.name,
-                    }) {
-                        return Ok(Type::Lit(TsLitType {
-                            span: v.span,
-                            lit: v.val.clone(),
-                        }));
+                if let Some(types) = self.find_type(&v.enum_name) {
+                    for ty in types {
+                        if let Type::Enum(Enum { members, .. }) = ty {
+                            if let Some(v) = members.iter().find(|m| match m.id {
+                                TsEnumMemberId::Ident(Ident { ref sym, .. })
+                                | TsEnumMemberId::Str(Str { value: ref sym, .. }) => *sym == v.name,
+                            }) {
+                                return Ok(Type::Lit(TsLitType {
+                                    span: v.span,
+                                    lit: v.val.clone(),
+                                }));
+                            }
+                        }
                     }
                 }
             }

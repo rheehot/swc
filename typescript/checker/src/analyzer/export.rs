@@ -45,16 +45,24 @@ impl Analyzer<'_, '_> {
             let ty = match exported_sym
                 .and_then(|exported_sym| self.scope.types.remove(&exported_sym))
             {
-                Some(export) => export,
+                Some(export) => {
+                    self.info
+                        .exports
+                        .types
+                        .entry(sym)
+                        .or_default()
+                        .extend(export);
+                }
                 None => match expr.validate_with(self) {
-                    Ok(ty) => ty,
+                    Ok(ty) => {
+                        self.info.exports.types.entry(sym).or_default().push(ty);
+                    }
                     Err(err) => {
                         self.info.errors.push(err);
                         return;
                     }
                 },
             };
-            self.info.exports.vars.insert(sym, ty);
         }
 
         assert_eq!(self.pending_exports, vec![]);
@@ -170,6 +178,10 @@ impl Analyzer<'_, '_> {
     /// Exports a type.
     ///
     /// `scope.regsiter_type` should be called before calling this method.
+    ///
+    ///
+    /// Note: We don't freeze types at here because doing so may prevent proper
+    /// finalization.
     #[validator_method]
     fn export(&mut self, span: Span, name: JsWord, from: Option<JsWord>) {
         let from = from.unwrap_or_else(|| name.clone());
@@ -182,12 +194,14 @@ impl Analyzer<'_, '_> {
             })?,
         };
 
-        // We don't freeze it at here because doing so may prevent proper finalization.
-        let ty = ty.clone();
+        let iter = ty.into_iter().cloned().collect::<Vec<_>>();
 
-        // TODO: Change this to error.
-        assert_eq!(self.info.exports.types.get(&name), None);
-        self.info.exports.types.entry(name).or_default().push(ty);
+        self.info
+            .exports
+            .types
+            .entry(name)
+            .or_default()
+            .extend(iter);
     }
 
     /// Exports a variable.

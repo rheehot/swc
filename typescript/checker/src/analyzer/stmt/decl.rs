@@ -114,16 +114,22 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                             }
                             None => {
                                 // infer type from value.
-                                let mut ty = match value_ty {
-                                    Type::EnumVariant(ref v) => {
-                                        if let Some(Type::Enum(ref e)) = a.find_type(&v.enum_name) {
-                                            Type::Enum(e.clone())
-                                        } else {
-                                            unreachable!()
+                                let mut ty = (|| {
+                                    match value_ty {
+                                        Type::EnumVariant(ref v) => {
+                                            if let Some(items) = a.find_type(&v.enum_name) {
+                                                for ty in items {
+                                                    if let Type::Enum(ref e) = ty {
+                                                        return Type::Enum(e.clone());
+                                                    }
+                                                }
+                                            }
                                         }
+                                        _ => {}
                                     }
-                                    ty => ty,
-                                };
+
+                                    value_ty
+                                })();
 
                                 let mut type_errors = vec![];
 

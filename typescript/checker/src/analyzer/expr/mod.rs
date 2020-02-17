@@ -631,20 +631,29 @@ impl Analyzer<'_, '_> {
                 span,
                 ..
             }) => match self.find_type(enum_name) {
-                Some(ref v) => match **v {
-                    Type::Enum(ref e) => {
-                        for v in e.members.iter() {
-                            let new_obj_ty = Type::Lit(TsLitType {
-                                span: *span,
-                                lit: v.val.clone(),
-                            });
-                            return self
-                                .access_property(*span, new_obj_ty, prop, computed, type_mode);
+                Some(types) => {
+                    //
+                    for ty in types {
+                        match ty.normalize() {
+                            Type::Enum(ref e) => {
+                                for v in e.members.iter() {
+                                    let new_obj_ty = Type::Lit(TsLitType {
+                                        span: *span,
+                                        lit: v.val.clone(),
+                                    });
+                                    return self.access_property(
+                                        *span, new_obj_ty, prop, computed, type_mode,
+                                    );
+                                }
+                                unreachable!(
+                                    "Enum {} does not have a variant named {}",
+                                    enum_name, name
+                                );
+                            }
+                            _ => unreachable!("Enum named {} does not exist", enum_name),
                         }
-                        unreachable!("Enum {} does not have a variant named {}", enum_name, name);
                     }
-                    _ => unreachable!("Enum named {} does not exist", enum_name),
-                },
+                }
                 _ => unreachable!("Enum named {} does not exist", enum_name),
             },
 
@@ -961,10 +970,10 @@ impl Analyzer<'_, '_> {
             return Ok(ty.clone());
         }
 
-        if let Some(ty) = self.find_type(&i.sym) {
-            println!("({}) type_of({}): find_type", self.scope.depth(), i.sym);
-            return Ok(ty.clone().respan(span));
-        }
+        //        if let Some(types) = self.find_type(&i.sym) {
+        //            println!("({}) type_of({}): find_type", self.scope.depth(),
+        // i.sym);            return Ok(ty.clone().respan(span));
+        //        }
 
         // Check `declaring` before checking variables.
         if self.scope.declaring.contains(&i.sym) {

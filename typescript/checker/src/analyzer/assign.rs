@@ -353,13 +353,15 @@ impl Analyzer<'_, '_> {
             Type::Enum(ref e) => handle_enum_in_rhs!(e),
 
             Type::EnumVariant(EnumVariant { ref enum_name, .. }) => {
-                let e = if let Some(&Type::Enum(ref e)) = self.find_type(enum_name) {
-                    e
-                } else {
-                    fail!()
-                };
+                if let Some(types) = self.find_type(enum_name) {
+                    for ty in types {
+                        if let Type::Enum(ref e) = ty {
+                            handle_enum_in_rhs!(e);
+                        }
+                    }
+                }
 
-                handle_enum_in_rhs!(e)
+                fail!()
             }
 
             _ => {}
@@ -504,20 +506,21 @@ impl Analyzer<'_, '_> {
                         Type::EnumVariant(ref v) => {
                             // Allow assigning enum with numeric values to
                             // number.
-                            if let Some(ty) = self.find_type(&v.name) {
-                                match *ty.normalize() {
-                                    Type::Enum(ref e) => {
-                                        let is_num = !e.has_str;
-                                        if is_num {
-                                            return Ok(());
+                            if let Some(types) = self.find_type(&v.name) {
+                                for ty in types {
+                                    match *ty.normalize() {
+                                        Type::Enum(ref e) => {
+                                            let is_num = !e.has_str;
+                                            if is_num {
+                                                return Ok(());
+                                            }
                                         }
-
-                                        fail!();
+                                        _ => {}
                                     }
-                                    // TODO: Make this error more specific
-                                    _ => fail!(),
                                 }
                             }
+
+                            fail!()
                         }
                         _ => {}
                     },
