@@ -181,6 +181,7 @@ fn add_fixture_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
 
         let name = test_name.to_string();
         add_test(tests, name, ignore, move || {
+            println!("----- Input -----\n{}", input);
             do_test(entry.path()).unwrap();
         });
     }
