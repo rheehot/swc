@@ -5,7 +5,7 @@ use swc_ecma_codegen_macros::emitter;
 
 impl<'a> Emitter<'a> {
     #[emitter]
-    pub fn emit_decl(&mut self, node: &Decl) -> Result {
+    fn emit_decl(&mut self, node: &Decl) -> Result {
         match *node {
             Decl::Class(ref n) => emit!(n),
             Decl::Fn(ref n) => emit!(n),
@@ -22,7 +22,7 @@ impl<'a> Emitter<'a> {
     }
 
     #[emitter]
-    pub fn emit_class_decl(&mut self, node: &ClassDecl) -> Result {
+    fn emit_class_decl(&mut self, node: &ClassDecl) -> Result {
         self.emit_leading_comments_of_pos(node.span().lo())?;
 
         if node.declare {
@@ -41,7 +41,7 @@ impl<'a> Emitter<'a> {
     }
 
     #[emitter]
-    pub fn emit_fn_decl(&mut self, node: &FnDecl) -> Result {
+    fn emit_fn_decl(&mut self, node: &FnDecl) -> Result {
         self.emit_leading_comments_of_pos(node.span().lo())?;
 
         if node.declare {
@@ -66,7 +66,7 @@ impl<'a> Emitter<'a> {
     }
 
     #[emitter]
-    pub fn emit_var_decl(&mut self, node: &VarDecl) -> Result {
+    fn emit_var_decl(&mut self, node: &VarDecl) -> Result {
         self.emit_leading_comments_of_pos(node.span.lo())?;
 
         if node.declare {
@@ -85,7 +85,7 @@ impl<'a> Emitter<'a> {
     }
 
     #[emitter]
-    pub fn emit_var_declarator(&mut self, node: &VarDeclarator) -> Result {
+    fn emit_var_declarator(&mut self, node: &VarDeclarator) -> Result {
         self.emit_leading_comments_of_pos(node.span().lo())?;
 
         emit!(node.name);
