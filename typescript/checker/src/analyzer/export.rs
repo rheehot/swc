@@ -1,6 +1,6 @@
 use super::Analyzer;
 use crate::{
-    analyzer::util::ResultExt,
+    analyzer::{scope::VarInfo, util::ResultExt},
     errors::Error,
     ty::Type,
     validator::{Validate, ValidateWith},
@@ -8,7 +8,7 @@ use crate::{
 use macros::validator_method;
 use std::mem::replace;
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_common::{Span, Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 // ModuleDecl::ExportNamed(export) => {}
@@ -23,10 +23,6 @@ impl Analyzer<'_, '_> {
     /// This methods exports unresolved expressions, which depends on
     /// expressions that comes after the expression.
     pub(super) fn handle_pending_exports(&mut self) {
-        if self.pending_exports.is_empty() {
-            return;
-        }
-
         let pending_exports: Vec<_> = replace(&mut self.pending_exports, Default::default());
 
         for ((sym, _), expr) in pending_exports {
@@ -59,13 +55,31 @@ impl Analyzer<'_, '_> {
                     }
                     Err(err) => {
                         self.info.errors.push(err);
-                        return;
                     }
                 },
             };
         }
 
         assert_eq!(self.pending_exports, vec![]);
+
+        if self.info.exports.types.is_empty() && self.info.exports.vars.is_empty() {
+            self.info
+                .exports
+                .vars
+                .extend(self.scope.vars.drain().map(|(k, v)| {
+                    (
+                        k,
+                        v.ty.map(|ty| ty.freeze())
+                            .unwrap_or_else(|| Type::any(DUMMY_SP)),
+                    )
+                }));
+            self.info.exports.types.extend(
+                self.scope
+                    .types
+                    .drain()
+                    .map(|(k, v)| (k, v.into_iter().map(|v| v.freeze()).collect())),
+            );
+        }
     }
 
     pub(super) fn export_default_expr(&mut self, expr: &Expr) {

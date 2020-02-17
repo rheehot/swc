@@ -38,7 +38,7 @@ pub(crate) struct Scope<'a> {
     kind: ScopeKind,
     pub declaring: SmallVec<[JsWord; 8]>,
 
-    vars: FxHashMap<JsWord, VarInfo>,
+    pub(super) vars: FxHashMap<JsWord, VarInfo>,
     pub(super) types: FxHashMap<JsWord, Vec<Type>>,
     pub(super) facts: CondFacts,
 
