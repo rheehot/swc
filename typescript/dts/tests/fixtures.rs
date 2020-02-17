@@ -27,7 +27,7 @@ use swc_ecma_parser::{JscTarget, Parser, Session, SourceFileInput, Syntax, TsCon
 use swc_ts_checker::{Lib, Rule};
 use swc_ts_dts::generate_dts;
 use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestName, TestType};
-use testing::{DropSpan, StdErr, Tester};
+use testing::{DropSpan, NormalizedOutput, StdErr, Tester};
 
 #[test]
 fn conformance() {
@@ -249,7 +249,10 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
                 String::from_utf8(buf).unwrap()
             };
 
-            assert_eq!(generated, *expected_code);
+            assert_eq!(
+                NormalizedOutput::from(generated),
+                NormalizedOutput::from((*expected_code).clone())
+            );
 
             Ok(())
         })
