@@ -9,7 +9,7 @@ use crate::{
     ValidationResult,
 };
 use macros::validator;
-use swc_common::{Spanned, Visit, VisitWith};
+use swc_common::{Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy)]
@@ -27,6 +27,9 @@ impl Validate<Pat> for Analyzer<'_, '_> {
 
     fn validate(&mut self, p: &Pat) -> Self::Output {
         self.record(p);
+        if !self.is_builtin {
+            debug_assert_ne!(p.span(), DUMMY_SP, "A pattern should have a valid span");
+        }
 
         let ty = try_opt!(p.get_ty().validate_with(self));
 

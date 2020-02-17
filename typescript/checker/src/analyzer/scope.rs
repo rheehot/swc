@@ -434,6 +434,9 @@ impl Analyzer<'_, '_> {
         match *pat {
             Pat::Ident(ref i) => {
                 let name = i.sym.clone();
+                if !self.is_builtin {
+                    debug_assert_ne!(span, DUMMY_SP);
+                }
                 self.declare_var(
                     span,
                     kind,
@@ -627,8 +630,6 @@ impl Analyzer<'_, '_> {
         initialized: bool,
         allow_multiple: bool,
     ) -> Result<(), Error> {
-        debug_assert_ne!(span, DUMMY_SP);
-
         match self.scope.vars.entry(name.clone()) {
             Entry::Occupied(e) => {
                 if !allow_multiple {

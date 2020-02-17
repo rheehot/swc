@@ -192,7 +192,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             self.rule,
             self.loader,
             scope,
-            false,
+            self.is_builtin,
         )
     }
 
