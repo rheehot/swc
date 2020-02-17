@@ -1,4 +1,5 @@
 use super::{Emitter, Result};
+use crate::list::ListFormat;
 use swc_ecma_ast::*;
 use swc_ecma_codegen_macros::emitter;
 
@@ -43,22 +44,58 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_entity_name(&mut self, n: &TsEntityName) -> Result {
-        unimplemented!("emit_ts_entity_name")
+        match n {
+            TsEntityName::TsQualifiedName(n) => {
+                emit!(n);
+                punct!(".");
+            }
+            TsEntityName::Ident(n) => emit!(n),
+        }
     }
 
     #[emitter]
     fn emit_ts_enum_decl(&mut self, n: &TsEnumDecl) -> Result {
-        unimplemented!("emit_ts_enum_decl")
+        if n.declare {
+            keyword!("declare");
+            space!();
+        }
+
+        if n.is_const {
+            keyword!("const");
+            space!();
+        }
+
+        keyword!("enum");
+        space!();
+
+        emit!(n.id);
+        formatting_space!();
+
+        punct!("{");
+
+        self.emit_list(n.span, Some(&n.members), ListFormat::EnumMembers)?;
+
+        punct!("}");
     }
 
     #[emitter]
     fn emit_ts_enum_member(&mut self, n: &TsEnumMember) -> Result {
-        unimplemented!("emit_ts_enum_member")
+        emit!(n.id);
+
+        if let Some(init) = &n.init {
+            formatting_space!();
+            punct!("=");
+            formatting_space!();
+            emit!(init);
+        }
     }
 
     #[emitter]
     fn emit_ts_enum_member_id(&mut self, n: &TsEnumMemberId) -> Result {
-        unimplemented!("emit_ts_enum_member_id")
+        match n {
+            TsEnumMemberId::Ident(n) => emit!(n),
+            TsEnumMemberId::Str(n) => emit!(n),
+        }
     }
 
     #[emitter]
@@ -83,7 +120,12 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_fn_param(&mut self, n: &TsFnParam) -> Result {
-        unimplemented!("emit_ts_fn_param")
+        match n {
+            TsFnParam::Ident(n) => emit!(n),
+            TsFnParam::Array(n) => emit!(n),
+            TsFnParam::Rest(n) => emit!(n),
+            TsFnParam::Object(n) => emit!(n),
+        }
     }
 
     #[emitter]
@@ -113,22 +155,55 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_interface_body(&mut self, n: &TsInterfaceBody) -> Result {
-        unimplemented!("emit_ts_interface_body")
+        punct!("{");
+
+        self.emit_list(n.span, Some(&n.body), ListFormat::InterfaceMembers)?;
+
+        punct!("}");
     }
 
     #[emitter]
     fn emit_ts_interface_decl(&mut self, n: &TsInterfaceDecl) -> Result {
-        unimplemented!("emit_ts_interface_decl")
+        if n.declare {
+            keyword!("declare");
+            space!();
+        }
+
+        keyword!("interface");
+        space!();
+
+        emit!(n.id);
+
+        formatting_space!();
+
+        emit!(n.body);
     }
 
     #[emitter]
     fn emit_ts_intersection_type(&mut self, n: &TsIntersectionType) -> Result {
-        unimplemented!("emit_ts_intersection_type")
+        self.emit_list(
+            n.span,
+            Some(&n.types),
+            ListFormat::IntersectionTypeConstituents,
+        )?;
     }
 
     #[emitter]
     fn emit_ts_keyword_type(&mut self, n: &TsKeywordType) -> Result {
-        unimplemented!("emit_ts_keyword_type")
+        match n.kind {
+            TsKeywordTypeKind::TsAnyKeyword => keyword!(n.span, "any"),
+            TsKeywordTypeKind::TsUnknownKeyword => keyword!(n.span, "unknown"),
+            TsKeywordTypeKind::TsNumberKeyword => keyword!(n.span, "number"),
+            TsKeywordTypeKind::TsObjectKeyword => keyword!(n.span, "object"),
+            TsKeywordTypeKind::TsBooleanKeyword => keyword!(n.span, "boolean"),
+            TsKeywordTypeKind::TsBigIntKeyword => keyword!(n.span, "bigint"),
+            TsKeywordTypeKind::TsStringKeyword => keyword!(n.span, "string"),
+            TsKeywordTypeKind::TsSymbolKeyword => keyword!(n.span, "symbol"),
+            TsKeywordTypeKind::TsVoidKeyword => keyword!(n.span, "void"),
+            TsKeywordTypeKind::TsUndefinedKeyword => keyword!(n.span, "undefined"),
+            TsKeywordTypeKind::TsNullKeyword => keyword!(n.span, "null"),
+            TsKeywordTypeKind::TsNeverKeyword => keyword!(n.span, "never"),
+        }
     }
 
     #[emitter]
@@ -148,22 +223,59 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_method_signature(&mut self, n: &TsMethodSignature) -> Result {
-        unimplemented!("emit_ts_method_signature")
+        if n.readonly {
+            keyword!("readonly");
+        }
+
+        if n.computed {
+            punct!("[");
+            emit!(n.key);
+            punct!("]");
+        } else {
+            emit!(n.key)
+        }
+
+        if n.optional {
+            punct!("?");
+        }
+
+        if let Some(type_params) = &n.type_params {
+            emit!(type_params);
+        }
+
+        punct!("(");
+        self.emit_list(n.span, Some(&n.params), ListFormat::Parameters)?;
+        punct!(")");
     }
 
     #[emitter]
     fn emit_ts_module_block(&mut self, n: &TsModuleBlock) -> Result {
-        unimplemented!("emit_ts_module_block")
+        self.emit_list(n.span, Some(&n.body), ListFormat::SourceFileStatements)?;
     }
 
     #[emitter]
     fn emit_ts_module_decl(&mut self, n: &TsModuleDecl) -> Result {
-        unimplemented!("emit_ts_module_decl")
+        if n.declare {
+            keyword!("declare");
+            space!();
+        }
+
+        keyword!("module");
+        space!();
+
+        emit!(n.id);
+
+        if let Some(body) = &n.body {
+            emit!(body);
+        }
     }
 
     #[emitter]
     fn emit_ts_module_name(&mut self, n: &TsModuleName) -> Result {
-        unimplemented!("emit_ts_module_name")
+        match n {
+            TsModuleName::Ident(n) => emit!(n),
+            TsModuleName::Str(n) => emit!(n),
+        }
     }
 
     #[emitter]
@@ -173,7 +285,14 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_ns_body(&mut self, n: &TsNamespaceBody) -> Result {
-        unimplemented!("emit_ts_ns_body")
+        punct!("{");
+
+        match n {
+            TsNamespaceBody::TsModuleBlock(n) => emit!(n),
+            TsNamespaceBody::TsNamespaceDecl(n) => emit!(n),
+        }
+
+        punct!("}");
     }
 
     #[emitter]
@@ -198,12 +317,29 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_param_prop(&mut self, n: &TsParamProp) -> Result {
-        unimplemented!("emit_ts_param_prop")
+        if let Some(a) = n.accessibility {
+            match a {
+                Accessibility::Public => keyword!("public"),
+                Accessibility::Protected => keyword!("protected"),
+                Accessibility::Private => keyword!("private"),
+            }
+            space!();
+        }
+
+        if n.readonly {
+            keyword!("readonly");
+            space!();
+        }
+
+        emit!(n.param);
     }
 
     #[emitter]
     fn emit_ts_param_prop_param(&mut self, n: &TsParamPropParam) -> Result {
-        unimplemented!("emit_ts_param_prop_param")
+        match n {
+            TsParamPropParam::Ident(n) => emit!(n),
+            TsParamPropParam::Assign(n) => emit!(n),
+        }
     }
 
     #[emitter]
@@ -213,7 +349,41 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_property_signature(&mut self, n: &TsPropertySignature) -> Result {
-        unimplemented!("emit_ts_property_signature")
+        if n.readonly {
+            keyword!("readonly");
+            space!();
+        }
+
+        if n.computed {
+            punct!("[");
+            emit!(n.key);
+            punct!("]");
+        } else {
+            emit!(n.key);
+        }
+
+        if n.optional {
+            punct!("?");
+        }
+
+        emit!(n.type_params);
+
+        punct!("(");
+        self.emit_list(n.span, Some(&n.params), ListFormat::Parameters)?;
+        punct!(")");
+
+        if let Some(type_ann) = &n.type_ann {
+            punct!(":");
+            formatting_space!();
+            emit!(type_ann);
+        }
+
+        if let Some(init) = &n.init {
+            formatting_space!();
+            punct!("=");
+            formatting_space!();
+            emit!(init);
+        }
     }
 
     #[emitter]
@@ -248,17 +418,72 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_type(&mut self, n: &TsType) -> Result {
-        unimplemented!("emit_ts_type")
+        match n {
+            TsType::TsKeywordType(n) => emit!(n),
+            TsType::TsThisType(n) => emit!(n),
+            TsType::TsFnOrConstructorType(n) => emit!(n),
+            TsType::TsTypeRef(n) => emit!(n),
+            TsType::TsTypeQuery(n) => emit!(n),
+            TsType::TsTypeLit(n) => emit!(n),
+            TsType::TsArrayType(n) => emit!(n),
+            TsType::TsTupleType(n) => emit!(n),
+            TsType::TsOptionalType(n) => emit!(n),
+            TsType::TsRestType(n) => emit!(n),
+            TsType::TsUnionOrIntersectionType(n) => emit!(n),
+            TsType::TsConditionalType(n) => emit!(n),
+            TsType::TsInferType(n) => emit!(n),
+            TsType::TsParenthesizedType(n) => emit!(n),
+            TsType::TsTypeOperator(n) => emit!(n),
+            TsType::TsIndexedAccessType(n) => emit!(n),
+            TsType::TsMappedType(n) => emit!(n),
+            TsType::TsLitType(n) => emit!(n),
+            TsType::TsTypePredicate(n) => emit!(n),
+            TsType::TsImportType(n) => emit!(n),
+        }
+    }
+
+    #[emitter]
+    fn emit_ts_import_type(&mut self, n: &TsImportType) -> Result {
+        keyword!("import");
+        punct!("(");
+        emit!(n.arg);
+        punct!(")");
+
+        if let Some(n) = &n.qualifier {
+            punct!(".");
+            emit!(n);
+        }
+
+        if let Some(type_args) = &n.type_args {
+            punct!("<");
+            emit!(type_args);
+            punct!(">");
+        }
     }
 
     #[emitter]
     fn emit_ts_type_alias_decl(&mut self, n: &TsTypeAliasDecl) -> Result {
-        unimplemented!("emit_ts_type_alias_decl")
+        if n.declare {
+            keyword!("declare");
+            space!();
+        }
+
+        emit!(n.id);
+        if let Some(type_params) = &n.type_params {
+            emit!(type_params);
+        }
+        formatting_space!();
+
+        punct!("=");
+
+        formatting_space!();
+
+        emit!(n.type_ann);
     }
 
     #[emitter]
     fn emit_ts_type_ann(&mut self, n: &TsTypeAnn) -> Result {
-        unimplemented!("emit_ts_type_ann")
+        emit!(n.type_ann)
     }
 
     #[emitter]
@@ -278,27 +503,60 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_type_element(&mut self, n: &TsTypeElement) -> Result {
-        unimplemented!("emit_ts_type_element")
+        match n {
+            TsTypeElement::TsCallSignatureDecl(n) => emit!(n),
+            TsTypeElement::TsConstructSignatureDecl(n) => emit!(n),
+            TsTypeElement::TsPropertySignature(n) => emit!(n),
+            TsTypeElement::TsMethodSignature(n) => emit!(n),
+            TsTypeElement::TsIndexSignature(n) => emit!(n),
+        }
     }
 
     #[emitter]
     fn emit_ts_type_lit(&mut self, n: &TsTypeLit) -> Result {
-        unimplemented!("emit_ts_type_lit")
+        self.emit_list(
+            n.span,
+            Some(&n.members),
+            ListFormat::MultiLineTypeLiteralMembers,
+        )?;
     }
 
     #[emitter]
     fn emit_ts_type_operator(&mut self, n: &TsTypeOperator) -> Result {
-        unimplemented!("emit_ts_type_operator")
+        match n.op {
+            TsTypeOperatorOp::KeyOf => keyword!("keyof"),
+            TsTypeOperatorOp::Unique => keyword!("unique"),
+            TsTypeOperatorOp::ReadOnly => keyword!("readonly"),
+        }
+        space!();
+        emit!(n.type_ann);
     }
 
     #[emitter]
     fn emit_ts_type_param(&mut self, n: &TsTypeParam) -> Result {
-        unimplemented!("emit_ts_type_param")
+        emit!(n.name);
+
+        if let Some(constraints) = &n.constraint {
+            space!();
+            keyword!("extends");
+            space!();
+        }
+
+        if let Some(default) = &n.default {
+            formatting_space!();
+            punct!("=");
+            formatting_space!();
+            emit!(default);
+        }
     }
 
     #[emitter]
     fn emit_ts_type_param_decl(&mut self, n: &TsTypeParamDecl) -> Result {
-        unimplemented!("emit_ts_type_param_decl")
+        punct!("<");
+
+        self.emit_list(n.span, Some(&n.params), ListFormat::TypeParameters)?;
+
+        punct!(">");
     }
 
     #[emitter]
@@ -318,16 +576,25 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_type_ref(&mut self, n: &TsTypeRef) -> Result {
-        unimplemented!("emit_ts_type_ref")
+        emit!(n.type_name);
+
+        if let Some(n) = &n.type_params {
+            punct!("<");
+            self.emit_list(n.span, Some(&n.params), ListFormat::TypeArguments)?;
+            punct!(">");
+        }
     }
 
     #[emitter]
     fn emit_ts_union_or_intersection_type(&mut self, n: &TsUnionOrIntersectionType) -> Result {
-        unimplemented!("emit_ts_union_or_intersection_type")
+        match n {
+            TsUnionOrIntersectionType::TsUnionType(n) => emit!(n),
+            TsUnionOrIntersectionType::TsIntersectionType(n) => emit!(n),
+        }
     }
 
     #[emitter]
     fn emit_ts_union_type(&mut self, n: &TsUnionType) -> Result {
-        unimplemented!("emit_ts_union_type")
+        self.emit_list(n.span, Some(&n.types), ListFormat::UnionTypeConstituents)?;
     }
 }

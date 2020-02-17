@@ -55,6 +55,24 @@ impl Fold<FnDecl> for TypeResolver {
     }
 }
 
+impl Fold<TsModuleDecl> for TypeResolver {
+    fn fold(&mut self, node: TsModuleDecl) -> TsModuleDecl {
+        TsModuleDecl {
+            declare: true,
+            ..node.fold_children(self)
+        }
+    }
+}
+
+impl Fold<TsTypeAliasDecl> for TypeResolver {
+    fn fold(&mut self, node: TsTypeAliasDecl) -> TsTypeAliasDecl {
+        TsTypeAliasDecl {
+            declare: true,
+            ..node.fold_children(self)
+        }
+    }
+}
+
 impl Fold<Option<BlockStmt>> for TypeResolver {
     #[inline]
     fn fold(&mut self, _: Option<BlockStmt>) -> Option<BlockStmt> {
