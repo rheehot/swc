@@ -383,9 +383,8 @@ fn do_test(treat_error_as_bug: bool, file_name: &Path, mode: Mode) -> Result<(),
                                 let v = s["noImplicitReturns:".len()..].trim().parse().unwrap();
                                 rule.no_implicit_returns = v;
                             } else if s.starts_with("declaration") {
-                                // TODO: Create d.ts
                             } else if s.starts_with("stripInternal:") {
-                                // TODO: Create d.ts
+                                // TODO: Handle
                             } else if s.starts_with("traceResolution") {
                                 // no-op
                             } else if s.starts_with("allowUnusedLabels:") {

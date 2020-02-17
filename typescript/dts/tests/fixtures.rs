@@ -81,6 +81,17 @@ fn add_conformance_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
                 }
             }
         }
+        {
+            let mut buf = String::new();
+            File::open(entry.path())
+                .context("failed to open input file")?
+                .read_to_string(&mut buf)
+                .context("failed to read input file")?;
+
+            if !buf.contains("declaration") {
+                continue;
+            }
+        }
 
         let file_name = entry
             .path()
