@@ -427,7 +427,9 @@ impl Analyzer<'_, '_> {
             .map(|v| v.span())
             .and_then(|span| if span.is_dummy() { None } else { Some(span) })
             .unwrap_or_else(|| pat.span());
-        assert_ne!(span, DUMMY_SP);
+        if !self.is_builtin {
+            assert_ne!(span, DUMMY_SP);
+        }
 
         match *pat {
             Pat::Ident(ref i) => {
