@@ -102,7 +102,9 @@ fn add_conformance_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
             .to_string();
 
         let test_name = format!("conformance::{}", file_name.replace("/", "::"));
-        let ignore = false;
+        let ignore = env::var("TEST")
+            .map(|s| !file_name.replace("/", "::").contains(&s))
+            .unwrap_or(false);
 
         let name = test_name.to_string();
         add_test(tests, name, ignore, move || {
