@@ -10,13 +10,17 @@ use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
+    /// TODO: implement
     pub(super) fn infer_arg_types(
         &mut self,
         type_params: &[TypeParam],
         params: &[FnParam],
         args: &[TypeOrSpread],
     ) -> ValidationResult<TypeParamInstantiation> {
-        unimplemented!("type parameter inference")
+        Ok(TypeParamInstantiation {
+            span: Default::default(),
+            params: type_params.iter().cloned().map(Type::Param).collect(),
+        })
     }
 
     pub(super) fn expand_type_params(
