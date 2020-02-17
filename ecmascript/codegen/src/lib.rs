@@ -78,7 +78,7 @@ impl<'a> Emitter<'a> {
     }
 
     #[emitter]
-    fn emit_program(&mut self, node: &Program) -> Result {
+    pub fn emit_program(&mut self, node: &Program) -> Result {
         match *node {
             Program::Module(ref m) => emit!(m),
             Program::Script(ref s) => emit!(s),
@@ -86,7 +86,7 @@ impl<'a> Emitter<'a> {
     }
 
     #[emitter]
-    fn emit_module(&mut self, node: &Module) -> Result {
+    pub fn emit_module(&mut self, node: &Module) -> Result {
         if let Some(ref shebang) = node.shebang {
             punct!("#!");
             self.wr.write_str_lit(DUMMY_SP, &*shebang)?;
@@ -98,7 +98,7 @@ impl<'a> Emitter<'a> {
     }
 
     #[emitter]
-    fn emit_script(&mut self, node: &Script) -> Result {
+    pub fn emit_script(&mut self, node: &Script) -> Result {
         if let Some(ref shebang) = node.shebang {
             punct!("#!");
             self.wr.write_str_lit(DUMMY_SP, &*shebang)?;
@@ -1205,7 +1205,13 @@ impl<'a> Emitter<'a> {
             unimplemented!()
         } else {
             // TODO: span
-            self.wr.write_symbol(ident.span, &ident.sym)?
+            self.wr.write_symbol(ident.span, &ident.sym)?;
+
+            if let Some(ty) = &ident.type_ann {
+                punct!(":");
+                formatting_space!();
+                emit!(ty);
+            }
 
             // self.wr
             //     .write(get_text_of_node(&self.cm, &ident, /* includeTrivia */
