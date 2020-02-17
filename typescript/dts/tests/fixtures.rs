@@ -88,7 +88,7 @@ fn add_conformance_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
                 .read_to_string(&mut buf)
                 .context("failed to read input file")?;
 
-            if !buf.contains("declaration") {
+            if !buf.to_ascii_lowercase().contains("@declaration") {
                 continue;
             }
         }
@@ -279,6 +279,8 @@ fn get_correct_dts(path: &Path) -> (Arc<String>, Module) {
                     .join("tsc"),
             );
             c.arg(path)
+                .arg("--jsx")
+                .arg("preserve")
                 .arg("-d")
                 .arg("--emitDeclarationOnly")
                 .arg("--lib")
