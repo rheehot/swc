@@ -85,8 +85,6 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
                     }
                 }
             }
-        } else {
-            e.members.visit_children(self);
         }
 
         ty
