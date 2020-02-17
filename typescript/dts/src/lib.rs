@@ -36,3 +36,28 @@ impl Fold<VarDeclarator> for TypeResolver {
         VarDeclarator { init, ..node }
     }
 }
+
+impl Fold<ClassDecl> for TypeResolver {
+    fn fold(&mut self, node: ClassDecl) -> ClassDecl {
+        ClassDecl {
+            declare: true,
+            ..node.fold_children(self)
+        }
+    }
+}
+
+impl Fold<FnDecl> for TypeResolver {
+    fn fold(&mut self, node: FnDecl) -> FnDecl {
+        FnDecl {
+            declare: true,
+            ..node.fold_children(self)
+        }
+    }
+}
+
+impl Fold<Option<BlockStmt>> for TypeResolver {
+    #[inline]
+    fn fold(&mut self, _: Option<BlockStmt>) -> Option<BlockStmt> {
+        None
+    }
+}
