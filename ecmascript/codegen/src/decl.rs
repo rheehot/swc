@@ -85,7 +85,7 @@ impl<'a> Emitter<'a> {
     }
 
     #[emitter]
-    pub fn emit_var_declator(&mut self, node: &VarDeclarator) -> Result {
+    pub fn emit_var_declarator(&mut self, node: &VarDeclarator) -> Result {
         self.emit_leading_comments_of_pos(node.span().lo())?;
 
         emit!(node.name);
