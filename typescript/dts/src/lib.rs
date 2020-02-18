@@ -9,7 +9,6 @@ use swc_ecma_ast::*;
 use swc_ts_checker::{ty, ty::Type, ModuleTypeInfo};
 
 pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
-    println!("Info: {:?}", info);
     module.fold_with(&mut TypeResolver { info })
 }
 
