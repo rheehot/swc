@@ -216,6 +216,10 @@ impl Fold<ClassMethod> for TypeResolver {
             return node;
         }
 
+        if node.kind != MethodKind::Method {
+            return node;
+        }
+
         if let Some(cls) = &mut self.current_class {
             if let Some(return_type) = cls.body.iter().find_map(|v| match v {
                 ty::ClassMember::Method(m) => {
