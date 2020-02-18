@@ -2,18 +2,21 @@
 #![feature(box_patterns)]
 #![feature(specialization)]
 
+use std::collections::hash_map::Entry;
 use swc_common::{Fold, FoldWith};
 use swc_ecma_ast::*;
-use swc_ts_checker::ModuleTypeInfo;
+use swc_ts_checker::{ty::Type, ModuleTypeInfo};
 
 pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
-    module.fold_with(&mut TypeResolver { types: info })
+    module.fold_with(&mut TypeResolver { info })
 }
 
 #[derive(Debug)]
 struct TypeResolver {
-    types: ModuleTypeInfo,
+    info: ModuleTypeInfo,
 }
+
+impl TypeResolver {}
 
 impl Fold<VarDecl> for TypeResolver {
     fn fold(&mut self, node: VarDecl) -> VarDecl {
@@ -27,13 +30,39 @@ impl Fold<VarDecl> for TypeResolver {
 }
 
 impl Fold<VarDeclarator> for TypeResolver {
-    fn fold(&mut self, node: VarDeclarator) -> VarDeclarator {
-        let init = match node.init {
-            Some(box Expr::Lit(..)) => node.init,
-            _ => None,
+    fn fold(&mut self, mut node: VarDeclarator) -> VarDeclarator {
+        match node.init {
+            Some(box Expr::Lit(Lit::Null(..))) => {
+                node.init = None;
+            }
+            Some(box Expr::Lit(..)) => {}
+            _ => {
+                node.init = None;
+            }
         };
 
-        VarDeclarator { init, ..node }
+        if node.init.is_none() {
+            node.name = node.name.fold_with(self);
+        }
+
+        node
+    }
+}
+
+impl Fold<Ident> for TypeResolver {
+    fn fold(&mut self, mut node: Ident) -> Pat {
+        if node.type_ann.is_some() {
+            return node;
+        }
+
+        if let Some(ty) = self.info.vars.remove(nodet.sym.clone()).map(From::from) {
+            node.type_ann = Some(TsTypeAnn {
+                span: Default::default(),
+                type_ann: box ty,
+            });
+        }
+
+        node
     }
 }
 
