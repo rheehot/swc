@@ -143,6 +143,36 @@ impl Fold<TsModuleDecl> for TypeResolver {
     }
 }
 
+impl Fold<TsEnumDecl> for TypeResolver {
+    fn fold(&mut self, node: TsEnumDecl) -> TsEnumDecl {
+        let members = self.take_mapped(&node.id.sym, |ty| match ty {
+            Type::Enum(e) => Some(
+                e.members
+                    .iter()
+                    .map(|member| TsEnumMember {
+                        span: member.span,
+                        id: member.id.clone(),
+                        init: Some(box Expr::Lit(match member.val.clone() {
+                            TsLit::Number(v) => Lit::Num(v),
+                            TsLit::Str(v) => Lit::Str(v),
+                            TsLit::Bool(..) => {
+                                unreachable!("enum member with bool value is invalid")
+                            }
+                        })),
+                    })
+                    .collect(),
+            ),
+            _ => None,
+        });
+
+        TsEnumDecl {
+            declare: true,
+            members: members.unwrap_or(node.members),
+            ..node
+        }
+    }
+}
+
 impl Fold<TsTypeAliasDecl> for TypeResolver {
     fn fold(&mut self, node: TsTypeAliasDecl) -> TsTypeAliasDecl {
         TsTypeAliasDecl {

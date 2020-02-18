@@ -27,15 +27,23 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<Enum>;
     #[inline(never)]
     fn validate(&mut self, e: &TsEnumDecl) -> Self::Output {
+        let mut last = 0;
         let ty: Result<_, _> = try {
             let members = e
                 .members
                 .iter()
-                .enumerate()
-                .map(|(i, m)| -> Result<_, Error> {
+                .map(|m| -> Result<_, Error> {
+                    let val = compute(&e, last as _, m.init.as_ref().map(|v| &**v))?;
+
+                    match val {
+                        TsLit::Number(n) => {
+                            last = n.value as isize + 1;
+                        }
+                        _ => {}
+                    }
                     Ok(EnumMember {
                         id: m.id.clone(),
-                        val: compute(&e, i, m.init.as_ref().map(|v| &**v))?,
+                        val,
                         span: m.span,
                     })
                 })
@@ -92,11 +100,11 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
 }
 
 /// Called only for enums.
-fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error> {
+fn compute(e: &TsEnumDecl, i: isize, expr: Option<&Expr>) -> Result<TsLit, Error> {
     fn arithmetic_opt(
         e: &TsEnumDecl,
         span: Span,
-        i: usize,
+        i: isize,
         expr: Option<&Expr>,
     ) -> Result<f64, Error> {
         if let Some(ref expr) = expr {
@@ -122,7 +130,12 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
                         TsEnumMemberId::Str(Str { value: ref sym, .. })
                         | TsEnumMemberId::Ident(Ident { ref sym, .. }) => {
                             if *sym == id.sym {
-                                return arithmetic_opt(e, span, i, m.init.as_ref().map(|v| &**v));
+                                return arithmetic_opt(
+                                    e,
+                                    span,
+                                    i as _,
+                                    m.init.as_ref().map(|v| &**v),
+                                );
                             }
                         }
                     }
@@ -136,7 +149,7 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
                     op!(unary, "+") => return Ok(v),
                     op!(unary, "-") => return Ok(-v),
                     op!("!") => return Ok(if v == 0.0f64 { 0.0 } else { 1.0 }),
-                    op!("~") => return Ok((!(v as u32)) as f64),
+                    op!("~") => return Ok((!(v as i32)) as f64),
                     _ => return Err(Error::InvalidEnumInit { span }),
                 };
             }
@@ -180,9 +193,12 @@ fn compute(e: &TsEnumDecl, i: usize, expr: Option<&Expr>) -> Result<TsLit, Error
         }
     }
 
+    let value = arithmetic_opt(e, e.span, i, expr)?;
+    println!("n.value = {}, last = {}", value, i);
+
     Ok(Number {
         span: expr.span(),
-        value: arithmetic_opt(e, e.span, i, expr)?,
+        value: valiue,
     }
     .into())
 }
