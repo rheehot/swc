@@ -80,9 +80,6 @@ impl Analyzer<'_, '_> {
                     .map(|(k, v)| (k, v.into_iter().map(|v| v.freeze()).collect())),
             );
         }
-
-        debug_assert_ne!(self.info.exports.types, Default::default());
-        debug_assert_ne!(self.info.exports.vars, Default::default());
     }
 
     pub(super) fn export_default_expr(&mut self, expr: &Expr) {

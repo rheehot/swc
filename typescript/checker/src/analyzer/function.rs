@@ -97,7 +97,11 @@ impl Validate<Function> for Analyzer<'_, '_> {
                         }
                     }
 
-                    Type::any(span)
+                    // No return statement -> void
+                    Type::Keyword(TsKeywordType {
+                        span,
+                        kind: TsKeywordTypeKind::TsVoidKeyword,
+                    })
                 }
                 None => Type::any(f.span),
             };
