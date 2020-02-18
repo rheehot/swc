@@ -967,8 +967,12 @@ impl<'a> Emitter<'a> {
             emit!(ty);
         }
 
-        formatting_space!();
-        emit!(node.body);
+        if let Some(body) = &node.body {
+            formatting_space!();
+            emit!(body);
+        } else {
+            semi!()
+        }
     }
 
     #[emitter]
