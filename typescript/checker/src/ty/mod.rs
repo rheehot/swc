@@ -9,7 +9,7 @@ use swc_ecma_utils::{
     Value::{Known, Unknown},
 };
 
-pub mod merge;
+mod convert;
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned, FromVariant, Is)]
 pub enum Type {
