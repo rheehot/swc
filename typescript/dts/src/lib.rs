@@ -19,12 +19,16 @@ struct TypeResolver {
 }
 
 impl TypeResolver {
-    fn take_type<F>(&mut self, sym: &JsWord, pred: F) -> Option<Type>
+    fn take_type<F>(&mut self, sym: &JsWord, mut pred: F) -> Option<Type>
     where
         F: FnMut(&Type) -> bool,
     {
         if let Some(types) = self.info.types.get_mut(sym) {
-            let pos = types.iter().position(pred);
+            for ty in &*types {
+                assert!(ty.is_arc());
+            }
+
+            let pos = types.iter().position(|ty| pred(ty.normalize()));
             if let Some(pos) = pos {
                 return Some(types.remove(pos));
             }
@@ -94,11 +98,12 @@ impl Fold<FnDecl> for TypeResolver {
 
         let node: FnDecl = node.fold_children(self);
 
-        let return_type = if let Some(ty) = self.take_type(&node.ident.sym, |ty| match ty {
-            Type::Function(..) => true,
-            _ => false,
-        }) {
-            Some(ty.into())
+        let return_type = if let Some(Type::Function(f)) =
+            self.take_type(&node.ident.sym, |ty| match ty {
+                Type::Function(..) => true,
+                _ => false,
+            }) {
+            Some(f.ret_ty.into())
         } else {
             None
         };
