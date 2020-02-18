@@ -198,6 +198,9 @@ impl Fold<Vec<ClassMember>> for TypeResolver {
                                         definite: false,
                                     }));
                                 }
+
+                                p.accessibility = None;
+                                p.readonly = false;
                             }
                             _ => {}
                         }

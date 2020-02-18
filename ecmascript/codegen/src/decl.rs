@@ -36,6 +36,7 @@ impl<'a> Emitter<'a> {
         keyword!("class");
         space!();
         emit!(node.ident);
+        formatting_space!();
 
         self.emit_class_trailing(&node.class)?;
     }

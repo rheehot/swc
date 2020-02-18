@@ -689,6 +689,7 @@ impl<'a> Emitter<'a> {
         if let Some(ref i) = node.ident {
             space!();
             emit!(i);
+            formatting_space!();
         }
 
         self.emit_class_trailing(&node.class)?;
@@ -802,10 +803,39 @@ impl<'a> Emitter<'a> {
     }
 
     #[emitter]
-    fn emit_class_prop(&mut self, node: &ClassProp) -> Result {
-        self.emit_leading_comments_of_pos(node.span().lo())?;
+    fn emit_class_prop(&mut self, n: &ClassProp) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_class_prop")
+        self.emit_accesibility(n.accessibility)?;
+
+        if n.readonly {
+            keyword!("readonly");
+            space!()
+        }
+
+        if n.computed {
+            punct!("[");
+            emit!(n.key);
+            punct!("]");
+        } else {
+            emit!(n.key);
+        }
+
+        if let Some(ty) = &n.type_ann {
+            punct!(":");
+            space!();
+            emit!(ty);
+        }
+
+        if let Some(v) = &n.value {
+            formatting_space!();
+            punct!("=");
+            formatting_space!();
+
+            emit!(v);
+        }
+
+        semi!();
     }
 
     fn emit_accesibility(&mut self, n: Option<Accessibility>) -> Result {
@@ -832,7 +862,11 @@ impl<'a> Emitter<'a> {
         self.emit_list(n.span(), Some(&n.params), ListFormat::Parameters)?;
         punct!(")");
 
-        emit!(n.body);
+        if let Some(body) = &n.body {
+            emit!(body);
+        } else {
+            semi!();
+        }
     }
 
     #[emitter]
