@@ -1,5 +1,6 @@
 use super::{Emitter, Result};
 use crate::list::ListFormat;
+use swc_common::Spanned;
 use swc_ecma_ast::*;
 use swc_ecma_codegen_macros::emitter;
 
@@ -14,36 +15,50 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_array_type(&mut self, n: &TsArrayType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_array_type")
     }
 
     #[emitter]
     fn emit_ts_as_expr(&mut self, n: &TsAsExpr) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_as_expr")
     }
 
     #[emitter]
     fn emit_ts_call_signature_decl(&mut self, n: &TsCallSignatureDecl) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_call_signature_decl")
     }
 
     #[emitter]
     fn emit_ts_cond_type(&mut self, n: &TsConditionalType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_cond_type")
     }
 
     #[emitter]
     fn emit_ts_constructor_signature_decl(&mut self, n: &TsConstructSignatureDecl) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_constructor_signature_decl")
     }
 
     #[emitter]
     fn emit_ts_constructor_type(&mut self, n: &TsConstructorType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_constructor_type")
     }
 
     #[emitter]
     fn emit_ts_entity_name(&mut self, n: &TsEntityName) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         match n {
             TsEntityName::TsQualifiedName(n) => {
                 emit!(n);
@@ -55,6 +70,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_enum_decl(&mut self, n: &TsEnumDecl) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         if n.declare {
             keyword!("declare");
             space!();
@@ -80,6 +97,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_enum_member(&mut self, n: &TsEnumMember) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         emit!(n.id);
 
         if let Some(init) = &n.init {
@@ -100,21 +119,29 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_export_assignment(&mut self, n: &TsExportAssignment) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_export_assignment")
     }
 
     #[emitter]
     fn emit_ts_expr_with_type_args(&mut self, n: &TsExprWithTypeArgs) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_expr_with_type_args")
     }
 
     #[emitter]
     fn emit_ts_external_module_ref(&mut self, n: &TsExternalModuleRef) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_external_module_ref")
     }
 
     #[emitter]
     fn emit_ts_fn_or_constructor_type(&mut self, n: &TsFnOrConstructorType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_fn_or_constructor_type")
     }
 
@@ -130,31 +157,43 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_fn_type(&mut self, n: &TsFnType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_fn_type")
     }
 
     #[emitter]
     fn emit_ts_import_equals_decl(&mut self, n: &TsImportEqualsDecl) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_import_equals_decl")
     }
 
     #[emitter]
     fn emit_ts_index_signature(&mut self, n: &TsIndexSignature) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_index_signature")
     }
 
     #[emitter]
     fn emit_ts_index_accessed_type(&mut self, n: &TsIndexedAccessType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_index_accessed_type")
     }
 
     #[emitter]
     fn emit_ts_infer_type(&mut self, n: &TsInferType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_infer_type")
     }
 
     #[emitter]
     fn emit_ts_interface_body(&mut self, n: &TsInterfaceBody) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         punct!("{");
 
         self.emit_list(n.span, Some(&n.body), ListFormat::InterfaceMembers)?;
@@ -164,6 +203,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_interface_decl(&mut self, n: &TsInterfaceDecl) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         if n.declare {
             keyword!("declare");
             space!();
@@ -181,6 +222,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_intersection_type(&mut self, n: &TsIntersectionType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         self.emit_list(
             n.span,
             Some(&n.types),
@@ -190,6 +233,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_keyword_type(&mut self, n: &TsKeywordType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         match n.kind {
             TsKeywordTypeKind::TsAnyKeyword => keyword!(n.span, "any"),
             TsKeywordTypeKind::TsUnknownKeyword => keyword!(n.span, "unknown"),
@@ -208,21 +253,29 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_lit(&mut self, n: &TsLit) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_lit")
     }
 
     #[emitter]
     fn emit_ts_lit_type(&mut self, n: &TsLitType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_lit_type")
     }
 
     #[emitter]
     fn emit_ts_mapped_type(&mut self, n: &TsMappedType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_mapped_type")
     }
 
     #[emitter]
     fn emit_ts_method_signature(&mut self, n: &TsMethodSignature) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         if n.readonly {
             keyword!("readonly");
         }
@@ -251,10 +304,13 @@ impl<'a> Emitter<'a> {
     #[emitter]
     fn emit_ts_module_block(&mut self, n: &TsModuleBlock) -> Result {
         self.emit_list(n.span, Some(&n.body), ListFormat::SourceFileStatements)?;
+        self.emit_leading_comments_of_pos(n.span().lo())?;
     }
 
     #[emitter]
     fn emit_ts_module_decl(&mut self, n: &TsModuleDecl) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         if n.declare {
             keyword!("declare");
             space!();
@@ -280,11 +336,15 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_module_ref(&mut self, n: &TsModuleRef) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_module_ref")
     }
 
     #[emitter]
     fn emit_ts_ns_body(&mut self, n: &TsNamespaceBody) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         punct!("{");
 
         match n {
@@ -297,26 +357,40 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_ns_decl(&mut self, n: &TsNamespaceDecl) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_ns_decl")
     }
 
     #[emitter]
     fn emit_ts_ns_export_decl(&mut self, n: &TsNamespaceExportDecl) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_ns_export_decl")
     }
 
     #[emitter]
     fn emit_ts_non_null_expr(&mut self, n: &TsNonNullExpr) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_non_null_expr")
     }
 
     #[emitter]
     fn emit_ts_optional_type(&mut self, n: &TsOptionalType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_optional_type")
     }
 
     #[emitter]
     fn emit_ts_param_prop(&mut self, n: &TsParamProp) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         self.emit_accesibility(n.accessibility)?;
 
         if n.readonly {
@@ -329,6 +403,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_param_prop_param(&mut self, n: &TsParamPropParam) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         match n {
             TsParamPropParam::Ident(n) => emit!(n),
             TsParamPropParam::Assign(n) => emit!(n),
@@ -337,11 +413,15 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_paren_type(&mut self, n: &TsParenthesizedType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_paren_type")
     }
 
     #[emitter]
     fn emit_ts_property_signature(&mut self, n: &TsPropertySignature) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         if n.readonly {
             keyword!("readonly");
             space!();
@@ -381,31 +461,43 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_qualified_name(&mut self, n: &TsQualifiedName) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_qualified_name")
     }
 
     #[emitter]
     fn emit_ts_rest_type(&mut self, n: &TsRestType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_rest_type")
     }
 
     #[emitter]
     fn emit_ts_signature_decl(&mut self, n: &TsSignatureDecl) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_signature_decl")
     }
 
     #[emitter]
     fn emit_ts_this_type(&mut self, n: &TsThisType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_this_type")
     }
 
     #[emitter]
     fn emit_ts_this_type_or_ident(&mut self, n: &TsThisTypeOrIdent) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_this_type_or_ident")
     }
 
     #[emitter]
     fn emit_ts_tuple_type(&mut self, n: &TsTupleType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_tuple_type")
     }
 
@@ -437,6 +529,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_import_type(&mut self, n: &TsImportType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         keyword!("import");
         punct!("(");
         emit!(n.arg);
@@ -456,6 +550,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_type_alias_decl(&mut self, n: &TsTypeAliasDecl) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         if n.declare {
             keyword!("declare");
             space!();
@@ -476,21 +572,29 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_type_ann(&mut self, n: &TsTypeAnn) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         emit!(n.type_ann)
     }
 
     #[emitter]
     fn emit_ts_type_assertion(&mut self, n: &TsTypeAssertion) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_type_assertion")
     }
 
     #[emitter]
     fn emit_ts_const_assertion(&mut self, n: &TsConstAssertion) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_const_assertion")
     }
 
     #[emitter]
     fn emit_ts_type_cast_expr(&mut self, n: &TsTypeCastExpr) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_type_cast_expr")
     }
 
@@ -507,6 +611,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_type_lit(&mut self, n: &TsTypeLit) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         self.emit_list(
             n.span,
             Some(&n.members),
@@ -516,6 +622,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_type_operator(&mut self, n: &TsTypeOperator) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         match n.op {
             TsTypeOperatorOp::KeyOf => keyword!("keyof"),
             TsTypeOperatorOp::Unique => keyword!("unique"),
@@ -527,6 +635,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_type_param(&mut self, n: &TsTypeParam) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         emit!(n.name);
 
         if let Some(constraints) = &n.constraint {
@@ -545,6 +655,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_type_param_decl(&mut self, n: &TsTypeParamDecl) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         punct!("<");
 
         self.emit_list(n.span, Some(&n.params), ListFormat::TypeParameters)?;
@@ -554,21 +666,29 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_type_param_instantiation(&mut self, n: &TsTypeParamInstantiation) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_type_param_instantiation")
     }
 
     #[emitter]
     fn emit_ts_type_predicate(&mut self, n: &TsTypePredicate) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_type_predicate")
     }
 
     #[emitter]
     fn emit_ts_type_query(&mut self, n: &TsTypeQuery) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         unimplemented!("emit_ts_type_query")
     }
 
     #[emitter]
     fn emit_ts_type_ref(&mut self, n: &TsTypeRef) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         emit!(n.type_name);
 
         if let Some(n) = &n.type_params {
@@ -588,6 +708,8 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_union_type(&mut self, n: &TsUnionType) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
         self.emit_list(n.span, Some(&n.types), ListFormat::UnionTypeConstituents)?;
     }
 }
