@@ -7,7 +7,7 @@ use crate::{
         self, Alias, Array, EnumVariant, IndexSignature, Interface, Intersection,
         PropertySignature, QueryExpr, QueryType, Ref, Tuple, Type, TypeElement, TypeLit, Union,
     },
-    util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
+    util::EqIgnoreNameAndSpan,
     validator::Validate,
     ValidationResult,
 };

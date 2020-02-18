@@ -376,7 +376,9 @@ impl Validate<TsConstructorType> for Analyzer<'_, '_> {
     fn validate(&mut self, t: &TsConstructorType) -> Self::Output {
         Ok(ty::Constructor {
             span: t.span,
+            type_params: try_opt!(t.type_params.validate_with(self)),
             params: t.params.validate_with(self)?,
+            type_ann: box t.type_ann.validate_with(self)?,
         })
     }
 }
@@ -491,6 +493,7 @@ impl Validate<TsTypePredicate> for Analyzer<'_, '_> {
         Ok(Predicate {
             span: t.span,
             param_name: t.param_name.clone(),
+            asserts: t.asserts,
             ty: try_opt!(t.type_ann.validate_with(self).map(|res| res.map(Box::new))),
         })
     }

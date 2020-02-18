@@ -1,6 +1,6 @@
 use super::Analyzer;
 use crate::{
-    analyzer::{scope::VarInfo, util::ResultExt},
+    analyzer::util::ResultExt,
     errors::Error,
     ty::Type,
     validator::{Validate, ValidateWith},

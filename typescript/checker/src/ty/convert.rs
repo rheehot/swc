@@ -4,6 +4,8 @@ use crate::{
     ty::{FnParam, TypeParamDecl},
 };
 use swc_common::Spanned;
+use crate::ty;
+use crate::{ty, ty::TypeParamDecl};
 use swc_ecma_ast::*;
 
 impl From<Type> for TsType {
@@ -247,4 +249,9 @@ impl From<ty::TypeParam> for TsTypeParam {
 
 impl From<ty::Operator> for TsTypeOperator {
     fn from(t: ty::Operator) -> Self {}
+}
+impl From<ty::TypeParamDecl> for TsType {
+    fn from(t: TypeParamDecl) -> Self {
+        unimplemented!()
+    }
 }

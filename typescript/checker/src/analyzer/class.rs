@@ -55,7 +55,7 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<Constructor> for Analyzer<'_, '_> {
-    type Output = ValidationResult<ty::Constructor>;
+    type Output = ValidationResult<ty::ConstructorSignature>;
 
     fn validate(&mut self, c: &Constructor) -> Self::Output {
         self.record(c);
@@ -146,9 +146,11 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                 child.scope.remove_declaring(names);
             }
 
-            Ok(ty::Constructor {
+            Ok(ty::ConstructorSignature {
                 span: c.span,
                 params: ps,
+                ret_ty: None,
+                type_params: None,
             })
         })
     }

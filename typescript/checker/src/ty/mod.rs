@@ -167,7 +167,7 @@ pub struct ClassInstance {
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned, FromVariant)]
 pub enum ClassMember {
-    Constructor(Constructor),
+    Constructor(ConstructorSignature),
     Method(Method),
     Property(ClassProperty),
     IndexSignature(IndexSignature),
@@ -434,13 +434,16 @@ pub struct Function {
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct Constructor {
     pub span: Span,
+    pub type_params: Option<TypeParamDecl>,
     pub params: Vec<FnParam>,
+    pub type_ann: Box<Type>,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct Predicate {
     pub span: Span,
     pub param_name: TsThisTypeOrIdent,
+    pub asserts: bool,
     pub ty: Option<Box<Type>>,
 }
 

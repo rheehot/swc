@@ -940,7 +940,7 @@ impl Analyzer<'_, '_> {
                             // TODO: Check # of parameters
                             for rm in body {
                                 match rm {
-                                    ClassMember::Constructor(Constructor { .. }) => continue 'l,
+                                    ClassMember::Constructor(..) => continue 'l,
                                     _ => {}
                                 }
                             }
@@ -956,7 +956,7 @@ impl Analyzer<'_, '_> {
 
                             for rm in body {
                                 match rm {
-                                    ClassMember::Constructor(Constructor { .. }) => continue 'l,
+                                    ClassMember::Constructor(..) => continue 'l,
                                     _ => {}
                                 }
                             }
