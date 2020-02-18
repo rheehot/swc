@@ -52,7 +52,15 @@ impl<'a> Emitter<'a> {
     fn emit_ts_constructor_type(&mut self, n: &TsConstructorType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_constructor_type")
+        keyword!("new");
+        space!();
+        if let Some(type_params) = &n.type_params {
+            emit!(type_params);
+        }
+
+        punct!("(");
+        self.emit_list(n.span, Some(&n.params), ListFormat::Parameters)?;
+        punct!(")");
     }
 
     #[emitter]
@@ -142,7 +150,10 @@ impl<'a> Emitter<'a> {
     fn emit_ts_fn_or_constructor_type(&mut self, n: &TsFnOrConstructorType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_fn_or_constructor_type")
+        match n {
+            TsFnOrConstructorType::TsFnType(n) => emit!(n),
+            TsFnOrConstructorType::TsConstructorType(n) => emit!(n),
+        }
     }
 
     #[emitter]
@@ -253,16 +264,18 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_lit(&mut self, n: &TsLit) -> Result {
-        self.emit_leading_comments_of_pos(n.span().lo())?;
-
-        unimplemented!("emit_ts_lit")
+        match n {
+            TsLit::Number(n) => emit!(n),
+            TsLit::Str(n) => emit!(n),
+            TsLit::Bool(n) => emit!(n),
+        }
     }
 
     #[emitter]
     fn emit_ts_lit_type(&mut self, n: &TsLitType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_lit_type")
+        emit!(n.lit);
     }
 
     #[emitter]
@@ -613,11 +626,13 @@ impl<'a> Emitter<'a> {
     fn emit_ts_type_lit(&mut self, n: &TsTypeLit) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
+        punct!("{");
         self.emit_list(
             n.span,
             Some(&n.members),
             ListFormat::MultiLineTypeLiteralMembers,
         )?;
+        punct!("}");
     }
 
     #[emitter]
