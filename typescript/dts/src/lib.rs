@@ -41,25 +41,20 @@ impl Fold<VarDeclarator> for TypeResolver {
             }
         };
 
+        match node.name {
+            Pat::Ident(ref mut node) => {
+                if let Some(ty) = self.info.vars.remove(nodet.sym.clone()).map(From::from) {
+                    node.type_ann = Some(TsTypeAnn {
+                        span: Default::default(),
+                        type_ann: box ty,
+                    });
+                }
+            }
+            _ => {}
+        }
+
         if node.init.is_none() {
             node.name = node.name.fold_with(self);
-        }
-
-        node
-    }
-}
-
-impl Fold<Ident> for TypeResolver {
-    fn fold(&mut self, mut node: Ident) -> Pat {
-        if node.type_ann.is_some() {
-            return node;
-        }
-
-        if let Some(ty) = self.info.vars.remove(nodet.sym.clone()).map(From::from) {
-            node.type_ann = Some(TsTypeAnn {
-                span: Default::default(),
-                type_ann: box ty,
-            });
         }
 
         node
