@@ -317,14 +317,7 @@ impl<'a> Emitter<'a> {
 
     #[emitter]
     fn emit_ts_param_prop(&mut self, n: &TsParamProp) -> Result {
-        if let Some(a) = n.accessibility {
-            match a {
-                Accessibility::Public => keyword!("public"),
-                Accessibility::Protected => keyword!("protected"),
-                Accessibility::Private => keyword!("private"),
-            }
-            space!();
-        }
+        self.emit_accesibility(n.accessibility)?;
 
         if n.readonly {
             keyword!("readonly");

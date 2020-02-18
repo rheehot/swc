@@ -808,9 +808,24 @@ impl<'a> Emitter<'a> {
         unimplemented!("emit_class_prop")
     }
 
+    fn emit_accesibility(&mut self, n: Option<Accessibility>) -> Result {
+        if let Some(a) = n {
+            match a {
+                Accessibility::Public => keyword!(self, "public"),
+                Accessibility::Protected => keyword!(self, "protected"),
+                Accessibility::Private => keyword!(self, "private"),
+            }
+            space!(self);
+        }
+
+        Ok(())
+    }
+
     #[emitter]
     fn emit_class_constructor(&mut self, n: &Constructor) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
+
+        self.emit_accesibility(n.accessibility)?;
 
         keyword!("constructor");
         punct!("(");
