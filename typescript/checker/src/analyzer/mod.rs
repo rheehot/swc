@@ -208,7 +208,8 @@ impl<'a, 'b> Analyzer<'a, 'b> {
             info: Default::default(),
             path,
             export_equals_span: DUMMY_SP,
-            in_declare: false,
+            // builtin types are declared
+            in_declare: is_builtin,
             resolved_import_types: Default::default(),
             resolved_import_vars: Default::default(),
             errored_imports: Default::default(),
