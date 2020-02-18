@@ -252,6 +252,51 @@ impl From<ty::Operator> for TsTypeOperator {
 }
 impl From<ty::TypeParamDecl> for TsType {
     fn from(t: TypeParamDecl) -> Self {
-        unimplemented!()
+        TsTypeParamDecl {
+            span: t.span,
+            params: t.params.into_iter().map(From::from).collect(),
+        }
+    }
+}
+
+impl From<ty::Type> for TsTypeAnn {
+    fn from(t: ty::Type) -> Self {
+        TsTypeAnn {
+            span: t.span(),
+            type_ann: box t.into(),
+        }
+    }
+}
+
+impl From<Box<ty::Type>> for TsTypeAnn {
+    fn from(t: Box<ty::Type>) -> Self {
+        (*t).into()
+    }
+}
+
+impl From<Box<ty::Type>> for Box<TsType> {
+    fn from(t: Box<ty::Type>) -> Self {
+        box (*t).into()
+    }
+}
+
+impl From<ty::Operator> for TsTypeOperator {
+    fn from(t: ty::Operator) -> Self {
+        TsTypeOperator {
+            span: t.span,
+            op: t.op,
+            type_ann: t.ty.into(),
+        }
+    }
+}
+
+impl From<ty::TypeParam> for TsTypeParam {
+    fn from(t: ty::TypeParam) -> Self {
+        TsTypeParam {
+            span: t.span,
+            name: t.name,
+            constraint: t.constraint.into(),
+            default: t.default.into(),
+        }
     }
 }
