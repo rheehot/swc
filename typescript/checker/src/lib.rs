@@ -211,8 +211,6 @@ impl Checker {
         let mut a = Analyzer::root(path.clone(), &self.libs, self.rule, self);
         module.visit_with(&mut a);
         let info = a.info;
-        debug_assert_ne!(info.exports.vars, FxHashMap::default());
-        debug_assert_ne!(info.exports.types, FxHashMap::default());
 
         let res = (module, info);
         self.modules.insert(path.clone(), res.clone());
