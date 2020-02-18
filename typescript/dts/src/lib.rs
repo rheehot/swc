@@ -2,11 +2,11 @@
 #![feature(box_patterns)]
 #![feature(specialization)]
 
-use std::collections::hash_map::Entry;
+use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{Fold, FoldWith};
 use swc_ecma_ast::*;
-use swc_ts_checker::{ty::Type, ModuleTypeInfo};
+use swc_ts_checker::{ty, ty::Type, ModuleTypeInfo};
 
 pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
     println!("Info: {:?}", info);
@@ -19,22 +19,40 @@ struct TypeResolver {
 }
 
 impl TypeResolver {
-    fn take_type<F>(&mut self, sym: &JsWord, mut pred: F) -> Option<Type>
+    fn take<F>(&mut self, sym: &JsWord, mut pred: F) -> Option<Arc<Type>>
     where
         F: FnMut(&Type) -> bool,
     {
         if let Some(types) = self.info.types.get_mut(sym) {
             for ty in &*types {
-                assert!(ty.is_arc());
+                debug_assert!(ty.is_arc(), "All exported types must be freezed");
             }
 
             let pos = types.iter().position(|ty| pred(ty.normalize()));
             if let Some(pos) = pos {
-                return Some(types.remove(pos));
+                return Some(match types.remove(pos) {
+                    Type::Arc(ty) => ty,
+                    _ => unreachable!(),
+                });
             }
         }
 
         None
+    }
+
+    fn take_mapped<F, T>(&mut self, sym: &JsWord, mut pred: F) -> Option<T>
+    where
+        F: FnMut(&Type) -> Option<T>,
+    {
+        if let Some(types) = self.info.types.get_mut(sym) {
+            for ty in &*types {
+                debug_assert!(ty.is_arc(), "All exported types must be freezed");
+            }
+
+            types.iter().filter_map(|ty| pred(ty.normalize())).next()
+        } else {
+            None
+        }
     }
 }
 
@@ -98,15 +116,12 @@ impl Fold<FnDecl> for TypeResolver {
 
         let node: FnDecl = node.fold_children(self);
 
-        let return_type = if let Some(Type::Function(f)) =
-            self.take_type(&node.ident.sym, |ty| match ty {
-                Type::Function(..) => true,
-                _ => false,
-            }) {
-            Some(f.ret_ty.into())
-        } else {
-            None
-        };
+        let return_type = self.take_mapped(&node.ident.sym, |ty| match ty {
+            Type::Function(ty::Function { ref ret_ty, .. }) => {
+                Some(TsTypeAnn::from((**ret_ty).clone()))
+            }
+            _ => None,
+        });
 
         FnDecl {
             declare: true,
