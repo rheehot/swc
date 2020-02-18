@@ -9,12 +9,16 @@ use swc_ecma_ast::*;
 use swc_ts_checker::{ty, ty::Type, ModuleTypeInfo};
 
 pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
-    module.fold_with(&mut TypeResolver { info })
+    module.fold_with(&mut TypeResolver {
+        info,
+        current_class: None,
+    })
 }
 
 #[derive(Debug)]
 struct TypeResolver {
     info: ModuleTypeInfo,
+    current_class: Option<ty::Class>,
 }
 
 impl TypeResolver {
@@ -102,15 +106,6 @@ impl Fold<VarDeclarator> for TypeResolver {
     }
 }
 
-impl Fold<ClassDecl> for TypeResolver {
-    fn fold(&mut self, node: ClassDecl) -> ClassDecl {
-        ClassDecl {
-            declare: true,
-            ..node.fold_children(self)
-        }
-    }
-}
-
 impl Fold<FnDecl> for TypeResolver {
     fn fold(&mut self, node: FnDecl) -> FnDecl {
         if node.function.return_type.is_some() {
@@ -189,6 +184,27 @@ impl Fold<Option<BlockStmt>> for TypeResolver {
     #[inline]
     fn fold(&mut self, _: Option<BlockStmt>) -> Option<BlockStmt> {
         None
+    }
+}
+
+impl Fold<ClassDecl> for TypeResolver {
+    fn fold(&mut self, mut node: ClassDecl) -> ClassDecl {
+        node.declare = true;
+
+        let old = self.current_class.take();
+
+        if let Some(class) = self.take_mapped(&node.ident.sym, |ty| match ty {
+            Type::Class(class) => Some(class.clone()),
+            _ => None,
+        }) {
+            self.current_class = Some(class);
+        }
+
+        node = node.fold_children(self);
+
+        self.current_class = old;
+
+        node
     }
 }
 
