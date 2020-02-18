@@ -43,7 +43,7 @@ impl Fold<VarDeclarator> for TypeResolver {
 
         match node.name {
             Pat::Ident(ref mut node) => {
-                if let Some(ty) = self.info.vars.remove(nodet.sym.clone()).map(From::from) {
+                if let Some(ty) = self.info.vars.remove(&node.sym).map(From::from) {
                     node.type_ann = Some(TsTypeAnn {
                         span: Default::default(),
                         type_ann: box ty,
