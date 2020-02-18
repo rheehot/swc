@@ -6,7 +6,7 @@ use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{util::move_map::MoveMap, Fold, FoldWith};
 use swc_ecma_ast::*;
-use swc_ts_checker::{ty, ty::Type, ModuleTypeInfo};
+use swc_ts_checker::{ty, ty::Type, util::TypeEq, ModuleTypeInfo};
 
 pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
     module.fold_with(&mut TypeResolver {
@@ -212,7 +212,26 @@ impl Fold<ClassMethod> for TypeResolver {
     fn fold(&mut self, mut node: ClassMethod) -> ClassMethod {
         node = node.fold_children(self);
 
-        if let Some(cls) = &mut self.current_class {}
+        if node.function.return_type.is_some() {
+            return node;
+        }
+
+        if let Some(cls) = &mut self.current_class {
+            if let Some(return_type) = cls.body.iter().find_map(|v| match v {
+                ty::ClassMember::Method(m) => {
+                    //
+                    if node.key.type_eq(&m.key) {
+                        //
+                        return Some(TsTypeAnn::from(*m.ret_ty.clone()));
+                    }
+
+                    None
+                }
+                _ => None,
+            }) {
+                node.function.return_type = Some(return_type);
+            }
+        }
 
         node
     }

@@ -39,7 +39,7 @@ pub mod loader;
 pub mod name;
 pub mod resolver;
 pub mod ty;
-mod util;
+pub mod util;
 pub mod validator;
 
 pub type Result<T> = std::result::Result<T, Error>;

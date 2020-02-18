@@ -289,8 +289,14 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
             }
         }
 
-        let ret_ty =
-            declared_ret_ty.unwrap_or_else(|| inferred_ret_ty.unwrap_or_else(|| Type::any(c_span)));
+        let ret_ty = declared_ret_ty.unwrap_or_else(|| {
+            inferred_ret_ty.unwrap_or_else(|| {
+                Type::Keyword(TsKeywordType {
+                    span: c_span,
+                    kind: TsKeywordTypeKind::TsVoidKeyword,
+                })
+            })
+        });
 
         Ok(ty::Method {
             span: c_span,
