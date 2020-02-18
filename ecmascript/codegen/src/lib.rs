@@ -60,23 +60,6 @@ pub struct Emitter<'a> {
 }
 
 impl<'a> Emitter<'a> {
-    fn emit_stmts(&mut self, stmts: &[Stmt]) -> Result {
-        let span = if stmts.is_empty() {
-            DUMMY_SP
-        } else {
-            stmts[0].span().with_hi(
-                stmts
-                    .last()
-                    .map(|s| s.span().hi())
-                    .unwrap_or_else(|| stmts[0].span().lo()),
-            )
-        };
-
-        self.emit_list(span, Some(stmts), ListFormat::SourceFileStatements)?;
-
-        Ok(())
-    }
-
     #[emitter]
     pub fn emit_program(&mut self, node: &Program) -> Result {
         match *node {
