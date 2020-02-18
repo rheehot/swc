@@ -208,6 +208,16 @@ impl Fold<ClassDecl> for TypeResolver {
     }
 }
 
+impl Fold<ClassProp> for TypeResolver {
+    fn fold(&mut self, mut node: ClassProp) -> ClassProp {
+        if node.accessibility == Some(Accessibility::Private) {
+            node.type_ann = None;
+        }
+
+        node.fold_children(self)
+    }
+}
+
 impl Fold<ClassMethod> for TypeResolver {
     fn fold(&mut self, mut node: ClassMethod) -> ClassMethod {
         node = node.fold_children(self);
