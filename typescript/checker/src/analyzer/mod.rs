@@ -28,7 +28,7 @@ use swc_atoms::JsWord;
 use swc_common::{
     util::move_map::MoveMap, Fold, FoldWith, Span, Spanned, Visit, VisitWith, DUMMY_SP,
 };
-use swc_ecma_ast::*;
+use swc_ecma_ast::{ModuleItem, *};
 use swc_ecma_utils::{ModuleItemLike, StmtLike};
 use swc_ts_builtin_types::Lib;
 
@@ -312,14 +312,8 @@ impl Load for NoopLoader {
     }
 }
 
-impl<T> Fold<Vec<T>> for Analyzer<'_, '_>
-where
-    T: FoldWith<Self> + Send + Sync + StmtLike + ModuleItemLike,
-    Vec<T>: FoldWith<Self>
-        + for<'any> VisitWith<AmbientFunctionHandler<'any>>
-        + for<'any> VisitWith<ImportFinder<'any>>,
-{
-    fn fold(&mut self, mut items: Vec<T>) -> Vec<T> {
+impl Visit<Vec<ModuleItem>> for Analyzer<'_, '_> {
+    fn visit(&mut self, mut items: &Vec<ModuleItem>) {
         {
             // We first load imports.
             let mut imports: Vec<ImportInfo> = vec![];
@@ -367,8 +361,8 @@ where
         }
 
         let mut has_normal_export = false;
-        items = items.move_map(|item| match item.try_into_module_decl() {
-            Ok(ModuleDecl::TsExportAssignment(decl)) => {
+        items.iter().for_each(|item| match item {
+            ModuleItem::ModuleDecl(ModuleDecl::TsExportAssignment(decl)) => {
                 if self.export_equals_span.is_dummy() {
                     self.export_equals_span = decl.span;
                 }
@@ -377,34 +371,23 @@ where
                 }
 
                 //
-                match T::try_from_module_decl(ModuleDecl::TsExportAssignment(decl)) {
-                    Ok(v) => v,
-                    _ => unreachable!(),
-                }
             }
-            Ok(item) => {
-                match item {
-                    ModuleDecl::ExportDecl(..)
-                    | ModuleDecl::ExportAll(..)
-                    | ModuleDecl::ExportDefaultDecl(..)
-                    | ModuleDecl::ExportDefaultExpr(..)
-                    | ModuleDecl::TsNamespaceExport(..) => {
-                        has_normal_export = true;
-                        if !self.export_equals_span.is_dummy() {
-                            self.info.errors.push(Error::TS2309 {
-                                span: self.export_equals_span,
-                            });
-                        }
+            ModuleItem::ModuleDecl(item) => match item {
+                ModuleDecl::ExportDecl(..)
+                | ModuleDecl::ExportAll(..)
+                | ModuleDecl::ExportDefaultDecl(..)
+                | ModuleDecl::ExportDefaultExpr(..)
+                | ModuleDecl::TsNamespaceExport(..) => {
+                    has_normal_export = true;
+                    if !self.export_equals_span.is_dummy() {
+                        self.info.errors.push(Error::TS2309 {
+                            span: self.export_equals_span,
+                        });
                     }
-                    _ => {}
                 }
-
-                match T::try_from_module_decl(item) {
-                    Ok(v) => v,
-                    _ => unreachable!(),
-                }
-            }
-            Err(item) => item,
+                _ => {}
+            },
+            _ => {}
         });
 
         if !self.in_declare {
@@ -422,11 +405,28 @@ where
             }
         }
 
-        let items = items.fold_children(self);
+        items.visit_children(self);
 
         self.handle_pending_exports();
+    }
+}
 
-        items
+impl Visit<Vec<Stmt>> for Analyzer<'_, '_> {
+    fn visit(&mut self, mut items: &Vec<Stmt>) {
+        let mut visitor = AmbientFunctionHandler {
+            last_ambient_name: None,
+            errors: &mut self.info.errors,
+        };
+
+        items.visit_with(&mut visitor);
+
+        if visitor.last_ambient_name.is_some() {
+            visitor.errors.push(Error::TS2391 {
+                span: visitor.last_ambient_name.unwrap().span,
+            })
+        }
+
+        items.visit_children(self);
     }
 }
 
