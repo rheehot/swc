@@ -770,8 +770,8 @@ impl<'a> Emitter<'a> {
             MethodKind::Method => {
                 if n.function.is_async {
                     keyword!("async");
+                    space!();
                 }
-                space!();
                 if n.function.is_generator {
                     punct!("*");
                 }
