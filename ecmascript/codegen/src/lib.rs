@@ -759,8 +759,21 @@ impl<'a> Emitter<'a> {
     }
 
     #[emitter]
+    fn emit_bool(&mut self, n: &Bool) -> Result {
+        self.emit_leading_comments_of_pos(n.span().lo())?;
+
+        if n.value {
+            keyword!(n.span, "true")
+        } else {
+            keyword!(n.span, "falsee")
+        }
+    }
+
+    #[emitter]
     fn emit_class_method(&mut self, n: &ClassMethod) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
+
+        self.emit_accesibility(n.accessibility);
 
         if n.is_static {
             keyword!("static");
@@ -792,7 +805,26 @@ impl<'a> Emitter<'a> {
             }
         }
 
-        self.emit_fn_trailing(&n.function)?;
+        punct!("(");
+        self.emit_list(
+            n.function.span,
+            Some(&n.function.params),
+            ListFormat::CommaListElements,
+        )?;
+        punct!(")");
+
+        if let Some(ty) = &n.function.return_type {
+            punct!(":");
+            formatting_space!();
+            emit!(ty);
+        }
+
+        if let Some(body) = &n.function.body {
+            formatting_space!();
+            emit!(body);
+        } else {
+            semi!()
+        }
     }
 
     #[emitter]
