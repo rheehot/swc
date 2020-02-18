@@ -8,7 +8,7 @@ use crate::{
         Array, ClassInstance, EnumVariant, IndexSignature, Interface, Ref, Tuple, Type,
         TypeElement, TypeLit, TypeParamInstantiation, Union,
     },
-    util::{EqIgnoreNameAndSpan, EqIgnoreSpan, RemoveTypes},
+    util::{EqIgnoreSpan, RemoveTypes, TypeEq},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -477,7 +477,7 @@ impl Analyzer<'_, '_> {
                         }
 
                         let index_ty = &params[0].ty;
-                        if index_ty.eq_ignore_name_and_span(&prop_ty) {
+                        if index_ty.type_eq(&prop_ty) {
                             if let Some(ref type_ann) = type_ann {
                                 return Ok(Some(type_ann.clone()));
                             }

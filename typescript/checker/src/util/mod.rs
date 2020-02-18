@@ -1,4 +1,4 @@
-use crate::ty::{Class, Intersection, Type, TypeElement, Union};
+use crate::ty::{Class, FnParam, Intersection, Type, TypeElement, Union};
 use swc_atoms::js_word;
 use swc_common::{Fold, FoldWith, Span, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -9,8 +9,8 @@ pub trait EqIgnoreSpan {
     fn eq_ignore_span(&self, to: &Self) -> bool;
 }
 
-pub trait EqIgnoreNameAndSpan<T = Self> {
-    fn eq_ignore_name_and_span(&self, to: &T) -> bool;
+pub trait TypeEq<T = Self> {
+    fn type_eq(&self, to: &T) -> bool;
 }
 
 macro_rules! impl_by_clone {
@@ -21,12 +21,10 @@ macro_rules! impl_by_clone {
             }
         }
 
-        impl EqIgnoreNameAndSpan<$T> for $T {
-            fn eq_ignore_name_and_span(&self, to: &$T) -> bool {
-                let l = self.clone().fold_with(&mut SpanAndNameRemover);
-                let r = to.clone().fold_with(&mut SpanAndNameRemover);
-                // In current implementation, l and r lives until the functions return, so it's
-                // safe.
+        impl TypeEq<$T> for $T {
+            fn type_eq(&self, to: &$T) -> bool {
+                let l = self.clone().fold_with(&mut TypeEqHelper);
+                let r = to.clone().fold_with(&mut TypeEqHelper);
 
                 l == r
             }
@@ -48,43 +46,17 @@ impl Fold<Span> for SpanRemover {
     }
 }
 
-struct SpanAndNameRemover;
-impl Fold<Span> for SpanAndNameRemover {
+struct TypeEqHelper;
+impl Fold<Span> for TypeEqHelper {
     fn fold(&mut self, _: Span) -> Span {
         DUMMY_SP
     }
 }
-impl Fold<Ident> for SpanAndNameRemover {
-    fn fold(&mut self, i: Ident) -> Ident {
-        Ident {
-            sym: js_word!(""),
-            span: DUMMY_SP,
-            ..i.fold_children(self)
-        }
-    }
-}
-
-/// TsEntityName is used in type position.
-impl Fold<TsEntityName> for SpanAndNameRemover {
-    fn fold(&mut self, n: TsEntityName) -> TsEntityName {
-        match n {
-            TsEntityName::Ident(i) => TsEntityName::Ident(Ident {
-                span: DUMMY_SP,
-                ..i.fold_children(self)
-            }),
-            TsEntityName::TsQualifiedName(q) => TsEntityName::TsQualifiedName(q.fold_with(self)),
-        }
-    }
-}
-
-impl Fold<TsQualifiedName> for SpanRemover {
-    fn fold(&mut self, n: TsQualifiedName) -> TsQualifiedName {
-        TsQualifiedName {
-            left: n.left.fold_with(self),
-            right: Ident {
-                span: DUMMY_SP,
-                ..n.right
-            },
+impl Fold<FnParam> for TypeEqHelper {
+    fn fold(&mut self, node: FnParam) -> FnParam {
+        FnParam {
+            pat: Pat::Invalid(Invalid { span: DUMMY_SP }),
+            ..node.fold_children(self)
         }
     }
 }
@@ -126,40 +98,38 @@ where
     }
 }
 
-impl<T> EqIgnoreNameAndSpan for Box<T>
+impl<T> TypeEq for Box<T>
 where
-    T: EqIgnoreNameAndSpan,
+    T: TypeEq,
 {
-    fn eq_ignore_name_and_span(&self, to: &Self) -> bool {
-        (**self).eq_ignore_name_and_span(&**to)
+    fn type_eq(&self, to: &Self) -> bool {
+        (**self).type_eq(&**to)
     }
 }
 
-impl<T> EqIgnoreNameAndSpan for Option<T>
+impl<T> TypeEq for Option<T>
 where
-    T: EqIgnoreNameAndSpan,
+    T: TypeEq,
 {
-    fn eq_ignore_name_and_span(&self, to: &Self) -> bool {
+    fn type_eq(&self, to: &Self) -> bool {
         match (self.as_ref(), to.as_ref()) {
-            (Some(l), Some(r)) => l.eq_ignore_name_and_span(r),
+            (Some(l), Some(r)) => l.type_eq(r),
             (None, None) => true,
             _ => false,
         }
     }
 }
 
-impl<T> EqIgnoreNameAndSpan for Vec<T>
+impl<T> TypeEq for Vec<T>
 where
-    T: EqIgnoreNameAndSpan,
+    T: TypeEq,
 {
-    fn eq_ignore_name_and_span(&self, to: &Self) -> bool {
+    fn type_eq(&self, to: &Self) -> bool {
         if self.len() != to.len() {
             return false;
         }
 
-        self.iter()
-            .zip(to.iter())
-            .all(|(l, r)| l.eq_ignore_name_and_span(&r))
+        self.iter().zip(to.iter()).all(|(l, r)| l.type_eq(&r))
     }
 }
 

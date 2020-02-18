@@ -1,4 +1,4 @@
-use crate::{util::EqIgnoreNameAndSpan, ModuleTypeInfo};
+use crate::{util::TypeEq, ModuleTypeInfo};
 use is_macro::Is;
 use std::{borrow::Cow, mem::transmute, sync::Arc};
 use swc_atoms::{js_word, JsWord};
@@ -372,8 +372,8 @@ pub struct FnParam {
 
 /// This impl is wrong.
 ///
-/// This will be moved to EqIgnoreNameAndSpan in future. (I'll do this after
-/// implementing a derive macro for EqIgnoreNameAndSpan)
+/// This will be moved to TypeEq in future. (I'll do this after
+/// implementing a derive macro for TypeEq)
 impl PartialEq for Union {
     fn eq(&self, other: &Self) -> bool {
         if self.span != other.span || self.types.len() != other.types.len() {
@@ -383,14 +383,10 @@ impl PartialEq for Union {
         // A | B is equal to B | A
         //
         //
-        // TODO: Make derive(EqIgnoreNameAndSpan) and move this to `impl
-        // EqIgnoreNameAndSpan for Union`
+        // TODO: Make derive(TypeEq) and move this to `impl
+        // TypeEq for Union`
         for ty in &self.types {
-            if other
-                .types
-                .iter()
-                .any(|oty| oty.eq_ignore_name_and_span(ty))
-            {
+            if other.types.iter().any(|oty| oty.type_eq(ty)) {
                 continue;
             }
             return false;
@@ -475,7 +471,7 @@ impl Type {
 
                 for ty in types {
                     let ty = ty.generalize_lit().into_owned();
-                    let dup = tys.iter().any(|t| t.eq_ignore_name_and_span(&ty));
+                    let dup = tys.iter().any(|t| t.type_eq(&ty));
                     if !dup {
                         tys.push(ty);
                     }

@@ -2,7 +2,7 @@ use super::{super::Analyzer, instantiate_class};
 use crate::{
     errors::Error,
     ty::Type,
-    util::EqIgnoreNameAndSpan,
+    util::TypeEq,
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -66,10 +66,7 @@ impl Analyzer<'_, '_> {
     ) -> ValidationResult<()> {
         match *orig_ty.normalize() {
             Type::Union(ref rt) => {
-                let castable = rt
-                    .types
-                    .iter()
-                    .any(|v| casted_ty.eq_ignore_name_and_span(v));
+                let castable = rt.types.iter().any(|v| casted_ty.type_eq(v));
 
                 if castable {
                     return Ok(());
@@ -123,7 +120,7 @@ impl Analyzer<'_, '_> {
                 //
                 match orig_ty {
                     Type::Tuple(ref rt) => {
-                        if rt.types[0].eq_ignore_name_and_span(&lt.elem_type) {
+                        if rt.types[0].type_eq(&lt.elem_type) {
                             return Ok(());
                         }
                     }

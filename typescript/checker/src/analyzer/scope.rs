@@ -7,7 +7,7 @@ use crate::{
         self, Alias, Array, EnumVariant, IndexSignature, Interface, Intersection,
         PropertySignature, QueryExpr, QueryType, Ref, Tuple, Type, TypeElement, TypeLit, Union,
     },
-    util::EqIgnoreNameAndSpan,
+    util::TypeEq,
     validator::Validate,
     ValidationResult,
 };
@@ -584,7 +584,7 @@ impl Analyzer<'_, '_> {
                         for ty in types {
                             let span = (*ty).span();
                             for excluded_ty in excludes.iter() {
-                                if ty.eq_ignore_name_and_span(excluded_ty) {
+                                if ty.type_eq(excluded_ty) {
                                     *ty = Type::never(span)
                                 }
                             }

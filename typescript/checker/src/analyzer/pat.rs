@@ -4,7 +4,7 @@ use crate::{
     errors::Error,
     ty,
     ty::Type,
-    util::EqIgnoreNameAndSpan,
+    util::TypeEq,
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -135,7 +135,7 @@ impl Visit<AssignPat> for Analyzer<'_, '_> {
                                                         ref key,
                                                         ..
                                                     }) => {
-                                                        if pk.eq_ignore_name_and_span(key) {
+                                                        if pk.type_eq(key) {
                                                             continue 'l;
                                                         }
                                                     }

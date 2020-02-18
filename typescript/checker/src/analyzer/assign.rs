@@ -6,7 +6,7 @@ use crate::{
         Array, Class, ClassInstance, ClassMember, Constructor, EnumVariant, FnParam, Function,
         Interface, Intersection, Tuple, Type, TypeElement, TypeLit, TypeParam, Union,
     },
-    util::{EqIgnoreNameAndSpan, EqIgnoreSpan},
+    util::{EqIgnoreSpan, TypeEq},
     ValidationResult,
 };
 use swc_atoms::js_word;
@@ -739,7 +739,7 @@ impl Analyzer<'_, '_> {
         }
 
         // This is slow (at the time of writing)
-        if to.eq_ignore_name_and_span(&rhs) {
+        if to.type_eq(&rhs) {
             return Ok(());
         }
 
