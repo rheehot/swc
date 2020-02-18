@@ -3,8 +3,8 @@ use crate::{
     analyzer::util::ResultExt,
     errors::{Error, Errors},
     ty::{
-        Array, Class, ClassInstance, ClassMember, Constructor, EnumVariant, FnParam, Function,
-        Interface, Intersection, Tuple, Type, TypeElement, TypeLit, TypeParam, Union,
+        Array, Class, ClassInstance, ClassMember, EnumVariant, FnParam, Function, Interface,
+        Intersection, Tuple, Type, TypeElement, TypeLit, TypeParam, Union,
     },
     util::{EqIgnoreSpan, TypeEq},
     ValidationResult,

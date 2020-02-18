@@ -21,7 +21,7 @@ use crate::{
     ty::Type,
 };
 use dashmap::DashMap;
-use fxhash::{FxHashMap, FxHashSet};
+use fxhash::FxHashMap;
 use std::{path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{errors::Handler, Globals, SourceMap, Span};

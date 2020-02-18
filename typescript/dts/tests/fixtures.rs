@@ -10,24 +10,21 @@ extern crate test;
 use anyhow::{Context, Error};
 use pretty_assertions::assert_eq;
 use std::{
-    collections::HashSet,
     env,
     fs::{canonicalize, File},
-    io::{self, Read},
+    io::Read,
     path::Path,
     process::Command,
     sync::Arc,
 };
-use swc_common::{
-    comments::Comments, errors::DiagnosticBuilder, FileName, Fold, FoldWith, Span, Spanned,
-};
-use swc_ecma_ast::{Module, *};
+use swc_common::FoldWith;
+use swc_ecma_ast::Module;
 use swc_ecma_codegen::{text_writer::JsWriter, Emitter};
 use swc_ecma_parser::{JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig};
-use swc_ts_checker::{Lib, Rule};
+use swc_ts_checker::Lib;
 use swc_ts_dts::generate_dts;
 use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestName, TestType};
-use testing::{DropSpan, NormalizedOutput, StdErr, Tester};
+use testing::{DropSpan, NormalizedOutput, StdErr};
 
 #[test]
 fn conformance() {

@@ -79,6 +79,10 @@ impl Fold<VarDeclarator> for TypeResolver {
             }
         };
 
+        if node.init.is_some() {
+            return node;
+        }
+
         match node.name {
             Pat::Ident(ref mut node) => {
                 if let Some(ty) = self.info.vars.remove(&node.sym).map(From::from) {

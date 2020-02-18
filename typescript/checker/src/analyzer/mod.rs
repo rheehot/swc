@@ -12,7 +12,7 @@ use crate::{
     loader::Load,
     ty,
     ty::Type,
-    validator::{Validate, ValidateWith},
+    validator::Validate,
     ImportInfo, ModuleTypeInfo, Rule, Specifier, ValidationResult,
 };
 use fxhash::{FxHashMap, FxHashSet};
@@ -25,11 +25,8 @@ use std::{
     sync::Arc,
 };
 use swc_atoms::JsWord;
-use swc_common::{
-    util::move_map::MoveMap, Fold, FoldWith, Span, Spanned, Visit, VisitWith, DUMMY_SP,
-};
+use swc_common::{Span, Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::{ModuleItem, *};
-use swc_ecma_utils::{ModuleItemLike, StmtLike};
 use swc_ts_builtin_types::Lib;
 
 macro_rules! try_opt {
