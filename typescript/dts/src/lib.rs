@@ -4,7 +4,7 @@
 
 use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
-use swc_common::{Fold, FoldWith};
+use swc_common::{util::move_map::MoveMap, Fold, FoldWith};
 use swc_ecma_ast::*;
 use swc_ts_checker::{ty, ty::Type, ModuleTypeInfo};
 
@@ -156,5 +156,61 @@ impl Fold<Option<BlockStmt>> for TypeResolver {
     #[inline]
     fn fold(&mut self, _: Option<BlockStmt>) -> Option<BlockStmt> {
         None
+    }
+}
+
+impl Fold<Vec<ClassMember>> for TypeResolver {
+    fn fold(&mut self, mut members: Vec<ClassMember>) -> Vec<ClassMember> {
+        members = members.fold_children(self);
+
+        let mut props = Vec::with_capacity(members.len() + 6);
+        let mut buf = Vec::with_capacity(members.len());
+        //
+
+        for mut m in members {
+            match m {
+                ClassMember::Constructor(ref mut c) => {
+                    for p in c.params.iter_mut() {
+                        match p {
+                            PatOrTsParamProp::TsParamProp(ref mut p) => {
+                                if p.accessibility.is_some() || p.readonly {
+                                    props.push(ClassMember::ClassProp(ClassProp {
+                                        span: Default::default(),
+                                        key: box match &p.param {
+                                            TsParamPropParam::Ident(p) => Expr::Ident(p.clone()),
+                                            TsParamPropParam::Assign(p) => match &p.left {
+                                                //
+                                                box Pat::Ident(i) => Expr::Ident(i.clone()),
+                                                _ => unreachable!(
+                                                    "binding pattern in property initializer"
+                                                ),
+                                            },
+                                        },
+                                        value: None,
+                                        type_ann: None,
+                                        is_static: false,
+                                        decorators: vec![],
+                                        computed: false,
+                                        accessibility: p.accessibility,
+                                        is_abstract: false,
+                                        is_optional: false,
+                                        readonly: p.readonly,
+                                        definite: false,
+                                    }));
+                                }
+                            }
+                            _ => {}
+                        }
+                    }
+                }
+                _ => {}
+            }
+
+            buf.push(m);
+        }
+
+        props.extend(buf);
+
+        props
     }
 }
