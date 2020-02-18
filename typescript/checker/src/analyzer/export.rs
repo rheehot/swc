@@ -63,6 +63,7 @@ impl Analyzer<'_, '_> {
         assert_eq!(self.pending_exports, vec![]);
 
         if self.info.exports.types.is_empty() && self.info.exports.vars.is_empty() {
+            println!("Empry");
             self.info
                 .exports
                 .vars

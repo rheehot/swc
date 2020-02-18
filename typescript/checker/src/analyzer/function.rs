@@ -1,6 +1,6 @@
 use super::Analyzer;
 use crate::{
-    analyzer::{pat::PatMode, Ctx, ScopeKind},
+    analyzer::{pat::PatMode, util::ResultExt, Ctx, ScopeKind},
     errors::Error,
     ty,
     ty::{ClassInstance, QueryType, Tuple, Type, TypeParam},
@@ -210,8 +210,10 @@ impl Analyzer<'_, '_> {
 impl Visit<FnDecl> for Analyzer<'_, '_> {
     /// NOTE: This method **should not call f.fold_children(self)**
     fn visit(&mut self, f: &FnDecl) {
-        let fn_ty = self.visit_fn(Some(&f.ident), &f.function);
+        let fn_ty = self.visit_fn(Some(&f.ident), &f.function).freeze();
 
+        self.register_type(f.ident.sym.clone(), fn_ty.clone())
+            .store(&mut self.info.errors);
         match self.override_var(VarDeclKind::Var, f.ident.sym.clone(), fn_ty) {
             Ok(()) => {}
             Err(err) => {

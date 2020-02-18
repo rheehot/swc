@@ -655,12 +655,20 @@ impl Analyzer<'_, '_> {
                             _ => {
                                 let generalized_var_ty = var_ty.generalize_lit();
 
-                                let res = self.assign(&ty, &generalized_var_ty, span);
+                                match var_ty {
+                                    // Allow override query type.
+                                    Type::Query(..) => {}
+                                    _ => {
+                                        let res = self.assign(&ty, &generalized_var_ty, span);
 
-                                if res.is_err() {
-                                    v.ty = Some(var_ty);
-                                    restore!();
-                                    return Err(Error::RedeclaredVarWithDifferentType { span });
+                                        if res.is_err() {
+                                            v.ty = Some(var_ty);
+                                            restore!();
+                                            return Err(Error::RedeclaredVarWithDifferentType {
+                                                span,
+                                            });
+                                        }
+                                    }
                                 }
                             }
                         }
