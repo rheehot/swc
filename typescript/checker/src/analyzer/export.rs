@@ -63,7 +63,6 @@ impl Analyzer<'_, '_> {
         assert_eq!(self.pending_exports, vec![]);
 
         if self.info.exports.types.is_empty() && self.info.exports.vars.is_empty() {
-            println!("Empry");
             self.info
                 .exports
                 .vars
@@ -81,6 +80,9 @@ impl Analyzer<'_, '_> {
                     .map(|(k, v)| (k, v.into_iter().map(|v| v.freeze()).collect())),
             );
         }
+
+        debug_assert_ne!(self.info.exports.types, Default::default());
+        debug_assert_ne!(self.info.exports.vars, Default::default());
     }
 
     pub(super) fn export_default_expr(&mut self, expr: &Expr) {
