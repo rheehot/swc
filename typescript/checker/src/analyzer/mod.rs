@@ -116,36 +116,39 @@ pub struct Info {
     pub exports: ModuleTypeInfo,
 }
 
-#[validator]
-impl Validate<Program> for Analyzer<'_, '_> {
-    type Output = ValidationResult<ty::Module>;
-
-    fn validate(&mut self, node: &Program) -> Self::Output {
-        match node {
-            Program::Module(m) => m.validate_with(self),
-            Program::Script(s) => s.validate_with(self),
-        }
-    }
-}
+// TODO:
+//#[validator]
+//impl Validate<Program> for Analyzer<'_, '_> {
+//    type Output = ValidationResult<ty::Module>;
+//
+//    fn validate(&mut self, node: &Program) -> Self::Output {
+//        match node {
+//            Program::Module(m) => m.validate_with(self),
+//            Program::Script(s) => s.validate_with(self),
+//        }
+//    }
+//}
 
 fn make_module_ty(span: Span, exports: ModuleTypeInfo) -> ty::Module {
     ty::Module { span, exports }
 }
 
-#[validator]
-impl Validate<Module> for Analyzer<'_, '_> {
-    type Output = ValidationResult<ty::Module>;
-
-    fn validate(&mut self, node: &Module) -> Self::Output {
-        let span = node.span;
-
-        let mut new = self.new(Scope::root());
-        node.visit_children(&mut new);
-        self.info.errors.append_errors(&mut new.info.errors);
-
-        Ok(self.finalize(make_module_ty(span, new.info.exports)))
-    }
-}
+// TODO:
+//#[validator]
+//impl Validate<Module> for Analyzer<'_, '_> {
+//    type Output = ValidationResult<ty::Module>;
+//
+//    fn validate(&mut self, node: &Module) -> Self::Output {
+//        let span = node.span;
+//
+//        let mut new = self.new(Scope::root());
+//        node.visit_children(&mut new);
+//        self.info.errors.append_errors(&mut new.info.errors);
+//        println!("after visit children");
+//
+//        Ok(self.finalize(make_module_ty(span, new.info.exports)))
+//    }
+//}
 
 #[validator]
 impl Validate<Script> for Analyzer<'_, '_> {

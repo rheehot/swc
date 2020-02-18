@@ -21,7 +21,7 @@ use crate::{
     ty::Type,
 };
 use dashmap::DashMap;
-use fxhash::FxHashMap;
+use fxhash::{FxHashMap, FxHashSet};
 use std::{path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{errors::Handler, Globals, SourceMap, Span};
@@ -160,28 +160,7 @@ impl Checker {
     /// Returns empty vector if no error is found.
     pub fn check(&self, entry: Arc<PathBuf>) -> (Module, Info) {
         self.run(|| {
-            let mut module = self.load_module(entry.clone());
-
-            // let (tasks, receiver) = channel::unbounded();
-            // let (result_sender, result_receiver) = channel::unbounded();
-            // for import in &module.1.imports {
-            //     let _ = tasks.send(Task::Resolve {
-            //         from: entry.clone(),
-            //         src: import.src.clone(),
-            //     });
-            // }
-
-            // for i in 1..6 {
-            //     let worker = Worker {
-            //         sender: result_sender.clone(),
-            //         queue: receiver.clone(),
-            //         modules: self.modules.clone(),
-            //     };
-            //     thread::scope(|s| {
-            //         s.spawn(|_| worker.run());
-            //     })
-            //     .unwrap();
-            // }
+            let module = self.load_module(entry.clone());
 
             module
         })
@@ -191,6 +170,7 @@ impl Checker {
         let cached = self.modules.get(&path);
 
         if let Some(cached) = cached {
+            println!("Cached");
             return cached.clone();
         }
 
@@ -230,8 +210,9 @@ impl Checker {
         });
         let mut a = Analyzer::root(path.clone(), &self.libs, self.rule, self);
         module.visit_with(&mut a);
-
         let info = a.info;
+        debug_assert_ne!(info.exports.vars, FxHashMap::default());
+        debug_assert_ne!(info.exports.types, FxHashMap::default());
 
         let res = (module, info);
         self.modules.insert(path.clone(), res.clone());
