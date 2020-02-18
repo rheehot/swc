@@ -43,11 +43,11 @@ impl TypeResolver {
         None
     }
 
-    fn take_mapped<F, T>(&mut self, sym: &JsWord, mut pred: F) -> Option<T>
+    fn get_mapped<F, T>(&self, sym: &JsWord, mut pred: F) -> Option<T>
     where
         F: FnMut(&Type) -> Option<T>,
     {
-        if let Some(types) = self.info.types.get_mut(sym) {
+        if let Some(types) = self.info.types.get(sym) {
             for ty in &*types {
                 debug_assert!(ty.is_arc(), "All exported types must be freezed");
             }
@@ -114,7 +114,7 @@ impl Fold<FnDecl> for TypeResolver {
 
         let node: FnDecl = node.fold_children(self);
 
-        let return_type = self.take_mapped(&node.ident.sym, |ty| match ty {
+        let return_type = self.get_mapped(&node.ident.sym, |ty| match ty {
             Type::Function(ty::Function { ref ret_ty, .. }) => {
                 Some(TsTypeAnn::from((**ret_ty).clone()))
             }
@@ -143,7 +143,7 @@ impl Fold<TsModuleDecl> for TypeResolver {
 
 impl Fold<TsEnumDecl> for TypeResolver {
     fn fold(&mut self, node: TsEnumDecl) -> TsEnumDecl {
-        let members = self.take_mapped(&node.id.sym, |ty| match ty {
+        let members = self.get_mapped(&node.id.sym, |ty| match ty {
             Type::Enum(e) => Some(
                 e.members
                     .iter()
@@ -193,7 +193,7 @@ impl Fold<ClassDecl> for TypeResolver {
 
         let old = self.current_class.take();
 
-        if let Some(class) = self.take_mapped(&node.ident.sym, |ty| match ty {
+        if let Some(class) = self.get_mapped(&node.ident.sym, |ty| match ty {
             Type::Class(class) => Some(class.clone()),
             _ => None,
         }) {
@@ -203,6 +203,16 @@ impl Fold<ClassDecl> for TypeResolver {
         node = node.fold_children(self);
 
         self.current_class = old;
+
+        node
+    }
+}
+
+impl Fold<ClassMethod> for TypeResolver {
+    fn fold(&mut self, mut node: ClassMethod) -> ClassMethod {
+        node = node.fold_children(self);
+
+        if let Some(cls) = &mut self.current_class {}
 
         node
     }
