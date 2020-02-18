@@ -1,4 +1,10 @@
-use super::Analyzer;
+use fxhash::{FxHashMap, FxHashSet};
+
+use macros::validator;
+use swc_atoms::JsWord;
+use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_ecma_ast::*;
+
 use crate::{
     analyzer::util::ResultExt,
     errors::Error,
@@ -6,9 +12,8 @@ use crate::{
     validator::Validate,
     ValidationResult,
 };
-use macros::validator;
-use swc_common::{Span, Spanned, Visit, VisitWith};
-use swc_ecma_ast::*;
+
+use super::Analyzer;
 
 /// We don't visit enum variants to allow
 ///
@@ -27,17 +32,25 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<Enum>;
     #[inline(never)]
     fn validate(&mut self, e: &TsEnumDecl) -> Self::Output {
-        let mut last = 0;
+        let mut default = 0;
+        let mut values = Default::default();
         let ty: Result<_, _> = try {
             let members = e
                 .members
                 .iter()
                 .map(|m| -> Result<_, Error> {
-                    let val = compute(&e, last as _, m.init.as_ref().map(|v| &**v))?;
+                    let val = compute(&e, &mut values, default, m.init.as_ref().map(|v| &**v))?;
 
                     match val {
                         TsLit::Number(n) => {
-                            last = n.value as isize + 1;
+                            default = n.value as i32 + 1;
+                            values.insert(
+                                match &m.id {
+                                    TsEnumMemberId::Ident(i) => i.sym.clone(),
+                                    TsEnumMemberId::Str(s) => s.value.clone(),
+                                },
+                                n.value as _,
+                            );
                         }
                         _ => {}
                     }
@@ -100,32 +113,47 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
 }
 
 /// Called only for enums.
-fn compute(e: &TsEnumDecl, i: isize, expr: Option<&Expr>) -> Result<TsLit, Error> {
+fn compute(
+    e: &TsEnumDecl,
+    values: &mut FxHashMap<JsWord, i32>,
+    default: i32,
+    expr: Option<&Expr>,
+) -> Result<TsLit, Error> {
     fn arithmetic_opt(
         e: &TsEnumDecl,
         span: Span,
-        i: isize,
+        values: &mut FxHashMap<JsWord, i32>,
+        default: i32,
         expr: Option<&Expr>,
     ) -> Result<f64, Error> {
         if let Some(ref expr) = expr {
-            return arithmetic(e, span, expr);
+            return arithmetic(e, span, values, default, expr);
         }
 
-        return Ok(i as f64);
+        return Ok(default as f64);
     }
 
-    fn arithmetic(e: &TsEnumDecl, span: Span, expr: &Expr) -> Result<f64, Error> {
+    fn arithmetic(
+        e: &TsEnumDecl,
+        span: Span,
+        values: &mut FxHashMap<JsWord, i32>,
+        default: i32,
+        expr: &Expr,
+    ) -> Result<f64, Error> {
         Ok(match *expr {
             Expr::Lit(ref lit) => match *lit {
                 Lit::Num(ref v) => v.value,
                 _ => unreachable!("arithmetic({:?})", lit),
             },
-            Expr::Bin(ref bin) => arithmetic_bin(e, span, &bin)?,
-            Expr::Paren(ref paren) => return arithmetic(e, span, &paren.expr),
+            Expr::Bin(ref bin) => arithmetic_bin(e, span, values, &bin)?,
+            Expr::Paren(ref paren) => return arithmetic(e, span, values, default, &paren.expr),
 
             Expr::Ident(ref id) => {
+                if let Some(v) = values.get(&id.sym) {
+                    return Ok(*v as _);
+                }
                 //
-                for (i, m) in e.members.iter().enumerate() {
+                for m in e.members.iter() {
                     match m.id {
                         TsEnumMemberId::Str(Str { value: ref sym, .. })
                         | TsEnumMemberId::Ident(Ident { ref sym, .. }) => {
@@ -133,7 +161,8 @@ fn compute(e: &TsEnumDecl, i: isize, expr: Option<&Expr>) -> Result<TsLit, Error
                                 return arithmetic_opt(
                                     e,
                                     span,
-                                    i as _,
+                                    values,
+                                    default,
                                     m.init.as_ref().map(|v| &**v),
                                 );
                             }
@@ -143,7 +172,7 @@ fn compute(e: &TsEnumDecl, i: isize, expr: Option<&Expr>) -> Result<TsLit, Error
                 return Err(Error::InvalidEnumInit { span });
             }
             Expr::Unary(ref expr) => {
-                let v = arithmetic(e, span, &expr.arg)?;
+                let v = arithmetic(e, span, values, default, &expr.arg)?;
 
                 match expr.op {
                     op!(unary, "+") => return Ok(v),
@@ -157,9 +186,14 @@ fn compute(e: &TsEnumDecl, i: isize, expr: Option<&Expr>) -> Result<TsLit, Error
         })
     }
 
-    fn arithmetic_bin(e: &TsEnumDecl, span: Span, expr: &BinExpr) -> Result<f64, Error> {
-        let l = arithmetic(e, span, &expr.left)?;
-        let r = arithmetic(e, span, &expr.right)?;
+    fn arithmetic_bin(
+        e: &TsEnumDecl,
+        span: Span,
+        values: &mut FxHashMap<JsWord, i32>,
+        expr: &BinExpr,
+    ) -> Result<f64, Error> {
+        let l = arithmetic(e, span, values, 0, &expr.left)?;
+        let r = arithmetic(e, span, values, 0, &expr.right)?;
 
         Ok(match expr.op {
             op!(bin, "+") => l + r,
@@ -193,12 +227,11 @@ fn compute(e: &TsEnumDecl, i: isize, expr: Option<&Expr>) -> Result<TsLit, Error
         }
     }
 
-    let value = arithmetic_opt(e, e.span, i, expr)?;
-    println!("n.value = {}, last = {}", value, i);
+    let value = arithmetic_opt(e, e.span, values, default, expr)?;
 
     Ok(Number {
         span: expr.span(),
-        value: valiue,
+        value,
     }
     .into())
 }
