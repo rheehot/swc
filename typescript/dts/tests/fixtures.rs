@@ -176,7 +176,7 @@ fn add_fixture_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
         };
 
         let test_name = file_name.replace("/", "::");
-        let ignore = false;
+        let ignore = file_name.contains("ambientAccessors.ts");
 
         let name = test_name.to_string();
         add_test(tests, name, ignore, move || {
