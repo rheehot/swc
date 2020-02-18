@@ -17,7 +17,9 @@ impl<'a> Emitter<'a> {
     fn emit_ts_array_type(&mut self, n: &TsArrayType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_array_type")
+        emit!(n.elem_type);
+        punct!("[");
+        punct!("]");
     }
 
     #[emitter]
@@ -61,6 +63,12 @@ impl<'a> Emitter<'a> {
         punct!("(");
         self.emit_list(n.span, Some(&n.params), ListFormat::Parameters)?;
         punct!(")");
+
+        formatting_space!();
+        punct!("=>");
+        formatting_space!();
+
+        emit!(n.type_ann)
     }
 
     #[emitter]
@@ -570,6 +578,10 @@ impl<'a> Emitter<'a> {
             space!();
         }
 
+        keyword!("type");
+
+        space!();
+
         emit!(n.id);
         if let Some(type_params) = &n.type_params {
             emit!(type_params);
@@ -581,6 +593,8 @@ impl<'a> Emitter<'a> {
         formatting_space!();
 
         emit!(n.type_ann);
+
+        semi!();
     }
 
     #[emitter]

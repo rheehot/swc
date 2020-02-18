@@ -838,11 +838,18 @@ impl<'a> Emitter<'a> {
     fn emit_class_prop(&mut self, n: &ClassProp) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        self.emit_accesibility(n.accessibility)?;
+        if n.accessibility != Some(Accessibility::Public) {
+            self.emit_accesibility(n.accessibility)?;
+        }
 
         if n.readonly {
             keyword!("readonly");
             space!()
+        }
+
+        if n.is_static {
+            keyword!("static");
+            space!();
         }
 
         if n.computed {
@@ -1557,6 +1564,12 @@ impl<'a> Emitter<'a> {
 
         punct!("...");
         emit!(node.arg);
+
+        if let Some(type_ann) = &node.type_ann {
+            punct!(":");
+            formatting_space!();
+            emit!(type_ann);
+        }
     }
 
     #[emitter]
