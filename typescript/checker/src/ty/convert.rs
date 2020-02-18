@@ -1,11 +1,13 @@
 use super::Type;
 use crate::{
     ty,
-    ty::{FnParam, TypeParamDecl},
+    ty::{FnParam, ImportType, QueryExpr, TypeParamDecl, TypeParamInstantiation},
 };
 use swc_common::Spanned;
 use crate::ty;
 use crate::{ty, ty::TypeParamDecl};
+use std::sync::Arc;
+use swc_common::{Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 impl From<Type> for TsType {
@@ -36,12 +38,14 @@ impl From<Type> for TsType {
             Type::Enum(t) => t.into(),
             Type::Mapped(t) => t.into(),
             Type::Alias(t) => t.into(),
-            Type::Namespace(t) => t.into(),
+            Type::Namespace(t) => {
+                unimplemented!("TsNamespaceDecl should be handled before converting to TsType")
+            }
             Type::Module(t) => t.into(),
             Type::Class(t) => t.into(),
             Type::ClassInstance(t) => t.into(),
             Type::Static(t) => (*t.ty).clone().into(),
-            Type::Arc(t) => (&t).clone().into(),
+            Type::Arc(t) => (*t).clone().into(),
         }
     }
 }
@@ -52,6 +56,26 @@ impl From<ty::QueryType> for TsType {
             span: t.span,
             expr_name: t.expr.into(),
         })
+    }
+}
+
+impl From<ty::QueryExpr> for TsTypeQueryExpr {
+    fn from(t: ty::QueryExpr) -> Self {
+        match t {
+            QueryExpr::TsEntityName(t) => TsTypeQueryExpr::TsEntityName(t),
+            QueryExpr::Import(t) => TsTypeQueryExpr::Import(t.into()),
+        }
+    }
+}
+
+impl From<ty::ImportType> for TsImportType {
+    fn from(t: ImportType) -> Self {
+        TsImportType {
+            span: t.span,
+            arg: t.arg,
+            qualifier: t.qualifier,
+            type_args: t.type_params.map(From::from),
+        }
     }
 }
 
@@ -70,7 +94,7 @@ impl From<ty::ImportType> for TsType {
             span: t.span,
             arg: t.arg,
             qualifier: t.qualifier,
-            type_args: t.type_params.into(),
+            type_args: t.type_params.map(From::from),
         })
     }
 }
@@ -81,14 +105,19 @@ impl From<ty::Predicate> for TsType {
             span: t.span,
             asserts: t.asserts,
             param_name: t.param_name,
-            type_ann: t.ty.into(),
+            type_ann: t.ty.map(From::from),
         })
     }
 }
 
 impl From<ty::IndexedAccessType> for TsType {
     fn from(t: ty::IndexedAccessType) -> Self {
-        TsType::TsIndexedAccessType(TsIndexedAccessType {})
+        TsType::TsIndexedAccessType(TsIndexedAccessType {
+            span: t.span,
+            readonly: t.readonly,
+            obj_type: t.obj_type.into(),
+            index_type: t.index_type.into(),
+        })
     }
 }
 
@@ -191,7 +220,7 @@ impl From<ty::Method> for TsType {
             span: t.span,
             params: t.params.into_iter().map(From::from).collect(),
             type_params: t.type_params.map(From::from),
-            type_ann: t.type_ann.into(),
+            type_ann: t.ret_ty.into(),
         }))
     }
 }
@@ -226,29 +255,109 @@ impl From<Box<ty::Type>> for Box<TsType> {
     }
 }
 
-impl From<ty::Operator> for TsTypeOperator {
+impl From<ty::TypeParam> for TsTypeParam {
+    fn from(t: ty::TypeParam) -> Self {
+        TsTypeParam {
+            span: t.span,
+            // TODO
+            name: Ident::new(t.name, DUMMY_SP),
+            constraint: t.constraint.map(From::from),
+            default: t.default.map(From::from),
+        }
+    }
+}
+
+impl From<ty::Operator> for TsType {
     fn from(t: ty::Operator) -> Self {
         TsTypeOperator {
             span: t.span,
             op: t.op,
             type_ann: t.ty.into(),
         }
+        .into()
     }
 }
 
-impl From<ty::TypeParam> for TsTypeParam {
+impl From<ty::TypeParam> for TsType {
     fn from(t: ty::TypeParam) -> Self {
-        TsTypeParam {
+        TsType::TsTypeRef(TsTypeRef {
             span: t.span,
-            name: t.name,
-            constraint: t.constraint.into(),
-            default: t.default.into(),
+            // TODO
+            type_name: Ident::new(t.name, DUMMY_SP).into(),
+            type_params: None,
+        })
+    }
+}
+
+impl From<ty::EnumVariant> for TsType {
+    fn from(t: ty::EnumVariant) -> Self {
+        TsType::TsTypeRef(TsTypeRef {
+            span: t.span,
+            type_name: TsEntityName::TsQualifiedName(box TsQualifiedName {
+                left: Ident::new(t.enum_name, DUMMY_SP).into(),
+                right: Ident::new(t.name, DUMMY_SP).into(),
+            }),
+            type_params: None,
+        })
+    }
+}
+
+impl From<ty::Enum> for TsType {
+    fn from(t: ty::Enum) -> Self {
+        TsType::TsTypeRef(TsTypeRef {
+            span: t.span,
+            // TODO
+            type_name: t.id.into(),
+            type_params: None,
+        })
+    }
+}
+
+impl From<ty::Interface> for TsType {
+    fn from(t: ty::Interface) -> Self {
+        TsTypeRef {
+            span: t.span,
+            // TODO
+            type_name: TsEntityName::Ident(Ident::new(t.name, DUMMY_SP)),
+            type_params: None,
+        }
+        .into()
+    }
+}
+
+impl From<ty::Mapped> for TsType {
+    fn from(t: ty::Mapped) -> Self {
+        TsMappedType {
+            span: t.span,
+
+            readonly: t.readonly,
+            type_param: t.type_param.into(),
+            optional: t.optional.map(From::from),
+            type_ann: t.ty.map(From::from),
+        }
+        .into()
+    }
+}
+
+impl From<ty::Alias> for TsType {
+    fn from(t: ty::Alias) -> Self {
+        (*t.ty).into()
+    }
+}
+
+impl From<ty::Module> for TsType {
+    fn from(_: ty::Module) -> Self {
+        unreachable!("ty::Module should be handled before converting to TsType")
+    }
+}
+
+impl From<TypeParamInstantiation> for TsTypeParamInstantiation {
+    fn from(t: TypeParamInstantiation) -> Self {
+        TsTypeParamInstantiation {
+            span: t.span,
+            params: t.params.into_iter().map(|v| box v.into()).collect(),
         }
     }
-}
-
-impl From<ty::Operator> for TsTypeOperator {
-    fn from(t: ty::Operator) -> Self {}
 }
 impl From<ty::TypeParamDecl> for TsType {
     fn from(t: TypeParamDecl) -> Self {
@@ -298,5 +407,44 @@ impl From<ty::TypeParam> for TsTypeParam {
             constraint: t.constraint.into(),
             default: t.default.into(),
         }
+
+impl From<ty::Class> for TsType {
+    fn from(t: ty::Class) -> Self {
+        // TODO: Handle generics
+        TsTypeLit {
+            span: t.span,
+            members: t.body.into_iter().map(From::from).collect(),
+        }
+        .into()
+    }
+}
+
+impl From<ty::ClassInstance> for TsType {
+    fn from(t: ty::ClassInstance) -> Self {
+        unimplemented!("From<ty::ClassInstance> for TsType")
+    }
+}
+
+impl From<ty::ClassMember> for TsTypeElement {
+    fn from(m: ty::ClassMember) -> Self {
+        unimplemented!("From<ty::ClassMember> for TsTypeElement")
+    }
+}
+
+impl From<ty::TypeElement> for TsTypeElement {
+    fn from(m: ty::TypeElement) -> Self {
+        unimplemented!("From<ty::TypeElement> for TsTypeElement")
+    }
+}
+
+impl From<ty::FnParam> for TsFnParam {
+    fn from(t: FnParam) -> Self {
+        unimplemented!("From<ty::FnParam> for TsFnParam")
+    }
+}
+
+impl From<ty::Type> for Box<TsType> {
+    fn from(t: Type) -> Self {
+        box t.into()
     }
 }
