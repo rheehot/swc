@@ -90,6 +90,18 @@ fn add_conformance_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
             }
         }
 
+        let input = {
+            let mut buf = String::new();
+            File::open(entry.path())?.read_to_string(&mut buf)?;
+
+            // Disable tests for dynamic import
+            if buf.contains("import(") {
+                continue;
+            }
+
+            buf
+        };
+
         let file_name = entry
             .path()
             .strip_prefix(&root)
@@ -99,12 +111,15 @@ fn add_conformance_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
             .to_string();
 
         let test_name = format!("conformance::{}", file_name.replace("/", "::"));
-        let ignore = env::var("TEST")
-            .map(|s| !file_name.replace("/", "::").contains(&s))
-            .unwrap_or(false);
+        let ignore = file_name.contains("ambientAccessors.ts")
+            || env::var("TEST")
+                .map(|s| !file_name.replace("/", "::").contains(&s))
+                .unwrap_or(false);
 
         let name = test_name.to_string();
         add_test(tests, name, ignore, move || {
+            println!("----- Input -----\n{}", input);
+
             do_test(entry.path()).unwrap();
         });
     }
@@ -176,9 +191,10 @@ fn add_fixture_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
         };
 
         let test_name = file_name.replace("/", "::");
-        let ignore = file_name.contains("ambientAccessors.ts");
+        let ignore = false;
 
         let name = test_name.to_string();
+
         add_test(tests, name, ignore, move || {
             println!("----- Input -----\n{}", input);
             do_test(entry.path()).unwrap();
