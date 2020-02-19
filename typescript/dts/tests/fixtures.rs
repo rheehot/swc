@@ -93,9 +93,10 @@ fn add_conformance_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
         let input = {
             let mut buf = String::new();
             File::open(entry.path())?.read_to_string(&mut buf)?;
+            buf = buf.to_lowercase();
 
             // Disable tests for dynamic import
-            if buf.contains("import(") {
+            if buf.contains("import(") || buf.contains("@filename") {
                 continue;
             }
 
