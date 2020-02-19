@@ -437,10 +437,8 @@ impl Analyzer<'_, '_> {
                 if !self.is_builtin {
                     debug_assert_ne!(span, DUMMY_SP);
                 }
-                let declared_ty =
-                    try_opt!(i.type_ann.as_ref().map(|v| v.type_ann.validate_with(self)));
-                let ty = match declared_ty {
-                    None => ty,
+                let ty = match ty {
+                    None => try_opt!(i.type_ann.as_ref().map(|v| v.type_ann.validate_with(self))),
                     Some(ty) => Some(ty),
                 };
                 self.declare_var(

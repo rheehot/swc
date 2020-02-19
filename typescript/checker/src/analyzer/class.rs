@@ -110,7 +110,8 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
 
                 match param {
                     PatOrTsParamProp::Pat(ref pat) => {
-                        match child.declare_vars(VarDeclKind::Let, pat) {
+                        match child.declare_vars_with_ty(VarDeclKind::Let, pat, Some(p.ty.clone()))
+                        {
                             Ok(()) => {}
                             Err(err) => {
                                 child.info.errors.push(err);
