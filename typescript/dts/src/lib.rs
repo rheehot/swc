@@ -8,7 +8,12 @@ use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{util::move_map::MoveMap, Fold, FoldWith, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
-use swc_ts_checker::{ty, ty::Type, util::TypeEq, ModuleTypeInfo};
+use swc_ts_checker::{
+    ty,
+    ty::Type,
+    util::{PatExt, TypeEq},
+    ModuleTypeInfo,
+};
 
 mod dce;
 
@@ -312,7 +317,19 @@ impl Fold<ClassMethod> for TypeResolver {
                 }
                 _ => None,
             }) {
-                node.function.return_type = Some(return_type);
+                match node.kind {
+                    MethodKind::Method => {
+                        node.function.return_type = Some(return_type);
+                    }
+                    MethodKind::Getter => {
+                        node.function.return_type = Some(return_type);
+                    }
+                    MethodKind::Setter => {
+                        if let Some(first) = node.function.params.first_mut() {
+                            first.set_ty(Some(return_type.type_ann))
+                        }
+                    }
+                }
             }
         }
 
