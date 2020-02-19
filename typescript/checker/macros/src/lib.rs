@@ -61,16 +61,18 @@ pub fn validator(
                     {
                         #[automatically_derived]
                         /// Delegates to `Validate<T>`.
-                        impl ::swc_common::Visit<T> for Folder {
+                        impl ::swc_common::Fold<T> for Folder {
                             #[inline]
-                            fn visit(&mut self, node: &T) {
+                            fn fold(&mut self, mut node: T) -> T {
                                 let res: ::std::result::Result<_, crate::Error> =
-                                    self.validate(node);
+                                    self.validate(&mut node);
 
                                 match res {
                                     Ok(..) => {}
                                     Err(err) => self.info.errors.push(err),
                                 }
+
+                                node
                             }
                         }
                     }

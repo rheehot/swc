@@ -25,7 +25,7 @@ use std::{
     sync::Arc,
 };
 use swc_atoms::JsWord;
-use swc_common::{Span, Spanned, Visit, VisitWith, DUMMY_SP};
+use swc_common::{Span, Spanned, VisitWith, DUMMY_SP};
 use swc_ecma_ast::{ModuleItem, *};
 use swc_ts_builtin_types::Lib;
 
@@ -118,7 +118,7 @@ pub struct Info {
 //impl Validate<Program> for Analyzer<'_, '_> {
 //    type Output = ValidationResult<ty::Module>;
 //
-//    fn validate(&mut self, node: &Program) -> Self::Output {
+//    fn validate(&mut self, node: &mut Program) -> Self::Output {
 //        match node {
 //            Program::Module(m) => m.validate_with(self),
 //            Program::Script(s) => s.validate_with(self),
@@ -135,7 +135,7 @@ fn make_module_ty(span: Span, exports: ModuleTypeInfo) -> ty::Module {
 //impl Validate<Module> for Analyzer<'_, '_> {
 //    type Output = ValidationResult<ty::Module>;
 //
-//    fn validate(&mut self, node: &Module) -> Self::Output {
+//    fn validate(&mut self, node: &mut Module) -> Self::Output {
 //        let span = node.span;
 //
 //        let mut new = self.new(Scope::root());
@@ -151,7 +151,7 @@ fn make_module_ty(span: Span, exports: ModuleTypeInfo) -> ty::Module {
 impl Validate<Script> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Module>;
 
-    fn validate(&mut self, node: &Script) -> Self::Output {
+    fn validate(&mut self, node: &mut Script) -> Self::Output {
         let span = node.span;
 
         let mut new = self.new(Scope::root());
@@ -313,8 +313,10 @@ impl Load for NoopLoader {
     }
 }
 
-impl Visit<Vec<ModuleItem>> for Analyzer<'_, '_> {
-    fn visit(&mut self, mut items: &Vec<ModuleItem>) {
+impl Validate<Vec<ModuleItem>> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, items: &mut Vec<ModuleItem>) {
         {
             // We first load imports.
             let mut imports: Vec<ImportInfo> = vec![];
@@ -412,8 +414,10 @@ impl Visit<Vec<ModuleItem>> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<Vec<Stmt>> for Analyzer<'_, '_> {
-    fn visit(&mut self, mut items: &Vec<Stmt>) {
+impl Validate<Vec<Stmt>> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, items: &mut Vec<Stmt>) {
         let mut visitor = AmbientFunctionHandler {
             last_ambient_name: None,
             errors: &mut self.info.errors,
@@ -432,14 +436,18 @@ impl Visit<Vec<Stmt>> for Analyzer<'_, '_> {
 }
 
 /// Done
-impl Visit<Decorator> for Analyzer<'_, '_> {
-    fn visit(&mut self, d: &Decorator) {
-        self.validate(&d.expr).store(&mut self.info.errors);
+impl Validate<Decorator> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, d: &mut Decorator) {
+        self.validate(&mut d.expr).store(&mut self.info.errors);
     }
 }
 
-impl Visit<TsImportEqualsDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, node: &TsImportEqualsDecl) {
+impl Validate<TsImportEqualsDecl> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, node: &mut TsImportEqualsDecl) {
         self.record(node);
 
         match node.module_ref {
@@ -454,8 +462,10 @@ impl Visit<TsImportEqualsDecl> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<TsModuleDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, decl: &TsModuleDecl) {
+impl Validate<TsModuleDecl> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, decl: &mut TsModuleDecl) {
         let span = decl.span;
 
         let mut new = self.new(Scope::root());

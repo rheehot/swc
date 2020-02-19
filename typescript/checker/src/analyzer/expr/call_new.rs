@@ -26,7 +26,7 @@ use swc_ecma_ast::*;
 impl Validate<ExprOrSpread> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeOrSpread>;
 
-    fn validate(&mut self, node: &ExprOrSpread) -> Self::Output {
+    fn validate(&mut self, node: &mut ExprOrSpread) -> Self::Output {
         let span = node.span();
         Ok(TypeOrSpread {
             span,
@@ -40,14 +40,14 @@ impl Validate<ExprOrSpread> for Analyzer<'_, '_> {
 impl Validate<CallExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &CallExpr) -> ValidationResult {
+    fn validate(&mut self, e: &mut CallExpr) -> ValidationResult {
         self.record(e);
 
         let CallExpr {
             span,
-            ref callee,
-            ref args,
-            ref type_args,
+            ref mut callee,
+            ref mut args,
+            ref mut type_args,
         } = *e;
 
         let callee = match callee {
@@ -57,7 +57,7 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
 
         // TODO: validate children
 
-        self.extract_call_new_expr_member(callee, ExtractKind::Call, args, type_args.as_ref())
+        self.extract_call_new_expr_member(callee, ExtractKind::Call, args, type_args.as_mut())
     }
 }
 
@@ -65,14 +65,14 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
 impl Validate<NewExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &NewExpr) -> ValidationResult {
+    fn validate(&mut self, e: &mut NewExpr) -> ValidationResult {
         self.record(e);
 
         let NewExpr {
             span,
-            ref callee,
-            ref args,
-            ref type_args,
+            ref mut callee,
+            ref mut args,
+            ref mut type_args,
         } = *e;
 
         // TODO: e.visit_children
@@ -80,8 +80,8 @@ impl Validate<NewExpr> for Analyzer<'_, '_> {
         self.extract_call_new_expr_member(
             callee,
             ExtractKind::New,
-            args.as_ref().map(|v| &**v).unwrap_or_else(|| &[]),
-            type_args.as_ref(),
+            args.as_mut().map(|v| &mut **v).unwrap_or_else(|| &mut []),
+            type_args.as_mut(),
         )
     }
 }
@@ -100,10 +100,10 @@ impl Analyzer<'_, '_> {
     /// Called only from [type_of_expr]
     fn extract_call_new_expr_member(
         &mut self,
-        callee: &Expr,
+        callee: &mut Expr,
         kind: ExtractKind,
-        args: &[ExprOrSpread],
-        type_args: Option<&TsTypeParamInstantiation>,
+        args: &mut [ExprOrSpread],
+        type_args: Option<&mut TsTypeParamInstantiation>,
     ) -> ValidationResult {
         let span = callee.span();
 
@@ -158,7 +158,7 @@ impl Analyzer<'_, '_> {
             _ => {}
         }
 
-        let args: Vec<_> = args
+        let mut args: Vec<_> = args
             .into_iter()
             .map(|arg| {
                 self.validate(arg)
@@ -173,7 +173,7 @@ impl Analyzer<'_, '_> {
 
         match *callee {
             Expr::Member(MemberExpr {
-                obj: ExprOrSuper::Expr(ref obj),
+                obj: ExprOrSuper::Expr(ref mut obj),
                 ref prop,
                 computed,
                 ..
@@ -367,7 +367,10 @@ impl Analyzer<'_, '_> {
                     let callee =
                         self.access_property(span, obj_type, prop, computed, TypeOfMode::RValue)?;
 
-                    let type_args = try_opt!(type_args.validate_with(self));
+                    let type_args = match type_args {
+                        None => None,
+                        Some(v) => Some(v.validate_with(self)?),
+                    };
 
                     match callee.normalize() {
                         Type::Function(ref f) => return Ok(*f.ret_ty.clone()),
@@ -390,9 +393,12 @@ impl Analyzer<'_, '_> {
             _ => {
                 let ty = callee_ty!();
                 let ty = self.expand(span, ty)?;
-                let type_args = try_opt!(type_args.validate_with(self));
+                let type_args = match type_args {
+                    None => None,
+                    Some(ty) => Some(ty.validate_with(self)?),
+                };
 
-                Ok(self.extract(span, ty, kind, &args, type_args.as_ref())?)
+                Ok(self.extract(span, ty, kind, &mut args, type_args.as_ref())?)
             }
         }
     }

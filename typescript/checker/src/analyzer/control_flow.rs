@@ -25,7 +25,7 @@ use std::{
     ops::{AddAssign, BitOr, Not},
 };
 use swc_atoms::JsWord;
-use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_common::{Span, Spanned, VisitWith};
 use swc_ecma_ast::*;
 
 /// Conditional facts
@@ -190,10 +190,12 @@ impl BitOr for CondFacts {
     }
 }
 
-impl Visit<IfStmt> for Analyzer<'_, '_> {
-    fn visit(&mut self, stmt: &IfStmt) {
+impl Validate<IfStmt> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, stmt: &mut IfStmt) {
         let mut facts = Default::default();
-        match self.detect_facts(&stmt.test, &mut facts) {
+        match self.detect_facts(&mut stmt.test, &mut facts) {
             Ok(()) => (),
             Err(err) => {
                 self.info.errors.push(err);
@@ -218,11 +220,11 @@ impl Visit<IfStmt> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    fn check_switch_discriminant(&mut self, s: &SwitchStmt) -> ValidationResult {
-        let discriminant_ty = self.validate(&s.discriminant)?;
-        for case in &s.cases {
-            if let Some(ref test) = case.test {
-                let case_ty = self.validate(&test)?;
+    fn check_switch_discriminant(&mut self, s: &mut SwitchStmt) -> ValidationResult {
+        let discriminant_ty = self.validate(&mut s.discriminant)?;
+        for case in &mut s.cases {
+            if let Some(ref mut test) = case.test {
+                let case_ty = self.validate(test)?;
                 self.assign(&case_ty, &discriminant_ty, test.span())?
             }
         }
@@ -231,12 +233,14 @@ impl Analyzer<'_, '_> {
     }
 }
 
-impl Visit<SwitchStmt> for Analyzer<'_, '_> {
-    fn visit(&mut self, stmt: &SwitchStmt) {
+impl Validate<SwitchStmt> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, stmt: &mut SwitchStmt) {
         self.record(stmt);
 
         let discriminant_ty = self
-            .check_switch_discriminant(&stmt)
+            .check_switch_discriminant(stmt)
             .store(&mut self.info.errors);
 
         let mut false_facts = CondFacts::default();
@@ -248,7 +252,7 @@ impl Visit<SwitchStmt> for Analyzer<'_, '_> {
 
         let mut errored = false;
         // Check cases *in order*
-        for (i, case) in stmt.cases.iter().enumerate() {
+        for (i, case) in stmt.cases.iter_mut().enumerate() {
             if errored {
                 break;
             }
@@ -268,7 +272,7 @@ impl Visit<SwitchStmt> for Analyzer<'_, '_> {
             match case.test {
                 Some(ref test) => {
                     match self.detect_facts(
-                        &Expr::Bin(BinExpr {
+                        &mut Expr::Bin(BinExpr {
                             op: op!("==="),
                             span,
                             left: stmt.discriminant.clone(),
@@ -306,10 +310,10 @@ impl Visit<SwitchStmt> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    pub(super) fn try_assign(&mut self, span: Span, lhs: &PatOrExpr, ty: &Type) {
+    pub(super) fn try_assign(&mut self, span: Span, lhs: &mut PatOrExpr, ty: &Type) {
         let res: Result<(), Error> = try {
             match *lhs {
-                PatOrExpr::Expr(ref expr) | PatOrExpr::Pat(box Pat::Expr(ref expr)) => {
+                PatOrExpr::Expr(ref mut expr) | PatOrExpr::Pat(box Pat::Expr(ref mut expr)) => {
                     let lhs_ty = self.validate_expr(expr, TypeOfMode::LValue, None)?;
                     let lhs_ty = self.expand(span, lhs_ty)?;
 
@@ -322,7 +326,7 @@ impl Analyzer<'_, '_> {
                     }
                 }
 
-                PatOrExpr::Pat(ref pat) => {
+                PatOrExpr::Pat(ref mut pat) => {
                     self.try_assign_pat(span, pat, ty)?;
                 }
             }
@@ -463,7 +467,7 @@ impl Analyzer<'_, '_> {
 
     /// Returns (type facts when test is matched, type facts when test is not
     /// matched)
-    fn detect_facts(&mut self, test: &Expr, facts: &mut Facts) -> ValidationResult<()> {
+    fn detect_facts(&mut self, test: &mut Expr, facts: &mut Facts) -> ValidationResult<()> {
         match *test {
             // Useless
             Expr::Fn(..)
@@ -479,7 +483,7 @@ impl Analyzer<'_, '_> {
             | Expr::JSXEmpty(..) => return Ok(()),
 
             Expr::Call(..) => {
-                let ty = self.validate(&test)?;
+                let ty = self.validate(test)?;
                 //match *ty.normalize() {
                 //    Type::Simple(ref sty) => match **sty {
                 //        TsType::TsTypePredicate(ref pred) => {
@@ -502,18 +506,20 @@ impl Analyzer<'_, '_> {
             // Array literal *may* have side effect.
             Expr::Array(..) => {}
 
-            Expr::Await(AwaitExpr { arg: ref expr, .. })
-            | Expr::TsNonNull(TsNonNullExpr { ref expr, .. }) => {
+            Expr::Await(AwaitExpr {
+                arg: ref mut expr, ..
+            })
+            | Expr::TsNonNull(TsNonNullExpr { ref mut expr, .. }) => {
                 self.detect_facts(expr, facts)?;
             }
 
-            Expr::Seq(SeqExpr { ref exprs, .. }) => {
+            Expr::Seq(SeqExpr { ref mut exprs, .. }) => {
                 for expr in exprs {
                     self.detect_facts(expr, facts)?;
                 }
             }
 
-            Expr::Paren(ParenExpr { ref expr, .. }) => self.detect_facts(expr, facts)?,
+            Expr::Paren(ParenExpr { ref mut expr, .. }) => self.detect_facts(expr, facts)?,
 
             Expr::Ident(ref i) => {
                 let ty = self.validate(test)?;
@@ -522,8 +528,8 @@ impl Analyzer<'_, '_> {
 
             Expr::Bin(BinExpr {
                 op: op!("&&"),
-                ref left,
-                ref right,
+                ref mut left,
+                ref mut right,
                 ..
             }) => {
                 // order is important
@@ -533,13 +539,13 @@ impl Analyzer<'_, '_> {
 
             Expr::Bin(BinExpr {
                 op: op!("||"),
-                ref left,
-                ref right,
+                ref mut left,
+                ref mut right,
                 ..
             }) => {
                 let (mut l_facts, mut r_facts) = Default::default();
-                self.detect_facts(&left, &mut l_facts)?;
-                self.detect_facts(&right, &mut r_facts)?;
+                self.detect_facts(left, &mut l_facts)?;
+                self.detect_facts(right, &mut r_facts)?;
 
                 *facts += l_facts | r_facts;
 
@@ -548,8 +554,8 @@ impl Analyzer<'_, '_> {
 
             Expr::Bin(BinExpr {
                 op,
-                ref left,
-                ref right,
+                ref mut left,
+                ref mut right,
                 ..
             }) => {
                 let l_ty = self.validate(left)?;
@@ -653,11 +659,11 @@ impl Analyzer<'_, '_> {
 
             Expr::Unary(UnaryExpr {
                 op: op!("!"),
-                ref arg,
+                ref mut arg,
                 ..
             }) => {
                 let mut f = Default::default();
-                self.detect_facts(&arg, &mut f)?;
+                self.detect_facts(&mut arg, &mut f)?;
                 *facts += !f;
             }
 
@@ -672,30 +678,30 @@ impl Analyzer<'_, '_> {
 impl Validate<CondExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &CondExpr) -> Self::Output {
+    fn validate(&mut self, e: &mut CondExpr) -> Self::Output {
         self.record(e);
 
         let CondExpr {
             span,
-            test,
-            alt,
-            cons,
+            mut test,
+            mut alt,
+            mut cons,
             ..
         } = e;
         let span = *span;
 
         let mut facts = Default::default();
-        self.detect_facts(&e.test, &mut facts)?;
+        self.detect_facts(&mut e.test, &mut facts)?;
 
-        self.validate(&test)?;
+        self.validate(&mut test)?;
         let cons = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
-            child.validate(&cons)
+            child.validate(&mut cons)
         })?;
         let alt = self.with_child(ScopeKind::Flow, facts.false_facts, |child| {
-            child.validate(&alt)
+            child.validate(&mut alt)
         })?;
 
-        match **test {
+        match *test {
             Expr::Ident(ref i) => {
                 // Check `declaring` before checking variables.
                 if self.scope.declaring.contains(&i.sym) {

@@ -10,6 +10,7 @@ use macros::{validator, validator_method};
 use swc_atoms::js_word;
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_common::{Spanned, VisitMut, VisitMutWith, VisitWith};
+use swc_common::{Spanned, VisitWith};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy)]
@@ -23,17 +24,21 @@ pub(super) enum ComputedPropMode {
     Interface,
 }
 
-impl Visit<PropName> for Analyzer<'_, '_> {
-    fn visit(&mut self, node: &PropName) {
+impl Validate<PropName> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, node: &mut PropName) {
         self.record(node);
 
         node.visit_children(self);
     }
 }
 
-impl Visit<ComputedPropName> for Analyzer<'_, '_> {
+impl Validate<ComputedPropName> for Analyzer<'_, '_> {
+    type Output = ();
+
     #[validator_method]
-    fn visit(&mut self, node: &ComputedPropName) {
+    fn validate(&mut self, node: &mut ComputedPropName) {
         self.record(node);
 
         let mode = self.ctx.computed_prop_mode;
@@ -53,7 +58,7 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
         };
 
         let mut errors = Errors::default();
-        let ty = match self.validate(&node.expr) {
+        let ty = match self.validate(&mut node.expr) {
             Ok(ty) => ty,
             Err(err) => {
                 match err {
@@ -149,7 +154,7 @@ impl Visit<ComputedPropName> for Analyzer<'_, '_> {
 impl Validate<Prop> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeElement>;
 
-    fn validate(&mut self, prop: &Prop) -> Self::Output {
+    fn validate(&mut self, prop: &mut Prop) -> Self::Output {
         self.record(prop);
 
         let ctx = Ctx {
@@ -243,7 +248,7 @@ impl Analyzer<'_, '_> {
 impl Validate<GetterProp> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeElement>;
 
-    fn validate(&mut self, n: &GetterProp) -> Self::Output {
+    fn validate(&mut self, n: &mut GetterProp) -> Self::Output {
         self.record(n);
 
         let type_ann = self

@@ -4,14 +4,16 @@ use crate::{
     errors::Error,
     ty::{Tuple, Type},
     util::PatExt,
-    validator::ValidateWith,
+    validator::{Validate, ValidateWith},
 };
-use swc_common::{Spanned, Visit};
+use swc_common::Spanned;
 use swc_ecma_ast::*;
 
-impl Visit<VarDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, var: &VarDecl) {
-        self.record(var);
+impl Validate<VarDecl> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, var: &mut VarDecl) {
+        self.record(&*var);
 
         let kind = var.kind;
 
@@ -22,7 +24,7 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
             ..self.ctx
         };
         self.with_ctx(ctx).with(|a| {
-            var.decls.iter().for_each(|v| {
+            var.decls.iter_mut().for_each(|v| {
                 a.record(v);
 
                 let res: Result<_, _> = try {
@@ -55,10 +57,10 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                         }};
                     }
 
-                    if let Some(ref init) = v.init {
+                    if let Some(ref mut init) = v.init {
                         let span = init.span();
 
-                        let declared_ty = v.name.get_ty();
+                        let declared_ty = v.name.get_mut_ty();
                         if declared_ty.is_some() {
                             //TODO:
                             // self.span_allowed_implicit_any = span;
@@ -194,8 +196,8 @@ impl Visit<VarDecl> for Analyzer<'_, '_> {
                         match v.name {
                             Pat::Ident(Ident {
                                 span,
-                                ref sym,
-                                ref type_ann,
+                                ref mut sym,
+                                ref mut type_ann,
                                 ..
                             }) => {
                                 //

@@ -16,24 +16,24 @@ use crate::{
 use macros::{validator, validator_method};
 use std::mem::replace;
 use swc_atoms::js_word;
-use swc_common::{Span, Spanned, Visit, DUMMY_SP};
+use swc_common::{Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[validator]
 impl Validate<ClassProp> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::ClassProperty>;
 
-    fn validate(&mut self, p: &ClassProp) -> Self::Output {
+    fn validate(&mut self, p: &mut ClassProp) -> Self::Output {
         self.record(p);
 
         // Verify key if key is computed
         if p.computed {
-            self.validate_computed_prop_key(p.span, &p.key);
+            self.validate_computed_prop_key(p.span, &mut p.key);
         }
 
         let value = {
             let ty = try_opt!(p.type_ann.validate_with(self));
-            let value_ty = try_opt!(self.validate(&p.value));
+            let value_ty = try_opt!(self.validate(&mut p.value));
 
             ty.or_else(|| value_ty)
         };
@@ -57,7 +57,7 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
 impl Validate<Constructor> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::ConstructorSignature>;
 
-    fn validate(&mut self, c: &Constructor) -> Self::Output {
+    fn validate(&mut self, c: &mut Constructor) -> Self::Output {
         self.record(c);
 
         let c_span = c.span();
@@ -106,7 +106,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                     })
                     | PatOrTsParamProp::Pat(pat) => from_pat(pat.clone()),
                 };
-                let p: ty::FnParam = child.validate(&p)?;
+                let p: ty::FnParam = child.validate(&mut p)?;
 
                 match param {
                     PatOrTsParamProp::Pat(ref pat) => {
@@ -161,7 +161,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
 impl Validate<TsFnParam> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 
-    fn validate(&mut self, p: &TsFnParam) -> Self::Output {
+    fn validate(&mut self, p: &mut TsFnParam) -> Self::Output {
         self.record(p);
 
         let span = p.span();
@@ -206,7 +206,7 @@ impl Validate<TsFnParam> for Analyzer<'_, '_> {
 impl Validate<ClassMethod> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Method>;
 
-    fn validate(&mut self, c: &ClassMethod) -> Self::Output {
+    fn validate(&mut self, c: &mut ClassMethod) -> Self::Output {
         self.record(c);
 
         let c_span = c.span();
@@ -314,7 +314,7 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
 impl Validate<ClassMember> for Analyzer<'_, '_> {
     type Output = ValidationResult<Option<ty::ClassMember>>;
 
-    fn validate(&mut self, m: &ClassMember) -> Self::Output {
+    fn validate(&mut self, m: &mut ClassMember) -> Self::Output {
         Ok(match m {
             swc_ecma_ast::ClassMember::PrivateMethod(_)
             | swc_ecma_ast::ClassMember::PrivateProp(_) => None,
@@ -428,7 +428,7 @@ impl Analyzer<'_, '_> {
     }
 
     #[validator_method]
-    pub(super) fn validate_computed_prop_key(&mut self, span: Span, key: &Expr) {
+    pub(super) fn validate_computed_prop_key(&mut self, span: Span, key: &mut Expr) {
         if self.is_builtin {
             // We don't need to validate builtins
             return;
@@ -447,7 +447,7 @@ impl Analyzer<'_, '_> {
             _ => false,
         };
 
-        let ty = match self.validate(&key).map(|ty| ty.respan(span)) {
+        let ty = match self.validate(key).map(|ty| ty.respan(span)) {
             Ok(ty) => ty,
             Err(err) => {
                 match err {
@@ -549,7 +549,7 @@ impl Analyzer<'_, '_> {
 impl Validate<Class> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Class>;
 
-    fn validate(&mut self, c: &Class) -> Self::Output {
+    fn validate(&mut self, c: &mut Class) -> Self::Output {
         self.record(c);
 
         self.ctx.computed_prop_mode = ComputedPropMode::Class {
@@ -569,7 +569,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
                 // Then, we can expand super class
 
                 let super_type_params = try_opt!(c.super_type_params.validate_with(child));
-                match &c.super_class {
+                match &mut c.super_class {
                     Some(box expr) => Some(box child.validate_expr(
                         expr,
                         TypeOfMode::RValue,
@@ -589,7 +589,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
 
             let body = c
                 .body
-                .iter()
+                .iter_mut()
                 .filter_map(|m| match child.validate(m) {
                     Ok(Some(v)) => Some(Ok(v)),
                     Ok(None) => None,
@@ -716,8 +716,10 @@ impl Validate<Class> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<ClassExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, c: &ClassExpr) {
+impl Validate<ClassExpr> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, c: &mut ClassExpr) {
         self.scope.this_class_name = c.ident.as_ref().map(|v| v.sym.clone());
         let ty = match c.class.validate_with(self) {
             Ok(ty) => ty.into(),
@@ -764,8 +766,10 @@ impl Visit<ClassExpr> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<ClassDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, c: &ClassDecl) {
+impl Validate<ClassDecl> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, c: &mut ClassDecl) {
         self.record(c);
 
         let ctx = Ctx { ..self.ctx };
@@ -774,7 +778,7 @@ impl Visit<ClassDecl> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    fn visit_class_decl(&mut self, c: &ClassDecl) {
+    fn visit_class_decl(&mut self, c: &mut ClassDecl) {
         c.ident.visit_with(self);
 
         self.validate_class_members(&c.class, c.declare)

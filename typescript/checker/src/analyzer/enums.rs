@@ -31,7 +31,7 @@ use super::Analyzer;
 impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<Enum>;
     #[inline(never)]
-    fn validate(&mut self, e: &TsEnumDecl) -> Self::Output {
+    fn validate(&mut self, e: &mut TsEnumDecl) -> Self::Output {
         let mut default = 0;
         let mut values = Default::default();
         let ty: Result<_, _> = try {

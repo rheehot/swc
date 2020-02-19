@@ -9,7 +9,7 @@ use crate::{
     ValidationResult,
 };
 use macros::validator;
-use swc_common::{Spanned, Visit, VisitWith, DUMMY_SP};
+use swc_common::{Spanned, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy)]
@@ -25,13 +25,16 @@ pub(super) enum PatMode {
 impl Validate<Pat> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 
-    fn validate(&mut self, p: &Pat) -> Self::Output {
+    fn validate(&mut self, p: &mut Pat) -> Self::Output {
         self.record(p);
         if !self.is_builtin {
             debug_assert_ne!(p.span(), DUMMY_SP, "A pattern should have a valid span");
         }
 
-        let ty = try_opt!(p.get_ty().validate_with(self));
+        let ty = match p.get_mut_ty() {
+            None => None,
+            Some(ty) => Some(ty.validate_with(self)?),
+        };
 
         match self.ctx.pat_mode {
             PatMode::Decl => {
@@ -68,8 +71,10 @@ impl Validate<Pat> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<RestPat> for Analyzer<'_, '_> {
-    fn visit(&mut self, p: &RestPat) {
+impl Validate<RestPat> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, p: &mut RestPat) {
         p.visit_children(self);
 
         let mut errors = vec![];
@@ -109,8 +114,10 @@ impl Visit<RestPat> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<AssignPat> for Analyzer<'_, '_> {
-    fn visit(&mut self, p: &AssignPat) {
+impl Validate<AssignPat> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, p: &mut AssignPat) {
         p.visit_children(self);
 
         //

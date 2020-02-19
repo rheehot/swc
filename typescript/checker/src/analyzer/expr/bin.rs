@@ -18,22 +18,22 @@ use swc_ecma_utils::{ExprExt, Value::Known};
 impl Validate<BinExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &BinExpr) -> ValidationResult {
+    fn validate(&mut self, e: &mut BinExpr) -> ValidationResult {
         let BinExpr {
             span,
             op,
-            ref left,
-            ref right,
+            ref mut left,
+            ref mut right,
         } = *e;
 
         let mut errors = vec![];
 
         let lt = self
-            .validate(&left)
+            .validate(left)
             .store(&mut errors)
             .map(|ty| ty.respan(left.span()));
         let rt = self
-            .validate(&right)
+            .validate(right)
             .store(&mut errors)
             .map(|ty| ty.respan(right.span()));
 

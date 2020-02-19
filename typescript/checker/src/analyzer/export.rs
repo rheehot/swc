@@ -8,7 +8,7 @@ use crate::{
 use macros::validator_method;
 use std::mem::replace;
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Span, Spanned, Visit, VisitWith, DUMMY_SP};
+use swc_common::{Span, Spanned, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 // ModuleDecl::ExportNamed(export) => {}
@@ -82,7 +82,7 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    pub(super) fn export_default_expr(&mut self, expr: &Expr) {
+    pub(super) fn export_default_expr(&mut self, expr: &mut Expr) {
         assert_eq!(
             self.info.exports.vars.get(&js_word!("default")),
             None,
@@ -112,8 +112,10 @@ impl Analyzer<'_, '_> {
     }
 }
 
-impl Visit<ExportDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, export: &ExportDecl) {
+impl Validate<ExportDecl> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, export: &mut ExportDecl) {
         match export.decl {
             Decl::Fn(ref f) => {
                 f.visit_with(self);
@@ -166,8 +168,10 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<ExportDefaultDecl> for Analyzer<'_, '_> {
-    fn visit(&mut self, export: &ExportDefaultDecl) {
+impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, export: &mut ExportDefaultDecl) {
         match export.decl {
             DefaultDecl::Fn(ref f) => {
                 let i = f
@@ -234,15 +238,19 @@ impl Analyzer<'_, '_> {
 }
 
 /// Done
-impl Visit<TsExportAssignment> for Analyzer<'_, '_> {
-    fn visit(&mut self, s: &TsExportAssignment) {
+impl Validate<TsExportAssignment> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, s: &mut TsExportAssignment) {
         self.export_expr(js_word!("default"), &s.expr);
     }
 }
 
 /// Done
-impl Visit<ExportDefaultExpr> for Analyzer<'_, '_> {
-    fn visit(&mut self, s: &ExportDefaultExpr) {
+impl Validate<ExportDefaultExpr> for Analyzer<'_, '_> {
+    type Output = ();
+
+    fn validate(&mut self, s: &mut ExportDefaultExpr) {
         self.export_expr(js_word!("default"), &s.expr);
     }
 }

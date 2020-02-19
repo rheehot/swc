@@ -71,7 +71,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
 
                                 Stmt::Decl(Decl::Fn(FnDecl {
                                     ref ident,
-                                    ref function,
+                                    ref mut function,
                                     ..
                                 })) => {
                                     merged.types.insert(
@@ -83,7 +83,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                     );
                                 }
 
-                                Stmt::Decl(Decl::Class(ref c)) => {
+                                Stmt::Decl(Decl::Class(ref mut c)) => {
                                     debug_assert_eq!(merged.types.get(&c.ident.sym), None);
 
                                     // builtin libraries does not contain a class which extends
@@ -99,7 +99,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                                 name: Some(c.ident.sym.clone()),
                                                 is_abstract: c.class.is_abstract,
                                                 body: analyzer
-                                                    .validate(&c.class.body)
+                                                    .validate(&mut c.class.body)
                                                     .expect(
                                                         "builtin: failed to validate class body",
                                                     )
@@ -125,7 +125,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                     merged.types.insert(c.ident.sym.clone(), ty);
                                 }
 
-                                Stmt::Decl(Decl::TsModule(ref m)) => {
+                                Stmt::Decl(Decl::TsModule(ref mut m)) => {
                                     let id = match m.id {
                                         TsModuleName::Ident(ref i) => i.sym.clone(),
                                         _ => unreachable!(),
@@ -156,7 +156,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                     }
                                 }
 
-                                Stmt::Decl(Decl::TsTypeAlias(ref a)) => {
+                                Stmt::Decl(Decl::TsTypeAlias(ref mut a)) => {
                                     debug_assert_eq!(merged.types.get(&a.id.sym), None);
 
                                     let ty = a
@@ -168,12 +168,12 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                 }
 
                                 // Merge interface
-                                Stmt::Decl(Decl::TsInterface(ref i)) => {
+                                Stmt::Decl(Decl::TsInterface(ref mut i)) => {
                                     match merged.types.entry(i.id.sym.clone()) {
                                         Entry::Occupied(mut e) => match *e.get_mut() {
                                             ty::Type::Interface(ref mut v) => {
                                                 v.body.extend(
-                                                    analyzer.validate(&i.body.body).expect(
+                                                    analyzer.validate(&mut i.body.body).expect(
                                                         "builtin: failed to parse interface body",
                                                     ),
                                                 );

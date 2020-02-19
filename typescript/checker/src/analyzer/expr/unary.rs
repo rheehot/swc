@@ -15,7 +15,7 @@ use swc_ecma_ast::*;
 impl Validate<UnaryExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &UnaryExpr) -> Self::Output {
+    fn validate(&mut self, e: &mut UnaryExpr) -> Self::Output {
         let UnaryExpr { span, op, ref arg } = *e;
 
         if let op!("delete") = op {

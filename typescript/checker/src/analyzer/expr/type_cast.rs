@@ -14,8 +14,8 @@ use swc_ecma_ast::*;
 impl Validate<TsTypeAssertion> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &TsTypeAssertion) -> ValidationResult {
-        let orig_ty = self.validate(&e.expr)?;
+    fn validate(&mut self, e: &mut TsTypeAssertion) -> ValidationResult {
+        let orig_ty = self.validate(&mut e.expr)?;
 
         self.validate_type_cast(e.span, orig_ty, &e.type_ann)
     }
@@ -25,8 +25,8 @@ impl Validate<TsTypeAssertion> for Analyzer<'_, '_> {
 impl Validate<TsAsExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &TsAsExpr) -> ValidationResult {
-        let orig_ty = self.validate(&e.expr)?;
+    fn validate(&mut self, e: &mut TsAsExpr) -> ValidationResult {
+        let orig_ty = self.validate(&mut e.expr)?;
 
         self.validate_type_cast(e.span, orig_ty, &e.type_ann)
     }

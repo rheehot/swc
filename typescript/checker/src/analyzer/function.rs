@@ -8,14 +8,14 @@ use crate::{
     ValidationResult,
 };
 use macros::validator;
-use swc_common::{Fold, FoldWith, Spanned, Visit};
+use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
 #[validator]
 impl Validate<Function> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Function>;
 
-    fn validate(&mut self, f: &Function) -> Self::Output {
+    fn validate(&mut self, f: &mut Function) -> Self::Output {
         self.record(f);
 
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
@@ -211,10 +211,12 @@ impl Analyzer<'_, '_> {
     }
 }
 
-impl Visit<FnDecl> for Analyzer<'_, '_> {
+impl Validate<FnDecl> for Analyzer<'_, '_> {
+    type Output = ();
+
     /// NOTE: This method **should not call f.fold_children(self)**
-    fn visit(&mut self, f: &FnDecl) {
-        let fn_ty = self.visit_fn(Some(&f.ident), &f.function).freeze();
+    fn validate(&mut self, f: &mut FnDecl) {
+        let fn_ty = self.visit_fn(Some(&f.ident), &mut f.function).freeze();
 
         self.register_type(f.ident.sym.clone(), fn_ty.clone())
             .store(&mut self.info.errors);
@@ -227,10 +229,12 @@ impl Visit<FnDecl> for Analyzer<'_, '_> {
     }
 }
 
-impl Visit<FnExpr> for Analyzer<'_, '_> {
+impl Validate<FnExpr> for Analyzer<'_, '_> {
+    type Output = ();
+
     /// NOTE: This method **should not call f.fold_children(self)**
-    fn visit(&mut self, f: &FnExpr) {
-        self.visit_fn(f.ident.as_ref(), &f.function);
+    fn validate(&mut self, f: &mut FnExpr) {
+        self.visit_fn(f.ident.as_ref(), &mut f.function);
     }
 }
 

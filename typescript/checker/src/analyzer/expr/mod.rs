@@ -44,7 +44,7 @@ impl Validate<Expr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
     #[inline]
-    fn validate(&mut self, e: &Expr) -> Self::Output {
+    fn validate(&mut self, e: &mut Expr) -> Self::Output {
         self.validate_expr(e, TypeOfMode::RValue, None)
     }
 }
@@ -53,8 +53,8 @@ impl Validate<Expr> for Analyzer<'_, '_> {
 impl Validate<ParenExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &ParenExpr) -> Self::Output {
-        self.validate(&e.expr)
+    fn validate(&mut self, e: &mut ParenExpr) -> Self::Output {
+        self.validate(&mut e.expr)
     }
 }
 
@@ -62,7 +62,7 @@ impl Validate<ParenExpr> for Analyzer<'_, '_> {
 impl Validate<AssignExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &AssignExpr) -> Self::Output {
+    fn validate(&mut self, e: &mut AssignExpr) -> Self::Output {
         let ctx = Ctx {
             pat_mode: PatMode::Assign,
             ..self.ctx
@@ -107,7 +107,7 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
             };
 
             if e.op == op!("=") {
-                a.try_assign(span, &e.left, &rhs_ty);
+                a.try_assign(span, &mut e.left, &rhs_ty);
             }
 
             if let Some(span) = any_span {
@@ -123,11 +123,11 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
 impl Validate<UpdateExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &UpdateExpr) -> Self::Output {
+    fn validate(&mut self, e: &mut UpdateExpr) -> Self::Output {
         let span = e.span;
 
         let ty = self
-            .validate_expr(&e.arg, TypeOfMode::LValue, None)
+            .validate_expr(&mut e.arg, TypeOfMode::LValue, None)
             .and_then(|ty| match *ty.normalize() {
                 Type::Keyword(TsKeywordType {
                     kind: TsKeywordTypeKind::TsStringKeyword,
@@ -163,8 +163,11 @@ impl Validate<UpdateExpr> for Analyzer<'_, '_> {
 impl Validate<SeqExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &SeqExpr) -> Self::Output {
-        let SeqExpr { span, ref exprs } = *e;
+    fn validate(&mut self, e: &mut SeqExpr) -> Self::Output {
+        let SeqExpr {
+            span,
+            ref mut exprs,
+        } = *e;
 
         assert!(exprs.len() >= 1);
 
@@ -172,7 +175,7 @@ impl Validate<SeqExpr> for Analyzer<'_, '_> {
         let len = e.exprs.len();
 
         let mut is_any = false;
-        for (i, e) in exprs.iter().enumerate() {
+        for (i, e) in exprs.iter_mut().enumerate() {
             let is_last = i == len - 1;
 
             if !is_last {
@@ -223,14 +226,14 @@ impl Validate<SeqExpr> for Analyzer<'_, '_> {
             return Ok(Type::any(span));
         }
 
-        return self.validate(&exprs.last().unwrap());
+        return self.validate(exprs.last_mut().unwrap());
     }
 }
 
 impl Analyzer<'_, '_> {
     pub fn validate_expr(
         &mut self,
-        e: &Expr,
+        e: &mut Expr,
         mode: TypeOfMode,
         type_args: Option<TypeParamInstantiation>,
     ) -> ValidationResult<Type> {
@@ -274,7 +277,7 @@ impl Analyzer<'_, '_> {
                     match elem {
                         Some(ExprOrSpread {
                             spread: None,
-                            ref expr,
+                            ref mut expr,
                         }) => {
                             let ty = self.validate(expr)?;
                             types.push(ty)
@@ -329,7 +332,7 @@ impl Analyzer<'_, '_> {
                 }));
             }
 
-            Expr::Paren(ParenExpr { ref expr, .. }) => self.validate(&expr),
+            Expr::Paren(ParenExpr { ref mut expr, .. }) => self.validate(expr),
 
             Expr::Tpl(ref t) => {
                 // Check if tpl is constant. If it is, it's type is string literal.
@@ -351,21 +354,24 @@ impl Analyzer<'_, '_> {
                 }));
             }
 
-            Expr::TsNonNull(TsNonNullExpr { ref expr, .. }) => {
+            Expr::TsNonNull(TsNonNullExpr { ref mut expr, .. }) => {
                 Ok(expr.validate_with(self)?.remove_falsy())
             }
 
-            Expr::Object(ObjectLit { span, ref props }) => {
+            Expr::Object(ObjectLit {
+                span,
+                ref mut props,
+            }) => {
                 let mut members = Vec::with_capacity(props.len());
                 let mut special_type = None;
 
                 for prop in props.iter() {
                     match *prop {
-                        PropOrSpread::Prop(ref prop) => {
+                        PropOrSpread::Prop(ref mut prop) => {
                             members.push(prop.validate_with(self)?);
                         }
-                        PropOrSpread::Spread(SpreadElement { ref expr, .. }) => {
-                            match self.validate(&expr)? {
+                        PropOrSpread::Spread(SpreadElement { ref mut expr, .. }) => {
+                            match self.validate(expr)? {
                                 Type::TypeLit(TypeLit {
                                     members: spread_members,
                                     ..
@@ -1132,7 +1138,7 @@ impl Analyzer<'_, '_> {
 impl Validate<ArrowExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Function>;
 
-    fn validate(&mut self, f: &ArrowExpr) -> Self::Output {
+    fn validate(&mut self, f: &mut ArrowExpr) -> Self::Output {
         self.record(f);
 
         self.with_child(ScopeKind::ArrowFn, Default::default(), |child| {

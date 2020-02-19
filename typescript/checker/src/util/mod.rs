@@ -298,6 +298,7 @@ where
 
 pub trait PatExt {
     fn get_ty(&self) -> Option<&TsType>;
+    fn get_mut_ty(&mut self) -> Option<&mut TsType>;
     fn set_ty(&mut self, ty: Option<Box<TsType>>);
 }
 
@@ -317,6 +318,30 @@ impl PatExt for Pat {
                 //}))
                 None
             }
+
+            _ => None,
+        }
+    }
+
+    fn get_mut_ty(&mut self) -> Option<&mut TsType> {
+        match *self {
+            Pat::Array(ArrayPat {
+                ref mut type_ann, ..
+            })
+            | Pat::Assign(AssignPat {
+                ref mut type_ann, ..
+            })
+            | Pat::Ident(Ident {
+                ref mut type_ann, ..
+            })
+            | Pat::Object(ObjectPat {
+                ref mut type_ann, ..
+            })
+            | Pat::Rest(RestPat {
+                ref mut type_ann, ..
+            }) => type_ann.as_mut().map(|ty| &mut *ty.type_ann),
+
+            Pat::Invalid(..) | Pat::Expr(box Expr::Invalid(..)) => None,
 
             _ => None,
         }
