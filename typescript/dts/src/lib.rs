@@ -4,7 +4,7 @@
 
 use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
-use swc_common::{util::move_map::MoveMap, Fold, FoldWith};
+use swc_common::{util::move_map::MoveMap, Fold, FoldWith, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_checker::{ty, ty::Type, util::TypeEq, ModuleTypeInfo};
 
@@ -12,7 +12,7 @@ pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
     module.fold_with(&mut TypeResolver {
         info,
         current_class: None,
-``        top_level: true,
+        top_level: true,
     })
 }
 
@@ -112,11 +112,13 @@ impl Fold<VarDeclarator> for TypeResolver {
 
         match node.name {
             Pat::Ident(ref mut node) => {
-                if let Some(ty) = self.info.vars.remove(&node.sym).map(From::from) {
-                    node.type_ann = Some(TsTypeAnn {
-                        span: Default::default(),
-                        type_ann: box ty,
-                    });
+                if node.type_ann.is_none() {
+                    if let Some(ty) = self.info.vars.remove(&node.sym).map(From::from) {
+                        node.type_ann = Some(TsTypeAnn {
+                            span: DUMMY_SP,
+                            type_ann: box ty,
+                        });
+                    }
                 }
             }
             _ => {}
