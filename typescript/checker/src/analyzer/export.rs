@@ -202,7 +202,6 @@ impl Analyzer<'_, '_> {
 
         let ty = match self.find_type(&from) {
             Some(ty) => ty,
-            None => unreachable!(".register_type() should be called before calling .export()"),
         };
 
         let iter = ty.into_iter().cloned().collect::<Vec<_>>();
