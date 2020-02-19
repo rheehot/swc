@@ -102,60 +102,6 @@ pub(super) fn is_prop_name_eq(l: &PropName, r: &PropName) -> bool {
     false
 }
 
-pub(super) trait PatExt {
-    fn get_ty(&self) -> Option<&TsType>;
-    fn set_ty(&mut self, ty: Option<Box<TsType>>);
-}
-
-impl PatExt for Pat {
-    fn get_ty(&self) -> Option<&TsType> {
-        match *self {
-            Pat::Array(ArrayPat { ref type_ann, .. })
-            | Pat::Assign(AssignPat { ref type_ann, .. })
-            | Pat::Ident(Ident { ref type_ann, .. })
-            | Pat::Object(ObjectPat { ref type_ann, .. })
-            | Pat::Rest(RestPat { ref type_ann, .. }) => type_ann.as_ref().map(|ty| &*ty.type_ann),
-
-            Pat::Invalid(..) | Pat::Expr(box Expr::Invalid(..)) => {
-                //Some(TsType::TsKeywordType(TsKeywordType {
-                //    span: self.span(),
-                //    kind: TsKeywordTypeKind::TsAnyKeyword,
-                //}))
-                None
-            }
-
-            _ => None,
-        }
-    }
-
-    fn set_ty(&mut self, ty: Option<Box<TsType>>) {
-        match *self {
-            Pat::Array(ArrayPat {
-                ref mut type_ann, ..
-            })
-            | Pat::Assign(AssignPat {
-                ref mut type_ann, ..
-            })
-            | Pat::Ident(Ident {
-                ref mut type_ann, ..
-            })
-            | Pat::Object(ObjectPat {
-                ref mut type_ann, ..
-            })
-            | Pat::Rest(RestPat {
-                ref mut type_ann, ..
-            }) => {
-                *type_ann = ty.map(|type_ann| TsTypeAnn {
-                    span: type_ann.span(),
-                    type_ann,
-                })
-            }
-
-            _ => unreachable!("Cannot set type annotations for {:?}", self),
-        }
-    }
-}
-
 pub(super) struct VarVisitor<'a> {
     pub names: &'a mut Vec<JsWord>,
 }

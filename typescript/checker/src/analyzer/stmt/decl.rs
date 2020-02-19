@@ -1,8 +1,9 @@
-use super::super::{pat::PatMode, util::PatExt, Analyzer, Ctx};
+use super::super::{pat::PatMode, Analyzer, Ctx};
 use crate::{
     analyzer::util::ResultExt,
     errors::Error,
     ty::{Tuple, Type},
+    util::PatExt,
     validator::ValidateWith,
 };
 use swc_common::{Spanned, Visit};

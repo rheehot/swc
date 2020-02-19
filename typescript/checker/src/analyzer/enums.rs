@@ -1,4 +1,4 @@
-use fxhash::{FxHashMap, FxHashSet};
+use fxhash::FxHashMap;
 
 use macros::validator;
 use swc_atoms::JsWord;

@@ -1,10 +1,10 @@
 use super::Analyzer;
 use crate::{
-    analyzer::util::{PatExt, ResultExt, VarVisitor},
+    analyzer::util::{ResultExt, VarVisitor},
     errors::Error,
     ty,
     ty::Type,
-    util::TypeEq,
+    util::{PatExt, TypeEq},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };

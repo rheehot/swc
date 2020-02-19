@@ -1,5 +1,5 @@
 use crate::ty::{Class, FnParam, Intersection, Type, TypeElement, Union};
-use swc_common::{Fold, FoldWith, Span, DUMMY_SP};
+use swc_common::{Fold, FoldWith, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 pub(crate) mod named;
@@ -292,6 +292,60 @@ where
         match self.last() {
             Some(ref stmt) => stmt.ends_with_ret(),
             _ => false,
+        }
+    }
+}
+
+pub trait PatExt {
+    fn get_ty(&self) -> Option<&TsType>;
+    fn set_ty(&mut self, ty: Option<Box<TsType>>);
+}
+
+impl PatExt for Pat {
+    fn get_ty(&self) -> Option<&TsType> {
+        match *self {
+            Pat::Array(ArrayPat { ref type_ann, .. })
+            | Pat::Assign(AssignPat { ref type_ann, .. })
+            | Pat::Ident(Ident { ref type_ann, .. })
+            | Pat::Object(ObjectPat { ref type_ann, .. })
+            | Pat::Rest(RestPat { ref type_ann, .. }) => type_ann.as_ref().map(|ty| &*ty.type_ann),
+
+            Pat::Invalid(..) | Pat::Expr(box Expr::Invalid(..)) => {
+                //Some(TsType::TsKeywordType(TsKeywordType {
+                //    span: self.span(),
+                //    kind: TsKeywordTypeKind::TsAnyKeyword,
+                //}))
+                None
+            }
+
+            _ => None,
+        }
+    }
+
+    fn set_ty(&mut self, ty: Option<Box<TsType>>) {
+        match *self {
+            Pat::Array(ArrayPat {
+                ref mut type_ann, ..
+            })
+            | Pat::Assign(AssignPat {
+                ref mut type_ann, ..
+            })
+            | Pat::Ident(Ident {
+                ref mut type_ann, ..
+            })
+            | Pat::Object(ObjectPat {
+                ref mut type_ann, ..
+            })
+            | Pat::Rest(RestPat {
+                ref mut type_ann, ..
+            }) => {
+                *type_ann = ty.map(|type_ann| TsTypeAnn {
+                    span: type_ann.span(),
+                    type_ann,
+                })
+            }
+
+            _ => unreachable!("Cannot set type annotations for {:?}", self),
         }
     }
 }
