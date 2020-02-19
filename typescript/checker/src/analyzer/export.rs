@@ -114,12 +114,20 @@ impl Analyzer<'_, '_> {
 
 impl Visit<ExportDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, export: &ExportDecl) {
-        // TODO:       export.visit_children(self);
-
         match export.decl {
-            Decl::Fn(ref f) => self.export(f.span(), f.ident.sym.clone(), None),
-            Decl::TsInterface(ref i) => self.export(i.span(), i.id.sym.clone(), None),
-            Decl::Class(ref c) => self.export(c.span(), c.ident.sym.clone(), None),
+            Decl::Fn(ref f) => {
+                f.visit_with(self);
+                self.export(f.span(), f.ident.sym.clone(), None)
+            }
+            Decl::TsInterface(ref i) => {
+                i.visit_with(self);
+
+                self.export(i.span(), i.id.sym.clone(), None)
+            }
+            Decl::Class(ref c) => {
+                c.visit_with(self);
+                self.export(c.span(), c.ident.sym.clone(), None)
+            }
             Decl::Var(ref var) => {
                 // unimplemented!("export var Foo = a;")
                 for decl in &var.decls {
