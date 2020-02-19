@@ -339,7 +339,6 @@ impl<'a> Emitter<'a> {
 
         keyword!("module");
         space!();
-
         emit!(n.id);
 
         if let Some(body) = &n.body {
@@ -367,12 +366,12 @@ impl<'a> Emitter<'a> {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
         punct!("{");
-
+        self.wr.increase_indent();
         match n {
             TsNamespaceBody::TsModuleBlock(n) => emit!(n),
             TsNamespaceBody::TsNamespaceDecl(n) => emit!(n),
         }
-
+        self.wr.decrease_indent();
         punct!("}");
     }
 
