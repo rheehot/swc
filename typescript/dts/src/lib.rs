@@ -12,6 +12,7 @@ pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
     module.fold_with(&mut TypeResolver {
         info,
         current_class: None,
+``        top_level: true,
     })
 }
 
@@ -19,6 +20,7 @@ pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
 struct TypeResolver {
     info: ModuleTypeInfo,
     current_class: Option<ty::Class>,
+    top_level: bool,
 }
 
 impl TypeResolver {
@@ -56,6 +58,28 @@ impl TypeResolver {
         } else {
             None
         }
+    }
+}
+
+impl Fold<BlockStmt> for TypeResolver {
+    fn fold(&mut self, mut node: BlockStmt) -> BlockStmt {
+        let old = self.top_level;
+        self.top_level = false;
+        node = node.fold_children(self);
+        self.top_level = old;
+
+        node
+    }
+}
+
+impl Fold<Function> for TypeResolver {
+    fn fold(&mut self, mut node: Function) -> Function {
+        let old = self.top_level;
+        self.top_level = false;
+        node = node.fold_children(self);
+        self.top_level = old;
+
+        node
     }
 }
 
@@ -307,5 +331,27 @@ impl Fold<Vec<ClassMember>> for TypeResolver {
         props.extend(buf);
 
         props
+    }
+}
+
+impl Fold<Vec<Stmt>> for TypeResolver {
+    fn fold(&mut self, stmts: Vec<Stmt>) -> Vec<Stmt> {
+        if !self.top_level {
+            return vec![];
+        }
+
+        stmts.fold_children(self)
+    }
+}
+
+impl Fold<Vec<ModuleItem>> for TypeResolver {
+    fn fold(&mut self, items: Vec<ModuleItem>) -> Vec<ModuleItem> {
+        items.move_flat_map(|item| match item {
+            ModuleItem::ModuleDecl(_) | ModuleItem::Stmt(Stmt::Decl(..)) => {
+                Some(item.fold_with(self))
+            }
+
+            _ => None,
+        })
     }
 }
