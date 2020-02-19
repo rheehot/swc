@@ -280,17 +280,13 @@ impl Fold<ClassMethod> for TypeResolver {
             return node;
         }
 
-        if node.kind != MethodKind::Method {
-            return node;
-        }
-
         if let Some(cls) = &mut self.current_class {
             if let Some(return_type) = cls.body.iter().find_map(|v| match v {
                 ty::ClassMember::Method(m) => {
                     //
                     if node.key.type_eq(&m.key) {
                         //
-                        return Some(TsTypeAnn::from(*m.ret_ty.clone()));
+                        return Some(TsTypeAnn::from(m.ret_ty.generalize_lit().into_owned()));
                     }
 
                     None
