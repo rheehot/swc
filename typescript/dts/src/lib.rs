@@ -19,6 +19,7 @@ pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
         current_class: None,
         in_declare: false,
         top_level: true,
+        forced_module: false,
     })
 }
 
@@ -30,6 +31,7 @@ struct TypeResolver {
 
     in_declare: bool,
     top_level: bool,
+    forced_module: bool,
 }
 
 impl TypeResolver {
@@ -388,14 +390,27 @@ impl Fold<Vec<Stmt>> for TypeResolver {
 }
 
 impl Fold<Vec<ModuleItem>> for TypeResolver {
-    fn fold(&mut self, items: Vec<ModuleItem>) -> Vec<ModuleItem> {
-        items.fold_children(self).move_flat_map(|item| match item {
+    fn fold(&mut self, mut items: Vec<ModuleItem>) -> Vec<ModuleItem> {
+        items = items.fold_children(self).move_flat_map(|item| match item {
             ModuleItem::Stmt(Stmt::Decl(..)) if self.in_declare => None,
 
             ModuleItem::ModuleDecl(_) | ModuleItem::Stmt(Stmt::Decl(..)) => Some(item),
 
             _ => None,
-        })
+        });
+
+        if self.forced_module {
+            items.push(ModuleItem::ModuleDecl(ModuleDecl::ExportNamed(
+                NamedExport {
+                    span: DUMMY_SP,
+                    specifiers: vec![],
+                    src: None,
+                    type_only: false,
+                },
+            )));
+        }
+
+        items
     }
 }
 
@@ -407,6 +422,7 @@ impl Fold<ModuleItem> for TypeResolver {
         match node {
             ModuleItem::Stmt(Stmt::Decl(Decl::TsInterface(i))) => {
                 if self.used.get(&i.id.sym).is_none() {
+                    self.forced_module = true;
                     return Stmt::Empty(EmptyStmt { span }).into();
                 }
                 return ModuleItem::Stmt(Stmt::Decl(Decl::TsInterface(i)));
