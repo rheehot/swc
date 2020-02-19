@@ -168,8 +168,6 @@ impl Visit<ExportDecl> for Analyzer<'_, '_> {
 
 impl Visit<ExportDefaultDecl> for Analyzer<'_, '_> {
     fn visit(&mut self, export: &ExportDefaultDecl) {
-        export.visit_children(self);
-
         match export.decl {
             DefaultDecl::Fn(ref f) => {
                 let i = f
@@ -188,8 +186,14 @@ impl Visit<ExportDefaultDecl> for Analyzer<'_, '_> {
                     .store(&mut self.info.errors);
                 self.export(f.span(), js_word!("default"), Some(i))
             }
-            DefaultDecl::Class(..) => unimplemented!("export default class"),
+            DefaultDecl::Class(..) => {
+                export.visit_children(self);
+
+                unimplemented!("export default class")
+            }
             DefaultDecl::TsInterfaceDecl(ref i) => {
+                export.visit_children(self);
+
                 self.export(i.span(), js_word!("default"), Some(i.id.sym.clone()))
             }
         };
