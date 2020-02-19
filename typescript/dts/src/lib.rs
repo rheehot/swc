@@ -12,6 +12,7 @@ pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
     module.fold_with(&mut TypeResolver {
         info,
         current_class: None,
+        in_declare: false,
         top_level: true,
     })
 }
@@ -20,6 +21,8 @@ pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
 struct TypeResolver {
     info: ModuleTypeInfo,
     current_class: Option<ty::Class>,
+
+    in_declare: bool,
     top_level: bool,
 }
 
@@ -162,10 +165,18 @@ impl Fold<FnDecl> for TypeResolver {
 
 impl Fold<TsModuleDecl> for TypeResolver {
     fn fold(&mut self, node: TsModuleDecl) -> TsModuleDecl {
-        TsModuleDecl {
+        let old = self.in_declare;
+
+        self.in_declare = true;
+
+        let node = TsModuleDecl {
             declare: true,
             ..node.fold_children(self)
-        }
+        };
+
+        self.in_declare = old;
+
+        node
     }
 }
 
@@ -217,9 +228,9 @@ impl Fold<Option<BlockStmt>> for TypeResolver {
 
 impl Fold<ClassDecl> for TypeResolver {
     fn fold(&mut self, mut node: ClassDecl) -> ClassDecl {
-        node.declare = true;
+        node.declare = !self.in_declare;
 
-        let old = self.current_class.take();
+        let old_class = self.current_class.take();
 
         if let Some(class) = self.get_mapped(&node.ident.sym, |ty| match ty {
             Type::Class(class) => Some(class.clone()),
@@ -230,7 +241,7 @@ impl Fold<ClassDecl> for TypeResolver {
 
         node = node.fold_children(self);
 
-        self.current_class = old;
+        self.current_class = old_class;
 
         node
     }
@@ -373,11 +384,28 @@ impl Fold<Vec<Stmt>> for TypeResolver {
 impl Fold<Vec<ModuleItem>> for TypeResolver {
     fn fold(&mut self, items: Vec<ModuleItem>) -> Vec<ModuleItem> {
         items.move_flat_map(|item| match item {
+            ModuleItem::Stmt(Stmt::Decl(..)) if self.in_declare => None,
+
             ModuleItem::ModuleDecl(_) | ModuleItem::Stmt(Stmt::Decl(..)) => {
                 Some(item.fold_with(self))
             }
 
             _ => None,
         })
+    }
+}
+
+impl Fold<ModuleItem> for TypeResolver {
+    fn fold(&mut self, mut node: ModuleItem) -> ModuleItem {
+        node = node.fold_children(self);
+
+        match node {
+            ModuleItem::ModuleDecl(ModuleDecl::ExportDecl(decl)) if self.in_declare => {
+                return ModuleItem::Stmt(Stmt::Decl(decl.decl))
+            }
+            _ => {}
+        }
+
+        node
     }
 }
