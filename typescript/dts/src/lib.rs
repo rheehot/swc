@@ -238,8 +238,34 @@ impl Fold<ClassDecl> for TypeResolver {
 
 impl Fold<ClassProp> for TypeResolver {
     fn fold(&mut self, mut node: ClassProp) -> ClassProp {
+        node.value = None;
+
         if node.accessibility == Some(Accessibility::Private) {
             node.type_ann = None;
+        }
+
+        if node.type_ann.is_some() {
+            return node;
+        }
+
+        if let Some(cls) = &mut self.current_class {
+            if let Some(type_ann) = cls.body.iter().find_map(|v| match v {
+                ty::ClassMember::Property(p) => {
+                    //
+                    if node.key.type_eq(&p.key) {
+                        //
+                        return p
+                            .value
+                            .clone()
+                            .map(|ty| ty.generalize_lit().into_owned().into());
+                    }
+
+                    None
+                }
+                _ => None,
+            }) {
+                node.type_ann = Some(type_ann)
+            }
         }
 
         node.fold_children(self)
