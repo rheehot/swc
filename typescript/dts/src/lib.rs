@@ -97,7 +97,9 @@ impl Fold<VarDecl> for TypeResolver {
 impl Fold<VarDeclarator> for TypeResolver {
     fn fold(&mut self, mut node: VarDeclarator) -> VarDeclarator {
         match node.init {
-            Some(box Expr::Lit(Lit::Null(..))) => {
+            Some(box Expr::Lit(Lit::Null(..)))
+            | Some(box Expr::Lit(Lit::Str(..)))
+            | Some(box Expr::Lit(Lit::JSXText(..))) => {
                 node.init = None;
             }
             Some(box Expr::Lit(..)) => {}
