@@ -2,14 +2,19 @@
 #![feature(box_patterns)]
 #![feature(specialization)]
 
+use crate::dce::get_used;
+use fxhash::FxHashSet;
 use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{util::move_map::MoveMap, Fold, FoldWith, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_checker::{ty, ty::Type, util::TypeEq, ModuleTypeInfo};
 
+mod dce;
+
 pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
     module.fold_with(&mut TypeResolver {
+        used: get_used(&info),
         info,
         current_class: None,
         in_declare: false,
@@ -20,6 +25,7 @@ pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
 #[derive(Debug)]
 struct TypeResolver {
     info: ModuleTypeInfo,
+    used: FxHashSet<JsWord>,
     current_class: Option<ty::Class>,
 
     in_declare: bool,
@@ -383,12 +389,10 @@ impl Fold<Vec<Stmt>> for TypeResolver {
 
 impl Fold<Vec<ModuleItem>> for TypeResolver {
     fn fold(&mut self, items: Vec<ModuleItem>) -> Vec<ModuleItem> {
-        items.move_flat_map(|item| match item {
+        items.fold_children(self).move_flat_map(|item| match item {
             ModuleItem::Stmt(Stmt::Decl(..)) if self.in_declare => None,
 
-            ModuleItem::ModuleDecl(_) | ModuleItem::Stmt(Stmt::Decl(..)) => {
-                Some(item.fold_with(self))
-            }
+            ModuleItem::ModuleDecl(_) | ModuleItem::Stmt(Stmt::Decl(..)) => Some(item),
 
             _ => None,
         })
@@ -398,8 +402,16 @@ impl Fold<Vec<ModuleItem>> for TypeResolver {
 impl Fold<ModuleItem> for TypeResolver {
     fn fold(&mut self, mut node: ModuleItem) -> ModuleItem {
         node = node.fold_children(self);
+        let span = node.span();
 
         match node {
+            ModuleItem::Stmt(Stmt::Decl(Decl::TsInterface(i))) => {
+                if self.used.get(&i.id.sym).is_none() {
+                    return Stmt::Empty(EmptyStmt { span }).into();
+                }
+                return ModuleItem::Stmt(Stmt::Decl(Decl::TsInterface(i)));
+            }
+
             ModuleItem::ModuleDecl(ModuleDecl::ExportDecl(decl)) if self.in_declare => {
                 return ModuleItem::Stmt(Stmt::Decl(decl.decl))
             }
