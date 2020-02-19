@@ -1,7 +1,7 @@
 use super::Analyzer;
 use std::iter::once;
 use swc_atoms::JsWord;
-use swc_common::{Spanned, Visit};
+use swc_common::Visit;
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {

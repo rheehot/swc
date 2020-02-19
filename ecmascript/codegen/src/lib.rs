@@ -773,7 +773,7 @@ impl<'a> Emitter<'a> {
     fn emit_class_method(&mut self, n: &ClassMethod) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        self.emit_accesibility(n.accessibility);
+        self.emit_accesibility(n.accessibility)?;
 
         if n.is_static {
             keyword!("static");
