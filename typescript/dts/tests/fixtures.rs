@@ -249,6 +249,8 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
                 String::from_utf8(buf).unwrap()
             };
 
+            println!("---------- Generated ----------\n{}", generated);
+            println!("---------- Expected ----------\n{}", expected_code);
             assert_eq!(
                 NormalizedOutput::from(generated),
                 NormalizedOutput::from((*expected_code).clone())
