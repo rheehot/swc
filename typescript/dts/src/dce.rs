@@ -11,17 +11,13 @@ pub fn get_used(info: &ModuleTypeInfo) -> FxHashSet<JsWord> {
 
     for (_, v) in info.vars.iter() {
         track(&mut used, v.normalize());
-        println!("track var: {:?}", v.normalize());
     }
 
     for (_, types) in info.types.iter() {
         for ty in types {
-            println!("track: {:?}", ty.normalize());
             track(&mut used, ty.normalize());
         }
     }
-
-    println!("Used: {:?}", used);
 
     used
 }
@@ -41,8 +37,12 @@ struct Tracker<'a> {
 
 impl Visit<JsWord> for Tracker<'_> {
     fn visit(&mut self, node: &JsWord) {
-        println!("used: {}", node);
-
         self.used.insert(node.clone());
+    }
+}
+
+impl Visit<Ident> for Tracker<'_> {
+    fn visit(&mut self, node: &Ident) {
+        self.used.insert(node.sym.clone());
     }
 }
