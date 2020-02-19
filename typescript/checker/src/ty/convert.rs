@@ -3,9 +3,6 @@ use crate::{
     ty,
     ty::{FnParam, ImportType, QueryExpr, TypeParamDecl, TypeParamInstantiation},
 };
-use swc_common::Spanned;
-use crate::ty;
-use crate::{ty, ty::TypeParamDecl};
 use std::sync::Arc;
 use swc_common::{Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -359,35 +356,6 @@ impl From<TypeParamInstantiation> for TsTypeParamInstantiation {
         }
     }
 }
-impl From<ty::TypeParamDecl> for TsType {
-    fn from(t: TypeParamDecl) -> Self {
-        TsTypeParamDecl {
-            span: t.span,
-            params: t.params.into_iter().map(From::from).collect(),
-        }
-    }
-}
-
-impl From<ty::Type> for TsTypeAnn {
-    fn from(t: ty::Type) -> Self {
-        TsTypeAnn {
-            span: t.span(),
-            type_ann: box t.into(),
-        }
-    }
-}
-
-impl From<Box<ty::Type>> for TsTypeAnn {
-    fn from(t: Box<ty::Type>) -> Self {
-        (*t).into()
-    }
-}
-
-impl From<Box<ty::Type>> for Box<TsType> {
-    fn from(t: Box<ty::Type>) -> Self {
-        box (*t).into()
-    }
-}
 
 impl From<ty::Operator> for TsTypeOperator {
     fn from(t: ty::Operator) -> Self {
@@ -398,15 +366,6 @@ impl From<ty::Operator> for TsTypeOperator {
         }
     }
 }
-
-impl From<ty::TypeParam> for TsTypeParam {
-    fn from(t: ty::TypeParam) -> Self {
-        TsTypeParam {
-            span: t.span,
-            name: t.name,
-            constraint: t.constraint.into(),
-            default: t.default.into(),
-        }
 
 impl From<ty::Class> for TsType {
     fn from(t: ty::Class) -> Self {
