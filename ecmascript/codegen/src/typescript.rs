@@ -340,6 +340,7 @@ impl<'a> Emitter<'a> {
         keyword!("module");
         space!();
         emit!(n.id);
+        formatting_space!();
 
         if let Some(body) = &n.body {
             emit!(body);
