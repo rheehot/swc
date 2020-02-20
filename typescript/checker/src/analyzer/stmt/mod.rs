@@ -7,6 +7,7 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
+use macros::validator;
 use swc_common::{Visit, VisitMut, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 
@@ -19,8 +20,10 @@ mod loops;
 impl Validate<WithStmt> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, s: &mut WithStmt) {
+    fn validate(&mut self, s: &mut WithStmt) -> Self::Output {
         s.obj.visit_mut_with(self);
+
+        Ok(())
     }
 }
 
@@ -28,10 +31,12 @@ impl Validate<WithStmt> for Analyzer<'_, '_> {
 impl Validate<BlockStmt> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, s: &mut BlockStmt) {
+    fn validate(&mut self, s: &mut BlockStmt) -> Self::Output {
         self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
             s.stmts.visit_mut_with(analyzer)
-        })
+        });
+
+        Ok(())
     }
 }
 

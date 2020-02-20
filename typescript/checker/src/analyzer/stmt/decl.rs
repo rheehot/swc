@@ -5,7 +5,9 @@ use crate::{
     ty::{Tuple, Type},
     util::PatExt,
     validator::{Validate, ValidateWith},
+    ValidationResult,
 };
+use macros::validator;
 use swc_common::Spanned;
 use swc_ecma_ast::*;
 
@@ -13,7 +15,7 @@ use swc_ecma_ast::*;
 impl Validate<VarDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, var: &mut VarDecl) {
+    fn validate(&mut self, var: &mut VarDecl) -> Self::Output {
         self.record(&*var);
 
         let kind = var.kind;
@@ -257,5 +259,7 @@ impl Validate<VarDecl> for Analyzer<'_, '_> {
                 res.store(&mut a.info.errors);
             });
         });
+
+        Ok(())
     }
 }

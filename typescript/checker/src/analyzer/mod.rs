@@ -315,7 +315,7 @@ impl Load for NoopLoader {
 impl Validate<Vec<ModuleItem>> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, items: &mut Vec<ModuleItem>) {
+    fn validate(&mut self, items: &mut Vec<ModuleItem>) -> Self::Output {
         println!(": Vec<ModuleItem>");
 
         {
@@ -412,6 +412,8 @@ impl Validate<Vec<ModuleItem>> for Analyzer<'_, '_> {
         items.visit_children(self);
 
         self.handle_pending_exports();
+
+        Ok(())
     }
 }
 
@@ -419,7 +421,7 @@ impl Validate<Vec<ModuleItem>> for Analyzer<'_, '_> {
 impl Validate<Vec<Stmt>> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, items: &mut Vec<Stmt>) {
+    fn validate(&mut self, items: &mut Vec<Stmt>) -> Self::Output {
         let mut visitor = AmbientFunctionHandler {
             last_ambient_name: None,
             errors: &mut self.info.errors,
@@ -434,6 +436,8 @@ impl Validate<Vec<Stmt>> for Analyzer<'_, '_> {
         }
 
         items.visit_children(self);
+
+        Ok(())
     }
 }
 
@@ -442,8 +446,10 @@ impl Validate<Vec<Stmt>> for Analyzer<'_, '_> {
 impl Validate<Decorator> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, d: &mut Decorator) {
+    fn validate(&mut self, d: &mut Decorator) -> Self::Output {
         self.validate(&mut d.expr).store(&mut self.info.errors);
+
+        Ok(())
     }
 }
 
@@ -451,7 +457,7 @@ impl Validate<Decorator> for Analyzer<'_, '_> {
 impl Validate<TsImportEqualsDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, node: &mut TsImportEqualsDecl) {
+    fn validate(&mut self, node: &mut TsImportEqualsDecl) -> Self::Output {
         self.record(node);
 
         match node.module_ref {
@@ -463,6 +469,8 @@ impl Validate<TsImportEqualsDecl> for Analyzer<'_, '_> {
             }
             _ => {}
         }
+
+        Ok(())
     }
 }
 
@@ -470,7 +478,7 @@ impl Validate<TsImportEqualsDecl> for Analyzer<'_, '_> {
 impl Validate<TsModuleDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, decl: &mut TsModuleDecl) {
+    fn validate(&mut self, decl: &mut TsModuleDecl) -> Self::Output {
         let span = decl.span;
 
         let mut new = self.new(Scope::root());
@@ -491,5 +499,7 @@ impl Validate<TsModuleDecl> for Analyzer<'_, '_> {
             Type::Module(module),
         )
         .store(&mut self.info.errors);
+
+        Ok(())
     }
 }

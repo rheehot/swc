@@ -6,7 +6,7 @@ use crate::{
     validator::Validate,
     ValidationResult,
 };
-use macros::validator_method;
+use macros::{validator, validator_method};
 use swc_common::{Span, Spanned, VisitMutWith};
 use swc_ecma_ast::*;
 
@@ -89,8 +89,10 @@ impl Analyzer<'_, '_> {
 impl Validate<ForInStmt> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, s: &mut ForInStmt) {
+    fn validate(&mut self, s: &mut ForInStmt) -> Self::Output {
         self.check_for_of_in_loop(s.span, &mut s.left, &mut s.right);
+
+        Ok(())
     }
 }
 
@@ -98,7 +100,9 @@ impl Validate<ForInStmt> for Analyzer<'_, '_> {
 impl Validate<ForOfStmt> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, s: &mut ForOfStmt) {
+    fn validate(&mut self, s: &mut ForOfStmt) -> Self::Output {
         self.check_for_of_in_loop(s.span, &mut s.left, &mut s.right);
+
+        Ok(())
     }
 }

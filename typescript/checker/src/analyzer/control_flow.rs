@@ -194,13 +194,13 @@ impl BitOr for CondFacts {
 impl Validate<IfStmt> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, stmt: &mut IfStmt) {
+    fn validate(&mut self, stmt: &mut IfStmt) -> Self::Output {
         let mut facts = Default::default();
         match self.detect_facts(&mut stmt.test, &mut facts) {
             Ok(()) => (),
             Err(err) => {
                 self.info.errors.push(err);
-                return;
+                return Ok(());
             }
         };
         let ends_with_ret = stmt.cons.ends_with_ret();
@@ -217,6 +217,8 @@ impl Validate<IfStmt> for Analyzer<'_, '_> {
         if ends_with_ret {
             self.scope.facts.extend(facts.false_facts);
         }
+
+        Ok(())
     }
 }
 
@@ -238,7 +240,7 @@ impl Analyzer<'_, '_> {
 impl Validate<SwitchStmt> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, stmt: &mut SwitchStmt) {
+    fn validate(&mut self, stmt: &mut SwitchStmt) -> Self::Output {
         self.record(stmt);
 
         let discriminant_ty = self
@@ -308,6 +310,8 @@ impl Validate<SwitchStmt> for Analyzer<'_, '_> {
         if ends_with_ret {
             self.scope.facts.extend(false_facts);
         }
+
+        Ok(())
     }
 }
 

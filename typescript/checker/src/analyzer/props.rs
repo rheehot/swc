@@ -30,10 +30,12 @@ pub(super) enum ComputedPropMode {
 impl Validate<PropName> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, node: &mut PropName) {
+    fn validate(&mut self, node: &mut PropName) -> Self::Output {
         self.record(node);
 
         node.visit_children(self);
+
+        Ok(())
     }
 }
 
@@ -41,8 +43,7 @@ impl Validate<PropName> for Analyzer<'_, '_> {
 impl Validate<ComputedPropName> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    #[validator_method]
-    fn validate(&mut self, node: &mut ComputedPropName) {
+    fn validate(&mut self, node: &mut ComputedPropName) -> Self::Output {
         self.record(node);
 
         let mode = self.ctx.computed_prop_mode;
@@ -151,6 +152,8 @@ impl Validate<ComputedPropName> for Analyzer<'_, '_> {
                 errors: errors.into(),
             })?
         }
+
+        Ok(())
     }
 }
 

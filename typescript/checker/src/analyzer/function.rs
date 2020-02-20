@@ -216,7 +216,7 @@ impl Validate<FnDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
     /// NOTE: This method **should not call f.fold_children(self)**
-    fn validate(&mut self, f: &mut FnDecl) {
+    fn validate(&mut self, f: &mut FnDecl) -> Self::Output {
         let fn_ty = self.visit_fn(Some(&f.ident), &mut f.function).freeze();
 
         self.register_type(f.ident.sym.clone(), fn_ty.clone())
@@ -227,6 +227,8 @@ impl Validate<FnDecl> for Analyzer<'_, '_> {
                 self.info.errors.push(err);
             }
         }
+
+        Ok(())
     }
 }
 
@@ -235,8 +237,10 @@ impl Validate<FnExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
     /// NOTE: This method **should not call f.fold_children(self)**
-    fn validate(&mut self, f: &mut FnExpr) {
+    fn validate(&mut self, f: &mut FnExpr) -> Self::Output {
         self.visit_fn(f.ident.as_ref(), &mut f.function);
+
+        Ok(())
     }
 }
 

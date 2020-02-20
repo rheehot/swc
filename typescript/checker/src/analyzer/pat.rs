@@ -81,7 +81,7 @@ impl Validate<Pat> for Analyzer<'_, '_> {
 impl Validate<RestPat> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, p: &mut RestPat) {
+    fn validate(&mut self, p: &mut RestPat) -> Self::Output {
         p.visit_children(self);
 
         let mut errors = vec![];
@@ -118,6 +118,8 @@ impl Validate<RestPat> for Analyzer<'_, '_> {
         }
 
         self.info.errors.extend(errors);
+
+        Ok(())
     }
 }
 
@@ -125,7 +127,7 @@ impl Validate<RestPat> for Analyzer<'_, '_> {
 impl Validate<AssignPat> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, p: &mut AssignPat) {
+    fn validate(&mut self, p: &mut AssignPat) -> Self::Output {
         p.visit_children(self);
 
         //
@@ -174,5 +176,7 @@ impl Validate<AssignPat> for Analyzer<'_, '_> {
             }
             _ => {}
         }
+
+        Ok(())
     }
 }

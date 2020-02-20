@@ -4,8 +4,9 @@ use crate::{
     errors::Error,
     ty::Type,
     validator::{Validate, ValidateWith},
+    ValidationResult,
 };
-use macros::validator_method;
+use macros::{validator, validator_method};
 use std::mem::replace;
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Span, Spanned, VisitMutWith, VisitWith, DUMMY_SP};
@@ -116,7 +117,7 @@ impl Analyzer<'_, '_> {
 impl Validate<ExportDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, export: &mut ExportDecl) {
+    fn validate(&mut self, export: &mut ExportDecl) -> Self::Output {
         match export.decl {
             Decl::Fn(ref f) => {
                 f.visit_mut_with(self);
@@ -177,6 +178,8 @@ impl Validate<ExportDecl> for Analyzer<'_, '_> {
                 self.export(decl.span, decl.id.sym.clone(), None)
             }
         }
+
+        Ok(())
     }
 }
 
@@ -184,7 +187,7 @@ impl Validate<ExportDecl> for Analyzer<'_, '_> {
 impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, export: &mut ExportDefaultDecl) {
+    fn validate(&mut self, export: &mut ExportDefaultDecl) -> Self::Output {
         match export.decl {
             DefaultDecl::Fn(ref mut f) => {
                 let i = f
@@ -196,7 +199,7 @@ impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
                     Ok(ty) => ty,
                     Err(err) => {
                         self.info.errors.push(err);
-                        return;
+                        return Ok(());
                     }
                 };
                 self.register_type(i.clone(), fn_ty.into())
@@ -214,6 +217,8 @@ impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
                 self.export(i.span(), js_word!("default"), Some(i.id.sym.clone()))
             }
         };
+
+        Ok(())
     }
 }
 
@@ -255,8 +260,10 @@ impl Analyzer<'_, '_> {
 impl Validate<TsExportAssignment> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, s: &mut TsExportAssignment) {
+    fn validate(&mut self, s: &mut TsExportAssignment) -> Self::Output {
         self.export_expr(js_word!("default"), &s.expr);
+
+        Ok(())
     }
 }
 
@@ -265,7 +272,9 @@ impl Validate<TsExportAssignment> for Analyzer<'_, '_> {
 impl Validate<ExportDefaultExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, s: &mut ExportDefaultExpr) {
+    fn validate(&mut self, s: &mut ExportDefaultExpr) -> Self::Output {
         self.export_expr(js_word!("default"), &s.expr);
+
+        Ok(())
     }
 }

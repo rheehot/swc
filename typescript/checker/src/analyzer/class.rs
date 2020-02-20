@@ -720,7 +720,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
 impl Validate<ClassExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, c: &mut ClassExpr) {
+    fn validate(&mut self, c: &mut ClassExpr) -> Self::Output {
         self.scope.this_class_name = c.ident.as_ref().map(|v| v.sym.clone());
         let ty = match c.class.validate_with(self) {
             Ok(ty) => ty.into(),
@@ -764,6 +764,8 @@ impl Validate<ClassExpr> for Analyzer<'_, '_> {
             .store(&mut self.info.errors);
 
         self.scope.this = old_this;
+
+        Ok(())
     }
 }
 
@@ -771,11 +773,13 @@ impl Validate<ClassExpr> for Analyzer<'_, '_> {
 impl Validate<ClassDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
-    fn validate(&mut self, c: &mut ClassDecl) {
+    fn validate(&mut self, c: &mut ClassDecl) -> Self::Output {
         self.record(c);
 
         let ctx = Ctx { ..self.ctx };
         self.with_ctx(ctx).visit_class_decl(c);
+
+        Ok(())
     }
 }
 
