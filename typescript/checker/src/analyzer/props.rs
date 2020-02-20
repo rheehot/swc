@@ -11,6 +11,7 @@ use swc_atoms::js_word;
 use swc_common::{Spanned, Visit, VisitWith};
 use swc_common::{Spanned, VisitMut, VisitMutWith, VisitWith};
 use swc_common::{Spanned, VisitWith};
+use swc_common::{Spanned, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy)]
@@ -166,8 +167,10 @@ impl Validate<Prop> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    fn validate_prop(&mut self, prop: &Prop) -> ValidationResult<TypeElement> {
+    fn validate_prop(&mut self, prop: &mut Prop) -> ValidationResult<TypeElement> {
+        let span = prop.span();
         // TODO: Validate prop key
+        let key = prop_key_to_expr(&prop);
 
         match prop {
             Prop::Shorthand(ref i) => {
@@ -193,7 +196,7 @@ impl Analyzer<'_, '_> {
             }
             .into(),
 
-            Prop::KeyValue(ref kv) => {
+            Prop::KeyValue(ref mut kv) => {
                 let ty = kv.value.validate_with(self)?;
 
                 PropertySignature {
@@ -209,30 +212,32 @@ impl Analyzer<'_, '_> {
                 .into()
             }
 
-            Prop::Assign(ref p) => unimplemented!("type_of_prop(AssignProperty): {:?}", p),
-            Prop::Getter(ref p) => p.validate_with(self)?,
-            Prop::Setter(ref p) => self.with_child(
-                ScopeKind::Fn,
-                Default::default(),
-                |child| -> ValidationResult<_> {
-                    Ok(PropertySignature {
-                        span: prop.span(),
-                        key: prop_key_to_expr(&prop),
-                        params: vec![p.param.validate_with(child)?],
-                        optional: false,
-                        readonly: false,
-                        computed: false,
-                        type_ann: None,
-                        type_params: Default::default(),
-                    }
-                    .into())
-                },
-            )?,
+            Prop::Assign(ref mut p) => unimplemented!("type_of_prop(AssignProperty): {:?}", p),
+            Prop::Getter(ref mut p) => p.validate_with(self)?,
+            Prop::Setter(ref mut p) => {
+                let mut param = &mut p.param;
 
-            Prop::Method(ref p) => MethodSignature {
+                self.with_child(ScopeKind::Fn, Default::default(), {
+                    |child| -> ValidationResult<_> {
+                        Ok(PropertySignature {
+                            span,
+                            key,
+                            params: vec![param.validate_with(child)?],
+                            optional: false,
+                            readonly: false,
+                            computed: false,
+                            type_ann: None,
+                            type_params: Default::default(),
+                        }
+                        .into())
+                    }
+                })?
+            }
+
+            Prop::Method(ref mut p) => MethodSignature {
                 span,
                 readonly: false,
-                key: prop_key_to_expr(&prop),
+                key,
                 computed: false,
                 optional: false,
                 params: p.function.params.validate_with(self)?,
@@ -255,7 +260,7 @@ impl Validate<GetterProp> for Analyzer<'_, '_> {
             .with_child(ScopeKind::Fn, Default::default(), |child| {
                 n.key.visit_with(child);
 
-                if let Some(body) = &n.body {
+                if let Some(body) = &mut n.body {
                     let ret_ty = child.visit_stmts_for_return(&mut body.stmts)?;
                     if let None = ret_ty {
                         // getter property must have return statements.

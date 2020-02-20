@@ -12,15 +12,15 @@ use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
     #[validator_method]
-    fn check_lhs_of_for_loop(&mut self, e: &VarDeclOrPat) {
+    fn check_lhs_of_for_loop(&mut self, e: &mut VarDeclOrPat) {
         match *e {
-            VarDeclOrPat::VarDecl(ref v) => {
+            VarDeclOrPat::VarDecl(ref mut v) => {
                 // Store variables
                 v.visit_with(self);
             }
             VarDeclOrPat::Pat(ref mut pat) => match *pat {
                 Pat::Expr(ref mut e) => {
-                    self.validate_expr(&mut e, TypeOfMode::LValue, None)?;
+                    self.validate_expr(e, TypeOfMode::LValue, None)?;
                 }
                 Pat::Ident(ref mut i) => {
                     // TODO: verify
@@ -36,10 +36,10 @@ impl Analyzer<'_, '_> {
         self.validate(e)
     }
 
-    fn validate_for_loop(&mut self, span: Span, lhs: &VarDeclOrPat, rty: Type) {
+    fn validate_for_loop(&mut self, span: Span, lhs: &mut VarDeclOrPat, rty: Type) {
         match lhs {
-            VarDeclOrPat::Pat(Pat::Expr(ref l)) => {
-                let lty = match self.validate_expr(&mut **l, TypeOfMode::LValue, None) {
+            VarDeclOrPat::Pat(Pat::Expr(l)) => {
+                let lty = match self.validate_expr(l, TypeOfMode::LValue, None) {
                     Ok(ty) => ty,
                     Err(..) => return,
                 };
@@ -62,7 +62,7 @@ impl Analyzer<'_, '_> {
     }
 
     #[validator_method]
-    fn check_for_of_in_loop(&mut self, span: Span, left: &VarDeclOrPat, rhs: &mut Expr) {
+    fn check_for_of_in_loop(&mut self, span: Span, mut left: &mut VarDeclOrPat, rhs: &mut Expr) {
         self.with_child(
             ScopeKind::Flow,
             Default::default(),
@@ -77,7 +77,7 @@ impl Analyzer<'_, '_> {
                     return Ok(());
                 };
 
-                child.validate_for_loop(span, &left, rty);
+                child.validate_for_loop(span, &mut left, rty);
 
                 Ok(())
             },

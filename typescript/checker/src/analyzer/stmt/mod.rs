@@ -7,7 +7,7 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
-use swc_common::{Visit, VisitMutWith, VisitWith};
+use swc_common::{Visit, VisitMut, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 
 mod ambient_decl;
@@ -59,7 +59,7 @@ impl Analyzer<'_, '_> {
     }
 
     /// Validate that parent interfaces are all resolved.
-    pub fn resolve_parent_interfaces(&mut self, parents: &[TsExprWithTypeArgs]) {
+    pub fn resolve_parent_interfaces(&mut self, parents: &mut [TsExprWithTypeArgs]) {
         for parent in parents {
             // Verify parent interface
             let res: Result<_, _> = try {
@@ -80,11 +80,11 @@ where
     pub types: Vec<Result<Type, Error>>,
 }
 
-impl<A> Visit<ReturnStmt> for ReturnTypeCollector<'_, A>
+impl<A> VisitMut<ReturnStmt> for ReturnTypeCollector<'_, A>
 where
-    A: Visit<Stmt> + Validate<Expr, Output = ValidationResult>,
+    A: VisitMut<Stmt> + Validate<Expr, Output = ValidationResult>,
 {
-    fn visit(&mut self, s: &ReturnStmt) {
+    fn visit_mut(&mut self, s: &mut ReturnStmt) {
         if let Some(ty) = s.arg.validate_with(self.analyzer) {
             self.types.push(ty)
         }

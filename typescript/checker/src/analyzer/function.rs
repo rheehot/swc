@@ -66,7 +66,7 @@ impl Validate<Function> for Analyzer<'_, '_> {
 
             let inferred_return_type = try_opt!(f
                 .body
-                .as_ref()
+                .as_mut()
                 .map(|body| child.visit_stmts_for_return(&mut body.stmts)));
             let inferred_return_type = match inferred_return_type {
                 Some(Some(inferred_return_type)) => {
@@ -121,7 +121,7 @@ impl Validate<Function> for Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     /// TODO: Handle recursive funciton
-    fn visit_fn(&mut self, name: Option<&Ident>, f: &Function) -> Type {
+    fn visit_fn(&mut self, name: Option<&Ident>, f: &mut Function) -> Type {
         let fn_ty: Result<_, _> = try {
             let no_implicit_any_span = name.as_ref().map(|name| name.span);
 

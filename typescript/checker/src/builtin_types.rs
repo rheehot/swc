@@ -11,7 +11,7 @@ use fxhash::FxHashMap;
 use once_cell::sync::{Lazy, OnceCell};
 use std::{collections::hash_map::Entry, path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
-use swc_common::{Span, VisitWith, DUMMY_SP};
+use swc_common::{Span, VisitMutWith, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ts_builtin_types::load;
 pub use swc_ts_builtin_types::Lib;
@@ -40,25 +40,26 @@ fn merge(ls: &[Lib]) -> &'static Merged {
         let mut analyzer = Analyzer::for_builtin();
         let modules = load(ls);
 
-        for (i, module) in modules.into_iter().enumerate() {
+        for (i, mut module) in modules.into_iter().enumerate() {
             println!("\tModule: {:?}", ls[i]);
 
             match *module.body {
                 TsNamespaceBody::TsModuleBlock(TsModuleBlock { ref body, .. }) => {
-                    for item in body {
-                        match item {
+                    for item in body.iter() {
+                        match *item {
                             ModuleItem::ModuleDecl(ref md) => unreachable!("ModuleDecl: {:#?}", md),
                             ModuleItem::Stmt(ref stmt) => match *stmt {
                                 Stmt::Decl(Decl::Var(VarDecl { ref decls, .. })) => {
                                     assert_eq!(decls.len(), 1);
                                     let decl = decls.iter().next().unwrap();
-                                    let name = match decl.name {
+                                    let mut name = match decl.name {
                                         Pat::Ident(ref i) => i,
                                         _ => unreachable!(),
                                     };
                                     merged.vars.insert(
                                         name.sym.clone(),
                                         name.type_ann
+                                            .clone()
                                             .validate_with(&mut analyzer)
                                             .map(|res| {
                                                 res.expect(
@@ -71,19 +72,20 @@ fn merge(ls: &[Lib]) -> &'static Merged {
 
                                 Stmt::Decl(Decl::Fn(FnDecl {
                                     ref ident,
-                                    ref mut function,
+                                    ref function,
                                     ..
                                 })) => {
                                     merged.types.insert(
                                         ident.sym.clone(),
                                         function
+                                            .clone()
                                             .validate_with(&mut analyzer)
                                             .expect("builtin: failed to parse function")
                                             .into(),
                                     );
                                 }
 
-                                Stmt::Decl(Decl::Class(ref mut c)) => {
+                                Stmt::Decl(Decl::Class(ref c)) => {
                                     debug_assert_eq!(merged.types.get(&c.ident.sym), None);
 
                                     // builtin libraries does not contain a class which extends
@@ -99,7 +101,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                                 name: Some(c.ident.sym.clone()),
                                                 is_abstract: c.class.is_abstract,
                                                 body: analyzer
-                                                    .validate(&mut c.class.body)
+                                                    .validate(&mut c.class.body.clone())
                                                     .expect(
                                                         "builtin: failed to validate class body",
                                                     )
@@ -111,6 +113,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                                 type_params: c
                                                     .class
                                                     .type_params
+                                                    .clone()
                                                     .validate_with(analyzer)
                                                     .map(|opt| {
                                                         opt.expect(
@@ -125,7 +128,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                     merged.types.insert(c.ident.sym.clone(), ty);
                                 }
 
-                                Stmt::Decl(Decl::TsModule(ref mut m)) => {
+                                Stmt::Decl(Decl::TsModule(ref m)) => {
                                     let id = match m.id {
                                         TsModuleName::Ident(ref i) => i.sym.clone(),
                                         _ => unreachable!(),
@@ -133,7 +136,7 @@ fn merge(ls: &[Lib]) -> &'static Merged {
 
                                     let mut analyzer = Analyzer::for_builtin();
 
-                                    m.body.visit_with(&mut analyzer);
+                                    m.body.clone().visit_mut_with(&mut analyzer);
 
                                     match merged.types.entry(id) {
                                         Entry::Occupied(mut e) => match e.get_mut() {
@@ -156,10 +159,11 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                     }
                                 }
 
-                                Stmt::Decl(Decl::TsTypeAlias(ref mut a)) => {
+                                Stmt::Decl(Decl::TsTypeAlias(ref a)) => {
                                     debug_assert_eq!(merged.types.get(&a.id.sym), None);
 
                                     let ty = a
+                                        .clone()
                                         .validate_with(&mut analyzer)
                                         .map(Type::from)
                                         .expect("builtin: failed to process type alias");
@@ -168,14 +172,17 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                 }
 
                                 // Merge interface
-                                Stmt::Decl(Decl::TsInterface(ref mut i)) => {
+                                Stmt::Decl(Decl::TsInterface(ref i)) => {
                                     match merged.types.entry(i.id.sym.clone()) {
                                         Entry::Occupied(mut e) => match *e.get_mut() {
                                             ty::Type::Interface(ref mut v) => {
                                                 v.body.extend(
-                                                    analyzer.validate(&mut i.body.body).expect(
-                                                        "builtin: failed to parse interface body",
-                                                    ),
+                                                    analyzer
+                                                        .validate(&mut i.body.body.clone())
+                                                        .expect(
+                                                            "builtin: failed to parse interface \
+                                                             body",
+                                                        ),
                                                 );
                                             }
                                             _ => unreachable!(
@@ -184,7 +191,8 @@ fn merge(ls: &[Lib]) -> &'static Merged {
                                         },
                                         Entry::Vacant(e) => {
                                             e.insert(
-                                                i.validate_with(&mut analyzer)
+                                                i.clone()
+                                                    .validate_with(&mut analyzer)
                                                     .expect("builtin: failed to parse interface")
                                                     .into(),
                                             );

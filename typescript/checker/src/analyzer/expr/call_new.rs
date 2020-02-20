@@ -362,7 +362,7 @@ impl Analyzer<'_, '_> {
                 }
 
                 if computed {
-                    unimplemented!("typeof(CallExpr): {:?}[{:?}]()", callee, prop)
+                    unimplemented!("typeof(CallExpr): {:?}[{:?}]()", obj, prop)
                 } else {
                     let callee =
                         self.access_property(span, obj_type, prop, computed, TypeOfMode::RValue)?;

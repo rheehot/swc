@@ -79,7 +79,7 @@ impl Validate<RestPat> for Analyzer<'_, '_> {
 
         let mut errors = vec![];
 
-        if let Pat::Assign(AssignPat { ref right, .. }) = *p.arg {
+        if let Pat::Assign(AssignPat { ref mut right, .. }) = *p.arg {
             let res: Result<_, _> = try {
                 let value_ty = right.validate_with(self)?;
 
@@ -93,7 +93,7 @@ impl Validate<RestPat> for Analyzer<'_, '_> {
                 }
             };
             res.store(&mut errors);
-        } else if let Some(ref type_ann) = p.type_ann {
+        } else if let Some(ref mut type_ann) = p.type_ann {
             let res: Result<_, _> = try {
                 let ty = type_ann.validate_with(self)?;
 

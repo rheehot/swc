@@ -93,7 +93,7 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
         // Validate const enums
         if e.is_const {
             for m in &e.members {
-                if let Some(ref init) = m.init {
+                if let Some(init) = &m.init {
                     let mut v = LitValidator {
                         error: false,
                         decl: &e,

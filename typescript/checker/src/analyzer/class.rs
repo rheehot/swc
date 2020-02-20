@@ -109,7 +109,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
                 let p: ty::FnParam = child.validate(&mut p)?;
 
                 match param {
-                    PatOrTsParamProp::Pat(ref pat) => {
+                    PatOrTsParamProp::Pat(ref mut pat) => {
                         match child.declare_vars_with_ty(VarDeclKind::Let, pat, Some(p.ty.clone()))
                         {
                             Ok(()) => {}
@@ -551,13 +551,14 @@ impl Validate<Class> for Analyzer<'_, '_> {
 
     fn validate(&mut self, c: &mut Class) -> Self::Output {
         self.record(c);
+        println!(": Class");
 
         self.ctx.computed_prop_mode = ComputedPropMode::Class {
             has_body: !self.ctx.in_declare,
         };
 
         c.decorators.visit_with(self);
-        self.resolve_parent_interfaces(&c.implements);
+        self.resolve_parent_interfaces(&mut c.implements);
         let name = self.scope.this_class_name.take();
 
         // Scope is required because of type parameters.

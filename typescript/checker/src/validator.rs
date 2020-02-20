@@ -1,4 +1,4 @@
-use swc_common::FoldWith;
+use swc_common::VisitMutWith;
 
 /// Visit with output
 pub trait Validate<T: ?Sized> {
@@ -9,7 +9,7 @@ pub trait Validate<T: ?Sized> {
 
 impl<T, V> Validate<T> for V
 where
-    T: FoldWith<Self>,
+    T: VisitMutWith<Self>,
 {
     default type Output = ();
 
@@ -21,7 +21,7 @@ where
 
 impl<T, V> Validate<Box<T>> for V
 where
-    T: FoldWith<Self>,
+    T: VisitMutWith<Self>,
     Self: Validate<T>,
 {
     type Output = <Self as Validate<T>>::Output;
@@ -33,7 +33,7 @@ where
 
 impl<T, V> Validate<Option<T>> for V
 where
-    T: FoldWith<Self>,
+    T: VisitMutWith<Self>,
     Self: Validate<T>,
 {
     type Output = Option<<Self as Validate<T>>::Output>;
@@ -48,7 +48,7 @@ where
 
 impl<T, V, O, E> Validate<Vec<T>> for V
 where
-    T: FoldWith<Self>,
+    T: VisitMutWith<Self>,
     Self: Validate<T, Output = Result<O, E>>,
 {
     type Output = Result<Vec<O>, E>;
@@ -62,13 +62,13 @@ pub trait ValidateWith<V> {
     type Output;
     fn validate_with(&mut self, v: &mut V) -> Self::Output;
 
-    fn validate_children(&self, v: &mut V);
+    fn validate_children(&mut self, v: &mut V);
 }
 
 impl<V, T> ValidateWith<V> for T
 where
     V: Validate<T>,
-    T: FoldWith<V>,
+    T: VisitMutWith<V>,
 {
     type Output = V::Output;
 
@@ -78,8 +78,8 @@ where
     }
 
     #[inline]
-    fn validate_children(&self, v: &mut V) {
-        self.fold_children(v);
+    fn validate_children(&mut self, v: &mut V) {
+        self.visit_mut_with(v);
     }
 }
 

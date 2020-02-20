@@ -232,7 +232,7 @@ impl Validate<VarDecl> for Analyzer<'_, '_> {
                                 //  );
 
                                 if a.ctx.in_declare {
-                                    match a.declare_vars(kind, &v.name) {
+                                    match a.declare_vars(kind, &mut v.name) {
                                         Ok(()) => {}
                                         Err(err) => {
                                             a.info.errors.push(err);
@@ -248,7 +248,7 @@ impl Validate<VarDecl> for Analyzer<'_, '_> {
                     };
 
                     debug_assert_eq!(a.ctx.allow_ref_declaring, true);
-                    a.declare_vars(kind, &v.name).store(&mut a.info.errors);
+                    a.declare_vars(kind, &mut v.name).store(&mut a.info.errors);
 
                     remove_declaring!();
                 };

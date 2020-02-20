@@ -389,14 +389,14 @@ impl Analyzer<'_, '_> {
         Ok(())
     }
 
-    pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &Pat) -> Result<(), Error> {
+    pub fn declare_vars(&mut self, kind: VarDeclKind, pat: &mut Pat) -> Result<(), Error> {
         self.declare_vars_inner_with_ty(kind, pat, false, None)
     }
 
     pub fn declare_vars_with_ty(
         &mut self,
         kind: VarDeclKind,
-        pat: &Pat,
+        pat: &mut Pat,
         ty: Option<Type>,
     ) -> Result<(), Error> {
         self.declare_vars_inner_with_ty(kind, pat, false, ty)
@@ -405,7 +405,7 @@ impl Analyzer<'_, '_> {
     pub(super) fn declare_vars_inner(
         &mut self,
         kind: VarDeclKind,
-        pat: &Pat,
+        pat: &mut Pat,
         export: bool,
     ) -> Result<(), Error> {
         self.declare_vars_inner_with_ty(kind, pat, export, None)
@@ -418,7 +418,7 @@ impl Analyzer<'_, '_> {
     fn declare_vars_inner_with_ty(
         &mut self,
         kind: VarDeclKind,
-        pat: &Pat,
+        pat: &mut Pat,
         export: bool,
         ty: Option<Type>,
     ) -> Result<(), Error> {
@@ -432,7 +432,7 @@ impl Analyzer<'_, '_> {
         }
 
         match *pat {
-            Pat::Ident(ref i) => {
+            Pat::Ident(ref mut i) => {
                 let name = i.sym.clone();
                 if !self.is_builtin {
                     debug_assert_ne!(span, DUMMY_SP);
@@ -471,17 +471,17 @@ impl Analyzer<'_, '_> {
                     p.left,
                     ty
                 );
-                self.declare_vars_inner(kind, &p.left, export)?;
+                self.declare_vars_inner(kind, &mut p.left, export)?;
 
                 return Ok(());
             }
 
-            Pat::Array(ArrayPat { ref elems, .. }) => {
+            Pat::Array(ArrayPat { ref mut elems, .. }) => {
                 // TODO: Handle type annotation
 
-                for elem in elems {
+                for elem in elems.iter_mut() {
                     match *elem {
-                        Some(ref elem) => {
+                        Some(ref mut elem) => {
                             self.declare_vars_inner(kind, elem, export)?;
                         }
                         // Skip
@@ -516,8 +516,8 @@ impl Analyzer<'_, '_> {
                 ..
             }) => {
                 let ty = ty.clone();
-                let arg = arg.clone();
-                return self.declare_vars_inner(kind, &arg, export);
+                let mut arg = arg.clone();
+                return self.declare_vars_inner(kind, &mut arg, export);
             }
 
             Pat::Invalid(..) | Pat::Expr(box Expr::Invalid(..)) => Ok(()),

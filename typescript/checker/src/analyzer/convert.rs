@@ -100,7 +100,7 @@ impl Validate<TsInterfaceDecl> for Analyzer<'_, '_> {
         self.register_type(d.id.sym.clone(), ty.clone().into())
             .store(&mut self.info.errors);
 
-        self.resolve_parent_interfaces(&d.extends);
+        self.resolve_parent_interfaces(&mut d.extends);
 
         Ok(ty)
     }

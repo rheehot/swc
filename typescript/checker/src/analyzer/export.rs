@@ -128,12 +128,23 @@ impl Validate<ExportDecl> for Analyzer<'_, '_> {
             }
             Decl::Class(ref c) => {
                 c.visit_with(self);
+            Decl::Fn(ref mut f) => {
+                f.visit_mut_with(self);
+                self.export(f.span(), f.ident.sym.clone(), None)
+            }
+            Decl::TsInterface(ref mut i) => {
+                i.visit_mut_with(self);
+
+                self.export(i.span(), i.id.sym.clone(), None)
+            }
+            Decl::Class(ref mut c) => {
+                c.visit_mut_with(self);
                 self.export(c.span(), c.ident.sym.clone(), None)
             }
-            Decl::Var(ref var) => {
+            Decl::Var(ref mut var) => {
                 // unimplemented!("export var Foo = a;")
-                for decl in &var.decls {
-                    let res = self.declare_vars_inner(var.kind, &decl.name, true);
+                for decl in &mut var.decls {
+                    let res = self.declare_vars_inner(var.kind, &mut decl.name, true);
                     match res {
                         Ok(..) => {}
                         Err(err) => self.info.errors.push(err),
