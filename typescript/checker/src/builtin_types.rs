@@ -41,8 +41,6 @@ fn merge(ls: &[Lib]) -> &'static Merged {
         let modules = load(ls);
 
         for (i, mut module) in modules.into_iter().enumerate() {
-            println!("\tModule: {:?}", ls[i]);
-
             match *module.body {
                 TsNamespaceBody::TsModuleBlock(TsModuleBlock { ref body, .. }) => {
                     for item in body.iter() {
