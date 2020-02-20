@@ -209,6 +209,7 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
     let file_name = canonicalize(file_name).unwrap();
     let fname = file_name.display().to_string();
     let (expected_code, expected) = get_correct_dts(&file_name);
+    println!("---------- Expected ----------\n{}", expected_code);
 
     testing::Tester::new()
         .print_errors(|cm, handler| {
@@ -267,7 +268,7 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
             };
 
             println!("---------- Generated ----------\n{}", generated);
-            println!("---------- Expected ----------\n{}", expected_code);
+
             assert_eq!(
                 NormalizedOutput::from(generated),
                 NormalizedOutput::from((*expected_code).clone())

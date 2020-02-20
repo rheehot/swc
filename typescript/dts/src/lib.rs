@@ -202,14 +202,57 @@ impl Fold<TsModuleDecl> for TypeResolver {
 
 impl Fold<TsEnumDecl> for TypeResolver {
     fn fold(&mut self, node: TsEnumDecl) -> TsEnumDecl {
+        let mut is_all_lit = true;
+        let mut should_init_only_first = true;
+        let has_no_init = node.members.iter().all(|v| v.init.is_none());
+
+        if node.members.iter().any(|m| m.init.is_some()) {
+            should_init_only_first = false;
+        }
+
+        let _: Option<()> = self.get_mapped(&node.id.sym, |ty| {
+            match ty {
+                Type::Enum(e) => {
+                    //
+                    if e.members.iter().any(|m| match m.val {
+                        Expr::Tpl(..) | Expr::Lit(..) => false,
+
+                        _ => true,
+                    }) {
+                        is_all_lit = false;
+                    }
+                }
+                _ => {}
+            }
+
+            None
+        });
+
         let members = self.get_mapped(&node.id.sym, |ty| match ty {
             Type::Enum(e) => Some(
                 e.members
                     .iter()
-                    .map(|member| TsEnumMember {
+                    .enumerate()
+                    .map(|(i, member)| TsEnumMember {
                         span: member.span,
                         id: member.id.clone(),
-                        init: Some(box member.val.clone()),
+                        init: if is_all_lit {
+                            if has_no_init {
+                                Some(box member.val.clone())
+                            } else {
+                                if should_init_only_first {
+                                    if i == 0 {
+                                        Some(box member.val.clone())
+                                    } else {
+                                        None
+                                    }
+                                } else {
+                                    Some(box member.val.clone())
+                                }
+                            }
+                        } else {
+                            None
+                        },
                     })
                     .collect(),
             ),
