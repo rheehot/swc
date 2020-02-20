@@ -476,8 +476,24 @@ impl Analyzer<'_, '_> {
                 return Ok(());
             }
 
-            Pat::Array(ArrayPat { ref mut elems, .. }) => {
+            Pat::Array(ArrayPat {
+                span,
+                ref mut elems,
+                ref mut type_ann,
+                ..
+            }) => {
                 // TODO: Handle type annotation
+
+                if type_ann.is_none() {
+                    *type_ann = Some(
+                        Type::Array(Array {
+                            span,
+                            // TODO: Handle type annotation
+                            elem_type: box Type::any(span),
+                        })
+                        .into(),
+                    );
+                }
 
                 for elem in elems.iter_mut() {
                     match *elem {
@@ -492,7 +508,21 @@ impl Analyzer<'_, '_> {
                 return Ok(());
             }
 
-            Pat::Object(ObjectPat { ref props, .. }) => {
+            Pat::Object(ObjectPat {
+                ref props,
+                ref mut type_ann,
+                ..
+            }) => {
+                if type_ann.is_none() {
+                    *type_ann = Some(
+                        Type::TypeLit(TypeLit {
+                            span,
+                            // TODO: Fill it
+                            members: vec![],
+                        })
+                        .into(),
+                    );
+                }
                 for prop in props {
                     match *prop {
                         ObjectPatProp::KeyValue(KeyValuePatProp { .. }) => {
