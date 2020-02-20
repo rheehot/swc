@@ -3,6 +3,7 @@ use swc_common::{Fold, FoldWith, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 pub(crate) mod named;
+pub(crate) mod property_map;
 
 pub trait EqIgnoreSpan {
     fn eq_ignore_span(&self, to: &Self) -> bool;

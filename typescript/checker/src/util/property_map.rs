@@ -50,4 +50,22 @@ impl<V> PropertyMap<V> {
         let key = key.fold_with(&mut super::SpanRemover);
         self.inner.push((key, v));
     }
+use swc_ecma_ast::{Expr, Ident, Str};
+
+/// **Note**: this struct ignores span of key.
+#[derive(Defualt)]
+pub struct PropertyMap<V> {
+    inner: FxHashMap<PropKey, V>,
+}
+
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+enum PropKey {
+    Str(JsWord),
+    Ident(Id),
+    Num(OrderedFloat<f64>),
+    Expr(Expr),
+}
+
+impl<V> PropertyMap<V> {
+    pub fn get(&self, key: &Expr) -> Option<&V> {}
 }

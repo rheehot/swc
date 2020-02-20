@@ -13,6 +13,7 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
+use fxhash::FxHashMap;
 use macros::{validator, validator_method};
 use std::mem::replace;
 use swc_atoms::js_word;
@@ -591,7 +592,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
 
             child.check_ambient_methods(c, false)?;
 
-            let body = c
+            let mut body: Vec<ty::ClassMember> = c
                 .body
                 .iter_mut()
                 .filter_map(|m| match child.validate(m) {
@@ -679,6 +680,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
                         ty::ClassMember::Property(_) => {}
                     }
                 }
+                let mut prop_types = FxHashMap::default();
 
                 for m in body.iter_mut() {
                     match m {
@@ -697,6 +699,15 @@ impl Validate<Class> for Analyzer<'_, '_> {
                                 }
                             }
                             _ => {}
+                            MethodKind::Method => continue,
+                            MethodKind::Getter => {}
+                            MethodKind::Setter => {
+                                if let Some(param) = m.params.first_mut() {
+                                    if param.ty.is_any() {
+                                        //
+                                    }
+                                }
+                            }
                         },
 
                         ty::ClassMember::Property(_) => {}
