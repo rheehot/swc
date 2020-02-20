@@ -258,6 +258,13 @@ fn compute(
                     TsLit::Bool(_) => {}
                 }
             }
+
+            Expr::Tpl(ref t) if t.exprs.is_empty() => {
+                if let Some(v) = &t.quasis[0].cooked {
+                    return Ok(v.clone().into());
+                }
+            }
+
             _ => {}
         }
     } else {
