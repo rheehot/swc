@@ -316,8 +316,6 @@ impl Validate<Vec<ModuleItem>> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
     fn validate(&mut self, items: &mut Vec<ModuleItem>) -> Self::Output {
-        println!(": Vec<ModuleItem>");
-
         {
             // We first load imports.
             let mut imports: Vec<ImportInfo> = vec![];
