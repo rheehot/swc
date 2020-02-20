@@ -157,11 +157,11 @@ impl Fold<VarDeclarator> for TypeResolver {
 
 impl Fold<FnDecl> for TypeResolver {
     fn fold(&mut self, node: FnDecl) -> FnDecl {
+        let node: FnDecl = node.fold_children(self);
+
         if node.function.return_type.is_some() {
             return node;
         }
-
-        let node: FnDecl = node.fold_children(self);
 
         let return_type = self.get_mapped(&node.ident.sym, |ty| match ty {
             Type::Function(ty::Function { ref ret_ty, .. }) => {
