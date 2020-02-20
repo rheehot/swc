@@ -1091,6 +1091,7 @@ impl Analyzer<'_, '_> {
                 };
 
                 if computed {
+                    // TODO: Remove duplicate: prop
                     let ty = match self.access_property(span, obj_ty, prop, computed, type_mode) {
                         Ok(v) => Ok(v),
                         Err(err) => {
@@ -1102,6 +1103,7 @@ impl Analyzer<'_, '_> {
                     if errors.is_empty() {
                         return Ok(ty.unwrap());
                     } else {
+                        // TODO: Remove duplicate: prop
                         match prop.validate_with(self) {
                             Ok(..) => match ty {
                                 Ok(ty) => {
