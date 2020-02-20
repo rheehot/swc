@@ -92,6 +92,9 @@ impl Fold<BlockStmt> for TypeResolver {
 
 impl Fold<Function> for TypeResolver {
     fn fold(&mut self, mut node: Function) -> Function {
+        node.is_generator = false;
+        node.is_async = false;
+
         let old = self.top_level;
         self.top_level = false;
         node = node.fold_children(self);
