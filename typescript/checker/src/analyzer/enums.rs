@@ -13,6 +13,10 @@ use crate::{
 };
 
 use super::Analyzer;
+use either::Either;
+
+/// Value does not contain TsLit::Bool
+type EnumValues = FxHashMap<JsWord, TsLit>;
 
 /// We don't visit enum variants to allow
 ///
@@ -38,21 +42,30 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
                 .members
                 .iter()
                 .map(|m| -> Result<_, Error> {
-                    let val = compute(&e, &mut values, default, m.init.as_ref().map(|v| &**v))?;
+                    let id_span = m.id.span();
+                    let val = compute(
+                        &e,
+                        id_span,
+                        &mut values,
+                        Some(default),
+                        m.init.as_ref().map(|v| &**v),
+                    )?;
 
                     match val {
                         TsLit::Number(n) => {
                             default = n.value as i32 + 1;
-                            values.insert(
-                                match &m.id {
-                                    TsEnumMemberId::Ident(i) => i.sym.clone(),
-                                    TsEnumMemberId::Str(s) => s.value.clone(),
-                                },
-                                n.value as _,
-                            );
                         }
                         _ => {}
                     }
+
+                    values.insert(
+                        match &m.id {
+                            TsEnumMemberId::Ident(i) => i.sym.clone(),
+                            TsEnumMemberId::Str(s) => s.value.clone(),
+                        },
+                        val.clone(),
+                    );
+
                     Ok(EnumMember {
                         id: m.id.clone(),
                         val,
@@ -112,104 +125,64 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
 }
 
 /// Called only for enums.
+///
+/// If both of the default value and the initialization is None, this method
+/// returns [Err].
 fn compute(
     e: &TsEnumDecl,
-    values: &mut FxHashMap<JsWord, i32>,
-    default: i32,
-    expr: Option<&Expr>,
+    span: Span,
+    values: &mut EnumValues,
+    default: Option<i32>,
+    init: Option<&Expr>,
 ) -> Result<TsLit, Error> {
-    fn arithmetic_opt(
+    fn compute_bin(
         e: &TsEnumDecl,
         span: Span,
-        values: &mut FxHashMap<JsWord, i32>,
-        default: i32,
-        expr: Option<&Expr>,
-    ) -> Result<f64, Error> {
-        if let Some(ref expr) = expr {
-            return arithmetic(e, span, values, default, expr);
-        }
-
-        return Ok(default as f64);
-    }
-
-    fn arithmetic(
-        e: &TsEnumDecl,
-        span: Span,
-        values: &mut FxHashMap<JsWord, i32>,
-        default: i32,
-        expr: &Expr,
-    ) -> Result<f64, Error> {
-        Ok(match *expr {
-            Expr::Lit(ref lit) => match *lit {
-                Lit::Num(ref v) => v.value,
-                _ => unreachable!("arithmetic({:?})", lit),
-            },
-            Expr::Bin(ref bin) => arithmetic_bin(e, span, values, &bin)?,
-            Expr::Paren(ref paren) => return arithmetic(e, span, values, default, &paren.expr),
-
-            Expr::Ident(ref id) => {
-                if let Some(v) = values.get(&id.sym) {
-                    return Ok(*v as _);
-                }
-                //
-                for m in e.members.iter() {
-                    match m.id {
-                        TsEnumMemberId::Str(Str { value: ref sym, .. })
-                        | TsEnumMemberId::Ident(Ident { ref sym, .. }) => {
-                            if *sym == id.sym {
-                                return arithmetic_opt(
-                                    e,
-                                    span,
-                                    values,
-                                    default,
-                                    m.init.as_ref().map(|v| &**v),
-                                );
-                            }
-                        }
-                    }
-                }
-                return Err(Error::InvalidEnumInit { span });
-            }
-            Expr::Unary(ref expr) => {
-                let v = arithmetic(e, span, values, default, &expr.arg)?;
-
-                match expr.op {
-                    op!(unary, "+") => return Ok(v),
-                    op!(unary, "-") => return Ok(-v),
-                    op!("!") => return Ok(if v == 0.0f64 { 0.0 } else { 1.0 }),
-                    op!("~") => return Ok((!(v as i32)) as f64),
-                    _ => return Err(Error::InvalidEnumInit { span }),
-                };
-            }
-            _ => Err(Error::InvalidEnumInit { span })?,
-        })
-    }
-
-    fn arithmetic_bin(
-        e: &TsEnumDecl,
-        span: Span,
-        values: &mut FxHashMap<JsWord, i32>,
+        values: &mut EnumValues,
         expr: &BinExpr,
-    ) -> Result<f64, Error> {
-        let l = arithmetic(e, span, values, 0, &expr.left)?;
-        let r = arithmetic(e, span, values, 0, &expr.right)?;
+    ) -> Result<TsLit, Error> {
+        let l = compute(e, span, values, None, Some(&expr.left))?;
+        let r = compute(e, span, values, None, Some(&expr.right))?;
 
-        Ok(match expr.op {
-            op!(bin, "+") => l + r,
-            op!(bin, "-") => l - r,
-            op!("*") => l * r,
-            op!("/") => l / r,
+        Ok(match (l, r) {
+            (TsLit::Number(Number { value: l, .. }), TsLit::Number(Number { value: r, .. })) => {
+                TsLit::Number(Number {
+                    span,
+                    value: match expr.op {
+                        op!(bin, "+") => l + r,
+                        op!(bin, "-") => l - r,
+                        op!("*") => l * r,
+                        op!("/") => l / r,
 
-            // TODO
-            op!("&") => ((l.round() as i64) & (r.round() as i64)) as _,
-            op!("|") => ((l.round() as i64) | (r.round() as i64)) as _,
-            op!("^") => ((l.round() as i64) ^ (r.round() as i64)) as _,
+                        // TODO
+                        op!("&") => ((l.round() as i64) & (r.round() as i64)) as _,
+                        op!("|") => ((l.round() as i64) | (r.round() as i64)) as _,
+                        op!("^") => ((l.round() as i64) ^ (r.round() as i64)) as _,
 
-            op!("<<") => ((l.round() as i64) << (r.round() as i64)) as _,
-            op!(">>") => ((l.round() as i64) >> (r.round() as i64)) as _,
-            // TODO: Verify this
-            op!(">>>") => ((l.round() as u64) >> (r.round() as u64)) as _,
-            _ => unimplemented!("arithmetic_bin({:?})", expr.op),
+                        op!("<<") => ((l.round() as i64) << (r.round() as i64)) as _,
+                        op!(">>") => ((l.round() as i64) >> (r.round() as i64)) as _,
+                        // TODO: Verify this
+                        op!(">>>") => ((l.round() as u64) >> (r.round() as u64)) as _,
+                        _ => Err(Error::InvalidEnumInit { span })?,
+                    },
+                })
+            }
+            (TsLit::Str(l), TsLit::Str(r)) if expr.op == op!(bin, "+") => TsLit::Str(Str {
+                span,
+                value: format!("{}{}", l.value, r.value).into(),
+                has_escape: l.has_escape || r.has_escape,
+            }),
+            (TsLit::Number(l), TsLit::Str(r)) if expr.op == op!(bin, "+") => TsLit::Str(Str {
+                span,
+                value: format!("{}{}", l.value, r.value).into(),
+                has_escape: r.has_escape,
+            }),
+            (TsLit::Str(l), TsLit::Number(r)) if expr.op == op!(bin, "+") => TsLit::Str(Str {
+                span,
+                value: format!("{}{}", l.value, r.value).into(),
+                has_escape: l.has_escape,
+            }),
+            _ => Err(Error::InvalidEnumInit { span })?,
         })
     }
 
@@ -220,19 +193,73 @@ fn compute(
         }
     }
 
-    if let Some(ref expr) = expr {
-        if let Ok(s) = try_str(&expr) {
-            return Ok(s.into());
+    if let Some(expr) = init {
+        match expr {
+            Expr::Lit(Lit::Str(s)) => return Ok(TsLit::Str(s.clone())),
+            Expr::Lit(Lit::Num(s)) => return Ok(TsLit::Number(*s)),
+            Expr::Bin(ref bin) => return compute_bin(e, span, values, &bin),
+            Expr::Paren(ref paren) => return compute(e, span, values, default, Some(&paren.expr)),
+
+            Expr::Ident(ref id) => {
+                if let Some(v) = values.get(&id.sym) {
+                    return Ok(v.clone());
+                }
+                //
+                for m in e.members.iter() {
+                    match m.id {
+                        TsEnumMemberId::Str(Str { value: ref sym, .. })
+                        | TsEnumMemberId::Ident(Ident { ref sym, .. }) => {
+                            if *sym == id.sym {
+                                return compute(
+                                    e,
+                                    span,
+                                    values,
+                                    None,
+                                    m.init.as_ref().map(|v| &**v),
+                                );
+                            }
+                        }
+                    }
+                }
+                return Err(Error::InvalidEnumInit { span });
+            }
+            Expr::Unary(ref expr) => {
+                let v = compute(e, span, values, None, Some(&expr.arg))?;
+                match v {
+                    TsLit::Number(Number { value: v, .. }) => {
+                        return Ok(TsLit::Number(Number {
+                            span,
+                            value: match expr.op {
+                                op!(unary, "+") => v,
+                                op!(unary, "-") => -v,
+                                op!("!") => {
+                                    if v == 0.0f64 {
+                                        0.0
+                                    } else {
+                                        1.0
+                                    }
+                                }
+                                op!("~") => (!(v as i32)) as f64,
+                                _ => Err(Error::InvalidEnumInit { span })?,
+                            },
+                        }))
+                    }
+                    TsLit::Str(_) => {}
+                    TsLit::Bool(_) => {}
+                }
+            }
+            _ => {}
+        }
+    } else {
+        if let Some(value) = default {
+            return Ok(TsLit::Number(Number {
+                span,
+                value: value as _,
+            }));
         }
     }
 
-    let value = arithmetic_opt(e, e.span, values, default, expr)?;
-
-    Ok(Number {
-        span: expr.span(),
-        value,
-    }
-    .into())
+    Err(Error::InvalidEnumInit { span })
 }
 
 impl Analyzer<'_, '_> {
