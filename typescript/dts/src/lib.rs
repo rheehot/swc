@@ -416,7 +416,7 @@ impl Fold<Vec<Stmt>> for TypeResolver {
 impl Fold<Vec<ModuleItem>> for TypeResolver {
     fn fold(&mut self, mut items: Vec<ModuleItem>) -> Vec<ModuleItem> {
         items = items.fold_children(self).move_flat_map(|item| match item {
-            ModuleItem::Stmt(Stmt::Decl(..)) if self.in_declare => None,
+            ModuleItem::Stmt(Stmt::Decl(Decl::TsInterface(..))) if self.in_declare => None,
 
             ModuleItem::ModuleDecl(_) | ModuleItem::Stmt(Stmt::Decl(..)) => Some(item),
 
