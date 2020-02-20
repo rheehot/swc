@@ -217,7 +217,7 @@ impl Fold<TsEnumDecl> for TypeResolver {
         });
 
         TsEnumDecl {
-            declare: true,
+            declare: !self.in_declare,
             members: members.unwrap_or(node.members),
             ..node
         }
@@ -227,7 +227,7 @@ impl Fold<TsEnumDecl> for TypeResolver {
 impl Fold<TsTypeAliasDecl> for TypeResolver {
     fn fold(&mut self, node: TsTypeAliasDecl) -> TsTypeAliasDecl {
         TsTypeAliasDecl {
-            declare: true,
+            declare: !self.in_declare,
             ..node.fold_children(self)
         }
     }
