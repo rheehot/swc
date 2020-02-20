@@ -14,7 +14,7 @@ use crate::{
 };
 use macros::validator;
 use swc_atoms::js_word;
-use swc_common::{Span, Spanned, VisitWith};
+use swc_common::{Span, Spanned, VisitMutWith};
 use swc_ecma_ast::*;
 
 mod bin;
@@ -83,7 +83,7 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
                 _ => None,
             };
 
-            e.left.visit_with(a);
+            e.left.visit_mut_with(a);
 
             let mut errors = vec![];
 

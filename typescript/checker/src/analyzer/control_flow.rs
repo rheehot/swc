@@ -25,7 +25,7 @@ use std::{
     ops::{AddAssign, BitOr, Not},
 };
 use swc_atoms::JsWord;
-use swc_common::{Span, Spanned, VisitWith};
+use swc_common::{Span, Spanned, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 
 /// Conditional facts
@@ -293,7 +293,7 @@ impl Validate<SwitchStmt> for Analyzer<'_, '_> {
 
             true_facts = true_facts | facts.true_facts;
             self.with_child(ScopeKind::Flow, true_facts.clone(), |child| {
-                cons.visit_with(child);
+                cons.visit_mut_with(child);
             });
             false_facts += facts.false_facts;
 

@@ -19,7 +19,7 @@ impl Validate<WithStmt> for Analyzer<'_, '_> {
     type Output = ();
 
     fn validate(&mut self, s: &mut WithStmt) {
-        s.obj.visit_with(self);
+        s.obj.visit_mut_with(self);
     }
 }
 
@@ -28,7 +28,7 @@ impl Validate<BlockStmt> for Analyzer<'_, '_> {
 
     fn validate(&mut self, s: &mut BlockStmt) {
         self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
-            s.stmts.visit_with(analyzer)
+            s.stmts.visit_mut_with(analyzer)
         })
     }
 }

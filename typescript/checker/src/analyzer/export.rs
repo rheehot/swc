@@ -8,7 +8,7 @@ use crate::{
 use macros::validator_method;
 use std::mem::replace;
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Span, Spanned, VisitWith, DUMMY_SP};
+use swc_common::{Span, Spanned, VisitMutWith, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 // ModuleDecl::ExportNamed(export) => {}
@@ -118,11 +118,11 @@ impl Validate<ExportDecl> for Analyzer<'_, '_> {
     fn validate(&mut self, export: &mut ExportDecl) {
         match export.decl {
             Decl::Fn(ref f) => {
-                f.visit_with(self);
+                f.visit_mut_with(self);
                 self.export(f.span(), f.ident.sym.clone(), None)
             }
             Decl::TsInterface(ref i) => {
-                i.visit_with(self);
+                i.visit_mut_with(self);
 
                 self.export(i.span(), i.id.sym.clone(), None)
             }

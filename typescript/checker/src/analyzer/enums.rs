@@ -1,7 +1,7 @@
 use fxhash::FxHashMap;
 use macros::validator;
 use swc_atoms::JsWord;
-use swc_common::{Span, Spanned, Visit, VisitWith};
+use swc_common::{Span, Spanned, Visit, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 
 use crate::{
@@ -97,7 +97,7 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
                         error: false,
                         decl: &e,
                     };
-                    init.visit_with(&mut v);
+                    init.visit_mut_with(&mut v);
                     if v.error {
                         self.info
                             .errors

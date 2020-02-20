@@ -7,7 +7,7 @@ use crate::{
     ValidationResult,
 };
 use macros::validator_method;
-use swc_common::{Span, Spanned, VisitWith};
+use swc_common::{Span, Spanned, VisitMutWith};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
@@ -16,7 +16,7 @@ impl Analyzer<'_, '_> {
         match *e {
             VarDeclOrPat::VarDecl(ref mut v) => {
                 // Store variables
-                v.visit_with(self);
+                v.visit_mut_with(self);
             }
             VarDeclOrPat::Pat(ref mut pat) => match *pat {
                 Pat::Expr(ref mut e) => {

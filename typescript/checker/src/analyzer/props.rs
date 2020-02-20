@@ -12,6 +12,7 @@ use swc_common::{Spanned, Visit, VisitWith};
 use swc_common::{Spanned, VisitMut, VisitMutWith, VisitWith};
 use swc_common::{Spanned, VisitWith};
 use swc_common::{Spanned, VisitMutWith, VisitWith};
+use swc_common::{Spanned, VisitMutWith, VisitWithk};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy)]
@@ -258,7 +259,7 @@ impl Validate<GetterProp> for Analyzer<'_, '_> {
 
         let type_ann = self
             .with_child(ScopeKind::Fn, Default::default(), |child| {
-                n.key.visit_with(child);
+                n.key.visit_mut_with(child);
 
                 if let Some(body) = &mut n.body {
                     let ret_ty = child.visit_stmts_for_return(&mut body.stmts)?;

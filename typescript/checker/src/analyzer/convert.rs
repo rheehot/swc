@@ -13,7 +13,7 @@ use crate::{
 };
 use macros::validator;
 use swc_atoms::js_word;
-use swc_common::{Spanned, VisitWith};
+use swc_common::{Spanned, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 
 #[validator]
@@ -223,7 +223,7 @@ impl Validate<TsPropertySignature> for Analyzer<'_, '_> {
                 span: d.key.span(),
                 expr: d.key.clone(),
             }
-            .visit_with(self);
+            .visit_mut_with(self);
         }
 
         Ok(PropertySignature {

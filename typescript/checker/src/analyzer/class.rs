@@ -7,7 +7,7 @@ use super::{
 use crate::{
     analyzer::{props::ComputedPropMode, util::ResultExt, Ctx},
     errors::{Error, Errors},
-    swc_common::VisitWith,
+    swc_common::VisitMutWith,
     ty,
     ty::{FnParam, Operator, Type},
     validator::{Validate, ValidateWith},
@@ -16,7 +16,7 @@ use crate::{
 use macros::{validator, validator_method};
 use std::mem::replace;
 use swc_atoms::js_word;
-use swc_common::{Span, Spanned, DUMMY_SP};
+use swc_common::{Span, Spanned, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[validator]
@@ -253,7 +253,7 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
                     child.info.errors.push(Error::TS1094 { span: key_span })
                 }
 
-                c.key.visit_with(child);
+                c.key.visit_mut_with(child);
                 // c.function.visit_children(child);
 
                 if child.ctx.in_declare && c.function.body.is_some() {
@@ -557,7 +557,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
             has_body: !self.ctx.in_declare,
         };
 
-        c.decorators.visit_with(self);
+        c.decorators.visit_mut_with(self);
         self.resolve_parent_interfaces(&mut c.implements);
         let name = self.scope.this_class_name.take();
 
@@ -581,7 +581,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
                 }
             };
 
-            c.implements.visit_with(child);
+            c.implements.visit_mut_with(child);
 
             // TODO: Check for implements
 
@@ -780,7 +780,7 @@ impl Validate<ClassDecl> for Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     fn visit_class_decl(&mut self, c: &mut ClassDecl) {
-        c.ident.visit_with(self);
+        c.ident.visit_mut_with(self);
 
         self.validate_class_members(&c.class, c.declare)
             .store(&mut self.info.errors);
