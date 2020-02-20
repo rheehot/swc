@@ -25,6 +25,7 @@ pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
         in_declare: false,
         top_level: true,
         forced_module: false,
+        prevent_empty_export: false,
     })
 }
 
@@ -37,6 +38,7 @@ struct TypeResolver {
     in_declare: bool,
     top_level: bool,
     forced_module: bool,
+    prevent_empty_export: bool,
 }
 
 impl TypeResolver {
@@ -178,8 +180,12 @@ impl Fold<FnDecl> for TypeResolver {
 
 impl Fold<TsModuleDecl> for TypeResolver {
     fn fold(&mut self, node: TsModuleDecl) -> TsModuleDecl {
-        let old = self.in_declare;
+        self.prevent_empty_export = true;
 
+        let old_in_declare = self.in_declare;
+        let old_top_level = self.top_level;
+
+        self.top_level = false;
         self.in_declare = true;
 
         let node = TsModuleDecl {
@@ -187,7 +193,8 @@ impl Fold<TsModuleDecl> for TypeResolver {
             ..node.fold_children(self)
         };
 
-        self.in_declare = old;
+        self.top_level = old_top_level;
+        self.in_declare = old_in_declare;
 
         node
     }
@@ -416,7 +423,7 @@ impl Fold<Vec<ModuleItem>> for TypeResolver {
             _ => None,
         });
 
-        if self.forced_module {
+        if self.top_level && self.forced_module && !self.prevent_empty_export {
             items.push(ModuleItem::ModuleDecl(ModuleDecl::ExportNamed(
                 NamedExport {
                     span: DUMMY_SP,
