@@ -35,7 +35,7 @@ pub fn validator(
             let mut segments = path.segments;
 
             segments[0] = PathSegment {
-                ident: Ident::new("Visit", call_site()),
+                ident: Ident::new("VisitMut", call_site()),
                 arguments: segments[0].arguments.clone(),
             };
 
@@ -61,18 +61,16 @@ pub fn validator(
                     {
                         #[automatically_derived]
                         /// Delegates to `Validate<T>`.
-                        impl ::swc_common::Fold<T> for Folder {
+                        impl ::swc_common::VisitMut<T> for Folder {
                             #[inline]
-                            fn fold(&mut self, mut node: T) -> T {
+                            fn visit_mut(&mut self, node: &mut T) {
                                 let res: ::std::result::Result<_, crate::Error> =
-                                    self.validate(&mut node);
+                                    self.validate(node);
 
                                 match res {
                                     Ok(..) => {}
                                     Err(err) => self.info.errors.push(err),
                                 }
-
-                                node
                             }
                         }
                     }
