@@ -21,7 +21,6 @@ pub(super) enum PatMode {
     Decl,
 }
 
-#[validator]
 impl Validate<Pat> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 

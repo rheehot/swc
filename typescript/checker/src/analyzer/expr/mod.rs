@@ -39,7 +39,6 @@ pub enum TypeOfMode {
     RValue,
 }
 
-#[validator]
 impl Validate<Expr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -49,7 +48,6 @@ impl Validate<Expr> for Analyzer<'_, '_> {
     }
 }
 
-#[validator]
 impl Validate<ParenExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -58,7 +56,6 @@ impl Validate<ParenExpr> for Analyzer<'_, '_> {
     }
 }
 
-#[validator]
 impl Validate<AssignExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -119,7 +116,6 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
     }
 }
 
-#[validator]
 impl Validate<UpdateExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -159,7 +155,6 @@ impl Validate<UpdateExpr> for Analyzer<'_, '_> {
     }
 }
 
-#[validator]
 impl Validate<SeqExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -1136,7 +1131,6 @@ impl Analyzer<'_, '_> {
     }
 }
 
-#[validator]
 impl Validate<ArrowExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Function>;
 

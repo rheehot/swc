@@ -1,3 +1,4 @@
+use std::any::type_name;
 use swc_common::VisitMutWith;
 
 /// Visit with output
@@ -79,7 +80,7 @@ where
 
     #[inline]
     fn validate_children(&mut self, v: &mut V) {
-        self.visit_mut_with(v);
+        self.visit_mut_children(v);
     }
 }
 

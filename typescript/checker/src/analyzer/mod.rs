@@ -147,7 +147,6 @@ fn make_module_ty(span: Span, exports: ModuleTypeInfo) -> ty::Module {
 //    }
 //}
 
-#[validator]
 impl Validate<Script> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Module>;
 
@@ -317,6 +316,8 @@ impl Validate<Vec<ModuleItem>> for Analyzer<'_, '_> {
     type Output = ();
 
     fn validate(&mut self, items: &mut Vec<ModuleItem>) {
+        println!(": Vec<ModuleItem>");
+
         {
             // We first load imports.
             let mut imports: Vec<ImportInfo> = vec![];

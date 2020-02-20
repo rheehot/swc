@@ -10,7 +10,6 @@ use macros::validator;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
-#[validator]
 impl Validate<TsTypeAssertion> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -21,7 +20,6 @@ impl Validate<TsTypeAssertion> for Analyzer<'_, '_> {
     }
 }
 
-#[validator]
 impl Validate<TsAsExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 

@@ -22,7 +22,6 @@ use swc_atoms::js_word;
 use swc_common::{Span, Spanned};
 use swc_ecma_ast::*;
 
-#[validator]
 impl Validate<ExprOrSpread> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeOrSpread>;
 
@@ -36,7 +35,6 @@ impl Validate<ExprOrSpread> for Analyzer<'_, '_> {
     }
 }
 
-#[validator]
 impl Validate<CallExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
@@ -61,7 +59,6 @@ impl Validate<CallExpr> for Analyzer<'_, '_> {
     }
 }
 
-#[validator]
 impl Validate<NewExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 

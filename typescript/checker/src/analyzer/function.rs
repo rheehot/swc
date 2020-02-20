@@ -11,7 +11,6 @@ use macros::validator;
 use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
-#[validator]
 impl Validate<Function> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Function>;
 

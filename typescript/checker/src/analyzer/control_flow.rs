@@ -675,7 +675,6 @@ impl Analyzer<'_, '_> {
     }
 }
 
-#[validator]
 impl Validate<CondExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
