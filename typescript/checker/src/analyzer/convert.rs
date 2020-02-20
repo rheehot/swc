@@ -541,7 +541,7 @@ impl Validate<TsType> for Analyzer<'_, '_> {
                 Type::Constructor(self.validate(c)?)
             }
             TsType::TsTypeLit(lit) => Type::TypeLit(self.validate(lit)?),
-            TsType::TsConditionalType(mut cond) => Type::Conditional(self.validate(&mut cond)?),
+            TsType::TsConditionalType(cond) => Type::Conditional(self.validate(cond)?),
             TsType::TsMappedType(ty) => Type::Mapped(self.validate(ty)?),
             TsType::TsTypeOperator(ty) => Type::Operator(self.validate(ty)?),
             TsType::TsParenthesizedType(ty) => self.validate(ty)?,

@@ -25,7 +25,7 @@ impl Analyzer<'_, '_> {
     pub(super) fn handle_pending_exports(&mut self) {
         let pending_exports: Vec<_> = replace(&mut self.pending_exports, Default::default());
 
-        for ((sym, _), expr) in pending_exports {
+        for ((sym, _), mut expr) in pending_exports {
             // TODO: Allow multiple exports with same name.
 
             debug_assert_eq!(self.info.exports.vars.get(&sym), None);
@@ -140,7 +140,7 @@ impl Validate<ExportDecl> for Analyzer<'_, '_> {
                     }
                 }
             }
-            Decl::TsEnum(ref e) => {
+            Decl::TsEnum(ref mut e) => {
                 let span = e.span();
 
                 let ty = e
@@ -173,7 +173,7 @@ impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
 
     fn validate(&mut self, export: &mut ExportDefaultDecl) {
         match export.decl {
-            DefaultDecl::Fn(ref f) => {
+            DefaultDecl::Fn(ref mut f) => {
                 let i = f
                     .ident
                     .as_ref()

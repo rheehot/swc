@@ -163,7 +163,7 @@ impl Validate<UpdateExpr> for Analyzer<'_, '_> {
 impl Validate<SeqExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &mut SeqExpr) -> Self::Output {
+    fn validate(&mut self, mut e: &mut SeqExpr) -> Self::Output {
         let SeqExpr {
             span,
             ref mut exprs,

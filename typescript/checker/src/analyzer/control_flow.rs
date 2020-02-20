@@ -664,7 +664,7 @@ impl Analyzer<'_, '_> {
                 ..
             }) => {
                 let mut f = Default::default();
-                self.detect_facts(&mut arg, &mut f)?;
+                self.detect_facts(arg, &mut f)?;
                 *facts += !f;
             }
 
@@ -679,7 +679,7 @@ impl Analyzer<'_, '_> {
 impl Validate<CondExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, e: &mut CondExpr) -> Self::Output {
+    fn validate(&mut self, mut e: &mut CondExpr) -> Self::Output {
         self.record(e);
 
         let CondExpr {
@@ -691,7 +691,7 @@ impl Validate<CondExpr> for Analyzer<'_, '_> {
         } = *e;
 
         let mut facts = Default::default();
-        self.detect_facts(&mut e.test, &mut facts)?;
+        self.detect_facts(test, &mut facts)?;
 
         self.validate(test)?;
         let cons = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
