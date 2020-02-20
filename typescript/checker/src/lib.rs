@@ -19,6 +19,7 @@ use crate::{
     resolver::Resolver,
     swc_common::VisitMutWith,
     ty::Type,
+    validator::{Validate, ValidateWith},
 };
 use dashmap::DashMap;
 use fxhash::FxHashMap;
@@ -209,7 +210,7 @@ impl Checker {
                 })
         });
         let mut a = Analyzer::root(path.clone(), &self.libs, self.rule, self);
-        module.visit_mut_with(&mut a);
+        module.validate_with(&mut a);
         let info = a.info;
 
         let res = (module, info);
