@@ -79,7 +79,7 @@ impl Validate<Pat> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<RestPat> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, p: &mut RestPat) {
         p.visit_children(self);
@@ -123,7 +123,7 @@ impl Validate<RestPat> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<AssignPat> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, p: &mut AssignPat) {
         p.visit_children(self);

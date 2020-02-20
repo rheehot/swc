@@ -313,7 +313,7 @@ impl Load for NoopLoader {
 
 #[validator]
 impl Validate<Vec<ModuleItem>> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, items: &mut Vec<ModuleItem>) {
         println!(": Vec<ModuleItem>");
@@ -417,7 +417,7 @@ impl Validate<Vec<ModuleItem>> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<Vec<Stmt>> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, items: &mut Vec<Stmt>) {
         let mut visitor = AmbientFunctionHandler {
@@ -440,7 +440,7 @@ impl Validate<Vec<Stmt>> for Analyzer<'_, '_> {
 /// Done
 #[validator]
 impl Validate<Decorator> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, d: &mut Decorator) {
         self.validate(&mut d.expr).store(&mut self.info.errors);
@@ -449,7 +449,7 @@ impl Validate<Decorator> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<TsImportEqualsDecl> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, node: &mut TsImportEqualsDecl) {
         self.record(node);
@@ -468,7 +468,7 @@ impl Validate<TsImportEqualsDecl> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<TsModuleDecl> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, decl: &mut TsModuleDecl) {
         let span = decl.span;

@@ -213,7 +213,7 @@ impl Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<FnDecl> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     /// NOTE: This method **should not call f.fold_children(self)**
     fn validate(&mut self, f: &mut FnDecl) {
@@ -232,7 +232,7 @@ impl Validate<FnDecl> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<FnExpr> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     /// NOTE: This method **should not call f.fold_children(self)**
     fn validate(&mut self, f: &mut FnExpr) {

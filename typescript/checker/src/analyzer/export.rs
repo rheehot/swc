@@ -114,7 +114,7 @@ impl Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<ExportDecl> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, export: &mut ExportDecl) {
         match export.decl {
@@ -182,7 +182,7 @@ impl Validate<ExportDecl> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, export: &mut ExportDefaultDecl) {
         match export.decl {
@@ -253,7 +253,7 @@ impl Analyzer<'_, '_> {
 /// Done
 #[validator]
 impl Validate<TsExportAssignment> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, s: &mut TsExportAssignment) {
         self.export_expr(js_word!("default"), &s.expr);
@@ -263,7 +263,7 @@ impl Validate<TsExportAssignment> for Analyzer<'_, '_> {
 /// Done
 #[validator]
 impl Validate<ExportDefaultExpr> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, s: &mut ExportDefaultExpr) {
         self.export_expr(js_word!("default"), &s.expr);

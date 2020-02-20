@@ -11,7 +11,7 @@ use swc_ecma_ast::*;
 
 #[validator]
 impl Validate<VarDecl> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, var: &mut VarDecl) {
         self.record(&*var);

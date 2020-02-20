@@ -87,7 +87,7 @@ impl Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<ForInStmt> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, s: &mut ForInStmt) {
         self.check_for_of_in_loop(s.span, &mut s.left, &mut s.right);
@@ -96,7 +96,7 @@ impl Validate<ForInStmt> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<ForOfStmt> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, s: &mut ForOfStmt) {
         self.check_for_of_in_loop(s.span, &mut s.left, &mut s.right);

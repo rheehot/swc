@@ -718,7 +718,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<ClassExpr> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, c: &mut ClassExpr) {
         self.scope.this_class_name = c.ident.as_ref().map(|v| v.sym.clone());
@@ -769,7 +769,7 @@ impl Validate<ClassExpr> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<ClassDecl> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, c: &mut ClassDecl) {
         self.record(c);

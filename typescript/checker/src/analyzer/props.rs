@@ -28,7 +28,7 @@ pub(super) enum ComputedPropMode {
 
 #[validator]
 impl Validate<PropName> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, node: &mut PropName) {
         self.record(node);
@@ -39,7 +39,7 @@ impl Validate<PropName> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<ComputedPropName> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     #[validator_method]
     fn validate(&mut self, node: &mut ComputedPropName) {

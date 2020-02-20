@@ -17,7 +17,7 @@ mod loops;
 /// NOTE: We does **not** dig into with statements.
 #[validator]
 impl Validate<WithStmt> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, s: &mut WithStmt) {
         s.obj.visit_mut_with(self);
@@ -26,7 +26,7 @@ impl Validate<WithStmt> for Analyzer<'_, '_> {
 
 #[validator]
 impl Validate<BlockStmt> for Analyzer<'_, '_> {
-    type Output = ();
+    type Output = ValidationResult<()>;
 
     fn validate(&mut self, s: &mut BlockStmt) {
         self.with_child(ScopeKind::Block, Default::default(), |analyzer| {
