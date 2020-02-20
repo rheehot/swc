@@ -1,5 +1,4 @@
 use fxhash::FxHashMap;
-
 use macros::validator;
 use swc_atoms::JsWord;
 use swc_common::{Span, Spanned, Visit, VisitWith};
