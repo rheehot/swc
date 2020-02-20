@@ -188,8 +188,8 @@ impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
     fn validate(&mut self, export: &mut ExportDefaultDecl) -> Self::Output {
-        match &mut export.decl {
-            DefaultDecl::Fn(f) => {
+        match export.decl {
+            DefaultDecl::Fn(ref mut f) => {
                 let i = f
                     .ident
                     .as_ref()
@@ -212,9 +212,11 @@ impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
                 unimplemented!("export default class")
             }
             DefaultDecl::TsInterfaceDecl(ref i) => {
+                let span = i.span;
+                let i = i.id.sym.clone();
                 export.visit_mut_children(self);
 
-                self.export(i.span(), js_word!("default"), Some(i.id.sym.clone()))
+                self.export(span, js_word!("default"), Some(i))
             }
         };
 
