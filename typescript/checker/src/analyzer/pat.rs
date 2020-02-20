@@ -9,7 +9,7 @@ use crate::{
     ValidationResult,
 };
 use macros::validator;
-use swc_common::{Spanned, VisitWith, DUMMY_SP};
+use swc_common::{Spanned, VisitMutWith, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy)]
@@ -82,7 +82,7 @@ impl Validate<RestPat> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
     fn validate(&mut self, p: &mut RestPat) -> Self::Output {
-        p.visit_children(self);
+        p.visit_mut_children(self);
 
         let mut errors = vec![];
 
@@ -128,7 +128,7 @@ impl Validate<AssignPat> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
     fn validate(&mut self, p: &mut AssignPat) -> Self::Output {
-        p.visit_children(self);
+        p.visit_mut_children(self);
 
         //
         match *p.left {

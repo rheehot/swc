@@ -13,6 +13,7 @@ use swc_common::{Spanned, VisitMut, VisitMutWith, VisitWith};
 use swc_common::{Spanned, VisitWith};
 use swc_common::{Spanned, VisitMutWith, VisitWith};
 use swc_common::{Spanned, VisitMutWith, VisitWithk};
+use swc_common::{Spanned, VisitMut, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy)]
@@ -33,7 +34,7 @@ impl Validate<PropName> for Analyzer<'_, '_> {
     fn validate(&mut self, node: &mut PropName) -> Self::Output {
         self.record(node);
 
-        node.visit_children(self);
+        node.visit_mut_children(self);
 
         Ok(())
     }

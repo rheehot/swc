@@ -9,7 +9,7 @@ use crate::{
 use macros::{validator, validator_method};
 use std::mem::replace;
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Span, Spanned, VisitMutWith, VisitWith, DUMMY_SP};
+use swc_common::{Span, Spanned, VisitMut, VisitMutWith, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 // ModuleDecl::ExportNamed(export) => {}
@@ -188,8 +188,8 @@ impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
     fn validate(&mut self, export: &mut ExportDefaultDecl) -> Self::Output {
-        match export.decl {
-            DefaultDecl::Fn(ref mut f) => {
+        match &mut export.decl {
+            DefaultDecl::Fn(f) => {
                 let i = f
                     .ident
                     .as_ref()
@@ -207,12 +207,12 @@ impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
                 self.export(f.span(), js_word!("default"), Some(i))
             }
             DefaultDecl::Class(..) => {
-                export.visit_children(self);
+                export.visit_mut_children(self);
 
                 unimplemented!("export default class")
             }
             DefaultDecl::TsInterfaceDecl(ref i) => {
-                export.visit_children(self);
+                export.visit_mut_children(self);
 
                 self.export(i.span(), js_word!("default"), Some(i.id.sym.clone()))
             }

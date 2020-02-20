@@ -25,7 +25,7 @@ use std::{
     sync::Arc,
 };
 use swc_atoms::JsWord;
-use swc_common::{Span, Spanned, VisitWith, DUMMY_SP};
+use swc_common::{Span, Spanned, VisitMut, VisitMutWith, VisitWith, DUMMY_SP};
 use swc_ecma_ast::{ModuleItem, *};
 use swc_ts_builtin_types::Lib;
 
@@ -137,7 +137,7 @@ fn make_module_ty(span: Span, exports: ModuleTypeInfo) -> ty::Module {
 //        let span = node.span;
 //
 //        let mut new = self.new(Scope::root());
-//        node.visit_children(&mut new);
+//        node.visit_mut_children(&mut new);
 //        self.info.errors.append_errors(&mut new.info.errors);
 //        println!("after visit children");
 //
@@ -153,7 +153,7 @@ impl Validate<Script> for Analyzer<'_, '_> {
         let span = node.span;
 
         let mut new = self.new(Scope::root());
-        node.visit_children(&mut new);
+        node.visit_mut_children(&mut new);
         self.info.errors.append_errors(&mut new.info.errors);
 
         Ok(self.finalize(make_module_ty(span, new.info.exports)))
@@ -409,7 +409,7 @@ impl Validate<Vec<ModuleItem>> for Analyzer<'_, '_> {
             }
         }
 
-        items.visit_children(self);
+        items.visit_mut_children(self);
 
         self.handle_pending_exports();
 
@@ -435,7 +435,7 @@ impl Validate<Vec<Stmt>> for Analyzer<'_, '_> {
             })
         }
 
-        items.visit_children(self);
+        items.visit_mut_children(self);
 
         Ok(())
     }
@@ -484,7 +484,7 @@ impl Validate<TsModuleDecl> for Analyzer<'_, '_> {
         let mut new = self.new(Scope::root());
         new.ctx.in_declare = decl.declare;
 
-        decl.visit_children(&mut new);
+        decl.visit_mut_children(&mut new);
         self.info.errors.append_errors(&mut new.info.errors);
 
         let module = self.finalize(ty::Module {

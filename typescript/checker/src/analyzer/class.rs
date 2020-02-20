@@ -757,7 +757,7 @@ impl Validate<ClassExpr> for Analyzer<'_, '_> {
                     }
                 }
 
-                c.visit_children(analyzer);
+                c.visit_mut_children(analyzer);
 
                 Ok(())
             })
