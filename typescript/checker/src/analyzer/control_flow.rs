@@ -207,7 +207,7 @@ impl Validate<IfStmt> for Analyzer<'_, '_> {
             stmt.cons.validate_with(child);
         });
 
-        if let Some(ref alt) = stmt.alt {
+        if let Some(ref mut alt) = stmt.alt {
             self.with_child(ScopeKind::Flow, facts.false_facts.clone(), |child| {
                 alt.validate_with(child);
             });
@@ -522,8 +522,9 @@ impl Analyzer<'_, '_> {
             Expr::Paren(ParenExpr { ref mut expr, .. }) => self.detect_facts(expr, facts)?,
 
             Expr::Ident(ref i) => {
+                let sym = i.sym.clone();
                 let ty = self.validate(test)?;
-                self.add_true_false(facts, &i.sym, &ty);
+                self.add_true_false(facts, &sym, &ty);
             }
 
             Expr::Bin(BinExpr {
@@ -683,25 +684,24 @@ impl Validate<CondExpr> for Analyzer<'_, '_> {
 
         let CondExpr {
             span,
-            mut test,
-            mut alt,
-            mut cons,
+            ref mut test,
+            ref mut alt,
+            ref mut cons,
             ..
-        } = e;
-        let span = *span;
+        } = *e;
 
         let mut facts = Default::default();
         self.detect_facts(&mut e.test, &mut facts)?;
 
-        self.validate(&mut test)?;
+        self.validate(test)?;
         let cons = self.with_child(ScopeKind::Flow, facts.true_facts, |child| {
-            child.validate(&mut cons)
+            child.validate(cons)
         })?;
         let alt = self.with_child(ScopeKind::Flow, facts.false_facts, |child| {
-            child.validate(&mut alt)
+            child.validate(alt)
         })?;
 
-        match *test {
+        match **test {
             Expr::Ident(ref i) => {
                 // Check `declaring` before checking variables.
                 if self.scope.declaring.contains(&i.sym) {

@@ -63,13 +63,13 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
         let c_span = c.span();
 
         self.with_child(ScopeKind::Fn, Default::default(), |child| {
-            let Constructor { params, .. } = c;
+            let Constructor { ref mut params, .. } = *c;
 
             {
                 // Validate params
                 // TODO: Move this to parser
                 let mut has_optional = false;
-                for p in params {
+                for p in params.iter_mut() {
                     if has_optional {
                         child.info.errors.push(Error::TS1016 { span: p.span() });
                     }
@@ -86,7 +86,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
             }
 
             let mut ps = Vec::with_capacity(params.len());
-            for param in params {
+            for param in params.iter_mut() {
                 let mut names = vec![];
 
                 let mut visitor = VarVisitor { names: &mut names };
@@ -95,7 +95,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
 
                 child.scope.declaring.extend(names.clone());
 
-                let p = match &param {
+                let mut p = match &param {
                     PatOrTsParamProp::TsParamProp(TsParamProp {
                         param: TsParamPropParam::Ident(i),
                         ..
