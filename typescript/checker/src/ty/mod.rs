@@ -365,7 +365,6 @@ pub struct Union {
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
 pub struct FnParam {
     pub span: Span,
-    pub pat: Pat,
     pub required: bool,
     pub ty: Type,
 }

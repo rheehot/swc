@@ -67,7 +67,6 @@ impl Validate<Pat> for Analyzer<'_, '_> {
 
         Ok(ty::FnParam {
             span: p.span(),
-            pat: p.clone(),
             required: match p {
                 Pat::Ident(i) => !i.optional,
                 _ => true,

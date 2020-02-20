@@ -51,15 +51,6 @@ impl Fold<Span> for TypeEqHelper {
         DUMMY_SP
     }
 }
-impl Fold<FnParam> for TypeEqHelper {
-    fn fold(&mut self, node: FnParam) -> FnParam {
-        FnParam {
-            pat: Pat::Invalid(Invalid { span: DUMMY_SP }),
-            ..node.fold_children(self)
-        }
-    }
-}
-
 impl<T> EqIgnoreSpan for Box<T>
 where
     T: EqIgnoreSpan,
