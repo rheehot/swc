@@ -342,11 +342,7 @@ impl Validate<ClassMember> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    fn validate_class_members(
-        &mut self,
-        c: &Class,
-        declare: bool,
-    ) -> ValidationResult<Vec<ty::ClassMember>> {
+    fn check_ambient_methods(&mut self, c: &mut Class, declare: bool) -> ValidationResult<()> {
         // Report errors for code like
         //
         //      class C {
@@ -359,7 +355,7 @@ impl Analyzer<'_, '_> {
         let mut name: Option<&PropName> = None;
 
         if !declare {
-            for m in &c.body {
+            for m in &mut c.body {
                 macro_rules! check {
                     ($m:expr, $body:expr) => {{
                         let m = $m;
@@ -430,7 +426,7 @@ impl Analyzer<'_, '_> {
 
         self.info.errors.extend(errors);
 
-        Ok(vec![])
+        Ok(())
     }
 
     #[validator_method]
@@ -593,6 +589,8 @@ impl Validate<Class> for Analyzer<'_, '_> {
             // Register the class.
             child.scope.this_class_name = name.clone();
 
+            child.check_ambient_methods(c, false)?;
+
             let body = c
                 .body
                 .iter_mut()
@@ -744,8 +742,6 @@ impl Validate<ClassExpr> for Analyzer<'_, '_> {
                 if let Some(ref i) = c.ident {
                     analyzer.register_type(i.sym.clone(), ty.clone())?;
 
-                    analyzer.validate_class_members(&c.class, false)?;
-
                     match analyzer.declare_var(
                         ty.span(),
                         VarDeclKind::Var,
@@ -792,9 +788,6 @@ impl Validate<ClassDecl> for Analyzer<'_, '_> {
 impl Analyzer<'_, '_> {
     fn visit_class_decl(&mut self, c: &mut ClassDecl) {
         c.ident.visit_mut_with(self);
-
-        self.validate_class_members(&c.class, c.declare)
-            .store(&mut self.info.errors);
 
         self.scope.this_class_name = Some(c.ident.sym.clone());
         let ty = match c.class.validate_with(self) {
