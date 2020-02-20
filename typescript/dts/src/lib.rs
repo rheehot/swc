@@ -279,26 +279,6 @@ impl Fold<ClassProp> for TypeResolver {
             return node;
         }
 
-        if let Some(cls) = &mut self.current_class {
-            if let Some(type_ann) = cls.body.iter().find_map(|v| match v {
-                ty::ClassMember::Property(p) => {
-                    //
-                    if node.key.type_eq(&p.key) {
-                        //
-                        return p
-                            .value
-                            .clone()
-                            .map(|ty| ty.generalize_lit().into_owned().into());
-                    }
-
-                    None
-                }
-                _ => None,
-            }) {
-                node.type_ann = Some(type_ann)
-            }
-        }
-
         node.fold_children(self)
     }
 }
@@ -309,35 +289,6 @@ impl Fold<ClassMethod> for TypeResolver {
 
         if node.function.return_type.is_some() {
             return node;
-        }
-
-        if let Some(cls) = &mut self.current_class {
-            if let Some(return_type) = cls.body.iter().find_map(|v| match v {
-                ty::ClassMember::Method(m) => {
-                    //
-                    if node.key.type_eq(&m.key) {
-                        //
-                        return Some(TsTypeAnn::from(m.ret_ty.generalize_lit().into_owned()));
-                    }
-
-                    None
-                }
-                _ => None,
-            }) {
-                match node.kind {
-                    MethodKind::Method => {
-                        node.function.return_type = Some(return_type);
-                    }
-                    MethodKind::Getter => {
-                        node.function.return_type = Some(return_type);
-                    }
-                    MethodKind::Setter => {
-                        if let Some(first) = node.function.params.first_mut() {
-                            first.set_ty(Some(return_type.type_ann))
-                        }
-                    }
-                }
-            }
         }
 
         node
