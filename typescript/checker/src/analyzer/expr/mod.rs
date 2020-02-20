@@ -570,7 +570,11 @@ impl Analyzer<'_, '_> {
                                         if sym == $sym {
                                             return Ok(Type::Lit(TsLitType {
                                                 span: m.span(),
-                                                lit: m.val.clone().into(),
+                                                lit: match m.val.clone() {
+                                                    Expr::Lit(Lit::Str(s)) => TsLit::Str(s),
+                                                    Expr::Lit(Lit::Num(v)) => TsLit::Number(v),
+                                                    _ => unreachable!(),
+                                                },
                                             }));
                                         }
                                     }
@@ -607,10 +611,22 @@ impl Analyzer<'_, '_> {
                     Expr::Lit(Lit::Num(Number { value, .. })) => {
                         let idx = value.round() as usize;
                         if e.members.len() > idx {
-                            return Ok(Type::Lit(TsLitType {
-                                span,
-                                lit: e.members[idx].val.clone(),
-                            }));
+                            let v = &e.members[idx];
+                            if match v.val {
+                                Expr::Lit(Lit::Str(..)) | Expr::Lit(Lit::Num(..)) => true,
+                                _ => false,
+                            } {
+                                let new_obj_ty = Type::Lit(TsLitType {
+                                    span,
+                                    lit: match v.val.clone() {
+                                        Expr::Lit(Lit::Str(s)) => TsLit::Str(s),
+                                        Expr::Lit(Lit::Num(v)) => TsLit::Number(v),
+                                        _ => unreachable!(),
+                                    },
+                                });
+                                return self
+                                    .access_property(span, new_obj_ty, prop, computed, type_mode);
+                            }
                         }
                         return Ok(Type::Keyword(TsKeywordType {
                             span,
@@ -645,20 +661,25 @@ impl Analyzer<'_, '_> {
                         match ty.normalize() {
                             Type::Enum(ref e) => {
                                 for v in e.members.iter() {
-                                    let new_obj_ty = Type::Lit(TsLitType {
-                                        span: *span,
-                                        lit: v.val.clone(),
-                                    });
-                                    return self.access_property(
-                                        *span, new_obj_ty, prop, computed, type_mode,
-                                    );
+                                    if match v.val {
+                                        Expr::Lit(Lit::Str(..)) | Expr::Lit(Lit::Num(..)) => true,
+                                        _ => false,
+                                    } {
+                                        let new_obj_ty = Type::Lit(TsLitType {
+                                            span: *span,
+                                            lit: match v.val.clone() {
+                                                Expr::Lit(Lit::Str(s)) => TsLit::Str(s),
+                                                Expr::Lit(Lit::Num(v)) => TsLit::Number(v),
+                                                _ => unreachable!(),
+                                            },
+                                        });
+                                        return self.access_property(
+                                            *span, new_obj_ty, prop, computed, type_mode,
+                                        );
+                                    }
                                 }
-                                unreachable!(
-                                    "Enum {} does not have a variant named {}",
-                                    enum_name, name
-                                );
                             }
-                            _ => unreachable!("Enum named {} does not exist", enum_name),
+                            _ => {}
                         }
                     }
                 }

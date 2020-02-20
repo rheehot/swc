@@ -209,13 +209,7 @@ impl Fold<TsEnumDecl> for TypeResolver {
                     .map(|member| TsEnumMember {
                         span: member.span,
                         id: member.id.clone(),
-                        init: Some(box Expr::Lit(match member.val.clone() {
-                            TsLit::Number(v) => Lit::Num(v),
-                            TsLit::Str(v) => Lit::Str(v),
-                            TsLit::Bool(..) => {
-                                unreachable!("enum member with bool value is invalid")
-                            }
-                        })),
+                        init: Some(box member.val.clone()),
                     })
                     .collect(),
             ),

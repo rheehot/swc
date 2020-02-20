@@ -49,22 +49,32 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
                         &mut values,
                         Some(default),
                         m.init.as_ref().map(|v| &**v),
-                    )?;
-
-                    match val {
-                        TsLit::Number(n) => {
-                            default = n.value as i32 + 1;
+                    )
+                    .map(|val| {
+                        match val {
+                            TsLit::Number(n) => {
+                                default = n.value as i32 + 1;
+                            }
+                            _ => {}
                         }
-                        _ => {}
-                    }
+                        values.insert(
+                            match &m.id {
+                                TsEnumMemberId::Ident(i) => i.sym.clone(),
+                                TsEnumMemberId::Str(s) => s.value.clone(),
+                            },
+                            val.clone(),
+                        );
 
-                    values.insert(
-                        match &m.id {
-                            TsEnumMemberId::Ident(i) => i.sym.clone(),
-                            TsEnumMemberId::Str(s) => s.value.clone(),
-                        },
-                        val.clone(),
-                    );
+                        match val {
+                            TsLit::Number(v) => Expr::Lit(Lit::Num(v)),
+                            TsLit::Str(v) => Expr::Lit(Lit::Str(v)),
+                            TsLit::Bool(v) => Expr::Lit(Lit::Bool(v)),
+                        }
+                    })
+                    .or_else(|err| match &m.init {
+                        None => Err(err),
+                        Some(v) => Ok(*v.clone()),
+                    })?;
 
                     Ok(EnumMember {
                         id: m.id.clone(),
@@ -77,11 +87,11 @@ impl Validate<TsEnumDecl> for Analyzer<'_, '_> {
             Enum {
                 span: e.span,
                 has_num: members.iter().any(|m| match m.val {
-                    TsLit::Number(..) => true,
+                    Expr::Lit(Lit::Num(..)) => true,
                     _ => false,
                 }),
                 has_str: members.iter().any(|m| match m.val {
-                    TsLit::Str(..) => true,
+                    Expr::Lit(Lit::Str(..)) => true,
                     _ => false,
                 }),
                 declare: e.declare,
@@ -285,10 +295,19 @@ impl Analyzer<'_, '_> {
                                 TsEnumMemberId::Ident(Ident { ref sym, .. })
                                 | TsEnumMemberId::Str(Str { value: ref sym, .. }) => *sym == v.name,
                             }) {
-                                return Ok(Type::Lit(TsLitType {
-                                    span: v.span,
-                                    lit: v.val.clone(),
-                                }));
+                                match v.val {
+                                    Expr::Lit(Lit::Str(..)) | Expr::Lit(Lit::Num(..)) => {
+                                        return Ok(Type::Lit(TsLitType {
+                                            span: v.span,
+                                            lit: match v.val.clone() {
+                                                Expr::Lit(Lit::Str(s)) => TsLit::Str(s),
+                                                Expr::Lit(Lit::Num(n)) => TsLit::Number(n),
+                                                _ => unreachable!(),
+                                            },
+                                        }));
+                                    }
+                                    _ => {}
+                                }
                             }
                         }
                     }

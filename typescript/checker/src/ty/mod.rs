@@ -143,7 +143,7 @@ pub struct Enum {
 pub struct EnumMember {
     pub span: Span,
     pub id: TsEnumMemberId,
-    pub val: TsLit,
+    pub val: Expr,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
