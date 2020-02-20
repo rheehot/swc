@@ -295,6 +295,8 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
             })
         });
 
+        c.function.return_type = Some(ret_ty.clone().into());
+
         Ok(ty::Method {
             span: c_span,
             key: c.key.clone(),
