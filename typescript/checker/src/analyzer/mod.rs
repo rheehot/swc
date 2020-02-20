@@ -93,7 +93,7 @@ pub struct Analyzer<'a, 'b> {
 }
 
 /// TODO
-const NO_DUP: bool = true;
+const NO_DUP: bool = false;
 
 impl Analyzer<'_, '_> {
     /// Mark node as visited. This method panics if Analyzer had visited node.
