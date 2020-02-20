@@ -301,7 +301,9 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
             })
         });
 
-        c.function.return_type = Some(ret_ty.generalize_lit().into_owned().into());
+        if c.kind != MethodKind::Setter {
+            c.function.return_type = Some(ret_ty.generalize_lit().into_owned().into());
+        }
 
         Ok(ty::Method {
             span: c_span,
