@@ -59,6 +59,12 @@ impl Validate<Pat> for Analyzer<'_, '_> {
             PatMode::Assign => {}
         }
 
+        let ty = ty.unwrap_or_else(|| Type::any(p.span()));
+
+        if p.get_ty().is_none() {
+            p.set_ty(Some(box ty.clone().into()));
+        }
+
         Ok(ty::FnParam {
             span: p.span(),
             pat: p.clone(),
@@ -66,7 +72,7 @@ impl Validate<Pat> for Analyzer<'_, '_> {
                 Pat::Ident(i) => !i.optional,
                 _ => true,
             },
-            ty: ty.unwrap_or_else(|| Type::any(p.span())),
+            ty,
         })
     }
 }
