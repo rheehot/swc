@@ -114,8 +114,7 @@ pub struct Info {
 }
 
 // TODO:
-//#[validator]
-//impl Validate<Program> for Analyzer<'_, '_> {
+//#[validator] impl Validate<Program> for Analyzer<'_, '_> {
 //    type Output = ValidationResult<ty::Module>;
 //
 //    fn validate(&mut self, node: &mut Program) -> Self::Output {
@@ -131,8 +130,7 @@ fn make_module_ty(span: Span, exports: ModuleTypeInfo) -> ty::Module {
 }
 
 // TODO:
-//#[validator]
-//impl Validate<Module> for Analyzer<'_, '_> {
+//#[validator] impl Validate<Module> for Analyzer<'_, '_> {
 //    type Output = ValidationResult<ty::Module>;
 //
 //    fn validate(&mut self, node: &mut Module) -> Self::Output {
@@ -147,6 +145,7 @@ fn make_module_ty(span: Span, exports: ModuleTypeInfo) -> ty::Module {
 //    }
 //}
 
+#[validator]
 impl Validate<Script> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Module>;
 
@@ -312,6 +311,7 @@ impl Load for NoopLoader {
     }
 }
 
+#[validator]
 impl Validate<Vec<ModuleItem>> for Analyzer<'_, '_> {
     type Output = ();
 
@@ -415,6 +415,7 @@ impl Validate<Vec<ModuleItem>> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<Vec<Stmt>> for Analyzer<'_, '_> {
     type Output = ();
 
@@ -437,6 +438,7 @@ impl Validate<Vec<Stmt>> for Analyzer<'_, '_> {
 }
 
 /// Done
+#[validator]
 impl Validate<Decorator> for Analyzer<'_, '_> {
     type Output = ();
 
@@ -445,6 +447,7 @@ impl Validate<Decorator> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<TsImportEqualsDecl> for Analyzer<'_, '_> {
     type Output = ();
 
@@ -463,6 +466,7 @@ impl Validate<TsImportEqualsDecl> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<TsModuleDecl> for Analyzer<'_, '_> {
     type Output = ();
 

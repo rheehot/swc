@@ -19,6 +19,7 @@ use swc_atoms::js_word;
 use swc_common::{Span, Spanned, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
+#[validator]
 impl Validate<ClassProp> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::ClassProperty>;
 
@@ -52,6 +53,7 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<Constructor> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::ConstructorSignature>;
 
@@ -155,6 +157,7 @@ impl Validate<Constructor> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<TsFnParam> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::FnParam>;
 
@@ -199,6 +202,7 @@ impl Validate<TsFnParam> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<ClassMethod> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Method>;
 
@@ -306,6 +310,7 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<ClassMember> for Analyzer<'_, '_> {
     type Output = ValidationResult<Option<ty::ClassMember>>;
 
@@ -540,6 +545,7 @@ impl Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<Class> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Class>;
 
@@ -710,6 +716,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<ClassExpr> for Analyzer<'_, '_> {
     type Output = ();
 
@@ -760,6 +767,7 @@ impl Validate<ClassExpr> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<ClassDecl> for Analyzer<'_, '_> {
     type Output = ();
 

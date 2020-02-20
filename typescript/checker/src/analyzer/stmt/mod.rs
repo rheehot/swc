@@ -15,6 +15,7 @@ mod decl;
 mod loops;
 
 /// NOTE: We does **not** dig into with statements.
+#[validator]
 impl Validate<WithStmt> for Analyzer<'_, '_> {
     type Output = ();
 
@@ -23,6 +24,7 @@ impl Validate<WithStmt> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<BlockStmt> for Analyzer<'_, '_> {
     type Output = ();
 

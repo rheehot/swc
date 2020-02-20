@@ -9,6 +9,7 @@ use crate::{
 use swc_common::Spanned;
 use swc_ecma_ast::*;
 
+#[validator]
 impl Validate<VarDecl> for Analyzer<'_, '_> {
     type Output = ();
 

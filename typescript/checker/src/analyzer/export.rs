@@ -112,6 +112,7 @@ impl Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<ExportDecl> for Analyzer<'_, '_> {
     type Output = ();
 
@@ -179,6 +180,7 @@ impl Validate<ExportDecl> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
     type Output = ();
 
@@ -249,6 +251,7 @@ impl Analyzer<'_, '_> {
 }
 
 /// Done
+#[validator]
 impl Validate<TsExportAssignment> for Analyzer<'_, '_> {
     type Output = ();
 
@@ -258,6 +261,7 @@ impl Validate<TsExportAssignment> for Analyzer<'_, '_> {
 }
 
 /// Done
+#[validator]
 impl Validate<ExportDefaultExpr> for Analyzer<'_, '_> {
     type Output = ();
 

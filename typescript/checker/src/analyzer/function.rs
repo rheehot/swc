@@ -11,6 +11,7 @@ use macros::validator;
 use swc_common::{Fold, FoldWith, Spanned};
 use swc_ecma_ast::*;
 
+#[validator]
 impl Validate<Function> for Analyzer<'_, '_> {
     type Output = ValidationResult<ty::Function>;
 
@@ -210,6 +211,7 @@ impl Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<FnDecl> for Analyzer<'_, '_> {
     type Output = ();
 
@@ -228,6 +230,7 @@ impl Validate<FnDecl> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<FnExpr> for Analyzer<'_, '_> {
     type Output = ();
 

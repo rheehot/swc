@@ -85,6 +85,7 @@ impl Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<ForInStmt> for Analyzer<'_, '_> {
     type Output = ();
 
@@ -93,6 +94,7 @@ impl Validate<ForInStmt> for Analyzer<'_, '_> {
     }
 }
 
+#[validator]
 impl Validate<ForOfStmt> for Analyzer<'_, '_> {
     type Output = ();
 
