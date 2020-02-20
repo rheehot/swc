@@ -7,7 +7,7 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
-use swc_common::{Visit, VisitWith};
+use swc_common::{Visit, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 
 mod ambient_decl;
@@ -34,14 +34,14 @@ impl Validate<BlockStmt> for Analyzer<'_, '_> {
 }
 
 impl Analyzer<'_, '_> {
-    pub fn visit_stmts_for_return(&mut self, stmts: &[Stmt]) -> Result<Option<Type>, Error> {
+    pub fn visit_stmts_for_return(&mut self, stmts: &mut [Stmt]) -> Result<Option<Type>, Error> {
         let types = {
             let mut v = ReturnTypeCollector {
                 analyzer: &mut *self,
                 types: Default::default(),
             };
 
-            stmts.visit_with(&mut v);
+            stmts.visit_mut_with(&mut v);
 
             v.types
         };

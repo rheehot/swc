@@ -174,7 +174,7 @@ impl Analyzer<'_, '_> {
         match *callee {
             Expr::Member(MemberExpr {
                 obj: ExprOrSuper::Expr(ref mut obj),
-                ref prop,
+                ref mut prop,
                 computed,
                 ..
             }) => {

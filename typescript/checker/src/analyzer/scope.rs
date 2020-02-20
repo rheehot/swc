@@ -438,7 +438,7 @@ impl Analyzer<'_, '_> {
                     debug_assert_ne!(span, DUMMY_SP);
                 }
                 let ty = match ty {
-                    None => try_opt!(i.type_ann.as_ref().map(|v| v.type_ann.validate_with(self))),
+                    None => try_opt!(i.type_ann.as_mut().map(|v| v.type_ann.validate_with(self))),
                     Some(ty) => Some(ty),
                 };
                 self.declare_var(
@@ -463,7 +463,7 @@ impl Analyzer<'_, '_> {
                 }
                 return Ok(());
             }
-            Pat::Assign(ref p) => {
+            Pat::Assign(ref mut p) => {
                 let ty = self.validate(&mut p.right)?;
                 println!(
                     "({}) declare_vars({:?}), ty = {:?}",

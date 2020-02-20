@@ -3,7 +3,6 @@ use crate::{
     ty,
     ty::{FnParam, ImportType, QueryExpr, TypeParamDecl, TypeParamInstantiation},
 };
-use std::sync::Arc;
 use swc_common::{Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 

@@ -17,7 +17,7 @@ impl Validate<TsTypeAssertion> for Analyzer<'_, '_> {
     fn validate(&mut self, e: &mut TsTypeAssertion) -> ValidationResult {
         let orig_ty = self.validate(&mut e.expr)?;
 
-        self.validate_type_cast(e.span, orig_ty, &e.type_ann)
+        self.validate_type_cast(e.span, orig_ty, &mut e.type_ann)
     }
 }
 
@@ -28,7 +28,7 @@ impl Validate<TsAsExpr> for Analyzer<'_, '_> {
     fn validate(&mut self, e: &mut TsAsExpr) -> ValidationResult {
         let orig_ty = self.validate(&mut e.expr)?;
 
-        self.validate_type_cast(e.span, orig_ty, &e.type_ann)
+        self.validate_type_cast(e.span, orig_ty, &mut e.type_ann)
     }
 }
 
@@ -46,7 +46,12 @@ impl Analyzer<'_, '_> {
     /// ```
     ///
     /// results in error.
-    fn validate_type_cast(&mut self, span: Span, orig_ty: Type, to: &TsType) -> ValidationResult {
+    fn validate_type_cast(
+        &mut self,
+        span: Span,
+        orig_ty: Type,
+        to: &mut TsType,
+    ) -> ValidationResult {
         let orig_ty = self.expand(span, orig_ty)?;
 
         let casted_ty = to.validate_with(self)?;

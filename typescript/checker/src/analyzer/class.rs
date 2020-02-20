@@ -269,8 +269,8 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
                 let inferred_ret_ty = match c
                     .function
                     .body
-                    .as_ref()
-                    .map(|bs| child.visit_stmts_for_return(&bs.stmts))
+                    .as_mut()
+                    .map(|bs| child.visit_stmts_for_return(&mut bs.stmts))
                 {
                     Some(Ok(ty)) => ty,
                     Some(err) => err?,

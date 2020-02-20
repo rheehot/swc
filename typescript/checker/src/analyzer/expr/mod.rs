@@ -163,7 +163,7 @@ impl Validate<UpdateExpr> for Analyzer<'_, '_> {
 impl Validate<SeqExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
-    fn validate(&mut self, mut e: &mut SeqExpr) -> Self::Output {
+    fn validate(&mut self, e: &mut SeqExpr) -> Self::Output {
         let SeqExpr {
             span,
             ref mut exprs,
@@ -171,8 +171,8 @@ impl Validate<SeqExpr> for Analyzer<'_, '_> {
 
         assert!(exprs.len() >= 1);
 
-        let first_span = e.exprs[0].span();
-        let len = e.exprs.len();
+        let first_span = exprs[0].span();
+        let len = exprs.len();
 
         let mut is_any = false;
         for (i, e) in exprs.iter_mut().enumerate() {
@@ -269,10 +269,10 @@ impl Analyzer<'_, '_> {
 
             Expr::Ident(ref i) => self.type_of_ident(i, mode, type_args),
 
-            Expr::Array(ArrayLit { ref elems, .. }) => {
+            Expr::Array(ArrayLit { ref mut elems, .. }) => {
                 let mut types: Vec<Type> = Vec::with_capacity(elems.len());
 
-                for elem in elems {
+                for elem in elems.iter_mut() {
                     let span = elem.span();
                     match elem {
                         Some(ExprOrSpread {
@@ -365,7 +365,7 @@ impl Analyzer<'_, '_> {
                 let mut members = Vec::with_capacity(props.len());
                 let mut special_type = None;
 
-                for prop in props.iter() {
+                for prop in props.iter_mut() {
                     match *prop {
                         PropOrSpread::Prop(ref mut prop) => {
                             members.push(prop.validate_with(self)?);
@@ -416,20 +416,22 @@ impl Analyzer<'_, '_> {
 
             Expr::Class(ClassExpr {
                 ref ident,
-                ref class,
+                ref mut class,
                 ..
             }) => {
                 self.scope.this_class_name = ident.as_ref().map(|i| i.sym.clone());
                 return Ok(class.validate_with(self)?.into());
             }
 
-            Expr::Arrow(ref e) => return Ok(e.validate_with(self)?.into()),
+            Expr::Arrow(ref mut e) => return Ok(e.validate_with(self)?.into()),
 
-            Expr::Fn(FnExpr { ref function, .. }) => {
+            Expr::Fn(FnExpr {
+                ref mut function, ..
+            }) => {
                 return Ok(function.validate_with(self)?.into());
             }
 
-            Expr::Member(ref expr) => {
+            Expr::Member(ref mut expr) => {
                 return self.type_of_member_expr(expr, mode);
             }
 
@@ -445,7 +447,7 @@ impl Analyzer<'_, '_> {
         &mut self,
         span: Span,
         obj: Type,
-        prop: &Expr,
+        prop: &mut Expr,
         computed: bool,
         type_mode: TypeOfMode,
     ) -> ValidationResult {
@@ -454,7 +456,7 @@ impl Analyzer<'_, '_> {
             a: &mut Analyzer,
             span: Span,
             obj: &Type,
-            prop: &Expr,
+            prop: &mut Expr,
             computed: bool,
             type_mode: TypeOfMode,
             members: &[TypeElement],
@@ -1051,7 +1053,7 @@ impl Analyzer<'_, '_> {
                 self.access_property(
                     span,
                     obj_ty,
-                    &Expr::Ident(qname.right.clone()),
+                    &mut Expr::Ident(qname.right.clone()),
                     false,
                     TypeOfMode::RValue,
                 )
@@ -1061,20 +1063,20 @@ impl Analyzer<'_, '_> {
 
     fn type_of_member_expr(
         &mut self,
-        expr: &MemberExpr,
+        expr: &mut MemberExpr,
         type_mode: TypeOfMode,
     ) -> ValidationResult {
         let MemberExpr {
-            ref obj,
+            ref mut obj,
             computed,
-            ref prop,
+            ref mut prop,
             span,
             ..
         } = *expr;
 
         let mut errors = vec![];
         match *obj {
-            ExprOrSuper::Expr(ref obj) => {
+            ExprOrSuper::Expr(ref mut obj) => {
                 let obj_ty = match obj.validate_with(self) {
                     Ok(ty) => ty,
                     Err(err) => {
@@ -1171,8 +1173,10 @@ impl Validate<ArrowExpr> for Analyzer<'_, '_> {
 
             let inferred_return_type = {
                 match f.body {
-                    BlockStmtOrExpr::Expr(ref e) => Some(e.validate_with(child)?),
-                    BlockStmtOrExpr::BlockStmt(ref s) => child.visit_stmts_for_return(&s.stmts)?,
+                    BlockStmtOrExpr::Expr(ref mut e) => Some(e.validate_with(child)?),
+                    BlockStmtOrExpr::BlockStmt(ref mut s) => {
+                        child.visit_stmts_for_return(&mut s.stmts)?
+                    }
                 }
             };
             if let Some(ref declared) = declared_ret_ty {

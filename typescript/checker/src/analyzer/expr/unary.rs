@@ -16,13 +16,17 @@ impl Validate<UnaryExpr> for Analyzer<'_, '_> {
     type Output = ValidationResult;
 
     fn validate(&mut self, e: &mut UnaryExpr) -> Self::Output {
-        let UnaryExpr { span, op, ref arg } = *e;
+        let UnaryExpr {
+            span,
+            op,
+            ref mut arg,
+        } = *e;
 
         if let op!("delete") = op {
             // `delete foo` returns bool
 
-            match *e.arg {
-                Expr::Member(ref e) => {
+            match **arg {
+                Expr::Member(ref mut e) => {
                     self.type_of_member_expr(e, TypeOfMode::LValue)
                         .store(&mut self.info.errors);
 

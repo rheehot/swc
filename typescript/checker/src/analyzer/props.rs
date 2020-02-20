@@ -256,7 +256,7 @@ impl Validate<GetterProp> for Analyzer<'_, '_> {
                 n.key.visit_with(child);
 
                 if let Some(body) = &n.body {
-                    let ret_ty = child.visit_stmts_for_return(&body.stmts)?;
+                    let ret_ty = child.visit_stmts_for_return(&mut body.stmts)?;
                     if let None = ret_ty {
                         // getter property must have return statements.
                         child.info.errors.push(Error::TS2378 { span: n.key.span() });
