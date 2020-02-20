@@ -17,14 +17,14 @@ use crate::{
     analyzer::{Analyzer, Info},
     errors::Error,
     resolver::Resolver,
-    swc_common::VisitWith,
+    swc_common::VisitMutWith,
     ty::Type,
 };
 use dashmap::DashMap;
 use fxhash::FxHashMap;
 use std::{path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
-use swc_common::{errors::Handler, Globals, SourceMap, Span};
+use swc_common::{errors::Handler, Globals, SourceMap, Span, VisitMut};
 use swc_ecma_ast::Module;
 use swc_ecma_parser::{
     lexer::Lexer, JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig,
@@ -176,7 +176,7 @@ impl Checker {
 
         self.current.insert(path.clone(), ());
 
-        let module = swc_common::GLOBALS.set(&self.globals, || {
+        let mut module = swc_common::GLOBALS.set(&self.globals, || {
             let session = Session {
                 handler: &self.handler,
             };
@@ -209,7 +209,7 @@ impl Checker {
                 })
         });
         let mut a = Analyzer::root(path.clone(), &self.libs, self.rule, self);
-        module.visit_with(&mut a);
+        module.visit_mut_with(&mut a);
         let info = a.info;
 
         let res = (module, info);
