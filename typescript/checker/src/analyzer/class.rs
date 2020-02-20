@@ -38,6 +38,12 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
             ty.or_else(|| value_ty)
         };
 
+        if p.type_ann.is_none() {
+            p.type_ann = value
+                .as_ref()
+                .map(|value: &Type| value.generalize_lit().into_owned().into());
+        }
+
         Ok(ty::ClassProperty {
             span: p.span,
             key: p.key.clone(),
