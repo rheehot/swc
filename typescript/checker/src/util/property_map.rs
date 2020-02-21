@@ -20,8 +20,6 @@ impl<V> Default for PropertyMap<V> {
 
 impl<V> PropertyMap<V> {
     pub fn get(&self, expr: &Expr) -> Option<&V> {
-        println!("expr");
-
         let expr = PropName::Computed(ComputedPropName {
             span: DUMMY_SP,
             expr: box expr.clone().fold_with(&mut super::SpanRemover),
@@ -33,21 +31,15 @@ impl<V> PropertyMap<V> {
     pub fn get_prop_name(&self, p: &PropName) -> Option<&V> {
         let p = p.clone().fold_with(&mut super::SpanRemover);
 
-        println!("p: {:?}", p);
-
         if let Some(v) = self.inner.get(&p) {
-            println!("Matched");
             Some(v)
         } else {
-            println!("Not matched");
-
             None
         }
     }
 
     pub fn insert(&mut self, key: PropName, v: V) {
         let key = key.fold_with(&mut super::SpanRemover);
-        println!("insert: {:?}", key);
         self.inner.insert(key, v);
     }
 use swc_ecma_ast::{Expr, Ident, Str};
