@@ -320,6 +320,12 @@ impl<'a> Emitter<'a> {
         punct!("(");
         self.emit_list(n.span, Some(&n.params), ListFormat::Parameters)?;
         punct!(")");
+
+        if let Some(ref type_ann) = n.type_ann {
+            punct!(":");
+            formatting_space!();
+            emit!(type_ann);
+        }
     }
 
     #[emitter]
