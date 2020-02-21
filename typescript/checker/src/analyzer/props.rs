@@ -247,17 +247,24 @@ impl Analyzer<'_, '_> {
                 })?
             }
 
-            Prop::Method(ref mut p) => MethodSignature {
-                span,
-                readonly: false,
-                key,
-                computed: false,
-                optional: false,
-                params: p.function.params.validate_with(self)?,
-                ret_ty: try_opt!(p.function.return_type.validate_with(self)),
-                type_params: try_opt!(p.function.type_params.validate_with(self)),
+            Prop::Method(ref mut p) => {
+                let computed = match p.key {
+                    PropName::Computed(..) => true,
+                    _ => false,
+                };
+
+                MethodSignature {
+                    span,
+                    readonly: false,
+                    key,
+                    computed,
+                    optional: false,
+                    params: p.function.params.validate_with(self)?,
+                    ret_ty: try_opt!(p.function.return_type.validate_with(self)),
+                    type_params: try_opt!(p.function.type_params.validate_with(self)),
+                }
+                .into()
             }
-            .into(),
         })
     }
 }
