@@ -999,10 +999,45 @@ impl Analyzer<'_, '_> {
             return Ok(ty.clone());
         }
 
-        //        if let Some(types) = self.find_type(&i.sym) {
-        //            println!("({}) type_of({}): find_type", self.scope.depth(),
-        // i.sym);            return Ok(ty.clone().respan(span));
-        //        }
+        if let Some(types) = self.find_type(&i.sym) {
+            for ty in types {
+                match ty.normalize() {
+                    Type::Class(_)
+                    | Type::ClassInstance(_)
+                    | Type::Enum(_)
+                    | Type::EnumVariant(_)
+                    | Type::This(_)
+                    | Type::Lit(_) => {
+                        return Ok(ty.clone().respan(span));
+                    }
+                    Type::Query(_) => {}
+                    Type::Infer(_) => {}
+                    Type::Import(_) => {}
+                    Type::Predicate(_) => {}
+                    Type::IndexedAccessType(_) => {}
+                    Type::Ref(_) => {}
+                    Type::TypeLit(_) => {}
+                    Type::Keyword(_) => {}
+                    Type::Conditional(_) => {}
+                    Type::Tuple(_) => {}
+                    Type::Array(_) => {}
+                    Type::Union(_) => {}
+                    Type::Intersection(_) => {}
+                    Type::Function(_) => {}
+                    Type::Constructor(_) => {}
+                    Type::Method(_) => {}
+                    Type::Operator(_) => {}
+                    Type::Param(_) => {}
+                    Type::Interface(_) => {}
+                    Type::Mapped(_) => {}
+                    Type::Alias(_) => {}
+                    Type::Namespace(_) => {}
+                    Type::Module(_) => {}
+                    Type::Static(_) => {}
+                    Type::Arc(_) => {}
+                }
+            }
+        }
 
         // Check `declaring` before checking variables.
         if self.scope.declaring.contains(&i.sym) {

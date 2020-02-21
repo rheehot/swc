@@ -383,6 +383,7 @@ impl Analyzer<'_, '_> {
                 .or_default()
                 .push(ty.freeze());
         } else {
+            log::debug!("register_type({})", name);
             self.scope.register_type(name, ty);
         }
 
