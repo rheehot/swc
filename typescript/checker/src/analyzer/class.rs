@@ -298,7 +298,7 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
             inferred_ret_ty.unwrap_or_else(|| {
                 Type::Keyword(TsKeywordType {
                     span: c_span,
-                    kind: TsKeywordTypeKind::TsVoidKeyword,
+                    kind: TsKeywordTypeKind::TsAnyKeyword,
                 })
             })
         });
