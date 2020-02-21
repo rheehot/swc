@@ -69,7 +69,7 @@ impl TypeResolver {
     {
         if let Some(types) = self.info.types.get(sym) {
             for ty in &*types {
-                debug_assert!(ty.is_arc(), "All exported types must be freezed");
+                debug_assert!(ty.is_arc(), "All exported types must be freezed: {:?}", ty);
             }
 
             types.iter().filter_map(|ty| pred(ty.normalize())).next()
