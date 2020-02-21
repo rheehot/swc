@@ -27,7 +27,7 @@ use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestN
 use testing::{DropSpan, NormalizedOutput, StdErr};
 
 #[test]
-fn conformance() {
+fn conformances() {
     let args: Vec<_> = env::args().collect();
     let mut tests = Vec::new();
     add_conformance_tests(&mut tests).unwrap();
@@ -128,7 +128,7 @@ fn add_conformance_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
 }
 
 #[test]
-fn fixtures() {
+fn fixture() {
     let args: Vec<_> = env::args().collect();
     let mut tests = Vec::new();
     add_fixture_tests(&mut tests).unwrap();
