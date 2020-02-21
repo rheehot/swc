@@ -14,7 +14,7 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
-use fxhash::FxHashMap;
+use fxhash::{FxHashMap, FxHashSet};
 use macros::{validator, validator_method};
 use std::mem::replace;
 use swc_atoms::js_word;
@@ -363,8 +363,9 @@ impl Analyzer<'_, '_> {
         // Span of name
         let mut spans = vec![];
         let mut name: Option<&PropName> = None;
+        let mut removed = FxHashSet::default();
 
-        for m in &mut c.body {
+        for (idx, m) in c.body.iter_mut().enumerate() {
             macro_rules! check {
                 ($m:expr, $body:expr) => {{
                     let m = $m;
@@ -386,6 +387,10 @@ impl Analyzer<'_, '_> {
                     } else {
                         if name.is_none() || is_prop_name_eq(&name.unwrap(), &m.key) {
                             // TODO: Verify parameters
+
+                            if name.is_some() {
+                                removed.insert(idx);
+                            }
 
                             spans = vec![];
                             name = None;
@@ -433,6 +438,18 @@ impl Analyzer<'_, '_> {
         }
 
         self.info.errors.extend(errors);
+
+        c.body = c
+            .body
+            .drain(..)
+            .enumerate()
+            .filter_map(|(i, m)| {
+                if removed.contains(&i) {
+                    return None;
+                }
+                Some(m)
+            })
+            .collect();
 
         Ok(())
     }
