@@ -25,8 +25,8 @@ impl<V> PropertyMap<V> {
             expr: box expr.clone().fold_with(&mut super::SpanRemover),
         });
 
-        for (k, v) in self.inner {
-            if k == expr {
+        for (k, v) in &self.inner {
+            if *k == expr {
                 return Some(&v);
             }
         }
@@ -37,8 +37,8 @@ impl<V> PropertyMap<V> {
     pub fn get_prop_anme(&self, p: &PropName) -> Option<&V> {
         let expr = p.clone().fold_with(&mut super::SpanRemover);
 
-        for (k, v) in self.inner {
-            if k == expr {
+        for (k, v) in &self.inner {
+            if *k == expr {
                 return Some(&v);
             }
         }
