@@ -1,7 +1,7 @@
 use super::Type;
 use crate::{
     ty,
-    ty::{FnParam, ImportType, QueryExpr, TypeParamDecl, TypeParamInstantiation},
+    ty::{FnParam, ImportType, QueryExpr, TypeElement, TypeParamDecl, TypeParamInstantiation},
 };
 use swc_common::{Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -390,8 +390,50 @@ impl From<ty::ClassMember> for TsTypeElement {
 }
 
 impl From<ty::TypeElement> for TsTypeElement {
-    fn from(m: ty::TypeElement) -> Self {
-        unimplemented!("From<ty::TypeElement> for TsTypeElement")
+    fn from(e: ty::TypeElement) -> Self {
+        match e {
+            TypeElement::Call(e) => TsTypeElement::TsCallSignatureDecl(TsCallSignatureDecl {
+                span: e.span,
+                params: e.params.into_iter().map(|v| v.into()).collect(),
+                type_ann: e.ret_ty.map(From::from),
+                type_params: e.type_params.map(From::from),
+            }),
+            TypeElement::Constructor(e) => {
+                TsTypeElement::TsConstructSignatureDecl(TsConstructSignatureDecl {
+                    span: e.span,
+                    params: e.params.map(|v| v.into()).collect(),
+                    type_ann: e.ret_ty.map(From::from),
+                    type_params: e.type_params.map(From::from),
+                })
+            }
+            TypeElement::Property(e) => TsTypeElement::TsPropertySignature(TsPropertySignature {
+                span: e.span,
+                readonly: e.readonly,
+                key: e.key,
+                computed: e.computed,
+                optional: e.optional,
+                init: e.init,
+                params: e.params.into_iter().map(From::from).collect(),
+                type_ann: e.type_ann.map(From::From),
+                type_params: e.type_params.map(From::from),
+            }),
+            TypeElement::Method(e) => TsTypeElement::TsMethodSignature(TsMethodSignature {
+                span: e.span,
+                readonly: e.readonly,
+                key: e.key,
+                computed: e.computed,
+                optional: e.optional,
+                params: e.params.into_iter().map(From::from).collect(),
+                type_ann: e.ret_ty.map(From::from),
+                type_params: e.type_params.map(From::from),
+            }),
+            TypeElement::Index(e) => TsTypeElement::TsIndexSignature(TsIndexSignature {
+                params: e.params.into_iter().map(From::from).collect(),
+                type_ann: e.type_ann.map(From::from),
+                readonly: e.readonly,
+                span: e.span,
+            }),
+        }
     }
 }
 
