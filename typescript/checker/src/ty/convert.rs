@@ -401,7 +401,7 @@ impl From<ty::TypeElement> for TsTypeElement {
             TypeElement::Constructor(e) => {
                 TsTypeElement::TsConstructSignatureDecl(TsConstructSignatureDecl {
                     span: e.span,
-                    params: e.params.map(|v| v.into()).collect(),
+                    params: e.params.into_iter().map(|v| v.into()).collect(),
                     type_ann: e.ret_ty.map(From::from),
                     type_params: e.type_params.map(From::from),
                 })
@@ -412,9 +412,9 @@ impl From<ty::TypeElement> for TsTypeElement {
                 key: e.key,
                 computed: e.computed,
                 optional: e.optional,
-                init: e.init,
+                init: None,
                 params: e.params.into_iter().map(From::from).collect(),
-                type_ann: e.type_ann.map(From::From),
+                type_ann: e.type_ann.map(From::from),
                 type_params: e.type_params.map(From::from),
             }),
             TypeElement::Method(e) => TsTypeElement::TsMethodSignature(TsMethodSignature {

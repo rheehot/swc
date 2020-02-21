@@ -189,6 +189,7 @@ impl Analyzer<'_, '_> {
         }
 
         let span = prop.span();
+        let key = prop_key_to_expr(&prop);
 
         Ok(match *prop {
             Prop::Shorthand(..) => PropertySignature {
@@ -204,15 +205,20 @@ impl Analyzer<'_, '_> {
             .into(),
 
             Prop::KeyValue(ref mut kv) => {
+                let computed = match kv.key {
+                    PropName::Computed(_) => true,
+                    _ => false,
+                };
                 let ty = kv.value.validate_with(self)?;
+                let ty = ty.generalize_lit().into_owned();
 
                 PropertySignature {
-                    span: prop.span(),
-                    key: prop_key_to_expr(&prop),
+                    span,
+                    key,
                     params: Default::default(),
                     optional: false,
                     readonly: false,
-                    computed: false,
+                    computed,
                     type_ann: Some(ty),
                     type_params: Default::default(),
                 }
