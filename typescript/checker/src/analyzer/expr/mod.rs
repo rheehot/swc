@@ -1011,7 +1011,8 @@ impl Analyzer<'_, '_> {
         if let Some(types) = self.find_type(&i.sym) {
             for ty in types {
                 match ty.normalize() {
-                    Type::Class(_)
+                    Type::Interface(_)
+                    | Type::Class(_)
                     | Type::ClassInstance(_)
                     | Type::Enum(_)
                     | Type::EnumVariant(_)
@@ -1037,7 +1038,6 @@ impl Analyzer<'_, '_> {
                     Type::Method(_) => {}
                     Type::Operator(_) => {}
                     Type::Param(_) => {}
-                    Type::Interface(_) => {}
                     Type::Mapped(_) => {}
                     Type::Alias(_) => {}
                     Type::Namespace(_) => {}
