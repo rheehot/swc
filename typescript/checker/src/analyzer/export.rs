@@ -178,6 +178,8 @@ impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
     fn validate(&mut self, export: &mut ExportDefaultDecl) -> Self::Output {
+        let span = export.span();
+
         match export.decl {
             DefaultDecl::Fn(ref mut f) => {
                 let i = f
@@ -196,13 +198,17 @@ impl Validate<ExportDefaultDecl> for Analyzer<'_, '_> {
                     .store(&mut self.info.errors);
                 self.export(f.span(), js_word!("default"), Some(i))
             }
-            DefaultDecl::Class(..) => {
+            DefaultDecl::Class(ref c) => {
+                let c = c
+                    .ident
+                    .as_ref()
+                    .map(|v| v.sym.clone())
+                    .unwrap_or_else(|| js_word!("default"));
                 export.visit_mut_children(self);
 
-                unimplemented!("export default class")
+                self.export(span, js_word!("default"), Some(c));
             }
             DefaultDecl::TsInterfaceDecl(ref i) => {
-                let span = i.span;
                 let i = i.id.sym.clone();
                 export.visit_mut_children(self);
 
@@ -223,15 +229,19 @@ impl Analyzer<'_, '_> {
     /// Note: We don't freeze types at here because doing so may prevent proper
     /// finalization.
     #[validator_method]
-    fn export(&mut self, span: Span, name: JsWord, from: Option<JsWord>) {
-        let from = from.unwrap_or_else(|| name.clone());
+    fn export(&mut self, span: Span, name: JsWord, orig_name: Option<JsWord>) {
+        let orig_name = orig_name.unwrap_or_else(|| name.clone());
 
-        let ty = match self.find_type(&from) {
+        let ty = match self.find_type(&orig_name) {
             Some(ty) => ty,
             None => unreachable!(".register_type() should be called before calling .export()"),
         };
 
-        let iter = ty.into_iter().cloned().collect::<Vec<_>>();
+        let iter = ty
+            .into_iter()
+            .cloned()
+            .map(|v| v.freeze())
+            .collect::<Vec<_>>();
 
         self.info
             .exports
