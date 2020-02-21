@@ -211,6 +211,7 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
     println!("---------- Expected ----------\n{}", expected_code);
 
     testing::Tester::new()
+        .no_error()
         .print_errors(|cm, handler| {
             let handler = Arc::new(handler);
 

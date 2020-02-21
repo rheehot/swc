@@ -100,6 +100,7 @@ where
 pub struct Tester {
     pub cm: Arc<SourceMap>,
     pub globals: swc_common::Globals,
+    treat_err_as_bug: bool,
 }
 
 impl Tester {
@@ -109,7 +110,13 @@ impl Tester {
         Tester {
             cm: Arc::new(SourceMap::new(FilePathMapping::empty())),
             globals: swc_common::Globals::new(),
+            treat_err_as_bug: false,
         }
+    }
+
+    pub fn no_error(mut self) -> Self {
+        self.treat_err_as_bug = true;
+        self
     }
 
     /// Run test and print errors.
@@ -117,7 +124,8 @@ impl Tester {
     where
         F: FnOnce(Arc<SourceMap>, Handler) -> Result<Ret, ()>,
     {
-        let (handler, errors) = self::string_errors::new_handler(self.cm.clone(), false);
+        let (handler, errors) =
+            self::string_errors::new_handler(self.cm.clone(), self.treat_err_as_bug);
         let result = swc_common::GLOBALS.set(&self.globals, || op(self.cm.clone(), handler));
 
         match result {
@@ -131,7 +139,8 @@ impl Tester {
     where
         F: FnOnce(Arc<SourceMap>, Handler) -> Result<Ret, ()>,
     {
-        let (handler, errors) = self::diag_errors::new_handler(self.cm.clone());
+        let (handler, errors) =
+            self::diag_errors::new_handler(self.cm.clone(), self.treat_err_as_bug);
         let result = swc_common::GLOBALS.set(&self.globals, || op(self.cm.clone(), handler));
 
         let mut errs: Vec<_> = errors.into();
