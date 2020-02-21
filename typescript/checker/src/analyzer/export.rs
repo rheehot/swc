@@ -130,6 +130,7 @@ impl Validate<ExportDecl> for Analyzer<'_, '_> {
             }
             Decl::Class(ref c) => {
                 c.visit_with(self);
+            }
             Decl::Fn(ref mut f) => {
                 f.visit_mut_with(self);
                 self.export(f.span(), f.ident.sym.clone(), None)
