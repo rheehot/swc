@@ -192,7 +192,14 @@ impl<'a> Emitter<'a> {
     fn emit_ts_index_signature(&mut self, n: &TsIndexSignature) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_index_signature")
+        punct!("[");
+        self.emit_list(n.span, Some(&n.params), ListFormat::Parameters)?;
+        punct!("]");
+
+        punct!(":");
+        formatting_space!();
+        emit!(n.type_ann);
+        semi!();
     }
 
     #[emitter]
