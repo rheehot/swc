@@ -253,6 +253,23 @@ impl Analyzer<'_, '_> {
                     _ => false,
                 };
 
+                if let Some(body) = &mut p.function.body {
+                    let inferred_ret_ty = self
+                        .visit_stmts_for_return(&mut body.stmts)?
+                        .unwrap_or_else(|| {
+                            Type::Keyword(TsKeywordType {
+                                span: body.span,
+                                kind: TsKeywordTypeKind::TsVoidKeyword,
+                            })
+                        });
+
+                    if p.function.return_type.is_none() {
+                        p.function.return_type = Some(inferred_ret_ty.clone().into())
+                    }
+
+                    // TODO: Assign
+                }
+
                 MethodSignature {
                     span,
                     readonly: false,
