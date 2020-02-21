@@ -299,6 +299,8 @@ fn get_correct_dts(path: &Path) -> (Arc<String>, Module) {
                 .arg("preserve")
                 .arg("-d")
                 .arg("--emitDeclarationOnly")
+                .arg("--target")
+                .arg("es2019")
                 .arg("--lib")
                 .arg("es2019");
             let output = c.output().unwrap();
