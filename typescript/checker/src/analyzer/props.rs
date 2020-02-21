@@ -87,6 +87,7 @@ impl Validate<ComputedPropName> for Analyzer<'_, '_> {
                 if let Some(ref ty) = ty {
                     match *ty {
                         Type::Lit(..) => {}
+                        Type::EnumVariant(..) => {}
                         _ if ty.is_kwd(TsKeywordTypeKind::TsSymbolKeyword)
                             || ty.is_unique_symbol() => {}
                         _ if is_symbol_access => {

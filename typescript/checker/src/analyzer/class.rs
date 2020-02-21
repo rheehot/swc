@@ -14,11 +14,12 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
+use bitflags::_core::mem::take;
 use fxhash::{FxHashMap, FxHashSet};
 use macros::{validator, validator_method};
 use std::mem::replace;
 use swc_atoms::js_word;
-use swc_common::{Span, Spanned, VisitWith, DUMMY_SP};
+use swc_common::{util::move_map::MoveMap, Span, Spanned, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[validator]
@@ -671,6 +672,44 @@ impl Validate<Class> for Analyzer<'_, '_> {
                         _ => {}
                     }
                 }
+            }
+
+            {
+                // Remove class members with const EnumVariant keys.
+
+                c.body = take(&mut c.body).move_flat_map(|mut v| {
+                    if match &mut v {
+                        ClassMember::Constructor(_) => true,
+                        ClassMember::PrivateMethod(_) => true,
+                        ClassMember::ClassProp(_) => true,
+                        ClassMember::PrivateProp(_) => true,
+                        ClassMember::TsIndexSignature(_) => true,
+                        ClassMember::Method(m) => match &mut m.key {
+                            PropName::Computed(c) => match c.expr.validate_with(child) {
+                                Ok(ty) => {
+                                    let ty: Type = ty;
+
+                                    match ty {
+                                        Type::EnumVariant(e) => return None,
+                                        _ => {}
+                                    }
+
+                                    true
+                                }
+                                Err(err) => {
+                                    child.info.errors.push(err);
+
+                                    false
+                                }
+                            },
+                            _ => true,
+                        },
+                    } {
+                        Some(v)
+                    } else {
+                        None
+                    }
+                });
             }
 
             let mut body: Vec<(_, ty::ClassMember)> = c

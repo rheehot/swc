@@ -491,6 +491,15 @@ impl Analyzer<'_, '_> {
                             }
                             return Ok(Some(Type::any(span)));
                         }
+
+                        match prop_ty.normalize() {
+                            // TODO: Only string or number
+                            Type::EnumVariant(..) => {
+                                return Ok(type_ann.clone());
+                            }
+
+                            _ => {}
+                        }
                     }
                     _ => {}
                 }
@@ -563,27 +572,27 @@ impl Analyzer<'_, '_> {
                     ($sym:expr) => {{
                         // Computed values are not permitted in an enum with string valued members.
                         if e.is_const && type_mode == TypeOfMode::RValue {
-                            for m in &e.members {
-                                match m.id {
-                                    TsEnumMemberId::Ident(Ident { ref sym, .. })
-                                    | TsEnumMemberId::Str(Str { value: ref sym, .. }) => {
-                                        if sym == $sym {
-                                            return Ok(Type::Lit(TsLitType {
-                                                span: m.span(),
-                                                lit: match m.val.clone() {
-                                                    Expr::Lit(Lit::Str(s)) => TsLit::Str(s),
-                                                    Expr::Lit(Lit::Num(v)) => TsLit::Number(v),
-                                                    _ => unreachable!(),
-                                                },
-                                            }));
-                                        }
-                                    }
-                                }
-                            }
+                            // for m in &e.members {
+                            //     match m.id {
+                            //         TsEnumMemberId::Ident(Ident { ref sym, .. })
+                            //         | TsEnumMemberId::Str(Str { value: ref sym, .. }) => {
+                            //             if sym == $sym {
+                            //                 return Ok(Type::Lit(TsLitType {
+                            //                     span: m.span(),
+                            //                     lit: match m.val.clone() {
+                            //                         Expr::Lit(Lit::Str(s)) => TsLit::Str(s),
+                            //                         Expr::Lit(Lit::Num(v)) =>
+                            // TsLit::Number(v),                         _ =>
+                            // unreachable!(),                     },
+                            //                 }));
+                            //             }
+                            //         }
+                            //     }
+                            // }
                         }
 
                         if e.is_const && computed {
-                            return Err(Error::ConstEnumNonIndexAccess { span: prop.span() });
+                            // return Err(Error::ConstEnumNonIndexAccess { span: prop.span() });
                         }
 
                         if e.is_const && type_mode == TypeOfMode::LValue {
