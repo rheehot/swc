@@ -314,6 +314,7 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
             type_params,
             params,
             ret_ty: box ret_ty,
+            kind: c.kind,
         })
     }
 }
@@ -673,7 +674,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
 
                         ty::ClassMember::Method(m) => match m.kind {
                             MethodKind::Getter => {
-                                prop_types.insert(m.key, m.ret_ty.clone());
+                                prop_types.insert(m.key.clone(), m.ret_ty.clone());
                             }
                             _ => {}
                         },

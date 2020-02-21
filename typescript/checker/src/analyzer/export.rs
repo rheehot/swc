@@ -119,18 +119,6 @@ impl Validate<ExportDecl> for Analyzer<'_, '_> {
 
     fn validate(&mut self, export: &mut ExportDecl) -> Self::Output {
         match export.decl {
-            Decl::Fn(ref f) => {
-                f.visit_mut_with(self);
-                self.export(f.span(), f.ident.sym.clone(), None)
-            }
-            Decl::TsInterface(ref i) => {
-                i.visit_mut_with(self);
-
-                self.export(i.span(), i.id.sym.clone(), None)
-            }
-            Decl::Class(ref c) => {
-                c.visit_with(self);
-            }
             Decl::Fn(ref mut f) => {
                 f.visit_mut_with(self);
                 self.export(f.span(), f.ident.sym.clone(), None)
@@ -140,6 +128,7 @@ impl Validate<ExportDecl> for Analyzer<'_, '_> {
 
                 self.export(i.span(), i.id.sym.clone(), None)
             }
+
             Decl::Class(ref mut c) => {
                 c.visit_mut_with(self);
                 self.export(c.span(), c.ident.sym.clone(), None)

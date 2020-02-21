@@ -195,6 +195,7 @@ pub struct Method {
     pub type_params: Option<TypeParamDecl>,
     pub params: Vec<FnParam>,
     pub ret_ty: Box<Type>,
+    pub kind: MethodKind,
 }
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned)]
