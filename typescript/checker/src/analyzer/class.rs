@@ -10,6 +10,7 @@ use crate::{
     swc_common::VisitMutWith,
     ty,
     ty::{FnParam, Operator, Type},
+    util::property_map::PropertyMap,
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -704,10 +705,13 @@ impl Validate<Class> for Analyzer<'_, '_> {
                             MethodKind::Setter => {
                                 if let Some(param) = m.params.first_mut() {
                                     if param.ty.is_any() {
-                                        //
+                                        if let Some(ty) = prop_types.get_prop_anme(&m.key) {
+                                            param.ty = ty.cloen();
+                                        }
                                     }
                                 }
                             }
+                            _ => {}
                         },
 
                         ty::ClassMember::Property(_) => {}
