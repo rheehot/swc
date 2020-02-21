@@ -92,6 +92,10 @@ impl Validate<Function> for Analyzer<'_, '_> {
                             | Type::Keyword(TsKeywordType {
                                 kind: TsKeywordTypeKind::TsVoidKeyword,
                                 ..
+                            })
+                            | Type::Keyword(TsKeywordType {
+                                kind: TsKeywordTypeKind::TsNeverKeyword,
+                                ..
                             }) => {}
                             _ => errors.push(Error::ReturnRequired { span }),
                         }
