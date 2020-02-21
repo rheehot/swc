@@ -10,7 +10,7 @@ use crate::{
     swc_common::VisitMutWith,
     ty,
     ty::{FnParam, Operator, Type},
-    util::property_map::PropertyMap,
+    util::{property_map::PropertyMap, PatExt},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -594,22 +594,12 @@ impl Validate<Class> for Analyzer<'_, '_> {
 
             child.check_ambient_methods(c, false)?;
 
-            let mut body: Vec<ty::ClassMember> = c
-                .body
-                .iter_mut()
-                .filter_map(|m| match child.validate(m) {
-                    Ok(Some(v)) => Some(Ok(v)),
-                    Ok(None) => None,
-                    Err(err) => Some(Err(err)),
-                })
-                .collect::<Result<_, _>>()?;
-
             {
                 // Validate constructors
                 let mut constructor_spans = vec![];
                 let mut constructor_required_param_count = None;
 
-                for m in &c.body {
+                for m in c.body.iter() {
                     match *m {
                         ClassMember::Constructor(ref cons) => {
                             //
@@ -661,12 +651,22 @@ impl Validate<Class> for Analyzer<'_, '_> {
                 }
             }
 
+            let mut body: Vec<(_, ty::ClassMember)> = c
+                .body
+                .iter_mut()
+                .filter_map(|m| match child.validate(m) {
+                    Ok(None) => None,
+                    Ok(Some(v)) => Some(Ok((m, v))),
+                    Err(err) => Some(Err(err)),
+                })
+                .collect::<Result<_, _>>()?;
+
             {
                 // Change types of getter and setter
 
                 let mut prop_types = PropertyMap::default();
 
-                for m in body.iter_mut() {
+                for (_, m) in body.iter_mut() {
                     match m {
                         ty::ClassMember::IndexSignature(_) | ty::ClassMember::Constructor(_) => {
                             continue
@@ -684,7 +684,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
                 }
                 let mut prop_types = FxHashMap::default();
 
-                for m in body.iter_mut() {
+                for (orig, m) in &mut body {
                     match m {
                         ty::ClassMember::IndexSignature(_) | ty::ClassMember::Constructor(_) => {
                             continue
@@ -694,8 +694,16 @@ impl Validate<Class> for Analyzer<'_, '_> {
                             MethodKind::Setter => {
                                 if let Some(param) = m.params.first_mut() {
                                     if param.ty.is_any() {
-                                        if let Some(ty) = prop_types.get_prop_anme(&m.key) {
-                                            param.ty = *ty.clone();
+                                        if let Some(ty) = prop_types.get_prop_name(&m.key) {
+                                            let new_ty = ty.clone().generalize_lit().into_owned();
+                                            param.ty = new_ty.clone();
+                                            match orig {
+                                                ClassMember::Method(ref mut method) => {
+                                                    method.function.params[0]
+                                                        .set_ty(Some(new_ty.clone().into()))
+                                                }
+                                                _ => {}
+                                            }
                                         }
                                     }
                                 }
@@ -726,7 +734,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
                 is_abstract: c.is_abstract,
                 super_class,
                 type_params,
-                body,
+                body: body.into_iter().map(|v| v.1).collect(),
             };
 
             child.validate_inherited_members(None, &class);
