@@ -85,6 +85,7 @@ impl Validate<ComputedPropName> for Analyzer<'_, '_> {
                     .store(&mut self.info.errors);
 
                 if let Some(ref ty) = ty {
+                    // TODO: Add support for expressions like '' + ''.
                     match *ty {
                         Type::Lit(..) => {}
                         Type::EnumVariant(..) => {}
