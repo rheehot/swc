@@ -118,6 +118,8 @@ impl Validate<ExportDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<()>;
 
     fn validate(&mut self, export: &mut ExportDecl) -> Self::Output {
+        let span = export.span;
+
         match export.decl {
             Decl::Fn(ref mut f) => {
                 f.visit_mut_with(self);
@@ -159,13 +161,14 @@ impl Validate<ExportDecl> for Analyzer<'_, '_> {
                     .push(ty.unwrap_or_else(|| Type::any(span)));
             }
             Decl::TsModule(..) => unimplemented!("export module "),
-            Decl::TsTypeAlias(ref decl) => {
+            Decl::TsTypeAlias(ref mut decl) => {
+                decl.visit_mut_with(self);
                 // export type Foo = 'a' | 'b';
                 // export type Foo = {};
 
                 // TODO: Handle type parameters.
 
-                self.export(decl.span, decl.id.sym.clone(), None)
+                self.export(span, decl.id.sym.clone(), None)
             }
         }
 
