@@ -793,6 +793,7 @@ impl<'a> Emitter<'a> {
             space!();
             keyword!("extends");
             space!();
+            emit!(constraints);
         }
 
         if let Some(default) = &n.default {
