@@ -964,6 +964,10 @@ impl<'a> Emitter<'a> {
     /// prints `(b){}` from `function a(b){}`
     #[emitter]
     fn emit_fn_trailing(&mut self, node: &Function) -> Result {
+        if let Some(type_params) = &node.type_params {
+            emit!(type_params);
+        }
+
         punct!("(");
         self.emit_list(node.span, Some(&node.params), ListFormat::CommaListElements)?;
         punct!(")");
