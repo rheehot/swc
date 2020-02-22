@@ -315,13 +315,18 @@ fn get_correct_dts(path: &Path) -> (Arc<String>, Module) {
 
         let mut p = Parser::new(
             Session { handler: &handler },
-            Syntax::Typescript(Default::default()),
+            Syntax::Typescript(TsConfig {
+                tsx: true,
+                decorators: true,
+                dynamic_import: true,
+            }),
             SourceFileInput::from(&*fm),
             None,
         );
 
         let m = p
             .parse_typescript_module()
+            .map_err(|mut e| e.emit())
             .expect("failed to parse generated .d.ts file");
         Ok((fm.src.clone(), m))
     })
