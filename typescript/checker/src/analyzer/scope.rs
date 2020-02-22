@@ -51,6 +51,10 @@ pub(crate) struct Scope<'a> {
 }
 
 impl Scope<'_> {
+    pub fn is_root(&self) -> bool {
+        self.parent.is_none()
+    }
+
     pub fn remove_parent(self) -> Scope<'static> {
         Scope {
             parent: None,

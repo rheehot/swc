@@ -137,7 +137,9 @@ impl Validate<VarDecl> for Analyzer<'_, '_> {
                                     value_ty
                                 })();
 
-                                v.name.set_ty(Some(ty.clone().into()));
+                                if a.scope.is_root() {
+                                    v.name.set_ty(Some(ty.clone().into()));
+                                }
 
                                 let mut type_errors = vec![];
 
