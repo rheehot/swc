@@ -1008,6 +1008,13 @@ impl Analyzer<'_, '_> {
             return Ok(ty.clone());
         }
 
+        if let Some(v) = self.scope.vars.get(&i.sym) {
+            log::debug!("type_of_ident({}): found var with name", i.sym);
+            if let Some(v) = &v.ty {
+                return Ok(v.clone());
+            }
+        }
+
         if let Some(types) = self.find_type(&i.sym) {
             for ty in types {
                 match ty.normalize() {
