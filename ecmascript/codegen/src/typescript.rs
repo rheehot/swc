@@ -58,7 +58,6 @@ impl<'a> Emitter<'a> {
 
         space!();
         emit!(n.false_type);
-        space!();
     }
 
     #[emitter]
@@ -238,14 +237,20 @@ impl<'a> Emitter<'a> {
     fn emit_ts_index_accessed_type(&mut self, n: &TsIndexedAccessType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        keyword!("<ts_index_accessed_type>")
+        emit!(n.obj_type);
+
+        punct!("[");
+        emit!(n.index_type);
+        punct!("]");
     }
 
     #[emitter]
     fn emit_ts_infer_type(&mut self, n: &TsInferType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_infer_type")
+        keyword!("infer");
+        space!();
+        emit!(n.type_param);
     }
 
     #[emitter]
@@ -329,7 +334,75 @@ impl<'a> Emitter<'a> {
     fn emit_ts_mapped_type(&mut self, n: &TsMappedType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_mapped_type")
+        punct!("{");
+        self.wr.write_line()?;
+        self.wr.increase_indent()?;
+
+        match n.readonly {
+            None => {}
+            Some(tpm) => match tpm {
+                TruePlusMinus::True => {
+                    keyword!("readonly");
+                    space!();
+                }
+                TruePlusMinus::Plus => {
+                    punct!("+");
+                    keyword!("readonly");
+                    space!();
+                }
+                TruePlusMinus::Minus => {
+                    punct!("-");
+                    keyword!("readonly");
+                    space!();
+                }
+            },
+        }
+
+        punct!("[");
+        emit!(n.type_param.name);
+
+        if let Some(constraints) = &n.type_param.constraint {
+            space!();
+            keyword!("in");
+            space!();
+        }
+
+        if let Some(default) = &n.type_param.default {
+            formatting_space!();
+            punct!("=");
+            formatting_space!();
+            emit!(default);
+        }
+
+        emit!(n.type_param.constraint);
+
+        punct!("]");
+
+        match n.optional {
+            None => {}
+            Some(tpm) => match tpm {
+                TruePlusMinus::True => {
+                    punct!("?");
+                }
+                TruePlusMinus::Plus => {
+                    punct!("+");
+                    punct!("/");
+                }
+                TruePlusMinus::Minus => {
+                    punct!("-");
+                    punct!("?");
+                }
+            },
+        }
+
+        punct!(":");
+        space!();
+        emit!(n.type_ann);
+        semi!();
+
+        self.wr.write_line()?;
+        self.wr.decrease_indent()?;
+        punct!("}");
     }
 
     #[emitter]
