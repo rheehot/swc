@@ -178,7 +178,21 @@ impl<'a> Emitter<'a> {
     fn emit_ts_fn_type(&mut self, n: &TsFnType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_fn_type")
+        if let Some(type_params) = &n.type_params {
+            punct!("<");
+            emit!(type_params);
+            punct!(">");
+        }
+
+        punct!("(");
+        self.emit_list(n.span, Some(&n.params), ListFormat::Parameters)?;
+        punct!(")");
+
+        formatting_space!();
+        punct!("=>");
+        formatting_space!();
+
+        emit!(n.type_ann);
     }
 
     #[emitter]
