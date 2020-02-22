@@ -267,7 +267,7 @@ impl Analyzer<'_, '_> {
                 return Ok(Type::from(TsThisType { span }));
             }
 
-            Expr::Ident(ref i) => self.type_of_ident(i, mode, type_args),
+            Expr::Ident(ref i) => self.type_of_var(i, mode, type_args),
 
             Expr::Array(ArrayLit { ref mut elems, .. }) => {
                 let mut types: Vec<Type> = Vec::with_capacity(elems.len());
@@ -958,7 +958,7 @@ impl Analyzer<'_, '_> {
         );
     }
 
-    pub fn type_of_ident(
+    pub fn type_of_var(
         &mut self,
         i: &Ident,
         type_mode: TypeOfMode,
@@ -1012,47 +1012,6 @@ impl Analyzer<'_, '_> {
             log::debug!("type_of_ident({}): found var with name", i.sym);
             if let Some(v) = &v.ty {
                 return Ok(v.clone());
-            }
-        }
-
-        if let Some(types) = self.find_type(&i.sym) {
-            for ty in types {
-                match ty.normalize() {
-                    Type::Interface(_)
-                    | Type::Class(_)
-                    | Type::ClassInstance(_)
-                    | Type::Enum(_)
-                    | Type::EnumVariant(_)
-                    | Type::This(_)
-                    | Type::Param(_)
-                    | Type::Constructor(_)
-                    | Type::Function(_)
-                    | Type::TypeLit(_)
-                    | Type::Keyword(_)
-                    | Type::Lit(_) => {
-                        return Ok(ty.clone().respan(span));
-                    }
-                    Type::Query(_) => {}
-                    Type::Infer(_) => {}
-                    Type::Import(_) => {}
-                    Type::Predicate(_) => {}
-                    Type::IndexedAccessType(_) => {}
-                    Type::Ref(_) => {}
-
-                    Type::Conditional(_) => {}
-                    Type::Tuple(_) => {}
-                    Type::Array(_) => {}
-                    Type::Union(_) => {}
-                    Type::Intersection(_) => {}
-                    Type::Method(_) => {}
-                    Type::Operator(_) => {}
-                    Type::Mapped(_) => {}
-                    Type::Alias(_) => {}
-                    Type::Namespace(_) => {}
-                    Type::Module(_) => {}
-                    Type::Static(_) => {}
-                    Type::Arc(_) => {}
-                }
             }
         }
 
@@ -1112,7 +1071,54 @@ impl Analyzer<'_, '_> {
         type_args: Option<TypeParamInstantiation>,
     ) -> ValidationResult {
         match *n {
-            TsEntityName::Ident(ref i) => self.type_of_ident(i, TypeOfMode::RValue, type_args),
+            TsEntityName::Ident(ref i) => {
+                if let Some(types) = self.find_type(&i.sym) {
+                    for ty in types {
+                        match ty.normalize() {
+                            Type::Interface(_)
+                            | Type::Class(_)
+                            | Type::ClassInstance(_)
+                            | Type::Enum(_)
+                            | Type::EnumVariant(_)
+                            | Type::This(_)
+                            | Type::Param(_)
+                            | Type::Constructor(_)
+                            | Type::Function(_)
+                            | Type::TypeLit(_)
+                            | Type::Keyword(_)
+                            | Type::Lit(_) => {
+                                return Ok(ty.clone().respan(span));
+                            }
+                            Type::Query(_) => {}
+                            Type::Infer(_) => {}
+                            Type::Import(_) => {}
+                            Type::Predicate(_) => {}
+                            Type::IndexedAccessType(_) => {}
+                            Type::Ref(_) => {}
+
+                            Type::Conditional(_) => {}
+                            Type::Tuple(_) => {}
+                            Type::Array(_) => {}
+                            Type::Union(_) => {}
+                            Type::Intersection(_) => {}
+                            Type::Method(_) => {}
+                            Type::Operator(_) => {}
+                            Type::Mapped(_) => {}
+                            Type::Alias(_) => {}
+                            Type::Namespace(_) => {}
+                            Type::Module(_) => {}
+                            Type::Static(_) => {}
+                            Type::Arc(_) => {}
+                        }
+                    }
+                }
+
+                Ok(Type::Ref(Ref {
+                    span,
+                    type_name: TsEntityName::Ident(i.clone()),
+                    type_args,
+                }))
+            }
             TsEntityName::TsQualifiedName(ref qname) => {
                 let obj_ty = self.type_of_ts_entity_name(span, &qname.left, None)?;
 

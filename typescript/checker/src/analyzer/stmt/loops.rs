@@ -24,7 +24,7 @@ impl Analyzer<'_, '_> {
                 }
                 Pat::Ident(ref mut i) => {
                     // TODO: verify
-                    self.type_of_ident(i, TypeOfMode::LValue, None)?;
+                    self.type_of_var(i, TypeOfMode::LValue, None)?;
                 }
                 _ => {}
             },
