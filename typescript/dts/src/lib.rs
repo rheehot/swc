@@ -383,13 +383,19 @@ impl Fold<Vec<ClassMember>> for TypeResolver {
                         }
                     }
                 }
-                ClassMember::Method(ref m) => match &m.key {
-                    PropName::Computed(e) => match &*e.expr {
-                        Expr::Bin(..) => continue,
+                ClassMember::Method(ref mut m) => {
+                    if let Some(Accessibility::Public) = m.accessibility {
+                        m.accessibility = None;
+                    }
+
+                    match &m.key {
+                        PropName::Computed(e) => match &*e.expr {
+                            Expr::Bin(..) => continue,
+                            _ => {}
+                        },
                         _ => {}
-                    },
-                    _ => {}
-                },
+                    }
+                }
                 _ => {}
             }
 
