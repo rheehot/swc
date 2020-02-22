@@ -5,7 +5,8 @@ use crate::{
     name::Name,
     ty::{
         self, Alias, Array, EnumVariant, IndexSignature, Interface, Intersection,
-        PropertySignature, QueryExpr, QueryType, Ref, Tuple, Type, TypeElement, TypeLit, Union,
+        PropertySignature, QueryExpr, QueryType, Ref, Tuple, Type, TypeElement, TypeLit,
+        TypeParamInstantiation, Union,
     },
     util::TypeEq,
     validator::{Validate, ValidateWith},
@@ -490,14 +491,20 @@ impl Analyzer<'_, '_> {
                 // TODO: Handle type annotation
 
                 if type_ann.is_none() {
-                    *type_ann = Some(
-                        Type::Array(Array {
+                    *type_ann = Some(TsTypeAnn {
+                        span,
+                        type_ann: box TsType::TsTypeRef(TsTypeRef {
                             span,
-                            // TODO: Handle type annotation
-                            elem_type: box Type::any(span),
-                        })
-                        .into(),
-                    );
+                            type_name: TsEntityName::Ident(Ident::new("Iterable".into(), DUMMY_SP)),
+                            type_params: Some(TsTypeParamInstantiation {
+                                span,
+                                params: vec![box TsType::TsKeywordType(TsKeywordType {
+                                    span: DUMMY_SP,
+                                    kind: TsKeywordTypeKind::TsAnyKeyword,
+                                })],
+                            }),
+                        }),
+                    });
                 }
 
                 for elem in elems.iter_mut() {
