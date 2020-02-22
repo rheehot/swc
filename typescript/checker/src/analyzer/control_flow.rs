@@ -344,7 +344,7 @@ impl Analyzer<'_, '_> {
         }
     }
 
-    fn try_assign_pat(&mut self, span: Span, lhs: &Pat, ty: &Type) -> Result<(), Error> {
+    fn try_assign_pat(&mut self, span: Span, lhs: &mut Pat, ty: &Type) -> Result<(), Error> {
         // Update variable's type
         match *lhs {
             Pat::Ident(ref i) => {
@@ -435,10 +435,10 @@ impl Analyzer<'_, '_> {
                 }
             }
 
-            Pat::Array(ref arr) => {
+            Pat::Array(ref mut arr) => {
                 //
-                for (i, elem) in arr.elems.iter().enumerate() {
-                    if let Some(elem) = elem.as_ref() {
+                for (i, elem) in arr.elems.iter_mut().enumerate() {
+                    if let Some(elem) = elem.as_mut() {
                         match *ty {
                             Type::Tuple(Tuple { ref types, .. }) => {
                                 if types.len() > i {
