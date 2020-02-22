@@ -1017,6 +1017,9 @@ impl Analyzer<'_, '_> {
                     | Type::Enum(_)
                     | Type::EnumVariant(_)
                     | Type::This(_)
+                    | Type::Param(_)
+                    | Type::Constructor(_)
+                    | Type::Function(_)
                     | Type::Lit(_) => {
                         return Ok(ty.clone().respan(span));
                     }
@@ -1033,11 +1036,8 @@ impl Analyzer<'_, '_> {
                     Type::Array(_) => {}
                     Type::Union(_) => {}
                     Type::Intersection(_) => {}
-                    Type::Function(_) => {}
-                    Type::Constructor(_) => {}
                     Type::Method(_) => {}
                     Type::Operator(_) => {}
-                    Type::Param(_) => {}
                     Type::Mapped(_) => {}
                     Type::Alias(_) => {}
                     Type::Namespace(_) => {}
