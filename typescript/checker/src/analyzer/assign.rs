@@ -836,9 +836,10 @@ impl Analyzer<'_, '_> {
         }
 
         {
+            let mut unhandled_rhs = vec![];
+
             macro_rules! handle_type_elements {
                 ($rhs:expr) => {{
-                    let mut unhandled_rhs = Vec::with_capacity($rhs.len());
                     for r in $rhs {
                         unhandled_rhs.push(r.span());
                     }
@@ -865,23 +866,6 @@ impl Analyzer<'_, '_> {
                                 .expect("it should be removable");
                         }
                     }
-
-                    if !unhandled_rhs.is_empty() {
-                        // The code below is invalid as c is not defined in type.
-                        //
-                        //      var c { [n: number]: { a: string; b: number; }; } = [{ a:
-                        // '', b: 0, c: '' }];
-
-                        return Err(Error::Errors {
-                            span,
-                            errors: unhandled_rhs
-                                .into_iter()
-                                .map(|span| Error::UnknownPropertyInObjectLiteralAssignment {
-                                    span,
-                                })
-                                .collect(),
-                        });
-                    }
                 }};
             }
 
@@ -899,6 +883,21 @@ impl Analyzer<'_, '_> {
                 }
 
                 _ => {}
+            }
+
+            if !unhandled_rhs.is_empty() {
+                // The code below is invalid as c is not defined in type.
+                //
+                //      var c { [n: number]: { a: string; b: number; }; } = [{ a:
+                // '', b: 0, c: '' }];
+
+                return Err(Error::Errors {
+                    span,
+                    errors: unhandled_rhs
+                        .into_iter()
+                        .map(|span| Error::UnknownPropertyInObjectLiteralAssignment { span })
+                        .collect(),
+                });
             }
         }
 
