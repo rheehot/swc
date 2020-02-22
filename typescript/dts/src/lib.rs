@@ -156,7 +156,9 @@ impl Fold<VarDeclarator> for TypeResolver {
 }
 
 impl Fold<FnDecl> for TypeResolver {
-    fn fold(&mut self, node: FnDecl) -> FnDecl {
+    fn fold(&mut self, mut node: FnDecl) -> FnDecl {
+        node.declare = !self.in_declare;
+
         let node: FnDecl = node.fold_children(self);
 
         if node.function.return_type.is_some() {
@@ -171,7 +173,6 @@ impl Fold<FnDecl> for TypeResolver {
         });
 
         FnDecl {
-            declare: true,
             function: Function {
                 return_type,
                 ..node.function
