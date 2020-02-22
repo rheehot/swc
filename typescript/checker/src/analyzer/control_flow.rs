@@ -439,8 +439,12 @@ impl Analyzer<'_, '_> {
                 //
                 for (i, elem) in arr.elems.iter_mut().enumerate() {
                     if let Some(elem) = elem.as_mut() {
-                        match *ty.normalize() {
-                            Type::Tuple(Tuple { ref types, .. }) => {
+                        match ty.normalize() {
+                            ty if ty.is_any() => {
+                                self.try_assign_pat(span, elem, ty)?;
+                            }
+
+                            Type::Tuple(Tuple { types, .. }) => {
                                 if types.len() > i {
                                     self.try_assign_pat(span, elem, &types[i])?;
                                 }
