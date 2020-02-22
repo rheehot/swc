@@ -106,7 +106,12 @@ impl Fold<Function> for TypeResolver {
 
 impl Fold<VarDecl> for TypeResolver {
     fn fold(&mut self, node: VarDecl) -> VarDecl {
-        let node = node.fold_children(self);
+        let mut node = node.fold_children(self);
+
+        node.decls.retain(|v| match v.name {
+            Pat::Invalid(..) => false,
+            _ => true,
+        });
 
         VarDecl {
             declare: true,
@@ -117,6 +122,19 @@ impl Fold<VarDecl> for TypeResolver {
 
 impl Fold<VarDeclarator> for TypeResolver {
     fn fold(&mut self, mut node: VarDeclarator) -> VarDeclarator {
+        if match &node.name {
+            Pat::Array(arr) => arr.elems.is_empty(),
+            Pat::Object(obj) => obj.props.is_empty(),
+            _ => false,
+        } {
+            return VarDeclarator {
+                span: DUMMY_SP,
+                name: Pat::Invalid(Invalid { span: DUMMY_SP }),
+                init: None,
+                definite: false,
+            };
+        }
+
         match node.init {
             Some(box Expr::Lit(Lit::Null(..)))
             | Some(box Expr::Lit(Lit::Str(..)))
@@ -405,6 +423,18 @@ impl Fold<Vec<ClassMember>> for TypeResolver {
         props.extend(buf);
 
         props
+    }
+}
+
+impl Fold<Stmt> for TypeResolver {
+    fn fold(&mut self, v: Stmt) -> Stmt {
+        let v = v.fold_children(self);
+        match v {
+            Stmt::Decl(Decl::Var(ref var)) if var.decls.is_empty() => {
+                Stmt::Empty(EmptyStmt { span: DUMMY_SP })
+            }
+            _ => v,
+        }
     }
 }
 
