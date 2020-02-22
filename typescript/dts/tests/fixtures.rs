@@ -331,10 +331,7 @@ fn get_correct_dts(path: &Path) -> (Arc<String>, Module) {
             None,
         );
 
-        let m = p
-            .parse_typescript_module()
-            .map_err(|mut e| e.emit())
-            .expect("failed to parse generated .d.ts file");
+        let m = p.parse_typescript_module().map_err(|mut e| e.emit())?;
         Ok((fm.src.clone(), m))
     })
     .unwrap()
