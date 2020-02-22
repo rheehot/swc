@@ -640,7 +640,9 @@ impl<'a> Emitter<'a> {
     fn emit_ts_tuple_type(&mut self, n: &TsTupleType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_tuple_type")
+        punct!("[");
+        self.emit_list(n.span, Some(&n.elem_types), ListFormat::TupleTypeElements)?;
+        punct!("]");
     }
 
     #[emitter]
