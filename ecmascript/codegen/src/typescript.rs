@@ -1,5 +1,5 @@
 use super::{Emitter, Result};
-use crate::list::ListFormat;
+use crate::{list::ListFormat, text_writer::WriteJs};
 use swc_common::Spanned;
 use swc_ecma_ast::*;
 use swc_ecma_codegen_macros::emitter;
@@ -238,7 +238,7 @@ impl<'a> Emitter<'a> {
     fn emit_ts_index_accessed_type(&mut self, n: &TsIndexedAccessType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_index_accessed_type")
+        keyword!("<ts_index_accessed_type>")
     }
 
     #[emitter]
