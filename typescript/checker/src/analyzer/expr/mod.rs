@@ -1020,6 +1020,8 @@ impl Analyzer<'_, '_> {
                     | Type::Param(_)
                     | Type::Constructor(_)
                     | Type::Function(_)
+                    | Type::TypeLit(_)
+                    | Type::Keyword(_)
                     | Type::Lit(_) => {
                         return Ok(ty.clone().respan(span));
                     }
@@ -1029,8 +1031,7 @@ impl Analyzer<'_, '_> {
                     Type::Predicate(_) => {}
                     Type::IndexedAccessType(_) => {}
                     Type::Ref(_) => {}
-                    Type::TypeLit(_) => {}
-                    Type::Keyword(_) => {}
+
                     Type::Conditional(_) => {}
                     Type::Tuple(_) => {}
                     Type::Array(_) => {}
