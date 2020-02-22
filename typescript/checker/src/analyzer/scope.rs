@@ -569,6 +569,12 @@ impl Analyzer<'_, '_> {
             initialized: true,
             copied: false,
         };
+        static ANY_VAR: VarInfo = VarInfo {
+            ty: Some(Type::any(DUMMY_SP)),
+            kind: VarDeclKind::Const,
+            initialized: true,
+            copied: false,
+        };
 
         if self.errored_imports.get(name).is_some() {
             return Some(&ERR_VAR);
@@ -579,6 +585,11 @@ impl Analyzer<'_, '_> {
         while let Some(s) = scope {
             if let Some(var) = s.vars.get(name) {
                 return Some(var);
+            }
+            if let Some(ref cls) = s.this_class_name {
+                if cls == name {
+                    return Some(&ANY_VAR);
+                }
             }
 
             scope = s.parent;
