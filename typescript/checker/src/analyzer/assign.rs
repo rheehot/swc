@@ -738,11 +738,9 @@ impl Analyzer<'_, '_> {
             return Ok(());
         }
 
-        // Some(Error::Unimplemented {
-        //     span,
-        //     msg: format!("Not implemented yet"),
-        // })
-        unimplemented!("assign: \nLeft: {:?}\nRight: {:?}", to, rhs)
+        // TODO: Implement full type checker
+        //  unimplemented!("assign: \nLeft: {:?}\nRight: {:?}", to, rhs)
+        Ok(())
     }
 
     fn assign_class(&self, span: Span, l: &Class, r: &Class) -> ValidationResult<()> {
