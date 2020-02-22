@@ -154,12 +154,6 @@ fn add_fixture_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
         .build()
     {
         let entry = entry.context("entry?")?;
-        match entry.path().file_stem() {
-            Some(ext) if ext.to_string_lossy() == "index" => {}
-            _ => {
-                continue;
-            }
-        }
 
         if entry.file_name().to_string_lossy().ends_with(".d.ts") {
             continue;
