@@ -61,8 +61,10 @@ impl Validate<Pat> for Analyzer<'_, '_> {
 
         let ty = ty.unwrap_or_else(|| Type::any(p.span()));
 
-        if p.get_ty().is_none() {
-            p.set_ty(Some(box ty.clone().into()));
+        if self.scope.is_root() {
+            if p.get_ty().is_none() {
+                p.set_ty(Some(box ty.clone().into()));
+            }
         }
 
         Ok(ty::FnParam {
