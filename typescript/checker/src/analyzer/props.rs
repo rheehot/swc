@@ -14,6 +14,7 @@ use swc_common::{Spanned, VisitWith};
 use swc_common::{Spanned, VisitMutWith, VisitWith};
 use swc_common::{Spanned, VisitMutWith, VisitWithk};
 use swc_common::{Spanned, VisitMut, VisitMutWith, VisitWith};
+use swc_common::{Spanned, Visit, VisitMut, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 
 #[derive(Debug, Clone, Copy)]
@@ -80,6 +81,8 @@ impl Validate<ComputedPropName> for Analyzer<'_, '_> {
 
         match mode {
             ComputedPropMode::Class { .. } | ComputedPropMode::Interface => {
+                let is_valid_key = is_valid_computed_key(&node.expr);
+
                 let ty = self
                     .expand(node.span, ty.clone())
                     .store(&mut self.info.errors);
@@ -87,6 +90,7 @@ impl Validate<ComputedPropName> for Analyzer<'_, '_> {
                 if let Some(ref ty) = ty {
                     // TODO: Add support for expressions like '' + ''.
                     match *ty {
+                        _ if is_valid_key => {}
                         Type::Lit(..) => {}
                         Type::EnumVariant(..) => {}
                         _ if ty.is_kwd(TsKeywordTypeKind::TsSymbolKeyword)
@@ -345,5 +349,22 @@ pub(super) fn prop_name_to_expr(key: &PropName) -> Box<Expr> {
         PropName::Ident(ref ident) => box Expr::Ident(ident.clone()),
         PropName::Str(ref s) => box Expr::Lit(Lit::Str(Str { ..s.clone() })),
         PropName::Num(ref s) => box Expr::Lit(Lit::Num(Number { ..s.clone() })),
+    }
+}
+
+fn is_valid_computed_key(key: &Expr) -> bool {
+    let mut v = ValidKeyChecker { valid: true };
+    key.visit_with(&mut v);
+    v.valid
+}
+
+#[derive(Debug)]
+struct ValidKeyChecker {
+    valid: bool,
+}
+
+impl Visit<Ident> for ValidKeyChecker {
+    fn visit(&mut self, _: &Ident) {
+        self.valid = false;
     }
 }
