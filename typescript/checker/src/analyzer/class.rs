@@ -185,21 +185,25 @@ impl Validate<TsFnParam> for Analyzer<'_, '_> {
         Ok(match p {
             TsFnParam::Ident(i) => ty::FnParam {
                 span,
+                pat: Pat::Ident(i.clone()),
                 required: !i.optional,
                 ty: ty!(i.type_ann),
             },
             TsFnParam::Array(p) => FnParam {
                 span,
+                pat: Pat::Array(p.clone()),
                 required: true,
                 ty: ty!(p.type_ann),
             },
             TsFnParam::Rest(p) => FnParam {
                 span,
+                pat: Pat::Rest(p.clone()),
                 required: false,
                 ty: ty!(p.type_ann),
             },
             TsFnParam::Object(p) => FnParam {
                 span,
+                pat: Pat::Object(p.clone()),
                 required: true,
                 ty: ty!(p.type_ann),
             },

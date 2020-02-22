@@ -439,7 +439,13 @@ impl From<ty::TypeElement> for TsTypeElement {
 
 impl From<ty::FnParam> for TsFnParam {
     fn from(t: FnParam) -> Self {
-        unimplemented!("From<ty::FnParam> for TsFnParam")
+        match t.pat {
+            Pat::Ident(i) => TsFnParam::Ident(i),
+            Pat::Array(a) => TsFnParam::Array(a),
+            Pat::Rest(r) => TsFnParam::Rest(r),
+            Pat::Object(o) => TsFnParam::Object(o),
+            _ => unimplemented!("From<ty::FnParam> for TsFnParam"),
+        }
     }
 }
 

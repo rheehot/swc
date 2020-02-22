@@ -367,6 +367,7 @@ pub struct Union {
 pub struct FnParam {
     pub span: Span,
     pub required: bool,
+    pub pat: Pat,
     pub ty: Type,
 }
 
