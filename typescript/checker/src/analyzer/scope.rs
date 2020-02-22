@@ -714,9 +714,14 @@ impl Analyzer<'_, '_> {
                                         if res.is_err() {
                                             v.ty = Some(var_ty);
                                             restore!();
-                                            return Err(Error::RedeclaredVarWithDifferentType {
-                                                span,
-                                            });
+                                            return Ok(());
+
+                                            // TODO:
+                                            //  return Err(Error::
+                                            //      RedeclaredVarWithDifferentType {
+                                            //          span,
+                                            //      }
+                                            //  );
                                         }
                                     }
                                 }
