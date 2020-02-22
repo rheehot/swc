@@ -192,6 +192,8 @@ pub struct Method {
     pub span: Span,
     pub key: PropName,
     pub is_static: bool,
+    pub is_abstract: bool,
+    pub is_optional: bool,
     pub type_params: Option<TypeParamDecl>,
     pub params: Vec<FnParam>,
     pub ret_ty: Box<Type>,

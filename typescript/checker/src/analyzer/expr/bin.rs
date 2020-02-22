@@ -225,7 +225,7 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
             op!("instanceof") => {
                 if match lt.normalize() {
                     ty if ty.is_any() || ty.is_kwd(TsKeywordTypeKind::TsObjectKeyword) => false,
-                    Type::Param(..) | Type::Ref(..) => false,
+                    Type::This(..) | Type::Param(..) | Type::Ref(..) => false,
                     _ => true,
                 } {
                     self.info.errors.push(Error::InvalidLhsInInstanceOf {

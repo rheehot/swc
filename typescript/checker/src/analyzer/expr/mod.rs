@@ -1098,18 +1098,11 @@ impl Analyzer<'_, '_> {
             )?);
         }
 
-        if self.is_builtin {
-            Ok(Type::Ref(Ref {
-                span,
-                type_name: TsEntityName::Ident(i.clone()),
-                type_args: None,
-            }))
-        } else {
-            Err(Error::UndefinedSymbol {
-                span,
-                sym: i.sym.clone(),
-            })
-        }
+        Ok(Type::Ref(Ref {
+            span,
+            type_name: TsEntityName::Ident(i.clone()),
+            type_args: None,
+        }))
     }
 
     pub fn type_of_ts_entity_name(

@@ -320,6 +320,8 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
             span: c_span,
             key: c.key.clone(),
             is_static: c.is_static,
+            is_abstract: c.is_abstract,
+            is_optional: c.is_optional,
             type_params,
             params,
             ret_ty: box ret_ty,
@@ -535,6 +537,13 @@ impl Analyzer<'_, '_> {
                         'outer: for sm in &sc.body {
                             match sm {
                                 ty::ClassMember::Method(sm) => {
+                                    if sm.is_optional || !sm.is_abstract {
+                                        // TODO: Validate parameters
+
+                                        // TODO: Validate return type
+                                        continue 'outer;
+                                    }
+
                                     for m in &class.body {
                                         match m {
                                             ty::ClassMember::Method(ref m) => {
