@@ -6,10 +6,10 @@ use super::{
     Analyzer,
 };
 use crate::{
-    analyzer::util::ResultExt,
+    analyzer::util::{is_prop_name_eq, ResultExt},
     errors::Error,
     name::Name,
-    ty::{Tuple, Type},
+    ty::{Tuple, Type, TypeElement, TypeLit},
     util::EndsWithRet,
     validator::{Validate, ValidateWith},
     ValidationResult,
@@ -439,7 +439,7 @@ impl Analyzer<'_, '_> {
                 //
                 for (i, elem) in arr.elems.iter_mut().enumerate() {
                     if let Some(elem) = elem.as_mut() {
-                        match *ty {
+                        match *ty.normalize() {
                             Type::Tuple(Tuple { ref types, .. }) => {
                                 if types.len() > i {
                                     self.try_assign_pat(span, elem, &types[i])?;
@@ -454,6 +454,79 @@ impl Analyzer<'_, '_> {
                         }
                     }
                 }
+                return Ok(());
+            }
+
+            Pat::Object(ref mut obj) => {
+                //
+                for prop in obj.props.iter_mut() {
+                    match ty.normalize() {
+                        ty if ty.is_any() => {
+                            self.try_assign_pat(
+                                span,
+                                match prop {
+                                    ObjectPatProp::KeyValue(kv) => &mut kv.value,
+                                    ObjectPatProp::Assign(a) => {
+                                        if a.key.type_ann.is_none() {
+                                            a.key.type_ann = Some(TsTypeAnn {
+                                                span,
+                                                type_ann: box TsType::TsKeywordType(
+                                                    TsKeywordType {
+                                                        span,
+                                                        kind: TsKeywordTypeKind::TsAnyKeyword,
+                                                    },
+                                                ),
+                                            })
+                                        }
+                                        continue;
+                                    }
+                                    ObjectPatProp::Rest(r) => {
+                                        if r.type_ann.is_none() {
+                                            r.type_ann = Some(TsTypeAnn {
+                                                span,
+                                                type_ann: box TsType::TsKeywordType(
+                                                    TsKeywordType {
+                                                        span,
+                                                        kind: TsKeywordTypeKind::TsAnyKeyword,
+                                                    },
+                                                ),
+                                            })
+                                        }
+                                        continue;
+                                    }
+                                },
+                                &Type::any(ty.span()),
+                            )?;
+                        }
+
+                        Type::Ref(..) => {}
+
+                        Type::TypeLit(TypeLit { span, ref members }) => {
+                            // Iterate over members, and assign if key matches.
+                            for member in members {
+                                match member {
+                                    TypeElement::Call(_) => unimplemented!(),
+                                    TypeElement::Constructor(_) => unimplemented!(),
+                                    TypeElement::Property(p) => match prop {
+                                        ObjectPatProp::KeyValue(prop) => {
+                                            //
+                                        }
+                                        ObjectPatProp::Assign(_) => {}
+                                        ObjectPatProp::Rest(_) => {}
+                                    },
+                                    TypeElement::Method(_) => unimplemented!(),
+                                    TypeElement::Index(_) => unimplemented!(),
+                                }
+                            }
+                        }
+                        _ => unimplemented!(
+                            "assignment with object pattern\nPat: {:?}\nType: {:?}",
+                            lhs,
+                            ty
+                        ),
+                    }
+                }
+
                 return Ok(());
             }
 
