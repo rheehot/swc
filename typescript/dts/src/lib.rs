@@ -382,6 +382,13 @@ impl Fold<Vec<ClassMember>> for TypeResolver {
                         }
                     }
                 }
+                ClassMember::Method(ref m) => match &m.key {
+                    PropName::Computed(e) => match &*e.expr {
+                        Expr::Bin(..) => continue,
+                        _ => {}
+                    },
+                    _ => {}
+                },
                 _ => {}
             }
 
