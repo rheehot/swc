@@ -40,7 +40,25 @@ impl<'a> Emitter<'a> {
     fn emit_ts_cond_type(&mut self, n: &TsConditionalType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_cond_type")
+        emit!(n.check_type);
+        space!();
+
+        keyword!("extends");
+        space!();
+
+        emit!(n.extends_type);
+        space!();
+        punct!("?");
+
+        space!();
+        emit!(n.true_type);
+        space!();
+
+        punct!(":");
+
+        space!();
+        emit!(n.false_type);
+        space!();
     }
 
     #[emitter]
