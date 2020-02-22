@@ -623,14 +623,17 @@ impl<'a> Emitter<'a> {
     fn emit_ts_this_type(&mut self, n: &TsThisType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_this_type")
+        keyword!(n.span, "this");
     }
 
     #[emitter]
     fn emit_ts_this_type_or_ident(&mut self, n: &TsThisTypeOrIdent) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_this_type_or_ident")
+        match n {
+            TsThisTypeOrIdent::TsThisType(n) => emit!(n),
+            TsThisTypeOrIdent::Ident(n) => emit!(n),
+        }
     }
 
     #[emitter]
@@ -822,7 +825,19 @@ impl<'a> Emitter<'a> {
     fn emit_ts_type_predicate(&mut self, n: &TsTypePredicate) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_type_predicate")
+        if n.asserts {
+            keyword!("asserts");
+            space!();
+        }
+
+        emit!(n.param_name);
+
+        if let Some(type_ann) = &n.type_ann {
+            space!();
+            keyword!("is");
+            space!();
+            emit!(type_ann);
+        }
     }
 
     #[emitter]
