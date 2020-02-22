@@ -368,7 +368,7 @@ impl PatExt for Pat {
                 })
             }
 
-            _ => unreachable!("Cannot set type annotations for {:?}", self),
+            _ => {}
         }
     }
 }
