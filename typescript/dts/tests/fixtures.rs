@@ -191,7 +191,9 @@ fn add_fixture_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
         };
 
         let test_name = file_name.replace("/", "::");
-        let ignore = false;
+        let ignore = env::var("TEST")
+            .map(|s| !file_name.replace("/", "::").contains(&s))
+            .unwrap_or(false);
 
         let name = format!("fixture::{}", test_name);
 
