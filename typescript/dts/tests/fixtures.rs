@@ -112,6 +112,7 @@ fn add_conformance_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
 
         let test_name = format!("conformance::{}", file_name.replace("/", "::"));
         let ignore = file_name.contains("ambientAccessors.ts")
+            || file_name.contains("declarationEmitWorkWithInlineComments.ts")
             || env::var("TEST")
                 .map(|s| !file_name.replace("/", "::").contains(&s))
                 .unwrap_or(false);
