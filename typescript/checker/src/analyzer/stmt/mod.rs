@@ -42,6 +42,8 @@ impl Validate<BlockStmt> for Analyzer<'_, '_> {
 
 impl Analyzer<'_, '_> {
     pub fn visit_stmts_for_return(&mut self, stmts: &mut [Stmt]) -> Result<Option<Type>, Error> {
+        log::debug!("visit_stmts_for_return()");
+
         let types = {
             let mut v = ReturnTypeCollector {
                 analyzer: &mut *self,
@@ -52,6 +54,8 @@ impl Analyzer<'_, '_> {
 
             v.types
         };
+
+        log::debug!("visit_stmts_for_return: types.len() = {}", types.len());
 
         let mut buf = Vec::with_capacity(types.len());
         for ty in types {
@@ -81,7 +85,7 @@ impl Analyzer<'_, '_> {
 
 struct ReturnTypeCollector<'a, A>
 where
-    A: Visit<Stmt> + Validate<Expr, Output = ValidationResult>,
+    A: VisitMut<Stmt> + Validate<Expr, Output = ValidationResult>,
 {
     pub analyzer: &'a mut A,
     pub types: Vec<Result<Type, Error>>,
@@ -98,14 +102,29 @@ where
     }
 }
 
+impl<A> VisitMut<Stmt> for ReturnTypeCollector<'_, A>
+where
+    A: VisitMut<Stmt> + Validate<Expr, Output = ValidationResult>,
+{
+    fn visit_mut(&mut self, s: &mut Stmt) {
+        self.analyzer.visit_mut(s);
+        match s {
+            Stmt::Return(..) => {
+                s.visit_mut_children(self);
+            }
+            _ => {}
+        }
+    }
+}
+
 macro_rules! noop {
     ($T:ty) => {
-        impl<A> Visit<$T> for ReturnTypeCollector<'_, A>
+        impl<A> VisitMut<$T> for ReturnTypeCollector<'_, A>
         where
-            A: Visit<Stmt> + Validate<Expr, Output = ValidationResult>,
+            A: VisitMut<Stmt> + Validate<Expr, Output = ValidationResult>,
         {
             #[inline]
-            fn visit(&mut self, _: &$T) {}
+            fn visit_mut(&mut self, _: &mut $T) {}
         }
     };
 }
