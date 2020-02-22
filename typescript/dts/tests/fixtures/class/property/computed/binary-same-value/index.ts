@@ -1,5 +1,5 @@
 class C {
-    get [1 + 2]() {
+    get [0.1 + 0.2]() {
         return ""
     }
 
