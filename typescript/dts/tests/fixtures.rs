@@ -17,7 +17,7 @@ use std::{
     process::Command,
     sync::Arc,
 };
-use swc_common::FoldWith;
+use swc_common::{FileName, FoldWith};
 use swc_ecma_ast::Module;
 use swc_ecma_codegen::{text_writer::JsWriter, Emitter};
 use swc_ecma_parser::{JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig};
@@ -311,7 +311,14 @@ fn get_correct_dts(path: &Path) -> (Arc<String>, Module) {
             }
         }
 
-        let fm = cm.load_file(&dts_file).unwrap();
+        let content = {
+            let mut buf = String::new();
+            let mut f = File::open(&dts_file).expect("failed to open generated .d.ts file");
+            f.read_to_string(&mut buf).unwrap();
+            buf.replace("export {};", "")
+        };
+
+        let fm = cm.new_source_file(FileName::Real(dts_file), content);
 
         let mut p = Parser::new(
             Session { handler: &handler },
