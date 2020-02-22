@@ -755,6 +755,7 @@ impl<'a> Emitter<'a> {
             TsTypeElement::TsMethodSignature(n) => emit!(n),
             TsTypeElement::TsIndexSignature(n) => emit!(n),
         }
+        semi!();
     }
 
     #[emitter]
