@@ -68,6 +68,8 @@ pub(crate) struct Ctx {
 pub struct Analyzer<'a, 'b> {
     pub info: Info,
 
+    phase: Phase,
+
     path: Arc<PathBuf>,
     export_equals_span: Span,
     in_declare: bool,
@@ -90,6 +92,12 @@ pub struct Analyzer<'a, 'b> {
     duplicated_tracker: DuplicateTracker,
 
     facts_buf: Option<Facts>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) enum Phase {
+    Shallow,
+    Full,
 }
 
 /// TODO
@@ -204,6 +212,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
     ) -> Self {
         Self {
             info: Default::default(),
+            phase: Phase::Shallow,
             path,
             export_equals_span: DUMMY_SP,
             // builtin types are declared
