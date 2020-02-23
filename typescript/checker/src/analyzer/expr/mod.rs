@@ -738,9 +738,43 @@ impl Analyzer<'_, '_> {
                             }
                         }
 
-                        _ => {}
+                        ty::ClassMember::Constructor(ref cons) => match prop {
+                            Expr::Ident(ref i) if i.sym == *"constructor" => {
+                                return Ok(Type::Constructor(ty::Constructor {
+                                    span,
+                                    type_params: cons.type_params.clone(),
+                                    params: cons.params.clone(),
+                                    type_ann: box cons
+                                        .ret_ty
+                                        .clone()
+                                        .unwrap_or_else(|| obj.clone()),
+                                }))
+                            }
+                            _ => {}
+                        },
+
+                        ref member => unimplemented!(
+                            "propert access to class member: {:?}\nprop: {:?}",
+                            member,
+                            prop
+                        ),
                     }
                 }
+
+                // check for super class
+                if let Some(super_ty) = &c.super_class {
+                    if let Ok(v) =
+                        self.access_property(span, *super_ty.clone(), prop, computed, type_mode)
+                    {
+                        return Ok(v);
+                    }
+                }
+
+                unimplemented!(
+                    "error reporting for unresolved property access to a class: \n{:?}\n{:?}",
+                    c,
+                    prop
+                )
             }
 
             Type::Keyword(TsKeywordType {
