@@ -48,7 +48,7 @@ mod expr;
 mod finalizer;
 mod function;
 mod generic;
-mod hosting;
+mod hoisting;
 mod import;
 mod pat;
 mod props;
