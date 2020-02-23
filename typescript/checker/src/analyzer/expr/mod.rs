@@ -368,7 +368,23 @@ impl Analyzer<'_, '_> {
                 for prop in props.iter_mut() {
                     match *prop {
                         PropOrSpread::Prop(ref mut prop) => {
-                            members.push(prop.validate_with(self)?);
+                            let p: TypeElement = prop.validate_with(self)?;
+
+                            if let Some(key) = p.key() {
+                                if members.iter_mut().any(|v| match v {
+                                    ty::TypeElement::Property(prop)
+                                        if (*prop.key).eq_ignore_span(key) =>
+                                    {
+                                        prop.readonly = false;
+                                        true
+                                    }
+                                    _ => false,
+                                }) {
+                                    continue;
+                                }
+                            }
+
+                            members.push(p);
                         }
                         PropOrSpread::Spread(SpreadElement { ref mut expr, .. }) => {
                             match self.validate(expr)? {
