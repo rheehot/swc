@@ -6,7 +6,7 @@ use crate::{
     ty,
     ty::{
         Array, ClassInstance, EnumVariant, IndexSignature, Interface, Intersection, Ref, Tuple,
-        Type, TypeElement, TypeLit, TypeParamInstantiation, Union,
+        Type, TypeElement, TypeLit, TypeParam, TypeParamInstantiation, Union,
     },
     util::{EqIgnoreSpan, RemoveTypes, TypeEq},
     validator::{Validate, ValidateWith},
@@ -776,6 +776,22 @@ impl Analyzer<'_, '_> {
                     prop
                 )
             }
+
+            Type::Param(TypeParam {
+                span: p_span, name, ..
+            }) => match prop {
+                Expr::Ident(ref i) => {
+                    return Ok(Type::Ref(Ref {
+                        span,
+                        type_name: TsEntityName::TsQualifiedName(box TsQualifiedName {
+                            left: TsEntityName::Ident(Ident::new(name.clone(), *p_span)),
+                            right: i.clone(),
+                        }),
+                        type_args: None,
+                    }));
+                }
+                _ => {}
+            },
 
             Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsAnyKeyword,
