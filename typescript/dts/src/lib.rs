@@ -459,14 +459,14 @@ impl Fold<Vec<ModuleItem>> for TypeResolver {
         });
 
         if self.top_level && self.forced_module && !self.prevent_empty_export {
-            items.push(ModuleItem::ModuleDecl(ModuleDecl::ExportNamed(
-                NamedExport {
-                    span: DUMMY_SP,
-                    specifiers: vec![],
-                    src: None,
-                    type_only: false,
-                },
-            )));
+            // items.push(ModuleItem::ModuleDecl(ModuleDecl::ExportNamed(
+            //     NamedExport {
+            //         span: DUMMY_SP,
+            //         specifiers: vec![],
+            //         src: None,
+            //         type_only: false,
+            //     },
+            // )));
         }
 
         items
