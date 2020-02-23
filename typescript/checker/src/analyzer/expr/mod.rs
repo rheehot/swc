@@ -733,11 +733,12 @@ impl Analyzer<'_, '_> {
                         }
                         ty::ClassMember::Method(ref mtd) => {
                             let mtd_key = prop_name_to_expr(&mtd.key);
-                            if (*mtd_key).eq_ignore_span(&mtd_key) {
+                            if (*mtd_key).eq_ignore_span(prop) {
                                 return Ok(Type::Method(mtd.clone()));
                             }
                         }
-                        ref member => unimplemented!("Non-property class member: {:?}", member),
+
+                        _ => {}
                     }
                 }
             }
