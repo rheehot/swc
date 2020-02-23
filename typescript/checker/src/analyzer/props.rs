@@ -175,12 +175,19 @@ impl Validate<Prop> for Analyzer<'_, '_> {
             computed_prop_mode: ComputedPropMode::Object,
             ..self.ctx
         };
-        self.with_ctx(ctx).validate_prop(prop)
+
+        let old_this = self.scope.this.take();
+        let res = self.with_ctx(ctx).validate_prop(prop);
+        self.scope.this = old_this;
+
+        res
     }
 }
 
 impl Analyzer<'_, '_> {
     fn validate_prop(&mut self, prop: &mut Prop) -> ValidationResult<TypeElement> {
+        self.scope.this = Some(js_word!(""));
+
         let span = prop.span();
         // TODO: Validate prop key
         let key = prop_key_to_expr(&prop);

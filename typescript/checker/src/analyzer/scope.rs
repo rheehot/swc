@@ -117,6 +117,10 @@ impl Scope<'_> {
 
     pub fn this(&self) -> Option<Cow<Type>> {
         if let Some(ref this) = self.this {
+            if *this == js_word!("") {
+                return Some(Cow::Owned(Type::any(DUMMY_SP)));
+            }
+
             return Some(Cow::Owned(Type::Ref(Ref {
                 span: DUMMY_SP,
                 type_name: TsEntityName::Ident(Ident::new(this.clone().into(), DUMMY_SP)),
