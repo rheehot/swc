@@ -848,7 +848,17 @@ impl<'a> Emitter<'a> {
     fn emit_ts_type_query(&mut self, n: &TsTypeQuery) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_type_query")
+        keyword!("typeof");
+        space!();
+        emit!(n.expr_name);
+    }
+
+    #[emitter]
+    fn emit_ts_type_query_expr(&mut self, n: &TsTypeQueryExpr) -> Result {
+        match n {
+            TsTypeQueryExpr::TsEntityName(n) => emit!(n),
+            TsTypeQueryExpr::Import(n) => emit!(n),
+        }
     }
 
     #[emitter]
