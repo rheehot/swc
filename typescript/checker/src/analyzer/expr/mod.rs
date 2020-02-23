@@ -5,8 +5,8 @@ use crate::{
     errors::Error,
     ty,
     ty::{
-        Array, ClassInstance, EnumVariant, IndexSignature, Interface, Ref, Tuple, Type,
-        TypeElement, TypeLit, TypeParamInstantiation, Union,
+        Array, ClassInstance, EnumVariant, IndexSignature, Interface, Intersection, Ref, Tuple,
+        Type, TypeElement, TypeLit, TypeParamInstantiation, Union,
     },
     util::{EqIgnoreSpan, RemoveTypes, TypeEq},
     validator::{Validate, ValidateWith},
@@ -737,7 +737,7 @@ impl Analyzer<'_, '_> {
                                 return Ok(Type::Method(mtd.clone()));
                             }
                         }
-                        _ => unimplemented!("Non-property class member"),
+                        ref member => unimplemented!("Non-property class member: {:?}", member),
                     }
                 }
             }
@@ -961,6 +961,16 @@ impl Analyzer<'_, '_> {
             Type::This(..) => {
                 if let Some(this) = self.scope.this().map(|this| this.into_owned()) {
                     return self.access_property(span, this, prop, computed, type_mode);
+                }
+            }
+
+            Type::Intersection(Intersection { ref types, .. }) => {
+                // TODO: Verify if multiple type has field
+                for ty in types {
+                    if let Ok(v) = self.access_property(span, ty.clone(), prop, computed, type_mode)
+                    {
+                        return Ok(v);
+                    }
                 }
             }
 
