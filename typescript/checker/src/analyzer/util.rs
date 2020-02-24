@@ -5,8 +5,10 @@ use swc_atoms::JsWord;
 use swc_common::{Fold, Visit};
 use swc_ecma_ast::*;
 
-#[derive(Debug, Copy, Clone)]
-pub(super) struct Generalizer;
+#[derive(Debug, Default)]
+pub(super) struct Generalizer {
+    force: bool,
+}
 
 impl Fold<ty::Function> for Generalizer {
     #[inline(always)]
@@ -17,7 +19,22 @@ impl Fold<ty::Function> for Generalizer {
 
 impl Fold<Type> for Generalizer {
     fn fold(&mut self, mut node: Type) -> Type {
+        if !self.force {
+            match node {
+                Type::Lit(..) => return node,
+                _ => {}
+            }
+        }
+
+        let force = match node {
+            Type::TypeLit(..) => true,
+            _ => false,
+        };
+
+        let old = self.force;
+        self.force = force;
         node = node.fold_children(self);
+        self.force = old;
 
         node.generalize_lit().into_owned()
     }

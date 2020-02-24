@@ -104,7 +104,7 @@ impl Validate<VarDecl> for Analyzer<'_, '_> {
                                 let ty = a.expand(span, ty)?;
                                 match a.assign(&ty, &value_ty, v_span) {
                                     Ok(()) => {
-                                        let ty = ty.fold_with(&mut Generalizer);
+                                        let ty = ty.fold_with(&mut Generalizer::default());
                                         match a.declare_complex_vars(kind, &v.name, ty) {
                                             Ok(()) => {}
                                             Err(err) => {
@@ -139,7 +139,7 @@ impl Validate<VarDecl> for Analyzer<'_, '_> {
                                     value_ty
                                 })();
 
-                                let mut ty = ty.fold_with(&mut Generalizer);
+                                let mut ty = ty.fold_with(&mut Generalizer::default());
                                 if a.scope.is_root() {
                                     if let Some(box Expr::Ident(ref alias)) = &v.init {
                                         if let Pat::Ident(ref mut i) = v.name {
