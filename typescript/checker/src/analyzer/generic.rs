@@ -2,7 +2,7 @@ use super::Analyzer;
 use crate::{
     ty::{
         self, Conditional, FnParam, Mapped, Ref, Tuple, Type, TypeOrSpread, TypeParam,
-        TypeParamDecl, TypeParamInstantiation,
+        TypeParamDecl, TypeParamInstantiation, Union,
     },
     ValidationResult,
 };
@@ -219,6 +219,22 @@ pub(super) struct GenericExpander<'a> {
 
 impl Fold<Type> for GenericExpander<'_> {
     fn fold(&mut self, ty: Type) -> Type {
+        fn handle_lit(ty: &Type) -> Type {
+            log::debug!("Expander: handle_lit {:?}", ty);
+
+            match ty.normalize() {
+                Type::Param(ty)
+                    if ty.constraint.is_some() && is_literals(&ty.constraint.as_ref().unwrap()) =>
+                {
+                    return *ty.constraint.clone().unwrap();
+                }
+                _ => {}
+            }
+
+            ty.clone()
+        }
+        log::info!("Expander: expanding {:?}", ty);
+
         let ty = ty.fold_children(self);
 
         match ty.normalize() {
@@ -230,7 +246,7 @@ impl Fold<Type> for GenericExpander<'_> {
                 // Handle references to type parameters
                 for (idx, p) in self.params.iter().enumerate() {
                     if p.name == *sym {
-                        return Type::from(self.i.params[idx].clone());
+                        return handle_lit(&self.i.params[idx]);
                     }
                 }
 
@@ -240,7 +256,7 @@ impl Fold<Type> for GenericExpander<'_> {
             Type::Param(param) => {
                 for (idx, p) in self.params.iter().enumerate() {
                     if p.name == param.name {
-                        return Type::from(self.i.params[idx].clone());
+                        return handle_lit(&self.i.params[idx]);
                     }
                 }
             }
@@ -249,5 +265,14 @@ impl Fold<Type> for GenericExpander<'_> {
         }
 
         ty
+    }
+}
+
+/// This method returns true for types like `'foo'` and `'foo' | 'bar'`.
+fn is_literals(ty: &Type) -> bool {
+    match ty.normalize() {
+        Type::Lit(_) => true,
+        Type::Union(Union { ref types, .. }) => types.iter().all(|v| is_literals(v)),
+        _ => false,
     }
 }
