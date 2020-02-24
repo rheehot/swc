@@ -1,5 +1,6 @@
 use super::Analyzer;
 use crate::{
+    analyzer::scope::Scope,
     ty::{
         self, Conditional, FnParam, Mapped, Ref, Tuple, Type, TypeOrSpread, TypeParam,
         TypeParamDecl, TypeParamInstantiation, Union,
@@ -161,6 +162,7 @@ impl Analyzer<'_, '_> {
             }) => {
                 // assert_eq!(type_params.as_ref(), Some(decl));
                 let mut v = GenericExpander {
+                    scope: &self.scope,
                     params: &decl.params,
                     i,
                 };
@@ -212,12 +214,13 @@ impl Analyzer<'_, '_> {
     }
 }
 
-pub(super) struct GenericExpander<'a> {
+pub(super) struct GenericExpander<'a, 'b> {
+    pub scope: &'a Scope<'b>,
     pub params: &'a [TypeParam],
     pub i: &'a TypeParamInstantiation,
 }
 
-impl Fold<Type> for GenericExpander<'_> {
+impl Fold<Type> for GenericExpander<'_, '_> {
     fn fold(&mut self, ty: Type) -> Type {
         fn handle_lit(ty: &Type) -> Type {
             log::trace!("Expander: handle_lit {:?}", ty);

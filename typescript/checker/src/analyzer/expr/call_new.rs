@@ -645,6 +645,7 @@ impl Analyzer<'_, '_> {
                 }
             };
             let mut v = GenericExpander {
+                scope: &self.scope,
                 params: type_params,
                 i,
             };
