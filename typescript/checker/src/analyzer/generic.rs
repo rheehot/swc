@@ -277,12 +277,17 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                 type_args,
                 ..
             }) => {
-                if type_args.is_none() {
-                    // Handle references to type parameters
-                    for (idx, p) in self.params.iter().enumerate() {
-                        if p.name == *sym {
-                            return handle_lit(&self.i.params[idx]);
-                        }
+                log::info!("Type: reference to {}", sym);
+
+                // Handle references to type parameters
+                for (idx, p) in self.params.iter().enumerate() {
+                    if p.name == *sym {
+                        assert_eq!(*type_args, None);
+
+                        let new_ty = handle_lit(&self.i.params[idx]);
+                        log::info!("type is replaced with {:?}", new_ty);
+
+                        return new_ty;
                     }
                 }
 
@@ -291,17 +296,19 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                         for t in types {
                             match t {
                                 Type::Alias(alias) => {
-                                    return if let Some(type_params) = &alias.type_params {
-                                        let mut v = GenericExpander {
-                                            analyzer: self.analyzer,
-                                            params: &type_params.params,
-                                            i: self.i,
-                                            state: self.state,
-                                        };
+                                    if let Some(type_params) = &alias.type_params {
+                                        if let Some(type_args) = &type_args {
+                                            let mut v = GenericExpander {
+                                                analyzer: self.analyzer,
+                                                params: &type_params.params,
+                                                i: type_args,
+                                                state: self.state,
+                                            };
 
-                                        *alias.ty.clone().fold_with(&mut v)
+                                            return *alias.ty.clone().fold_with(&mut v);
+                                        }
                                     } else {
-                                        *alias.ty.clone()
+                                        return *alias.ty.clone();
                                     }
                                 }
 
@@ -318,10 +325,16 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                                     }
 
                                     let members = if let Some(type_params) = &i.type_params {
+                                        let type_args = if let Some(type_args) = &type_args {
+                                            type_args
+                                        } else {
+                                            return ty;
+                                        };
+
                                         let mut v = GenericExpander {
                                             analyzer: self.analyzer,
                                             params: &type_params.params,
-                                            i: self.i,
+                                            i: type_args,
                                             state: self.state,
                                         };
 
