@@ -645,9 +645,10 @@ impl Analyzer<'_, '_> {
                 }
             };
             let mut v = GenericExpander {
-                scope: &self.scope,
+                analyzer: &self,
                 params: type_params,
                 i,
+                state: Default::default(),
             };
             return Ok(ret_ty.clone().fold_with(&mut v));
         }

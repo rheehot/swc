@@ -2,11 +2,12 @@ use super::Analyzer;
 use crate::{
     analyzer::scope::Scope,
     ty::{
-        self, Conditional, FnParam, Mapped, Ref, Tuple, Type, TypeOrSpread, TypeParam,
+        self, Conditional, FnParam, Mapped, Ref, Tuple, Type, TypeLit, TypeOrSpread, TypeParam,
         TypeParamDecl, TypeParamInstantiation, Union,
     },
     ValidationResult,
 };
+use bitflags::_core::mem::take;
 use fxhash::FxHashMap;
 use swc_common::{Fold, FoldWith, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -162,9 +163,10 @@ impl Analyzer<'_, '_> {
             }) => {
                 // assert_eq!(type_params.as_ref(), Some(decl));
                 let mut v = GenericExpander {
-                    scope: &self.scope,
+                    analyzer: &self,
                     params: &decl.params,
                     i,
+                    state: Default::default(),
                 };
                 let ret_ty = ret_ty.clone().fold_with(&mut v);
                 let params = params.clone().fold_with(&mut v);
@@ -214,13 +216,32 @@ impl Analyzer<'_, '_> {
     }
 }
 
-pub(super) struct GenericExpander<'a, 'b> {
-    pub scope: &'a Scope<'b>,
+/// TODO: Handle operators like keyof.
+///  e.g.
+///    Convert
+///      type BadNested<T> = {
+///          x: T extends number ? T : string;
+///      };
+///      T extends {
+///          [K in keyof BadNested<infer P>]: BadNested<infer P>[K];
+///      } ? P : never;
+///   into
+///      T extends {
+///          x: infer P extends number ? infer P : string;
+///      } ? P : never
+pub(super) struct GenericExpander<'a, 'b, 'c> {
+    pub analyzer: &'a Analyzer<'b, 'c>,
     pub params: &'a [TypeParam],
     pub i: &'a TypeParamInstantiation,
+    pub state: ExpanderState,
 }
 
-impl Fold<Type> for GenericExpander<'_, '_> {
+#[derive(Debug, Clone, Copy, Default)]
+pub(super) struct ExpanderState {
+    expand_fully: bool,
+}
+
+impl Fold<Type> for GenericExpander<'_, '_, '_> {
     fn fold(&mut self, ty: Type) -> Type {
         fn handle_lit(ty: &Type) -> Type {
             log::trace!("Expander: handle_lit {:?}", ty);
@@ -236,34 +257,87 @@ impl Fold<Type> for GenericExpander<'_, '_> {
 
             ty.clone()
         }
-        log::debug!("Expander: expanding {:?}", ty);
 
-        // TODO: Handle operators like keyof.
-        //  e.g.
-        //    Convert
-        //      type BadNested<T> = {
-        //          x: T extends number ? T : string;
-        //      };
-        //      T extends {
-        //          [K in keyof BadNested<infer P>]: BadNested<infer P>[K];
-        //      } ? P : never;
-        //   into
-        //      T extends {
-        //          x: infer P extends number ? infer P : string;
-        //      } ? P : never
+        let should_expand_fully = self.state.expand_fully
+            || match ty {
+                Type::Mapped(..) => true,
+                _ => false,
+            };
+
+        let old_state = take(&mut self.state);
+        self.state.expand_fully = should_expand_fully;
 
         let ty = ty.fold_children(self);
+
+        self.state = old_state;
 
         match ty.normalize() {
             Type::Ref(Ref {
                 type_name: TsEntityName::Ident(Ident { ref sym, .. }),
-                type_args: None,
+                type_args,
                 ..
             }) => {
-                // Handle references to type parameters
-                for (idx, p) in self.params.iter().enumerate() {
-                    if p.name == *sym {
-                        return handle_lit(&self.i.params[idx]);
+                if type_args.is_none() {
+                    // Handle references to type parameters
+                    for (idx, p) in self.params.iter().enumerate() {
+                        if p.name == *sym {
+                            return handle_lit(&self.i.params[idx]);
+                        }
+                    }
+                }
+
+                if self.state.expand_fully {
+                    if let Some(types) = self.analyzer.find_type(sym) {
+                        for t in types {
+                            match t {
+                                Type::Alias(alias) => {
+                                    return if let Some(type_params) = &alias.type_params {
+                                        let mut v = GenericExpander {
+                                            analyzer: self.analyzer,
+                                            params: &type_params.params,
+                                            i: self.i,
+                                            state: self.state,
+                                        };
+
+                                        *alias.ty.clone().fold_with(&mut v)
+                                    } else {
+                                        *alias.ty.clone()
+                                    }
+                                }
+
+                                Type::Interface(i) => {
+                                    log::info!("found an interface",);
+
+                                    // TODO: Handle super
+                                    if !i.extends.is_empty() {
+                                        log::error!(
+                                            "not yet implemented: expanding interface which has a \
+                                             parent"
+                                        );
+                                        return ty;
+                                    }
+
+                                    let members = if let Some(type_params) = &i.type_params {
+                                        let mut v = GenericExpander {
+                                            analyzer: self.analyzer,
+                                            params: &type_params.params,
+                                            i: self.i,
+                                            state: self.state,
+                                        };
+
+                                        i.body.clone().fold_with(&mut v)
+                                    } else {
+                                        i.body.clone()
+                                    };
+
+                                    return Type::TypeLit(TypeLit {
+                                        span: i.span,
+                                        members,
+                                    });
+                                }
+                                _ => {}
+                            }
+                        }
                     }
                 }
 
