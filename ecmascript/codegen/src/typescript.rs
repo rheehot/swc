@@ -278,6 +278,16 @@ impl<'a> Emitter<'a> {
 
         emit!(n.id);
 
+        if !n.extends.is_empty() {
+            space!();
+
+            keyword!("extends");
+
+            space!();
+
+            self.emit_list(n.span, Some(&n.extends), ListFormat::HeritageClauseTypes)?;
+        }
+
         formatting_space!();
 
         emit!(n.body);
