@@ -2,8 +2,8 @@ use super::Analyzer;
 use crate::{
     analyzer::scope::Scope,
     ty::{
-        self, Conditional, FnParam, Mapped, Ref, Tuple, Type, TypeLit, TypeOrSpread, TypeParam,
-        TypeParamDecl, TypeParamInstantiation, Union,
+        self, Conditional, FnParam, IndexedAccessType, Mapped, Ref, Tuple, Type, TypeElement,
+        TypeLit, TypeOrSpread, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
     },
     ValidationResult,
 };
@@ -48,7 +48,11 @@ impl Analyzer<'_, '_> {
             if let Some(ty) = inferred.remove(&type_param.name) {
                 params.push(ty);
             } else {
-                log::warn!("infer_type_args: falling back to unknown type parameter");
+                log::warn!(
+                    "infer_type_args: falling back to unknown type parameter: {:?}",
+                    type_param
+                );
+
                 // TODO: Fix this and implement full type inference
                 params.push(type_param.clone().into());
             }
@@ -260,7 +264,7 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
 
         let should_expand_fully = self.state.expand_fully
             || match ty {
-                Type::Mapped(..) => true,
+                Type::Mapped(Mapped { ty: Some(..), .. }) => true,
                 _ => false,
             };
 
@@ -277,15 +281,12 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                 type_args,
                 ..
             }) => {
-                log::info!("Type: reference to {}", sym);
-
                 // Handle references to type parameters
                 for (idx, p) in self.params.iter().enumerate() {
                     if p.name == *sym {
                         assert_eq!(*type_args, None);
 
                         let new_ty = handle_lit(&self.i.params[idx]);
-                        log::info!("type is replaced with {:?}", new_ty);
 
                         return new_ty;
                     }
@@ -313,8 +314,6 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                                 }
 
                                 Type::Interface(i) => {
-                                    log::info!("found an interface",);
-
                                     // TODO: Handle super
                                     if !i.extends.is_empty() {
                                         log::error!(
@@ -362,6 +361,53 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                     if p.name == param.name {
                         return handle_lit(&self.i.params[idx]);
                     }
+                }
+            }
+
+            Type::Mapped(Mapped {
+                span,
+                readonly,
+                optional,
+                type_param,
+                ty: Some(rty),
+            }) => {
+                match rty.normalize() {
+                    Type::IndexedAccessType(IndexedAccessType {
+                        span,
+                        readonly,
+                        obj_type,
+                        index_type,
+                    }) => {
+                        match obj_type.normalize() {
+                            Type::TypeLit(TypeLit { span, members, .. })
+                                if members.iter().all(|m| match m {
+                                    TypeElement::Property(_) => true,
+                                    _ => false,
+                                }) =>
+                            {
+                                let mut new_members = Vec::with_capacity(members.len());
+
+                                for m in members {
+                                    match m {
+                                        ty::TypeElement::Property(p) => {
+                                            let p = p.clone();
+                                            //
+                                            new_members.push(ty::TypeElement::Property(p));
+                                        }
+                                        _ => unreachable!(),
+                                    }
+                                }
+
+                                return Type::TypeLit(TypeLit {
+                                    span: *span,
+                                    members: new_members,
+                                });
+                            }
+
+                            _ => {}
+                        }
+                    }
+                    _ => {}
                 }
             }
 

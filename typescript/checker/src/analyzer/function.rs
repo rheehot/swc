@@ -3,7 +3,7 @@ use crate::{
     analyzer::{pat::PatMode, util::ResultExt, Ctx, ScopeKind},
     errors::Error,
     ty,
-    ty::{ClassInstance, QueryType, Tuple, Type, TypeParam},
+    ty::{ClassInstance, FnParam, QueryType, Tuple, Type, TypeParam},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
@@ -43,7 +43,7 @@ impl Validate<Function> for Analyzer<'_, '_> {
 
             let type_params = try_opt!(f.type_params.validate_with(child));
 
-            let params = {
+            let mut params = {
                 let ctx = Ctx {
                     pat_mode: PatMode::Decl,
                     allow_ref_declaring: false,
@@ -51,6 +51,16 @@ impl Validate<Function> for Analyzer<'_, '_> {
                 };
                 f.params.validate_with(&mut *child.with_ctx(ctx))?
             };
+
+            if !child.is_builtin {
+                params = params
+                    .into_iter()
+                    .map(|param: FnParam| -> Result<_, Error> {
+                        let ty = child.expand(param.span, param.ty)?;
+                        Ok(FnParam { ty, ..param })
+                    })
+                    .collect::<Result<_, _>>()?;
+            }
 
             let declared_ret_ty = try_opt!(f.return_type.validate_with(child)).map(|ret_ty| {
                 let span = ret_ty.span();
