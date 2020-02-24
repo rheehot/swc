@@ -2,7 +2,7 @@
 #![feature(box_patterns)]
 #![feature(specialization)]
 
-use crate::{ambient::AmbientFunctionHandler, dce::get_used};
+use crate::{ambient::RealImplRemover, dce::get_used};
 use fxhash::FxHashSet;
 use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
@@ -20,7 +20,7 @@ mod dce;
 
 pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
     module
-        .fold_with(&mut AmbientFunctionHandler::default())
+        .fold_with(&mut RealImplRemover::default())
         .fold_with(&mut TypeResolver {
             used: get_used(&info),
             info,
