@@ -8,7 +8,7 @@ use crate::{
     ValidationResult,
 };
 use macros::validator;
-use swc_common::Spanned;
+use swc_common::{Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[validator]
@@ -138,7 +138,22 @@ impl Validate<VarDecl> for Analyzer<'_, '_> {
                                 })();
 
                                 if a.scope.is_root() {
-                                    v.name.set_ty(Some(ty.clone().into()));
+                                    if let Some(box Expr::Ident(ref alias)) = &v.init {
+                                        if let Pat::Ident(ref mut i) = v.name {
+                                            i.type_ann = Some(TsTypeAnn {
+                                                span: DUMMY_SP,
+                                                type_ann: box TsType::TsTypeQuery(TsTypeQuery {
+                                                    span,
+                                                    expr_name: TsTypeQueryExpr::TsEntityName(
+                                                        TsEntityName::Ident(alias.clone()),
+                                                    ),
+                                                }),
+                                            });
+                                        }
+                                    }
+                                    if v.name.get_ty().is_none() {
+                                        v.name.set_ty(Some(ty.clone().into()));
+                                    }
                                 }
 
                                 let mut type_errors = vec![];
