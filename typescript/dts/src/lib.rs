@@ -475,6 +475,23 @@ impl Fold<Stmt> for TypeResolver {
     fn fold(&mut self, v: Stmt) -> Stmt {
         let v = v.fold_children(self);
         match v {
+            Stmt::Decl(Decl::Class(ref i)) if !self.used.contains((&i.ident.sym)) => {
+                Stmt::Empty(EmptyStmt { span: DUMMY_SP })
+            }
+            Stmt::Decl(Decl::Fn(ref i)) if !self.used.contains((&i.ident.sym)) => {
+                Stmt::Empty(EmptyStmt { span: DUMMY_SP })
+            }
+
+            Stmt::Decl(Decl::TsTypeAlias(ref i)) if !self.used.contains((&i.id.sym)) => {
+                Stmt::Empty(EmptyStmt { span: DUMMY_SP })
+            }
+            Stmt::Decl(Decl::TsInterface(ref i)) if !self.used.contains((&i.id.sym)) => {
+                Stmt::Empty(EmptyStmt { span: DUMMY_SP })
+            }
+            Stmt::Decl(Decl::TsEnum(ref i)) if !self.used.contains((&i.id.sym)) => {
+                Stmt::Empty(EmptyStmt { span: DUMMY_SP })
+            }
+
             Stmt::Decl(Decl::Var(ref var)) if var.decls.is_empty() => {
                 Stmt::Empty(EmptyStmt { span: DUMMY_SP })
             }

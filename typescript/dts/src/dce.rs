@@ -9,11 +9,13 @@ use swc_ts_checker::ModuleTypeInfo;
 pub fn get_used(info: &ModuleTypeInfo) -> FxHashSet<JsWord> {
     let mut used = FxHashSet::default();
 
-    for (_, v) in info.vars.iter() {
+    for (sym, v) in info.vars.iter() {
+        used.insert(sym.clone());
         track(&mut used, v.normalize());
     }
 
-    for (_, types) in info.types.iter() {
+    for (sym, types) in info.types.iter() {
+        used.insert(sym.clone());
         for ty in types {
             track(&mut used, ty.normalize());
         }
