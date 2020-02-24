@@ -373,6 +373,7 @@ impl Analyzer<'_, '_> {
                     };
 
                     match callee.normalize() {
+                        Type::Method(ref m) => return Ok(*m.ret_ty.clone()),
                         Type::Function(ref f) => return Ok(*f.ret_ty.clone()),
                         Type::Class(ref cls) if kind == ExtractKind::New => {
                             return Ok(Type::ClassInstance(ClassInstance {
@@ -383,6 +384,7 @@ impl Analyzer<'_, '_> {
                         }
                         _ => {}
                     }
+
                     Err(if kind == ExtractKind::Call {
                         Error::NoCallSignature { span, callee }
                     } else {
