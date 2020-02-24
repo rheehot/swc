@@ -689,6 +689,8 @@ impl<'a> Emitter<'a> {
         if let Some(ref i) = node.ident {
             space!();
             emit!(i);
+            emit!(node.class.type_params);
+
             formatting_space!();
         }
 
