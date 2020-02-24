@@ -8,7 +8,7 @@ use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{util::move_map::MoveMap, Fold, FoldWith, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
-use swc_ecma_utils::StmtLike;
+use swc_ecma_utils::{prop_name_to_expr, StmtLike};
 use swc_ts_checker::{
     ty,
     ty::Type,
@@ -313,6 +313,44 @@ impl Fold<Option<BlockStmt>> for TypeResolver {
     #[inline]
     fn fold(&mut self, _: Option<BlockStmt>) -> Option<BlockStmt> {
         None
+    }
+}
+
+impl Fold<ClassMember> for TypeResolver {
+    fn fold(&mut self, node: ClassMember) -> ClassMember {
+        match node {
+            ClassMember::Method(ClassMethod {
+                span,
+                key,
+                function,
+                kind,
+                is_static,
+                accessibility: Some(Accessibility::Private),
+                is_abstract,
+                is_optional,
+            }) => {
+                return ClassMember::ClassProp(ClassProp {
+                    span,
+                    computed: match key {
+                        PropName::Computed(..) => true,
+                        _ => false,
+                    },
+                    key: box prop_name_to_expr(key),
+                    value: None,
+                    type_ann: None,
+                    is_static,
+                    decorators: vec![],
+                    accessibility: Some(Accessibility::Private),
+                    is_abstract,
+                    is_optional,
+                    readonly: false,
+                    definite: false,
+                })
+            }
+            _ => {}
+        }
+
+        node.fold_children(self)
     }
 }
 
