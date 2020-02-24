@@ -49,15 +49,6 @@ impl Analyzer<'_, '_> {
                 r,
             ),
 
-            Type::Param(ref p) => {
-                if let None = self.find_type(&p.name) {
-                    panic!(
-                        "A type parameter should be handled by a function which declares it\n{:?}",
-                        p
-                    )
-                }
-            }
-
             _ => {}
         }
     }
