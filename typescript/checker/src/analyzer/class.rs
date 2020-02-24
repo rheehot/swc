@@ -5,7 +5,7 @@ use super::{
     Analyzer,
 };
 use crate::{
-    analyzer::{props::ComputedPropMode, util::ResultExt, Ctx},
+    analyzer::{pat::PatMode, props::ComputedPropMode, util::ResultExt, Ctx},
     errors::{Error, Errors},
     swc_common::VisitMutWith,
     ty,
@@ -253,7 +253,11 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
                     }
                 }
 
-                let params = c.function.params.validate_with(child)?;
+                let ctx = Ctx {
+                    pat_mode: PatMode::Decl,
+                    ..child.ctx
+                };
+                let params = c.function.params.validate_with(&mut *child.with_ctx(ctx))?;
 
                 let type_params = try_opt!(c.function.type_params.validate_with(child));
                 if (c.kind == MethodKind::Getter || c.kind == MethodKind::Setter)
