@@ -1,8 +1,20 @@
 use super::Analyzer;
+use crate::{swc_common::FoldWith, ty::Type};
 use std::iter::once;
 use swc_atoms::JsWord;
-use swc_common::Visit;
+use swc_common::{Fold, Visit};
 use swc_ecma_ast::*;
+
+#[derive(Debug, Copy, Clone)]
+pub(super) struct Generalizer;
+
+impl Fold<Type> for Generalizer {
+    fn fold(&mut self, mut node: Type) -> Type {
+        node = node.fold_children(self);
+
+        node.generalize_lit().into_owned()
+    }
+}
 
 impl Analyzer<'_, '_> {
     //    /// Validates and store errors if required.

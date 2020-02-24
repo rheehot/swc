@@ -1,7 +1,8 @@
 use super::super::{pat::PatMode, Analyzer, Ctx};
 use crate::{
-    analyzer::util::ResultExt,
+    analyzer::util::{Generalizer, ResultExt},
     errors::Error,
+    swc_common::FoldWith,
     ty::{Tuple, Type},
     util::PatExt,
     validator::{Validate, ValidateWith},
@@ -103,6 +104,7 @@ impl Validate<VarDecl> for Analyzer<'_, '_> {
                                 let ty = a.expand(span, ty)?;
                                 match a.assign(&ty, &value_ty, v_span) {
                                     Ok(()) => {
+                                        let ty = ty.fold_with(&mut Generalizer);
                                         match a.declare_complex_vars(kind, &v.name, ty) {
                                             Ok(()) => {}
                                             Err(err) => {
@@ -137,6 +139,7 @@ impl Validate<VarDecl> for Analyzer<'_, '_> {
                                     value_ty
                                 })();
 
+                                let mut ty = ty.fold_with(&mut Generalizer);
                                 if a.scope.is_root() {
                                     if let Some(box Expr::Ident(ref alias)) = &v.init {
                                         if let Pat::Ident(ref mut i) = v.name {
