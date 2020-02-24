@@ -2,7 +2,7 @@
 #![feature(box_patterns)]
 #![feature(specialization)]
 
-use crate::dce::get_used;
+use crate::{ambient::AmbientFunctionHandler, dce::get_used};
 use fxhash::FxHashSet;
 use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
@@ -15,18 +15,21 @@ use swc_ts_checker::{
     ModuleTypeInfo,
 };
 
+mod ambient;
 mod dce;
 
 pub fn generate_dts(module: Module, info: ModuleTypeInfo) -> Module {
-    module.fold_with(&mut TypeResolver {
-        used: get_used(&info),
-        info,
-        current_class: None,
-        in_declare: false,
-        top_level: true,
-        forced_module: false,
-        prevent_empty_export: false,
-    })
+    module
+        .fold_with(&mut AmbientFunctionHandler::default())
+        .fold_with(&mut TypeResolver {
+            used: get_used(&info),
+            info,
+            current_class: None,
+            in_declare: false,
+            top_level: true,
+            forced_module: false,
+            prevent_empty_export: false,
+        })
 }
 
 #[derive(Debug)]
