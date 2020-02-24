@@ -6,7 +6,8 @@ use crate::{
     },
     ValidationResult,
 };
-use swc_common::{Fold, FoldWith, Spanned};
+use fxhash::FxHashMap;
+use swc_common::{Fold, FoldWith, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
@@ -17,9 +18,43 @@ impl Analyzer<'_, '_> {
         params: &[FnParam],
         args: &[TypeOrSpread],
     ) -> ValidationResult<TypeParamInstantiation> {
+        let mut inferred = FxHashMap::default();
+
+        // TODO: Handle optional parameters
+        // TODO: Convert this to error.
+        assert!(args.len() >= params.len());
+
+        for (p, arg) in params.iter().zip(args) {
+            match &p.ty {
+                Type::Param(TypeParam { ref name, .. }) => {
+                    assert_eq!(
+                        arg.spread, None,
+                        "argument type inference for spread argument is not implemented yet"
+                    );
+
+                    // Very simple case.
+                    inferred.insert(name, arg.ty.clone());
+                    // function foo<T>(a: T) {}
+                }
+
+                _ => {}
+            }
+        }
+
+        let mut params = Vec::with_capacity(type_params.len());
+        for type_param in type_params {
+            if let Some(ty) = inferred.remove(&type_param.name) {
+                params.push(ty);
+            } else {
+                log::warn!("infer_type_args: falling back to unknown type parameter");
+                // TODO: Fix this and implement full type inference
+                params.push(type_param.clone().into());
+            }
+        }
+
         Ok(TypeParamInstantiation {
-            span: Default::default(),
-            params: type_params.iter().cloned().map(Type::Param).collect(),
+            span: DUMMY_SP,
+            params,
         })
     }
 
