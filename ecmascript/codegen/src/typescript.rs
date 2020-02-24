@@ -161,7 +161,9 @@ impl<'a> Emitter<'a> {
     fn emit_ts_expr_with_type_args(&mut self, n: &TsExprWithTypeArgs) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_expr_with_type_args")
+        emit!(n.expr);
+
+        emit!(n.type_args);
     }
 
     #[emitter]
@@ -832,7 +834,10 @@ impl<'a> Emitter<'a> {
     fn emit_ts_type_param_instantiation(&mut self, n: &TsTypeParamInstantiation) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_type_param_instantiation")
+        punct!("<");
+        self.emit_list(n.span, Some(&n.params), ListFormat::TypeParameters)?;
+
+        punct!(">");
     }
 
     #[emitter]
