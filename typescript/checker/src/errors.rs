@@ -10,10 +10,6 @@ use swc_ecma_ast::{Expr, UnaryOp, UpdateOp};
 impl Errors {
     /// This is used for debugging (by calling [pacic]).
     fn validate(&self, err: &Error) {
-        if err.span().is_dummy() {
-            panic!("Error with a dummy span found: {:?}", err)
-        }
-
         if let Ok(var) = std::env::var("DBG_ERROR") {
             let s = format!("{:?}", err);
             if var != "" && s.contains(&var) {
@@ -27,8 +23,13 @@ impl Errors {
                 for err in errors {
                     self.validate(err)
                 }
+                return;
             }
             _ => {}
+        }
+
+        if err.span().is_dummy() {
+            panic!("Error with a dummy span found: {:?}", err)
         }
     }
 }
