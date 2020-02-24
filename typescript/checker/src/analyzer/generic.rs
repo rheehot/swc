@@ -220,7 +220,7 @@ pub(super) struct GenericExpander<'a> {
 impl Fold<Type> for GenericExpander<'_> {
     fn fold(&mut self, ty: Type) -> Type {
         fn handle_lit(ty: &Type) -> Type {
-            log::debug!("Expander: handle_lit {:?}", ty);
+            log::trace!("Expander: handle_lit {:?}", ty);
 
             match ty.normalize() {
                 Type::Param(ty)
@@ -233,7 +233,21 @@ impl Fold<Type> for GenericExpander<'_> {
 
             ty.clone()
         }
-        log::info!("Expander: expanding {:?}", ty);
+        log::debug!("Expander: expanding {:?}", ty);
+
+        // TODO: Handle operators like keyof.
+        //  e.g.
+        //    Convert
+        //      type BadNested<T> = {
+        //          x: T extends number ? T : string;
+        //      };
+        //      T extends {
+        //          [K in keyof BadNested<infer P>]: BadNested<infer P>[K];
+        //      } ? P : never;
+        //   into
+        //      T extends {
+        //          x: infer P extends number ? infer P : string;
+        //      } ? P : never
 
         let ty = ty.fold_children(self);
 
