@@ -1,4 +1,7 @@
-use swc_ecma_utils::{Id, StmtLike};
+use bitflags::_core::mem::{replace, take};
+use swc_common::{Visit, VisitWith};
+use swc_ecma_ast::*;
+use swc_ecma_utils::{find_ids, ident::IdentLike, DestructuringFinder, Id, StmtLike};
 
 /// Returns the order of evaluation. This methods is used to handle hoisting
 /// properly.
@@ -18,11 +21,28 @@ use swc_ecma_utils::{Id, StmtLike};
 /// ```
 pub(super) fn order<T>(nodes: &[T]) -> Vec<usize>
 where
-    T: StmtLike,
+    T: StmtLike + for<'any> VisitWith<DependencyFinder<'any>>,
 {
     let mut order = (0..nodes.len()).collect();
 
-    for n in nodes.iter() {}
+    let mut ids = Vec::with_capacity(8);
+    let mut dependencies = Vec::with_capacity(16);
+
+    for node in nodes.iter() {
+        ids.clear();
+        dependencies.clear();
+
+        {
+            let mut v = DependencyFinder {
+                ids: &mut ids,
+                dependencies: &mut dependencies,
+            };
+
+            node.visit_with(&mut v);
+        }
+
+        //
+    }
 
     order
 }
@@ -155,6 +175,8 @@ impl Analyzer<'_, '_> {
 #[derive(Debug)]
 pub(super) struct StmtDependencyFinder<'a> {
     ids_buf: &'a mut Vec<Id>,
+#[derive(Debug)]
+pub(super) struct DependencyFinder<'a> {
     /// Identifiers created by a statement.
     ///
     /// e.g.
@@ -163,5 +185,64 @@ pub(super) struct StmtDependencyFinder<'a> {
     /// ```js
     /// var a, b = foo();
     /// ```
-    ids: Vec<Id>,
+    ids: &'a mut Vec<Id>,
+
+    /// Dependencies of the id.
+    dependencies: &'a mut Vec<Id>,
+}
+
+impl Visit<FnDecl> for DependencyFinder<'_> {
+    fn visit(&mut self, node: &FnDecl) {
+        self.ids.push(node.ident.to_id());
+        node.visit_children(self);
+    }
+}
+
+impl Visit<VarDeclarator> for DependencyFinder<'_> {
+    fn visit(&mut self, node: &VarDeclarator) {
+        let mut v = DestructuringFinder { found: self.ids };
+        node.name.visit_with(&mut v);
+
+        node.init.visit_with(self);
+    }
+}
+
+impl Visit<ClassDecl> for DependencyFinder<'_> {
+    fn visit(&mut self, node: &ClassDecl) {
+        self.ids.push(node.ident.to_id());
+        node.visit_children(self);
+    }
+}
+
+impl Visit<Function> for DependencyFinder<'_> {
+    fn visit(&mut self, f: &Function) {
+        let ids = take(self.ids);
+
+        f.visit_children(self);
+
+        *self.ids = ids;
+    }
+}
+
+impl Visit<MemberExpr> for DependencyFinder<'_> {
+    fn visit(&mut self, node: &MemberExpr) {
+        node.obj.visit_with(self);
+
+        if node.computed {
+            node.prop.visit_with(self);
+        }
+    }
+}
+
+impl Visit<Expr> for DependencyFinder<'_> {
+    fn visit(&mut self, node: &Expr) {
+        match node {
+            Expr::Ident(ref i) => {
+                self.dependencies.push(i.to_id());
+            }
+            _ => {}
+        }
+
+        node.visit_children(self);
+    }
 }
