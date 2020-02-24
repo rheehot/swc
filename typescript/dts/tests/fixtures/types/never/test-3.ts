@@ -1,3 +1,7 @@
+function error(message: string): never {
+    throw new Error(message);
+}
+
 function move1(direction: "up" | "down") {
     switch (direction) {
         case "up":
