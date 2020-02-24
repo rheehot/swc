@@ -223,7 +223,6 @@ impl Analyzer<'_, '_> {
                     _ => false,
                 };
                 let ty = kv.value.validate_with(self)?;
-                let ty = ty.generalize_lit().into_owned();
 
                 PropertySignature {
                     span,
