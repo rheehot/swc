@@ -1,9 +1,10 @@
 use super::Analyzer;
-use crate::{swc_common::FoldWith, ty, ty::Type};
+use crate::{analyzer::generic::is_literals, swc_common::FoldWith, ty, ty::Type};
 use std::iter::once;
 use swc_atoms::JsWord;
 use swc_common::{Fold, Visit};
 use swc_ecma_ast::*;
+use swc_ecma_utils::is_literal;
 
 #[derive(Debug, Default)]
 pub(super) struct Generalizer {
@@ -20,9 +21,8 @@ impl Fold<ty::Function> for Generalizer {
 impl Fold<Type> for Generalizer {
     fn fold(&mut self, mut node: Type) -> Type {
         if !self.force {
-            match node {
-                Type::Lit(..) => return node,
-                _ => {}
+            if is_literals(&node) {
+                return node;
             }
         }
 

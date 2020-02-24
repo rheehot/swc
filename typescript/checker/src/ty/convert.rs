@@ -440,10 +440,28 @@ impl From<ty::TypeElement> for TsTypeElement {
 impl From<ty::FnParam> for TsFnParam {
     fn from(t: FnParam) -> Self {
         match t.pat {
-            Pat::Ident(i) => TsFnParam::Ident(i),
-            Pat::Array(a) => TsFnParam::Array(a),
-            Pat::Rest(r) => TsFnParam::Rest(r),
-            Pat::Object(o) => TsFnParam::Object(o),
+            Pat::Ident(i) => TsFnParam::Ident(Ident {
+                span: t.span,
+                sym: i.sym,
+                type_ann: Some(t.ty.into()),
+                optional: !t.required,
+            }),
+            Pat::Array(a) => TsFnParam::Array(ArrayPat {
+                span: t.span,
+                type_ann: Some(t.ty.into()),
+                elems: a.elems,
+            }),
+            Pat::Rest(r) => TsFnParam::Rest(RestPat {
+                span: t.span,
+                dot3_token: r.dot3_token,
+                arg: r.arg,
+                type_ann: Some(t.ty.into()),
+            }),
+            Pat::Object(o) => TsFnParam::Object(ObjectPat {
+                span: t.span,
+                type_ann: Some(t.ty.into()),
+                props: o.props,
+            }),
             _ => unimplemented!("From<ty::FnParam> for TsFnParam"),
         }
     }

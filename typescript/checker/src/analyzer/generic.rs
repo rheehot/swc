@@ -269,7 +269,7 @@ impl Fold<Type> for GenericExpander<'_> {
 }
 
 /// This method returns true for types like `'foo'` and `'foo' | 'bar'`.
-fn is_literals(ty: &Type) -> bool {
+pub(super) fn is_literals(ty: &Type) -> bool {
     match ty.normalize() {
         Type::Lit(_) => true,
         Type::Union(Union { ref types, .. }) => types.iter().all(|v| is_literals(v)),
