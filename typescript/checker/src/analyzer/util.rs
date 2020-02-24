@@ -1,5 +1,5 @@
 use super::Analyzer;
-use crate::{swc_common::FoldWith, ty::Type};
+use crate::{swc_common::FoldWith, ty, ty::Type};
 use std::iter::once;
 use swc_atoms::JsWord;
 use swc_common::{Fold, Visit};
@@ -7,6 +7,13 @@ use swc_ecma_ast::*;
 
 #[derive(Debug, Copy, Clone)]
 pub(super) struct Generalizer;
+
+impl Fold<ty::Function> for Generalizer {
+    #[inline(always)]
+    fn fold(&mut self, node: ty::Function) -> ty::Function {
+        node
+    }
+}
 
 impl Fold<Type> for Generalizer {
     fn fold(&mut self, mut node: Type) -> Type {
