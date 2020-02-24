@@ -8,6 +8,7 @@ use std::{collections::hash_map::Entry, sync::Arc};
 use swc_atoms::JsWord;
 use swc_common::{util::move_map::MoveMap, Fold, FoldWith, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
+use swc_ecma_utils::StmtLike;
 use swc_ts_checker::{
     ty,
     ty::Type,
@@ -79,6 +80,13 @@ impl TypeResolver {
         } else {
             None
         }
+    }
+
+    fn fold_stmts<T>(&mut self, nodes: Vec<T>) -> Vec<T>
+    where
+        T: StmtLike + FoldWith<Self>,
+    {
+        nodes
     }
 }
 
@@ -442,12 +450,14 @@ impl Fold<Stmt> for TypeResolver {
 }
 
 impl Fold<Vec<Stmt>> for TypeResolver {
-    fn fold(&mut self, stmts: Vec<Stmt>) -> Vec<Stmt> {
+    fn fold(&mut self, mut stmts: Vec<Stmt>) -> Vec<Stmt> {
         if !self.top_level {
             return vec![];
         }
 
-        stmts.fold_children(self)
+        stmts = stmts.fold_children(self);
+
+        self.fold_stmts(stmts)
     }
 }
 
@@ -472,7 +482,7 @@ impl Fold<Vec<ModuleItem>> for TypeResolver {
             // )));
         }
 
-        items
+        self.fold_stmts(items)
     }
 }
 
