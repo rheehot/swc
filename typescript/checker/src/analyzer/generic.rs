@@ -253,7 +253,9 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                 if self.state.expand_fully {
                     if let Some(types) = self.analyzer.find_type(sym) {
                         for t in types {
-                            match t {
+                            log::info!("Found {}:\n{:?}", sym, ty);
+                            match t.normalize() {
+                                // Type::Ref(..) => return t.clone().fold_with(self),
                                 Type::Alias(alias) => {
                                     if let Some(type_params) = &alias.type_params {
                                         if let Some(type_args) = &type_args {
@@ -332,7 +334,6 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                 type_param,
                 ty: Some(rty),
             }) => {
-                log::info!("constraint: {:?}", type_param.constraint);
                 if let Some(constraint) = &type_param.constraint {
                     match &**constraint {
                         Type::Operator(Operator {

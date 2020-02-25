@@ -683,10 +683,15 @@ impl Analyzer<'_, '_> {
             return Some(ItemRef::Single(&ANY));
         }
 
-        // TODO:
-        //        if let Some(ty) = self.resolved_import_types.get(name) {
-        //            return Some(ty);
-        //        }
+        if let Some(ty) = self.resolved_import_types.get(name) {
+            return Some(ItemRef::Multi(ty));
+        }
+
+        if !self.is_builtin {
+            if let Ok(Type::Static(s)) = builtin_types::get_type(self.libs, DUMMY_SP, name) {
+                return Some(ItemRef::Single(s.ty));
+            }
+        }
 
         if let Some(ty) = self.scope.find_type(name) {
             return Some(ty);
