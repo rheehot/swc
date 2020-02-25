@@ -220,7 +220,8 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                     // Check for builtin types
                     if !self.analyzer.is_builtin {
                         if let Ok(ty) = builtin_types::get_type(self.analyzer.libs, *span, sym) {
-                            return ty.fold_with(self);
+                            let ty = ty.fold_with(self);
+                            return ty;
                         }
                     }
                 }
@@ -231,57 +232,7 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                             log::info!("Found {}:\n{:?}", sym, ty);
                             match t.normalize() {
                                 Type::Ref(..) => return t.clone().fold_with(self),
-                                Type::Alias(alias) => {
-                                    if let Some(type_params) = &alias.type_params {
-                                        if let Some(type_args) = &type_args {
-                                            let mut v = GenericExpander {
-                                                analyzer: self.analyzer,
-                                                params: &type_params.params,
-                                                i: type_args,
-                                                state: self.state,
-                                            };
 
-                                            return *alias.ty.clone().fold_with(&mut v);
-                                        }
-                                    } else {
-                                        return *alias.ty.clone();
-                                    }
-                                }
-
-                                Type::Interface(i) => {
-                                    // TODO: Handle super
-                                    if !i.extends.is_empty() {
-                                        log::error!(
-                                            "not yet implemented: expanding interface which has a \
-                                             parent"
-                                        );
-                                        return ty;
-                                    }
-
-                                    let members = if let Some(type_params) = &i.type_params {
-                                        let type_args = if let Some(type_args) = &type_args {
-                                            type_args
-                                        } else {
-                                            return ty;
-                                        };
-
-                                        let mut v = GenericExpander {
-                                            analyzer: self.analyzer,
-                                            params: &type_params.params,
-                                            i: type_args,
-                                            state: self.state,
-                                        };
-
-                                        i.body.clone().fold_with(&mut v)
-                                    } else {
-                                        i.body.clone()
-                                    };
-
-                                    return Type::TypeLit(TypeLit {
-                                        span: i.span,
-                                        members,
-                                    });
-                                }
                                 _ => {}
                             }
                         }
@@ -300,6 +251,47 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                         return self.i.params[idx].clone();
                     }
                 }
+            }
+
+            Type::Alias(alias) => {
+                return if let Some(type_params) = &alias.type_params {
+                    let mut v = GenericExpander {
+                        analyzer: self.analyzer,
+                        params: &type_params.params,
+                        i: self.i,
+                        state: self.state,
+                    };
+
+                    *alias.ty.clone().fold_with(&mut v)
+                } else {
+                    *alias.ty.clone()
+                }
+            }
+
+            Type::Interface(i) => {
+                // TODO: Handle super
+                if !i.extends.is_empty() {
+                    log::error!("not yet implemented: expanding interface which has a parent");
+                    return ty;
+                }
+
+                let members = if let Some(type_params) = &i.type_params {
+                    let mut v = GenericExpander {
+                        analyzer: self.analyzer,
+                        params: &type_params.params,
+                        i: self.i,
+                        state: self.state,
+                    };
+
+                    i.body.clone().fold_with(&mut v)
+                } else {
+                    i.body.clone()
+                };
+
+                return Type::TypeLit(TypeLit {
+                    span: i.span,
+                    members,
+                });
             }
 
             Type::Conditional(Conditional {
