@@ -1042,6 +1042,7 @@ impl<'a> Scope<'a> {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
 pub enum ItemRef<'a, T> {
     Single(&'a T),
     Multi(&'a [T]),

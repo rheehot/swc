@@ -73,351 +73,186 @@ impl Analyzer<'_, '_> {
         params: &[TypeParam],
         ty: Type,
     ) -> ValidationResult {
+        self.expand_type_params_inner(i, params, ty, false)
+    }
+
+    /// if `fully` is true, interfaces are converted into type literal and
+    /// resolved.
+    ///
+    ///
+    /// TODO: Handle operators like keyof.
+    ///  e.g.
+    ///    Convert
+    ///      type BadNested<T> = {
+    ///          x: T extends number ? T : string;
+    ///      };
+    ///      T extends {
+    ///          [K in keyof BadNested<infer P>]: BadNested<infer P>[K];
+    ///      } ? P : never;
+    ///   into
+    ///      T extends {
+    ///          x: infer P extends number ? infer P : string;
+    ///      } ? P : never
+    fn expand_type_params_inner(
+        &mut self,
+        type_args: &TypeParamInstantiation,
+        params: &[TypeParam],
+        ty: Type,
+        fully: bool,
+    ) -> ValidationResult {
         let mut ty = ty.fold_with(&mut GenericExpander {
             analyzer: self,
             params,
-            i,
-            state: Default::default(),
+            i: type_args,
+            fully,
         });
-        match ty {
-            Type::Tuple(Tuple { ref types, .. }) => {
-                let mut buf = vec![];
-
-                for (idx, t) in types.into_iter().enumerate() {
-                    let t = self.expand_type_params(i, params, t.clone())?;
-                    buf.push((idx, t))
-                }
-
-                for (idx, t) in buf {
-                    match ty {
-                        Type::Tuple(ref mut tuple) => {
-                            tuple.types[idx] = t;
-                        }
-
-                        _ => unreachable!(),
-                    }
-                }
-
-                return Ok(ty);
-            }
-
-            _ => {}
-        }
 
         Ok(ty)
     }
 
-    fn expand_type_param(
-        &mut self,
-        i: &TypeParamInstantiation,
-        decl: &[TypeParam],
-        mut type_param: TypeParam,
-    ) -> ValidationResult<TypeParam> {
-        if let Some(c) = type_param.constraint {
-            let c = self.expand_type_params(i, decl, *c.clone())?;
-
-            type_param.constraint = Some(box c);
-        }
-
-        Ok(type_param)
-    }
-
     /// Returns `Some(true)` if `child` extends `parent`.
     fn extends(&self, child: &Type, parent: &Type) -> Option<bool> {
+        match child {
+            Type::Ref(..) => return None,
+            _ => {}
+        }
+        match parent {
+            Type::Ref(..) => return None,
+            _ => {}
+        }
+
         let span = child.span();
 
         match self.assign(parent, child, span) {
             Ok(()) => Some(true),
-            _ => Some(false),
+            _ => None,
         }
     }
 }
 
-/// TODO: Handle operators like keyof.
-///  e.g.
-///    Convert
-///      type BadNested<T> = {
-///          x: T extends number ? T : string;
-///      };
-///      T extends {
-///          [K in keyof BadNested<infer P>]: BadNested<infer P>[K];
-///      } ? P : never;
-///   into
-///      T extends {
-///          x: infer P extends number ? infer P : string;
-///      } ? P : never
 struct GenericExpander<'a, 'b, 'c> {
-    pub analyzer: &'a Analyzer<'b, 'c>,
-    pub params: &'a [TypeParam],
-    pub i: &'a TypeParamInstantiation,
-    pub state: ExpanderState,
-}
-
-#[derive(Debug, Default)]
-struct ExpanderState {
-    expand_fully: bool,
-    dejavu: FxHashSet<JsWord>,
+    analyzer: &'a Analyzer<'b, 'c>,
+    params: &'a [TypeParam],
+    i: &'a TypeParamInstantiation,
+    /// Expand fully?
+    fully: bool,
 }
 
 impl Fold<Type> for GenericExpander<'_, '_, '_> {
-    fn fold(&mut self, ty: Type) -> Type {
-        let should_expand_fully = self.state.expand_fully
-            || match ty {
-                Type::Mapped(Mapped { ty: Some(..), .. }) => true,
-                _ => false,
-            };
-
-        let old_state_full = self.state.expand_fully;
-        self.state.expand_fully = true;
-
+    fn fold(&mut self, mut ty: Type) -> Type {
         let ty = ty.fold_children(self);
 
-        self.state.expand_fully = old_state_full;
+        let old_fully = self.fully;
+        self.fully |= match ty {
+            Type::Mapped(..) => true,
+            _ => false,
+        };
 
-        log::debug!("expanding: {:?}", ty.normalize());
-        match ty.normalize() {
+        match ty {
             Type::Ref(Ref {
                 span,
                 type_name: TsEntityName::Ident(Ident { ref sym, .. }),
-                type_args,
+                ref type_args,
                 ..
             }) => {
-                if *sym != *"BadNested" {
-                    if self.state.dejavu.contains(sym) {
-                        return ty;
-                    }
-                }
-                self.state.dejavu.insert(sym.clone());
-
                 log::info!("Ref: {}", sym);
-                // Handle references to type parameters
+
                 for (idx, p) in self.params.iter().enumerate() {
                     if p.name == *sym {
                         assert_eq!(*type_args, None);
 
-                        return self.i.params[idx].clone().fold_with(self);
+                        return self.i.params[idx].clone();
                     }
                 }
 
-                if self.state.expand_fully {
+                if self.fully {
                     // Check for builtin types
                     if !self.analyzer.is_builtin {
-                        if let Ok(ty) = builtin_types::get_type(self.analyzer.libs, *span, sym) {
+                        if let Ok(ty) = builtin_types::get_type(self.analyzer.libs, span, sym) {
                             let ty = ty.fold_with(self);
-                            // log::info!("builtin: {:?}", ty);
                             return ty;
                         }
                     }
                 }
 
-                if self.state.expand_fully {
+                if self.fully {
                     if let Some(types) = self.analyzer.find_type(sym) {
+                        log::info!(
+                            "Found {} items from {}",
+                            types.clone().into_iter().count(),
+                            sym
+                        );
+
                         for t in types {
                             match t.normalize() {
-                                Type::Ref(..) => return t.clone().fold_with(self),
-
-                                Type::TypeLit(..) | Type::Lit(..) => return t.clone(),
-
-                                Type::Interface(Interface { type_params, .. })
-                                | Type::Class(ty::Class { type_params, .. })
-                                | Type::Alias(Alias { type_params, .. }) => {
-                                    if let Some(type_params) = type_params {
+                                Type::Alias(alias) => {
+                                    if let Some(type_params) = &alias.type_params {
                                         if let Some(type_args) = &type_args {
                                             let mut v = GenericExpander {
                                                 analyzer: self.analyzer,
                                                 params: &type_params.params,
                                                 i: type_args,
-                                                state: Default::default(),
+                                                fully: self.fully,
                                             };
 
-                                            return t.clone().fold_with(&mut v);
+                                            return *alias.ty.clone().fold_with(&mut v);
                                         }
                                     } else {
-                                        return t.clone().fold_with(self);
+                                        return *alias.ty.clone();
                                     }
                                 }
 
+                                Type::Interface(i) => {
+                                    // TODO: Handle super
+                                    if !i.extends.is_empty() {
+                                        log::error!(
+                                            "not yet implemented: expanding interface which has a \
+                                             parent"
+                                        );
+                                        return ty;
+                                    }
+
+                                    let members = if let Some(type_params) = &i.type_params {
+                                        let type_args = if let Some(type_args) = &type_args {
+                                            type_args
+                                        } else {
+                                            return ty;
+                                        };
+
+                                        let mut v = GenericExpander {
+                                            analyzer: self.analyzer,
+                                            params: &type_params.params,
+                                            i: type_args,
+                                            fully: self.fully,
+                                        };
+
+                                        i.body.clone().fold_with(&mut v)
+                                    } else {
+                                        i.body.clone()
+                                    };
+
+                                    return Type::TypeLit(TypeLit {
+                                        span: i.span,
+                                        members,
+                                    });
+                                }
                                 _ => {}
                             }
                         }
                     }
                 }
-
-                // Normal type reference
             }
 
-            Type::Alias(alias) => {
-                return if let Some(type_params) = &alias.type_params {
-                    let mut v = GenericExpander {
-                        analyzer: self.analyzer,
-                        params: &type_params.params,
-                        i: self.i,
-                        state: take(&mut self.state),
-                    };
-                    log::debug!("Alias (generic)");
-                    let ty = *alias.ty.clone().fold_with(&mut v);
-                    self.state = v.state;
-                    ty
-                } else {
-                    *alias.ty.clone()
-                }
-            }
+            Type::Ref(..) => return ty,
 
-            Type::Interface(i) => {
-                // TODO: Handle super
-                if !i.extends.is_empty() {
-                    log::error!("not yet implemented: expanding interface which has a parent");
-                    return ty;
-                }
+            Type::Param(mut param) => {
+                param = param.fold_with(self);
 
-                let members = if let Some(type_params) = &i.type_params {
-                    let mut v = GenericExpander {
-                        analyzer: self.analyzer,
-                        params: &type_params.params,
-                        i: self.i,
-                        state: take(&mut self.state),
-                    };
-
-                    log::debug!("Interface (generic)");
-                    let ty = i.body.clone().fold_with(&mut v);
-                    self.state = v.state;
-                    ty
-                } else {
-                    log::debug!("Interface (not generic)");
-                    i.body.clone()
-                };
-
-                return Type::TypeLit(TypeLit {
-                    span: i.span,
-                    members,
-                });
-            }
-
-            Type::Conditional(Conditional {
-                span,
-                check_type,
-                extends_type,
-                true_type,
-                false_type,
-            }) => {
-                if let Some(v) = self.analyzer.extends(&check_type, &extends_type) {
-                    return if v {
-                        *true_type.clone()
-                    } else {
-                        *false_type.clone()
-                    };
-                }
-            }
-
-            Type::Mapped(Mapped {
-                span,
-                readonly,
-                optional,
-                type_param,
-                ty: Some(rty),
-            }) => {
-                if let Some(constraint) = &type_param.constraint {
-                    match &**constraint {
-                        Type::Operator(Operator {
-                            span,
-                            op: TsTypeOperatorOp::KeyOf,
-                            ty,
-                        }) => match &**ty {
-                            Type::Keyword(..) => return *ty.clone(),
-                            Type::TypeLit(lit) => {
-                                return Type::TypeLit(TypeLit {
-                                    span: lit.span,
-                                    members: lit
-                                        .members
-                                        .iter()
-                                        .filter_map(|member| {
-                                            let ret_ty = &**rty;
-                                            let mut computed = false;
-                                            let mut optional = false;
-                                            let mut readonly = false;
-                                            match member {
-                                                TypeElement::Call(_) => {}
-                                                TypeElement::Constructor(_) => return None,
-                                                TypeElement::Property(p) => {
-                                                    optional = p.optional;
-                                                    readonly = p.readonly;
-                                                    computed = p.computed;
-                                                }
-                                                TypeElement::Method(m) => {
-                                                    optional = m.optional;
-                                                    readonly = m.readonly;
-                                                    computed = m.computed;
-                                                }
-                                                TypeElement::Index(_) => {}
-                                            }
-
-                                            Some(TypeElement::Property(PropertySignature {
-                                                span: member.span(),
-                                                readonly,
-                                                key: box member.key()?.clone(),
-                                                computed,
-                                                optional,
-                                                params: vec![],
-                                                type_ann: Some(ret_ty.clone()),
-                                                type_params: None,
-                                            }))
-                                        })
-                                        .collect(),
-                                });
-                            }
-                            _ => {}
-                        },
-
-                        _ => {}
-                    }
-                }
-
-                match rty.normalize() {
-                    Type::IndexedAccessType(IndexedAccessType {
-                        span,
-                        readonly,
-                        obj_type,
-                        index_type,
-                    }) => {
-                        match obj_type.normalize() {
-                            Type::TypeLit(TypeLit { span, members, .. })
-                                if members.iter().all(|m| match m {
-                                    TypeElement::Property(_) => true,
-                                    _ => false,
-                                }) =>
-                            {
-                                let mut new_members = Vec::with_capacity(members.len());
-
-                                for m in members {
-                                    match m {
-                                        ty::TypeElement::Property(p) => {
-                                            let p = p.clone();
-                                            //
-                                            new_members.push(ty::TypeElement::Property(p));
-                                        }
-                                        _ => unreachable!(),
-                                    }
-                                }
-
-                                return Type::TypeLit(TypeLit {
-                                    span: *span,
-                                    members: new_members,
-                                });
-                            }
-
-                            _ => {}
-                        }
-                    }
-                    _ => {}
-                }
-            }
-
-            Type::Param(param) => {
                 for (idx, p) in self.params.iter().enumerate() {
                     if p.name == param.name {
                         match self.i.params[idx].clone().normalize() {
                             Type::Param(..) => {}
-                            _ => return self.i.params[idx].clone().fold_with(self),
+                            _ => return self.i.params[idx].clone(),
                         }
                     }
                 }
@@ -445,9 +280,154 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                         }
                     }
                 }
+
+                return Type::Param(param);
             }
 
-            _ => {}
+            // Alias returns other than self.
+            Type::Alias(mut alias) => {
+                alias = alias.fold_with(self);
+
+                if let Some(..) = &alias.type_params {
+                    // TODO: Handle unresolved type parameter
+                    log::warn!("An type alias has type parameters. It may not be fully expanded.");
+                }
+                return *alias.ty;
+            }
+
+            Type::Interface(mut i) if self.fully => {
+                i = i.fold_with(self);
+
+                if let Some(..) = &i.type_params {
+                    log::error!("An interface has type parameters. It may not be fully expanded.");
+                }
+
+                // TODO: Handle super
+                if !i.extends.is_empty() {
+                    log::error!("not yet implemented: expanding interface which has a parent");
+                    return Type::Interface(i);
+                }
+
+                return Type::TypeLit(TypeLit {
+                    span: i.span,
+                    members: i.body,
+                });
+            }
+
+            Type::Class(mut c) => {
+                c = c.fold_with(self);
+
+                if let Some(..) = &c.type_params {
+                    log::error!("A class has type parameters. It may not be fully expanded.");
+                }
+
+                return Type::Class(c);
+            }
+
+            Type::Conditional(mut c) => {
+                c = c.fold_with(self);
+
+                if let Some(v) = self.analyzer.extends(&c.check_type, &c.extends_type) {
+                    log::info!("conditional: shrinking");
+                    return if v { *c.true_type } else { *c.false_type };
+                }
+
+                log::info!("conditional: failed to process");
+
+                return Type::Conditional(c);
+            }
+
+            Type::Mapped(mut m @ Mapped { ty: Some(..), .. }) => {
+                m = m.fold_with(self);
+
+                if let Some(constraint) = &m.type_param.constraint {
+                    match &**constraint {
+                        Type::Operator(Operator {
+                            span,
+                            op: TsTypeOperatorOp::KeyOf,
+                            ty,
+                        }) => match &**ty {
+                            Type::Keyword(..) => return *ty.clone(),
+                            _ => {}
+                        },
+
+                        _ => {}
+                    }
+                }
+                m.ty = match m.ty {
+                    Some(box Type::IndexedAccessType(IndexedAccessType {
+                        span,
+                        readonly,
+                        obj_type,
+                        index_type,
+                    })) => {
+                        match *obj_type {
+                            Type::TypeLit(TypeLit { span, members, .. })
+                                if members.iter().all(|m| match m {
+                                    TypeElement::Property(_) => true,
+                                    TypeElement::Method(_) => true,
+                                    _ => false,
+                                }) =>
+                            {
+                                let mut new_members = Vec::with_capacity(members.len());
+
+                                for m in members {
+                                    match m {
+                                        ty::TypeElement::Property(p) => {
+                                            //
+                                            new_members.push(ty::TypeElement::Property(p));
+                                        }
+                                        _ => unreachable!(),
+                                    }
+                                }
+
+                                return Type::TypeLit(TypeLit {
+                                    span,
+                                    members: new_members,
+                                });
+                            }
+
+                            _ => Some(box Type::IndexedAccessType(IndexedAccessType {
+                                span,
+                                readonly,
+                                obj_type,
+                                index_type,
+                            })),
+                        }
+                    }
+                    _ => m.ty,
+                };
+
+                return Type::Mapped(m);
+            }
+
+            Type::This(..) | Type::Keyword(..) | Type::TypeLit(..) | Type::Lit(..) => {
+                return ty.fold_children(self)
+            }
+
+            Type::Query(..)
+            | Type::Operator(..)
+            | Type::Tuple(..)
+            | Type::Infer(..)
+            | Type::Import(..)
+            | Type::Predicate(..)
+            | Type::Array(..)
+            | Type::Union(..)
+            | Type::Intersection(..)
+            | Type::IndexedAccessType(..)
+            | Type::Function(..)
+            | Type::Constructor(..)
+            | Type::Method(..)
+            | Type::Enum(..)
+            | Type::EnumVariant(..)
+            | Type::Interface(..)
+            | Type::Namespace(..)
+            | Type::Module(..)
+            | Type::ClassInstance(..)
+            | Type::Mapped(..) => return ty.fold_children(self),
+
+            Type::Static(s) => return s.ty.clone().fold_with(self),
+            Type::Arc(a) => return (*a).clone().fold_with(self),
         }
 
         ty
