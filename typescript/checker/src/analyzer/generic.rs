@@ -78,43 +78,6 @@ impl Analyzer<'_, '_> {
             state: Default::default(),
         });
         match ty {
-            Type::Operator(mut op) => {
-                let expanded = self.expand_type_params(i, decl, *op.ty)?;
-
-                op.ty = box expanded;
-
-                return Ok(Type::Operator(op));
-            }
-
-            Type::Conditional(Conditional {
-                check_type,
-                extends_type,
-                true_type,
-                false_type,
-                ..
-            }) => {
-                let check_type = self.expand_type_params(i, decl, *check_type)?;
-                if let Some(v) = self.extends(&check_type, &extends_type) {
-                    return Ok(if v {
-                        *true_type.clone()
-                    } else {
-                        *false_type.clone()
-                    });
-                }
-
-                //
-                unimplemented!(
-                    "expanding conditional type.\nParams: {:#?}\nTypeParam decls: {:#?}\nCheck \
-                     Type: {:#?}\nextends_type: {:#?}\nTrue type: {:#?}\nFalse type: {:#?}",
-                    i,
-                    decl,
-                    check_type,
-                    extends_type,
-                    true_type,
-                    false_type
-                )
-            }
-
             Type::Tuple(Tuple { ref types, .. }) => {
                 let mut buf = vec![];
 
@@ -158,7 +121,7 @@ impl Analyzer<'_, '_> {
     }
 
     /// Returns `Some(true)` if `child` extends `parent`.
-    fn extends(&mut self, child: &Type, parent: &Type) -> Option<bool> {
+    fn extends(&self, child: &Type, parent: &Type) -> Option<bool> {
         let span = child.span();
 
         match self.assign(parent, child, span) {
@@ -255,7 +218,7 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                         for t in types {
                             log::info!("Found {}:\n{:?}", sym, ty);
                             match t.normalize() {
-                                // Type::Ref(..) => return t.clone().fold_with(self),
+                                Type::Ref(..) => return t.clone().fold_with(self),
                                 Type::Alias(alias) => {
                                     if let Some(type_params) = &alias.type_params {
                                         if let Some(type_args) = &type_args {
@@ -324,6 +287,22 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                         }
                         return self.i.params[idx].clone();
                     }
+                }
+            }
+
+            Type::Conditional(Conditional {
+                span,
+                check_type,
+                extends_type,
+                true_type,
+                false_type,
+            }) => {
+                if let Some(v) = self.analyzer.extends(&check_type, &extends_type) {
+                    return if v {
+                        *true_type.clone()
+                    } else {
+                        *false_type.clone()
+                    };
                 }
             }
 

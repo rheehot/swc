@@ -645,7 +645,7 @@ impl Analyzer<'_, '_> {
                 }
             };
             let mut v = GenericExpander {
-                analyzer: &self,
+                analyzer: self,
                 params: type_params,
                 i,
                 state: Default::default(),
