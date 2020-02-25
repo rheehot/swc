@@ -224,6 +224,7 @@ impl Analyzer<'_, '_> {
                                     }
 
                                     Type::Interface(Interface { type_params, .. })
+                                    | Type::Alias(Alias { type_params, .. })
                                     | Type::Class(ty::Class { type_params, .. }) => {
                                         if let Some(type_params) = type_params {
                                             if let Some(type_args) = type_args {
@@ -238,34 +239,6 @@ impl Analyzer<'_, '_> {
                                             }
                                         }
 
-                                        return Ok(ty.clone());
-                                    }
-
-                                    Type::Alias(Alias {
-                                        type_params: None,
-                                        ref ty,
-                                        ..
-                                    }) => {
-                                        verify!(ty);
-                                        return Ok(*ty.clone());
-                                    }
-
-                                    // Expand type parameters.
-                                    Type::Alias(Alias {
-                                        type_params: Some(ref tps),
-                                        ref ty,
-                                        ..
-                                    }) => {
-                                        let tps = tps.clone();
-                                        let ty = ty.clone();
-                                        let ty = if let Some(i) = type_args {
-                                            self.expand_type_params(i, &tps, *ty)?
-                                        } else {
-                                            *ty.clone()
-                                        };
-                                        let ty = self.expand(span, ty)?;
-
-                                        verify!(ty);
                                         return Ok(ty.clone());
                                     }
 
