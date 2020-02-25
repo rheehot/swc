@@ -3,9 +3,9 @@ use crate::{
     analyzer::scope::Scope,
     builtin_types,
     ty::{
-        self, CallSignature, Conditional, FnParam, IndexedAccessType, Mapped, Operator,
-        PropertySignature, Ref, Tuple, Type, TypeElement, TypeLit, TypeOrSpread, TypeParam,
-        TypeParamDecl, TypeParamInstantiation, Union,
+        self, Alias, CallSignature, Conditional, FnParam, IndexedAccessType, Interface, Mapped,
+        Operator, PropertySignature, Ref, Tuple, Type, TypeElement, TypeLit, TypeOrSpread,
+        TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
     },
     ValidationResult,
 };
@@ -168,7 +168,7 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
             };
 
         let old_state_full = self.state.expand_fully;
-        self.state.expand_fully = should_expand_fully;
+        self.state.expand_fully = true;
 
         let ty = ty.fold_children(self);
 
@@ -182,8 +182,10 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                 type_args,
                 ..
             }) => {
-                if self.state.dejavu.contains(sym) {
-                    return ty;
+                if *sym != *"BadNested" {
+                    if self.state.dejavu.contains(sym) {
+                        return ty;
+                    }
                 }
                 self.state.dejavu.insert(sym.clone());
 
@@ -202,25 +204,44 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                     if !self.analyzer.is_builtin {
                         if let Ok(ty) = builtin_types::get_type(self.analyzer.libs, *span, sym) {
                             let ty = ty.fold_with(self);
-                            log::info!("Processed: {:?}", ty);
+                            // log::info!("builtin: {:?}", ty);
                             return ty;
                         }
                     }
                 }
 
-                // if self.state.expand_fully {
-                //     if let Some(types) = self.analyzer.find_type(sym) {
-                //         for t in types {
-                //             log::info!("Found {}:\n{:?}", sym, ty);
-                //             match t.normalize() {
-                //                 Type::Ref(..) => return
-                // t.clone().fold_with(self),
-                //
-                //                 _ => {}
-                //             }
-                //         }
-                //     }
-                // }
+                if self.state.expand_fully {
+                    if let Some(types) = self.analyzer.find_type(sym) {
+                        for t in types {
+                            match t.normalize() {
+                                Type::Ref(..) => return t.clone().fold_with(self),
+
+                                Type::TypeLit(..) | Type::Lit(..) => return t.clone(),
+
+                                Type::Interface(Interface { type_params, .. })
+                                | Type::Class(ty::Class { type_params, .. })
+                                | Type::Alias(Alias { type_params, .. }) => {
+                                    if let Some(type_params) = type_params {
+                                        if let Some(type_args) = &type_args {
+                                            let mut v = GenericExpander {
+                                                analyzer: self.analyzer,
+                                                params: &type_params.params,
+                                                i: type_args,
+                                                state: Default::default(),
+                                            };
+
+                                            return t.clone().fold_with(&mut v);
+                                        }
+                                    } else {
+                                        return t.clone().fold_with(self);
+                                    }
+                                }
+
+                                _ => {}
+                            }
+                        }
+                    }
+                }
 
                 // Normal type reference
             }
