@@ -68,26 +68,15 @@ impl Analyzer<'_, '_> {
         &mut self,
         i: &TypeParamInstantiation,
         decl: &TypeParamDecl,
-        mut ty: Type,
+        ty: Type,
     ) -> ValidationResult {
+        let mut ty = ty.fold_with(&mut GenericExpander {
+            analyzer: self,
+            params: &decl.params,
+            i,
+            state: Default::default(),
+        });
         match ty {
-            Type::TypeLit(..) | Type::Keyword(..) | Type::Lit(..) => return Ok(ty),
-
-            Type::Ref(Ref {
-                type_name: TsEntityName::Ident(Ident { ref sym, .. }),
-                ..
-            }) => {
-                // Handle references to type parameters
-                for (idx, p) in decl.params.iter().enumerate() {
-                    if p.name == *sym {
-                        return Ok(Type::from(i.params[idx].clone()));
-                    }
-                }
-
-                // Normal type reference
-                return Ok(ty);
-            }
-
             Type::Operator(mut op) => {
                 let expanded = self.expand_type_params(i, decl, *op.ty)?;
 
@@ -125,18 +114,6 @@ impl Analyzer<'_, '_> {
                 )
             }
 
-            Type::Mapped(t) => {
-                let type_param = self.expand_type_param(&i, decl, t.type_param)?;
-
-                // TODO:
-                //
-                //     type T50<T> = { [P in keyof T]: number };
-                //     type T51 = T50<any>;  // { [x: string]: number }
-                //     type T52 = T50<unknown>;  // {}
-
-                return Ok(Type::Mapped(Mapped { type_param, ..t }));
-            }
-
             Type::Tuple(Tuple { ref types, .. }) => {
                 let mut buf = vec![];
 
@@ -158,40 +135,10 @@ impl Analyzer<'_, '_> {
                 return Ok(ty);
             }
 
-            Type::Function(ty::Function {
-                span,
-                ref params,
-                ref type_params,
-                ref ret_ty,
-                ..
-            }) => {
-                // assert_eq!(type_params.as_ref(), Some(decl));
-                let mut v = GenericExpander {
-                    analyzer: &self,
-                    params: &decl.params,
-                    i,
-                    state: Default::default(),
-                };
-                let ret_ty = ret_ty.clone().fold_with(&mut v);
-                let params = params.clone().fold_with(&mut v);
-                let type_params = type_params.clone().fold_with(&mut v);
-                return Ok(Type::Function(ty::Function {
-                    span,
-                    params,
-                    type_params,
-                    ret_ty,
-                }));
-            }
-
             _ => {}
         }
 
-        unimplemented!(
-            "expand_type_params({:#?})\nDecl: {:#?}\nInstantiation: {:#?}",
-            ty,
-            decl,
-            i
-        )
+        Ok(ty)
     }
 
     fn expand_type_param(

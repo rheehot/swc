@@ -1,5 +1,6 @@
 use super::{control_flow::CondFacts, Analyzer};
 use crate::{
+    analyzer::generic::GenericExpander,
     builtin_types,
     errors::Error,
     name::Name,
@@ -21,7 +22,7 @@ use std::{
     iter::{once, repeat},
 };
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Span, Spanned, DUMMY_SP};
+use swc_common::{FoldWith, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 macro_rules! no_ref {
@@ -222,9 +223,21 @@ impl Analyzer<'_, '_> {
                                         return Ok(ty.clone());
                                     }
 
-                                    Type::Interface(..) | Type::Class(..) => {
-                                        // TODO: Handle type parameters
-                                        verify!(ty);
+                                    Type::Interface(Interface { type_params, .. })
+                                    | Type::Class(ty::Class { type_params, .. }) => {
+                                        if let Some(type_params) = type_params {
+                                            if let Some(type_args) = type_args {
+                                                return Ok(ty.clone().fold_with(
+                                                    &mut GenericExpander {
+                                                        analyzer: self,
+                                                        params: &type_params.params,
+                                                        i: type_args,
+                                                        state: Default::default(),
+                                                    },
+                                                ));
+                                            }
+                                        }
+
                                         return Ok(ty.clone());
                                     }
 
