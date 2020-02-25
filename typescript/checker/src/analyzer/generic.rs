@@ -2,8 +2,9 @@ use super::Analyzer;
 use crate::{
     analyzer::scope::Scope,
     ty::{
-        self, Conditional, FnParam, IndexedAccessType, Mapped, Ref, Tuple, Type, TypeElement,
-        TypeLit, TypeOrSpread, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
+        self, Conditional, FnParam, IndexedAccessType, Mapped, Operator, Ref, Tuple, Type,
+        TypeElement, TypeLit, TypeOrSpread, TypeParam, TypeParamDecl, TypeParamInstantiation,
+        Union,
     },
     ValidationResult,
 };
@@ -194,19 +195,28 @@ pub(super) struct ExpanderState {
 
 impl Fold<Type> for GenericExpander<'_, '_, '_> {
     fn fold(&mut self, ty: Type) -> Type {
-        fn handle_lit(ty: &Type) -> Type {
+        fn handle_lit(ty: &Type) -> Result<Type, ()> {
             log::trace!("Expander: handle_lit {:?}", ty);
 
             match ty.normalize() {
                 Type::Param(ty)
                     if ty.constraint.is_some() && is_literals(&ty.constraint.as_ref().unwrap()) =>
                 {
-                    return *ty.constraint.clone().unwrap();
+                    return Ok(*ty.constraint.clone().unwrap());
+                }
+                Type::Param(ty)
+                    if ty.constraint.is_some()
+                        && match **ty.constraint.as_ref().unwrap() {
+                            Type::Keyword(..) => true,
+                            _ => false,
+                        } =>
+                {
+                    return Ok(*ty.constraint.clone().unwrap());
                 }
                 _ => {}
             }
 
-            ty.clone()
+            Err(())
         }
 
         let should_expand_fully = self.state.expand_fully
@@ -233,9 +243,10 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                     if p.name == *sym {
                         assert_eq!(*type_args, None);
 
-                        let new_ty = handle_lit(&self.i.params[idx]);
-
-                        return new_ty;
+                        if let Ok(new_ty) = handle_lit(&self.i.params[idx]) {
+                            return new_ty;
+                        }
+                        return self.i.params[idx].clone();
                     }
                 }
 
@@ -306,7 +317,10 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
             Type::Param(param) => {
                 for (idx, p) in self.params.iter().enumerate() {
                     if p.name == param.name {
-                        return handle_lit(&self.i.params[idx]);
+                        if let Ok(ty) = handle_lit(&self.i.params[idx]) {
+                            return ty;
+                        }
+                        return self.i.params[idx].clone();
                     }
                 }
             }
@@ -318,6 +332,22 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                 type_param,
                 ty: Some(rty),
             }) => {
+                log::info!("constraint: {:?}", type_param.constraint);
+                if let Some(constraint) = &type_param.constraint {
+                    match &**constraint {
+                        Type::Operator(Operator {
+                            span,
+                            op: TsTypeOperatorOp::KeyOf,
+                            ty,
+                        }) => match &**ty {
+                            Type::Keyword(..) => return *ty.clone(),
+                            _ => {}
+                        },
+
+                        _ => {}
+                    }
+                }
+
                 match rty.normalize() {
                     Type::IndexedAccessType(IndexedAccessType {
                         span,
