@@ -152,14 +152,6 @@ impl Fold<VarDeclarator> for TypeResolver {
                     node.name = Pat::Invalid(Invalid { span: DUMMY_SP });
                     return node;
                 }
-                if i.type_ann.is_none() {
-                    if let Some(ty) = self.info.vars.remove(&i.sym).map(From::from) {
-                        i.type_ann = Some(TsTypeAnn {
-                            span: DUMMY_SP,
-                            type_ann: box ty,
-                        });
-                    }
-                }
             }
             _ => {}
         }
@@ -177,7 +169,22 @@ impl Fold<VarDeclarator> for TypeResolver {
         };
 
         if node.init.is_some() {
+            node.name.set_ty(None);
             return node;
+        }
+
+        match node.name {
+            Pat::Ident(ref mut i) => {
+                if i.type_ann.is_none() {
+                    if let Some(ty) = self.info.vars.remove(&i.sym).map(From::from) {
+                        i.type_ann = Some(TsTypeAnn {
+                            span: DUMMY_SP,
+                            type_ann: box ty,
+                        });
+                    }
+                }
+            }
+            _ => {}
         }
 
         if node.init.is_none() {
