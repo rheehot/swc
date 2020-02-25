@@ -1,9 +1,7 @@
 //! Handles new expressions and call expressions.
 use super::super::Analyzer;
 use crate::{
-    analyzer::{
-        expr::TypeOfMode, generic::GenericExpander, props::prop_name_to_expr, util::ResultExt,
-    },
+    analyzer::{expr::TypeOfMode, props::prop_name_to_expr, util::ResultExt},
     builtin_types,
     errors::Error,
     swc_common::FoldWith,
@@ -644,13 +642,9 @@ impl Analyzer<'_, '_> {
                     &inferred
                 }
             };
-            let mut v = GenericExpander {
-                analyzer: self,
-                params: type_params,
-                i,
-                state: Default::default(),
-            };
-            return Ok(ret_ty.clone().fold_with(&mut v));
+            let ty = self.expand_type_params(i, type_params, ret_ty.clone())?;
+
+            return Ok(ty);
         }
 
         Ok(ret_ty.clone())

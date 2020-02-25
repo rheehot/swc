@@ -70,12 +70,12 @@ impl Analyzer<'_, '_> {
     pub(super) fn expand_type_params(
         &mut self,
         i: &TypeParamInstantiation,
-        decl: &TypeParamDecl,
+        params: &[TypeParam],
         ty: Type,
     ) -> ValidationResult {
         let mut ty = ty.fold_with(&mut GenericExpander {
             analyzer: self,
-            params: &decl.params,
+            params,
             i,
             state: Default::default(),
         });
@@ -84,7 +84,7 @@ impl Analyzer<'_, '_> {
                 let mut buf = vec![];
 
                 for (idx, t) in types.into_iter().enumerate() {
-                    let t = self.expand_type_params(i, decl, t.clone())?;
+                    let t = self.expand_type_params(i, params, t.clone())?;
                     buf.push((idx, t))
                 }
 
@@ -110,7 +110,7 @@ impl Analyzer<'_, '_> {
     fn expand_type_param(
         &mut self,
         i: &TypeParamInstantiation,
-        decl: &TypeParamDecl,
+        decl: &[TypeParam],
         mut type_param: TypeParam,
     ) -> ValidationResult<TypeParam> {
         if let Some(c) = type_param.constraint {
@@ -146,7 +146,7 @@ impl Analyzer<'_, '_> {
 ///      T extends {
 ///          x: infer P extends number ? infer P : string;
 ///      } ? P : never
-pub(super) struct GenericExpander<'a, 'b, 'c> {
+struct GenericExpander<'a, 'b, 'c> {
     pub analyzer: &'a Analyzer<'b, 'c>,
     pub params: &'a [TypeParam],
     pub i: &'a TypeParamInstantiation,
@@ -154,7 +154,7 @@ pub(super) struct GenericExpander<'a, 'b, 'c> {
 }
 
 #[derive(Debug, Default)]
-pub(super) struct ExpanderState {
+struct ExpanderState {
     expand_fully: bool,
     dejavu: FxHashSet<JsWord>,
 }

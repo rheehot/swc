@@ -1,6 +1,5 @@
 use super::{control_flow::CondFacts, Analyzer};
 use crate::{
-    analyzer::generic::GenericExpander,
     builtin_types,
     errors::Error,
     name::Name,
@@ -226,16 +225,14 @@ impl Analyzer<'_, '_> {
                                     Type::Interface(Interface { type_params, .. })
                                     | Type::Alias(Alias { type_params, .. })
                                     | Type::Class(ty::Class { type_params, .. }) => {
-                                        if let Some(type_params) = type_params {
+                                        if let Some(type_params) = type_params.clone() {
                                             if let Some(type_args) = type_args {
-                                                return Ok(ty.clone().fold_with(
-                                                    &mut GenericExpander {
-                                                        analyzer: self,
-                                                        params: &type_params.params,
-                                                        i: type_args,
-                                                        state: Default::default(),
-                                                    },
-                                                ));
+                                                let ty = ty.clone();
+                                                return self.expand_type_params(
+                                                    &type_args,
+                                                    &type_params.params,
+                                                    ty,
+                                                );
                                             }
                                         }
 
