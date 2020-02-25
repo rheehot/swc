@@ -3,15 +3,15 @@ use crate::{
     analyzer::scope::Scope,
     builtin_types,
     ty::{
-        self, Alias, CallSignature, Conditional, FnParam, IndexedAccessType, Interface, Mapped,
-        Operator, PropertySignature, Ref, Tuple, Type, TypeElement, TypeLit, TypeOrSpread,
+        self, Alias, Array, CallSignature, Conditional, FnParam, IndexedAccessType, Interface,
+        Mapped, Operator, PropertySignature, Ref, Tuple, Type, TypeElement, TypeLit, TypeOrSpread,
         TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
     },
     ValidationResult,
 };
 use bitflags::_core::mem::take;
 use fxhash::{FxHashMap, FxHashSet};
-use swc_atoms::JsWord;
+use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
@@ -148,6 +148,8 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
             _ => false,
         };
 
+        log::debug!("{:?}", ty);
+
         match ty {
             Type::Ref(Ref {
                 span,
@@ -155,6 +157,16 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                 ref type_args,
                 ..
             }) => {
+                if *sym == js_word!("Array") {
+                    return Type::Array(Array {
+                        span,
+                        elem_type: box type_args
+                            .as_ref()
+                            .and_then(|args| args.params.iter().next().cloned())
+                            .unwrap_or_else(|| Type::any(span)),
+                    });
+                }
+
                 log::info!("Ref: {}", sym);
 
                 for (idx, p) in self.params.iter().enumerate() {
