@@ -327,12 +327,9 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
             Type::Conditional(mut c) => {
                 c = c.fold_with(self);
 
-                if let Some(v) = self.analyzer.extends(&c.check_type, &c.extends_type) {
-                    log::info!("conditional: shrinking");
-                    return if v { *c.true_type } else { *c.false_type };
-                }
-
-                log::info!("conditional: failed to process");
+                // if let Some(v) = self.analyzer.extends(&c.check_type, &c.extends_type) {
+                //     return if v { *c.true_type } else { *c.false_type };
+                // }
 
                 return Type::Conditional(c);
             }
