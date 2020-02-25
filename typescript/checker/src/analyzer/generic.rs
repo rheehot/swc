@@ -10,7 +10,8 @@ use crate::{
     ValidationResult,
 };
 use bitflags::_core::mem::take;
-use fxhash::FxHashMap;
+use fxhash::{FxHashMap, FxHashSet};
+use swc_atoms::JsWord;
 use swc_common::{Fold, FoldWith, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
@@ -152,51 +153,28 @@ pub(super) struct GenericExpander<'a, 'b, 'c> {
     pub state: ExpanderState,
 }
 
-#[derive(Debug, Clone, Copy, Default)]
+#[derive(Debug, Default)]
 pub(super) struct ExpanderState {
     expand_fully: bool,
+    dejavu: FxHashSet<JsWord>,
 }
 
 impl Fold<Type> for GenericExpander<'_, '_, '_> {
     fn fold(&mut self, ty: Type) -> Type {
-        fn handle_lit(ty: &Type) -> Result<Type, ()> {
-            log::trace!("Expander: handle_lit {:?}", ty);
-
-            match ty.normalize() {
-                Type::Param(ty)
-                    if ty.constraint.is_some() && is_literals(&ty.constraint.as_ref().unwrap()) =>
-                {
-                    return Ok(*ty.constraint.clone().unwrap());
-                }
-                Type::Param(ty)
-                    if ty.constraint.is_some()
-                        && match **ty.constraint.as_ref().unwrap() {
-                            Type::Keyword(..) => true,
-                            Type::Ref(..) => true,
-                            _ => false,
-                        } =>
-                {
-                    return Ok(*ty.constraint.clone().unwrap());
-                }
-                _ => {}
-            }
-
-            Err(())
-        }
-
         let should_expand_fully = self.state.expand_fully
             || match ty {
                 Type::Mapped(Mapped { ty: Some(..), .. }) => true,
                 _ => false,
             };
 
-        let old_state = take(&mut self.state);
+        let old_state_full = self.state.expand_fully;
         self.state.expand_fully = should_expand_fully;
 
         let ty = ty.fold_children(self);
 
-        self.state = old_state;
+        self.state.expand_fully = old_state_full;
 
+        log::debug!("expanding: {:?}", ty.normalize());
         match ty.normalize() {
             Type::Ref(Ref {
                 span,
@@ -204,15 +182,18 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                 type_args,
                 ..
             }) => {
+                if self.state.dejavu.contains(sym) {
+                    return ty;
+                }
+                self.state.dejavu.insert(sym.clone());
+
+                log::info!("Ref: {}", sym);
                 // Handle references to type parameters
                 for (idx, p) in self.params.iter().enumerate() {
                     if p.name == *sym {
                         assert_eq!(*type_args, None);
 
-                        if let Ok(new_ty) = handle_lit(&self.i.params[idx]) {
-                            return new_ty;
-                        }
-                        return self.i.params[idx].clone();
+                        return self.i.params[idx].clone().fold_with(self);
                     }
                 }
 
@@ -221,36 +202,27 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                     if !self.analyzer.is_builtin {
                         if let Ok(ty) = builtin_types::get_type(self.analyzer.libs, *span, sym) {
                             let ty = ty.fold_with(self);
+                            log::info!("Processed: {:?}", ty);
                             return ty;
                         }
                     }
                 }
 
-                if self.state.expand_fully {
-                    if let Some(types) = self.analyzer.find_type(sym) {
-                        for t in types {
-                            log::info!("Found {}:\n{:?}", sym, ty);
-                            match t.normalize() {
-                                Type::Ref(..) => return t.clone().fold_with(self),
-
-                                _ => {}
-                            }
-                        }
-                    }
-                }
+                // if self.state.expand_fully {
+                //     if let Some(types) = self.analyzer.find_type(sym) {
+                //         for t in types {
+                //             log::info!("Found {}:\n{:?}", sym, ty);
+                //             match t.normalize() {
+                //                 Type::Ref(..) => return
+                // t.clone().fold_with(self),
+                //
+                //                 _ => {}
+                //             }
+                //         }
+                //     }
+                // }
 
                 // Normal type reference
-            }
-
-            Type::Param(param) => {
-                for (idx, p) in self.params.iter().enumerate() {
-                    if p.name == param.name {
-                        if let Ok(ty) = handle_lit(&self.i.params[idx]) {
-                            return ty;
-                        }
-                        return self.i.params[idx].clone();
-                    }
-                }
             }
 
             Type::Alias(alias) => {
@@ -259,10 +231,12 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                         analyzer: self.analyzer,
                         params: &type_params.params,
                         i: self.i,
-                        state: self.state,
+                        state: take(&mut self.state),
                     };
-
-                    *alias.ty.clone().fold_with(&mut v)
+                    log::debug!("Alias (generic)");
+                    let ty = *alias.ty.clone().fold_with(&mut v);
+                    self.state = v.state;
+                    ty
                 } else {
                     *alias.ty.clone()
                 }
@@ -280,11 +254,15 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                         analyzer: self.analyzer,
                         params: &type_params.params,
                         i: self.i,
-                        state: self.state,
+                        state: take(&mut self.state),
                     };
 
-                    i.body.clone().fold_with(&mut v)
+                    log::debug!("Interface (generic)");
+                    let ty = i.body.clone().fold_with(&mut v);
+                    self.state = v.state;
+                    ty
                 } else {
+                    log::debug!("Interface (not generic)");
                     i.body.clone()
                 };
 
@@ -325,6 +303,20 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                             ty,
                         }) => match &**ty {
                             Type::Keyword(..) => return *ty.clone(),
+                            Type::TypeLit(lit) => {
+                                return Type::TypeLit(TypeLit {
+                                    span: lit.span,
+                                    members: lit
+                                        .members
+                                        .clone()
+                                        .into_iter()
+                                        .map(|member| {
+                                            //
+                                            member
+                                        })
+                                        .collect(),
+                                });
+                            }
                             _ => {}
                         },
 
@@ -369,6 +361,41 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                         }
                     }
                     _ => {}
+                }
+            }
+
+            Type::Param(param) => {
+                for (idx, p) in self.params.iter().enumerate() {
+                    if p.name == param.name {
+                        match self.i.params[idx].clone().normalize() {
+                            Type::Param(..) => {}
+                            _ => return self.i.params[idx].clone().fold_with(self),
+                        }
+                    }
+                }
+
+                if param.constraint.is_some() && is_literals(&param.constraint.as_ref().unwrap()) {
+                    return *param.constraint.clone().unwrap();
+                }
+
+                if param.constraint.is_some()
+                    && match **param.constraint.as_ref().unwrap() {
+                        Type::Keyword(..) => true,
+                        Type::Ref(..) => true,
+                        Type::TypeLit(..) => true,
+                        _ => false,
+                    }
+                {
+                    return *param.constraint.clone().unwrap();
+                }
+
+                for (idx, p) in self.params.iter().enumerate() {
+                    if p.name == param.name {
+                        match self.i.params[idx].clone().normalize() {
+                            Type::Param(..) => return self.i.params[idx].clone(),
+                            _ => {}
+                        }
+                    }
                 }
             }
 
