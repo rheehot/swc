@@ -614,7 +614,9 @@ impl<'a> Emitter<'a> {
     fn emit_ts_qualified_name(&mut self, n: &TsQualifiedName) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_qualified_name")
+        emit!(n.left);
+        punct!(".");
+        emit!(n.right);
     }
 
     #[emitter]

@@ -3,9 +3,9 @@ use crate::{
     analyzer::scope::Scope,
     builtin_types,
     ty::{
-        self, Conditional, FnParam, IndexedAccessType, Mapped, Operator, Ref, Tuple, Type,
-        TypeElement, TypeLit, TypeOrSpread, TypeParam, TypeParamDecl, TypeParamInstantiation,
-        Union,
+        self, CallSignature, Conditional, FnParam, IndexedAccessType, Mapped, Operator,
+        PropertySignature, Ref, Tuple, Type, TypeElement, TypeLit, TypeOrSpread, TypeParam,
+        TypeParamDecl, TypeParamInstantiation, Union,
     },
     ValidationResult,
 };
@@ -308,11 +308,38 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                                     span: lit.span,
                                     members: lit
                                         .members
-                                        .clone()
-                                        .into_iter()
-                                        .map(|member| {
-                                            //
-                                            member
+                                        .iter()
+                                        .filter_map(|member| {
+                                            let ret_ty = &**rty;
+                                            let mut computed = false;
+                                            let mut optional = false;
+                                            let mut readonly = false;
+                                            match member {
+                                                TypeElement::Call(_) => {}
+                                                TypeElement::Constructor(_) => return None,
+                                                TypeElement::Property(p) => {
+                                                    optional = p.optional;
+                                                    readonly = p.readonly;
+                                                    computed = p.computed;
+                                                }
+                                                TypeElement::Method(m) => {
+                                                    optional = m.optional;
+                                                    readonly = m.readonly;
+                                                    computed = m.computed;
+                                                }
+                                                TypeElement::Index(_) => {}
+                                            }
+
+                                            Some(TypeElement::Property(PropertySignature {
+                                                span: member.span(),
+                                                readonly,
+                                                key: box member.key()?.clone(),
+                                                computed,
+                                                optional,
+                                                params: vec![],
+                                                type_ann: Some(ret_ty.clone()),
+                                                type_params: None,
+                                            }))
                                         })
                                         .collect(),
                                 });
