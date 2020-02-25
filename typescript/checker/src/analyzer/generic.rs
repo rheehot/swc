@@ -1,6 +1,7 @@
 use super::Analyzer;
 use crate::{
     analyzer::scope::Scope,
+    builtin_types,
     ty::{
         self, Conditional, FnParam, IndexedAccessType, Mapped, Operator, Ref, Tuple, Type,
         TypeElement, TypeLit, TypeOrSpread, TypeParam, TypeParamDecl, TypeParamInstantiation,
@@ -171,6 +172,7 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                     if ty.constraint.is_some()
                         && match **ty.constraint.as_ref().unwrap() {
                             Type::Keyword(..) => true,
+                            Type::Ref(..) => true,
                             _ => false,
                         } =>
                 {
@@ -197,6 +199,7 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
 
         match ty.normalize() {
             Type::Ref(Ref {
+                span,
                 type_name: TsEntityName::Ident(Ident { ref sym, .. }),
                 type_args,
                 ..
@@ -210,6 +213,15 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                             return new_ty;
                         }
                         return self.i.params[idx].clone();
+                    }
+                }
+
+                if self.state.expand_fully {
+                    // Check for builtin types
+                    if !self.analyzer.is_builtin {
+                        if let Ok(ty) = builtin_types::get_type(self.analyzer.libs, *span, sym) {
+                            return ty.fold_with(self);
+                        }
                     }
                 }
 
