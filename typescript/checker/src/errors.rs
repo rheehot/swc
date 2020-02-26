@@ -1,4 +1,5 @@
 use crate::{
+    debug::print_backtrace,
     name::Name,
     ty::{Type, TypeElement, TypeParamInstantiation},
 };
@@ -29,6 +30,7 @@ impl Errors {
         }
 
         if err.span().is_dummy() {
+            print_backtrace();
             panic!("Error with a dummy span found: {:?}", err)
         }
     }
