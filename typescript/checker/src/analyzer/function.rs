@@ -26,17 +26,20 @@ impl Validate<Function> for Analyzer<'_, '_> {
                 // TODO: Move this to parser
                 let mut has_optional = false;
                 for p in &f.params {
-                    if has_optional {
-                        child.info.errors.push(Error::TS1016 { span: p.span() });
-                    }
-
                     match *p {
                         Pat::Ident(Ident { optional, .. }) => {
+                            // Allow optional after optional parameter
                             if optional {
                                 has_optional = true;
+                            } else if has_optional {
+                                child.info.errors.push(Error::TS1016 { span: p.span() });
                             }
                         }
-                        _ => {}
+                        _ => {
+                            if has_optional {
+                                child.info.errors.push(Error::TS1016 { span: p.span() });
+                            }
+                        }
                     }
                 }
             }
