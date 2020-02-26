@@ -1,6 +1,7 @@
 use super::Analyzer;
 use crate::{
     analyzer::util::ResultExt,
+    debug::print_backtrace,
     errors::{Error, Errors},
     ty::{
         Array, Class, ClassInstance, ClassMember, EnumVariant, FnParam, Function, Interface,
@@ -44,10 +45,13 @@ impl Analyzer<'_, '_> {
     ///     - Not a type parameter declared on child scope.
     fn verify_before_assign(&self, ty: &Type) {
         match ty.normalize() {
-            Type::Ref(ref r) => panic!(
-                "A reference type should be expanded before calling .assign()\n{:?}",
-                r,
-            ),
+            Type::Ref(ref r) => {
+                print_backtrace();
+                panic!(
+                    "A reference type should be expanded before calling .assign()\n{:?}",
+                    r,
+                )
+            }
 
             _ => {}
         }
