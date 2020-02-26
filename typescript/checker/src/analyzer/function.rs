@@ -74,6 +74,11 @@ impl Validate<Function> for Analyzer<'_, '_> {
                 }
             });
 
+            let declared_ret_ty = match declared_ret_ty {
+                Some(ty) => Some(child.expand(f.span, ty)?),
+                None => None,
+            };
+
             let inferred_return_type = try_opt!(f
                 .body
                 .as_mut()
