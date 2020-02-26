@@ -12,10 +12,11 @@ use crate::{
 use bitflags::_core::mem::take;
 use fxhash::{FxHashMap, FxHashSet};
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Fold, FoldWith, Span, Spanned, DUMMY_SP};
+use swc_common::{Fold, FoldWith, Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ecma_utils::Id;
 
+/// Type inference for arguments.
 impl Analyzer<'_, '_> {
     /// TODO: implement
     pub(super) fn infer_arg_types(
@@ -26,26 +27,10 @@ impl Analyzer<'_, '_> {
     ) -> ValidationResult<TypeParamInstantiation> {
         let mut inferred = FxHashMap::default();
 
-        // TODO: Handle optional parameters
-        // TODO: Convert this to error.
-        assert!(args.len() >= params.len());
-
-        for (p, arg) in params.iter().zip(args) {
-            match &p.ty {
-                Type::Param(TypeParam { ref name, .. }) => {
-                    assert_eq!(
-                        arg.spread, None,
-                        "argument type inference for spread argument is not implemented yet"
-                    );
-
-                    // Very simple case.
-                    inferred.insert(name, arg.ty.clone());
-                    // function foo<T>(a: T) {}
-                }
-
-                _ => {}
-            }
+        InferGeneric {
+            inferred: &mut inferred,
         }
+        .infer(params, args);
 
         let mut params = Vec::with_capacity(type_params.len());
         for type_param in type_params {
@@ -73,6 +58,70 @@ struct InferGeneric<'a> {
     inferred: &'a mut FxHashMap<JsWord, Type>,
 }
 
+impl InferGeneric<'_> {
+    fn infer(&mut self, params: &[FnParam], args: &[TypeOrSpread]) {
+        // TODO: Handle optional parameters
+        // TODO: Convert this to error.
+        assert!(args.len() >= params.len());
+
+        for (p, arg) in params.iter().zip(args) {
+            assert_eq!(
+                arg.spread, None,
+                "argument inference for spread argument in a function / method call is not \
+                 implemented yet"
+            );
+
+            self.compare_ty(&p.ty, &arg.ty)
+        }
+    }
+
+    fn compare_ty(&mut self, param: &Type, arg: &Type) {
+        let param = param.normalize();
+        let arg = arg.normalize();
+
+        log::debug!("param = {:#?}", param);
+        log::debug!("arg = {:#?}", arg);
+
+        match param {
+            Type::Param(TypeParam { ref name, .. }) => {
+                // Very simple case.
+                self.inferred.insert(name.clone(), arg.clone());
+                // function foo<T>(a: T) {}
+            }
+
+            Type::Array(Array { elem_type, .. }) => match arg {
+                Type::Array(Array {
+                    elem_type: arg_elem_type,
+                    ..
+                }) => self.compare_ty(&elem_type, &arg_elem_type),
+
+                _ => {}
+            },
+
+            Type::Function(p) => match arg {
+                Type::Function(a) => {
+                    self.compare_fn_params(&p.params, &a.params);
+                    self.compare_ty(&p.ret_ty, &a.ret_ty);
+                }
+                _ => {}
+            },
+
+            _ => unimplemented!("compare_ty: {:?}", param),
+        }
+    }
+
+    fn compare_fn_param(&mut self, param: &FnParam, arg: &FnParam) {
+        self.compare_ty(&param.ty, &arg.ty)
+    }
+
+    fn compare_fn_params(&mut self, params: &[FnParam], args: &[FnParam]) {
+        for (param, arg) in params.iter().zip(args) {
+            self.compare_fn_param(param, arg)
+        }
+    }
+}
+
+/// Generic expander.
 impl Analyzer<'_, '_> {
     pub(super) fn expand_type_params(
         &mut self,
