@@ -12,7 +12,7 @@ use crate::{
 use bitflags::_core::mem::take;
 use fxhash::{FxHashMap, FxHashSet};
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Fold, FoldWith, Spanned, DUMMY_SP};
+use swc_common::{Fold, FoldWith, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
@@ -140,15 +140,11 @@ struct GenericExpander<'a, 'b, 'c> {
 
 impl Fold<Type> for GenericExpander<'_, '_, '_> {
     fn fold(&mut self, mut ty: Type) -> Type {
-        let ty = ty.fold_children(self);
-
         let old_fully = self.fully;
         self.fully |= match ty {
             Type::Mapped(..) => true,
             _ => false,
         };
-
-        log::debug!("{:?}", ty);
 
         match ty {
             Type::Ref(Ref {
