@@ -150,27 +150,27 @@ impl Analyzer<'_, '_> {
         let fn_ty: Result<_, _> = try {
             let no_implicit_any_span = name.as_ref().map(|name| name.span);
 
-            if let Some(name) = name {
-                // We use `typeof function` to infer recursive function's return type.
-                match self.declare_var(
-                    f.span,
-                    VarDeclKind::Var,
-                    name.sym.clone(),
-                    Some(Type::Query(QueryType {
-                        span: f.span,
-                        expr: TsEntityName::Ident(name.clone()).into(),
-                    })),
-                    // value is initialized
-                    true,
-                    // Allow overriding
-                    true,
-                ) {
-                    Ok(()) => {}
-                    Err(err) => {
-                        self.info.errors.push(err);
-                    }
-                }
-            }
+            // if let Some(name) = name {
+            //     // We use `typeof function` to infer recursive function's return type.
+            //     match self.declare_var(
+            //         f.span,
+            //         VarDeclKind::Var,
+            //         name.sym.clone(),
+            //         Some(Type::Query(QueryType {
+            //             span: f.span,
+            //             expr: TsEntityName::Ident(name.clone()).into(),
+            //         })),
+            //         // value is initialized
+            //         true,
+            //         // Allow overriding
+            //         true,
+            //     ) {
+            //         Ok(()) => {}
+            //         Err(err) => {
+            //             self.info.errors.push(err);
+            //         }
+            //     }
+            // }
 
             if let Some(name) = name {
                 assert_eq!(self.scope.declaring_fn, None);
