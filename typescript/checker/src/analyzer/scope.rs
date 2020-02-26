@@ -174,6 +174,10 @@ impl Analyzer<'_, '_> {
     ///
     ///   - Type alias
     pub(super) fn expand(&mut self, span: Span, ty: Type) -> ValidationResult<Type> {
+        if self.is_builtin {
+            return Ok(ty);
+        }
+
         macro_rules! verify {
             ($ty:expr) => {{
                 if cfg!(debug_assertions) {
