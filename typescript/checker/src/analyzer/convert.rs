@@ -411,6 +411,17 @@ impl Validate<TsTypeRef> for Analyzer<'_, '_> {
                 }
             }
 
+            TsEntityName::Ident(ref i) => {
+                if let Some(types) = self.find_type(&i.sym) {
+                    for ty in types {
+                        match ty.normalize() {
+                            Type::Param(..) => return Ok(ty.clone()),
+                            _ => {}
+                        }
+                    }
+                }
+            }
+
             _ => {}
         }
 
