@@ -60,6 +60,7 @@ mod util;
 #[derive(Debug, Clone, Copy)]
 pub(crate) struct Ctx {
     in_declare: bool,
+    var_kind: VarDeclKind,
     pat_mode: PatMode,
     computed_prop_mode: ComputedPropMode,
     allow_ref_declaring: bool,
@@ -221,6 +222,7 @@ impl<'a, 'b> Analyzer<'a, 'b> {
                 allow_ref_declaring: false,
                 pat_mode: PatMode::Assign,
                 computed_prop_mode: ComputedPropMode::Object,
+                var_kind: VarDeclKind::Var,
             },
             loader,
             is_builtin,
