@@ -347,6 +347,48 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
 
                 log::info!("m: {:#?}", m);
 
+                m.ty = match m.ty {
+                    Some(box Type::IndexedAccessType(IndexedAccessType {
+                        span,
+                        readonly,
+                        obj_type,
+                        index_type,
+                    })) => {
+                        match *obj_type {
+                            Type::TypeLit(TypeLit { span, members, .. })
+                                if members.iter().all(|m| match m {
+                                    TypeElement::Property(_) => true,
+                                    _ => false,
+                                }) =>
+                            {
+                                let mut new_members = Vec::with_capacity(members.len());
+                                for m in members {
+                                    match m {
+                                        ty::TypeElement::Property(p) => {
+                                            //
+                                            new_members.push(ty::TypeElement::Property(p));
+                                        }
+                                        _ => unreachable!(),
+                                    }
+                                }
+
+                                return Type::TypeLit(TypeLit {
+                                    span,
+                                    members: new_members,
+                                });
+                            }
+
+                            _ => Some(box Type::IndexedAccessType(IndexedAccessType {
+                                span,
+                                readonly,
+                                obj_type,
+                                index_type,
+                            })),
+                        }
+                    }
+                    _ => m.ty,
+                };
+
                 if let Some(constraint) = &m.type_param.constraint {
                     match &**constraint {
                         Type::Operator(Operator {
@@ -402,48 +444,6 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                         _ => {}
                     }
                 }
-
-                m.ty = match m.ty {
-                    Some(box Type::IndexedAccessType(IndexedAccessType {
-                        span,
-                        readonly,
-                        obj_type,
-                        index_type,
-                    })) => {
-                        match *obj_type {
-                            Type::TypeLit(TypeLit { span, members, .. })
-                                if members.iter().all(|m| match m {
-                                    TypeElement::Property(_) => true,
-                                    _ => false,
-                                }) =>
-                            {
-                                let mut new_members = Vec::with_capacity(members.len());
-                                for m in members {
-                                    match m {
-                                        ty::TypeElement::Property(p) => {
-                                            //
-                                            new_members.push(ty::TypeElement::Property(p));
-                                        }
-                                        _ => unreachable!(),
-                                    }
-                                }
-
-                                return Type::TypeLit(TypeLit {
-                                    span,
-                                    members: new_members,
-                                });
-                            }
-
-                            _ => Some(box Type::IndexedAccessType(IndexedAccessType {
-                                span,
-                                readonly,
-                                obj_type,
-                                index_type,
-                            })),
-                        }
-                    }
-                    _ => m.ty,
-                };
 
                 return Type::Mapped(m);
             }
