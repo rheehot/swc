@@ -67,7 +67,13 @@ impl Analyzer<'_, '_> {
             params,
         })
     }
+}
 
+struct InferGeneric<'a> {
+    inferred: &'a mut FxHashMap<JsWord, Type>,
+}
+
+impl Analyzer<'_, '_> {
     pub(super) fn expand_type_params(
         &mut self,
         i: &TypeParamInstantiation,
