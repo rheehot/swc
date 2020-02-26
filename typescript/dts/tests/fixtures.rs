@@ -215,7 +215,7 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
                 Default::default(),
                 cm.clone(),
                 handler.clone(),
-                Lib::load("es2019"),
+                Lib::load("es2019.full"),
                 Default::default(),
                 TsConfig {
                     tsx: fname.contains("tsx"),
