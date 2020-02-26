@@ -7,7 +7,7 @@ use self::{
 };
 use crate::{
     analyzer::{import::ImportFinder, pat::PatMode, props::ComputedPropMode},
-    debug::duplicate::DuplicateTracker,
+    debug::{duplicate::DuplicateTracker, print_backtrace},
     errors::{Error, Errors},
     loader::Load,
     ty,
@@ -258,11 +258,17 @@ impl<'a, 'b> Analyzer<'a, 'b> {
         };
 
         self.info.errors.extend(info.errors);
-        assert!(info.exports.types.is_empty(), "child cannot export a type");
-        assert!(
-            info.exports.vars.is_empty(),
-            "child cannot export a variable"
-        );
+        if !self.is_builtin {
+            assert_eq!(
+                info.exports.types,
+                Default::default(),
+                "child cannot export a type"
+            );
+            assert!(
+                info.exports.vars.is_empty(),
+                "child cannot export a variable"
+            );
+        }
 
         self.duplicated_tracker.record_all(dup);
         self.scope.copy_hoisted_vars_from(&mut child_scope);
