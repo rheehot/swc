@@ -35,7 +35,10 @@ fn merge(ls: &[Lib]) -> &'static Merged {
     let libs = libs;
 
     let cache = CACHE.entry(libs).or_default();
+    let key = cache.key();
     return &*cache.get_or_init(|| {
+        log::info!("Loading builtins: {:?}", key);
+
         let mut merged = box Merged::default();
         let mut analyzer = Analyzer::for_builtin();
         let modules = load(ls);
@@ -208,6 +211,8 @@ fn merge(ls: &[Lib]) -> &'static Merged {
         }
 
         assert_eq!(analyzer.info.errors, Errors::default());
+
+        log::info!("Loaded builtins");
 
         Box::leak(merged)
     });
