@@ -345,6 +345,8 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
             Type::Mapped(mut m @ Mapped { ty: Some(..), .. }) => {
                 m = m.fold_with(self);
 
+                log::info!("m: {:#?}", m);
+
                 if let Some(constraint) = &m.type_param.constraint {
                     match &**constraint {
                         Type::Operator(Operator {
@@ -353,12 +355,54 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                             ty,
                         }) => match &**ty {
                             Type::Keyword(..) => return *ty.clone(),
+                            Type::TypeLit(TypeLit { span, members, .. })
+                                if members.iter().all(|m| match m {
+                                    TypeElement::Property(_) => true,
+                                    TypeElement::Method(_) => true,
+                                    _ => false,
+                                }) =>
+                            {
+                                let mut new_members = Vec::with_capacity(members.len());
+                                for member in members {
+                                    match member {
+                                        ty::TypeElement::Method(method) => {
+                                            new_members.push(ty::TypeElement::Property(
+                                                PropertySignature {
+                                                    span: method.span,
+                                                    readonly: method.readonly,
+                                                    key: method.key.clone(),
+                                                    computed: method.computed,
+                                                    optional: method.optional,
+                                                    params: vec![],
+                                                    type_ann: m.ty.clone().map(|v| *v),
+                                                    type_params: None,
+                                                },
+                                            ));
+                                        }
+                                        ty::TypeElement::Property(p) => {
+                                            let mut p = p.clone();
+                                            if let Some(ty) = &m.ty {
+                                                p.type_ann = Some(*ty.clone());
+                                            }
+                                            //
+                                            new_members.push(ty::TypeElement::Property(p));
+                                        }
+                                        _ => unreachable!(),
+                                    }
+                                }
+
+                                return Type::TypeLit(TypeLit {
+                                    span: *span,
+                                    members: new_members,
+                                });
+                            }
                             _ => {}
                         },
 
                         _ => {}
                     }
                 }
+
                 m.ty = match m.ty {
                     Some(box Type::IndexedAccessType(IndexedAccessType {
                         span,
@@ -370,12 +414,10 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                             Type::TypeLit(TypeLit { span, members, .. })
                                 if members.iter().all(|m| match m {
                                     TypeElement::Property(_) => true,
-                                    TypeElement::Method(_) => true,
                                     _ => false,
                                 }) =>
                             {
                                 let mut new_members = Vec::with_capacity(members.len());
-
                                 for m in members {
                                     match m {
                                         ty::TypeElement::Property(p) => {
