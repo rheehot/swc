@@ -12,7 +12,7 @@ use crate::{
 use bitflags::_core::mem::take;
 use fxhash::{FxHashMap, FxHashSet};
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Fold, FoldWith, Span, Spanned, Visit, DUMMY_SP};
+use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ecma_utils::Id;
 
@@ -86,16 +86,6 @@ impl Analyzer<'_, '_> {
 
             Type::Function(p) => match arg {
                 Type::Function(a) => {
-                    // We need to infer type of T in
-                    //
-                    // declare function wrap<A, B>(f: (a: A) => B): (a: A) => B;
-                    // declare function list<T>(a: T): T[];
-                    // const f02: <C>(x: C) => C[] = wrap(list);
-                    if a.type_params.is_some() {
-                        log::warn!("param = {:#?}", p);
-                        log::warn!("arg = {:#?}", a);
-                    }
-
                     self.compare_type_of_fn_params(inferred, &p.params, &a.params);
                     self.infer_type(inferred, &p.ret_ty, &a.ret_ty);
                 }
@@ -124,6 +114,58 @@ impl Analyzer<'_, '_> {
         for (param, arg) in params.iter().zip(args) {
             self.infer_type_of_fn_param(inferred, param, arg)
         }
+    }
+}
+
+/// Handles renaming of the type parameters.
+impl Analyzer<'_, '_> {
+    pub(super) fn rename_type_params(
+        &mut self,
+        mut ty: Type,
+        type_ann: Option<&Type>,
+    ) -> ValidationResult {
+        if self.is_builtin {
+            return Ok(ty);
+        }
+
+        match ty {
+            Type::Function(ref mut f) => {
+                let mut v = TypeParamFinder::default();
+                f.params.visit_with(&mut v);
+                f.ret_ty.visit_with(&mut v);
+                if !v.params.is_empty() {
+                    if let Some(type_params) = &mut f.type_params {
+                        // Rename type parameters
+                    } else {
+                        f.type_params = Some(TypeParamDecl {
+                            span: DUMMY_SP,
+                            params: v.params,
+                        });
+                    }
+                }
+            }
+
+            _ => {}
+        }
+
+        Ok(ty)
+    }
+}
+
+#[derive(Debug, Default)]
+struct TypeParamFinder {
+    params: Vec<TypeParam>,
+}
+
+impl Visit<TypeParam> for TypeParamFinder {
+    fn visit(&mut self, node: &TypeParam) {
+        for p in &self.params {
+            if node.name == p.name {
+                return;
+            }
+        }
+
+        self.params.push(node.clone());
     }
 }
 

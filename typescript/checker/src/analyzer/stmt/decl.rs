@@ -85,7 +85,7 @@ impl Validate<VarDeclarator> for Analyzer<'_, '_> {
                 debug_assert_eq!(self.ctx.allow_ref_declaring, true);
 
                 //  Check if v_ty is assignable to ty
-                let value_ty = match init.validate_with(self) {
+                let mut value_ty = match init.validate_with(self) {
                     Ok(ty) => {
                         let ty = self.expand(span, ty)?;
                         self.check_rvalue(&ty);
@@ -113,7 +113,9 @@ impl Validate<VarDeclarator> for Analyzer<'_, '_> {
                                 return Ok(());
                             }
                         };
+                        value_ty = self.rename_type_params(value_ty, Some(&ty))?;
                         let ty = self.expand(span, ty)?;
+
                         match self.assign(&ty, &value_ty, v_span) {
                             Ok(()) => {
                                 let ty = ty.fold_with(&mut Generalizer::default());
@@ -151,25 +153,7 @@ impl Validate<VarDeclarator> for Analyzer<'_, '_> {
                             value_ty
                         })();
 
-                        if !self.is_builtin {
-                            match ty {
-                                Type::Function(ref mut f) => {
-                                    if f.type_params.is_none() {
-                                        let mut v = TypeParamFinder::default();
-                                        f.params.visit_with(&mut v);
-                                        f.ret_ty.visit_with(&mut v);
-                                        if !v.params.is_empty() {
-                                            f.type_params = Some(TypeParamDecl {
-                                                span: DUMMY_SP,
-                                                params: v.params,
-                                            });
-                                        }
-                                    }
-                                }
-
-                                _ => {}
-                            }
-                        }
+                        let ty = self.rename_type_params(ty, None)?;
 
                         let mut ty = ty.fold_with(&mut Generalizer::default());
                         if self.scope.is_root() {
@@ -312,22 +296,5 @@ impl Validate<VarDeclarator> for Analyzer<'_, '_> {
         res.store(&mut self.info.errors);
 
         Ok(())
-    }
-}
-
-#[derive(Debug, Default)]
-struct TypeParamFinder {
-    params: Vec<TypeParam>,
-}
-
-impl Visit<TypeParam> for TypeParamFinder {
-    fn visit(&mut self, node: &TypeParam) {
-        for p in &self.params {
-            if node.name == p.name {
-                return;
-            }
-        }
-
-        self.params.push(node.clone());
     }
 }
