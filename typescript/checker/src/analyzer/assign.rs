@@ -43,13 +43,13 @@ impl Analyzer<'_, '_> {
     ///
     ///     - Not a reference
     ///     - Not a type parameter declared on child scope.
-    fn verify_before_assign(&self, ty: &Type) {
+    fn verify_before_assign(&self, ctx: &'static str, ty: &Type) {
         match ty.normalize() {
             Type::Ref(ref r) => {
                 print_backtrace();
                 panic!(
-                    "A reference type should be expanded before calling .assign()\n{:?}",
-                    r,
+                    "A reference type (in {}) should be expanded before calling .assign()\n{:?}",
+                    ctx, r,
                 )
             }
 
@@ -60,8 +60,8 @@ impl Analyzer<'_, '_> {
     fn assign_inner(&self, to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
         debug_assert!(!span.is_dummy(), "\n\t{:?}\n<-\n\t{:?}", to, rhs);
 
-        self.verify_before_assign(to);
-        self.verify_before_assign(rhs);
+        self.verify_before_assign("lhs", to);
+        self.verify_before_assign("rhs", rhs);
 
         macro_rules! fail {
             () => {{
