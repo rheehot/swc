@@ -3,13 +3,13 @@ use crate::{
     analyzer::util::{Generalizer, ResultExt},
     errors::Error,
     swc_common::FoldWith,
-    ty::{Tuple, Type},
+    ty::{Tuple, Type, TypeParam, TypeParamDecl},
     util::PatExt,
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
 use macros::validator;
-use swc_common::{Spanned, DUMMY_SP};
+use swc_common::{Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[validator]
@@ -138,6 +138,26 @@ impl Validate<VarDecl> for Analyzer<'_, '_> {
 
                                     value_ty
                                 })();
+
+                                if !a.is_builtin {
+                                    match ty {
+                                        Type::Function(ref mut f) => {
+                                            if f.type_params.is_none() {
+                                                let mut v = TypeParamFinder::default();
+                                                f.params.visit_with(&mut v);
+                                                f.ret_ty.visit_with(&mut v);
+                                                if !v.params.is_empty() {
+                                                    f.type_params = Some(TypeParamDecl {
+                                                        span: DUMMY_SP,
+                                                        params: v.params,
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        _ => {}
+                                    }
+                                }
 
                                 let mut ty = ty.fold_with(&mut Generalizer::default());
                                 if a.scope.is_root() {
@@ -283,5 +303,22 @@ impl Validate<VarDecl> for Analyzer<'_, '_> {
         });
 
         Ok(())
+    }
+}
+
+#[derive(Debug, Default)]
+struct TypeParamFinder {
+    params: Vec<TypeParam>,
+}
+
+impl Visit<TypeParam> for TypeParamFinder {
+    fn visit(&mut self, node: &TypeParam) {
+        for p in &self.params {
+            if node.name == p.name {
+                return;
+            }
+        }
+
+        self.params.push(node.clone());
     }
 }

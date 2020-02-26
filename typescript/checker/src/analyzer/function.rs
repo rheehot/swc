@@ -2,13 +2,14 @@ use super::Analyzer;
 use crate::{
     analyzer::{pat::PatMode, util::ResultExt, Ctx, ScopeKind},
     errors::Error,
+    swc_common::VisitWith,
     ty,
-    ty::{ClassInstance, FnParam, QueryType, Tuple, Type, TypeParam},
+    ty::{ClassInstance, FnParam, QueryType, Tuple, Type, TypeParam, TypeParamDecl},
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
 use macros::validator;
-use swc_common::{Fold, FoldWith, Spanned};
+use swc_common::{Fold, FoldWith, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 
 #[validator]
@@ -47,7 +48,7 @@ impl Validate<Function> for Analyzer<'_, '_> {
                 }
             }
 
-            let type_params = try_opt!(f.type_params.validate_with(child));
+            let mut type_params = try_opt!(f.type_params.validate_with(child));
 
             let mut params = {
                 let ctx = Ctx {

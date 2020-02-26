@@ -27,10 +27,19 @@ impl Analyzer<'_, '_> {
     ) -> ValidationResult<TypeParamInstantiation> {
         let mut inferred = FxHashMap::default();
 
-        InferGeneric {
-            inferred: &mut inferred,
+        // TODO: Handle optional parameters
+        // TODO: Convert this to error.
+        assert!(args.len() >= params.len());
+
+        for (p, arg) in params.iter().zip(args) {
+            assert_eq!(
+                arg.spread, None,
+                "argument inference for spread argument in a function / method call is not \
+                 implemented yet"
+            );
+
+            self.infer_type(&mut inferred, &p.ty, &arg.ty)
         }
-        .infer(params, args);
 
         let mut params = Vec::with_capacity(type_params.len());
         for type_param in type_params {
@@ -52,40 +61,17 @@ impl Analyzer<'_, '_> {
             params,
         })
     }
-}
 
-struct InferGeneric<'a> {
-    inferred: &'a mut FxHashMap<JsWord, Type>,
-}
-
-impl InferGeneric<'_> {
-    fn infer(&mut self, params: &[FnParam], args: &[TypeOrSpread]) {
-        // TODO: Handle optional parameters
-        // TODO: Convert this to error.
-        assert!(args.len() >= params.len());
-
-        for (p, arg) in params.iter().zip(args) {
-            assert_eq!(
-                arg.spread, None,
-                "argument inference for spread argument in a function / method call is not \
-                 implemented yet"
-            );
-
-            self.compare_ty(&p.ty, &arg.ty)
-        }
-    }
-
-    fn compare_ty(&mut self, param: &Type, arg: &Type) {
+    fn infer_type(&mut self, inferred: &mut FxHashMap<JsWord, Type>, param: &Type, arg: &Type) {
         let param = param.normalize();
         let arg = arg.normalize();
-
-        log::debug!("param = {:#?}", param);
-        log::debug!("arg = {:#?}", arg);
 
         match param {
             Type::Param(TypeParam { ref name, .. }) => {
                 // Very simple case.
-                self.inferred.insert(name.clone(), arg.clone());
+                inferred.insert(name.clone(), arg.clone());
+                log::info!("infer: {} = {:?}", name, arg);
+
                 // function foo<T>(a: T) {}
             }
 
@@ -93,30 +79,50 @@ impl InferGeneric<'_> {
                 Type::Array(Array {
                     elem_type: arg_elem_type,
                     ..
-                }) => self.compare_ty(&elem_type, &arg_elem_type),
+                }) => self.infer_type(inferred, &elem_type, &arg_elem_type),
 
                 _ => {}
             },
 
             Type::Function(p) => match arg {
                 Type::Function(a) => {
-                    self.compare_fn_params(&p.params, &a.params);
-                    self.compare_ty(&p.ret_ty, &a.ret_ty);
+                    // We need to infer type of T in
+                    //
+                    // declare function wrap<A, B>(f: (a: A) => B): (a: A) => B;
+                    // declare function list<T>(a: T): T[];
+                    // const f02: <C>(x: C) => C[] = wrap(list);
+                    if a.type_params.is_some() {
+                        log::warn!("param = {:#?}", p);
+                        log::warn!("arg = {:#?}", a);
+                    }
+
+                    self.compare_type_of_fn_params(inferred, &p.params, &a.params);
+                    self.infer_type(inferred, &p.ret_ty, &a.ret_ty);
                 }
                 _ => {}
             },
 
-            _ => unimplemented!("compare_ty: {:?}", param),
+            _ => unimplemented!("compare_ty:\nParam = {:?}\nArg = {:?}", param, arg),
         }
     }
 
-    fn compare_fn_param(&mut self, param: &FnParam, arg: &FnParam) {
-        self.compare_ty(&param.ty, &arg.ty)
+    fn infer_type_of_fn_param(
+        &mut self,
+        inferred: &mut FxHashMap<JsWord, Type>,
+        param: &FnParam,
+        arg: &FnParam,
+    ) {
+        self.infer_type(inferred, &param.ty, &arg.ty)
     }
 
-    fn compare_fn_params(&mut self, params: &[FnParam], args: &[FnParam]) {
+    fn compare_type_of_fn_params(
+        &mut self,
+        inferred: &mut FxHashMap<JsWord, Type>,
+        params: &[FnParam],
+        args: &[FnParam],
+    ) {
         for (param, arg) in params.iter().zip(args) {
-            self.compare_fn_param(param, arg)
+            self.infer_type_of_fn_param(inferred, param, arg)
         }
     }
 }
