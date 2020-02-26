@@ -14,6 +14,7 @@ use fxhash::{FxHashMap, FxHashSet};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
+use swc_ecma_utils::Id;
 
 impl Analyzer<'_, '_> {
     /// TODO: implement
@@ -105,6 +106,7 @@ impl Analyzer<'_, '_> {
             params,
             i: type_args,
             fully,
+            dejavu: Default::default(),
         });
 
         Ok(ty)
@@ -136,6 +138,7 @@ struct GenericExpander<'a, 'b, 'c> {
     i: &'a TypeParamInstantiation,
     /// Expand fully?
     fully: bool,
+    dejavu: FxHashSet<JsWord>,
 }
 
 impl Fold<Type> for GenericExpander<'_, '_, '_> {
@@ -161,6 +164,11 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                             .and_then(|args| args.params.iter().next().cloned())
                             .unwrap_or_else(|| Type::any(span)),
                     });
+                }
+
+                if self.dejavu.contains(sym) {
+                    log::debug!("Dejavu: {}", sym);
+                    return ty;
                 }
 
                 log::info!("Ref: {}", sym);
@@ -201,6 +209,11 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                                                 params: &type_params.params,
                                                 i: type_args,
                                                 fully: self.fully,
+                                                dejavu: {
+                                                    let mut v = self.dejavu.clone();
+                                                    v.insert(sym.clone());
+                                                    v
+                                                },
                                             };
 
                                             return *alias.ty.clone().fold_with(&mut v);
@@ -232,6 +245,11 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                                             params: &type_params.params,
                                             i: type_args,
                                             fully: self.fully,
+                                            dejavu: {
+                                                let mut v = self.dejavu.clone();
+                                                v.insert(sym.clone());
+                                                v
+                                            },
                                         };
 
                                         i.body.clone().fold_with(&mut v)
@@ -344,8 +362,6 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
 
             Type::Mapped(mut m @ Mapped { ty: Some(..), .. }) => {
                 m = m.fold_with(self);
-
-                log::info!("m: {:#?}", m);
 
                 m.ty = match m.ty {
                     Some(box Type::IndexedAccessType(IndexedAccessType {
