@@ -106,9 +106,10 @@ impl Analyzer<'_, '_> {
 
                     if constraint.is_some()
                         && match **constraint.as_ref().unwrap() {
-                            Type::Keyword(..) => true,
-                            Type::Ref(..) => true,
-                            Type::TypeLit(..) => true,
+                            Type::Keyword(..)
+                            | Type::Ref(..)
+                            | Type::TypeLit(..)
+                            | Type::Param(..) => true,
                             _ => false,
                         }
                     {
@@ -149,7 +150,12 @@ impl Analyzer<'_, '_> {
                 _ => {}
             },
 
-            _ => unimplemented!("infer_arg_type: \narg = {:?}\nparam = {:?}", arg, param),
+            Type::Keyword(..) => {}
+
+            _ => match arg {
+                Type::Keyword(..) => {}
+                _ => unimplemented!("infer_arg_type: \narg = {:?}\nparam = {:?}", arg, param),
+            },
         }
 
         Ok(())
