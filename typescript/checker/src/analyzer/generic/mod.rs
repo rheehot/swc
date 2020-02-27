@@ -17,6 +17,7 @@ use itertools::{EitherOrBoth, Itertools};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
+use swc_ecma_parser::token::Keyword::TypeOf;
 use swc_ecma_utils::Id;
 
 mod remover;
@@ -54,6 +55,14 @@ impl Analyzer<'_, '_> {
             if let Some(ty) = inferred.remove(&type_param.name) {
                 params.push(ty);
             } else {
+                match type_param.constraint {
+                    Some(box Type::Param(ref p)) => {
+                        params.push(Type::Param(p.clone()));
+                        continue;
+                    }
+                    _ => {}
+                }
+
                 log::warn!(
                     "infer_type_args: falling back to unknown type parameter: {:?}",
                     type_param
@@ -112,18 +121,6 @@ impl Analyzer<'_, '_> {
                         }
                     {
                         return *constraint.clone().unwrap();
-                    }
-
-                    match arg {
-                        Type::Param(TypeParam {
-                            constraint: Some(c),
-                            ..
-                        }) => match **c {
-                            Type::Param(..) => return *c.clone(),
-                            _ => {}
-                        },
-
-                        _ => {}
                     }
 
                     arg.clone()
