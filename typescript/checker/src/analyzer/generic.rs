@@ -4,8 +4,8 @@ use crate::{
     builtin_types,
     ty::{
         self, Alias, Array, CallSignature, Conditional, FnParam, IndexedAccessType, Interface,
-        Mapped, Operator, PropertySignature, Ref, Tuple, Type, TypeElement, TypeLit, TypeOrSpread,
-        TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
+        Mapped, Operator, PropertySignature, Ref, Tuple, Type, Type::Param, TypeElement, TypeLit,
+        TypeOrSpread, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
     },
     ValidationResult,
 };
@@ -127,22 +127,27 @@ impl Analyzer<'_, '_> {
         if self.is_builtin {
             return Ok(ty);
         }
+        let mut inferred = FxHashMap::default();
+
+        let mut usage_visitor = TypeParamUsageFinder::default();
+        ty.visit_with(&mut usage_visitor);
+        if usage_visitor.params.is_empty() {
+            return Ok(ty);
+        }
+
+        if let Some(type_ann) = type_ann {
+            self.infer_type(&mut inferred, &ty, type_ann);
+            log::trace!("Inferred = {:#?}", inferred);
+            return Ok(ty.fold_with(&mut TypeParamRenamer { inferred }));
+        }
+        let decl = Some(TypeParamDecl {
+            span: DUMMY_SP,
+            params: usage_visitor.params,
+        });
 
         match ty {
             Type::Function(ref mut f) => {
-                let mut v = TypeParamFinder::default();
-                f.params.visit_with(&mut v);
-                f.ret_ty.visit_with(&mut v);
-                if !v.params.is_empty() {
-                    if let Some(type_params) = &mut f.type_params {
-                        // Rename type parameters
-                    } else {
-                        f.type_params = Some(TypeParamDecl {
-                            span: DUMMY_SP,
-                            params: v.params,
-                        });
-                    }
-                }
+                f.type_params = decl;
             }
 
             _ => {}
@@ -152,12 +157,39 @@ impl Analyzer<'_, '_> {
     }
 }
 
+#[derive(Debug)]
+struct TypeParamRenamer {
+    inferred: FxHashMap<JsWord, Type>,
+}
+
+impl Fold<Type> for TypeParamRenamer {
+    fn fold(&mut self, mut ty: Type) -> Type {
+        ty = ty.fold_children(self);
+
+        match ty {
+            Type::Param(ref param) => {
+                if let Some(ty) = self.inferred.get(&param.name) {
+                    return ty.clone();
+                }
+            }
+            _ => {}
+        }
+
+        ty
+    }
+}
+
 #[derive(Debug, Default)]
-struct TypeParamFinder {
+struct TypeParamUsageFinder {
     params: Vec<TypeParam>,
 }
 
-impl Visit<TypeParam> for TypeParamFinder {
+impl Visit<TypeParamDecl> for TypeParamUsageFinder {
+    #[inline]
+    fn visit(&mut self, _: &TypeParamDecl) {}
+}
+
+impl Visit<TypeParam> for TypeParamUsageFinder {
     fn visit(&mut self, node: &TypeParam) {
         for p in &self.params {
             if node.name == p.name {
