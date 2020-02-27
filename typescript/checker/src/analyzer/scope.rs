@@ -355,7 +355,7 @@ impl Analyzer<'_, '_> {
                 params,
                 ret_ty,
             }) => {
-                let ret_ty = self.rename_type_params(*ret_ty, None)?;
+                let ret_ty = self.rename_type_params(span, *ret_ty, None)?;
                 let ret_ty = box self.expand(span, ret_ty)?;
 
                 let ty = ty::Function {

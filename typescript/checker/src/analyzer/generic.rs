@@ -2,6 +2,7 @@ use super::Analyzer;
 use crate::{
     analyzer::scope::Scope,
     builtin_types,
+    debug::print_backtrace,
     ty::{
         self, Alias, Array, CallSignature, Conditional, FnParam, IndexedAccessType, Interface,
         Mapped, Operator, PropertySignature, Ref, Tuple, Type, Type::Param, TypeElement, TypeLit,
@@ -21,6 +22,7 @@ impl Analyzer<'_, '_> {
     /// TODO: implement
     pub(super) fn infer_arg_types(
         &mut self,
+        span: Span,
         type_params: &[TypeParam],
         params: &[FnParam],
         args: &[TypeOrSpread],
@@ -44,6 +46,7 @@ impl Analyzer<'_, '_> {
         let mut params = Vec::with_capacity(type_params.len());
         for type_param in type_params {
             if let Some(ty) = inferred.remove(&type_param.name) {
+                let ty = self.expand(span, ty)?;
                 params.push(ty);
             } else {
                 log::warn!(
@@ -65,6 +68,21 @@ impl Analyzer<'_, '_> {
     fn infer_type(&mut self, inferred: &mut FxHashMap<JsWord, Type>, param: &Type, arg: &Type) {
         let param = param.normalize();
         let arg = arg.normalize();
+
+        match arg {
+            Type::Ref(..) => {
+                print_backtrace();
+                unreachable!("infer_type: arg is reference ({:?})", arg)
+            }
+            _ => {}
+        }
+        match param {
+            Type::Ref(..) => {
+                print_backtrace();
+                unreachable!("infer_type: param is reference ({:?})", param)
+            }
+            _ => {}
+        }
 
         match param {
             Type::Param(TypeParam {
@@ -114,7 +132,7 @@ impl Analyzer<'_, '_> {
                 _ => {}
             },
 
-            _ => {}
+            _ => unimplemented!("infer_arg_type: \narg = {:?}\nparam = {:?}", arg, param),
         }
     }
 
@@ -143,13 +161,20 @@ impl Analyzer<'_, '_> {
 impl Analyzer<'_, '_> {
     pub(super) fn rename_type_params(
         &mut self,
+        span: Span,
         mut ty: Type,
         type_ann: Option<&Type>,
     ) -> ValidationResult {
         if self.is_builtin {
             return Ok(ty);
         }
-        log::debug!("rename_type_param: starting: {:#?}", ty);
+        ty = self.expand(span, ty)?;
+
+        log::trace!(
+            "rename_type_param: starting\nType: {:#?}\nAnnotation: {:#?}",
+            ty,
+            type_ann
+        );
 
         let mut inferred = FxHashMap::default();
 

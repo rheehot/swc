@@ -653,15 +653,17 @@ impl Analyzer<'_, '_> {
         args: &[TypeOrSpread],
     ) -> ValidationResult {
         if let Some(type_params) = type_params {
+            let ret_ty = self.expand(span, ret_ty)?;
+
             let inferred;
             let i = match type_args {
                 Some(ty) => ty,
                 None => {
-                    inferred = self.infer_arg_types(type_params, params, args)?;
+                    inferred = self.infer_arg_types(span, type_params, params, args)?;
                     &inferred
                 }
             };
-            let ty = self.expand_type_params(i, type_params, ret_ty.clone())?;
+            let ty = self.expand_type_params(i, type_params, ret_ty)?;
 
             return Ok(ty);
         }
