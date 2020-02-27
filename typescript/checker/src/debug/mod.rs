@@ -21,7 +21,7 @@ pub fn assert_no_ref(ty: &Type) {
     ty.visit_with(&mut v);
     if v.found {
         print_backtrace();
-        unreachable!()
+        unreachable!("A type ({:#?}) should not contain unresolved reference", ty)
     }
 }
 
