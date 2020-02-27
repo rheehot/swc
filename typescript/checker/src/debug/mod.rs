@@ -1,8 +1,29 @@
 //! A module to validate while type checking
 
+use crate::ty::{Ref, Type};
 use backtrace::Backtrace;
+use swc_common::{Visit, VisitWith};
 
 pub mod duplicate;
+
+/// Ensures that `ty` does not **contain** [Type::Ref].
+pub fn assert_no_ref(ty: &Type) {
+    struct Visitor {
+        found: bool,
+    }
+    impl Visit<Ref> for Visitor {
+        fn visit(&mut self, _: &Ref) {
+            self.found = true;
+        }
+    }
+
+    let mut v = Visitor { found: false };
+    ty.visit_with(&mut v);
+    if v.found {
+        print_backtrace();
+        unreachable!()
+    }
+}
 
 pub fn print_backtrace() {
     let bt = Backtrace::new();
