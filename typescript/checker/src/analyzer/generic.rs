@@ -149,7 +149,7 @@ impl Analyzer<'_, '_> {
         if self.is_builtin {
             return Ok(ty);
         }
-        log::trace!("rename_type_param: starting");
+        log::debug!("rename_type_param: starting: {:#?}", ty);
 
         let mut inferred = FxHashMap::default();
 
@@ -218,13 +218,13 @@ impl Visit<TypeParamDecl> for TypeParamUsageFinder {
 
 impl Visit<TypeParam> for TypeParamUsageFinder {
     fn visit(&mut self, node: &TypeParam) {
-        log::info!("Found type parameter");
-
         for p in &self.params {
             if node.name == p.name {
                 return;
             }
         }
+
+        log::info!("Found type parameter({})", node.name);
 
         self.params.push(node.clone());
     }
