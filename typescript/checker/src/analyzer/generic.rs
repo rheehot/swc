@@ -67,10 +67,32 @@ impl Analyzer<'_, '_> {
         let arg = arg.normalize();
 
         match param {
-            Type::Param(TypeParam { ref name, .. }) => {
+            Type::Param(TypeParam {
+                ref name,
+                ref constraint,
+                ..
+            }) => {
+                let arg_ty = (|| {
+                    if constraint.is_some() && is_literals(&constraint.as_ref().unwrap()) {
+                        return *constraint.clone().unwrap();
+                    }
+
+                    if constraint.is_some()
+                        && match **constraint.as_ref().unwrap() {
+                            Type::Keyword(..) => true,
+                            Type::Ref(..) => true,
+                            Type::TypeLit(..) => true,
+                            _ => false,
+                        }
+                    {
+                        return *constraint.clone().unwrap();
+                    }
+
+                    arg.clone()
+                })();
                 // Very simple case.
-                inferred.insert(name.clone(), arg.clone());
-                log::info!("infer: {} = {:?}", name, arg);
+                log::info!("infer: {} = {:?}", name, arg_ty);
+                inferred.insert(name.clone(), arg_ty);
 
                 // function foo<T>(a: T) {}
             }
@@ -416,21 +438,6 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                             _ => return self.i.params[idx].clone(),
                         }
                     }
-                }
-
-                if param.constraint.is_some() && is_literals(&param.constraint.as_ref().unwrap()) {
-                    return *param.constraint.clone().unwrap();
-                }
-
-                if param.constraint.is_some()
-                    && match **param.constraint.as_ref().unwrap() {
-                        Type::Keyword(..) => true,
-                        Type::Ref(..) => true,
-                        Type::TypeLit(..) => true,
-                        _ => false,
-                    }
-                {
-                    return *param.constraint.clone().unwrap();
                 }
 
                 for (idx, p) in self.params.iter().enumerate() {
