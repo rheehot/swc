@@ -353,6 +353,8 @@ impl Analyzer<'_, '_> {
             dejavu: Default::default(),
         });
 
+        dbg!(&ty);
+
         Ok(ty)
     }
 

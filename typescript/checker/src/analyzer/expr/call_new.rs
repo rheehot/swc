@@ -672,6 +672,7 @@ impl Analyzer<'_, '_> {
             };
             let ty = self.expand_type_params(i, type_params, ret_ty)?;
 
+            dbg!(&ty);
             return Ok(ty);
         }
 

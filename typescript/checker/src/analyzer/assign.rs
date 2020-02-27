@@ -65,7 +65,6 @@ impl Analyzer<'_, '_> {
 
         macro_rules! fail {
             () => {{
-                dbg!();
                 return Err(Error::AssignFailed {
                     span,
                     left: to.clone(),
