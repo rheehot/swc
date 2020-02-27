@@ -40,7 +40,7 @@ impl Analyzer<'_, '_> {
                  implemented yet"
             );
 
-            self.infer_type(&mut inferred, &p.ty, &arg.ty)
+            self.infer_type(&mut inferred, &p.ty, &arg.ty)?;
         }
 
         let mut params = Vec::with_capacity(type_params.len());
@@ -65,7 +65,12 @@ impl Analyzer<'_, '_> {
         })
     }
 
-    fn infer_type(&mut self, inferred: &mut FxHashMap<JsWord, Type>, param: &Type, arg: &Type) {
+    fn infer_type(
+        &mut self,
+        inferred: &mut FxHashMap<JsWord, Type>,
+        param: &Type,
+        arg: &Type,
+    ) -> ValidationResult<()> {
         let param = param.normalize();
         let arg = arg.normalize();
 
@@ -119,21 +124,38 @@ impl Analyzer<'_, '_> {
                 Type::Array(Array {
                     elem_type: arg_elem_type,
                     ..
-                }) => self.infer_type(inferred, &elem_type, &arg_elem_type),
+                }) => self.infer_type(inferred, &elem_type, &arg_elem_type)?,
 
                 _ => {}
             },
 
             Type::Function(p) => match arg {
                 Type::Function(a) => {
-                    self.compare_type_of_fn_params(inferred, &p.params, &a.params);
-                    self.infer_type(inferred, &p.ret_ty, &a.ret_ty);
+                    self.compare_type_of_fn_params(inferred, &p.params, &a.params)?;
+                    self.infer_type(inferred, &p.ret_ty, &a.ret_ty)?;
                 }
+                _ => {}
+            },
+
+            Type::TypeLit(param) => match arg {
+                Type::TypeLit(arg) => self.infer_type_lit(inferred, param, arg)?,
                 _ => {}
             },
 
             _ => unimplemented!("infer_arg_type: \narg = {:?}\nparam = {:?}", arg, param),
         }
+
+        Ok(())
+    }
+
+    fn infer_type_lit(
+        &mut self,
+        inferred: &mut FxHashMap<JsWord, Type>,
+        param: &TypeLit,
+        arg: &TypeLit,
+    ) -> ValidationResult<()> {
+        // TODO: implement
+        Ok(())
     }
 
     fn infer_type_of_fn_param(
@@ -141,7 +163,7 @@ impl Analyzer<'_, '_> {
         inferred: &mut FxHashMap<JsWord, Type>,
         param: &FnParam,
         arg: &FnParam,
-    ) {
+    ) -> ValidationResult<()> {
         self.infer_type(inferred, &param.ty, &arg.ty)
     }
 
@@ -150,10 +172,12 @@ impl Analyzer<'_, '_> {
         inferred: &mut FxHashMap<JsWord, Type>,
         params: &[FnParam],
         args: &[FnParam],
-    ) {
+    ) -> ValidationResult<()> {
         for (param, arg) in params.iter().zip(args) {
-            self.infer_type_of_fn_param(inferred, param, arg)
+            self.infer_type_of_fn_param(inferred, param, arg)?
         }
+
+        Ok(())
     }
 }
 
@@ -186,7 +210,7 @@ impl Analyzer<'_, '_> {
         }
 
         if let Some(type_ann) = type_ann {
-            self.infer_type(&mut inferred, &ty, type_ann);
+            self.infer_type(&mut inferred, &ty, type_ann)?;
             log::trace!("inferred = {:#?}", inferred);
             return Ok(ty
                 .into_owned()

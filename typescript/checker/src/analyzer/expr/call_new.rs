@@ -653,6 +653,7 @@ impl Analyzer<'_, '_> {
         args: &[TypeOrSpread],
     ) -> ValidationResult {
         if let Some(type_params) = type_params {
+            log::info!("get_return_type: type_params = {:?}", type_params);
             let ret_ty = self.expand(span, ret_ty)?;
 
             let inferred;
