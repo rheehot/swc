@@ -65,6 +65,7 @@ impl Analyzer<'_, '_> {
 
         macro_rules! fail {
             () => {{
+                dbg!();
                 return Err(Error::AssignFailed {
                     span,
                     left: to.clone(),
@@ -636,11 +637,10 @@ impl Analyzer<'_, '_> {
                 // var fnr2: () => any = fnReturn2();
                 match *rhs.normalize() {
                     Type::Function(Function {
-                        type_params: None,
-                        params: _,
                         ret_ty: ref r_ret_ty,
                         ..
                     }) => {
+                        // TODO: Verify type parameters.
                         self.assign_inner(ret_ty, r_ret_ty, span)?;
                         // TODO: Verify parameter counts
 
@@ -648,10 +648,8 @@ impl Analyzer<'_, '_> {
                     }
 
                     Type::Lit(..) => return Err(Error::CannotAssignToNonVariable { span }),
-                    _ => {}
+                    _ => fail!(),
                 }
-
-                fail!()
             }
 
             Type::Tuple(Tuple { ref types, .. }) => {
