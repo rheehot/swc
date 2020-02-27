@@ -29,7 +29,7 @@ impl Analyzer<'_, '_> {
 
         // TODO: Handle optional parameters
         // TODO: Convert this to error.
-        assert!(args.len() >= params.len());
+        assert!(args.len() <= params.len());
 
         for (p, arg) in params.iter().zip(args) {
             assert_eq!(
