@@ -358,6 +358,14 @@ impl Analyzer<'_, '_> {
                 let ret_ty = self.rename_type_params(span, *ret_ty, None)?;
                 let ret_ty = box self.expand(span, ret_ty)?;
 
+                let params = params
+                    .into_iter()
+                    .map(|mut param| -> ValidationResult<_> {
+                        param.ty = self.expand(param.span, param.ty)?;
+                        Ok(param)
+                    })
+                    .collect::<Result<_, _>>()?;
+
                 let ty = ty::Function {
                     span,
                     type_params,
