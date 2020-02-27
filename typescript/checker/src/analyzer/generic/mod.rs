@@ -1,3 +1,4 @@
+use self::remover::TypeParamRemover;
 use super::Analyzer;
 use crate::{
     analyzer::scope::Scope,
@@ -16,6 +17,8 @@ use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ecma_utils::Id;
+
+mod remover;
 
 /// Type inference for arguments.
 impl Analyzer<'_, '_> {
@@ -113,11 +116,9 @@ impl Analyzer<'_, '_> {
 
                     arg.clone()
                 })();
-                // Very simple case.
+
                 log::info!("infer: {} = {:?}", name, arg_ty);
                 inferred.insert(name.clone(), arg_ty);
-
-                // function foo<T>(a: T) {}
             }
 
             Type::Array(Array { elem_type, .. }) => match arg {
@@ -216,6 +217,7 @@ impl Analyzer<'_, '_> {
                 .into_owned()
                 .fold_with(&mut TypeParamRenamer { inferred }));
         }
+
         let decl = Some(TypeParamDecl {
             span: DUMMY_SP,
             params: usage_visitor.params,
@@ -229,7 +231,7 @@ impl Analyzer<'_, '_> {
             _ => {}
         }
 
-        Ok(ty)
+        Ok(ty.fold_with(&mut TypeParamRemover::new()))
     }
 }
 
