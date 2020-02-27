@@ -654,7 +654,7 @@ impl Analyzer<'_, '_> {
         args: &[TypeOrSpread],
     ) -> ValidationResult {
         if let Some(type_params) = type_params {
-            log::info!(
+            log::trace!(
                 "get_return_type: \ntype_params = {:#?}\nret_ty = {:#?}",
                 type_params,
                 ret_ty
