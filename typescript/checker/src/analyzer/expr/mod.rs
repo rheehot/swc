@@ -781,6 +781,7 @@ impl Analyzer<'_, '_> {
                 span: p_span, name, ..
             }) => match prop {
                 Expr::Ident(ref i) => {
+                    log::warn!("Creating ref from a type parameter: {}", name);
                     return Ok(Type::Ref(Ref {
                         span,
                         type_name: TsEntityName::TsQualifiedName(box TsQualifiedName {
@@ -1045,6 +1046,10 @@ impl Analyzer<'_, '_> {
 
         if let Some(ref cls_name) = self.scope.this_class_name {
             if *cls_name == i.sym {
+                log::warn!(
+                    "Creating ref because we are currently defining a class: {}",
+                    i.sym
+                );
                 return Ok(Type::Ref(Ref {
                     span,
                     type_name: TsEntityName::Ident(i.clone()),
@@ -1133,6 +1138,8 @@ impl Analyzer<'_, '_> {
                 &js_word!("Symbol"),
             )?);
         }
+
+        log::error!("Creating ref because we failed to resolve {}", i.sym);
 
         Ok(Type::Ref(Ref {
             span,
