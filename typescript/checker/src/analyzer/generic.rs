@@ -92,7 +92,7 @@ impl Analyzer<'_, '_> {
                 _ => {}
             },
 
-            _ => unimplemented!("compare_ty:\nParam = {:?}\nArg = {:?}", param, arg),
+            _ => {}
         }
     }
 
