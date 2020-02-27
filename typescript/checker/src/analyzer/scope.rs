@@ -384,7 +384,36 @@ impl Analyzer<'_, '_> {
     }
 
     pub(super) fn register_type(&mut self, name: JsWord, ty: Type) -> Result<(), Error> {
-        if self.is_builtin {
+        if self.is_builtin
+            && match ty.normalize() {
+                Type::EnumVariant(_)
+                | Type::Interface(_)
+                | Type::Enum(_)
+                | Type::Mapped(_)
+                | Type::Alias(_)
+                | Type::Namespace(_)
+                | Type::Module(_)
+                | Type::Class(_)
+                | Type::ClassInstance(_)
+                | Type::Intersection(_)
+                | Type::Function(_)
+                | Type::Constructor(_)
+                | Type::Union(_)
+                | Type::Array(_)
+                | Type::Tuple(_)
+                | Type::Keyword(_)
+                | Type::Conditional(_)
+                | Type::TypeLit(_)
+                | Type::Ref(_)
+                | Type::IndexedAccessType(_)
+                | Type::Import(_)
+                | Type::Query(_)
+                | Type::Lit(_)
+                | Type::This(_) => true,
+
+                _ => false,
+            }
+        {
             self.info
                 .exports
                 .types
