@@ -149,18 +149,23 @@ impl Analyzer<'_, '_> {
         if self.is_builtin {
             return Ok(ty);
         }
+        log::trace!("rename_type_param: starting");
+
         let mut inferred = FxHashMap::default();
 
         let mut usage_visitor = TypeParamUsageFinder::default();
-        ty.visit_with(&mut usage_visitor);
+        ty.normalize().visit_with(&mut usage_visitor);
         if usage_visitor.params.is_empty() {
+            log::debug!("rename_type_param: No type parameter is used in type");
             return Ok(ty);
         }
 
         if let Some(type_ann) = type_ann {
             self.infer_type(&mut inferred, &ty, type_ann);
-            log::trace!("Inferred = {:#?}", inferred);
-            return Ok(ty.fold_with(&mut TypeParamRenamer { inferred }));
+            log::trace!("inferred = {:#?}", inferred);
+            return Ok(ty
+                .into_owned()
+                .fold_with(&mut TypeParamRenamer { inferred }));
         }
         let decl = Some(TypeParamDecl {
             span: DUMMY_SP,
@@ -213,6 +218,8 @@ impl Visit<TypeParamDecl> for TypeParamUsageFinder {
 
 impl Visit<TypeParam> for TypeParamUsageFinder {
     fn visit(&mut self, node: &TypeParam) {
+        log::info!("Found type parameter");
+
         for p in &self.params {
             if node.name == p.name {
                 return;

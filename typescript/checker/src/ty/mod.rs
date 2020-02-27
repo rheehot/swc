@@ -773,6 +773,15 @@ impl Type {
 //}
 
 impl Type {
+    /// Normalize types.
+    pub fn into_owned(self) -> Type {
+        match self {
+            Type::Arc(ty) => (*ty).clone(),
+            Type::Static(s) => s.ty.clone(),
+            _ => self,
+        }
+    }
+
     /// `Type::Static` is normalized.
     pub fn normalize<'s, 'c>(&'s self) -> &'c Type
     where
