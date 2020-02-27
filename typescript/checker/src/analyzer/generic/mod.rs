@@ -31,6 +31,8 @@ impl Analyzer<'_, '_> {
         params: &[FnParam],
         args: &[TypeOrSpread],
     ) -> ValidationResult<TypeParamInstantiation> {
+        log::debug!("infer_arg_types");
+
         let mut inferred = FxHashMap::default();
 
         // TODO: Handle optional parameters
@@ -50,7 +52,6 @@ impl Analyzer<'_, '_> {
         let mut params = Vec::with_capacity(type_params.len());
         for type_param in type_params {
             if let Some(ty) = inferred.remove(&type_param.name) {
-                let ty = self.expand(span, ty)?;
                 params.push(ty);
             } else {
                 log::warn!(
@@ -106,14 +107,23 @@ impl Analyzer<'_, '_> {
 
                     if constraint.is_some()
                         && match **constraint.as_ref().unwrap() {
-                            Type::Keyword(..)
-                            | Type::Ref(..)
-                            | Type::TypeLit(..)
-                            | Type::Param(..) => true,
+                            Type::Keyword(..) | Type::Ref(..) | Type::TypeLit(..) => true,
                             _ => false,
                         }
                     {
                         return *constraint.clone().unwrap();
+                    }
+
+                    match arg {
+                        Type::Param(TypeParam {
+                            constraint: Some(c),
+                            ..
+                        }) => match **c {
+                            Type::Param(..) => return *c.clone(),
+                            _ => {}
+                        },
+
+                        _ => {}
                     }
 
                     arg.clone()
@@ -222,6 +232,8 @@ impl Analyzer<'_, '_> {
         if self.is_builtin {
             return Ok(ty);
         }
+        log::debug!("rename_type_params");
+
         ty = self.expand(span, ty)?;
 
         log::trace!(
@@ -241,7 +253,6 @@ impl Analyzer<'_, '_> {
 
         if let Some(type_ann) = type_ann {
             self.infer_type(&mut inferred, &ty, type_ann)?;
-            log::trace!("inferred = {:#?}", inferred);
             return Ok(ty
                 .into_owned()
                 .fold_with(&mut TypeParamRenamer { inferred }));
