@@ -13,6 +13,7 @@ use crate::{
 };
 use bitflags::_core::mem::take;
 use fxhash::{FxHashMap, FxHashSet};
+use itertools::{EitherOrBoth, Itertools};
 use swc_atoms::{js_word, JsWord};
 use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -143,6 +144,11 @@ impl Analyzer<'_, '_> {
                 _ => {}
             },
 
+            Type::Tuple(param) => match arg {
+                Type::Tuple(arg) => self.infer_tuple(inferred, param, arg)?,
+                _ => {}
+            },
+
             _ => unimplemented!("infer_arg_type: \narg = {:?}\nparam = {:?}", arg, param),
         }
 
@@ -156,6 +162,23 @@ impl Analyzer<'_, '_> {
         arg: &TypeLit,
     ) -> ValidationResult<()> {
         // TODO: implement
+        Ok(())
+    }
+
+    fn infer_tuple(
+        &mut self,
+        inferred: &mut FxHashMap<JsWord, Type>,
+        param: &Tuple,
+        arg: &Tuple,
+    ) -> ValidationResult<()> {
+        for item in param.types.iter().zip_longest(&arg.types) {
+            match item {
+                EitherOrBoth::Both(param, arg) => self.infer_type(inferred, param, arg)?,
+                EitherOrBoth::Left(_) => {}
+                EitherOrBoth::Right(_) => {}
+            }
+        }
+
         Ok(())
     }
 
