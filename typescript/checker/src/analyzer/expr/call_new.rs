@@ -3,6 +3,7 @@ use super::super::Analyzer;
 use crate::{
     analyzer::{expr::TypeOfMode, props::prop_name_to_expr, util::ResultExt},
     builtin_types,
+    debug::assert_no_ref,
     errors::Error,
     swc_common::FoldWith,
     ty,
@@ -653,8 +654,13 @@ impl Analyzer<'_, '_> {
         args: &[TypeOrSpread],
     ) -> ValidationResult {
         if let Some(type_params) = type_params {
-            log::info!("get_return_type: type_params = {:?}", type_params);
+            log::info!(
+                "get_return_type: \ntype_params = {:#?}\nret_ty = {:#?}",
+                type_params,
+                ret_ty
+            );
             let ret_ty = self.expand(span, ret_ty)?;
+            assert_no_ref(&ret_ty);
 
             let inferred;
             let i = match type_args {
