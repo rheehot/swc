@@ -376,7 +376,7 @@ impl Analyzer<'_, '_> {
                                 span,
                                 m.type_params.as_ref().map(|v| &*v.params),
                                 &m.params,
-                                *m.ret_ty,
+                                *m.ret_ty.clone(),
                                 type_args.as_ref(),
                                 &args,
                             );
@@ -386,7 +386,7 @@ impl Analyzer<'_, '_> {
                                 span,
                                 f.type_params.as_ref().map(|v| &*v.params),
                                 &f.params,
-                                *f.ret_ty,
+                                *f.ret_ty.clone(),
                                 type_args.as_ref(),
                                 &args,
                             );
