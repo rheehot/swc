@@ -5,7 +5,7 @@ use crate::{
     name::Name,
     ty::{
         self, Alias, Array, EnumVariant, IndexSignature, Interface, Intersection,
-        PropertySignature, QueryExpr, QueryType, Ref, Tuple, Type, TypeElement, TypeLit,
+        PropertySignature, QueryExpr, QueryType, Ref, Tuple, Type, TypeElement, TypeLit, TypeParam,
         TypeParamInstantiation, Union,
     },
     util::TypeEq,
@@ -301,7 +301,7 @@ impl Analyzer<'_, '_> {
             _ => {}
         }
 
-        let ty = match ty {
+        let ty = match ty.into_owned() {
             Type::Union(Union { span, types }) => {
                 let v = types
                     .into_iter()
@@ -375,6 +375,21 @@ impl Analyzer<'_, '_> {
                 .into();
 
                 return Ok(ty);
+            }
+
+            Type::Param(ty) => {
+                return Ok(TypeParam {
+                    constraint: match ty.constraint {
+                        None => None,
+                        Some(ty) => Some(box self.expand(span, *ty)?),
+                    },
+                    default: match ty.default {
+                        None => None,
+                        Some(ty) => Some(box self.expand(span, *ty)?),
+                    },
+                    ..ty
+                }
+                .into())
             }
 
             ty => ty,
