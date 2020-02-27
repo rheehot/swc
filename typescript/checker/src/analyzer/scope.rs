@@ -349,6 +349,26 @@ impl Analyzer<'_, '_> {
                 return Ok(*ty);
             }
 
+            Type::Function(ty::Function {
+                span,
+                type_params,
+                params,
+                ret_ty,
+            }) => {
+                let ret_ty = self.rename_type_params(*ret_ty, None)?;
+                let ret_ty = box self.expand(span, ret_ty)?;
+
+                let ty = ty::Function {
+                    span,
+                    type_params,
+                    params,
+                    ret_ty,
+                }
+                .into();
+
+                return Ok(ty);
+            }
+
             ty => ty,
         };
 
