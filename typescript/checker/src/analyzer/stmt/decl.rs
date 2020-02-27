@@ -1,6 +1,7 @@
 use super::super::{pat::PatMode, Analyzer, Ctx};
 use crate::{
     analyzer::util::{Generalizer, ResultExt},
+    debug::assert_no_ref,
     errors::Error,
     swc_common::FoldWith,
     ty::{Tuple, Type, TypeParam, TypeParamDecl},
@@ -113,8 +114,9 @@ impl Validate<VarDeclarator> for Analyzer<'_, '_> {
                                 return Ok(());
                             }
                         };
-                        value_ty = self.rename_type_params(value_ty, Some(&ty))?;
                         let ty = self.expand(span, ty)?;
+                        assert_no_ref(&ty);
+                        value_ty = self.rename_type_params(span, value_ty, Some(&ty))?;
 
                         match self.assign(&ty, &value_ty, v_span) {
                             Ok(()) => {
@@ -153,7 +155,7 @@ impl Validate<VarDeclarator> for Analyzer<'_, '_> {
                             value_ty
                         })();
 
-                        let ty = self.rename_type_params(ty, None)?;
+                        let ty = self.rename_type_params(span, ty, None)?;
 
                         let mut ty = ty.fold_with(&mut Generalizer::default());
                         if self.scope.is_root() {
