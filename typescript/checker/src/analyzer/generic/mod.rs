@@ -69,13 +69,29 @@ impl Analyzer<'_, '_> {
                     _ => {}
                 }
 
-                log::warn!(
-                    "infer_type_args: falling back to unknown type parameter: {:?}",
-                    type_param
-                );
+                if type_param.constraint.is_some()
+                    && is_literals(&type_param.constraint.as_ref().unwrap())
+                {
+                    params.push(*type_param.constraint.clone().unwrap());
+                    continue;
+                }
 
-                // TODO: Fix this and implement full type inference
-                params.push(type_param.clone().into());
+                if type_param.constraint.is_some()
+                    && match **type_param.constraint.as_ref().unwrap() {
+                        Type::Keyword(..) | Type::Ref(..) | Type::TypeLit(..) => true,
+                        _ => false,
+                    }
+                {
+                    let ty = self.expand(span, *type_param.constraint.clone().unwrap())?;
+                    params.push(ty);
+                    continue;
+                }
+
+                // Defaults to {}
+                params.push(Type::TypeLit(TypeLit {
+                    span,
+                    members: vec![],
+                }));
             }
         }
 
