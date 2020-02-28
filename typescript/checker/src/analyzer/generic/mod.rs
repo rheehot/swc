@@ -61,7 +61,7 @@ impl Analyzer<'_, '_> {
             if let Some(ty) = inferred.remove(&type_param.name) {
                 params.push(ty);
             } else {
-                log::debug!("{:?}", type_param.constraint);
+                log::debug!("type param = {:?}", type_param.constraint);
 
                 match type_param.constraint {
                     Some(box Type::Param(ref p)) => {
