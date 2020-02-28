@@ -6,4 +6,4 @@ interface Foo {
     b: string;
 }
 
-<Foo>{ a: undefined };
+<Foo>{a: undefined};

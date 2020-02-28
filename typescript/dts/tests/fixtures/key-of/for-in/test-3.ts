@@ -1,4 +1,4 @@
-function f1<K extends string, T>(obj: { [P in K]: T }, k: K) {
+function f3<T, K extends keyof T>(obj: { [P in K]: T[P] }, k: K) {
     const b = k in obj;
     let k1: K;
     for (k1 in obj) {

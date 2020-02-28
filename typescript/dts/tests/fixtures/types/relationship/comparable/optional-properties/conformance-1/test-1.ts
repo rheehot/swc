@@ -7,5 +7,5 @@ interface Foo {
     optional?: string;
 }
 
-const foo1 = { required1: "hello" } as Foo;
-const foo2 = { required1: "hello", optional: "bar" } as Foo;
+const foo1 = {required1: "hello"} as Foo;
+const foo2 = {required1: "hello", optional: "bar"} as Foo;

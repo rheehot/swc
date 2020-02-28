@@ -115,9 +115,11 @@ function f13(foo: any, bar: any) {
 
 class Component<PropType> {
     props: PropType;
+
     getProperty<K extends keyof PropType>(key: K) {
         return this.props[key];
     }
+
     setProperty<K extends keyof PropType>(key: K, value: PropType[K]) {
         this.props[key] = value;
     }
@@ -128,7 +130,7 @@ function f20(component: Component<Shape>) {
     let widthOrHeight = component.getProperty(cond ? "width" : "height");  // number
     let nameOrVisible = component.getProperty(cond ? "name" : "visible");  // string | boolean
     component.setProperty("name", "rectangle");
-    component.setProperty(cond ? "width" : "height", 10)
+    component.setProperty(cond ? "width" : "height", 10);
     component.setProperty(cond ? "name" : "visible", true);  // Technically not safe
 }
 
@@ -143,12 +145,12 @@ function f30(shapes: Shape[]) {
 }
 
 function f31<K extends keyof Shape>(key: K) {
-    const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
+    const shape: Shape = {name: "foo", width: 5, height: 10, visible: true};
     return shape[key];  // Shape[K]
 }
 
 function f32<K extends "width" | "height">(key: K) {
-    const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
+    const shape: Shape = {name: "foo", width: 5, height: 10, visible: true};
     return shape[key];  // Shape[K]
 }
 
@@ -227,27 +229,27 @@ function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
 }
 
 function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
-    let x = func({ a: 1, b: "hello" }, { c: true });
+    let x = func({a: 1, b: "hello"}, {c: true});
     x.a;  // number | undefined
     x.b;  // string | undefined
     x.c;  // boolean | undefined
 }
 
 function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) {
-    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
-    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
-    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
+    let a = func({a: 1, b: "hello"}, {c: true}, 'a');  // number
+    let b = func({a: 1, b: "hello"}, {c: true}, 'b');  // string
+    let c = func({a: 1, b: "hello"}, {c: true}, 'c');  // boolean
 }
 
 function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) {
-    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
-    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
-    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
+    let a = func({a: 1, b: "hello"}, {c: true}, 'a');  // number
+    let b = func({a: 1, b: "hello"}, {c: true}, 'b');  // string
+    let c = func({a: 1, b: "hello"}, {c: true}, 'c');  // boolean
 }
 
 function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) {
-    let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a');  // number
-    let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');  // string | boolean
+    let a = func({a: 1, b: "hello"}, {a: 2, b: true}, 'a');  // number
+    let b = func({a: 1, b: "hello"}, {a: 2, b: true}, 'b');  // string | boolean
 }
 
 function f80<T extends { a: { x: any } }>(obj: T) {
@@ -264,8 +266,8 @@ function f81<T extends { a: { x: any } }>(obj: T) {
 }
 
 function f82() {
-    let x1 = f81({ a: { x: "hello" } });  // string
-    let x2 = f81({ a: { x: 42 } });  // number
+    let x1 = f81({a: {x: "hello"}});  // string
+    let x2 = f81({a: {x: 42}});  // number
 }
 
 function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
@@ -273,18 +275,21 @@ function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, k
 }
 
 function f84() {
-    let x1 = f83({ foo: { x: "hello" } }, "foo");  // string
-    let x2 = f83({ bar: { x: 42 } }, "bar");  // number
+    let x1 = f83({foo: {x: "hello"}}, "foo");  // string
+    let x2 = f83({bar: {x: 42}}, "bar");  // number
 }
 
 class C1 {
     x: number;
+
     get<K extends keyof this>(key: K) {
         return this[key];
     }
+
     set<K extends keyof this>(key: K, value: this[K]) {
         this[key] = value;
     }
+
     foo() {
         let x1 = this.x;  // number
         let x2 = this["x"];  // number
@@ -334,6 +339,7 @@ class Base {
     get<K extends keyof this>(prop: K) {
         return this[prop];
     }
+
     set<K extends keyof this>(prop: K, value: this[K]) {
         this[prop] = value;
     }
@@ -341,10 +347,12 @@ class Base {
 
 class Person extends Base {
     parts: number;
+
     constructor(parts: number) {
         super();
         this.set("parts", parts);
     }
+
     getParts() {
         return this.get("parts")
     }
@@ -352,9 +360,11 @@ class Person extends Base {
 
 class OtherPerson {
     parts: number;
+
     constructor(parts: number) {
         setProperty(this, "parts", parts);
     }
+
     getParts() {
         return getProperty(this, "parts")
     }
@@ -395,12 +405,22 @@ const assignTo2 = <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key
 // Modified repro from #12573
 
 declare function one<T>(handler: (t: T) => void): T
-var empty = one(() => {}) // inferred as {}, expected
+
+var empty = one(() => {
+}); // inferred as {}, expected
 
 type Handlers<T> = { [K in keyof T]: (t: T[K]) => void }
+
 declare function on<T>(handlerHash: Handlers<T>): T
-var hashOfEmpty1 = on({ test: () => {} });  // {}
-var hashOfEmpty2 = on({ test: (x: boolean) => {} });  // { test: boolean }
+
+var hashOfEmpty1 = on({
+    test: () => {
+    }
+});  // {}
+var hashOfEmpty2 = on({
+    test: (x: boolean) => {
+    }
+});  // { test: boolean }
 
 // Repro from #12624
 
@@ -411,6 +431,7 @@ interface Options1<Data, Computed> {
 
 declare class Component1<Data, Computed> {
     constructor(options: Options1<Data, Computed>);
+
     get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
 }
 
@@ -431,6 +452,7 @@ interface Options2<Data, Computed> {
 
 declare class Component2<Data, Computed> {
     constructor(options: Options2<Data, Computed>);
+
     get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
 }
 
@@ -478,7 +500,7 @@ type Handler<T> = {
     onChange: (name: keyof T) => void;
 };
 
-function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
+function onChangeGenericFunction<T>(handler: Handler<T & { preset: number }>) {
     handler.onChange('preset')
 }
 
@@ -519,7 +541,7 @@ class A<T> {
     props: T & { foo: string };
 }
 
-class B extends A<{ x: number}> {
+class B extends A<{ x: number }> {
     f(p: this["props"]) {
         p.x;
     }
@@ -528,7 +550,7 @@ class B extends A<{ x: number}> {
 // Repro from #13749
 
 class Form<T> {
-    private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
+    private childFormFactories: { [K in keyof T]: (v: T[K]) => Form<T[K]> };
 
     public set<K extends keyof T>(prop: K, value: T[K]) {
         this.childFormFactories[prop](value)
@@ -539,6 +561,7 @@ class Form<T> {
 
 class SampleClass<P> {
     public props: Readonly<P>;
+
     constructor(props: P) {
         this.props = Object.freeze(props);
     }
@@ -552,7 +575,7 @@ declare function merge<T, U>(obj1: T, obj2: U): T & U;
 
 class AnotherSampleClass<T> extends SampleClass<T & Foo> {
     constructor(props: T) {
-        const foo: Foo = { foo: "bar" };
+        const foo: Foo = {foo: "bar"};
         super(merge(props, foo));
     }
 
@@ -560,12 +583,13 @@ class AnotherSampleClass<T> extends SampleClass<T & Foo> {
         this.props.foo.concat;
     }
 }
+
 new AnotherSampleClass({});
 
 // Positive repro from #17166
 function f3<T, K extends Extract<keyof T, string>>(t: T, k: K, tk: T[K]): void {
     for (let key in t) {
-        key = k // ok, K ==> keyof T
+        key = k; // ok, K ==> keyof T
         t[key] = tk; // ok, T[K] ==> T[keyof T]
     }
 }
@@ -587,17 +611,20 @@ type Result2 = Example2<{ 1: { prop: string }; 2: { prop: number } }>;
 // Repro from #23618
 
 type DBBoolTable<K extends string> = { [k in K]: 0 | 1 }
+
 enum Flag {
     FLAG_1 = "flag_1",
     FLAG_2 = "flag_2"
 }
 
 type SimpleDBRecord<Flag extends string> = { staticField: number } & DBBoolTable<Flag>
+
 function getFlagsFromSimpleRecord<Flag extends string>(record: SimpleDBRecord<Flag>, flags: Flag[]) {
     return record[flags[0]];
 }
 
 type DynamicDBRecord<Flag extends string> = ({ dynamicField: number } | { dynamicField: string }) & DBBoolTable<Flag>
+
 function getFlagsFromDynamicRecord<Flag extends string>(record: DynamicDBRecord<Flag>, flags: Flag[]) {
     return record[flags[0]];
 }
@@ -628,7 +655,9 @@ class Unbounded<T> {
 interface I7 {
     x: any;
 }
+
 type Foo7<T extends number> = T;
+
 declare function f7<K extends keyof I7>(type: K): Foo7<I7[K]>;
 
 // Repro from #21770
@@ -647,14 +676,12 @@ function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: 
 
 // Repro from #26409
 
-const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>
-{
+const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) => {
     const s: string = t[k];
     t.cool;
 };
 
-const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
-{
+const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => {
     const s: string = t[k];
     t.cool;
 };

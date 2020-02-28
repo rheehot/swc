@@ -1,6 +1,6 @@
-function f1<K extends string, T>(obj: { [P in K]: T }, k: K) {
+function f2<T>(obj: { [P in keyof T]: T[P] }, k: keyof T) {
     const b = k in obj;
-    let k1: K;
+    let k1: keyof T;
     for (k1 in obj) {
         let x1 = obj[k1];
     }

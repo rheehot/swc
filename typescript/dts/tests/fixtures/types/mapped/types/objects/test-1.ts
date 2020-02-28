@@ -32,7 +32,7 @@ interface E1<T> extends Base {
 interface Something {
     name: string,
     value: string
-};
+}
 
 interface E2 extends Base {
     foo: Partial<Something>;  // or other mapped type

@@ -3,34 +3,36 @@ class RoyalGuard {
     isLeader(): this is LeadGuard {
         return this instanceof LeadGuard;
     }
+
     isFollower(): this is FollowerGuard {
         return this instanceof FollowerGuard;
     }
 }
 
 class LeadGuard extends RoyalGuard {
-    lead(): void {};
+    lead(): void {
+    };
 }
 
 class FollowerGuard extends RoyalGuard {
-    follow(): void {};
+    follow(): void {
+    };
 }
 
 let a: RoyalGuard = new FollowerGuard();
 if (a.isLeader()) {
     a.lead();
-}
-else if (a.isFollower()) {
+} else if (a.isFollower()) {
     a.follow();
 }
 
-interface GuardInterface extends RoyalGuard {}
+interface GuardInterface extends RoyalGuard {
+}
 
 let b: GuardInterface;
 if (b.isLeader()) {
     b.lead();
-}
-else if (b.isFollower()) {
+} else if (b.isFollower()) {
     b.follow();
 }
 
@@ -52,33 +54,33 @@ var holder2 = {a};
 
 if (holder2.a.isLeader()) {
     holder2.a;
-}
-else {
+} else {
     holder2.a;
 }
 
 class ArrowGuard {
     isElite = (): this is ArrowElite => {
         return this instanceof ArrowElite;
-    }
+    };
     isMedic = (): this is ArrowMedic => {
         return this instanceof ArrowMedic;
     }
 }
 
 class ArrowElite extends ArrowGuard {
-    defend(): void {}
+    defend(): void {
+    }
 }
 
 class ArrowMedic extends ArrowGuard {
-    heal(): void {}
+    heal(): void {
+    }
 }
 
 let guard = new ArrowGuard();
 if (guard.isElite()) {
     guard.defend();
-}
-else if (guard.isMedic()) {
+} else if (guard.isMedic()) {
     guard.heal();
 }
 
@@ -93,7 +95,9 @@ interface Sundries {
 interface Crate<T> {
     contents: T;
     volume: number;
+
     isSupplies(): this is Crate<Supplies>;
+
     isSundries(): this is Crate<Sundries>;
 }
 
@@ -101,8 +105,7 @@ let crate: Crate<{}>;
 
 if (crate.isSundries()) {
     crate.contents.broken = true;
-}
-else if (crate.isSupplies()) {
+} else if (crate.isSupplies()) {
     crate.contents.spoiled = true;
 }
 
@@ -112,16 +115,23 @@ a.isFollower = b.isFollower;
 a.isLeader = b.isLeader;
 
 class MimicGuard {
-    isLeader(): this is MimicLeader { return this instanceof MimicLeader; };
-    isFollower(): this is MimicFollower { return this instanceof MimicFollower; };
+    isLeader(): this is MimicLeader {
+        return this instanceof MimicLeader;
+    };
+
+    isFollower(): this is MimicFollower {
+        return this instanceof MimicFollower;
+    };
 }
 
 class MimicLeader extends MimicGuard {
-    lead(): void {}
+    lead(): void {
+    }
 }
 
 class MimicFollower extends MimicGuard {
-    follow(): void {}
+    follow(): void {
+    }
 }
 
 let mimic = new MimicGuard();
@@ -137,5 +147,6 @@ if (mimic.isFollower()) {
 
 interface MimicGuardInterface {
     isLeader(): this is LeadGuard;
+
     isFollower(): this is FollowerGuard;
 }

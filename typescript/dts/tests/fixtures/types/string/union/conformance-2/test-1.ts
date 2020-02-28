@@ -7,11 +7,9 @@ var y: T = undefined;
 
 if (x === "foo") {
     let a = x;
-}
-else if (x !== "bar") {
+} else if (x !== "bar") {
     let b = x || y;
-}
-else {
+} else {
     let c = x;
     let d = y;
     let e: (typeof x) | (typeof y) = c || d;

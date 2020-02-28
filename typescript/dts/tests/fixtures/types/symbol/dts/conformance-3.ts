@@ -3,5 +3,6 @@
 class C {
     [Symbol.toPrimitive](x: number);
     [Symbol.toPrimitive](x: string);
-    [Symbol.toPrimitive](x: any) { }
+    [Symbol.toPrimitive](x: any) {
+    }
 }

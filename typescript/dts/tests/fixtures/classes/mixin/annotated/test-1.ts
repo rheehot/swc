@@ -24,7 +24,7 @@ const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Prin
         print() {
             const output = this.x + "," + this.y;
         }
-    }
+    };
 
 interface Tagged {
     _tag: string;

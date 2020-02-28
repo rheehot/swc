@@ -11,7 +11,7 @@ type Boxified<T> = {
 }
 
 function box<T>(x: T): Box<T> {
-    return { value: x };
+    return {value: x};
 }
 
 function unbox<T>(x: Box<T>): T {
@@ -66,7 +66,7 @@ function f3() {
         b: box("hello"),
         c: box(true)
     };
-    assignBoxified(b, { c: false });
+    assignBoxified(b, {c: false});
 }
 
 function f4() {
@@ -108,7 +108,9 @@ function f6(s: string) {
 }
 
 declare function validate<T>(obj: { [P in keyof T]?: T[P] }): T;
+
 declare function clone<T>(obj: { readonly [P in keyof T]: T[P] }): T;
+
 declare function validateAndClone<T>(obj: { readonly [P in keyof T]?: T[P] }): T;
 
 type Foo = {
@@ -126,7 +128,7 @@ function f10(foo: Foo) {
 
 type Func<T> = (...args: any[]) => T;
 type Spec<T> = {
-    [P in keyof T]: Func<T[P]> | Spec<T[P]> ;
+    [P in keyof T]: Func<T[P]> | Spec<T[P]>;
 };
 
 /**
@@ -145,7 +147,7 @@ var g1 = applySpec({
 });
 
 // Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
-var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
+var g2 = applySpec({foo: {bar: {baz: (x: any) => true}}});
 
 // Repro from #12633
 
@@ -158,16 +160,20 @@ o = foo(o, {b: 9});
 // inferring to { [P in keyof T]: X }.
 
 declare function f20<T, K extends keyof T>(obj: Pick<T, K>): T;
+
 declare function f21<T, K extends keyof T>(obj: Pick<T, K>): K;
+
 declare function f22<T, K extends keyof T>(obj: Boxified<Pick<T, K>>): T;
+
 declare function f23<T, U extends keyof T, K extends U>(obj: Pick<T, K>): T;
+
 declare function f24<T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>): T & U;
 
-let x0 = f20({ foo: 42, bar: "hello" });
-let x1 = f21({ foo: 42, bar: "hello" });
-let x2 = f22({ foo: { value: 42} , bar: { value: "hello" } });
-let x3 = f23({ foo: 42, bar: "hello" });
-let x4 = f24({ foo: 42, bar: "hello" });
+let x0 = f20({foo: 42, bar: "hello"});
+let x1 = f21({foo: 42, bar: "hello"});
+let x2 = f22({foo: {value: 42}, bar: {value: "hello"}});
+let x3 = f23({foo: 42, bar: "hello"});
+let x4 = f24({foo: 42, bar: "hello"});
 
 // Repro from #29765
 

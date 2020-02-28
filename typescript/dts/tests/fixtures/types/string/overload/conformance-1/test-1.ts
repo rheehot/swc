@@ -30,9 +30,9 @@ namespace Consts1 {
     const FALSE = getFalsyPrimitive("boolean");
 }
 
-const string: "string" = "string"
-const number: "number" = "number"
-const boolean: "boolean" = "boolean"
+const string: "string" = "string";
+const number: "number" = "number";
+const boolean: "boolean" = "boolean";
 
 const stringOrNumber = string || number;
 const stringOrBoolean = string || boolean;
