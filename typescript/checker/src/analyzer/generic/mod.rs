@@ -383,21 +383,20 @@ impl Analyzer<'_, '_> {
         self.expand_type_params_inner(i, params, ty, false)
     }
 
-    /// if `fully` is true, interfaces are converted into type literal and
-    /// resolved.
     ///
     ///
-    /// TODO: Handle operators like keyof.
+    ///  This methods handle special types like mapped type.
+    ///
     ///  e.g.
-    ///    Convert
     ///      type BadNested<T> = {
     ///          x: T extends number ? T : string;
     ///      };
     ///      T extends {
     ///          [K in keyof BadNested<infer P>]: BadNested<infer P>[K];
     ///      } ? P : never;
-    ///   into
-    ///      T extends {
+    ///
+    ///
+    ///z     T extends {
     ///          x: infer P extends number ? infer P : string;
     ///      } ? P : never
     fn expand_type_params_inner(
@@ -408,7 +407,6 @@ impl Analyzer<'_, '_> {
         fully: bool,
     ) -> ValidationResult {
         let mut ty = ty.fold_with(&mut GenericExpander {
-            analyzer: self,
             params,
             i: type_args,
             fully,
@@ -440,8 +438,9 @@ impl Analyzer<'_, '_> {
     }
 }
 
-struct GenericExpander<'a, 'b, 'c> {
-    analyzer: &'a Analyzer<'b, 'c>,
+/// This struct does not expands ref to other thpe. See Analyzer.expand to do
+/// such operation.
+struct GenericExpander<'a> {
     params: &'a [TypeParam],
     i: &'a TypeParamInstantiation,
     /// Expand fully?
@@ -449,7 +448,7 @@ struct GenericExpander<'a, 'b, 'c> {
     dejavu: FxHashSet<JsWord>,
 }
 
-impl Fold<Type> for GenericExpander<'_, '_, '_> {
+impl Fold<Type> for GenericExpander<'_> {
     fn fold(&mut self, mut ty: Type) -> Type {
         let old_fully = self.fully;
         self.fully |= match ty {
@@ -486,94 +485,6 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                         assert_eq!(*type_args, None);
 
                         return self.i.params[idx].clone();
-                    }
-                }
-
-                if self.fully {
-                    // Check for builtin types
-                    if !self.analyzer.is_builtin {
-                        if let Ok(ty) = builtin_types::get_type(self.analyzer.libs, span, sym) {
-                            let ty = ty.fold_with(self);
-                            return ty;
-                        }
-                    }
-                }
-
-                if self.fully {
-                    if let Some(types) = self.analyzer.find_type(sym) {
-                        log::info!(
-                            "Found {} items from {}",
-                            types.clone().into_iter().count(),
-                            sym
-                        );
-
-                        for t in types {
-                            match t.normalize() {
-                                Type::Alias(alias) => {
-                                    if let Some(type_params) = &alias.type_params {
-                                        if let Some(type_args) = &type_args {
-                                            let mut v = GenericExpander {
-                                                analyzer: self.analyzer,
-                                                params: &type_params.params,
-                                                i: type_args,
-                                                fully: self.fully,
-                                                dejavu: {
-                                                    let mut v = self.dejavu.clone();
-                                                    v.insert(sym.clone());
-                                                    v
-                                                },
-                                            };
-                                            log::info!("Expanding alias: {}", sym);
-                                            return *alias.ty.clone().fold_with(&mut v);
-                                        }
-                                    } else {
-                                        log::info!("Returning alias: {}", sym);
-                                        return *alias.ty.clone();
-                                    }
-                                }
-
-                                Type::Interface(i) => {
-                                    // TODO: Handle super
-                                    if !i.extends.is_empty() {
-                                        log::error!(
-                                            "not yet implemented: expanding interface which has a \
-                                             parent"
-                                        );
-                                        return ty;
-                                    }
-
-                                    let members = if let Some(type_params) = &i.type_params {
-                                        let type_args = if let Some(type_args) = &type_args {
-                                            type_args
-                                        } else {
-                                            return ty;
-                                        };
-
-                                        let mut v = GenericExpander {
-                                            analyzer: self.analyzer,
-                                            params: &type_params.params,
-                                            i: type_args,
-                                            fully: self.fully,
-                                            dejavu: {
-                                                let mut v = self.dejavu.clone();
-                                                v.insert(sym.clone());
-                                                v
-                                            },
-                                        };
-
-                                        i.body.clone().fold_with(&mut v)
-                                    } else {
-                                        i.body.clone()
-                                    };
-
-                                    return Type::TypeLit(TypeLit {
-                                        span: i.span,
-                                        members,
-                                    });
-                                }
-                                _ => {}
-                            }
-                        }
                     }
                 }
             }
