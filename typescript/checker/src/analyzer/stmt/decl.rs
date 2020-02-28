@@ -87,11 +87,7 @@ impl Validate<VarDeclarator> for Analyzer<'_, '_> {
 
                 //  Check if v_ty is assignable to ty
                 let mut value_ty = match init.validate_with(self) {
-                    Ok(ty) => {
-                        let ty = self.expand(span, ty)?;
-                        self.check_rvalue(&ty);
-                        ty
-                    }
+                    Ok(ty) => ty,
                     Err(err) => {
                         if self.is_builtin {
                             unreachable!("failed to assign builtin: \nError: {:?}", err)
@@ -115,7 +111,8 @@ impl Validate<VarDeclarator> for Analyzer<'_, '_> {
                             }
                         };
                         let ty = self.expand(span, ty)?;
-                        assert_no_ref(&ty);
+                        self.check_rvalue(&ty);
+                        value_ty = self.expand(span, value_ty)?;
                         value_ty = self.rename_type_params(span, value_ty, Some(&ty))?;
 
                         match self.assign(&ty, &value_ty, v_span) {
@@ -176,6 +173,8 @@ impl Validate<VarDeclarator> for Analyzer<'_, '_> {
                                 v.name.set_ty(Some(ty.clone().into()));
                             }
                         }
+                        ty = self.expand(span, ty)?;
+                        self.check_rvalue(&ty);
 
                         let mut type_errors = vec![];
 

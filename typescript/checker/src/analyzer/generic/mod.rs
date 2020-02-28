@@ -165,8 +165,20 @@ impl Analyzer<'_, '_> {
 
             Type::Keyword(..) => {}
 
+            Type::Ref(param) => match arg {
+                Type::Ref(arg) => {}
+                _ => {
+                    let param = self.expand(param.span(), Type::Ref(param.clone()))?;
+                    return self.infer_type(inferred, &param, arg);
+                }
+            },
+
             _ => match arg {
                 Type::Keyword(..) => {}
+                Type::Ref(..) => {
+                    let arg = self.expand(arg.span(), arg.clone())?;
+                    return self.infer_type(inferred, param, &arg);
+                }
                 _ => unimplemented!("infer_arg_type: \narg = {:?}\nparam = {:?}", arg, param),
             },
         }
