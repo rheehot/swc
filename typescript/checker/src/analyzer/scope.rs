@@ -3,6 +3,7 @@ use crate::{
     builtin_types,
     errors::Error,
     name::Name,
+    swc_common::VisitWith,
     ty::{
         self, Alias, Array, EnumVariant, IndexSignature, Interface, Intersection,
         PropertySignature, QueryExpr, QueryType, Ref, Tuple, Type, TypeElement, TypeLit, TypeParam,
@@ -21,7 +22,7 @@ use std::{
     iter::{once, repeat},
 };
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Fold, FoldWith, Span, Spanned, DUMMY_SP};
+use swc_common::{Fold, FoldWith, Span, Spanned, Visit, DUMMY_SP};
 use swc_ecma_ast::*;
 
 macro_rules! no_ref {
@@ -959,6 +960,14 @@ impl Fold<Type> for Expander<'_, '_, '_> {
             _ => {}
         }
 
+        {
+            let mut union_finder = UnionFinder { found: false };
+            ty.visit_with(&mut union_finder);
+            if union_finder.found {
+                return ty;
+            }
+        }
+
         let span = self.span;
         let ty = ty.fold_children(self);
 
@@ -994,8 +1003,13 @@ impl Fold<Type> for Expander<'_, '_, '_> {
 
                             // Handle enum
                             if let Some(types) = self.analyzer.find_type(&i.sym) {
-                                for ty in types {
-                                    match ty.normalize() {
+                                for t in types {
+                                    let mut finder = UnionFinder { found: false };
+                                    t.visit_with(&mut finder);
+                                    if finder.found {
+                                        return ty;
+                                    }
+                                    match t.normalize() {
                                         Type::Enum(..) => {
                                             if let Some(..) = *type_args {
                                                 Err(Error::NotGeneric { span })?;
@@ -1135,5 +1149,25 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                 Type::any(span)
             }
         }
+    }
+}
+
+#[derive(Debug, Default)]
+struct UnionFinder {
+    found: bool,
+}
+
+impl Visit<ty::PropertySignature> for UnionFinder {
+    fn visit(&mut self, _: &PropertySignature) {}
+}
+
+impl Visit<ty::MethodSignature> for UnionFinder {
+    fn visit(&mut self, _: &ty::MethodSignature) {}
+}
+
+impl Visit<Union> for UnionFinder {
+    fn visit(&mut self, u: &Union) {
+        log::debug!("Found union: {:?}", u);
+        self.found = true;
     }
 }
