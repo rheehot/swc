@@ -80,11 +80,14 @@ impl Analyzer<'_, '_> {
 
                 if type_param.constraint.is_some()
                     && match **type_param.constraint.as_ref().unwrap() {
-                        Type::Keyword(..) | Type::Ref(..) | Type::TypeLit(..) => true,
+                        Type::Interface(..)
+                        | Type::Keyword(..)
+                        | Type::Ref(..)
+                        | Type::TypeLit(..) => true,
                         _ => false,
                     }
                 {
-                    let ty = self.expand(span, *type_param.constraint.clone().unwrap())?;
+                    let ty = self.expand_fully(span, *type_param.constraint.clone().unwrap())?;
                     params.push(ty);
                     continue;
                 }
@@ -133,7 +136,10 @@ impl Analyzer<'_, '_> {
 
                 if constraint.is_some()
                     && match **constraint.as_ref().unwrap() {
-                        Type::Keyword(..) | Type::Ref(..) | Type::TypeLit(..) => true,
+                        Type::Interface(..)
+                        | Type::Keyword(..)
+                        | Type::Ref(..)
+                        | Type::TypeLit(..) => true,
                         _ => false,
                     }
                 {

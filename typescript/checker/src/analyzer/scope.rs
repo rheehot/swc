@@ -186,6 +186,22 @@ impl Analyzer<'_, '_> {
         Ok(ty.into_owned().fold_with(&mut v))
     }
 
+    /// Expands
+    ///
+    ///   - Type alias
+    pub(super) fn expand_fully(&mut self, span: Span, ty: Type) -> ValidationResult<Type> {
+        if self.is_builtin {
+            return Ok(ty);
+        }
+
+        let mut v = Expander {
+            span,
+            analyzer: self,
+            full: true,
+        };
+        Ok(ty.into_owned().fold_with(&mut v))
+    }
+
     pub(super) fn register_type(&mut self, name: JsWord, ty: Type) -> Result<(), Error> {
         if self.is_builtin
             && match ty.normalize() {
@@ -972,7 +988,7 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                     builtin_types::get_type(self.analyzer.libs, span, &i.sym)
                                 {
                                     verify!(ty);
-                                    return self.analyzer.expand(span, ty)?;
+                                    return ty.fold_with(self);
                                 }
                             }
 
