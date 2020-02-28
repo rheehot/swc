@@ -100,35 +100,38 @@ impl Analyzer<'_, '_> {
                 ref constraint,
                 ..
             }) => {
-                let arg_ty = (|| {
-                    if constraint.is_some() && is_literals(&constraint.as_ref().unwrap()) {
-                        return *constraint.clone().unwrap();
+                if constraint.is_some() && is_literals(&constraint.as_ref().unwrap()) {
+                    inferred.insert(name.clone(), *constraint.clone().unwrap());
+                    return Ok(());
+                }
+
+                if constraint.is_some()
+                    && match **constraint.as_ref().unwrap() {
+                        Type::Keyword(..) | Type::Ref(..) | Type::TypeLit(..) => true,
+                        _ => false,
                     }
+                {
+                    inferred.insert(name.clone(), *constraint.clone().unwrap());
+                    return Ok(());
+                }
 
-                    if constraint.is_some()
-                        && match **constraint.as_ref().unwrap() {
-                            Type::Keyword(..) | Type::Ref(..) | Type::TypeLit(..) => true,
-                            _ => false,
-                        }
-                    {
-                        return *constraint.clone().unwrap();
-                    }
-
-                    arg.clone()
-                })();
-
-                log::info!("infer: {} = {:?}", name, arg_ty);
+                log::info!("infer: {} = {:?}", name, arg);
                 match inferred.entry(name.clone()) {
                     Entry::Occupied(e) => {
+                        match e.get() {
+                            Type::Param(..) => return Ok(()),
+                            _ => {}
+                        }
+
                         // Use this for type inference.
                         let param_ty = e.get().clone();
 
                         // We pass in inverse order to infer type of arg from the type information
                         // of parameter
-                        self.infer_type(inferred, &arg_ty, &param_ty)?;
+                        self.infer_type(inferred, &arg, &param_ty)?;
                     }
                     Entry::Vacant(e) => {
-                        e.insert(arg_ty);
+                        e.insert(arg.clone());
                     }
                 }
             }
@@ -173,14 +176,35 @@ impl Analyzer<'_, '_> {
                 }
             },
 
-            _ => match arg {
-                Type::Keyword(..) => {}
-                Type::Ref(..) => {
-                    let arg = self.expand(arg.span(), arg.clone())?;
-                    return self.infer_type(inferred, param, &arg);
-                }
-                _ => unimplemented!("infer_arg_type: \narg = {:?}\nparam = {:?}", arg, param),
+            Type::Lit(..) => match arg {
+                Type::Lit(..) => {}
+                _ => {}
             },
+
+            // TODO: implement
+            Type::Union(..) => match arg {
+                Type::Union(..) => {}
+                _ => {}
+            },
+
+            // Handled by generic expander, so let's return it as-is.
+            Type::Mapped(..) => {}
+
+            Type::Alias(param) => self.infer_type(inferred, &param.ty, arg)?,
+
+            _ => {}
+        }
+
+        match arg {
+            // Handled by generic expander, so let's return it as-is.
+            Type::Mapped(..) => {}
+            Type::Keyword(..) => {}
+            Type::Ref(..) => {
+                let arg = self.expand(arg.span(), arg.clone())?;
+                return self.infer_type(inferred, param, &arg);
+            }
+            Type::Alias(arg) => self.infer_type(inferred, param, &arg.ty)?,
+            _ => log::error!("infer_arg_type: \narg = {:?}\nparam = {:?}", arg, param),
         }
 
         Ok(())
