@@ -21,7 +21,7 @@ use std::{
     iter::{once, repeat},
 };
 use swc_atoms::{js_word, JsWord};
-use swc_common::{FoldWith, Span, Spanned, DUMMY_SP};
+use swc_common::{Fold, FoldWith, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 
 macro_rules! no_ref {
@@ -178,224 +178,11 @@ impl Analyzer<'_, '_> {
             return Ok(ty);
         }
 
-        macro_rules! verify {
-            ($ty:expr) => {{
-                if cfg!(debug_assertions) {
-                    match $ty.normalize() {
-                        Type::Ref(ref s) => unreachable!("ref: {:?}", s),
-                        _ => {}
-                    }
-                }
-            }};
-        }
-
-        match ty.normalize() {
-            Type::Ref(Ref {
-                ref type_name,
-                ref type_args,
-                ..
-            }) => {
-                match *type_name {
-                    TsEntityName::Ident(ref i) => {
-                        // Check for builtin types
-                        if !self.is_builtin {
-                            if let Ok(ty) = builtin_types::get_type(self.libs, span, &i.sym) {
-                                verify!(ty);
-                                return self.expand(span, ty);
-                            }
-                        }
-
-                        // Handle enum
-                        if let Some(types) = self.find_type(&i.sym) {
-                            for ty in types {
-                                match ty.normalize() {
-                                    Type::Enum(..) => {
-                                        if let Some(..) = *type_args {
-                                            return Err(Error::NotGeneric { span });
-                                        }
-                                        verify!(ty);
-                                        return Ok(ty.clone());
-                                    }
-
-                                    Type::Param(..) => {
-                                        if let Some(..) = *type_args {
-                                            return Err(Error::NotGeneric { span });
-                                        }
-
-                                        verify!(ty);
-                                        return Ok(ty.clone());
-                                    }
-
-                                    Type::Interface(Interface { type_params, .. })
-                                    | Type::Alias(Alias { type_params, .. })
-                                    | Type::Class(ty::Class { type_params, .. }) => {
-                                        if let Some(type_params) = type_params.clone() {
-                                            if let Some(type_args) = type_args {
-                                                let ty = ty.clone();
-                                                return self.expand_type_params(
-                                                    &type_args,
-                                                    &type_params.params,
-                                                    ty,
-                                                );
-                                            }
-                                        }
-
-                                        return Ok(ty.clone());
-                                    }
-
-                                    _ => unimplemented!(
-                                        "Handling result of find_type() -> {:#?}",
-                                        ty
-                                    ),
-                                }
-                            }
-                        } else {
-                            println!("Failed to find type: {}", i.sym)
-                        }
-                    }
-
-                    // Handle enum variant type.
-                    //
-                    //  let a: StringEnum.Foo = x;
-                    TsEntityName::TsQualifiedName(box TsQualifiedName {
-                        left: TsEntityName::Ident(ref left),
-                        ref right,
-                    }) => {
-                        if left.sym == js_word!("void") {
-                            return Ok(Type::any(span));
-                        }
-
-                        if let Some(types) = self.scope.find_type(&left.sym) {
-                            for ty in types {
-                                match *ty {
-                                    Type::Enum(..) => {
-                                        return Ok(EnumVariant {
-                                            span,
-                                            enum_name: left.sym.clone(),
-                                            name: right.sym.clone(),
-                                        }
-                                        .into());
-                                    }
-                                    _ => {}
-                                }
-                            }
-                        }
-                    }
-                    _ => {
-                        unimplemented!("TsEntityName: {:?}", type_name);
-                    }
-                }
-
-                return Err(Error::NameNotFound {
-                    name: type_name.clone().into(),
-                    type_args: type_args.clone(),
-                    span: type_name.span(),
-                });
-            }
-
-            Type::Query(QueryType {
-                expr: QueryExpr::TsEntityName(ref name),
-                ..
-            }) => return self.type_of_ts_entity_name(span, name, None),
-
-            _ => {}
-        }
-
-        let ty = match ty.into_owned() {
-            Type::Union(Union { span, types }) => {
-                let v = types
-                    .into_iter()
-                    .map(|ty| -> ValidationResult { Ok(self.expand(span, ty)?) })
-                    .collect::<Result<Vec<_>, _>>()?;
-                return Ok(Type::union(v));
-            }
-            Type::Intersection(Intersection { span, types }) => {
-                return Ok(Intersection {
-                    span,
-                    types: types
-                        .into_iter()
-                        .map(|ty| -> ValidationResult { Ok(self.expand(span, ty)?) })
-                        .collect::<Result<_, _>>()?,
-                }
-                .into());
-            }
-
-            Type::Array(Array {
-                span,
-                box elem_type,
-            }) => {
-                let elem_type = box self.expand(elem_type.span(), elem_type)?;
-                return Ok(Array { span, elem_type }.into());
-            }
-
-            // type Baz = "baz"
-            // let a: ["foo", "bar", Baz] = ["foo", "bar", "baz"];
-            Type::Tuple(Tuple { span, types }) => {
-                return Ok(Tuple {
-                    span,
-                    types: types
-                        .into_iter()
-                        .map(|v| self.expand(v.span(), v))
-                        .collect::<Result<_, _>>()?,
-                }
-                .into());
-            }
-
-            Type::Alias(Alias {
-                type_params: None,
-                ty,
-                ..
-            }) => {
-                return Ok(*ty);
-            }
-
-            Type::Function(ty::Function {
-                span,
-                type_params,
-                params,
-                ret_ty,
-            }) => {
-                let ret_ty = self.rename_type_params(span, *ret_ty, None)?;
-                let ret_ty = box self.expand(span, ret_ty)?;
-
-                let params = params
-                    .into_iter()
-                    .map(|mut param| -> ValidationResult<_> {
-                        param.ty = self.expand(param.span, param.ty)?;
-                        Ok(param)
-                    })
-                    .collect::<Result<_, _>>()?;
-
-                let ty = ty::Function {
-                    span,
-                    type_params,
-                    params,
-                    ret_ty,
-                }
-                .into();
-
-                return Ok(ty);
-            }
-
-            Type::Param(ty) => {
-                return Ok(TypeParam {
-                    constraint: match ty.constraint {
-                        None => None,
-                        Some(ty) => Some(box self.expand(span, *ty)?),
-                    },
-                    default: match ty.default {
-                        None => None,
-                        Some(ty) => Some(box self.expand(span, *ty)?),
-                    },
-                    ..ty
-                }
-                .into())
-            }
-
-            ty => ty,
+        let mut v = Expander {
+            span,
+            analyzer: self,
         };
-
-        Ok(ty)
+        Ok(ty.into_owned().fold_with(&mut v))
     }
 
     pub(super) fn register_type(&mut self, name: JsWord, ty: Type) -> Result<(), Error> {
@@ -1129,4 +916,189 @@ pub(crate) enum ScopeKind {
     Class,
     /// If statement, conditional expression, switch case
     Flow,
+}
+
+struct Expander<'a, 'b, 'c> {
+    span: Span,
+    analyzer: &'a mut Analyzer<'b, 'c>,
+}
+
+impl Fold<Type> for Expander<'_, '_, '_> {
+    fn fold(&mut self, ty: Type) -> Type {
+        if self.analyzer.is_builtin {
+            return ty;
+        }
+
+        let ty = ty.into_owned();
+
+        match ty {
+            Type::Interface(..) | Type::Class(..) => return ty,
+            _ => {}
+        }
+
+        let span = self.span;
+        let ty = ty.fold_children(self);
+
+        let res: ValidationResult = try {
+            macro_rules! verify {
+                ($ty:expr) => {{
+                    if cfg!(debug_assertions) {
+                        match $ty.normalize() {
+                            Type::Ref(ref s) => unreachable!("ref: {:?}", s),
+                            _ => {}
+                        }
+                    }
+                }};
+            }
+
+            match ty.normalize() {
+                Type::Ref(Ref {
+                    ref type_name,
+                    ref type_args,
+                    ..
+                }) => {
+                    match *type_name {
+                        TsEntityName::Ident(ref i) => {
+                            // Check for builtin types
+                            if !self.analyzer.is_builtin {
+                                if let Ok(ty) =
+                                    builtin_types::get_type(self.analyzer.libs, span, &i.sym)
+                                {
+                                    verify!(ty);
+                                    return self.analyzer.expand(span, ty)?;
+                                }
+                            }
+
+                            // Handle enum
+                            if let Some(types) = self.analyzer.find_type(&i.sym) {
+                                for ty in types {
+                                    match ty.normalize() {
+                                        Type::Enum(..) => {
+                                            if let Some(..) = *type_args {
+                                                Err(Error::NotGeneric { span })?;
+                                            }
+                                            verify!(ty);
+                                            return ty.clone();
+                                        }
+
+                                        Type::Param(..) => {
+                                            if let Some(..) = *type_args {
+                                                Err(Error::NotGeneric { span })?;
+                                            }
+
+                                            verify!(ty);
+                                            return ty.clone();
+                                        }
+
+                                        Type::Interface(Interface { type_params, .. })
+                                        | Type::Alias(Alias { type_params, .. })
+                                        | Type::Class(ty::Class { type_params, .. }) => {
+                                            if let Some(type_params) = type_params.clone() {
+                                                if let Some(type_args) = type_args {
+                                                    let ty = ty.clone();
+                                                    return self.analyzer.expand_type_params(
+                                                        &type_args,
+                                                        &type_params.params,
+                                                        ty,
+                                                    )?;
+                                                }
+                                            }
+
+                                            return ty.clone();
+                                        }
+
+                                        _ => unimplemented!(
+                                            "Handling result of find_type() -> {:#?}",
+                                            ty
+                                        ),
+                                    }
+                                }
+                            } else {
+                                println!("Failed to find type: {}", i.sym)
+                            }
+                        }
+
+                        // Handle enum variant type.
+                        //
+                        //  let a: StringEnum.Foo = x;
+                        TsEntityName::TsQualifiedName(box TsQualifiedName {
+                            left: TsEntityName::Ident(ref left),
+                            ref right,
+                        }) => {
+                            if left.sym == js_word!("void") {
+                                return Type::any(span);
+                            }
+
+                            if let Some(types) = self.analyzer.scope.find_type(&left.sym) {
+                                for ty in types {
+                                    match *ty {
+                                        Type::Enum(..) => {
+                                            return EnumVariant {
+                                                span,
+                                                enum_name: left.sym.clone(),
+                                                name: right.sym.clone(),
+                                            }
+                                            .into();
+                                        }
+                                        _ => {}
+                                    }
+                                }
+                            }
+                        }
+                        _ => {
+                            unimplemented!("TsEntityName: {:?}", type_name);
+                        }
+                    }
+
+                    Err(Error::NameNotFound {
+                        name: type_name.clone().into(),
+                        type_args: type_args.clone(),
+                        span: type_name.span(),
+                    })?;
+                }
+
+                Type::Query(QueryType {
+                    expr: QueryExpr::TsEntityName(ref name),
+                    ..
+                }) => return self.analyzer.type_of_ts_entity_name(span, name, None)?,
+
+                _ => {}
+            }
+
+            match ty.into_owned() {
+                ty @ Type::Interface(..) | ty @ Type::TypeLit(..) => return ty,
+
+                Type::Union(Union { span, types }) => {
+                    return Type::union(types);
+                }
+
+                Type::Function(ty::Function {
+                    span,
+                    type_params,
+                    params,
+                    ret_ty,
+                }) => {
+                    let ret_ty = box self.analyzer.rename_type_params(span, *ret_ty, None)?;
+
+                    return ty::Function {
+                        span,
+                        type_params,
+                        params,
+                        ret_ty,
+                    }
+                    .into();
+                }
+
+                ty => ty,
+            }
+        };
+
+        match res {
+            Ok(ty) => ty,
+            Err(err) => {
+                self.analyzer.info.errors.push(err);
+                Type::any(span)
+            }
+        }
+    }
 }
