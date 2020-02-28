@@ -1019,6 +1019,7 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                             if let Some(type_params) = type_params.clone() {
                                                 if let Some(type_args) = type_args {
                                                     let ty = ty.clone();
+                                                    log::info!("expand: expanding type parameters");
                                                     return self.analyzer.expand_type_params(
                                                         &type_args,
                                                         &type_params.params,
