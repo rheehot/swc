@@ -32,7 +32,10 @@ impl Analyzer<'_, '_> {
         params: &[FnParam],
         args: &[TypeOrSpread],
     ) -> ValidationResult<TypeParamInstantiation> {
-        log::debug!("infer_arg_types");
+        log::debug!(
+            "infer_arg_types: {:?}",
+            type_params.iter().map(|p| &p.name).collect::<Vec<_>>()
+        );
 
         let mut inferred = FxHashMap::default();
 
@@ -127,7 +130,9 @@ impl Analyzer<'_, '_> {
                 })();
 
                 log::info!("infer: {} = {:?}", name, arg_ty);
-                inferred.insert(name.clone(), arg_ty);
+                if !inferred.contains_key(&name) {
+                    inferred.insert(name.clone(), arg_ty);
+                }
             }
 
             Type::Array(Array { elem_type, .. }) => match arg {
@@ -233,11 +238,13 @@ impl Analyzer<'_, '_> {
 
         ty = self.expand(span, ty)?;
 
-        log::trace!(
-            "rename_type_param: starting\nType: {:#?}\nAnnotation: {:#?}",
-            ty,
-            type_ann
-        );
+        if type_ann.is_some() {
+            log::debug!(
+                "rename_type_param: starting\nType: {:#?}\nAnnotation: {:#?}",
+                ty,
+                type_ann
+            );
+        }
 
         let mut inferred = FxHashMap::default();
 
@@ -469,10 +476,11 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
                                                     v
                                                 },
                                             };
-
+                                            log::info!("Expanding alias: {}", sym);
                                             return *alias.ty.clone().fold_with(&mut v);
                                         }
                                     } else {
+                                        log::info!("Returning alias: {}", sym);
                                         return *alias.ty.clone();
                                     }
                                 }
@@ -552,12 +560,13 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
             // Alias returns other than self.
             Type::Alias(mut alias) => {
                 alias = alias.fold_with(self);
-
-                if let Some(..) = &alias.type_params {
-                    // TODO: Handle unresolved type parameter
-                    log::warn!("An type alias has type parameters. It may not be fully expanded.");
-                }
-                return *alias.ty;
+                //
+                // if let Some(..) = &alias.type_params {
+                //     // TODO: Handle unresolved type parameter
+                //     log::warn!("An type alias has type parameters. It may not be fully
+                // expanded."); }
+                // return *alias.ty;
+                return Type::Alias(alias);
             }
 
             Type::Interface(mut i) if self.fully => {
