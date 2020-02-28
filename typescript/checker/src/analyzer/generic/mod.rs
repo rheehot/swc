@@ -146,8 +146,11 @@ impl Analyzer<'_, '_> {
 
             Type::Function(p) => match arg {
                 Type::Function(a) => {
-                    self.compare_type_of_fn_params(inferred, &p.params, &a.params)?;
+                    self.infer_type_of_fn_params(inferred, &p.params, &a.params)?;
                     self.infer_type(inferred, &p.ret_ty, &a.ret_ty)?;
+                    if let Some(arg_type_params) = &a.type_params {
+                        self.rename_inferred(inferred, arg_type_params)?;
+                    }
                 }
                 _ => {}
             },
@@ -209,7 +212,7 @@ impl Analyzer<'_, '_> {
         self.infer_type(inferred, &param.ty, &arg.ty)
     }
 
-    fn compare_type_of_fn_params(
+    fn infer_type_of_fn_params(
         &mut self,
         inferred: &mut FxHashMap<JsWord, Type>,
         params: &[FnParam],
@@ -218,6 +221,23 @@ impl Analyzer<'_, '_> {
         for (param, arg) in params.iter().zip(args) {
             self.infer_type_of_fn_param(inferred, param, arg)?
         }
+
+        Ok(())
+    }
+
+    fn rename_inferred(
+        &mut self,
+        inferred: &mut FxHashMap<JsWord, Type>,
+        arg_type_params: &TypeParamDecl,
+    ) -> ValidationResult<()> {
+        struct Renamer<'a> {
+            type_params: &'a TypeParamDecl,
+        }
+
+        inferred.iter_mut().for_each(|(param_name, ty)| {
+            //
+            log::warn!("Type: {:?}", ty);
+        });
 
         Ok(())
     }
@@ -561,12 +581,11 @@ impl Fold<Type> for GenericExpander<'_, '_, '_> {
             Type::Alias(mut alias) => {
                 alias = alias.fold_with(self);
                 //
-                // if let Some(..) = &alias.type_params {
-                //     // TODO: Handle unresolved type parameter
-                //     log::warn!("An type alias has type parameters. It may not be fully
-                // expanded."); }
-                // return *alias.ty;
-                return Type::Alias(alias);
+                if let Some(..) = &alias.type_params {
+                    // TODO: Handle unresolved type parameter
+                    log::warn!("An type alias has type parameters. It may not be fully expanded.");
+                }
+                return *alias.ty;
             }
 
             Type::Interface(mut i) if self.fully => {
