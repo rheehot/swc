@@ -174,15 +174,3 @@ let x1 = f21({foo: 42, bar: "hello"});
 let x2 = f22({foo: {value: 42}, bar: {value: "hello"}});
 let x3 = f23({foo: 42, bar: "hello"});
 let x4 = f24({foo: 42, bar: "hello"});
-
-// Repro from #29765
-
-function getProps<T, K extends keyof T>(obj: T, list: K[]): Pick<T, K> {
-    return {} as any;
-}
-
-const myAny: any = {};
-
-const o1 = getProps(myAny, ['foo', 'bar']);
-
-const o2: { foo: any; bar: any } = getProps(myAny, ['foo', 'bar']);
