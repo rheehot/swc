@@ -4,7 +4,7 @@ use super::super::{
 };
 use crate::{
     errors::{Error, Errors},
-    ty::Type,
+    ty::{Operator, Type},
     util::EqIgnoreSpan,
     validator::Validate,
     ValidationResult,
@@ -504,7 +504,12 @@ impl Analyzer<'_, '_> {
                             ..
                         })
                         | Type::Enum(..)
-                        | Type::EnumVariant(..) => {}
+                        | Type::EnumVariant(..)
+                        | Type::Param(..)
+                        | Type::Operator(Operator {
+                            op: TsTypeOperatorOp::KeyOf,
+                            ..
+                        }) => {}
 
                         _ => errors.push(Error::TS2360 { span: ls }),
                     }
@@ -519,6 +524,7 @@ impl Analyzer<'_, '_> {
                         match ty.normalize() {
                             Type::TypeLit(..)
                             | Type::Param(..)
+                            | Type::Mapped(..)
                             | Type::Array(..)
                             | Type::Tuple(..)
                             | Type::Interface(..)
