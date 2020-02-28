@@ -81,11 +81,6 @@ impl Validate<Function> for Analyzer<'_, '_> {
                 }
             });
 
-            let declared_ret_ty = match declared_ret_ty {
-                Some(ty) => Some(child.expand(f.span, ty)?),
-                None => None,
-            };
-
             let inferred_return_type = try_opt!(f
                 .body
                 .as_mut()
@@ -93,6 +88,8 @@ impl Validate<Function> for Analyzer<'_, '_> {
             let inferred_return_type = match inferred_return_type {
                 Some(Some(inferred_return_type)) => {
                     if let Some(ref declared) = declared_ret_ty {
+                        // Expand before assigning
+                        let declared = child.expand(f.span, declared.clone())?;
                         let span = inferred_return_type.span();
 
                         child.assign(&declared, &inferred_return_type, span)?;
