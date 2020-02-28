@@ -877,6 +877,10 @@ impl Analyzer<'_, '_> {
                 _ => {}
             }
 
+            if !errors.is_empty() {
+                return Err(errors)?;
+            }
+
             if !unhandled_rhs.is_empty() {
                 // The code below is invalid as c is not defined in type.
                 //
