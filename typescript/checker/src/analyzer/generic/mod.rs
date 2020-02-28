@@ -14,8 +14,11 @@ use crate::{
 use bitflags::_core::mem::take;
 use fxhash::{FxHashMap, FxHashSet};
 use itertools::{EitherOrBoth, Itertools};
-use swc_atoms::{js_word, JsWord};
-use swc_common::{Fold, FoldWith, Span, Spanned, Visit, VisitWith, DUMMY_SP};
+use std::collections::hash_map::Entry;
+use swc_atoms::{js_word, JsWord, JsWordStaticSet};
+use swc_common::{
+    Fold, FoldWith, Span, Spanned, Visit, VisitMut, VisitMutWith, VisitWith, DUMMY_SP,
+};
 use swc_ecma_ast::*;
 use swc_ecma_parser::token::Keyword::TypeOf;
 use swc_ecma_utils::Id;
@@ -130,8 +133,18 @@ impl Analyzer<'_, '_> {
                 })();
 
                 log::info!("infer: {} = {:?}", name, arg_ty);
-                if !inferred.contains_key(&name) {
-                    inferred.insert(name.clone(), arg_ty);
+                match inferred.entry(name.clone()) {
+                    Entry::Occupied(e) => {
+                        // Use this for type inference.
+                        let param_ty = e.get().clone();
+
+                        // We pass in inverse order to infer type of arg from the type information
+                        // of parameter
+                        self.infer_type(inferred, &arg_ty, &param_ty)?;
+                    }
+                    Entry::Vacant(e) => {
+                        e.insert(arg_ty);
+                    }
                 }
             }
 
@@ -231,12 +244,34 @@ impl Analyzer<'_, '_> {
         arg_type_params: &TypeParamDecl,
     ) -> ValidationResult<()> {
         struct Renamer<'a> {
-            type_params: &'a TypeParamDecl,
+            fixed: &'a FxHashMap<JsWord, Type>,
         }
 
-        inferred.iter_mut().for_each(|(param_name, ty)| {
-            //
-            log::warn!("Type: {:?}", ty);
+        impl VisitMut<Type> for Renamer<'_> {
+            fn visit_mut(&mut self, node: &mut Type) {
+                match node {
+                    Type::Param(p) if self.fixed.contains_key(&p.name) => {
+                        *node = (*self.fixed.get(&p.name).unwrap()).clone();
+                    }
+                    _ => node.visit_mut_children(self),
+                }
+            }
+        }
+
+        //
+        let mut fixed = FxHashMap::default();
+
+        inferred.iter().for_each(|(param_name, ty)| {
+            // Ignore unrelated type parameters
+            if arg_type_params.params.iter().all(|v| *param_name != v.name) {
+                return;
+            }
+            fixed.insert(param_name.clone(), ty.clone());
+        });
+
+        let mut v = Renamer { fixed: &fixed };
+        inferred.iter_mut().for_each(|(_, ty)| {
+            ty.visit_mut_with((&mut v));
         });
 
         Ok(())
