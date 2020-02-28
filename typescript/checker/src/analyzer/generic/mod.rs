@@ -289,17 +289,9 @@ impl Analyzer<'_, '_> {
         if self.is_builtin {
             return Ok(ty);
         }
-        log::debug!("rename_type_params");
+        log::trace!("rename_type_params");
 
         ty = self.expand(span, ty)?;
-
-        if type_ann.is_some() {
-            log::debug!(
-                "rename_type_param: starting\nType: {:#?}\nAnnotation: {:#?}",
-                ty,
-                type_ann
-            );
-        }
 
         let mut inferred = FxHashMap::default();
 
