@@ -94,21 +94,6 @@ impl Analyzer<'_, '_> {
         let param = param.normalize();
         let arg = arg.normalize();
 
-        match arg {
-            Type::Ref(..) => {
-                print_backtrace();
-                unreachable!("infer_type: arg is reference ({:?})", arg)
-            }
-            _ => {}
-        }
-        match param {
-            Type::Ref(..) => {
-                print_backtrace();
-                unreachable!("infer_type: param is reference ({:?})", param)
-            }
-            _ => {}
-        }
-
         match param {
             Type::Param(TypeParam {
                 ref name,
@@ -291,7 +276,7 @@ impl Analyzer<'_, '_> {
         }
         log::trace!("rename_type_params");
 
-        ty = self.expand(span, ty)?;
+        // ty = self.expand(span, ty)?;
 
         let mut inferred = FxHashMap::default();
 
