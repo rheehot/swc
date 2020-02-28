@@ -80,10 +80,7 @@ impl Analyzer<'_, '_> {
 
                 if type_param.constraint.is_some()
                     && match **type_param.constraint.as_ref().unwrap() {
-                        Type::Interface(..)
-                        | Type::Keyword(..)
-                        | Type::Ref(..)
-                        | Type::TypeLit(..) => true,
+                        Type::Keyword(..) | Type::Ref(..) | Type::TypeLit(..) => true,
                         _ => false,
                     }
                 {
@@ -136,10 +133,7 @@ impl Analyzer<'_, '_> {
 
                 if constraint.is_some()
                     && match **constraint.as_ref().unwrap() {
-                        Type::Interface(..)
-                        | Type::Keyword(..)
-                        | Type::Ref(..)
-                        | Type::TypeLit(..) => true,
+                        Type::Keyword(..) | Type::Ref(..) | Type::TypeLit(..) => true,
                         _ => false,
                     }
                 {
