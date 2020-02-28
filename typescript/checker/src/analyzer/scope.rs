@@ -189,6 +189,8 @@ impl Analyzer<'_, '_> {
 
     /// Expands
     ///
+    /// // TODO: Add an option to expand union (this is required to assign)
+    ///
     ///   - Type alias
     pub(super) fn expand_fully(&mut self, span: Span, ty: Type) -> ValidationResult<Type> {
         if self.is_builtin {
