@@ -5,8 +5,9 @@ use crate::{
     errors::Error,
     ty,
     ty::{
-        Array, ClassInstance, EnumVariant, IndexSignature, Interface, Intersection, Ref, Tuple,
-        Type, TypeElement, TypeLit, TypeParam, TypeParamInstantiation, Union,
+        Array, ClassInstance, EnumVariant, IndexSignature, IndexedAccessType, Interface,
+        Intersection, Operator, Ref, Tuple, Type, TypeElement, TypeLit, TypeParam,
+        TypeParamInstantiation, Union,
     },
     util::{EqIgnoreSpan, RemoveTypes, TypeEq},
     validator::{Validate, ValidateWith},
@@ -779,20 +780,14 @@ impl Analyzer<'_, '_> {
 
             Type::Param(TypeParam {
                 span: p_span, name, ..
-            }) => match prop {
-                Expr::Ident(ref i) => {
-                    log::warn!("Creating ref from a type parameter: {}", name);
-                    return Ok(Type::Ref(Ref {
-                        span,
-                        type_name: TsEntityName::TsQualifiedName(box TsQualifiedName {
-                            left: TsEntityName::Ident(Ident::new(name.clone(), *p_span)),
-                            right: i.clone(),
-                        }),
-                        type_args: None,
-                    }));
-                }
-                _ => {}
-            },
+            }) => {
+                return Ok(Type::IndexedAccessType(IndexedAccessType {
+                    span,
+                    readonly: false,
+                    obj_type: box obj,
+                    index_type: box prop.validate_with(self)?,
+                }))
+            }
 
             Type::Keyword(TsKeywordType {
                 kind: TsKeywordTypeKind::TsAnyKeyword,
