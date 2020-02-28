@@ -100,6 +100,8 @@ impl Analyzer<'_, '_> {
                 ref constraint,
                 ..
             }) => {
+                log::debug!("infer_type: type parameter: {} = {:?}", name, constraint);
+
                 if constraint.is_some() && is_literals(&constraint.as_ref().unwrap()) {
                     inferred.insert(name.clone(), *constraint.clone().unwrap());
                     return Ok(());
@@ -320,6 +322,14 @@ impl Analyzer<'_, '_> {
         ty.normalize().visit_with(&mut usage_visitor);
         if usage_visitor.params.is_empty() {
             log::debug!("rename_type_param: No type parameter is used in type");
+            match ty {
+                Type::Function(ref mut f) => {
+                    f.type_params = None;
+                }
+
+                _ => {}
+            }
+
             return Ok(ty);
         }
 
