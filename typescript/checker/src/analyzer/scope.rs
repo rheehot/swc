@@ -181,6 +181,7 @@ impl Analyzer<'_, '_> {
         let mut v = Expander {
             span,
             analyzer: self,
+            full: false,
         };
         Ok(ty.into_owned().fold_with(&mut v))
     }
@@ -921,6 +922,7 @@ pub(crate) enum ScopeKind {
 struct Expander<'a, 'b, 'c> {
     span: Span,
     analyzer: &'a mut Analyzer<'b, 'c>,
+    full: bool,
 }
 
 impl Fold<Type> for Expander<'_, '_, '_> {
@@ -929,10 +931,15 @@ impl Fold<Type> for Expander<'_, '_, '_> {
             return ty;
         }
 
+        self.full |= match ty {
+            Type::Mapped(..) => true,
+            _ => false,
+        };
+
         let ty = ty.into_owned();
 
         match ty {
-            Type::Interface(..) | Type::Class(..) => return ty,
+            Type::Interface(..) | Type::Class(..) if !self.full => return ty,
             _ => {}
         }
 
@@ -1029,7 +1036,7 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                 return Type::any(span);
                             }
 
-                            if let Some(types) = self.analyzer.scope.find_type(&left.sym) {
+                            if let Some(types) = self.analyzer.find_type(&left.sym) {
                                 for ty in types {
                                     match *ty {
                                         Type::Enum(..) => {
@@ -1040,6 +1047,9 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                             }
                                             .into();
                                         }
+                                        Type::Param(..)
+                                        | Type::Namespace(..)
+                                        | Type::Module(..) => return ty.clone(),
                                         _ => {}
                                     }
                                 }
@@ -1066,7 +1076,15 @@ impl Fold<Type> for Expander<'_, '_, '_> {
             }
 
             match ty.into_owned() {
-                ty @ Type::Interface(..) | ty @ Type::TypeLit(..) => return ty,
+                ty @ Type::TypeLit(..) => return ty,
+
+                Type::Interface(i) => {
+                    // TODO: Handle type params
+                    return Type::TypeLit(TypeLit {
+                        span,
+                        members: i.body,
+                    });
+                }
 
                 Type::Union(Union { span, types }) => {
                     return Type::union(types);
