@@ -277,6 +277,10 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
 
                 match op {
                     op!("||") => {
+                        if rt.is_never() {
+                            return Ok(rt);
+                        }
+
                         if let Known(v) = lt.as_bool() {
                             return Ok(if v { lt } else { rt });
                         }
@@ -287,6 +291,10 @@ impl Validate<BinExpr> for Analyzer<'_, '_> {
                     }
 
                     op!("&&") => {
+                        if lt.is_never() {
+                            return Ok(lt);
+                        }
+
                         if let Known(v) = lt.as_bool() {
                             return Ok(if v { rt } else { lt });
                         }
