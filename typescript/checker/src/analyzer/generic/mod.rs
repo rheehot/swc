@@ -61,6 +61,8 @@ impl Analyzer<'_, '_> {
             if let Some(ty) = inferred.remove(&type_param.name) {
                 params.push(ty);
             } else {
+                log::debug!("{:?}", type_param.constraint);
+
                 match type_param.constraint {
                     Some(box Type::Param(ref p)) => {
                         params.push(Type::Param(p.clone()));
@@ -78,7 +80,10 @@ impl Analyzer<'_, '_> {
 
                 if type_param.constraint.is_some()
                     && match **type_param.constraint.as_ref().unwrap() {
-                        Type::Keyword(..) | Type::Ref(..) | Type::TypeLit(..) => true,
+                        Type::Interface(..)
+                        | Type::Keyword(..)
+                        | Type::Ref(..)
+                        | Type::TypeLit(..) => true,
                         _ => false,
                     }
                 {
@@ -86,6 +91,11 @@ impl Analyzer<'_, '_> {
                     params.push(ty);
                     continue;
                 }
+
+                log::warn!(
+                    "infer: A type parameter {} defaults to {{}}",
+                    type_param.name
+                );
 
                 // Defaults to {}
                 params.push(Type::TypeLit(TypeLit {
@@ -119,16 +129,21 @@ impl Analyzer<'_, '_> {
                 log::debug!("infer_type: type parameter: {} = {:?}", name, constraint);
 
                 if constraint.is_some() && is_literals(&constraint.as_ref().unwrap()) {
+                    log::debug!("infer: {} = {:?}", name, constraint);
                     inferred.insert(name.clone(), *constraint.clone().unwrap());
                     return Ok(());
                 }
 
                 if constraint.is_some()
                     && match **constraint.as_ref().unwrap() {
-                        Type::Keyword(..) | Type::Ref(..) | Type::TypeLit(..) => true,
+                        Type::Interface(..)
+                        | Type::Keyword(..)
+                        | Type::Ref(..)
+                        | Type::TypeLit(..) => true,
                         _ => false,
                     }
                 {
+                    log::debug!("infer: {} = {:?}", name, constraint);
                     inferred.insert(name.clone(), *constraint.clone().unwrap());
                     return Ok(());
                 }
