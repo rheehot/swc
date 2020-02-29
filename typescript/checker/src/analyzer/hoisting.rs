@@ -1,7 +1,12 @@
 use crate::{ty::TypeParam, ValidationResult};
 use bitflags::_core::mem::{replace, take};
 use fxhash::FxHashSet;
-use petgraph::{algo::toposort, graph::DiGraph, stable_graph::StableDiGraph};
+use petgraph::{
+    algo::toposort,
+    graph::DiGraph,
+    graphmap::{DiGraphMap, GraphMap},
+    stable_graph::StableDiGraph,
+};
 use swc_atoms::{JsWord, JsWordStaticSet};
 use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
@@ -252,10 +257,13 @@ impl Visit<Expr> for StmtDependencyFinder<'_> {
 }
 
 pub(super) fn order_type_params(params: &[TsTypeParam]) -> ValidationResult<Vec<usize>> {
-    let mut graph = DiGraph::<usize, usize>::with_capacity(params.len(), params.len() * 2);
+    let mut graph = DiGraphMap::<usize, usize>::with_capacity(params.len(), params.len() * 2);
     let mut deps = FxHashSet::with_capacity_and_hasher(4, Default::default());
+    for i in 0..params.len() {
+        graph.add_node(i);
+    }
 
-    for node in params.iter() {
+    for (idx, node) in params.iter().enumerate() {
         deps.clear();
 
         {
@@ -269,11 +277,21 @@ pub(super) fn order_type_params(params: &[TsTypeParam]) -> ValidationResult<Vec<
                 p.default.visit_with(&mut v);
             }
 
+            for dep in &deps {
+                if let Some(pos) = params.iter().position(|v| v.name.sym == *dep) {
+                    //
+                    graph.add_edge(idx, pos, 1);
+                    break;
+                }
+            }
+
             log::info!("Reorder: {} <-- {:?}", node.name.sym, deps);
         }
     }
 
-    let sorted = toposort(&graph, None).unwrap();
+    let sorted = toposort(&graph.into_graph::<usize>(), None)
+        .expect("cycle in type parameter is not supported");
+    log::warn!("Reorder: {:?}", sorted);
     Ok(sorted.into_iter().map(|i| i.index()).collect())
 }
 

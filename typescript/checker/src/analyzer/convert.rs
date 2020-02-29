@@ -36,18 +36,22 @@ impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
                 params: decl.params.validate_with(self)?,
             })
         } else {
-            let mut params = Vec::with_capacity(decl.params.len());
+            let mut params = (0..decl.params.len())
+                .into_iter()
+                .map(|_| None)
+                .collect::<Vec<_>>();
+
             let order = order_type_params(&*decl.params)?;
             assert_eq!(order.len(), decl.params.len());
 
             for idx in order {
                 let param = decl.params[idx].validate_with(self)?;
-                params.push(param);
+                params[idx] = Some(param);
             }
 
             Ok(TypeParamDecl {
                 span: decl.span,
-                params,
+                params: params.into_iter().map(|v| v.unwrap()).collect(),
             })
         }
     }
