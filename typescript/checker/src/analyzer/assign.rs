@@ -19,7 +19,11 @@ impl Analyzer<'_, '_> {
         if self.is_builtin {
             return Ok(());
         }
+
         debug_assert!(!span.is_dummy());
+
+        self.verify_before_assign("lhs", left);
+        self.verify_before_assign("rhs", right);
 
         let res = self.assign_inner(left, right, span);
         match res {
@@ -59,9 +63,6 @@ impl Analyzer<'_, '_> {
 
     fn assign_inner(&self, to: &Type, rhs: &Type, span: Span) -> Result<(), Error> {
         debug_assert!(!span.is_dummy(), "\n\t{:?}\n<-\n\t{:?}", to, rhs);
-
-        self.verify_before_assign("lhs", to);
-        self.verify_before_assign("rhs", rhs);
 
         macro_rules! fail {
             () => {{
