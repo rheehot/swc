@@ -1,4 +1,7 @@
+use crate::ty::TypeParam;
 use bitflags::_core::mem::{replace, take};
+use fxhash::FxHashSet;
+use swc_atoms::{JsWord, JsWordStaticSet};
 use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
 use swc_ecma_utils::{find_ids, ident::IdentLike, DestructuringFinder, Id, StmtLike};
@@ -21,7 +24,7 @@ use swc_ecma_utils::{find_ids, ident::IdentLike, DestructuringFinder, Id, StmtLi
 /// ```
 pub(super) fn order<T>(nodes: &[T]) -> Vec<usize>
 where
-    T: for<'any> VisitWith<DependencyFinder<'any>>,
+    T: StmtLike + for<'any> VisitWith<StmtDependencyFinder<'any>>,
 {
     let mut order = (0..nodes.len()).collect();
 
@@ -33,7 +36,7 @@ where
         dependencies.clear();
 
         {
-            let mut v = DependencyFinder {
+            let mut v = StmtDependencyFinder {
                 ids: &mut ids,
                 dependencies: &mut dependencies,
             };
@@ -176,7 +179,7 @@ impl Analyzer<'_, '_> {
 pub(super) struct StmtDependencyFinder<'a> {
     ids_buf: &'a mut Vec<Id>,
 #[derive(Debug)]
-pub(super) struct DependencyFinder<'a> {
+pub(super) struct StmtDependencyFinder<'a> {
     /// Identifiers created by a statement.
     ///
     /// e.g.
@@ -191,14 +194,14 @@ pub(super) struct DependencyFinder<'a> {
     dependencies: &'a mut Vec<Id>,
 }
 
-impl Visit<FnDecl> for DependencyFinder<'_> {
+impl Visit<FnDecl> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &FnDecl) {
         self.ids.push(node.ident.to_id());
         node.visit_children(self);
     }
 }
 
-impl Visit<VarDeclarator> for DependencyFinder<'_> {
+impl Visit<VarDeclarator> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &VarDeclarator) {
         let mut v = DestructuringFinder { found: self.ids };
         node.name.visit_with(&mut v);
@@ -207,14 +210,14 @@ impl Visit<VarDeclarator> for DependencyFinder<'_> {
     }
 }
 
-impl Visit<ClassDecl> for DependencyFinder<'_> {
+impl Visit<ClassDecl> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &ClassDecl) {
         self.ids.push(node.ident.to_id());
         node.visit_children(self);
     }
 }
 
-impl Visit<Function> for DependencyFinder<'_> {
+impl Visit<Function> for StmtDependencyFinder<'_> {
     fn visit(&mut self, f: &Function) {
         let ids = take(self.ids);
 
@@ -224,7 +227,7 @@ impl Visit<Function> for DependencyFinder<'_> {
     }
 }
 
-impl Visit<MemberExpr> for DependencyFinder<'_> {
+impl Visit<MemberExpr> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &MemberExpr) {
         node.obj.visit_with(self);
 
@@ -234,7 +237,7 @@ impl Visit<MemberExpr> for DependencyFinder<'_> {
     }
 }
 
-impl Visit<Expr> for DependencyFinder<'_> {
+impl Visit<Expr> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &Expr) {
         match node {
             Expr::Ident(ref i) => {
@@ -244,5 +247,39 @@ impl Visit<Expr> for DependencyFinder<'_> {
         }
 
         node.visit_children(self);
+    }
+}
+
+pub(super) fn order_type_params(params: &[TsTypeParam]) -> Vec<usize> {
+    let mut order = (0..params.len()).collect();
+    let mut deps = FxHashSet::with_capacity_and_hasher(4, Default::default());
+
+    for node in params.iter() {
+        deps.clear();
+
+        {
+            let mut v = TypeParamDepFinder {
+                id: &node.name.sym,
+                deps: &mut deps,
+            };
+
+            node.visit_with(&mut v);
+
+            log::info!("Reorder: {} <-- {:?}", node.name.sym, deps);
+        }
+    }
+
+    order
+}
+
+#[derive(Debug)]
+struct TypeParamDepFinder<'a> {
+    id: &'a JsWord,
+    deps: &'a mut FxHashSet<JsWord>,
+}
+
+impl Visit<JsWord> for TypeParamDepFinder<'_> {
+    fn visit(&mut self, node: &JsWord) {
+        self.deps.insert(node.clone());
     }
 }

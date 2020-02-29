@@ -1,6 +1,11 @@
 use super::Analyzer;
 use crate::{
-    analyzer::{hoisting::order, props::ComputedPropMode, util::ResultExt, Ctx},
+    analyzer::{
+        hoisting::{order, order_type_params},
+        props::ComputedPropMode,
+        util::ResultExt,
+        Ctx,
+    },
     ty,
     ty::{
         Alias, Array, CallSignature, Conditional, ConstructorSignature, ImportType, IndexSignature,
@@ -25,19 +30,26 @@ impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
     fn validate(&mut self, decl: &mut TsTypeParamDecl) -> Self::Output {
         self.record(decl);
 
-        let mut params = Vec::with_capacity(decl.params.len());
-        let order = order(&decl.params);
-        assert_eq!(order.len(), decl.params.len());
+        if self.is_builtin {
+            Ok(TypeParamDecl {
+                span: decl.span,
+                params: decl.params.validate_with(self)?,
+            })
+        } else {
+            let mut params = Vec::with_capacity(decl.params.len());
+            let order = order_type_params(&*decl.params);
+            assert_eq!(order.len(), decl.params.len());
 
-        for idx in order {
-            let param = decl.params[idx].validate_with(self)?;
-            params.push(param);
+            for idx in order {
+                let param = decl.params[idx].validate_with(self)?;
+                params.push(param);
+            }
+
+            Ok(TypeParamDecl {
+                span: decl.span,
+                params,
+            })
         }
-
-        Ok(TypeParamDecl {
-            span: decl.span,
-            params,
-        })
     }
 }
 
