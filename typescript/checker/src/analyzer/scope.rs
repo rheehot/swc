@@ -14,7 +14,7 @@ use crate::{
     ValidationResult,
 };
 use either::Either;
-use fxhash::FxHashMap;
+use fxhash::{FxHashMap, FxHashSet};
 use smallvec::SmallVec;
 use std::{
     borrow::Cow,
@@ -182,6 +182,7 @@ impl Analyzer<'_, '_> {
         let mut v = Expander {
             span,
             analyzer: self,
+            dejvau: Default::default(),
             full: false,
             expand_union: false,
         };
@@ -209,9 +210,11 @@ impl Analyzer<'_, '_> {
         let mut v = Expander {
             span,
             analyzer: self,
+            dejvau: Default::default(),
             full: true,
             expand_union,
         };
+
         Ok(ty.into_owned().fold_with(&mut v))
     }
 
@@ -905,12 +908,12 @@ impl<'a> Scope<'a> {
     /// This method does **not** handle imported types.
     fn find_type(&self, name: &JsWord) -> Option<ItemRef<Type>> {
         if let Some(ty) = self.facts.types.get(name) {
-            println!("({}) find_type({}): Found (cond facts)", self.depth(), name);
+            // println!("({}) find_type({}): Found (cond facts)", self.depth(), name);
             return Some(ItemRef::Single(&ty));
         }
 
         if let Some(ty) = self.types.get(name) {
-            println!("({}) find_type({}): Found", self.depth(), name);
+            // println!("({}) find_type({}): Found", self.depth(), name);
 
             return Some(ItemRef::Multi(&ty));
         }
@@ -957,6 +960,7 @@ pub(crate) enum ScopeKind {
 struct Expander<'a, 'b, 'c> {
     span: Span,
     analyzer: &'a mut Analyzer<'b, 'c>,
+    dejvau: FxHashSet<JsWord>,
     full: bool,
     expand_union: bool,
 }
@@ -974,7 +978,11 @@ impl Fold<Type> for Expander<'_, '_, '_> {
 
         let ty = ty.into_owned();
 
+        log::debug!("{:?}", ty);
+
         match ty {
+            Type::Param(..) => return ty.fold_children(self),
+            Type::Ref(..) if !self.full => return ty.fold_children(self),
             Type::Interface(..) | Type::Class(..) if !self.full => return ty,
             _ => {}
         }
@@ -988,6 +996,7 @@ impl Fold<Type> for Expander<'_, '_, '_> {
         }
 
         let span = self.span;
+
         let ty = ty.fold_children(self);
 
         let res: ValidationResult = try {
@@ -1008,8 +1017,18 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                     ref type_args,
                     ..
                 }) => {
+                    if !self.full {
+                        return ty;
+                    }
+
                     match *type_name {
                         TsEntityName::Ident(ref i) => {
+                            if self.dejvau.contains(&i.sym) {
+                                return ty;
+                            }
+                            self.dejvau.insert(i.sym.clone());
+                            log::error!("{}", i.sym);
+
                             // Check for builtin types
                             if !self.analyzer.is_builtin {
                                 if let Ok(ty) =
@@ -1018,10 +1037,6 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                     verify!(ty);
                                     return ty.fold_with(self);
                                 }
-                            }
-
-                            if !self.full {
-                                return ty;
                             }
 
                             // Handle enum
@@ -1034,6 +1049,8 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                             return ty;
                                         }
                                     }
+
+                                    log::info!("expand: expanding using analyzer");
 
                                     match t.normalize() {
                                         ty @ Type::Enum(..) => {
@@ -1123,6 +1140,8 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                         span: type_name.span(),
                     })?;
                 }
+
+                Type::Param(..) => return ty,
 
                 Type::Query(QueryType {
                     expr: QueryExpr::TsEntityName(ref name),
