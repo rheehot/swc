@@ -1,6 +1,7 @@
-use crate::ty::TypeParam;
+use crate::{ty::TypeParam, ValidationResult};
 use bitflags::_core::mem::{replace, take};
 use fxhash::FxHashSet;
+use petgraph::{algo::toposort, graph::DiGraph, stable_graph::StableDiGraph};
 use swc_atoms::{JsWord, JsWordStaticSet};
 use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
@@ -250,8 +251,8 @@ impl Visit<Expr> for StmtDependencyFinder<'_> {
     }
 }
 
-pub(super) fn order_type_params(params: &[TsTypeParam]) -> Vec<usize> {
-    let mut order = (0..params.len()).collect();
+pub(super) fn order_type_params(params: &[TsTypeParam]) -> ValidationResult<Vec<usize>> {
+    let mut graph = DiGraph::<usize, usize>::with_capacity(params.len(), params.len() * 2);
     let mut deps = FxHashSet::with_capacity_and_hasher(4, Default::default());
 
     for node in params.iter() {
@@ -263,13 +264,17 @@ pub(super) fn order_type_params(params: &[TsTypeParam]) -> Vec<usize> {
                 deps: &mut deps,
             };
 
-            node.visit_with(&mut v);
+            for p in params {
+                p.constraint.visit_with(&mut v);
+                p.default.visit_with(&mut v);
+            }
 
             log::info!("Reorder: {} <-- {:?}", node.name.sym, deps);
         }
     }
 
-    order
+    let sorted = toposort(&graph, None).unwrap();
+    Ok(sorted.into_iter().map(|i| i.index()).collect())
 }
 
 #[derive(Debug)]
@@ -278,8 +283,12 @@ struct TypeParamDepFinder<'a> {
     deps: &'a mut FxHashSet<JsWord>,
 }
 
-impl Visit<JsWord> for TypeParamDepFinder<'_> {
-    fn visit(&mut self, node: &JsWord) {
-        self.deps.insert(node.clone());
+impl Visit<Ident> for TypeParamDepFinder<'_> {
+    fn visit(&mut self, node: &Ident) {
+        if *self.id == node.sym {
+            return;
+        }
+
+        self.deps.insert(node.sym.clone());
     }
 }

@@ -37,7 +37,7 @@ impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
             })
         } else {
             let mut params = Vec::with_capacity(decl.params.len());
-            let order = order_type_params(&*decl.params);
+            let order = order_type_params(&*decl.params)?;
             assert_eq!(order.len(), decl.params.len());
 
             for idx in order {
