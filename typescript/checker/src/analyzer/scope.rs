@@ -183,6 +183,7 @@ impl Analyzer<'_, '_> {
             span,
             analyzer: self,
             full: false,
+            expand_union: false,
         };
         Ok(ty.into_owned().fold_with(&mut v))
     }
@@ -192,7 +193,12 @@ impl Analyzer<'_, '_> {
     /// // TODO: Add an option to expand union (this is required to assign)
     ///
     ///   - Type alias
-    pub(super) fn expand_fully(&mut self, span: Span, ty: Type) -> ValidationResult<Type> {
+    pub(super) fn expand_fully(
+        &mut self,
+        span: Span,
+        ty: Type,
+        expand_union: bool,
+    ) -> ValidationResult<Type> {
         if self.is_builtin {
             return Ok(ty);
         }
@@ -201,6 +207,7 @@ impl Analyzer<'_, '_> {
             span,
             analyzer: self,
             full: true,
+            expand_union,
         };
         Ok(ty.into_owned().fold_with(&mut v))
     }
@@ -942,6 +949,7 @@ struct Expander<'a, 'b, 'c> {
     span: Span,
     analyzer: &'a mut Analyzer<'b, 'c>,
     full: bool,
+    expand_union: bool,
 }
 
 impl Fold<Type> for Expander<'_, '_, '_> {
@@ -962,10 +970,10 @@ impl Fold<Type> for Expander<'_, '_, '_> {
             _ => {}
         }
 
-        {
-            let mut union_finder = UnionFinder { found: false };
-            ty.visit_with(&mut union_finder);
-            if union_finder.found {
+        if !self.expand_union {
+            let mut finder = UnionFinder { found: false };
+            ty.visit_with(&mut finder);
+            if finder.found {
                 return ty;
             }
         }
@@ -1006,10 +1014,12 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                             // Handle enum
                             if let Some(types) = self.analyzer.find_type(&i.sym) {
                                 for t in types {
-                                    let mut finder = UnionFinder { found: false };
-                                    t.visit_with(&mut finder);
-                                    if finder.found {
-                                        return ty;
+                                    if !self.expand_union {
+                                        let mut finder = UnionFinder { found: false };
+                                        t.visit_with(&mut finder);
+                                        if finder.found {
+                                            return ty;
+                                        }
                                     }
                                     match t.normalize() {
                                         Type::Enum(..) => {

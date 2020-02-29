@@ -87,7 +87,8 @@ impl Analyzer<'_, '_> {
                         _ => false,
                     }
                 {
-                    let ty = self.expand_fully(span, *type_param.constraint.clone().unwrap())?;
+                    let ty =
+                        self.expand_fully(span, *type_param.constraint.clone().unwrap(), false)?;
                     params.push(ty);
                     continue;
                 }
