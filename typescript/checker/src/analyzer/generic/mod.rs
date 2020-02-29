@@ -607,7 +607,6 @@ impl Fold<Type> for GenericExpander<'_> {
                     members: i.body,
                 });
             }
-
             Type::Class(mut c) => {
                 c = c.fold_with(self);
 
@@ -629,6 +628,22 @@ impl Fold<Type> for GenericExpander<'_> {
             }
 
             Type::Mapped(mut m @ Mapped { ty: Some(..), .. }) => {
+                dbg!(&m.ty);
+                match m.ty {
+                    Some(box Type::Param(TypeParam {
+                        constraint:
+                            Some(box Type::Operator(Operator {
+                                op: TsTypeOperatorOp::KeyOf,
+                                ty: box Type::Union(ref u),
+                                ..
+                            })),
+                        ..
+                    })) => {
+                        log::error!("Union!");
+                    }
+                    _ => {}
+                }
+
                 m = m.fold_with(self);
 
                 m.ty = match m.ty {
