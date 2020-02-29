@@ -50,7 +50,12 @@ impl Analyzer<'_, '_> {
                 types: Default::default(),
             };
 
-            stmts.visit_mut_with(&mut v);
+            let order = self.reorder_stmts(&*stmts);
+            assert_eq!(order.len(), stmts.len());
+
+            for idx in order {
+                stmts[idx].visit_mut(&mut v);
+            }
 
             v.types
         };
