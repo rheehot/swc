@@ -45,13 +45,13 @@ impl Analyzer<'_, '_> {
         log::debug!("visit_stmts_for_return()");
 
         let types = {
+            let order = self.reorder_stmts(&*stmts);
+            assert_eq!(order.len(), stmts.len());
+
             let mut v = ReturnTypeCollector {
                 analyzer: &mut *self,
                 types: Default::default(),
             };
-
-            let order = self.reorder_stmts(&*stmts);
-            assert_eq!(order.len(), stmts.len());
 
             for idx in order {
                 stmts[idx].visit_mut_with(&mut v);
