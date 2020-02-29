@@ -178,6 +178,11 @@ impl Analyzer<'_, '_> {
                     ..
                 }) => return self.infer_type(inferred, &elem_type, &arg_elem_type),
 
+                Type::Tuple(arg) => {
+                    let arg = Type::union(arg.types.iter().cloned());
+                    return self.infer_type(inferred, &elem_type, &arg);
+                }
+
                 _ => {}
             },
 
