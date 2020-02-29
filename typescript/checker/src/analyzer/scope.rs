@@ -586,7 +586,13 @@ impl Analyzer<'_, '_> {
                                     // Allow override query type.
                                     Type::Query(..) => {}
                                     _ => {
-                                        let res = self.assign(&ty, &generalized_var_ty, span);
+                                        let ty = self.expand_fully(span, ty.clone(), true)?;
+                                        let var_ty = self.expand_fully(
+                                            span,
+                                            generalized_var_ty.into_owned().clone(),
+                                            true,
+                                        )?;
+                                        let res = self.assign(&ty, &var_ty, span);
 
                                         if res.is_err() {
                                             v.ty = Some(var_ty);
@@ -1014,6 +1020,10 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                 }
                             }
 
+                            if !self.full {
+                                return ty;
+                            }
+
                             // Handle enum
                             if let Some(types) = self.analyzer.find_type(&i.sym) {
                                 for t in types {
@@ -1024,6 +1034,7 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                             return ty;
                                         }
                                     }
+
                                     match t.normalize() {
                                         ty @ Type::Enum(..) => {
                                             if let Some(..) = *type_args {
