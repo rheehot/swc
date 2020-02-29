@@ -1,6 +1,6 @@
 use super::Analyzer;
 use crate::{
-    analyzer::{props::ComputedPropMode, util::ResultExt, Ctx},
+    analyzer::{hoisting::order, props::ComputedPropMode, util::ResultExt, Ctx},
     ty,
     ty::{
         Alias, Array, CallSignature, Conditional, ConstructorSignature, ImportType, IndexSignature,
@@ -26,9 +26,11 @@ impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
         self.record(decl);
 
         let mut params = Vec::with_capacity(decl.params.len());
+        let order = order(&decl.params);
+        assert_eq!(order.len(), decl.params.len());
 
-        for p in &mut decl.params {
-            let param = p.validate_with(self)?;
+        for idx in order {
+            let param = decl.params[idx].validate_with(self)?;
             params.push(param);
         }
 

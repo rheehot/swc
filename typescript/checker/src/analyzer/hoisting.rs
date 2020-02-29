@@ -21,7 +21,7 @@ use swc_ecma_utils::{find_ids, ident::IdentLike, DestructuringFinder, Id, StmtLi
 /// ```
 pub(super) fn order<T>(nodes: &[T]) -> Vec<usize>
 where
-    T: StmtLike + for<'any> VisitWith<DependencyFinder<'any>>,
+    T: for<'any> VisitWith<DependencyFinder<'any>>,
 {
     let mut order = (0..nodes.len()).collect();
 
