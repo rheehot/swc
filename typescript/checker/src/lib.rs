@@ -34,9 +34,7 @@ use swc_ecma_parser::{
 #[macro_use]
 mod debug;
 pub mod analyzer;
-/// Visible only for testing
-#[doc(hidden)]
-pub mod builtin_types;
+mod builtin_types;
 pub mod errors;
 pub mod loader;
 pub mod name;
