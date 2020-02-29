@@ -237,7 +237,12 @@ impl Analyzer<'_, '_> {
             Type::Keyword(..) => {}
             Type::Ref(..) => {
                 let arg = self.expand(arg.span(), arg.clone())?;
-                return self.infer_type(inferred, param, &arg);
+                match arg {
+                    Type::Ref(..) => {}
+                    _ => {
+                        return self.infer_type(inferred, param, &arg);
+                    }
+                }
             }
             Type::Alias(arg) => self.infer_type(inferred, param, &arg.ty)?,
             _ => log::error!("infer_arg_type: \narg = {:?}\nparam = {:?}", arg, param),
