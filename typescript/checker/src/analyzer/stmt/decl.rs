@@ -115,7 +115,10 @@ impl Validate<VarDeclarator> for Analyzer<'_, '_> {
                         value_ty = self.expand(span, value_ty)?;
                         value_ty = self.rename_type_params(span, value_ty, Some(&ty))?;
 
-                        match self.assign(&ty, &value_ty, v_span) {
+                        let ty_for_assignment = self.expand_fully(span, ty.clone(), true)?;
+                        let value_ty_for_assignment =
+                            self.expand_fully(span, value_ty.clone(), true)?;
+                        match self.assign(&ty_for_assignment, &value_ty_for_assignment, v_span) {
                             Ok(()) => {
                                 let ty = ty.fold_with(&mut Generalizer::default());
                                 match self.declare_complex_vars(kind, &v.name, ty) {
