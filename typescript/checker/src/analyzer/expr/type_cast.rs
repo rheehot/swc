@@ -52,11 +52,11 @@ impl Analyzer<'_, '_> {
         orig_ty: Type,
         to: &mut TsType,
     ) -> ValidationResult {
-        let orig_ty = self.expand(span, orig_ty)?;
+        let orig_ty = self.expand_fully(span, orig_ty, true)?;
 
         let casted_ty = to.validate_with(self)?;
         let casted_ty = instantiate_class(casted_ty);
-        let casted_ty = self.expand(span, casted_ty)?;
+        let casted_ty = self.expand_fully(span, casted_ty, true)?;
 
         self.validate_type_cast_inner(span, &orig_ty, &casted_ty)?;
 
