@@ -1072,7 +1072,7 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                                 }
                                             }
 
-                                            return t.clone();
+                                            return t.clone().fold_with(self);
                                         }
 
                                         _ => unimplemented!(
