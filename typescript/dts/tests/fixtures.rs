@@ -17,11 +17,11 @@ use std::{
     process::Command,
     sync::Arc,
 };
-use swc_common::{FileName, FoldWith};
+use swc_common::{FileName, FoldWith, DUMMY_SP};
 use swc_ecma_ast::Module;
 use swc_ecma_codegen::{text_writer::JsWriter, Emitter};
 use swc_ecma_parser::{JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig};
-use swc_ts_checker::Lib;
+use swc_ts_checker::{builtin_types, Lib};
 use swc_ts_dts::generate_dts;
 use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestName, TestType};
 use testing::{DropSpan, NormalizedOutput, StdErr};
@@ -210,12 +210,14 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
     testing::Tester::new()
         .print_errors(|cm, handler| {
             let handler = Arc::new(handler);
+            let libs = Lib::load("es2019.full");
+            let _ = builtin_types::get_var(&libs, DUMMY_SP, &"String".into());
 
             let checker = swc_ts_checker::Checker::new(
                 Default::default(),
                 cm.clone(),
                 handler.clone(),
-                Lib::load("es2019.full"),
+                libs,
                 Default::default(),
                 TsConfig {
                     tsx: fname.contains("tsx"),
