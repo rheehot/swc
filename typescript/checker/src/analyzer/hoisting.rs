@@ -1,6 +1,6 @@
-use crate::{ty::TypeParam, ValidationResult};
+use crate::{analyzer::Analyzer, ty::TypeParam, ValidationResult};
 use bitflags::_core::mem::{replace, take};
-use fxhash::FxHashSet;
+use fxhash::{FxHashMap, FxHashSet};
 use petgraph::{
     algo::toposort,
     graph::DiGraph,
@@ -12,48 +12,70 @@ use swc_common::{Visit, VisitWith};
 use swc_ecma_ast::*;
 use swc_ecma_utils::{find_ids, ident::IdentLike, DestructuringFinder, Id, StmtLike};
 
-/// Returns the order of evaluation. This methods is used to handle hoisting
-/// properly.
-///
-/// # Exmaple
-///
-/// The method will return `[1, 0]` for the code below.
-///
-/// ```js
-/// function foo() {
-///     return bar();
-/// }
-///
-/// function bar (){
-///     return 1;
-/// }
-/// ```
-pub(super) fn order<T>(nodes: &[T]) -> Vec<usize>
-where
-    T: StmtLike + for<'any> VisitWith<StmtDependencyFinder<'any>>,
-{
-    let mut order = (0..nodes.len()).collect();
+/// Structs to reuse vector / hash maps.
+#[derive(Debug, Default)]
+pub(super) struct HoistingWs {
+    stmts: StmtWs,
+    type_params: TypeParamWs,
+}
 
-    let mut ids = Vec::with_capacity(8);
-    let mut dependencies = Vec::with_capacity(16);
+#[derive(Debug, Default)]
+struct StmtWs {
+    idx_by_ids: FxHashMap<Id, usize>,
+    ids: FxHashSet<Id>,
+    ids_buf: Vec<Id>,
+    deps: FxHashSet<Id>,
+}
 
-    for node in nodes.iter() {
-        ids.clear();
-        dependencies.clear();
+impl Analyzer<'_, '_> {
+    /// Returns the order of evaluation. This methods is used to handle hoisting
+    /// properly.
+    ///
+    /// # Exmaple
+    ///
+    /// The method will return `[1, 0]` for the code below.
+    ///
+    /// ```js
+    /// function foo() {
+    ///     return bar();
+    /// }
+    ///
+    /// function bar (){
+    ///     return 1;
+    /// }
+    /// ```
+    pub(super) fn reorder_stmts<T>(&mut self, nodes: &[T]) -> Vec<usize>
+    where
+        T: StmtLike + for<'any> VisitWith<StmtDependencyFinder<'any>>,
+    {
+        let mut graph = DiGraphMap::<usize, usize>::with_capacity(nodes.len(), nodes.len() * 2);
+        let mut order = (0..nodes.len()).collect();
 
-        {
-            let mut v = StmtDependencyFinder {
-                ids: &mut ids,
-                dependencies: &mut dependencies,
-            };
+        let mut idx_by_id = &mut self.hoisting_ws.stmts.idx_by_ids;
+        let ids = &mut self.hoisting_ws.stmts.ids;
+        let ids_buf = &mut self.hoisting_ws.stmts.ids_buf;
+        let deps = &mut self.hoisting_ws.stmts.deps;
 
-            node.visit_with(&mut v);
+        idx_by_id.clear();
+
+        for (idx, node) in nodes.iter().enumerate() {
+            ids.clear();
+            ids_buf.clear();
+            deps.clear();
+
+            {
+                let mut v = StmtDependencyFinder { ids_buf, ids, deps };
+
+                node.visit_with(&mut v);
+            }
+
+            idx_by_id.extend(ids.drain().map(|id| (id, idx)));
+
+            //
         }
 
-        //
+        order
     }
-
-    order
 }
 
 pub(super) struct DependencyFinder {
@@ -186,6 +208,7 @@ pub(super) struct StmtDependencyFinder<'a> {
     ids_buf: &'a mut Vec<Id>,
 #[derive(Debug)]
 pub(super) struct StmtDependencyFinder<'a> {
+    ids_buf: &'a mut Vec<Id>,
     /// Identifiers created by a statement.
     ///
     /// e.g.
@@ -194,23 +217,29 @@ pub(super) struct StmtDependencyFinder<'a> {
     /// ```js
     /// var a, b = foo();
     /// ```
-    ids: &'a mut Vec<Id>,
+    ids: &'a mut FxHashSet<Id>,
 
     /// Dependencies of the id.
-    dependencies: &'a mut Vec<Id>,
+    deps: &'a mut FxHashSet<Id>,
 }
 
 impl Visit<FnDecl> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &FnDecl) {
-        self.ids.push(node.ident.to_id());
+        self.ids.insert(node.ident.to_id());
         node.visit_children(self);
     }
 }
 
 impl Visit<VarDeclarator> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &VarDeclarator) {
-        let mut v = DestructuringFinder { found: self.ids };
-        node.name.visit_with(&mut v);
+        {
+            let mut v = DestructuringFinder {
+                found: self.ids_buf,
+            };
+            node.name.visit_with(&mut v);
+        }
+
+        self.ids.extend(self.ids_buf.drain(..));
 
         node.init.visit_with(self);
     }
@@ -218,19 +247,17 @@ impl Visit<VarDeclarator> for StmtDependencyFinder<'_> {
 
 impl Visit<ClassDecl> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &ClassDecl) {
-        self.ids.push(node.ident.to_id());
+        self.ids.insert(node.ident.to_id());
         node.visit_children(self);
     }
 }
 
 impl Visit<Function> for StmtDependencyFinder<'_> {
-    fn visit(&mut self, f: &Function) {
-        let ids = take(self.ids);
+    fn visit(&mut self, _: &Function) {}
+}
 
-        f.visit_children(self);
-
-        *self.ids = ids;
-    }
+impl Visit<ArrowExpr> for StmtDependencyFinder<'_> {
+    fn visit(&mut self, _: &ArrowExpr) {}
 }
 
 impl Visit<MemberExpr> for StmtDependencyFinder<'_> {
@@ -247,7 +274,7 @@ impl Visit<Expr> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &Expr) {
         match node {
             Expr::Ident(ref i) => {
-                self.dependencies.push(i.to_id());
+                self.deps.insert(i.to_id());
             }
             _ => {}
         }
@@ -256,43 +283,53 @@ impl Visit<Expr> for StmtDependencyFinder<'_> {
     }
 }
 
-pub(super) fn order_type_params(params: &[TsTypeParam]) -> ValidationResult<Vec<usize>> {
-    let mut graph = DiGraphMap::<usize, usize>::with_capacity(params.len(), params.len() * 2);
-    let mut deps = FxHashSet::with_capacity_and_hasher(4, Default::default());
-    for i in 0..params.len() {
-        graph.add_node(i);
-    }
+#[derive(Debug, Default)]
+struct TypeParamWs {
+    deps: FxHashSet<JsWord>,
+}
 
-    for (idx, node) in params.iter().enumerate() {
-        deps.clear();
-
-        {
-            let mut v = TypeParamDepFinder {
-                id: &node.name.sym,
-                deps: &mut deps,
-            };
-
-            for p in params {
-                p.constraint.visit_with(&mut v);
-                p.default.visit_with(&mut v);
-            }
-
-            for dep in &deps {
-                if let Some(pos) = params.iter().position(|v| v.name.sym == *dep) {
-                    //
-                    graph.add_edge(idx, pos, 1);
-                    break;
-                }
-            }
-
-            log::info!("Reorder: {} <-- {:?}", node.name.sym, deps);
+impl Analyzer<'_, '_> {
+    pub(super) fn reorder_type_params(
+        &mut self,
+        params: &[TsTypeParam],
+    ) -> ValidationResult<Vec<usize>> {
+        let mut graph = DiGraphMap::<usize, usize>::with_capacity(params.len(), params.len() * 2);
+        let deps = &mut self.hoisting_ws.type_params.deps;
+        for i in 0..params.len() {
+            graph.add_node(i);
         }
-    }
 
-    let sorted = toposort(&graph.into_graph::<usize>(), None)
-        .expect("cycle in type parameter is not supported");
-    log::warn!("Reorder: {:?}", sorted);
-    Ok(sorted.into_iter().map(|i| i.index()).collect())
+        for (idx, node) in params.iter().enumerate() {
+            deps.clear();
+
+            {
+                let mut v = TypeParamDepFinder {
+                    id: &node.name.sym,
+                    deps,
+                };
+
+                for p in params {
+                    p.constraint.visit_with(&mut v);
+                    p.default.visit_with(&mut v);
+                }
+
+                for dep in &*deps {
+                    if let Some(pos) = params.iter().position(|v| v.name.sym == *dep) {
+                        //
+                        graph.add_edge(idx, pos, 1);
+                        break;
+                    }
+                }
+
+                log::info!("Reorder: {} <-- {:?}", node.name.sym, deps);
+            }
+        }
+
+        let sorted = toposort(&graph.into_graph::<usize>(), None)
+            .expect("cycle in type parameter is not supported");
+        log::warn!("Reorder: {:?}", sorted);
+        Ok(sorted.into_iter().map(|i| i.index()).collect())
+    }
 }
 
 #[derive(Debug)]

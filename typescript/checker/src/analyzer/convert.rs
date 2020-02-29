@@ -1,11 +1,6 @@
 use super::Analyzer;
 use crate::{
-    analyzer::{
-        hoisting::{order, order_type_params},
-        props::ComputedPropMode,
-        util::ResultExt,
-        Ctx,
-    },
+    analyzer::{props::ComputedPropMode, util::ResultExt, Ctx},
     ty,
     ty::{
         Alias, Array, CallSignature, Conditional, ConstructorSignature, ImportType, IndexSignature,
@@ -41,7 +36,7 @@ impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
                 .map(|_| None)
                 .collect::<Vec<_>>();
 
-            let order = order_type_params(&*decl.params)?;
+            let order = self.reorder_type_params(&*decl.params)?;
             assert_eq!(order.len(), decl.params.len());
 
             for idx in order {
