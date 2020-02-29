@@ -85,7 +85,7 @@ impl Validate<Function> for Analyzer<'_, '_> {
                 .body
                 .as_mut()
                 .map(|body| child.visit_stmts_for_return(&mut body.stmts)));
-            dbg!(&inferred_return_type);
+
             let inferred_return_type = match inferred_return_type {
                 Some(Some(inferred_return_type)) => {
                     if let Some(ref declared) = declared_ret_ty {
