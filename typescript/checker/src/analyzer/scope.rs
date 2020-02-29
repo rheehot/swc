@@ -978,8 +978,6 @@ impl Fold<Type> for Expander<'_, '_, '_> {
 
         let ty = ty.into_owned();
 
-        log::debug!("{:?}", ty);
-
         match ty {
             Type::Param(..) => return ty.fold_children(self),
             Type::Ref(..) if !self.full => return ty.fold_children(self),
@@ -1027,7 +1025,7 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                 return ty;
                             }
                             self.dejvau.insert(i.sym.clone());
-                            log::error!("{}", i.sym);
+                            log::error!("({}): {}", self.analyzer.scope.depth(), i.sym);
 
                             // Check for builtin types
                             if !self.analyzer.is_builtin {

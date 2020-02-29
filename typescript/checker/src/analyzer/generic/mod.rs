@@ -127,7 +127,7 @@ impl Analyzer<'_, '_> {
                 ref constraint,
                 ..
             }) => {
-                log::debug!("infer_type: type parameter: {} = {:?}", name, constraint);
+                log::trace!("infer_type: type parameter: {} = {:?}", name, constraint);
 
                 if constraint.is_some() && is_literals(&constraint.as_ref().unwrap()) {
                     log::debug!("infer: {} = {:?}", name, constraint);
@@ -149,7 +149,7 @@ impl Analyzer<'_, '_> {
                     return Ok(());
                 }
 
-                log::info!("infer: {} = {:?}", name, arg);
+                log::info!("({}): infer: {} = {:?}", self.scope.depth(), name, arg);
                 match inferred.entry(name.clone()) {
                     Entry::Occupied(e) => {
                         match e.get() {
