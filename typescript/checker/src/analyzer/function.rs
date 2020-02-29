@@ -90,7 +90,7 @@ impl Validate<Function> for Analyzer<'_, '_> {
                 Some(Some(inferred_return_type)) => {
                     if let Some(ref declared) = declared_ret_ty {
                         // Expand before assigning
-                        let declared = child.expand(f.span, declared.clone())?;
+                        let declared = child.expand_fully(f.span, declared.clone(), true)?;
                         let span = inferred_return_type.span();
 
                         child.assign(&declared, &inferred_return_type, span)?;
