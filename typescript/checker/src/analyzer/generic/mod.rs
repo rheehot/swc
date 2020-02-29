@@ -176,7 +176,7 @@ impl Analyzer<'_, '_> {
                 Type::Array(Array {
                     elem_type: arg_elem_type,
                     ..
-                }) => self.infer_type(inferred, &elem_type, &arg_elem_type)?,
+                }) => return self.infer_type(inferred, &elem_type, &arg_elem_type),
 
                 _ => {}
             },
@@ -188,17 +188,18 @@ impl Analyzer<'_, '_> {
                     if let Some(arg_type_params) = &a.type_params {
                         self.rename_inferred(inferred, arg_type_params)?;
                     }
+                    return Ok(());
                 }
                 _ => {}
             },
 
             Type::TypeLit(param) => match arg {
-                Type::TypeLit(arg) => self.infer_type_lit(inferred, param, arg)?,
+                Type::TypeLit(arg) => return self.infer_type_lit(inferred, param, arg),
                 _ => {}
             },
 
             Type::Tuple(param) => match arg {
-                Type::Tuple(arg) => self.infer_tuple(inferred, param, arg)?,
+                Type::Tuple(arg) => return self.infer_tuple(inferred, param, arg),
                 _ => {}
             },
 
@@ -216,7 +217,7 @@ impl Analyzer<'_, '_> {
             },
 
             Type::Lit(..) => match arg {
-                Type::Lit(..) => {}
+                Type::Lit(..) => return Ok(()),
                 _ => {}
             },
 
@@ -229,7 +230,7 @@ impl Analyzer<'_, '_> {
             // Handled by generic expander, so let's return it as-is.
             Type::Mapped(..) => {}
 
-            Type::Alias(param) => self.infer_type(inferred, &param.ty, arg)?,
+            Type::Alias(param) => return self.infer_type(inferred, &param.ty, arg),
 
             _ => {}
         }
@@ -247,10 +248,15 @@ impl Analyzer<'_, '_> {
                     }
                 }
             }
-            Type::Alias(arg) => self.infer_type(inferred, param, &arg.ty)?,
-            _ => log::error!("infer_arg_type: \narg = {:?}\nparam = {:?}", arg, param),
+            Type::Alias(arg) => return self.infer_type(inferred, param, &arg.ty),
+            _ => {}
         }
 
+        log::error!(
+            "infer_arg_type: unimplemented\narg = {:?}\nparam = {:?}",
+            arg,
+            param
+        );
         Ok(())
     }
 
