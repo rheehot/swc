@@ -16,6 +16,8 @@ use swc_atoms::js_word;
 use swc_common::{Spanned, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 
+/// We analyze dependencies between type parameters, and fold parameter in
+/// topological order.
 #[validator]
 impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
     type Output = ValidationResult<TypeParamDecl>;
@@ -23,9 +25,16 @@ impl Validate<TsTypeParamDecl> for Analyzer<'_, '_> {
     fn validate(&mut self, decl: &mut TsTypeParamDecl) -> Self::Output {
         self.record(decl);
 
+        let mut params = Vec::with_capacity(decl.params.len());
+
+        for p in &mut decl.params {
+            let param = p.validate_with(self)?;
+            params.push(param);
+        }
+
         Ok(TypeParamDecl {
             span: decl.span,
-            params: self.validate(&mut decl.params)?,
+            params,
         })
     }
 }
