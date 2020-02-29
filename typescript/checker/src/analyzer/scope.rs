@@ -192,7 +192,10 @@ impl Analyzer<'_, '_> {
     ///
     /// // TODO: Add an option to expand union (this is required to assign)
     ///
-    ///   - Type alias
+    ///
+    ///  - `expand_union` should be true if you are going to use it in
+    ///    assignment, and false if you are going to use it in user-visible
+    ///    stuffs (e.g. type annotation for .d.ts file)
     pub(super) fn expand_fully(
         &mut self,
         span: Span,
@@ -1022,7 +1025,7 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                         }
                                     }
                                     match t.normalize() {
-                                        Type::Enum(..) => {
+                                        ty @ Type::Enum(..) => {
                                             if let Some(..) = *type_args {
                                                 Err(Error::NotGeneric { span })?;
                                             }
@@ -1030,7 +1033,7 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                             return ty.clone();
                                         }
 
-                                        Type::Param(..) => {
+                                        ty @ Type::Param(..) => {
                                             if let Some(..) = *type_args {
                                                 Err(Error::NotGeneric { span })?;
                                             }
@@ -1044,7 +1047,7 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                         | Type::Class(ty::Class { type_params, .. }) => {
                                             if let Some(type_params) = type_params.clone() {
                                                 if let Some(type_args) = type_args {
-                                                    let ty = ty.clone();
+                                                    let ty = t.clone();
                                                     log::info!("expand: expanding type parameters");
                                                     return self.analyzer.expand_type_params(
                                                         &type_args,
@@ -1054,7 +1057,7 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                                                 }
                                             }
 
-                                            return ty.clone();
+                                            return t.clone();
                                         }
 
                                         _ => unimplemented!(
