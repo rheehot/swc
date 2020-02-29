@@ -369,8 +369,6 @@ impl Analyzer<'_, '_> {
 
         // ty = self.expand(span, ty)?;
 
-        let mut inferred = FxHashMap::default();
-
         let mut usage_visitor = TypeParamUsageFinder::default();
         ty.normalize().visit_with(&mut usage_visitor);
         if usage_visitor.params.is_empty() {
@@ -385,6 +383,8 @@ impl Analyzer<'_, '_> {
 
             return Ok(ty);
         }
+
+        let mut inferred = FxHashMap::default();
 
         if let Some(type_ann) = type_ann {
             self.infer_type(&mut inferred, &ty, type_ann)?;
