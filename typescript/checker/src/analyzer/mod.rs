@@ -422,7 +422,14 @@ impl Validate<Vec<ModuleItem>> for Analyzer<'_, '_> {
             }
         }
 
-        items.visit_mut_children(self);
+        {
+            let order = self.reorder_stmts(&*items);
+            assert_eq!(order.len(), items.len());
+
+            for idx in order {
+                items[idx].visit_mut_with(self);
+            }
+        }
 
         self.handle_pending_exports();
 

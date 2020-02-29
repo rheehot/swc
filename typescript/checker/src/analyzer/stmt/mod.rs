@@ -54,7 +54,7 @@ impl Analyzer<'_, '_> {
             assert_eq!(order.len(), stmts.len());
 
             for idx in order {
-                stmts[idx].visit_mut(&mut v);
+                stmts[idx].visit_mut_with(&mut v);
             }
 
             v.types
