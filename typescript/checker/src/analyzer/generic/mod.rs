@@ -168,6 +168,8 @@ impl Analyzer<'_, '_> {
                         e.insert(arg.clone());
                     }
                 }
+
+                return Ok(());
             }
 
             Type::Array(Array { elem_type, .. }) => match arg {
@@ -476,8 +478,6 @@ impl Analyzer<'_, '_> {
             dejavu: Default::default(),
         });
 
-        dbg!(&ty);
-
         Ok(ty)
     }
 
@@ -550,9 +550,11 @@ impl Fold<Type> for GenericExpander<'_> {
                         return self.i.params[idx].clone();
                     }
                 }
+
+                return ty.fold_children(self);
             }
 
-            Type::Ref(..) => return ty,
+            Type::Ref(..) => return ty.fold_children(self),
 
             Type::Param(mut param) => {
                 param = param.fold_with(self);
