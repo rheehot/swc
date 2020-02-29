@@ -628,23 +628,18 @@ impl Fold<Type> for GenericExpander<'_> {
             }
 
             Type::Mapped(mut m @ Mapped { ty: Some(..), .. }) => {
-                dbg!(&m.ty);
-                match m.ty {
-                    Some(box Type::Param(TypeParam {
-                        constraint:
-                            Some(box Type::Operator(Operator {
-                                op: TsTypeOperatorOp::KeyOf,
-                                ty: box Type::Union(ref u),
-                                ..
-                            })),
+                m = m.fold_with(self);
+
+                match m.type_param.constraint {
+                    Some(box Type::Operator(Operator {
+                        op: TsTypeOperatorOp::KeyOf,
+                        ty: box Type::Union(ref u),
                         ..
                     })) => {
                         log::error!("Union!");
                     }
                     _ => {}
                 }
-
-                m = m.fold_with(self);
 
                 m.ty = match m.ty {
                     Some(box Type::IndexedAccessType(IndexedAccessType {
