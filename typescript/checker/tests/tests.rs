@@ -156,6 +156,7 @@ static IGNORED: Lazy<Vec<&'static str>> = Lazy::new(|| {
 });
 
 #[test]
+#[ignore] // I copied (and splitted) all tests from conformance to `fixture`
 fn conformance() {
     let args: Vec<_> = env::args().collect();
     let mut tests = Vec::new();
