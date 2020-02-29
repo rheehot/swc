@@ -1027,17 +1027,6 @@ impl Fold<Type> for Expander<'_, '_, '_> {
                             self.dejvau.insert(i.sym.clone());
                             log::error!("({}): {}", self.analyzer.scope.depth(), i.sym);
 
-                            // Check for builtin types
-                            if !self.analyzer.is_builtin {
-                                if let Ok(ty) =
-                                    builtin_types::get_type(self.analyzer.libs, span, &i.sym)
-                                {
-                                    verify!(ty);
-                                    return ty.fold_with(self);
-                                }
-                            }
-
-                            // Handle enum
                             if let Some(types) = self.analyzer.find_type(&i.sym) {
                                 for t in types {
                                     if !self.expand_union {
