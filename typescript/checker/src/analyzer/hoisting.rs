@@ -69,9 +69,8 @@ impl Analyzer<'_, '_> {
                 node.visit_with(&mut v);
             }
 
+            log::info!("{} ({:?}) <-- {:?}", idx, ids, deps);
             idx_by_id.extend(ids.drain().map(|id| (id, idx)));
-
-            //
         }
 
         order
