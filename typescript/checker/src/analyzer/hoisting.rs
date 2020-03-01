@@ -320,13 +320,12 @@ impl Analyzer<'_, '_> {
                     }
                 }
 
-                log::info!("Reorder: {} <-- {:?}", node.name.sym, deps);
+                log::trace!("Reorder: {} <-- {:?}", node.name.sym, deps);
             }
         }
 
         let sorted = toposort(&graph.into_graph::<usize>(), None)
             .expect("cycle in type parameter is not supported");
-        log::warn!("Reorder: {:?}", sorted);
         Ok(sorted.into_iter().map(|i| i.index()).collect())
     }
 }
