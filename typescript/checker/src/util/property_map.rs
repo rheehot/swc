@@ -26,25 +26,13 @@ impl<V> PropertyMap<V> {
             expr: box expr.clone().fold_with(&mut super::SpanRemover),
         });
 
-        for (k, v) in self.inner {
-            if k == expr {
-                return Some(&v);
-            }
-        }
-
-        None
+        self.inner.get(&expr)
     }
 
-    pub fn get_prop_anme(&self, p: &PropName) -> Option<&V> {
+    pub fn get_prop_name(&self, p: &PropName) -> Option<&V> {
         let expr = p.clone().fold_with(&mut super::SpanRemover);
 
-        for (k, v) in self.inner {
-            if k == expr {
-                return Some(&v);
-            }
-        }
-
-        None
+        self.inner.get(&expr)
     }
 
     pub fn insert(&mut self, key: PropName, v: V) {

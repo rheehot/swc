@@ -760,7 +760,7 @@ impl Validate<Class> for Analyzer<'_, '_> {
                         ty::ClassMember::Property(_) => {}
                     }
                 }
-                let mut prop_types = FxHashMap::default();
+                let mut prop_types = PropertyMap::<Type>::default();
 
                 for (orig, m) in &mut body {
                     match m {
@@ -786,19 +786,8 @@ impl Validate<Class> for Analyzer<'_, '_> {
                                     }
                                 }
                             }
-                            _ => {}
                             MethodKind::Method => continue,
                             MethodKind::Getter => {}
-                            MethodKind::Setter => {
-                                if let Some(param) = m.params.first_mut() {
-                                    if param.ty.is_any() {
-                                        if let Some(ty) = prop_types.get_prop_anme(&m.key) {
-                                            param.ty = ty.cloen();
-                                        }
-                                    }
-                                }
-                            }
-                            _ => {}
                         },
 
                         ty::ClassMember::Property(_) => {}
