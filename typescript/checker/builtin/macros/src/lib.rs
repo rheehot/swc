@@ -89,9 +89,8 @@ pub fn builtin(_: proc_macro::TokenStream) -> proc_macro::TokenStream {
             let (leading, trailing) = comments.take_all();
 
             let mut ds = vec![];
-            for r in leading.into_iter().chain(&trailing) {
-                let cmts = r.value();
-                for cmt in cmts {
+            for (_, comments) in leading.into_iter().chain(trailing) {
+                for cmt in comments {
                     if !cmt.text.starts_with("/ <reference lib=")
                         && !cmt.text.starts_with("/<reference lib=")
                     {

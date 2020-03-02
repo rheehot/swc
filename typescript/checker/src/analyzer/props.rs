@@ -8,12 +8,6 @@ use crate::{
 };
 use macros::{validator, validator_method};
 use swc_atoms::js_word;
-use swc_common::{Spanned, Visit, VisitWith};
-use swc_common::{Spanned, VisitMut, VisitMutWith, VisitWith};
-use swc_common::{Spanned, VisitWith};
-use swc_common::{Spanned, VisitMutWith, VisitWith};
-use swc_common::{Spanned, VisitMutWith, VisitWithk};
-use swc_common::{Spanned, VisitMut, VisitMutWith, VisitWith};
 use swc_common::{Spanned, Visit, VisitMut, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 
