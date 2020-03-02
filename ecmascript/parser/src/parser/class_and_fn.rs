@@ -505,7 +505,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
                 }
 
                 if let Some(span) = modifier_span {
-                    self.emit_err(span, SyntaxError::TS1242);
+                    self.emit_err(make_span(span), SyntaxError::TS1242);
                 }
 
                 return Ok(ClassMember::Constructor(Constructor {

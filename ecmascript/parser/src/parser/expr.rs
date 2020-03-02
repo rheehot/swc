@@ -1225,7 +1225,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
                         assert_and_bump!('?');
                         let _ = cur!(false);
                         if arg.spread.is_some() {
-                            self.emit_err(self.input.prev_span(), SyntaxError::TS1047);
+                            self.emit_err(make_span(self.input.prev_span()), SyntaxError::TS1047);
                         }
                         match *arg.expr {
                             Expr::Ident(..) => {}
