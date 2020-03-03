@@ -195,6 +195,17 @@ impl Fold<VarDeclarator> for TypeResolver {
     }
 }
 
+impl Fold<Pat> for TypeResolver {
+    fn fold(&mut self, mut node: Pat) -> Pat {
+        node = node.fold_children(self);
+
+        match node {
+            Pat::Assign(a) => *a.left,
+            _ => node,
+        }
+    }
+}
+
 impl Fold<FnDecl> for TypeResolver {
     fn fold(&mut self, mut node: FnDecl) -> FnDecl {
         node.declare = !self.in_declare;
