@@ -237,11 +237,11 @@ impl Analyzer<'_, '_> {
 
                     while let Some(node_id) = visitor.next(&ids_graph) {
                         let id = ids_graph.node_weight(node_id).unwrap();
-                        let order_of_the_id = *order_idx_by_id.get(&id).unwrap();
-
-                        if idx < order_of_the_id {
-                            log::trace!("hoisting: Swap: {} <-> {}", idx, order_of_the_id);
-                            order.swap(order_of_the_id, idx)
+                        if let Some(&order_of_the_id) = order_idx_by_id.get(&id) {
+                            if idx < order_of_the_id {
+                                log::trace!("hoisting: Swap: {} <-> {}", idx, order_of_the_id);
+                                order.swap(order_of_the_id, idx)
+                            }
                         }
                     }
                 }
