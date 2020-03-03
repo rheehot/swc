@@ -240,7 +240,7 @@ impl Analyzer<'_, '_> {
 
                     while let Some(node_id) = visitor.next(&ids_graph) {
                         let id = ids_graph.node_weight(node_id).unwrap();
-                        if let Some(&order_of_the_id) = order_idx_by_id.get(&id).unwrap() {
+                        if let Some(&order_of_the_id) = order_idx_by_id.get(&id) {
                             log::error!("Order graph: {} <- {}", idx, order_of_the_id);
 
                             if idx < order_of_the_id {

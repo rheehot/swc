@@ -17,7 +17,6 @@ use crate::{
     analyzer::{Analyzer, Info},
     errors::Error,
     resolver::Resolver,
-    swc_common::VisitMutWith,
     ty::Type,
     validator::{Validate, ValidateWith},
 };
@@ -25,11 +24,12 @@ use dashmap::DashMap;
 use fxhash::FxHashMap;
 use std::{path::PathBuf, sync::Arc};
 use swc_atoms::JsWord;
-use swc_common::{errors::Handler, Globals, SourceMap, Span, VisitMut};
+use swc_common::{errors::Handler, FoldWith, Globals, SourceMap, Span, VisitMut, VisitMutWith};
 use swc_ecma_ast::Module;
 use swc_ecma_parser::{
     lexer::Lexer, JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig,
 };
+use swc_ecma_transforms::resolver;
 
 #[macro_use]
 mod debug;
@@ -209,6 +209,8 @@ impl Checker {
                     }
                 })
         });
+        module = module.fold_with(&mut resolver());
+
         let mut a = Analyzer::root(path.clone(), &self.libs, self.rule, self);
         module.validate_with(&mut a);
         let info = a.info;
