@@ -233,8 +233,8 @@ impl Analyzer<'_, '_> {
 
         let mut order = (0..nodes.len()).collect();
 
-        for (i, _) in nodes.iter().enumerate() {
-            if let Some(node_ids) = node_ids_by_order_idx.get(&i) {
+        for (idx, _) in nodes.iter().enumerate() {
+            if let Some(node_ids) = node_ids_by_order_idx.get(&idx) {
                 log::info!("node_ids_by_order_idx: {}", node_ids.len());
 
                 for &node_id in node_ids {
@@ -244,7 +244,7 @@ impl Analyzer<'_, '_> {
                         let id = ids_graph.node_weight(node_id).unwrap();
                         let order_of_the_id = order_idx_by_id.get(&id).unwrap();
 
-                        log::error!("Order graph: {} <- {}", i, order_of_the_id);
+                        log::error!("Order graph: {} <- {}", idx, order_of_the_id);
                     }
                 }
             }
