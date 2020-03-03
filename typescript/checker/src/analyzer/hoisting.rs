@@ -204,24 +204,29 @@ impl Analyzer<'_, '_> {
             log::info!("Id graph: ({}) ({:?}) <-- {:?}", idx, ids, deps);
             order_idx_by_id.extend(ids.iter().cloned().map(|id| (id, idx)));
 
-            for (id, is_decl) in ids
-                .drain()
-                .map(|v| (v, true))
-                .chain(deps.drain().map(|v| (v, false)))
-            {
+            for id in ids.drain() {
+                let node_id = if let Some(&node_id) = graph_node_id_by_id.get(&id) {
+                    node_ids_by_order_idx.entry(idx).or_default().push(node_id);
+                    node_id
+                } else {
+                    let node_id = ids_graph.add_node(id.clone());
+                    node_ids_by_order_idx.entry(idx).or_default().push(node_id);
+                    node_id
+                };
+
                 log::info!("Id graph: ({}) ({:?})", idx, id);
 
-                if let Some(node_id) = graph_node_id_by_id.get(&id) {
-                    if is_decl {
-                        node_ids_by_order_idx.entry(idx).or_default().push(*node_id);
-                    }
-                    continue;
+                for dep_id in deps.drain() {
+                    let dep_node_id = if let Some(&node_id) = graph_node_id_by_id.get(&dep_id) {
+                        node_id
+                    } else {
+                        let node_id = ids_graph.add_node(dep_id.clone());
+                        node_id
+                    };
+
+                    ids_graph.add_edge(node_id, dep_node_id, 1);
                 }
 
-                let node_id = ids_graph.add_node(id.clone());
-                if is_decl {
-                    node_ids_by_order_idx.entry(idx).or_default().push(node_id);
-                }
                 graph_node_id_by_id.insert(id, node_id);
             }
         }
@@ -230,6 +235,8 @@ impl Analyzer<'_, '_> {
 
         for (i, _) in nodes.iter().enumerate() {
             if let Some(node_ids) = node_ids_by_order_idx.get(&i) {
+                log::info!("node_ids_by_order_idx: {}", node_ids.len());
+
                 for &node_id in node_ids {
                     let mut visitor = DfsPostOrder::new(&ids_graph, node_id);
 
