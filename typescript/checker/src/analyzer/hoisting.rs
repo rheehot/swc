@@ -201,7 +201,6 @@ impl Analyzer<'_, '_> {
                 node.visit_with(&mut v);
             }
 
-            log::info!("Id graph: ({}) ({:?}) <-- {:?}", idx, ids, deps);
             order_idx_by_id.extend(ids.iter().cloned().map(|id| (id, idx)));
 
             for id in ids.drain() {
@@ -213,8 +212,6 @@ impl Analyzer<'_, '_> {
                     node_ids_by_order_idx.entry(idx).or_default().push(node_id);
                     node_id
                 };
-
-                log::info!("Id graph: ({}) ({:?})", idx, id);
 
                 for dep_id in deps.drain() {
                     let dep_node_id = if let Some(&node_id) = graph_node_id_by_id.get(&dep_id) {
@@ -231,24 +228,27 @@ impl Analyzer<'_, '_> {
             }
         }
 
-        let mut order = (0..nodes.len()).collect();
+        let mut order: Vec<usize> = (0..nodes.len()).collect();
 
         for (idx, _) in nodes.iter().enumerate() {
             if let Some(node_ids) = node_ids_by_order_idx.get(&idx) {
-                log::info!("node_ids_by_order_idx: {}", node_ids.len());
-
                 for &node_id in node_ids {
                     let mut visitor = DfsPostOrder::new(&ids_graph, node_id);
 
                     while let Some(node_id) = visitor.next(&ids_graph) {
                         let id = ids_graph.node_weight(node_id).unwrap();
-                        let order_of_the_id = order_idx_by_id.get(&id).unwrap();
+                        let order_of_the_id = *order_idx_by_id.get(&id).unwrap();
 
-                        log::error!("Order graph: {} <- {}", idx, order_of_the_id);
+                        if idx < order_of_the_id {
+                            log::trace!("hoisting: Swap: {} <-> {}", idx, order_of_the_id);
+                            order.swap(order_of_the_id, idx)
+                        }
                     }
                 }
             }
         }
+
+        log::trace!("hosting: {:?}", order);
 
         order
     }
