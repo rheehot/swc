@@ -520,8 +520,6 @@ impl<'a> Emitter<'a> {
     fn emit_ts_non_null_expr(&mut self, n: &TsNonNullExpr) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        self.emit_leading_comments_of_pos(n.span().lo())?;
-
         unimplemented!("emit_ts_non_null_expr")
     }
 
@@ -529,9 +527,8 @@ impl<'a> Emitter<'a> {
     fn emit_ts_optional_type(&mut self, n: &TsOptionalType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        self.emit_leading_comments_of_pos(n.span().lo())?;
-
-        unimplemented!("emit_ts_optional_type")
+        emit!(n.type_ann);
+        punct!("?");
     }
 
     #[emitter]
