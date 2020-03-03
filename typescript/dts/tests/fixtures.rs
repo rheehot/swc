@@ -240,9 +240,6 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
             }
 
             let dts = generate_dts(info.0, info.1.exports);
-            if dts.clone().fold_with(&mut DropSpan) == expected.clone().fold_with(&mut DropSpan) {
-                return Ok(());
-            }
 
             let generated = {
                 let mut buf = vec![];
@@ -266,10 +263,17 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
 
             println!("---------- Generated ----------\n{}", generated);
 
-            assert_eq!(
-                NormalizedOutput::from(generated.trim().to_string()),
-                NormalizedOutput::from(expected_code.trim().to_string())
-            );
+            if generated.contains('"') {
+                assert_eq!(
+                    NormalizedOutput::from(generated.trim().to_string()),
+                    NormalizedOutput::from(expected_code.trim().to_string())
+                );
+            } else {
+                assert_eq!(
+                    NormalizedOutput::from(generated.replace("'", "\"").trim().to_string()),
+                    NormalizedOutput::from(expected_code.trim().to_string())
+                );
+            }
 
             Ok(())
         })
