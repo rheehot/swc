@@ -191,7 +191,12 @@ impl Analyzer<'_, '_> {
             deps.clear();
 
             {
-                let mut v = StmtDependencyFinder { ids_buf, ids, deps };
+                let mut v = StmtDependencyFinder {
+                    ids_buf,
+                    ids,
+                    deps,
+                    no_decl: false,
+                };
 
                 node.visit_with(&mut v);
             }
@@ -260,25 +265,31 @@ pub(super) struct StmtDependencyFinder<'a> {
 
     /// Dependencies of the id.
     deps: &'a mut FxHashSet<Id>,
+
+    no_decl: bool,
 }
 
 impl Visit<FnDecl> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &FnDecl) {
-        self.ids.insert(node.ident.to_id());
+        if !self.no_decl {
+            self.ids.insert(node.ident.to_id());
+        }
         node.visit_children(self);
     }
 }
 
 impl Visit<VarDeclarator> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &VarDeclarator) {
-        {
-            let mut v = DestructuringFinder {
-                found: self.ids_buf,
-            };
-            node.name.visit_with(&mut v);
-        }
+        if !self.no_decl {
+            {
+                let mut v = DestructuringFinder {
+                    found: self.ids_buf,
+                };
+                node.name.visit_with(&mut v);
+            }
 
-        self.ids.extend(self.ids_buf.drain(..));
+            self.ids.extend(self.ids_buf.drain(..));
+        }
 
         node.init.visit_with(self);
     }
@@ -286,17 +297,28 @@ impl Visit<VarDeclarator> for StmtDependencyFinder<'_> {
 
 impl Visit<ClassDecl> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &ClassDecl) {
-        self.ids.insert(node.ident.to_id());
+        if !self.no_decl {
+            self.ids.insert(node.ident.to_id());
+        }
+
         node.visit_children(self);
     }
 }
 
 impl Visit<Function> for StmtDependencyFinder<'_> {
-    fn visit(&mut self, _: &Function) {}
+    fn visit(&mut self, n: &Function) {
+        let old = self.no_decl;
+        n.visit_children(self);
+        self.no_decl = old;
+    }
 }
 
 impl Visit<ArrowExpr> for StmtDependencyFinder<'_> {
-    fn visit(&mut self, _: &ArrowExpr) {}
+    fn visit(&mut self, n: &ArrowExpr) {
+        let old = self.no_decl;
+        n.visit_children(self);
+        self.no_decl = old;
+    }
 }
 
 impl Visit<MemberExpr> for StmtDependencyFinder<'_> {
