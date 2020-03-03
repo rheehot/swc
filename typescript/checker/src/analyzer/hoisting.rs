@@ -49,127 +49,6 @@ impl Analyzer<'_, '_> {
     where
         T: StmtLike + for<'any> VisitWith<StmtDependencyFinder<'any>>,
     {
-        let mut ids_graph = DiGraph::<_, usize>::with_capacity(nodes.len(), nodes.len() * 2);
-
-        let order_idx_by_id = &mut self.hoisting_ws.stmts.idx_by_ids;
-        let ids = &mut self.hoisting_ws.stmts.ids;
-        let ids_buf = &mut self.hoisting_ws.stmts.ids_buf;
-        let deps = &mut self.hoisting_ws.stmts.deps;
-        let mut graph_node_id_by_id = FxHashMap::<_, _>::default();
-        let mut node_ids_by_order_idx = FxHashMap::<_, Vec<_>>::default();
-
-        order_idx_by_id.clear();
-
-        for (idx, node) in nodes.iter().enumerate() {
-            ids.clear();
-            ids_buf.clear();
-            deps.clear();
-
-            {
-                let mut v = StmtDependencyFinder { ids_buf, ids, deps };
-
-                node.visit_with(&mut v);
-            }
-
-            log::info!("({}) ({:?}) <-- {:?}", idx, ids, deps);
-            order_idx_by_id.extend(ids.drain().map(|id| (id, idx)));
-
-            for (id, is_decl) in ids
-                .drain()
-                .map(|v| (v, true))
-                .chain(deps.drain().map(|v| (v, false)))
-            {
-                log::info!("Id graph: ({}) ({:?})", idx, id);
-
-                if let Some(node_id) = graph_node_id_by_id.get(&id) {
-                    if is_decl {
-                        node_ids_by_order_idx.entry(idx).or_default().push(*node_id);
-                    }
-                    continue;
-                }
-
-                let node_id = ids_graph.add_node(id.clone());
-                if is_decl {
-                    node_ids_by_order_idx.entry(idx).or_default().push(node_id);
-                }
-                graph_node_id_by_id.insert(id, node_id);
-            }
-        }
-
-        let mut order = (0..nodes.len()).collect();
-
-        for (i, _) in nodes.iter().enumerate() {
-            if let Some(node_ids) = node_ids_by_order_idx.get(&i) {
-                for &node_id in node_ids {
-                    let mut visitor = DfsPostOrder::new(&ids_graph, node_id);
-
-                    while let Some(node_id) = visitor.next(&ids_graph) {
-                        let node = ids_graph.node_weight(node_id);
-                        log::error!("Node = {:?}", node);
-                        // let order_of_the_id =
-                        // order_idx_by_id.get(&node_id).unwrap();
-                    }
-                }
-            }
-        }
-
-        order
-    }
-}
-
-pub(super) struct DependencyFinder {
-    /// Identifiers contained in a declaration.
-use crate::{analyzer::Analyzer, ty::TypeParam, ValidationResult};
-use bitflags::_core::mem::{replace, take};
-use fxhash::{FxHashMap, FxHashSet};
-use petgraph::{
-    algo::toposort,
-    graph::DiGraph,
-    graphmap::{DiGraphMap, GraphMap},
-    stable_graph::StableDiGraph,
-    visit::DfsPostOrder,
-};
-use swc_atoms::{JsWord, JsWordStaticSet};
-use swc_common::{Visit, VisitWith};
-use swc_ecma_ast::*;
-use swc_ecma_utils::{find_ids, ident::IdentLike, DestructuringFinder, Id, StmtLike};
-
-/// Structs to reuse vector / hash maps.
-#[derive(Debug, Default)]
-pub(super) struct HoistingWs {
-    stmts: StmtWs,
-    type_params: TypeParamWs,
-}
-
-#[derive(Debug, Default)]
-struct StmtWs {
-    idx_by_ids: FxHashMap<Id, usize>,
-    ids: FxHashSet<Id>,
-    ids_buf: Vec<Id>,
-    deps: FxHashSet<Id>,
-}
-
-impl Analyzer<'_, '_> {
-    /// Returns the order of evaluation. This methods is used to handle hoisting
-    /// properly.
-    ///
-    /// # Exmaple
-    ///
-    /// The method will return `[1, 0]` for the code below.
-    ///
-    /// ```js
-    /// function foo() {
-    ///     return bar();
-    /// }
-    ///
-    /// function bar (){
-    ///     return 1;
-    /// }K
-    /// ```
-    pub(super) fn reorder_stmts<T>(&mut self, nodes: &[T]) -> Vec<usize>
-    where
-        T: StmtLike + for<'any> VisitWith<StmtDependencyFinder<'any>>,
-    {
         if nodes.len() <= 1 {
             return (0..nodes.len()).collect();
         }
@@ -259,9 +138,6 @@ impl Analyzer<'_, '_> {
     }
 }
 
-#[derive(Debug)]
-pub(super) struct StmtDependencyFinder<'a> {
-    ids_buf: &'a mut Vec<Id>,
 #[derive(Debug)]
 pub(super) struct StmtDependencyFinder<'a> {
     ids_buf: &'a mut Vec<Id>,
