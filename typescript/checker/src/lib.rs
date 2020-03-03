@@ -209,7 +209,6 @@ impl Checker {
                     }
                 })
         });
-        module = module.fold_with(&mut resolver());
 
         let mut a = Analyzer::root(path.clone(), &self.libs, self.rule, self);
         module.validate_with(&mut a);
