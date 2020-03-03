@@ -1613,6 +1613,9 @@ impl<'a> Emitter<'a> {
             ListFormat::ArrayBindingPatternElements,
         )?;
         punct!("]");
+        if node.optional {
+            punct!("?");
+        }
 
         if let Some(type_ann) = &node.type_ann {
             punct!(":");
@@ -1643,6 +1646,9 @@ impl<'a> Emitter<'a> {
             ListFormat::ObjectBindingPatternElements,
         )?;
         punct!("}");
+        if node.optional {
+            punct!("?");
+        }
 
         if let Some(type_ann) = &node.type_ann {
             punct!(":");
