@@ -111,10 +111,12 @@ impl<'a, I: Tokens> Parser<'a, I> {
         }
 
         expect!(']');
+        let optional = self.input.syntax().dts() && eat!('?');
 
         Ok(Pat::Array(ArrayPat {
             span: span!(start),
             elems,
+            optional,
             type_ann: None,
         }))
     }
@@ -586,9 +588,12 @@ impl<'a, I: Tokens> Parser<'a, I> {
                 elems: mut exprs, ..
             }) => {
                 if exprs.is_empty() {
+                    // In dts, we do not reparse.
+                    debug_assert!(!self.input.syntax().dts());
                     return Ok(Pat::Array(ArrayPat {
                         span,
                         elems: vec![],
+                        optional: false,
                         type_ann: None,
                     }));
                 }
