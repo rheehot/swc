@@ -29,7 +29,7 @@ use swc_ecma_ast::Module;
 use swc_ecma_parser::{
     lexer::Lexer, JscTarget, Parser, Session, SourceFileInput, Syntax, TsConfig,
 };
-use swc_ecma_transforms::resolver;
+use swc_ecma_transforms::resolver as ident_resolver;
 
 #[macro_use]
 mod debug;
@@ -177,7 +177,7 @@ impl Checker {
 
         self.current.insert(path.clone(), ());
 
-        let mut module = swc_common::GLOBALS.set(&self.globals, || {
+        let mut module = self.run(|| {
             let session = Session {
                 handler: &self.handler,
             };
@@ -193,7 +193,7 @@ impl Checker {
             );
             let mut parser = Parser::new_from(session, lexer);
 
-            parser
+            let module = parser
                 .parse_typescript_module()
                 .map_err(|mut e| {
                     e.emit();
@@ -207,7 +207,8 @@ impl Checker {
                         body: Default::default(),
                         shebang: None,
                     }
-                })
+                });
+            module.fold_with(&mut ident_resolver())
         });
 
         let mut a = Analyzer::root(path.clone(), &self.libs, self.rule, self);
