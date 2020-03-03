@@ -444,6 +444,9 @@ impl<'a, I: Tokens> Parser<'a, I> {
         pat_ty: PatType,
         expr: Box<Expr>,
     ) -> PResult<'a, Pat> {
+        // In dts, we do not reparse.
+        debug_assert!(!self.input.syntax().dts());
+
         let span = expr.span();
 
         if pat_ty == PatType::AssignPat {
@@ -580,6 +583,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
                             }
                         })
                         .collect::<PResult<'a, _>>()?,
+                    optional: false,
                     type_ann: None,
                 }))
             }
@@ -588,8 +592,6 @@ impl<'a, I: Tokens> Parser<'a, I> {
                 elems: mut exprs, ..
             }) => {
                 if exprs.is_empty() {
-                    // In dts, we do not reparse.
-                    debug_assert!(!self.input.syntax().dts());
                     return Ok(Pat::Array(ArrayPat {
                         span,
                         elems: vec![],
@@ -662,6 +664,7 @@ impl<'a, I: Tokens> Parser<'a, I> {
                 Ok(Pat::Array(ArrayPat {
                     span,
                     elems: params,
+                    optional: false,
                     type_ann: None,
                 }))
             }
