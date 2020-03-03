@@ -27,6 +27,7 @@ use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestN
 use testing::{DropSpan, NormalizedOutput, StdErr};
 
 #[test]
+#[ignore]
 fn conformance_test() {
     let args: Vec<_> = env::args().collect();
     let mut tests = Vec::new();
