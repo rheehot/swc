@@ -267,8 +267,8 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
             println!("---------- Generated ----------\n{}", generated);
 
             assert_eq!(
-                NormalizedOutput::from(generated),
-                NormalizedOutput::from((*expected_code).clone())
+                NormalizedOutput::from(generated.trim().to_string()),
+                NormalizedOutput::from(expected_code.trim().to_string())
             );
 
             Ok(())
