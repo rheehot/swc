@@ -2,6 +2,7 @@ use super::Analyzer;
 use crate::{
     analyzer::{pat::PatMode, props::prop_name_to_expr, util::ResultExt, Ctx, ScopeKind},
     builtin_types,
+    debug::print_backtrace,
     errors::Error,
     ty,
     ty::{
@@ -1024,6 +1025,7 @@ impl Analyzer<'_, '_> {
             _ => {}
         }
 
+        print_backtrace();
         unimplemented!(
             "access_property(MemberExpr):\nObject: {:?}\nProp: {:?}",
             obj,
