@@ -344,6 +344,7 @@ fn get_correct_dts(path: &Path) -> (Arc<String>, Module) {
                 tsx: true,
                 decorators: true,
                 dynamic_import: true,
+                dts: true,
             }),
             SourceFileInput::from(&*fm),
             None,
