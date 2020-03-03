@@ -703,6 +703,7 @@ impl<'a> Emitter<'a> {
             keyword!("extends");
             space!();
             emit!(node.super_class);
+            space!();
         }
 
         punct!("{");
