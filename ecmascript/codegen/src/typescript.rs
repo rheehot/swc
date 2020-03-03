@@ -562,7 +562,9 @@ impl<'a> Emitter<'a> {
     fn emit_ts_paren_type(&mut self, n: &TsParenthesizedType) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_paren_type")
+        punct!("(");
+        emit!(n.type_ann);
+        punct!(")");
     }
 
     #[emitter]
