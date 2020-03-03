@@ -210,6 +210,26 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
 
     testing::Tester::new()
         .print_errors(|cm, handler| {
+            let expected = {
+                let mut buf = vec![];
+                {
+                    let handlers = box MyHandlers;
+                    let mut emitter = Emitter {
+                        cfg: Default::default(),
+                        comments: None,
+                        cm: cm.clone(),
+                        wr: box JsWriter::new(cm.clone(), "\n", &mut buf, None),
+                        handlers,
+                    };
+
+                    emitter
+                        .emit_module(&expected)
+                        .context("failed to emit module")
+                        .unwrap();
+                }
+                String::from_utf8(buf).unwrap()
+            };
+
             let handler = Arc::new(handler);
 
             let checker = swc_ts_checker::Checker::new(
@@ -263,17 +283,10 @@ fn do_test(file_name: &Path) -> Result<(), StdErr> {
 
             println!("---------- Generated ----------\n{}", generated);
 
-            if generated.contains('"') {
-                assert_eq!(
-                    NormalizedOutput::from(generated.trim().to_string()),
-                    NormalizedOutput::from(expected_code.trim().to_string())
-                );
-            } else {
-                assert_eq!(
-                    NormalizedOutput::from(generated.replace("'", "\"").trim().to_string()),
-                    NormalizedOutput::from(expected_code.trim().to_string())
-                );
-            }
+            assert_eq!(
+                NormalizedOutput::from(generated),
+                NormalizedOutput::from(expected)
+            );
 
             Ok(())
         })
@@ -337,6 +350,7 @@ fn get_correct_dts(path: &Path) -> (Arc<String>, Module) {
         );
 
         let m = p.parse_typescript_module().map_err(|mut e| e.emit())?;
+
         Ok((fm.src.clone(), m))
     })
     .unwrap()
