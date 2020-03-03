@@ -33,7 +33,19 @@ impl<'a> Emitter<'a> {
     fn emit_ts_call_signature_decl(&mut self, n: &TsCallSignatureDecl) -> Result {
         self.emit_leading_comments_of_pos(n.span().lo())?;
 
-        unimplemented!("emit_ts_call_signature_decl")
+        emit!(n.type_params);
+
+        punct!("(");
+        self.emit_list(n.span, Some(&n.params), ListFormat::Parameters)?;
+        punct!(")");
+
+        if let Some(type_ann) = &n.type_ann {
+            space!();
+            punct!("=>");
+            space!();
+
+            emit!(type_ann);
+        }
     }
 
     #[emitter]
