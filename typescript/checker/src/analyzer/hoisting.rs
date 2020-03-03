@@ -185,11 +185,9 @@ impl Visit<VarDeclarator> for StmtDependencyFinder<'_> {
 
 impl Visit<ClassDecl> for StmtDependencyFinder<'_> {
     fn visit(&mut self, node: &ClassDecl) {
-        if !self.no_decl {
-            self.ids.insert(node.ident.to_id());
-        }
-
-        node.visit_children(self);
+        let old = self.no_decl;
+        node.class.visit_with(self);
+        self.no_decl = old;
     }
 }
 
