@@ -450,6 +450,7 @@ impl From<ty::FnParam> for TsFnParam {
                 span: t.span,
                 type_ann: Some(t.ty.into()),
                 elems: a.elems,
+                optional: a.optional,
             }),
             Pat::Rest(r) => TsFnParam::Rest(RestPat {
                 span: t.span,
@@ -461,6 +462,7 @@ impl From<ty::FnParam> for TsFnParam {
                 span: t.span,
                 type_ann: Some(t.ty.into()),
                 props: o.props,
+                optional: o.optional,
             }),
             _ => unimplemented!("From<ty::FnParam> for TsFnParam"),
         }
