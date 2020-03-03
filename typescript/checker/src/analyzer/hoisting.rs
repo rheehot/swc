@@ -214,8 +214,6 @@ impl Analyzer<'_, '_> {
                     node_id
                 };
 
-                log::info!("Id graph: ({}) ({:?})", idx, id);
-
                 for dep_id in deps.drain() {
                     let dep_node_id = if let Some(&node_id) = graph_node_id_by_id.get(&dep_id) {
                         node_id
@@ -242,13 +240,13 @@ impl Analyzer<'_, '_> {
 
                     while let Some(node_id) = visitor.next(&ids_graph) {
                         let id = ids_graph.node_weight(node_id).unwrap();
-                        let order_of_the_id = *order_idx_by_id.get(&id).unwrap();
+                        if let Some(&order_of_the_id) = order_idx_by_id.get(&id).unwrap() {
+                            log::error!("Order graph: {} <- {}", idx, order_of_the_id);
 
-                        log::error!("Order graph: {} <- {}", idx, order_of_the_id);
-
-                        if idx < order_of_the_id {
-                            log::info!("Swap: {} <-> {}", idx, order_of_the_id);
-                            order.swap(order_of_the_id, idx)
+                            if idx < order_of_the_id {
+                                log::info!("Swap: {} <-> {}", idx, order_of_the_id);
+                                order.swap(order_of_the_id, idx)
+                            }
                         }
                     }
                 }
