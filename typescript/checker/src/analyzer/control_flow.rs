@@ -352,8 +352,10 @@ impl Analyzer<'_, '_> {
 
                 if let Some(ref var_info) = self.scope.get_var(&i.sym) {
                     if let Some(ref var_ty) = var_info.ty {
+                        let var_ty = var_ty.clone();
                         // let foo: string;
                         // let foo = 'value';
+                        let var_ty = self.expand_fully(span, var_ty, true)?;
                         self.assign(&var_ty, ty, i.span)?;
                         return Ok(());
                     }
