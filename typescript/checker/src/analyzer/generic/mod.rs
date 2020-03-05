@@ -66,8 +66,6 @@ impl Analyzer<'_, '_> {
             self.infer_type(&mut inferred, &p.ty, &arg.ty)?;
         }
 
-        log::error!("{:#?}", inferred);
-
         let mut params = Vec::with_capacity(type_params.len());
         for type_param in type_params {
             if let Some(ty) = inferred.type_params.remove(&type_param.name) {
