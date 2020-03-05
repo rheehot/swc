@@ -35,6 +35,7 @@
 use crate::{def_site, is_attr_name, syn_ext::PairExt};
 use pmutil::{prelude::*, *};
 use proc_macro2::{Span, TokenStream};
+use quote::ToTokens;
 use syn::{
     punctuated::Pair,
     token::{Mut, Ref},
