@@ -28,7 +28,11 @@ mod remover;
 #[derive(Debug, Default)]
 struct InferData {
     /// Inferred type parameters
-    inferred: FxHashMap<JsWord, Type>,
+    type_params: FxHashMap<JsWord, Type>,
+    /// Key is the name of the type parameter.
+    ///
+    /// Note that order is very important.
+    type_elements: FxHashMap<JsWord, Vec<Type>>,
 }
 
 /// Type inference for arguments.
@@ -46,7 +50,7 @@ impl Analyzer<'_, '_> {
             type_params.iter().map(|p| &p.name).collect::<Vec<_>>()
         );
 
-        let mut inferred = FxHashMap::default();
+        let mut inferred = InferData::default();
 
         // TODO: Handle optional parameters
         // TODO: Convert this to error.
@@ -64,7 +68,7 @@ impl Analyzer<'_, '_> {
 
         let mut params = Vec::with_capacity(type_params.len());
         for type_param in type_params {
-            if let Some(ty) = inferred.remove(&type_param.name) {
+            if let Some(ty) = inferred.type_params.remove(&type_param.name) {
                 params.push(ty);
             } else {
                 log::debug!("type param = {:?}", type_param.constraint);
@@ -120,7 +124,7 @@ impl Analyzer<'_, '_> {
 
     fn infer_type(
         &mut self,
-        inferred: &mut FxHashMap<JsWord, Type>,
+        inferred: &mut InferData,
         param: &Type,
         arg: &Type,
     ) -> ValidationResult<()> {
@@ -137,7 +141,9 @@ impl Analyzer<'_, '_> {
 
                 if constraint.is_some() && is_literals(&constraint.as_ref().unwrap()) {
                     log::debug!("infer: {} = {:?}", name, constraint);
-                    inferred.insert(name.clone(), *constraint.clone().unwrap());
+                    inferred
+                        .type_params
+                        .insert(name.clone(), *constraint.clone().unwrap());
                     return Ok(());
                 }
 
@@ -151,12 +157,14 @@ impl Analyzer<'_, '_> {
                     }
                 {
                     log::debug!("infer: {} = {:?}", name, constraint);
-                    inferred.insert(name.clone(), *constraint.clone().unwrap());
+                    inferred
+                        .type_params
+                        .insert(name.clone(), *constraint.clone().unwrap());
                     return Ok(());
                 }
 
                 log::info!("({}): infer: {} = {:?}", self.scope.depth(), name, arg);
-                match inferred.entry(name.clone()) {
+                match inferred.type_params.entry(name.clone()) {
                     Entry::Occupied(e) => {
                         match e.get() {
                             Type::Param(..) => return Ok(()),
@@ -191,6 +199,20 @@ impl Analyzer<'_, '_> {
 
                 _ => {}
             },
+
+            // TODO: Check if index type extends `keyof obj_type`
+            Type::IndexedAccessType(IndexedAccessType {
+                obj_type: box Type::Param(_param_obj),
+                index_type: box Type::Param(param_index),
+                ..
+            }) => {
+                inferred
+                    .type_elements
+                    .entry(param_index.name.clone())
+                    .or_default()
+                    .push(arg.clone());
+                return Ok(());
+            }
 
             Type::Function(p) => match arg {
                 Type::Function(a) => {
@@ -240,7 +262,10 @@ impl Analyzer<'_, '_> {
                                 self.infer_type(inferred, param, arg)?;
                             }
                             _ => {
-                                // TODO: default parameter
+                                unimplemented!(
+                                    "type inference: Comparisong of Ref<Arg1, Arg2> and Ref<Arg1> \
+                                     (different length)"
+                                );
                             }
                         }
                     }
@@ -272,25 +297,36 @@ impl Analyzer<'_, '_> {
 
             Type::Mapped(param) => match arg {
                 Type::TypeLit(arg) => {
-                    let mut new_members = Default::default();
-                    for member in &arg.members {
-                        match member {
-                            TypeElement::Property(p) => {
-                                //
-                                if let Some(pt) = &p.type_ann {
-                                    if let Some(param_ty) = &param.ty {
-                                        self.infer_type(&mut new_members, param_ty, pt)?;
+                    if let Some(param_ty) = &param.ty {
+                        let mut new_members: Vec<TypeElement> = Default::default();
+                        for member in &arg.members {
+                            match member {
+                                TypeElement::Property(p) => {
+                                    //
+                                    if let Some(pt) = &p.type_ann {
+                                        self.infer_type(inferred, param_ty, pt)?;
+                                        if let Some(types) =
+                                            inferred.type_elements.remove(&param.type_param.name)
+                                        {
+                                            let ty = Type::union(types);
+                                            new_members.push(TypeElement::Property(
+                                                PropertySignature {
+                                                    type_ann: Some(ty),
+                                                    ..p.clone()
+                                                },
+                                            ))
+                                        }
                                     }
                                 }
+                                _ => log::error!(
+                                    "infer_type: Mapped <- Assign: TypeElement({:?})",
+                                    member
+                                ),
                             }
-                            _ => log::error!(
-                                "infer_type: Mapped <- Assign: TypeElement({:?})",
-                                member
-                            ),
                         }
-                    }
 
-                    log::info!("Members: {:?}", new_members);
+                        log::info!("Members: {:?}", new_members);
+                    }
                 }
                 // Handled by generic expander, so let's return it as-is.
                 _ => {}
@@ -326,7 +362,7 @@ impl Analyzer<'_, '_> {
 
     fn infer_type_lit(
         &mut self,
-        inferred: &mut FxHashMap<JsWord, Type>,
+        inferred: &mut InferData,
         param: &TypeLit,
         arg: &TypeLit,
     ) -> ValidationResult<()> {
@@ -336,7 +372,7 @@ impl Analyzer<'_, '_> {
 
     fn infer_tuple(
         &mut self,
-        inferred: &mut FxHashMap<JsWord, Type>,
+        inferred: &mut InferData,
         param: &Tuple,
         arg: &Tuple,
     ) -> ValidationResult<()> {
@@ -353,7 +389,7 @@ impl Analyzer<'_, '_> {
 
     fn infer_type_of_fn_param(
         &mut self,
-        inferred: &mut FxHashMap<JsWord, Type>,
+        inferred: &mut InferData,
         param: &FnParam,
         arg: &FnParam,
     ) -> ValidationResult<()> {
@@ -362,7 +398,7 @@ impl Analyzer<'_, '_> {
 
     fn infer_type_of_fn_params(
         &mut self,
-        inferred: &mut FxHashMap<JsWord, Type>,
+        inferred: &mut InferData,
         params: &[FnParam],
         args: &[FnParam],
     ) -> ValidationResult<()> {
@@ -375,7 +411,7 @@ impl Analyzer<'_, '_> {
 
     fn rename_inferred(
         &mut self,
-        inferred: &mut FxHashMap<JsWord, Type>,
+        inferred: &mut InferData,
         arg_type_params: &TypeParamDecl,
     ) -> ValidationResult<()> {
         struct Renamer<'a> {
@@ -396,7 +432,7 @@ impl Analyzer<'_, '_> {
         //
         let mut fixed = FxHashMap::default();
 
-        inferred.iter().for_each(|(param_name, ty)| {
+        inferred.type_params.iter().for_each(|(param_name, ty)| {
             // Ignore unrelated type parameters
             if arg_type_params.params.iter().all(|v| *param_name != v.name) {
                 return;
@@ -405,7 +441,7 @@ impl Analyzer<'_, '_> {
         });
 
         let mut v = Renamer { fixed: &fixed };
-        inferred.iter_mut().for_each(|(_, ty)| {
+        inferred.type_params.iter_mut().for_each(|(_, ty)| {
             ty.visit_mut_with((&mut v));
         });
 
@@ -443,13 +479,13 @@ impl Analyzer<'_, '_> {
             return Ok(ty);
         }
 
-        let mut inferred = FxHashMap::default();
+        let mut inferred = InferData::default();
 
         if let Some(type_ann) = type_ann {
             self.infer_type(&mut inferred, &ty, type_ann)?;
-            return Ok(ty
-                .into_owned()
-                .fold_with(&mut TypeParamRenamer { inferred }));
+            return Ok(ty.into_owned().fold_with(&mut TypeParamRenamer {
+                inferred: inferred.type_params,
+            }));
         }
 
         let decl = Some(TypeParamDecl {
