@@ -475,6 +475,13 @@ impl Fold<Type> for LitGeneralizer {
     }
 }
 
+impl Fold<TypeParamInstantiation> for LitGeneralizer {
+    #[inline(always)]
+    fn fold(&mut self, i: TypeParamInstantiation) -> TypeParamInstantiation {
+        i
+    }
+}
+
 impl Type {
     pub fn generalize_lit(self) -> Self {
         let span = self.span();
