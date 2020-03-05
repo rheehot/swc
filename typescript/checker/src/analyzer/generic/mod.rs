@@ -29,6 +29,8 @@ mod remover;
 struct InferData {
     /// Inferred type parameters
     type_params: FxHashMap<JsWord, Type>,
+
+    type_elements: FxHashMap<JsWord, Type>,
 }
 
 /// Type inference for arguments.
@@ -204,7 +206,13 @@ impl Analyzer<'_, '_> {
                         ..
                     }),
                 ..
-            }) => {}
+            }) => {
+                inferred
+                    .type_elements
+                    .insert(param_obj.name.clone(), arg.clone());
+
+                return Ok(());
+            }
 
             Type::Function(p) => match arg {
                 Type::Function(a) => {
@@ -292,13 +300,28 @@ impl Analyzer<'_, '_> {
                 match arg {
                     Type::TypeLit(arg) => {
                         if let Some(param_ty) = &param.ty {
+                            let mut new_members =
+                                Vec::<TypeElement>::with_capacity(arg.members.len());
                             for member in &arg.members {
                                 match member {
                                     TypeElement::Property(p) => {
                                         //
-                                        if let Some(pt) = &p.type_ann {
+                                        let old = take(&mut inferred.type_elements);
+                                        let type_ann = if let Some(pt) = &p.type_ann {
                                             self.infer_type(inferred, param_ty, pt)?;
-                                        }
+
+                                            inferred.type_elements.remove(&param.type_param.name)
+                                        } else {
+                                            None
+                                        };
+                                        new_members.push(TypeElement::Property(
+                                            PropertySignature {
+                                                type_ann,
+                                                ..p.clone()
+                                            },
+                                        ));
+
+                                        inferred.type_elements = old;
                                     }
                                     _ => log::error!(
                                         "infer_type: Mapped <- Assign: TypeElement({:?})",
@@ -306,6 +329,17 @@ impl Analyzer<'_, '_> {
                                     ),
                                 }
                             }
+
+                            assert_eq!(
+                                inferred.type_params.insert(
+                                    param.type_param.name.clone(),
+                                    Type::TypeLit(TypeLit {
+                                        span: arg.span,
+                                        members: new_members
+                                    })
+                                ),
+                                None
+                            );
                         }
 
                         return Ok(());
