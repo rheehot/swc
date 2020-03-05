@@ -360,8 +360,11 @@ impl Analyzer<'_, '_> {
                             assert_eq!(
                                 inferred.type_params.insert(
                                     match param.type_param.constraint {
-                                        Some(box Type::Param(ref tp)) => {
-                                            tp.name.clone()
+                                        Some(box Type::Operator(Operator {
+                                            ty: box Type::Param(TypeParam { ref name, .. }),
+                                            ..
+                                        })) => {
+                                            name.clone()
                                         }
                                         _ => unreachable!(),
                                     },
