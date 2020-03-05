@@ -321,6 +321,13 @@ impl Analyzer<'_, '_> {
                     ..
                 },
             ) => {
+                let name = match param.type_param.constraint {
+                    Some(box Type::Operator(Operator {
+                        ty: box Type::Param(TypeParam { ref name, .. }),
+                        ..
+                    })) => name.clone(),
+                    _ => unreachable!(),
+                };
                 //
                 match arg {
                     Type::TypeLit(arg) => {
@@ -335,7 +342,7 @@ impl Analyzer<'_, '_> {
                                         let type_ann = if let Some(pt) = &p.type_ann {
                                             self.infer_type(inferred, param_ty, pt)?;
 
-                                            inferred.type_elements.remove(&param.type_param.name)
+                                            inferred.type_elements.remove(&name)
                                         } else {
                                             None
                                         };
@@ -357,15 +364,7 @@ impl Analyzer<'_, '_> {
 
                             assert_eq!(
                                 inferred.type_params.insert(
-                                    match param.type_param.constraint {
-                                        Some(box Type::Operator(Operator {
-                                            ty: box Type::Param(TypeParam { ref name, .. }),
-                                            ..
-                                        })) => {
-                                            name.clone()
-                                        }
-                                        _ => unreachable!(),
-                                    },
+                                    name,
                                     Type::TypeLit(TypeLit {
                                         span: arg.span,
                                         members: new_members
