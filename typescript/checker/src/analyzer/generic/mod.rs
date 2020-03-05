@@ -30,6 +30,9 @@ struct InferData {
     /// Inferred type parameters
     type_params: FxHashMap<JsWord, Type>,
 
+    /// Type parameters which requires renaming.
+    pending_type_params: FxHashMap<JsWord, Type>,
+
     type_elements: FxHashMap<JsWord, Type>,
 }
 
@@ -62,6 +65,8 @@ impl Analyzer<'_, '_> {
 
             self.infer_type(&mut inferred, &p.ty, &arg.ty)?;
         }
+
+        log::error!("{:#?}", inferred);
 
         let mut params = Vec::with_capacity(type_params.len());
         for type_param in type_params {
@@ -293,9 +298,31 @@ impl Analyzer<'_, '_> {
                 _ => {}
             },
 
-            Type::Alias(param) => return self.infer_type(inferred, &param.ty, arg),
+            Type::Alias(param) => {
+                self.infer_type(inferred, &param.ty, arg)?;
+                if let Some(type_params) = &param.type_params {
+                    self.rename_inferred(inferred, type_params)?;
+                }
+                return Ok(());
+            }
 
-            Type::Mapped(param) => {
+            Type::Mapped(
+                param
+                @
+                Mapped {
+                    type_param:
+                        TypeParam {
+                            constraint:
+                                Some(box Type::Operator(Operator {
+                                    op: TsTypeOperatorOp::KeyOf,
+                                    ty: box Type::Param(..),
+                                    ..
+                                })),
+                            ..
+                        },
+                    ..
+                },
+            ) => {
                 //
                 match arg {
                     Type::TypeLit(arg) => {
@@ -332,7 +359,12 @@ impl Analyzer<'_, '_> {
 
                             assert_eq!(
                                 inferred.type_params.insert(
-                                    param.type_param.name.clone(),
+                                    match param.type_param.constraint {
+                                        Some(box Type::Param(ref tp)) => {
+                                            tp.name.clone()
+                                        }
+                                        _ => unreachable!(),
+                                    },
                                     Type::TypeLit(TypeLit {
                                         span: arg.span,
                                         members: new_members
