@@ -409,6 +409,7 @@ impl Analyzer<'_, '_> {
                                     TypeElement::Property(p) => {
                                         //
                                         log::info!("{:?}", p);
+                                        members.push(m.clone());
                                     }
 
                                     _ => unimplemented!(
