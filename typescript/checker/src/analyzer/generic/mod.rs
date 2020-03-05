@@ -29,11 +29,6 @@ mod remover;
 struct InferData {
     /// Inferred type parameters
     type_params: FxHashMap<JsWord, Type>,
-
-    /// Key is the name of the type parameter.
-    ///
-    /// Note that order is very important.
-    type_element_types: FxHashMap<JsWord, Vec<Type>>,
 }
 
 /// Type inference for arguments.
@@ -209,15 +204,7 @@ impl Analyzer<'_, '_> {
                         ..
                     }),
                 ..
-            }) => {
-                if let Some(ref mut types) = inferred.type_element_types {
-                    types
-                        .entry(param_obj.name.clone())
-                        .or_default()
-                        .push(arg.clone());
-                }
-                return Ok(());
-            }
+            }) => {}
 
             Type::Function(p) => match arg {
                 Type::Function(a) => {
