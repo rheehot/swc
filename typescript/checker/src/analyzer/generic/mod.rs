@@ -25,6 +25,12 @@ use swc_ecma_utils::Id;
 
 mod remover;
 
+#[derive(Debug, Default)]
+struct InferData {
+    /// Inferred type parameters
+    inferred: FxHashMap<JsWord, Type>,
+}
+
 /// Type inference for arguments.
 impl Analyzer<'_, '_> {
     /// TODO: implement
@@ -211,7 +217,35 @@ impl Analyzer<'_, '_> {
             Type::Keyword(..) => {}
 
             Type::Ref(param) => match arg {
-                Type::Ref(arg) => {}
+                Type::Ref(arg) => {
+                    if param.type_args.is_none() && arg.type_args.is_none() {
+                        return Ok(());
+                    }
+                    if param.type_args.is_none() || arg.type_args.is_none() {
+                        unimplemented!(
+                            "Comparing `Ref<T>` (with type args) and `Ref` (without type args)"
+                        );
+                    }
+
+                    for pa in param
+                        .type_args
+                        .as_ref()
+                        .unwrap()
+                        .params
+                        .iter()
+                        .zip_longest(arg.type_args.as_ref().unwrap().params.iter())
+                    {
+                        match pa {
+                            EitherOrBoth::Both(param, arg) => {
+                                self.infer_type(inferred, param, arg)?;
+                            }
+                            _ => {
+                                // TODO: default parameter
+                            }
+                        }
+                    }
+                    return Ok(());
+                }
                 _ => {
                     let param = self.expand_fully(param.span(), Type::Ref(param.clone()), true)?;
                     match param {
@@ -234,10 +268,33 @@ impl Analyzer<'_, '_> {
                 _ => {}
             },
 
-            // Handled by generic expander, so let's return it as-is.
-            Type::Mapped(..) => {}
-
             Type::Alias(param) => return self.infer_type(inferred, &param.ty, arg),
+
+            Type::Mapped(param) => match arg {
+                Type::TypeLit(arg) => {
+                    let mut new_members = Default::default();
+                    for member in &arg.members {
+                        match member {
+                            TypeElement::Property(p) => {
+                                //
+                                if let Some(pt) = &p.type_ann {
+                                    if let Some(param_ty) = &param.ty {
+                                        self.infer_type(&mut new_members, param_ty, pt)?;
+                                    }
+                                }
+                            }
+                            _ => log::error!(
+                                "infer_type: Mapped <- Assign: TypeElement({:?})",
+                                member
+                            ),
+                        }
+                    }
+
+                    log::info!("Members: {:?}", new_members);
+                }
+                // Handled by generic expander, so let's return it as-is.
+                _ => {}
+            },
 
             _ => {}
         }
