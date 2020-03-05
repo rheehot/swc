@@ -44,7 +44,7 @@ impl Validate<ClassProp> for Analyzer<'_, '_> {
         if p.type_ann.is_none() {
             p.type_ann = value
                 .as_ref()
-                .map(|value: &Type| value.generalize_lit().into_owned().into());
+                .map(|value: &Type| value.clone().generalize_lit().into_owned().into());
         }
 
         Ok(ty::ClassProperty {
@@ -317,7 +317,7 @@ impl Validate<ClassMethod> for Analyzer<'_, '_> {
         });
 
         if c.kind != MethodKind::Setter {
-            c.function.return_type = Some(ret_ty.generalize_lit().into_owned().into());
+            c.function.return_type = Some(ret_ty.clone().generalize_lit().into_owned().into());
         }
 
         Ok(ty::Method {

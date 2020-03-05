@@ -158,7 +158,7 @@ impl Analyzer<'_, '_> {
             ];
 
             for (kwd, interface) in special_cases {
-                let rhs = rhs.generalize_lit();
+                let rhs = rhs.clone().generalize_lit();
                 match to.normalize() {
                     Type::Keyword(k) if k.kind == *kwd => match *rhs.normalize() {
                         Type::Interface(ref i) => {

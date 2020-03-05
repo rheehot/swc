@@ -2,7 +2,7 @@ use crate::{util::TypeEq, ModuleTypeInfo};
 use is_macro::Is;
 use std::{borrow::Cow, mem::transmute, sync::Arc};
 use swc_atoms::{js_word, JsWord};
-use swc_common::{Fold, FromVariant, Span, Spanned, DUMMY_SP};
+use swc_common::{Fold, FoldWith, FromVariant, Span, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
 use swc_ecma_utils::{
     Value,
@@ -454,38 +454,32 @@ pub struct TypeOrSpread {
     pub ty: Type,
 }
 
-impl Type {
-    pub fn generalize_lit(&self) -> Cow<Self> {
-        let span = self.span();
+struct LitGeneralizer;
+impl Fold<Type> for LitGeneralizer {
+    fn fold(&mut self, mut ty: Type) -> Type {
+        ty = ty.fold_children(self);
 
-        match self.normalize() {
-            Type::Lit(TsLitType { ref lit, .. }) => {
-                return Cow::Owned(Type::Keyword(TsKeywordType {
+        match ty {
+            Type::Lit(TsLitType { span, ref lit, .. }) => {
+                return Type::Keyword(TsKeywordType {
                     span,
                     kind: match *lit {
                         TsLit::Bool(Bool { .. }) => TsKeywordTypeKind::TsBooleanKeyword,
                         TsLit::Number(Number { .. }) => TsKeywordTypeKind::TsNumberKeyword,
                         TsLit::Str(Str { .. }) => TsKeywordTypeKind::TsStringKeyword,
                     },
-                }))
+                })
             }
-            Type::Union(Union { ref types, .. }) => {
-                let mut tys: Vec<Type> = Vec::with_capacity(types.len());
-
-                for ty in types {
-                    let ty = ty.generalize_lit().into_owned();
-                    let dup = tys.iter().any(|t| t.type_eq(&ty));
-                    if !dup {
-                        tys.push(ty);
-                    }
-                }
-
-                return Cow::Owned(Type::union(tys));
-            }
-            _ => {}
+            _ => ty,
         }
+    }
+}
 
-        Cow::Borrowed(self)
+impl Type {
+    pub fn generalize_lit(self) -> Self {
+        let span = self.span();
+
+        self.into_owned().fold_with(&mut LitGeneralizer)
     }
 
     pub fn union<I: IntoIterator<Item = Self>>(iter: I) -> Self {

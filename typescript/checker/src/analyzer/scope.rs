@@ -583,7 +583,7 @@ impl Analyzer<'_, '_> {
                         match ty {
                             Type::Query(..) | Type::Function(..) => {}
                             _ => {
-                                let generalized_var_ty = var_ty.generalize_lit();
+                                let generalized_var_ty = var_ty.clone().generalize_lit();
 
                                 match var_ty {
                                     // Allow override query type.
