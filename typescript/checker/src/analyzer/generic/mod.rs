@@ -29,15 +29,15 @@ mod remover;
 struct InferData {
     /// Inferred type parameters
     type_params: FxHashMap<JsWord, Type>,
+
     /// Key is the name of the type parameter.
     ///
     /// Note that order is very important.
-    type_elements: FxHashMap<JsWord, Vec<Type>>,
+    type_element_types: FxHashMap<JsWord, Vec<Type>>,
 }
 
 /// Type inference for arguments.
 impl Analyzer<'_, '_> {
-    /// TODO: implement
     pub(super) fn infer_arg_types(
         &mut self,
         span: Span,
@@ -202,15 +202,20 @@ impl Analyzer<'_, '_> {
 
             // TODO: Check if index type extends `keyof obj_type`
             Type::IndexedAccessType(IndexedAccessType {
-                obj_type: box Type::Param(_param_obj),
-                index_type: box Type::Param(param_index),
+                obj_type: box Type::Param(param_obj),
+                index_type:
+                    box Type::Param(TypeParam {
+                        constraint: Some(..),
+                        ..
+                    }),
                 ..
             }) => {
-                inferred
-                    .type_elements
-                    .entry(param_index.name.clone())
-                    .or_default()
-                    .push(arg.clone());
+                if let Some(ref mut types) = inferred.type_element_types {
+                    types
+                        .entry(param_obj.name.clone())
+                        .or_default()
+                        .push(arg.clone());
+                }
                 return Ok(());
             }
 
@@ -295,42 +300,33 @@ impl Analyzer<'_, '_> {
 
             Type::Alias(param) => return self.infer_type(inferred, &param.ty, arg),
 
-            Type::Mapped(param) => match arg {
-                Type::TypeLit(arg) => {
-                    if let Some(param_ty) = &param.ty {
-                        let mut new_members: Vec<TypeElement> = Default::default();
-                        for member in &arg.members {
-                            match member {
-                                TypeElement::Property(p) => {
-                                    //
-                                    if let Some(pt) = &p.type_ann {
-                                        self.infer_type(inferred, param_ty, pt)?;
-                                        if let Some(types) =
-                                            inferred.type_elements.remove(&param.type_param.name)
-                                        {
-                                            let ty = Type::union(types);
-                                            new_members.push(TypeElement::Property(
-                                                PropertySignature {
-                                                    type_ann: Some(ty),
-                                                    ..p.clone()
-                                                },
-                                            ))
+            Type::Mapped(param) => {
+                //
+                match arg {
+                    Type::TypeLit(arg) => {
+                        if let Some(param_ty) = &param.ty {
+                            for member in &arg.members {
+                                match member {
+                                    TypeElement::Property(p) => {
+                                        //
+                                        if let Some(pt) = &p.type_ann {
+                                            self.infer_type(inferred, param_ty, pt)?;
                                         }
                                     }
+                                    _ => log::error!(
+                                        "infer_type: Mapped <- Assign: TypeElement({:?})",
+                                        member
+                                    ),
                                 }
-                                _ => log::error!(
-                                    "infer_type: Mapped <- Assign: TypeElement({:?})",
-                                    member
-                                ),
                             }
                         }
 
-                        log::info!("Members: {:?}", new_members);
+                        return Ok(());
                     }
+                    // Handled by generic expander, so let's return it as-is.
+                    _ => {}
                 }
-                // Handled by generic expander, so let's return it as-is.
-                _ => {}
-            },
+            }
 
             _ => {}
         }
