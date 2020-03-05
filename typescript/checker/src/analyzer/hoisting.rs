@@ -80,7 +80,7 @@ impl Analyzer<'_, '_> {
                 node.visit_with(&mut v);
             }
 
-            log::info!("Id graph: ({}) ({:?}) <-- {:?}", idx, ids, deps);
+            // log::info!("Id graph: ({}) ({:?}) <-- {:?}", idx, ids, deps);
             order_idx_by_id.extend(ids.iter().cloned().map(|id| (id, idx)));
 
             for id in ids.drain() {
@@ -112,7 +112,7 @@ impl Analyzer<'_, '_> {
 
         for (idx, _) in nodes.iter().enumerate() {
             if let Some(node_ids) = node_ids_by_order_idx.get(&idx) {
-                log::info!("node_ids_by_order_idx: {}", node_ids.len());
+                // log::info!("node_ids_by_order_idx: {}", node_ids.len());
 
                 for &node_id in node_ids {
                     let mut visitor = DfsPostOrder::new(&ids_graph, node_id);
@@ -120,10 +120,10 @@ impl Analyzer<'_, '_> {
                     while let Some(node_id) = visitor.next(&ids_graph) {
                         let id = ids_graph.node_weight(node_id).unwrap();
                         if let Some(&order_of_the_id) = order_idx_by_id.get(&id) {
-                            log::error!("Order graph: {} <- {}", idx, order_of_the_id);
+                            // log::error!("Order graph: {} <- {}", idx, order_of_the_id);
 
                             if idx < order_of_the_id {
-                                log::info!("Swap: {} <-> {}", idx, order_of_the_id);
+                                // log::info!("Swap: {} <-> {}", idx, order_of_the_id);
                                 order.swap(order_of_the_id, idx)
                             }
                         }
@@ -132,7 +132,7 @@ impl Analyzer<'_, '_> {
             }
         }
 
-        log::info!("{:?}", order);
+        // log::info!("{:?}", order);
 
         order
     }
