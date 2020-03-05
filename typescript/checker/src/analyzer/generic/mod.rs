@@ -177,7 +177,7 @@ impl Analyzer<'_, '_> {
 
                         inferred
                             .type_params
-                            .insert(name, Type::union(vec![param_ty, arg.clone()]))
+                            .insert(name, Type::union(vec![param_ty, arg.clone()]));
                     }
                     Entry::Vacant(e) => {
                         e.insert(arg.clone());
