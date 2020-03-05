@@ -106,10 +106,11 @@ impl Analyzer<'_, '_> {
                 );
 
                 // Defaults to {}
-                params.push(Type::TypeLit(TypeLit {
-                    span,
-                    members: vec![],
-                }));
+                // params.push(Type::TypeLit(TypeLit {
+                //     span,
+                //     members: vec![],
+                // }));
+                params.push(type_param.clone().into());
             }
         }
 
