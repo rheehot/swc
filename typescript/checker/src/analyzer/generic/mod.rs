@@ -213,9 +213,11 @@ impl Analyzer<'_, '_> {
             Type::Ref(param) => match arg {
                 Type::Ref(arg) => {}
                 _ => {
-                    let param = self.expand(param.span(), Type::Ref(param.clone()))?;
+                    let param = self.expand_fully(param.span(), Type::Ref(param.clone()), true)?;
                     match param {
-                        Type::Ref(..) => {}
+                        Type::Ref(..) => {
+                            log::info!("Ref: {:?}", param);
+                        }
                         _ => return self.infer_type(inferred, &param, arg),
                     }
                 }
