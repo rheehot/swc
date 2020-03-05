@@ -355,7 +355,7 @@ impl Analyzer<'_, '_> {
 
                                         inferred.type_elements = old;
                                     }
-                                    _ => log::error!(
+                                    _ => unimplemented!(
                                         "infer_type: Mapped <- Assign: TypeElement({:?})",
                                         member
                                     ),
@@ -372,6 +372,51 @@ impl Analyzer<'_, '_> {
                                 ),
                                 None
                             );
+                        }
+
+                        return Ok(());
+                    }
+                    // Handled by generic expander, so let's return it as-is.
+                    _ => {}
+                }
+            }
+
+            Type::Mapped(
+                param
+                @
+                Mapped {
+                    type_param:
+                        TypeParam {
+                            constraint: Some(box Type::Param(..)),
+                            ..
+                        },
+                    ..
+                },
+            ) => {
+                let name = match param.type_param.constraint {
+                    Some(box Type::Param(TypeParam { name, .. })) => name.clone(),
+                    _ => unreachable!(),
+                };
+                //
+                match arg {
+                    Type::TypeLit(arg) => {
+                        //
+                        if let Some(param_ty) = &param.ty {
+                            let mut members = Vec::with_capacity(arg.members.len());
+
+                            for m in &arg.members {
+                                match m {
+                                    TypeElement::Property(p) => {
+                                        //
+                                        log::info!("{:?}", p)
+                                    }
+
+                                    _ => unimplemented!(
+                                        "infer_type: Mapped <- Assign: TypeElement({:?})",
+                                        m
+                                    ),
+                                }
+                            }
                         }
 
                         return Ok(());
