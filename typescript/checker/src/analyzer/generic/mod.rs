@@ -409,7 +409,13 @@ impl Analyzer<'_, '_> {
                                 match m {
                                     TypeElement::Property(p) => {
                                         //
-                                        members.push(m.clone());
+                                        if let Some(ref type_ann) = p.type_ann {
+                                            self.infer_type(inferred, &param_ty, &type_ann)?;
+                                        }
+                                        members.push(TypeElement::Property(PropertySignature {
+                                            type_ann: None,
+                                            ..p.clone()
+                                        }));
                                     }
 
                                     _ => unimplemented!(
@@ -419,13 +425,12 @@ impl Analyzer<'_, '_> {
                                 }
                             }
 
-                            inferred.type_params.insert(
-                                name.clone(),
-                                Type::TypeLit(TypeLit {
-                                    span: arg.span,
-                                    members,
-                                }),
-                            );
+                            let list_ty = Type::TypeLit(TypeLit {
+                                span: arg.span,
+                                members,
+                            });
+
+                            inferred.type_params.insert(name.clone(), list_ty);
                         }
 
                         return Ok(());
