@@ -143,7 +143,8 @@ impl Analyzer<'_, '_> {
                     log::debug!("infer: {} = {:?}", name, constraint);
                     inferred
                         .type_params
-                        .insert(name.clone(), *constraint.clone().unwrap());
+                        .insert(name.clone(), *constraint.clone().unwrap())
+                        .expect_none("Cannot override");
                     return Ok(());
                 }
 
@@ -159,24 +160,24 @@ impl Analyzer<'_, '_> {
                     log::debug!("infer: {} = {:?}", name, constraint);
                     inferred
                         .type_params
-                        .insert(name.clone(), *constraint.clone().unwrap());
+                        .insert(name.clone(), *constraint.clone().unwrap())
+                        .expect_none("Cannot override");
                     return Ok(());
                 }
 
                 log::info!("({}): infer: {} = {:?}", self.scope.depth(), name, arg);
                 match inferred.type_params.entry(name.clone()) {
-                    Entry::Occupied(e) => {
-                        match e.get() {
-                            Type::Param(..) => return Ok(()),
-                            _ => {}
-                        }
-
+                    Entry::Occupied(mut e) => {
                         // Use this for type inference.
-                        let param_ty = e.get().clone();
+                        let (name, param_ty) = e.remove_entry();
 
                         // We pass in inverse order to infer type of arg from the type information
                         // of parameter
                         self.infer_type(inferred, &arg, &param_ty)?;
+
+                        inferred
+                            .type_params
+                            .insert(name, Type::union(vec![param_ty, arg.clone()]))
                     }
                     Entry::Vacant(e) => {
                         e.insert(arg.clone());
@@ -408,7 +409,6 @@ impl Analyzer<'_, '_> {
                                 match m {
                                     TypeElement::Property(p) => {
                                         //
-                                        log::info!("{:?}", p);
                                         members.push(m.clone());
                                     }
 

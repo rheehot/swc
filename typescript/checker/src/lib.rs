@@ -7,6 +7,7 @@
 #![feature(specialization)]
 #![feature(try_blocks)]
 #![feature(vec_remove_item)]
+#![feature(option_expect_none)]
 #![recursion_limit = "1024"]
 
 #[macro_use]
