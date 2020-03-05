@@ -109,6 +109,7 @@ impl Validate<AssignExpr> for Analyzer<'_, '_> {
             };
 
             if e.op == op!("=") {
+                let rhs_ty = a.expand_fully(span, rhs_ty.clone(), true)?;
                 a.try_assign(span, &mut e.left, &rhs_ty);
             }
 
