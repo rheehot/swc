@@ -740,6 +740,7 @@ impl Fold<Type> for GenericExpander<'_> {
             Type::Mapped(..) => true,
             _ => false,
         };
+        let span = ty.span();
 
         match ty {
             Type::Ref(Ref {
@@ -855,6 +856,26 @@ impl Fold<Type> for GenericExpander<'_> {
                 m = m.fold_with(self);
 
                 match m.type_param.constraint {
+                    Some(box Type::TypeLit(lit)) => {
+                        let ty = m.ty.clone();
+
+                        let members = lit
+                            .members
+                            .into_iter()
+                            .map(|mut v| match v {
+                                TypeElement::Property(ref mut p) => {
+                                    p.type_ann = ty.clone().map(|v| *v.clone());
+
+                                    v
+                                }
+                                _ => unimplemented!(
+                                    "type element other than property in a mapped type"
+                                ),
+                            })
+                            .collect();
+                        return Type::TypeLit(TypeLit { span, members });
+                    }
+
                     Some(box Type::Operator(Operator {
                         op: TsTypeOperatorOp::KeyOf,
                         ty: box Type::Union(ref u),
