@@ -54,7 +54,7 @@ where
 {
     type Output = Result<Vec<O>, E>;
 
-    fn validate(&mut self, nodes: &mut Vec<T>) -> Self::Output {
+    default fn validate(&mut self, nodes: &mut Vec<T>) -> Self::Output {
         nodes.iter_mut().map(|node| self.validate(node)).collect()
     }
 }
