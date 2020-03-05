@@ -394,7 +394,7 @@ impl Analyzer<'_, '_> {
                 },
             ) => {
                 let name = match param.type_param.constraint {
-                    Some(box Type::Param(TypeParam { name, .. })) => name.clone(),
+                    Some(box Type::Param(TypeParam { ref name, .. })) => name.clone(),
                     _ => unreachable!(),
                 };
                 //
@@ -408,7 +408,7 @@ impl Analyzer<'_, '_> {
                                 match m {
                                     TypeElement::Property(p) => {
                                         //
-                                        log::info!("{:?}", p)
+                                        log::info!("{:?}", p);
                                     }
 
                                     _ => unimplemented!(
@@ -417,6 +417,14 @@ impl Analyzer<'_, '_> {
                                     ),
                                 }
                             }
+
+                            inferred.type_params.insert(
+                                name.clone(),
+                                Type::TypeLit(TypeLit {
+                                    span: arg.span,
+                                    members,
+                                }),
+                            );
                         }
 
                         return Ok(());
