@@ -318,10 +318,14 @@ impl Analyzer<'_, '_> {
             },
 
             // TODO: implement
-            Type::Union(..) => match arg {
-                Type::Union(..) => {}
-                _ => {}
-            },
+            Type::Union(param) => {
+                //
+                for p in &param.types {
+                    self.infer_type(inferred, p, arg)?;
+                }
+
+                return Ok(());
+            }
 
             Type::Alias(param) => {
                 self.infer_type(inferred, &param.ty, arg)?;
