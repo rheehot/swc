@@ -131,6 +131,21 @@ impl Analyzer<'_, '_> {
         let param = param.normalize();
         let arg = arg.normalize();
 
+        match arg {
+            Type::Union(arg) => {
+                //
+                log::error!("Param: {:#?}", param);
+
+                for a in &arg.types {
+                    log::error!("Arg: {:#?}", a);
+                    self.infer_type(inferred, param, a)?;
+                }
+
+                return Ok(());
+            }
+            _ => {}
+        }
+
         match param {
             Type::Param(TypeParam {
                 ref name,
@@ -140,7 +155,7 @@ impl Analyzer<'_, '_> {
                 log::trace!("infer_type: type parameter: {} = {:?}", name, constraint);
 
                 if constraint.is_some() && is_literals(&constraint.as_ref().unwrap()) {
-                    log::debug!("infer: {} = {:?}", name, constraint);
+                    log::info!("infer: {} = {:?}", name, constraint);
                     inferred
                         .type_params
                         .insert(name.clone(), *constraint.clone().unwrap())
@@ -157,7 +172,7 @@ impl Analyzer<'_, '_> {
                         _ => false,
                     }
                 {
-                    log::debug!("infer: {} = {:?}", name, constraint);
+                    log::info!("infer: {} = {:?}", name, constraint);
                     inferred
                         .type_params
                         .insert(name.clone(), *constraint.clone().unwrap())
@@ -177,7 +192,8 @@ impl Analyzer<'_, '_> {
 
                         inferred
                             .type_params
-                            .insert(name, Type::union(vec![param_ty, arg.clone()]));
+                            .insert(name, Type::union(vec![param_ty, arg.clone()]))
+                            .expect_none("Cannot override");
                     }
                     Entry::Vacant(e) => {
                         e.insert(arg.clone());
@@ -211,9 +227,19 @@ impl Analyzer<'_, '_> {
                     }),
                 ..
             }) => {
-                inferred
-                    .type_elements
-                    .insert(param_obj.name.clone(), arg.clone());
+                match inferred.type_elements.entry(param_obj.name.clone()) {
+                    Entry::Occupied(mut e) => {
+                        let (name, prev_ty) = e.remove_entry();
+
+                        inferred
+                            .type_elements
+                            .insert(name, Type::union(vec![prev_ty, arg.clone()]))
+                            .expect_none("Cannot override");
+                    }
+                    Entry::Vacant(e) => {
+                        e.insert(arg.clone());
+                    }
+                }
 
                 return Ok(());
             }
@@ -267,7 +293,7 @@ impl Analyzer<'_, '_> {
                             }
                             _ => {
                                 unimplemented!(
-                                    "type inference: Comparisong of Ref<Arg1, Arg2> and Ref<Arg1> \
+                                    "type inference: Comparison of Ref<Arg1, Arg2> and Ref<Arg1> \
                                      (different length)"
                                 );
                             }
@@ -430,7 +456,10 @@ impl Analyzer<'_, '_> {
                                 members,
                             });
 
-                            inferred.type_params.insert(name.clone(), list_ty);
+                            inferred
+                                .type_params
+                                .insert(name.clone(), list_ty)
+                                .expect_none("Cannot override");
                         }
 
                         return Ok(());
