@@ -27,7 +27,7 @@ use test::{test_main, DynTestFn, ShouldPanic::No, TestDesc, TestDescAndFn, TestN
 use testing::{DropSpan, NormalizedOutput, StdErr};
 
 #[test]
-#[ignore]
+#[ignore] // Copies of all tests live in the fixtures directory.
 fn conformance_test() {
     let args: Vec<_> = env::args().collect();
     let mut tests = Vec::new();
@@ -36,6 +36,8 @@ fn conformance_test() {
 }
 
 fn add_conformance_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
+    testing::prepare();
+
     let root = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("..")
         .join("checker")
@@ -138,6 +140,8 @@ fn fixtures_test() {
 }
 
 fn add_fixture_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
+    testing::prepare();
+
     let root = {
         let mut root = Path::new(env!("CARGO_MANIFEST_DIR")).to_path_buf();
         root.push("tests");
