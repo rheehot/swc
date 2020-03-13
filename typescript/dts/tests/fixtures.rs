@@ -195,7 +195,7 @@ fn add_fixture_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
             .map(|s| !file_name.replace("/", "::").contains(&s))
             .unwrap_or(false);
 
-        let name = format!("fixture::{}", test_name);
+        let name = format!("{}", test_name);
 
         add_test(tests, name, ignore, move || {
             println!("----- Input -----\n{}", input);
