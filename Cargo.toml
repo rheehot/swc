@@ -49,5 +49,3 @@ codegen-units = 1
 debug = true
 
 
-[patch.crates-io]
-failure_derive = { git = "https://github.com/grokse/failure.git", branch = "build_quote_103" }
