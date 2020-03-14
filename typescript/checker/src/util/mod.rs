@@ -39,25 +39,6 @@ impl_by_clone!(TsLitType);
 impl_by_clone!(PropName);
 impl_by_clone!(Class);
 
-impl<T> TypeEq<Vec<T>> for Vec<T>
-where
-    T: TypeEq,
-{
-    fn type_eq(&self, to: &Vec<T>) -> bool {
-        if self.len() != to.len() {
-            return false;
-        }
-
-        for (a, b) in self.iter().zip(to.iter()) {
-            if !a.type_eq(b) {
-                return false;
-            }
-        }
-
-        true
-    }
-}
-
 struct SpanRemover;
 impl Fold<Span> for SpanRemover {
     fn fold(&mut self, _: Span) -> Span {
