@@ -32,3 +32,4 @@ let b = makeDictionary({
     b: box("hello"),
     c: box(true)
 });
+let v = unboxify(b);

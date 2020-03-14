@@ -32,3 +32,5 @@ let b = makeDictionary({
     b: box("hello"),
     c: box(true)
 });
+let v = unboxify(b);
+let x: string | number | boolean = v[s];
