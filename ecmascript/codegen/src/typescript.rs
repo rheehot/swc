@@ -237,9 +237,11 @@ impl<'a> Emitter<'a> {
         self.emit_list(n.span, Some(&n.params), ListFormat::Parameters)?;
         punct!("]");
 
-        punct!(":");
-        formatting_space!();
-        emit!(n.type_ann);
+        if let Some(type_ann) = &n.type_ann {
+            punct!(":");
+            formatting_space!();
+            emit!(type_ann);
+        }
     }
 
     #[emitter]
