@@ -240,7 +240,6 @@ impl<'a> Emitter<'a> {
         punct!(":");
         formatting_space!();
         emit!(n.type_ann);
-        semi!();
     }
 
     #[emitter]
