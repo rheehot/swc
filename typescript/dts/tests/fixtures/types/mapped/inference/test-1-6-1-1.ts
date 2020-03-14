@@ -19,10 +19,10 @@ declare function unboxify<T>(obj: Boxified<T>): T;
 
 declare function assignBoxified<T>(obj: Boxified<T>, values: T): void;
 
-declare function makeDictionary<T>(obj: {
-    [x: string]: T;
+declare function makeDictionary<D>(obj: {
+    [x: string]: D;
 }): {
-    [x: string]: T;
+    [x: string]: D;
 };
 
 declare var s: string;
