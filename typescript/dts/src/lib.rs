@@ -4,7 +4,14 @@
 
 use crate::{ambient::RealImplRemover, dce::get_used};
 use fxhash::FxHashSet;
-use std::{collections::hash_map::Entry, sync::Arc};
+use std::{
+    cmp::{
+        Ordering,
+        Ordering::{Equal, Greater},
+    },
+    collections::hash_map::Entry,
+    sync::Arc,
+};
 use swc_atoms::JsWord;
 use swc_common::{util::move_map::MoveMap, Fold, FoldWith, Spanned, DUMMY_SP};
 use swc_ecma_ast::*;
@@ -584,5 +591,32 @@ impl Fold<ModuleItem> for TypeResolver {
         }
 
         node
+    }
+}
+
+/// Sorts the type.
+///
+/// Note: I don't know why tsc does such strange operation, but I want to
+/// replace tsc.
+impl Fold<TsUnionType> for TypeResolver {
+    fn fold(&mut self, mut u: TsUnionType) -> TsUnionType {
+        fn rank(kind: TsKeywordTypeKind) -> u8 {
+            match kind {
+                TsKeywordTypeKind::TsStringKeyword => 0,
+                TsKeywordTypeKind::TsNumberKeyword => 1,
+                TsKeywordTypeKind::TsBooleanKeyword => 2,
+                // TODO(kdy1): Implement fully
+                _ => 4,
+            }
+        }
+
+        u.types.sort_by(|a, b| match (&**a, &**b) {
+            (&TsType::TsKeywordType(ref a), &TsType::TsKeywordType(ref b)) => {
+                rank(a.kind).cmp(&rank(b.kind))
+            }
+            _ => Equal,
+        });
+
+        u
     }
 }

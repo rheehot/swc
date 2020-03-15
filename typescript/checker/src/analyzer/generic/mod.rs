@@ -5,9 +5,9 @@ use crate::{
     builtin_types,
     debug::print_backtrace,
     ty::{
-        self, Alias, Array, CallSignature, Conditional, FnParam, IndexedAccessType, Interface,
-        Mapped, Operator, PropertySignature, Ref, Tuple, Type, Type::Param, TypeElement, TypeLit,
-        TypeOrSpread, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
+        self, Alias, Array, CallSignature, Conditional, FnParam, IndexSignature, IndexedAccessType,
+        Interface, Mapped, Operator, PropertySignature, Ref, Tuple, Type, Type::Param, TypeElement,
+        TypeLit, TypeOrSpread, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
     },
     ValidationResult,
 };
@@ -130,6 +130,7 @@ impl Analyzer<'_, '_> {
     ) -> ValidationResult<()> {
         let param = param.normalize();
         let arg = arg.normalize();
+        dbg!();
 
         match arg {
             Type::Union(arg) => {
@@ -145,6 +146,8 @@ impl Analyzer<'_, '_> {
             }
             _ => {}
         }
+
+        dbg!((&param, &arg));
 
         match param {
             Type::Param(TypeParam {
@@ -214,7 +217,9 @@ impl Analyzer<'_, '_> {
                     return self.infer_type(inferred, &elem_type, &arg);
                 }
 
-                _ => {}
+                _ => {
+                    dbg!();
+                }
             },
 
             // TODO: Check if index type extends `keyof obj_type`
@@ -253,20 +258,28 @@ impl Analyzer<'_, '_> {
                     }
                     return Ok(());
                 }
-                _ => {}
+                _ => {
+                    dbg!();
+                }
             },
 
             Type::TypeLit(param) => match arg {
                 Type::TypeLit(arg) => return self.infer_type_lit(inferred, param, arg),
-                _ => {}
+                _ => {
+                    dbg!();
+                }
             },
 
             Type::Tuple(param) => match arg {
                 Type::Tuple(arg) => return self.infer_tuple(inferred, param, arg),
-                _ => {}
+                _ => {
+                    dbg!();
+                }
             },
 
-            Type::Keyword(..) => {}
+            Type::Keyword(..) => {
+                dbg!();
+            }
 
             Type::Ref(param) => match arg {
                 Type::Ref(arg) => {
@@ -305,6 +318,8 @@ impl Analyzer<'_, '_> {
                     let param = self.expand_fully(param.span(), Type::Ref(param.clone()), true)?;
                     match param {
                         Type::Ref(..) => {
+                            dbg!();
+
                             log::info!("Ref: {:?}", param);
                         }
                         _ => return self.infer_type(inferred, &param, arg),
@@ -314,7 +329,9 @@ impl Analyzer<'_, '_> {
 
             Type::Lit(..) => match arg {
                 Type::Lit(..) => return Ok(()),
-                _ => {}
+                _ => {
+                    dbg!();
+                }
             },
 
             // TODO: implement
@@ -359,9 +376,12 @@ impl Analyzer<'_, '_> {
                     })) => name.clone(),
                     _ => unreachable!(),
                 };
+                dbg!(&name);
                 //
                 match arg {
                     Type::TypeLit(arg) => {
+                        dbg!(&arg);
+
                         if let Some(param_ty) = &param.ty {
                             let mut new_members =
                                 Vec::<TypeElement>::with_capacity(arg.members.len());
@@ -386,8 +406,26 @@ impl Analyzer<'_, '_> {
 
                                         inferred.type_elements = old;
                                     }
+                                    TypeElement::Index(i) => {
+                                        let old = take(&mut inferred.type_elements);
+
+                                        let type_ann = if let Some(pt) = &i.type_ann {
+                                            self.infer_type(inferred, param_ty, pt)?;
+                                            // inferred.type_elements.remove(&name)
+                                            None
+                                        } else {
+                                            Some(Type::any(i.span))
+                                        };
+                                        new_members.push(TypeElement::Index(IndexSignature {
+                                            type_ann,
+                                            ..i.clone()
+                                        }));
+
+                                        inferred.type_elements = old;
+                                    }
+
                                     _ => unimplemented!(
-                                        "infer_type: Mapped <- Assign: TypeElement({:?})",
+                                        "infer_type: Mapped <- Assign: TypeElement({:#?})",
                                         member
                                     ),
                                 }
@@ -429,6 +467,8 @@ impl Analyzer<'_, '_> {
                     _ => unreachable!(),
                 };
                 //
+                dbg!(&name);
+
                 match arg {
                     Type::TypeLit(arg) => {
                         //
@@ -473,12 +513,18 @@ impl Analyzer<'_, '_> {
                 }
             }
 
+            Type::Mapped(..) => {
+                dbg!();
+            }
+
             _ => {}
         }
 
         match arg {
             // Handled by generic expander, so let's return it as-is.
-            Type::Mapped(..) => {}
+            Type::Mapped(..) => {
+                dbg!();
+            }
             Type::Keyword(..) => {}
             Type::Ref(..) => {
                 let arg = self.expand(arg.span(), arg.clone())?;

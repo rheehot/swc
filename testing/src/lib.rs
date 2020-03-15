@@ -273,6 +273,10 @@ pub fn prepare() {
     fn npm_install() {
         let f = manifest_dir().join("package.json");
 
+        if manifest_dir().join("node_modules").exists() {
+            return;
+        }
+
         if f.exists() {
             Command::new("npm")
                 .arg("i")
