@@ -38,6 +38,7 @@ impl_by_clone!(TsLit);
 impl_by_clone!(TsLitType);
 impl_by_clone!(PropName);
 impl_by_clone!(Class);
+impl_by_clone!(FnParam);
 
 struct SpanRemover;
 impl Fold<Span> for SpanRemover {

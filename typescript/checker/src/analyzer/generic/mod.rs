@@ -9,6 +9,7 @@ use crate::{
         Interface, Mapped, Operator, PropertySignature, Ref, Tuple, Type, Type::Param, TypeElement,
         TypeLit, TypeOrSpread, TypeParam, TypeParamDecl, TypeParamInstantiation, Union,
     },
+    util::TypeEq,
     ValidationResult,
 };
 use bitflags::_core::mem::take;
@@ -130,7 +131,6 @@ impl Analyzer<'_, '_> {
     ) -> ValidationResult<()> {
         let param = param.normalize();
         let arg = arg.normalize();
-        dbg!();
 
         match arg {
             Type::Union(arg) => {
@@ -146,8 +146,6 @@ impl Analyzer<'_, '_> {
             }
             _ => {}
         }
-
-        dbg!((&param, &arg));
 
         match param {
             Type::Param(TypeParam {
@@ -513,18 +511,12 @@ impl Analyzer<'_, '_> {
                 }
             }
 
-            Type::Mapped(..) => {
-                dbg!();
-            }
-
             _ => {}
         }
 
         match arg {
             // Handled by generic expander, so let's return it as-is.
-            Type::Mapped(..) => {
-                dbg!();
-            }
+            Type::Mapped(..) => {}
             Type::Keyword(..) => {}
             Type::Ref(..) => {
                 let arg = self.expand(arg.span(), arg.clone())?;
@@ -553,7 +545,52 @@ impl Analyzer<'_, '_> {
         param: &TypeLit,
         arg: &TypeLit,
     ) -> ValidationResult<()> {
-        // TODO: implement
+        dbg!();
+
+        for p in &param.members {
+            dbg!(&p);
+            for a in &arg.members {
+                dbg!(&a);
+                //
+
+                match p {
+                    TypeElement::Property(p) => match a {
+                        TypeElement::Property(a) => {
+                            if p.key.type_eq(&a.key) {
+                                if let Some(pt) = &p.type_ann {
+                                    if let Some(at) = &a.type_ann {
+                                        self.infer_type(inferred, pt, at)?;
+                                    } else {
+                                        dbg!((&p, &a));
+                                    }
+                                } else {
+                                    dbg!((&p, &a));
+                                }
+                            }
+                        }
+                        _ => {}
+                    },
+                    TypeElement::Index(p) => match a {
+                        TypeElement::Index(a) => {
+                            if p.params.type_eq(&a.params) {
+                                if let Some(pt) = &p.type_ann {
+                                    if let Some(at) = &a.type_ann {
+                                        self.infer_type(inferred, pt, at)?;
+                                    }
+                                } else {
+                                    dbg!((&p, &a));
+                                }
+                            } else {
+                                dbg!((&p, &a));
+                            }
+                        }
+                        _ => {}
+                    },
+                    _ => unimplemented!("TypeElement({:#?}) in type literal", p),
+                }
+            }
+        }
+
         Ok(())
     }
 
