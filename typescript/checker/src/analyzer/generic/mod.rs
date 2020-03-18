@@ -532,9 +532,9 @@ impl Analyzer<'_, '_> {
         }
 
         log::error!(
-            "infer_arg_type: unimplemented\narg = {:?}\nparam = {:?}",
+            "infer_arg_type: unimplemented\nparam  = {:?}\narg = {:?}",
+            param,
             arg,
-            param
         );
         Ok(())
     }
