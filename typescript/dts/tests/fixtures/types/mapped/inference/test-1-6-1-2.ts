@@ -27,9 +27,7 @@ declare function makeDictionary<D>(obj: {
 
 declare var s: string;
 
-let b = makeDictionary({
-    a: box(42),
-    b: box("hello"),
-    c: box(true)
-});
+declare let b: {
+    [x: string]: Box<number> | Box<string> | Box<boolean>;
+};
 let v = unboxify(b);
