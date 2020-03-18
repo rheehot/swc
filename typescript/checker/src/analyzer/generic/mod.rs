@@ -574,7 +574,6 @@ impl Analyzer<'_, '_> {
                                 );
                             }
 
-                            let param = &p.params[0];
                             if let Some(p_type_ann) = &p.type_ann {
                                 if let Some(a_type_ann) = &a.type_ann {
                                     self.infer_type(inferred, p_type_ann, a_type_ann)?;
