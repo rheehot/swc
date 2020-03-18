@@ -545,12 +545,8 @@ impl Analyzer<'_, '_> {
         param: &TypeLit,
         arg: &TypeLit,
     ) -> ValidationResult<()> {
-        dbg!();
-
         for p in &param.members {
-            dbg!(&p);
             for a in &arg.members {
-                dbg!(&a);
                 //
 
                 match p {
@@ -571,6 +567,20 @@ impl Analyzer<'_, '_> {
                         _ => {}
                     },
                     TypeElement::Index(p) => match a {
+                        TypeElement::Property(a) => {
+                            if p.params.len() != 1 {
+                                unimplemented!(
+                                    "handling of IndexSignature with zero / multiple parameters"
+                                );
+                            }
+
+                            let param = &p.params[0];
+                            if let Some(p_type_ann) = &p.type_ann {
+                                if let Some(a_type_ann) = &a.type_ann {
+                                    self.infer_type(inferred, p_type_ann, a_type_ann)?;
+                                }
+                            }
+                        }
                         TypeElement::Index(a) => {
                             if p.params.type_eq(&a.params) {
                                 if let Some(pt) = &p.type_ann {
