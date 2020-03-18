@@ -374,12 +374,9 @@ impl Analyzer<'_, '_> {
                     })) => name.clone(),
                     _ => unreachable!(),
                 };
-                dbg!(&name);
                 //
                 match arg {
                     Type::TypeLit(arg) => {
-                        dbg!(&arg);
-
                         if let Some(param_ty) = &param.ty {
                             let mut new_members =
                                 Vec::<TypeElement>::with_capacity(arg.members.len());
