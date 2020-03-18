@@ -140,8 +140,6 @@ fn fixtures_test() {
 }
 
 fn add_fixture_tests(tests: &mut Vec<TestDescAndFn>) -> Result<(), Error> {
-    testing::prepare();
-
     let root = {
         let mut root = Path::new(env!("CARGO_MANIFEST_DIR")).to_path_buf();
         root.push("tests");
