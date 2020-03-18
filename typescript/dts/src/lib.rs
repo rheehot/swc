@@ -620,3 +620,24 @@ impl Fold<TsUnionType> for TypeResolver {
         u
     }
 }
+
+impl Fold<TsIndexSignature> for TypeResolver {
+    fn fold(&mut self, sig: TsIndexSignature) -> TsIndexSignature {
+        let sig = sig.fold_children(self);
+
+        if sig.type_ann.is_none() {
+            return TsIndexSignature {
+                type_ann: Some(TsTypeAnn {
+                    span: DUMMY_SP,
+                    type_ann: box TsType::TsKeywordType(TsKeywordType {
+                        span: DUMMY_SP,
+                        kind: TsKeywordTypeKind::TsAnyKeyword,
+                    }),
+                }),
+                ..sig
+            };
+        }
+
+        sig
+    }
+}
