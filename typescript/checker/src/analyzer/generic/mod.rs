@@ -135,10 +135,7 @@ impl Analyzer<'_, '_> {
         match arg {
             Type::Union(arg) => {
                 //
-                log::error!("Param: {:#?}", param);
-
                 for a in &arg.types {
-                    log::error!("Arg: {:#?}", a);
                     self.infer_type(inferred, param, a)?;
                 }
 
