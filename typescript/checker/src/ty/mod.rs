@@ -1,4 +1,4 @@
-use crate::{id::Id, ty, util::TypeEq, ModuleTypeInfo};
+use crate::{debug::print_backtrace, id::Id, ty, util::TypeEq, ModuleTypeInfo};
 use bitflags::_core::iter::FusedIterator;
 use is_macro::Is;
 use std::{fmt::Debug, mem::transmute, sync::Arc};
@@ -9,7 +9,6 @@ use swc_ecma_utils::{
     Value,
     Value::{Known, Unknown},
 };
-use crate::debug::print_backtrace;
 
 mod convert;
 
@@ -521,9 +520,9 @@ impl Type {
             }
         }
 
-        if tys.is_empty(){
+        if tys.is_empty() {
             print_backtrace();
-            unreachable!("Type::union() should not be called with an empty iterator"),
+            unreachable!("Type::union() should not be called with an empty iterator")
         }
 
         tys.retain(|ty| !ty.is_never());
