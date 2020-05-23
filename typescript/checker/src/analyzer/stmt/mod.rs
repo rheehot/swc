@@ -109,7 +109,10 @@ where
                 Type::Keyword(TsKeywordType {
                     kind: TsKeywordTypeKind::TsNeverKeyword,
                     ..
-                }) => self.types.push(Ok(ty)),
+                }) => {
+                    log::info!("found never type");
+                    self.types.push(Ok(ty))
+                }
                 _ => {}
             }
 
