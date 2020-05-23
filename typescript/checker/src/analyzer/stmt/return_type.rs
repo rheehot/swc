@@ -85,7 +85,7 @@ where
 }
 
 impl<A> VisitMut<ReturnStmt> for ReturnTypeCollector<'_, A>
-where˚
+where
     A: VisitMut<Stmt> + Validate<Expr, Output = ValidationResult>,
 {
     fn visit_mut(&mut self, s: &mut ReturnStmt) {
