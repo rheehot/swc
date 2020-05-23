@@ -9,6 +9,7 @@ use swc_ecma_utils::{
     Value,
     Value::{Known, Unknown},
 };
+use crate::debug::print_backtrace;
 
 mod convert;
 
@@ -520,10 +521,15 @@ impl Type {
             }
         }
 
+        if tys.is_empty(){
+            print_backtrace();
+            unreachable!("Type::union() should not be called with an empty iterator"),
+        }
+
         tys.retain(|ty| !ty.is_never());
 
         match tys.len() {
-            0 => unreachable!("Type::union() should not be called with an empty iterator"),
+            0 => Type::never(span),
             1 => tys.into_iter().next().unwrap(),
             _ => Type::Union(Union { span, types: tys }),
         }
