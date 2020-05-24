@@ -7,6 +7,7 @@ use crate::{
 };
 use swc_common::{Visit, VisitMut, VisitMutWith};
 use swc_ecma_ast::*;
+use swc_ecma_utils::{ExprExt, Value::Known};
 
 impl Analyzer<'_, '_> {
     pub(in crate::analyzer) fn visit_stmts_for_return(
@@ -57,6 +58,31 @@ where
     /// Are we in if or switch statement?
     pub in_conditional: bool,
     pub forced_never: bool,
+}
+
+impl<A> ReturnTypeCollector<'_, A>
+where
+    A: VisitMut<Stmt> + Validate<Expr, Output = ValidationResult>,
+{
+    fn is_always_true(&mut self, e: &mut Expr) -> bool {
+        if let (_, Known(v)) = e.as_bool() {
+            return v;
+        }
+
+        match self.analyzer.validate(e) {
+            Ok(ty) => {
+                if let Known(v) = ty.as_bool() {
+                    return v;
+                }
+            }
+            Err(err) => {
+                self.types.push(Err(err));
+                false
+            }
+        }
+
+        false
+    }
 }
 
 impl<A> VisitMut<Expr> for ReturnTypeCollector<'_, A>
@@ -121,11 +147,25 @@ where
             let has_break = v.found;
             if !has_break {
                 match s {
-                    Stmt::While(s) => {}
-                    Stmt::DoWhile(s) => {}
-                    Stmt::For(s) => {}
-                    Stmt::ForIn(s) => {}
-                    Stmt::ForOf(s) => {}
+                    Stmt::While(s) => {
+                        if self.is_always_true(&mut s.test) {
+                            self.forced_never = true;
+                        }
+                    }
+                    Stmt::DoWhile(s) => {
+                        if self.is_always_true(&mut s.test) {
+                            self.forced_never = true;
+                        }
+                    }
+                    Stmt::For(s) => {
+                        if let Some(test) = &mut s.test {
+                            if self.is_always_true(test) {
+                                self.forced_never = true;
+                            }
+                        } else {
+                            self.forced_never = true;
+                        }
+                    }
                     _ => {}
                 }
             }
@@ -167,7 +207,7 @@ impl Visit<ThrowStmt> for LoopBreakerFinder {
 }
 
 impl Visit<ReturnStmt> for LoopBreakerFinder {
-    fn visit(&mut self, _: &ThrowStmt) {
+    fn visit(&mut self, _: &ReturnStmt) {
         self.found = true;
     }
 }
