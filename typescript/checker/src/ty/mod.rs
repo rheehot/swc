@@ -13,6 +13,7 @@ use swc_ecma_utils::{
 };
 
 mod convert;
+mod type_facts;
 
 #[derive(Debug, Fold, Clone, PartialEq, Spanned, FromVariant, Is)]
 pub enum Type {
@@ -867,31 +868,6 @@ impl Type {
             }) => true,
             _ => false,
         }
-    }
-
-    pub(crate) fn apply_type_facts(self, facts: TypeFacts) -> Type {
-        let keyword_types = &[
-            (
-                TypeFacts::TypeofEQString,
-                TsKeywordTypeKind::TsStringKeyword,
-            ),
-            (
-                TypeFacts::TypeofEQNumber,
-                TsKeywordTypeKind::TsNumberKeyword,
-            ),
-            (
-                TypeFacts::TypeofEQBoolean,
-                TsKeywordTypeKind::TsBooleanKeyword,
-            ),
-            (
-                TypeFacts::TypeofEQBigInt,
-                TsKeywordTypeKind::TsBigIntKeyword,
-            ),
-            (
-                TypeFacts::TypeofEQBigInt,
-                TsKeywordTypeKind::TsSymbolKeyword,
-            ),
-        ];
     }
 }
 
