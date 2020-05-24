@@ -631,6 +631,8 @@ impl Analyzer<'_, '_> {
         type_args: Option<TypeParamInstantiation>,
         args: &[TypeOrSpread],
     ) -> ValidationResult {
+        let cnt = callee.normalize().iter_union().count();
+
         // TODO: Calculate return type only if selected
         // This can be done by storing type params, return type, params in the
         // candidates.
@@ -641,7 +643,9 @@ impl Analyzer<'_, '_> {
                 let m = $m;
 
                 let type_params = m.type_params.as_ref().map(|v| &*v.params);
-                if is_exact_match(type_params, &m.params, type_args.as_ref(), args) {
+                if cnt == 1
+                    || check_call(span, type_params, &m.params, type_args.as_ref(), args).is_ok()
+                {
                     return self.get_return_type(
                         span,
                         type_params,
@@ -727,6 +731,7 @@ impl Analyzer<'_, '_> {
 
 /// This method return [Err] if call is invalid
 fn check_call(
+    span: Span,
     type_params: Option<&[TypeParam]>,
     params: &[FnParam],
     type_args: Option<&TypeParamInstantiation>,
@@ -736,20 +741,32 @@ fn check_call(
         if let Some(type_args) = type_args {
             // TODO: Handle defaults of the type parameter (Change to range)
             if type_params.len() != type_args.params.len() {
-                return false;
+                return Err(Error::TypeParameterCountMismatch {
+                    span,
+                    max: type_params.len(),
+                    min: type_params.len(),
+                    actual: type_args.params.len(),
+                });
             }
         }
     }
+
+    // TODO: Handle spread
 
     let params_min = params.iter().filter(|param| param.required).count();
     let params_max = params.len();
 
     if args.len() < params_min || params_max < args.len() {
         return Err(Error::ParameterCountMismatch {
+            span,
             min: params_min,
             max: params_max,
             actual: args.len(),
         });
+    }
+
+    for (arg, param) in args.iter().zip(params) {
+        assert_eq!(arg.spread, None, "Spread element ");
     }
 
     false
