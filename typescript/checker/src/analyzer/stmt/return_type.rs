@@ -5,7 +5,7 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
-use swc_common::{Visit, VisitMut, VisitMutWith};
+use swc_common::{Visit, VisitMut, VisitMutWith, VisitWith};
 use swc_ecma_ast::*;
 use swc_ecma_utils::{ExprExt, Value::Known};
 
@@ -23,6 +23,8 @@ impl Analyzer<'_, '_> {
             let mut v = ReturnTypeCollector {
                 analyzer: &mut *self,
                 types: Default::default(),
+                in_conditional: false,
+                forced_never: false,
             };
 
             // for idx in order {
@@ -77,7 +79,7 @@ where
             }
             Err(err) => {
                 self.types.push(Err(err));
-                false
+                return false;
             }
         }
 
