@@ -1,4 +1,6 @@
-use crate::{debug::print_backtrace, id::Id, ty, util::TypeEq, ModuleTypeInfo};
+use crate::{
+    debug::print_backtrace, id::Id, ty, type_facts::TypeFacts, util::TypeEq, ModuleTypeInfo,
+};
 use bitflags::_core::iter::FusedIterator;
 use is_macro::Is;
 use std::{fmt::Debug, mem::transmute, sync::Arc};
@@ -865,6 +867,31 @@ impl Type {
             }) => true,
             _ => false,
         }
+    }
+
+    pub(crate) fn apply_type_facts(self, facts: TypeFacts) -> Type {
+        let keyword_types = &[
+            (
+                TypeFacts::TypeofEQString,
+                TsKeywordTypeKind::TsStringKeyword,
+            ),
+            (
+                TypeFacts::TypeofEQNumber,
+                TsKeywordTypeKind::TsNumberKeyword,
+            ),
+            (
+                TypeFacts::TypeofEQBoolean,
+                TsKeywordTypeKind::TsBooleanKeyword,
+            ),
+            (
+                TypeFacts::TypeofEQBigInt,
+                TsKeywordTypeKind::TsBigIntKeyword,
+            ),
+            (
+                TypeFacts::TypeofEQBigInt,
+                TsKeywordTypeKind::TsSymbolKeyword,
+            ),
+        ];
     }
 }
 
