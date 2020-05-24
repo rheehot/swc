@@ -5,7 +5,7 @@ use crate::{
     validator::{Validate, ValidateWith},
     ValidationResult,
 };
-use swc_common::{VisitMut, VisitMutWith};
+use swc_common::{Visit, VisitMut, VisitMutWith};
 use swc_ecma_ast::*;
 
 impl Analyzer<'_, '_> {
@@ -54,6 +54,9 @@ where
 {
     pub analyzer: &'a mut A,
     pub types: Vec<Result<Type, Error>>,
+    /// Are we in if or switch statement?
+    pub in_conditional: bool,
+    pub forced_never: bool,
 }
 
 impl<A> VisitMut<Expr> for ReturnTypeCollector<'_, A>
@@ -100,8 +103,35 @@ where
     A: VisitMut<Stmt> + Validate<Expr, Output = ValidationResult>,
 {
     fn visit_mut(&mut self, s: &mut Stmt) {
+        let old_in_conditional = self.in_conditional;
+        self.in_conditional |= match s {
+            Stmt::If(_) => true,
+            Stmt::Switch(_) => true,
+            _ => false,
+        };
+
         s.visit_mut_children(self);
         s.visit_mut_children(self.analyzer);
+
+        // Of `s` is always executed and we enter infinite loop, return type should be
+        // never
+        if !self.in_conditional {
+            let mut v = LoopBreakerFinder { found: false };
+            s.visit_with(&mut v);
+            let has_break = v.found;
+            if !has_break {
+                match s {
+                    Stmt::While(s) => {}
+                    Stmt::DoWhile(s) => {}
+                    Stmt::For(s) => {}
+                    Stmt::ForIn(s) => {}
+                    Stmt::ForOf(s) => {}
+                    _ => {}
+                }
+            }
+        }
+
+        self.in_conditional = old_in_conditional;
     }
 }
 
@@ -119,3 +149,25 @@ macro_rules! noop {
 
 noop!(Function);
 noop!(ArrowExpr);
+
+struct LoopBreakerFinder {
+    found: bool,
+}
+
+impl Visit<BreakStmt> for LoopBreakerFinder {
+    fn visit(&mut self, _: &BreakStmt) {
+        self.found = true;
+    }
+}
+
+impl Visit<ThrowStmt> for LoopBreakerFinder {
+    fn visit(&mut self, _: &ThrowStmt) {
+        self.found = true;
+    }
+}
+
+impl Visit<ReturnStmt> for LoopBreakerFinder {
+    fn visit(&mut self, _: &ThrowStmt) {
+        self.found = true;
+    }
+}
