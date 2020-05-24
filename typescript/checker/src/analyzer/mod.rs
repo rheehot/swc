@@ -519,7 +519,7 @@ impl Validate<TsModuleDecl> for Analyzer<'_, '_> {
                     },
                     Type::Module(module),
                 )
-                .store(&mut self.info.errors);
+                .store(&mut child.info.errors);
 
             Ok(())
         })
