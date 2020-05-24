@@ -725,12 +725,13 @@ impl Analyzer<'_, '_> {
     }
 }
 
-fn is_exact_match(
+/// This method return [Err] if call is invalid
+fn check_call(
     type_params: Option<&[TypeParam]>,
     params: &[FnParam],
     type_args: Option<&TypeParamInstantiation>,
     args: &[TypeOrSpread],
-) -> bool {
+) -> ValidationResult<bool> {
     if let Some(type_params) = type_params {
         if let Some(type_args) = type_args {
             // TODO: Handle defaults of the type parameter (Change to range)
@@ -740,9 +741,15 @@ fn is_exact_match(
         }
     }
 
-    // TODO: Handle default parameters (Change to range)
-    if params.len() != args.len() {
-        return false;
+    let params_min = params.iter().filter(|param| param.required).count();
+    let params_max = params.len();
+
+    if args.len() < params_min || params_max < args.len() {
+        return Err(Error::ParameterCountMismatch {
+            min: params_min,
+            max: params_max,
+            actual: args.len(),
+        });
     }
 
     false
