@@ -69,14 +69,18 @@ impl Validate<VarDeclarator> for Analyzer<'_, '_> {
                 };
             }
 
+            // If user specified type, value should be removed.
+            let should_remove_value = v.name.get_ty().is_some();
+
             macro_rules! remove_declaring {
                 () => {{
+                    if should_remove_value {
+                        v.init = None;
+                    }
+
                     debug_assert_eq!(Some(self.scope.declaring.clone()), debug_declaring);
                 }};
             }
-
-            // If user specified type, value should be removed.
-            let should_remove_value = v.name.get_ty().is_some();
 
             if let Some(ref mut init) = v.init {
                 let span = init.span();
@@ -290,10 +294,6 @@ impl Validate<VarDeclarator> for Analyzer<'_, '_> {
                 remove_declaring!();
                 return Ok(());
             };
-
-            if should_remove_value {
-                v.init = None;
-            }
 
             debug_assert_eq!(self.ctx.allow_ref_declaring, true);
             self.declare_vars(kind, &mut v.name)
