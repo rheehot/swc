@@ -1,4 +1,6 @@
-use crate::ast::{JsDoc, JsDocTagItem};
+use crate::ast::{
+    JsDoc, JsDocAbstractTag, JsDocAccessTag, JsDocAliasTag, JsDocTag, JsDocTagItem, JsDocUnknownTag,
+};
 use nom::{
     bytes::complete::{tag, take_while},
     character::is_alphabetic,
@@ -13,12 +15,25 @@ pub fn parse(start: BytePos, end: BytePos, i: &str) -> IResult<&str, JsDoc> {}
 pub fn parse_tag_item(start: BytePos, end: BytePos, i: &str) -> IResult<&str, JsDocTagItem> {
     let (i, _) = tag("@")(i)?;
 
-    let (i, tag_name) = take_while(is_alphabetic)(i)?;
+    let (mut i, tag_name) = take_while(is_alphabetic)(i)?;
+
+    let span = Span::new(start, start + BytePos(tag_name.0 as _), Default::default());
 
     let tag = match tag_name {
-        "abstract" | "virtual" => {}
-        "access" => {}
-        "alias" => {}
+        "abstract" | "virtual" => JsDocTag::Abstract(JsDocAbstractTag { span }),
+        "access" => {
+            let (input, access) = parse_one_of(i, &["private", "protected", "package", "public"])?;
+            i = input;
+            JsDocTag::Access(JsDocAccessTag {
+                span,
+                access: access.into(),
+            })
+        }
+        "alias" => {
+            let (input, name_path) = parse_name_path(i)?;
+            i = input;
+            JsDocTag::Alias(JsDocAliasTag { span, name_path })
+        }
         "async" => {}
         "augments" | "extends" => {}
         "author" => {}
@@ -86,9 +101,23 @@ pub fn parse_tag_item(start: BytePos, end: BytePos, i: &str) -> IResult<&str, Js
     Ok((
         i,
         JsDocTagItem {
-            span: Span::new(start, end, Default::default()),
+            span,
             tag_name: tag_name.into(),
             tag,
         },
     ))
+}
+
+fn parse_one_of(i: &str, list: &[&str]) -> IResult<&str, &str> {
+    for s in list {
+        if i.starts_with(s) {
+            let i = i[s.len()..];
+            return Ok((i, s));
+        }
+    }
+
+    Err(nom::Err::Error((
+        format!("Expected one of {}", list.join(",")).as_bytes(),
+        nom::error::ErrorKind::Tag,
+    )))
 }

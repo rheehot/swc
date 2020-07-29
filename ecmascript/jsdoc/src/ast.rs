@@ -1,4 +1,4 @@
-use crate::{Ident, Str, TsEntityName, TsQualifiedName, TsTypeParamDecl};
+use swc_atoms::JsWord;
 use swc_common::{ast_node, Span};
 use swc_ecma_ast::{Ident, Str};
 
@@ -22,6 +22,12 @@ pub struct JsDocTagItem {
 
 #[ast_node]
 pub enum JsDocTag {
+    #[tag("JsDocAbstractTag")]
+    Abstract(JsDocAbstractTag),
+    #[tag("JsDocAccessTag")]
+    Access(JsDocAccessTag),
+    #[tag("JsDocAliasTag")]
+    Alias(JsDocAliasTag),
     #[tag("JsDocUnknownTag")]
     Unknown(JsDocUnknownTag),
     #[tag("JsDocAugmentsTag")]
@@ -58,6 +64,23 @@ pub enum JsDocTag {
     Typedef(JsDocTypedefTag),
     #[tag("JsDocPropertyTag")]
     Property(JsDocPropertyTag),
+}
+
+#[ast_node]
+pub struct JsDocAbstractTag {
+    pub span: Span,
+}
+
+#[ast_node]
+pub struct JsDocAccessTag {
+    pub span: Span,
+    pub access: JsWord,
+}
+
+#[ast_node]
+pub struct JsDocAliasTag {
+    pub span: Span,
+    pub name_path: JsDocNamePath,
 }
 
 #[ast_node]
@@ -344,4 +367,9 @@ pub enum JsDocPropOrParam {
     Prop(JsDocPropertyTag),
     #[tag("JsDocParameterTag")]
     Param(JsDocParameterTag),
+}
+
+#[ast_node]
+pub struct JsDocNamePath {
+    pub components: Vec<Ident>,
 }
