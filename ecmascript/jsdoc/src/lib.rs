@@ -199,6 +199,12 @@ pub fn parse_tag_item(start: BytePos, end: BytePos, i: &str) -> IResult<&str, Js
         "version" => {}
 
         "yields" | "yield" => {}
+
+        _ => {
+            let (input, extras) = parse_str(i);
+            i = input;
+            JsDocTag::Unknown(JsDocUnknownTag { span, extras })
+        }
     };
 
     Ok((
