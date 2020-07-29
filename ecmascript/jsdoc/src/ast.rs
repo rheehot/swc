@@ -42,6 +42,8 @@ pub enum JsDocTag {
     Borrows(JsDocBorrowsTag),
     #[tag("JsDocClassTag")]
     Class(JsDocClassTag),
+    #[tag("JSDocClassDescTag")]
+    ClassDesc(JSDocClassDescTag),
     #[tag("JsDocPublicTag")]
     Public(JsDocPublicTag),
     #[tag("JsDocPrivateTag")]
@@ -100,6 +102,12 @@ pub struct JsDocBorrowsTag {
 }
 
 #[ast_node]
+pub struct JSDocClassDescTag {
+    pub span: Span,
+    pub desc: Str,
+}
+
+#[ast_node]
 pub struct JsDocUnknownTag {
     pub span: Span,
     pub extras: Str,
@@ -145,6 +153,8 @@ pub struct JsDocAuthorTag {
 #[derive(Copy, Eq)]
 pub struct JsDocClassTag {
     pub span: Span,
+    pub ty: Option<Str>,
+    pub name: Option<Str>,
 }
 
 #[ast_node]
