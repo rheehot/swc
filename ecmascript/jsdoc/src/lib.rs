@@ -5,7 +5,7 @@ use crate::ast::*;
 use nom::{
     bytes::complete::{tag, take_while},
     character::is_alphabetic,
-    IResult, Slice,
+    IResult, InputIter, Slice,
 };
 use swc_ecma_ast::Str;
 
@@ -21,7 +21,7 @@ pub fn parse_tag_item(i: Input) -> IResult<Input, JsDocTagItem> {
 
     let span = tag_name.span();
 
-    let tag = match tag_name {
+    let tag = match &*tag_name {
         "abstract" | "virtual" => JsDocTag::Abstract(JsDocAbstractTag { span }),
 
         "access" => {
@@ -250,7 +250,7 @@ pub fn parse_tag_item(i: Input) -> IResult<Input, JsDocTagItem> {
 fn parse_one_of<'i, 'l>(i: Input<'i>, list: &'l [&str]) -> IResult<Input<'i>, &'l str> {
     for s in list {
         if i.starts_with(s) {
-            let i = i[s.len()..];
+            let i = &i[s.len()..];
             return Ok((i, s));
         }
     }
@@ -261,10 +261,12 @@ fn parse_one_of<'i, 'l>(i: Input<'i>, list: &'l [&str]) -> IResult<Input<'i>, &'
     )))
 }
 
-fn parse_name_path(i: Input) -> IResult<Input, &str> {}
+fn parse_name_path(i: Input) -> IResult<Input, Str> {
+    parse_line(i)
+}
 
 fn parse_line(i: Input) -> IResult<Input, Str> {
-    let res = i.src.char_indices().find(|(_, c)| c == '\n' || c == '\r');
+    let res = i.iter_indices().find(|(_, &c)| c == '\n' || c == '\r');
 
     if let Some((idx, _)) = res {
         let ret = i.slice(..idx);
