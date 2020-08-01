@@ -21,6 +21,7 @@ pub struct JsDocTagItem {
 }
 
 #[ast_node]
+#[non_exhaustive]
 pub enum JsDocTag {
     #[tag("JsDocAbstractTag")]
     Abstract(JsDocAbstractTag),
@@ -159,7 +160,7 @@ pub struct JsDocAuthorTag {
 }
 
 #[ast_node]
-#[derive(Copy, Eq)]
+#[derive(Eq)]
 pub struct JsDocClassTag {
     pub span: Span,
     pub ty: Option<Str>,
@@ -223,9 +224,10 @@ pub struct JsDocParameterTag {
 }
 
 #[ast_node]
-#[derive(Copy, Eq)]
+#[derive(Eq)]
 pub struct JsDocEnumTag {
     pub span: Span,
+    pub ty: Str,
 }
 
 #[ast_node]

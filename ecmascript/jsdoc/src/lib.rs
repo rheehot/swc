@@ -6,19 +6,29 @@ use nom::{
     character::is_alphabetic,
     IResult,
 };
-use swc_atoms::JsWord;
 use swc_common::{BytePos, Span};
 
 pub mod ast;
 
-pub fn parse(start: BytePos, end: BytePos, i: &str) -> IResult<&str, JsDoc> {}
+#[derive(Debug, Clone, Copy)]
+pub struct Input<'i> {
+    pub start: BytePos,
+    pub end: BytePos,
+    pub src: &'i str,
+}
 
-pub fn parse_tag_item(start: BytePos, end: BytePos, i: &str) -> IResult<&str, JsDocTagItem> {
+pub fn parse(i: Input) -> IResult<Input, JsDoc> {}
+
+pub fn parse_tag_item(i: Input) -> IResult<Input, JsDocTagItem> {
     let (i, _) = tag("@")(i)?;
 
     let (mut i, tag_name) = take_while(is_alphabetic)(i)?;
 
-    let span = Span::new(start, start + BytePos(tag_name.0 as _), Default::default());
+    let span = Span::new(
+        i.start,
+        i.start + BytePos(tag_name.0 as _),
+        Default::default(),
+    );
 
     let tag = match tag_name {
         "abstract" | "virtual" => JsDocTag::Abstract(JsDocAbstractTag { span }),
@@ -93,19 +103,48 @@ pub fn parse_tag_item(start: BytePos, end: BytePos, i: &str) -> IResult<&str, Js
             JsDocTag::Const(JsDocConstTag { span, ty, name })
         }
 
-        "constructs" => {}
+        "constructs" => {
+            let (input, name) = parse_line(i)?;
+            i = input;
+            JsDocTag::Constructs(JsDocConstructsTag { span, name })
+        }
 
-        "copyright" => {}
+        "copyright" => {
+            let (input, text) = parse_line(i)?;
+            i = input;
+            JsDocTag::Copyright(JsDocCopyrightTag { span, text })
+        }
 
-        "default" | "defaultvalue" => {}
+        "default" | "defaultvalue" => {
+            let (input, value) = parse_line(i)?;
+            i = input;
+            JsDocTag::Default(JsDocDefaultTag { span, value })
+        }
 
-        "deprecated" => {}
+        "deprecated" => {
+            let (input, text) = parse_line(i)?;
+            i = input;
+            JsDocTag::Deprecated(JsDocDeprecatedTag { span, text })
+        }
 
-        "description" | "desc" => {}
+        "description" | "desc" => {
+            let (input, text) = parse_line(i)?;
+            i = input;
+            JsDocTag::Description(JsDocDescriptionTag { span, text })
+        }
 
-        "enum" => {}
+        "enum" => {
+            let (input, ty) = parse_type(i)?;
+            i = input;
+            JsDocTag::Enum(JsDocEnumTag { span, ty })
+        }
 
-        "event" => {}
+        "event" => {
+            // TODO: implement this
+            let (input, ty) = parse_line(i)?;
+            i = input;
+            JsDocTag::Unknown(JsDocUnknownTag { span, extras: ty })
+        }
 
         "example" => {}
 
@@ -217,7 +256,7 @@ pub fn parse_tag_item(start: BytePos, end: BytePos, i: &str) -> IResult<&str, Js
     ))
 }
 
-fn parse_one_of(i: &str, list: &[&str]) -> IResult<&str, &str> {
+fn parse_one_of<'i, 'l>(i: Input<'i>, list: &'l [&str]) -> IResult<Input<'i>, &'l str> {
     for s in list {
         if i.starts_with(s) {
             let i = i[s.len()..];
@@ -230,3 +269,13 @@ fn parse_one_of(i: &str, list: &[&str]) -> IResult<&str, &str> {
         nom::error::ErrorKind::Tag,
     )))
 }
+
+fn parse_name_path(i: Input) -> IResult<Input, &str> {}
+
+fn parse_line(i: Input) -> IResult<Input, &str> {}
+
+fn parse_opt_str(i: Input) -> IResult<Input, &str> {}
+
+fn parse_str(i: Input) -> IResult<Input, &str> {}
+
+fn parse_type(i: Input) -> IResult<Input, &str> {}
