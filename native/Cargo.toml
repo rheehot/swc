@@ -13,7 +13,7 @@ name = "ffi"
 crate-type = ["cdylib"]
 
 [build-dependencies]
-neon-build = "0.4.0"
+napi-build = "0.2.0"
 
 [dependencies]
 swc = { path = "../" }
@@ -25,7 +25,7 @@ backtrace = "0.3"
 fxhash = "0.2"
 anyhow = "1"
 serde_json = "1"
-neon = "0.4.0"
-neon-serde = "0.4.0"
+napi = "0.4"
+napi-derive = "0.4.2"
 path-clean = "0.1"
 serde = { version = "1", features = ["derive"] }
