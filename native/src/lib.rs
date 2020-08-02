@@ -18,9 +18,9 @@ mod print;
 mod transform;
 mod util;
 
-register_module!(native, init_module);
+register_module!(native, init);
 
-fn init_module(module: &mut Module) -> Result<()> {
+fn init(module: &mut Module) -> Result<()> {
     module.create_named_method("transform", transform::transform)?;
     module.create_named_method("transformSync", transform::transform_sync)?;
     Ok(())
