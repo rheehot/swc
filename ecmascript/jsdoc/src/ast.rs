@@ -73,11 +73,14 @@ pub enum JsDocTag {
     Typedef(JsDocTypedefTag),
     #[tag("JsDocPropertyTag")]
     Property(JsDocPropertyTag),
-
     #[tag("JsDocDescriptionTag")]
     Description(JsDocDescriptionTag),
     #[tag("JsDocExampleTag")]
     Example(JsDocExampleTag),
+    #[tag("JsDocExportsTag")]
+    Exports(JsDocExportsTag),
+    #[tag("JsDocExternalTag")]
+    External(JsDocExternalTag),
 }
 
 #[ast_node]
@@ -430,4 +433,16 @@ pub struct JsDocDescriptionTag {
 pub struct JsDocExampleTag {
     pub span: Span,
     pub text: Str,
+}
+
+#[ast_node]
+pub struct JsDocExportsTag {
+    pub span: Span,
+    pub module_name: Str,
+}
+
+#[ast_node]
+pub struct JsDocExternalTag {
+    pub span: Span,
+    pub name: Str,
 }
