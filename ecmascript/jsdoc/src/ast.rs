@@ -73,6 +73,11 @@ pub enum JsDocTag {
     Typedef(JsDocTypedefTag),
     #[tag("JsDocPropertyTag")]
     Property(JsDocPropertyTag),
+
+    #[tag("JsDocDescriptionTag")]
+    Description(JsDocDescriptionTag),
+    #[tag("JsDocExampleTag")]
+    Example(JsDocExampleTag),
 }
 
 #[ast_node]
@@ -83,7 +88,7 @@ pub struct JsDocAbstractTag {
 #[ast_node]
 pub struct JsDocAccessTag {
     pub span: Span,
-    pub access: JsWord,
+    pub access: Str,
 }
 
 #[ast_node]
@@ -407,4 +412,22 @@ pub enum JsDocPropOrParam {
 pub struct JsDocNamePath {
     pub span: Span,
     pub components: Vec<Ident>,
+}
+
+#[ast_node]
+pub struct JsDocCopyrightTag {
+    pub span: Span,
+    pub text: Str,
+}
+
+#[ast_node]
+pub struct JsDocDescriptionTag {
+    pub span: Span,
+    pub text: Str,
+}
+
+#[ast_node]
+pub struct JsDocExampleTag {
+    pub span: Span,
+    pub text: Str,
 }

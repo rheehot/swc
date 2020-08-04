@@ -1,10 +1,12 @@
 pub use self::input::Input;
 use crate::ast::*;
 use nom::{
+    branch::alt,
     bytes::complete::{tag, take_while},
     character::is_alphabetic,
     IResult, InputIter, Slice,
 };
+use swc_common::Spanned;
 use swc_ecma_ast::Str;
 
 pub mod ast;
@@ -15,15 +17,20 @@ pub fn parse(i: Input) -> IResult<Input, JsDoc> {}
 pub fn parse_tag_item(i: Input) -> IResult<Input, JsDocTagItem> {
     let (i, _) = tag("@")(i)?;
 
-    let (mut i, tag_name) = take_while(is_alphabetic)(i)?;
+    let (mut i, tag_name) = parse_word(i)?;
 
     let span = tag_name.span();
 
-    let tag = match &*tag_name {
+    let tag = match &*tag_name.value {
         "abstract" | "virtual" => JsDocTag::Abstract(JsDocAbstractTag { span }),
 
         "access" => {
-            let (input, access) = parse_one_of(i, &["private", "protected", "package", "public"])?;
+            let (input, access) = alt(
+                tag("private"),
+                tag("protected"),
+                tag("package"),
+                tag("public"),
+            )(i)?;
             i = input;
             JsDocTag::Access(JsDocAccessTag {
                 span,
@@ -135,7 +142,14 @@ pub fn parse_tag_item(i: Input) -> IResult<Input, JsDocTagItem> {
             JsDocTag::Unknown(JsDocUnknownTag { span, extras: ty })
         }
 
-        "example" => {}
+        "example" => {
+            let (input, text) = take_while(|c| c != '@')(i)?;
+            i = input;
+            JsDocTag::Example(JsDocExampleTag {
+                span,
+                text: text.into(),
+            })
+        }
 
         "exports" => {}
 
@@ -229,7 +243,7 @@ pub fn parse_tag_item(i: Input) -> IResult<Input, JsDocTagItem> {
         "yields" | "yield" => {}
 
         _ => {
-            let (input, extras) = parse_str(i);
+            let (input, extras) = parse_str(i)?;
             i = input;
             JsDocTag::Unknown(JsDocUnknownTag { span, extras })
         }
@@ -243,20 +257,6 @@ pub fn parse_tag_item(i: Input) -> IResult<Input, JsDocTagItem> {
             tag,
         },
     ))
-}
-
-fn parse_one_of<'i, 'l>(i: Input<'i>, list: &'l [&str]) -> IResult<Input<'i>, &'l str> {
-    for s in list {
-        if i.starts_with(s) {
-            let i = &i[s.len()..];
-            return Ok((i, s));
-        }
-    }
-
-    Err(nom::Err::Error((
-        format!("Expected one of {}", list.join(",")).as_bytes(),
-        nom::error::ErrorKind::Tag,
-    )))
 }
 
 fn parse_name_path(i: Input) -> IResult<Input, Str> {
