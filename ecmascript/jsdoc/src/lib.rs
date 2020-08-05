@@ -273,6 +273,20 @@ pub fn parse_tag_item(i: Input) -> IResult<Input, JsDocTagItem> {
     ))
 }
 
+fn parse_opt_str(i: Input) -> IResult<Input, Str> {
+    parse_line(i)
+}
+
+fn parse_str(i: Input) -> IResult<Input, Str> {
+    parse_line(i)
+}
+
+fn parse_type(i: Input) -> IResult<Input, Str> {
+    parse_line(i)
+}
+
+// ----- ----- Done ----- -----
+
 fn parse_name_path(mut i: Input) -> IResult<Input, JsDocNamePath> {
     let lo = i.span().lo;
     let mut components = vec![];
@@ -301,20 +315,6 @@ fn parse_name_path(mut i: Input) -> IResult<Input, JsDocNamePath> {
 
     Ok((i, components))
 }
-
-fn parse_opt_str(i: Input) -> IResult<Input, Str> {
-    parse_line(i)
-}
-
-fn parse_str(i: Input) -> IResult<Input, Str> {
-    parse_line(i)
-}
-
-fn parse_type(i: Input) -> IResult<Input, Str> {
-    parse_line(i)
-}
-
-// ----- ----- Done ----- -----
 
 fn parse_word(i: Input) -> IResult<Input, Str> {
     let res = i
