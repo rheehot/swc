@@ -268,8 +268,14 @@ pub fn parse_tag_item(i: Input) -> IResult<Input, JsDocTagItem> {
     ))
 }
 
-fn parse_opt_str(i: Input) -> IResult<Input, Str> {
-    parse_line(i)
+fn parse_opt_str(i: Input) -> IResult<Input, Option<Str>> {
+    let (i, res) = parse_line(i)?;
+
+    if res.value.is_empty() {
+        Ok((i, None))
+    } else {
+        Ok((i, Some(res)))
+    }
 }
 
 fn parse_str(i: Input) -> IResult<Input, Str> {
