@@ -6,7 +6,7 @@ use nom::{
     character::is_alphabetic,
     IResult, InputIter, Slice,
 };
-use swc_common::Spanned;
+use swc_common::{Span, Spanned};
 use swc_ecma_ast::Str;
 
 pub mod ast;
@@ -275,7 +275,7 @@ pub fn parse_tag_item(i: Input) -> IResult<Input, JsDocTagItem> {
 
 fn parse_name_path(mut i: Input) -> IResult<Input, JsDocNamePath> {
     let lo = i.span().lo;
-    let mut path = vec![];
+    let mut components = vec![];
 
     loop {
         let (input, component) = parse_word(i)?;
@@ -283,17 +283,23 @@ fn parse_name_path(mut i: Input) -> IResult<Input, JsDocNamePath> {
 
         let (input, _) = match tag(".")(i) {
             Ok(v) => v,
-            Err(_) => {
-                if path.is_empty() {
-                    return Err();
+            Err(err) => {
+                if components.is_empty() {
+                    return Err(err);
                 }
 
-                return OK(JsDocNamePath {});
+                return Ok((
+                    i,
+                    JsDocNamePath {
+                        span: Span::new(lo, i.span().hi, Default::default()),
+                        components,
+                    },
+                ));
             }
         };
     }
 
-    Ok((i, path))
+    Ok((i, components))
 }
 
 fn parse_opt_str(i: Input) -> IResult<Input, Str> {
