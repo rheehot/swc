@@ -185,8 +185,6 @@ pub fn parse_tag_item(i: Input) -> IResult<Input, JsDocTagItem> {
 
         "generator" => JsDocTag::Generator(JsDocGeneratorTag { span }),
 
-        "global" => {}
-
         "hideconstructor" => {}
 
         "ignore" => {}
