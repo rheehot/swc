@@ -164,7 +164,11 @@ pub fn parse_tag_item(i: Input) -> IResult<Input, JsDocTagItem> {
             })
         }
 
-        "file" => {}
+        "file" | "fileoverview" | "overview" => {
+            let (input, text) = parse_line(i)?;
+            i = input;
+            JsDocTag::File(JsDocFilelTag { span, text })
+        }
 
         "fires" => {}
 
