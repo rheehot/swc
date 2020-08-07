@@ -23,6 +23,8 @@ pub struct JsDocTagItem {
 #[ast_node]
 #[non_exhaustive]
 pub enum JsDocTag {
+    #[tag("JsDocIgnoreTag")]
+    Ignore(JsDocIgnoreTag),
     #[tag("JsDocHideConstructorTag")]
     HideConstructor(JsDocHideConstructorTag),
     #[tag("JsDocGeneratorTag")]
@@ -157,7 +159,7 @@ pub struct JsDocAugmentsTag {
 #[ast_node]
 pub struct JsDocImplementsTag {
     pub span: Span,
-    pub class: JsDocExprWithTypeArgs,
+    pub class: Str,
 }
 
 #[ast_node]
@@ -499,5 +501,10 @@ pub struct JsDocGeneratorTag {
 }
 #[ast_node]
 pub struct JsDocHideConstructorTag {
+    pub span: Span,
+}
+
+#[ast_node]
+pub struct JsDocIgnoreTag {
     pub span: Span,
 }
