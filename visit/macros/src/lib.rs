@@ -1078,76 +1078,65 @@ fn create_method_sig(mode: Mode, ty: &Type) -> Signature {
                     }
                 }
 
-                if last.ident == "Option" {
-                    match &last.arguments {
-                        PathArguments::AngleBracketed(tps) => {
-                            let arg = tps.args.first().unwrap();
+                if let Some(arg) = extract_generic("Option", ty) {
+                    let mtd = create_method_sig(mode, arg);
+                    let ident = mtd.ident.new_ident_with(|v| {
+                        v.replace(
+                            &format!("{}_", mode.prefix()),
+                            &format!("{}_opt_", mode.prefix()),
+                        )
+                    });
 
-                            match arg {
-                                GenericArgument::Type(arg) => {
-                                    let ident = method_name(mode, arg).new_ident_with(|v| {
-                                        v.replace(
-                                            &format!("{}_", mode.prefix()),
-                                            &format!("{}_opt_", mode.prefix()),
-                                        )
-                                    });
-
-                                    if let Some(item) = extract_vec(arg) {
-                                        match mode {
-                                            Mode::Fold => {
-                                                return mk_exact(
-                                                    mode,
-                                                    ident,
-                                                    &q!(Vars { item }, { Option<Vec<item>> })
-                                                        .parse(),
-                                                );
-                                            }
-                                            Mode::VisitMut => {
-                                                return mk_exact(
-                                                    mode,
-                                                    ident,
-                                                    &q!(Vars { item }, { Option<&mut Vec<item>> })
-                                                        .parse(),
-                                                );
-                                            }
-                                            Mode::Visit => {
-                                                return mk_exact(
-                                                    mode,
-                                                    ident,
-                                                    &q!(Vars { item }, { Option<&[item]> }).parse(),
-                                                );
-                                            }
-                                        }
-                                    }
-
-                                    match mode {
-                                        Mode::Fold => {
-                                            return mk_exact(
-                                                mode,
-                                                ident,
-                                                &q!(Vars { arg }, { Option<arg> }).parse(),
-                                            );
-                                        }
-                                        Mode::VisitMut => {
-                                            return mk_exact(
-                                                mode,
-                                                ident,
-                                                &q!(Vars { arg }, { Option<&mut arg> }).parse(),
-                                            );
-                                        }
-                                        Mode::Visit => {
-                                            return mk_exact(
-                                                mode,
-                                                ident,
-                                                &q!(Vars { arg }, { Option<&arg> }).parse(),
-                                            );
-                                        }
-                                    }
-                                }
-                                _ => unimplemented!("generic parameter other than type"),
+                    if let Some(item) = extract_vec(arg) {
+                        match mode {
+                            Mode::Fold => {
+                                return mk_exact(
+                                    mode,
+                                    ident,
+                                    &q!(Vars { item }, { Option<Vec<item>> }).parse(),
+                                );
+                            }
+                            Mode::VisitMut => {
+                                return mk_exact(
+                                    mode,
+                                    ident,
+                                    &q!(Vars { item }, { Option<&mut Vec<item>> }).parse(),
+                                );
+                            }
+                            Mode::Visit => {
+                                return mk_exact(
+                                    mode,
+                                    ident,
+                                    &q!(Vars { item }, { Option<&[item]> }).parse(),
+                                );
                             }
                         }
-                        _ => unimplemented!("Box() -> T or Box without a type parameter"),
+                    }
+
+                    let ty = if let Some(arg) = extract_generic("Box", arg) {
+                        arg
+                    } else {
+                        arg
+                    };
+
+                    match mode {
+                        Mode::Fold => {
+                            return mk_exact(mode, ident, &q!(Vars { ty }, { Option<ty> }).parse());
+                        }
+                        Mode::VisitMut => {
+                            return mk_exact(
+                                mode,
+                                ident,
+                                &q!(Vars { ty }, { Option<&mut ty> }).parse(),
+                            );
+                        }
+                        Mode::Visit => {
+                            return mk_exact(
+                                mode,
+                                ident,
+                                &q!(Vars { ty }, { Option<&ty> }).parse(),
+                            );
+                        }
                     }
                 }
 
